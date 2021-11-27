@@ -94,7 +94,7 @@
 <meta property="og:site_name" content="My Little World">
 <meta property="og:description" content="1.CSS 选择器的优先级!important内联样式（1000）id选择器（100）类选择器（10）元素选择器（1） 2.为兼容浏览器，对css基本样式做统一处理的三种方法【reset】消除浏览器默认样式，针对具体元素标签重写样式【normalize】样式规范确定的情况下，直接重写全部样式【neat】前两者结合，针对确定的样式直接重写，不确定的进行清除 3.css预处理语法工具需要具备的特性可以">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-01-27T13:10:16.995Z">
+<meta property="og:updated_time" content="2021-11-27T02:10:20.298Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于css的一些事">
 <meta name="twitter:description" content="1.CSS 选择器的优先级!important内联样式（1000）id选择器（100）类选择器（10）元素选择器（1） 2.为兼容浏览器，对css基本样式做统一处理的三种方法【reset】消除浏览器默认样式，针对具体元素标签重写样式【normalize】样式规范确定的情况下，直接重写全部样式【neat】前两者结合，针对确定的样式直接重写，不确定的进行清除 3.css预处理语法工具需要具备的特性可以">
@@ -342,6 +342,12 @@
 <p>5.屏幕适配布局方案<br>想办法让比例不变<br>A.在html/body标签上加上zoom属性，缺点是不灵活<br>B.使用rem，相对于文档根元素font-size,<br>  利用mediaQuery对常见几种屏幕宽度设置html的font-size<br>  以font-size大小为1rem</p>
 <p>6.响应式设计的两种方案<br>前端或者后端判断useragent来跳转不同站点得到不同页面<br>使用mediaQuery媒体查询让页面根据不同设备自动改变页面布局和显示</p>
 <p>7.根据浏览器屏幕宽度和分辨率加载不同大小的图片<br>使用mediaQuery判断加载不同的背景图<br>使用H5的picture标签<br>模板进行判断然后渲染不同图片<br>请求图片时带上相关参数，让图片服务器吐出不同大小图片</p>
+<h1 id="table-layout-fixed-妙用"><a href="#table-layout-fixed-妙用" class="headerlink" title="table-layout: fixed; 妙用"></a>table-layout: fixed; 妙用</h1><p>具有滚动条的table表头和tbody分别用两个table实现时，在每列设置宽度的情况下，有时可能出现表头和tbody对不齐的情况，</p>
+<p>这是因为table默认情况下，会按照表格内容进行列宽绘制，tbody和表头整个宽度是一样宽的，而tbody有滚动条宽度,表头没有滚动条，就会导致列对不上了<br>解决办法：</p>
+<ol>
+<li>给table设置 table-layout: fixed;让table按照设置的列宽进行绘制<br>.xxx-table {<br>table-layout: fixed;<br>}</li>
+<li>不让所有的列都有具体的宽度，让某一列不设置宽度</li>
+</ol>
 
       
     </div>
@@ -433,8 +439,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/psb.jpg"
@@ -445,7 +460,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">199</span>
+              <span class="site-state-item-count">215</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -494,6 +509,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#table-layout-fixed-妙用"><span class="nav-number">1.</span> <span class="nav-text">table-layout: fixed; 妙用</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
     </div>

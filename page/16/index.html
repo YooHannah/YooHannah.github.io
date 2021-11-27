@@ -259,7 +259,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/graphstruct.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/search.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -284,8 +284,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/algorithm/graphstruct.html" itemprop="url">
-                  图的存储结构
+                <a class="post-title-link" href="/post/algorithm/search.html" itemprop="url">
+                  查找
                 </a>
               
             
@@ -299,8 +299,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-01T21:59:30+08:00">
-                2017-03-01
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-02T19:24:37+08:00">
+                2017-04-02
               </time>
             
 
@@ -337,245 +337,10 @@
       
         
           
-            <h1 id="1-邻接矩阵"><a href="#1-邻接矩阵" class="headerlink" title="1.邻接矩阵"></a>1.邻接矩阵</h1><h2 id="1-无向图"><a href="#1-无向图" class="headerlink" title="1.无向图"></a>1.无向图</h2><p><img src="/image/graph1.png" alt="graph1"><br>一个一维数组存储图中顶点信息，</p>
-<table>
-<thead>
-<tr>
-<th>顶点数组</th>
-<th>v0</th>
-<th>v1</th>
-<th>v2</th>
-<th>v3</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>一个二维数组(邻接矩阵)存储图中边或弧的信息<br>0表示不存在顶点间的边，1表示顶点间存在边</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>v0</th>
-<th>v1</th>
-<th>v2</th>
-<th>v3</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>v0</td>
-<td>0</td>
-<td>1</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<td>v1</td>
-<td>1</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<td>v2</td>
-<td>1</td>
-<td>1</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<td>v3</td>
-<td>1</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-</tr>
-</tbody>
-</table>
-<p>无向图构成的邻接矩阵为对称矩阵，对角线值为0<br>—–顶点Vi在邻接矩阵中第i行(或第i列)的元素之和为该顶点的度<br>—–扫描矩阵中第i行元素，元素为1的列为顶点Vi的邻接点</p>
-<h2 id="2-有向图"><a href="#2-有向图" class="headerlink" title="2.有向图"></a>2.有向图</h2><p><img src="/image/graph2.png" alt="graph2"><br>一个一维数组存储图中顶点信息，</p>
-<table>
-<thead>
-<tr>
-<th>顶点数组</th>
-<th>v0</th>
-<th>v1</th>
-<th>v2</th>
-<th>v3</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>坐标[Vi][Vj]的值，1表示Vi指向Vj的弧存在，0表示不存在</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>v0</th>
-<th>v1</th>
-<th>v2</th>
-<th>v3</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>v0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<td>v1</td>
-<td>1</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<td>v2</td>
-<td>1</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>v3</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-</tbody>
-</table>
-<p>第Vi列的元素之和为顶点Vi的入度<br>第Vi行的元素之和为顶点Vi的出度</p>
-<h2 id="3-网"><a href="#3-网" class="headerlink" title="3.网"></a>3.网</h2><p><img src="/image/tu3.png" alt="tu3"><br>邻接矩阵各元素的值不再用0/1表示，而是用权表示<br>顶点间若不存在弧，则用\infty无穷表示,顶点自己到自己的权为0</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>v0</th>
-<th>v1</th>
-<th>v2</th>
-<th>v3</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>v0</td>
-<td>0</td>
-<td>\infty</td>
-<td>\infty</td>
-<td>18</td>
-</tr>
-<tr>
-<td>v1</td>
-<td>8</td>
-<td>0</td>
-<td>2</td>
-<td>\infty</td>
-</tr>
-<tr>
-<td>v2</td>
-<td>4</td>
-<td>\infty</td>
-<td>0</td>
-<td>\infty</td>
-</tr>
-<tr>
-<td>v3</td>
-<td>\infty</td>
-<td>\infty</td>
-<td>\infty</td>
-<td>0</td>
-</tr>
-</tbody>
-</table>
-<h1 id="2-邻接表"><a href="#2-邻接表" class="headerlink" title="2.邻接表"></a>2.邻接表</h1><h2 id="无向图"><a href="#无向图" class="headerlink" title="无向图"></a>无向图</h2><p>顶点用一个一维数组存储<br>每个顶点Vi的所有邻接点构成一个线性表，由于个数不确定，用单链表来表示<br><img src="/image/tu4.png" alt="tu4"><br><img src="/image/tu5.png" alt="tu5"></p>
-<h2 id="有向图"><a href="#有向图" class="headerlink" title="有向图"></a>有向图</h2><p>把顶点当弧尾建立邻接表，邻接表长度就是该顶点出度<br><img src="/image/tu6.png" alt="tu6"><br>把顶点当弧头建的表叫逆邻接表，邻接表长度就是该顶点入度<br><img src="/image/tu7.png" alt="tu7"></p>
-<h2 id="网"><a href="#网" class="headerlink" title="网"></a>网</h2><p>在边表结点定义中再增加一个数据域来存储权值<br><img src="/image/tu8.png" alt="tu8"></p>
-<h1 id="3-十字链表-有向图"><a href="#3-十字链表-有向图" class="headerlink" title="3.十字链表(有向图)"></a>3.十字链表(有向图)</h1><p>顶点表结构</p>
-<p>|data|firstIn|firstOut|<br>data：顶点数据<br>firstIn:第一个入边表的指针<br>firstOut:第一个出边表的指针</p>
-<p>边表结点结构 表示以条边</p>
-<table>
-<thead>
-<tr>
-<th>tailVex</th>
-<th>headVex</th>
-<th>headLink</th>
-<th>tailLink</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>tailVex:该弧起点的顶点在顶点表的下标<br>headVex:该弧终点的顶点在顶点表的下标<br>headLink:指向headVex的弧的指针<br>tailLink: 从tailVex出发的弧的指针<br><img src="/image/graph2.png" alt="graph2"><br><img src="/image/tu9.png" alt="tu9"></p>
-<h1 id="4-邻接多重表-无向表"><a href="#4-邻接多重表-无向表" class="headerlink" title="4.邻接多重表(无向表)"></a>4.邻接多重表(无向表)</h1><p>关注对象是图中的表不是顶点<br>|iVex|iLink|jVex|jLink|<br>iVex和jVex是与某条边依附的两个顶点在顶点表中的下标<br>iLink：指向依附顶点iVex的下一条边，<br>jLink：指向依附顶点jVex的下一条边，<br><img src="/image/tu10.png" alt="tu10"></p>
-<h1 id="5-边集数组"><a href="#5-边集数组" class="headerlink" title="5.边集数组"></a>5.边集数组</h1><p>由两个一维数组构成<br>一个是存储顶点的信息<br>另一个存储边的信息<br>边数组的每个数据元素由一条边的起点下标(begin)、终点下标(end)和权(weight)组成</p>
-<p><img src="/image/tu11.png" alt="tu11"></p>
-<table>
-<thead>
-<tr>
-<th>顶点数组</th>
-<th>v0</th>
-<th>v1</th>
-<th>v2</th>
-<th>v3</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>边数组</th>
-<th>begin</th>
-<th>end</th>
-<th>weight</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>edges[0]</td>
-<td>0</td>
-<td>3</td>
-<td>5</td>
-</tr>
-<tr>
-<td>edges[1]</td>
-<td>1</td>
-<td>0</td>
-<td>4</td>
-</tr>
-<tr>
-<td>edges[2]</td>
-<td>1</td>
-<td>2</td>
-<td>3</td>
-</tr>
-<tr>
-<td>edges[3]</td>
-<td>2</td>
-<td>0</td>
-<td>8</td>
-</tr>
-</tbody>
-</table>
+            <p>静态查找: 数据集合稳定，不需要添加，删除元素的查找操作<br>– 组织数据宜用线性表结构<br>– 如果要对关键字排序，折半查找算法或斐波那契查找算法<br>动态查找：数据集合在查找过程中需要同时添加或删除元素的查找操作<br>– 二叉排序树，散列表结构</p>
+<h1 id="顺序查找"><a href="#顺序查找" class="headerlink" title="顺序查找"></a>顺序查找</h1><p>顺序查找/线性查找:从第一个(或者最后一个)记录开始，逐个进行记录的关键字和给定值进行比较，若某个记录的关键字和给定值相等，则查找成功。<br>—如果查找了所有的记录仍然找不到与给定值相等的关键字，则查找不成功<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//方式一</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">search</span>(<span class="params">array,key</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> i;</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;= array.length;i++)&#123;</div><div class="line">		<span class="keyword">if</span>(a[i] == key)&#123;</div><div class="line">			<span class="keyword">return</span> i;</div><div class="line">		&#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"><span class="comment">//方式二</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">search</span>(<span class="params">array,key</span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> i= array.length;</div><div class="line">	a[<span class="number">0</span>] = key;</div><div class="line">	<span class="keyword">while</span>(a[i] != key)&#123;</div><div class="line">	  i--</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> i;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h1 id="插值查找-按比例查找"><a href="#插值查找-按比例查找" class="headerlink" title="插值查找(按比例查找)"></a>插值查找(按比例查找)</h1><p>查找方法类似于折半查找，只不过mid的值不再取low和high的中间值，<br>而是根据查找值在low和hight中间的大概位置确定mid<br>var mid = low +(high-low)*(num-list[low])/(list[high]-list[low]);<br>因此插值查找适用于有一定顺序规律的数组<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/Interpolationsearch.js" target="_blank" rel="external">代码链接</a></p>
+<h1 id="斐波那契查找-黄金查找"><a href="#斐波那契查找-黄金查找" class="headerlink" title="斐波那契查找(黄金查找)"></a>斐波那契查找(黄金查找)</h1><p>同样适用于有一定顺序规律的数组<br>在折半查找的基础上根据斐波那契数列进行分割。<br>在斐波那契数列找一个等于略大于查找表中元素个数的数F[k]，<br>将原查找表扩展为长度为F[k]-1(如果要补充元素，则补充重复最后一个元素，直到满足F[k]-1个元素)<br>进行斐波那契分割，即F[k]-1个元素分割为前半部分F[k-1]-1个元素，后半部分F[n-2]-1个元素，剩一个做mid<br>找出要查找的元素在那一部分并递归，直到找到。<br><img src="/image/fiobsearch.png" alt="fiobsearch"><br><a href="https://github.com/YooHannah/algorithm/blob/master/js/FibonacciSearch.js" target="_blank" rel="external">代码链接</a></p>
 
           
         
@@ -614,7 +379,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/performance/compatible_date.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/keypath.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -639,8 +404,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/performance/compatible_date.html" itemprop="url">
-                  日期格式兼容
+                <a class="post-title-link" href="/post/algorithm/keypath.html" itemprop="url">
+                  关键路径
                 </a>
               
             
@@ -654,8 +419,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-26T21:14:37+08:00">
-                2017-02-26
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-02T19:15:37+08:00">
+                2017-04-02
               </time>
             
 
@@ -692,9 +457,7 @@
       
         
           
-            <h1 id="IE11-chrome-360-火狐兼容日期格式兼容"><a href="#IE11-chrome-360-火狐兼容日期格式兼容" class="headerlink" title="IE11/chrome/360/火狐兼容日期格式兼容"></a>IE11/chrome/360/火狐兼容日期格式兼容</h1><p> $scope.date= new Date().toLocaleDateString().replace(/\//g,’-‘);<br> 获取到的”year-month-day”格式支持/chrome/360/火狐，但到了IE11就变成”year年month月day”</p>
-<p> var date = new Date();<br> var y = date.getFullYear();<br> var m = date.getMonth()+1;<br> var d = date.getDate();<br> var day = date.getDay();<br> var dateString=y+”-“+m+”-“+d;<br> $scope.date= dateString;</p>
-<p> 这样获取的”year-month-day”格式支持以上四种浏览器</p>
+            <h1 id="关键路径"><a href="#关键路径" class="headerlink" title="关键路径"></a>关键路径</h1><p>AOE网：在一个表示工程的带权有向图中，用顶点表示事件，用有向边表示活动，用边上的权值表示活动的持续时间，<br>这种有向图的边表示活动的网，我们称之为AOE网(Activity On Edge Network)<br>始点/源点:AOE网中没有入边的顶点<br>终点/汇点:AOE网中没有出边的顶点<br><img src="/image/keypath.png" alt="keypath"><br>etv:时间最早发生时间,顶点的最早发生时间<br>ltv:事件最晚发生时间，每个顶点对应事件最晚需要开始的时间，如果超出此时间将会延误着整个工期<br>ete:活动最早开工时间，弧的最早发生时间<br>lte:活动最晚发生时间，不推迟工期的最晚开工时间<br>关键路径的目的是在规划工程各项活动执行的顺序时，找出关键的活动，保证工程不延期<br><img src="/image/keypath1.png" alt="keypath1"><br><img src="/image/keypath2.png" alt="keypath2"><br><a href="https://github.com/YooHannah/algorithm/blob/master/js/CriticalPath.js" target="_blank" rel="external">代码链接</a></p>
 
           
         
@@ -733,7 +496,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/angular/imgupload.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/TopologySorting.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -758,8 +521,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/angular/imgupload.html" itemprop="url">
-                  AngularJs自定义指令实现图片上传
+                <a class="post-title-link" href="/post/algorithm/TopologySorting.html" itemprop="url">
+                  拓扑排序
                 </a>
               
             
@@ -773,8 +536,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-22T22:14:30+08:00">
-                2017-02-22
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-02T19:14:37+08:00">
+                2017-04-02
               </time>
             
 
@@ -811,12 +574,9 @@
       
         
           
-            <p>//定义file-Model指令的代码<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">MetronicApp.directive(<span class="string">'fileModel'</span>, [<span class="string">'$parse'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">$parse</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> &#123;</div><div class="line">    <span class="attr">restrict</span>: <span class="string">'A'</span>,</div><div class="line">    <span class="attr">link</span>: <span class="function"><span class="keyword">function</span>(<span class="params">scope, element, attrs, ngModel</span>) </span>&#123;</div><div class="line">      <span class="keyword">var</span> model = $parse(attrs.fileModel);</div><div class="line">      <span class="keyword">var</span> modelSetter = model.assign;</div><div class="line">      element.bind(<span class="string">'change'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>&#123;</div><div class="line">        scope.$apply(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">          modelSetter(scope, element[<span class="number">0</span>].files[<span class="number">0</span>]);</div><div class="line">        &#125;);</div><div class="line">        <span class="comment">//附件预览</span></div><div class="line">           scope.file = (event.srcElement || event.target).files[<span class="number">0</span>];</div><div class="line">            scope.getFile();</div><div class="line">            <span class="keyword">this</span>.value = <span class="string">''</span>; <span class="comment">//清除已上传的文件，否则无法连续上传相同文件</span></div><div class="line">      &#125;);</div><div class="line">    &#125;</div><div class="line">  &#125;;</div><div class="line">&#125;</div><div class="line">])</div></pre></td></tr></table></figure></p>
-<p>//在HTML使用时的代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"> &lt;div class=&quot;form-group&quot;&gt;</div><div class="line">    &lt;label class=&quot;control-label col-md-3&quot;&gt;图片上传&lt;/label&gt;</div><div class="line">     &lt;div class=&quot;col-md-9 fileinput&quot;&gt;</div><div class="line">         &lt;img src=&quot;&#123;&#123;detaildata.banner&#125;&#125;&quot; name=&quot;img&quot; style=&quot;width:40px;height: 40px;&quot;&gt;</div><div class="line">        &lt;span class=&quot;btn red btn-outline btn-file&quot; style=&quot;margin-left: 10px;margin-top:0px;&quot;&gt;</div><div class="line">        &lt;span class=&quot;fileinput-new&quot;&gt; 重新上传 &lt;/span&gt;</div><div class="line">        &lt;input type=&quot;hidden&quot;&gt;&lt;input id=&quot;upload&quot; type=&quot;file&quot; file-model=&quot;myFile&quot; name=&quot;...&quot; accept=&quot;image/*&quot; &gt;</div><div class="line">        &lt;/span&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure></p>
-<p>//Controller中上传图片时的js函数<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$scope.getFile = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">   <span class="keyword">var</span> postData = &#123;</div><div class="line">            <span class="attr">fileName</span>: $scope.file</div><div class="line">          &#125;;</div><div class="line">       fileReader.readAsDataUrl($rootScope.settings.url + <span class="string">""</span>, postData).success( <span class="function"><span class="keyword">function</span>(<span class="params">response</span>) </span>&#123;</div><div class="line">                $scope.detaildata.banner = response;</div><div class="line">        &#125;);</div><div class="line"> &#125;;</div></pre></td></tr></table></figure></p>
-<p> //定义fileReader服务的代码<br> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">angular.module(<span class="string">'MetronicApp'</span>)</div><div class="line">.factory(<span class="string">'fileReader'</span>, [<span class="string">"$http"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">$http</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> readAsDataURL = <span class="function"><span class="keyword">function</span> (<span class="params">url, data</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> fd = <span class="keyword">new</span> FormData();</div><div class="line">          angular.forEach(data, <span class="function"><span class="keyword">function</span>(<span class="params">val, key</span>) </span>&#123;</div><div class="line">            fd.append(key, val);</div><div class="line">          &#125;);</div><div class="line">          <span class="keyword">var</span> args = &#123;</div><div class="line">            <span class="attr">method</span>: <span class="string">'POST'</span>,</div><div class="line">            <span class="attr">url</span>: url,</div><div class="line">            <span class="attr">data</span>: fd,</div><div class="line">            <span class="attr">headers</span>: &#123;<span class="string">'Content-Type'</span>: <span class="literal">undefined</span>&#125;,</div><div class="line">            <span class="attr">transformRequest</span>: angular.identity</div><div class="line">          &#125;;</div><div class="line">          <span class="keyword">return</span> $http(args);</div><div class="line">  &#125;;</div><div class="line">  <span class="keyword">return</span> &#123;</div><div class="line">    <span class="attr">readAsDataUrl</span>: readAsDataURL</div><div class="line">  &#125;;</div><div class="line">&#125;])</div></pre></td></tr></table></figure></p>
-<p>整个上传的过程，点击“重新上传”按钮，file-model指令绑定的change事件会检测本次选择的图片与上次是否为一致，不一致则会执行file-model定义时的代码<br> element.bind(‘change’, function(event){<br>        scope.$apply(function(){<br>          modelSetter(scope, element[0].files[0]);<br>        });<br>        //附件预览<br>           scope.file = (event.srcElement || event.target).files[0];      //给Controller 中$scope.file赋值<br>            scope.getFile();    //调用Controller 中 $scope.getFile();<br>          this.value = ‘’; //清除已上传的文件，否则无法连续上传相同文件<br>      });<br>控制器中的$scope.getFile()函数用到fileReader.readAsDataUrl函数上传图片给后台，这个函数在定义fileReader时被定义</p>
-<p>定义指令时，若没有清除已上传文件，连续多次上传时，将导致无法连续上传相同图片的bug.</p>
+            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>DAG(Directed Acyclic)图/无环图：无环的有向图<br>‘活动’：所有的工程或者某种流程都可以分为的若干个小的工程或者阶段<br>AOV(Active On Vertex Network)网：在一个表示工程的有向图中，用顶点表示活动，用弧表示活动之间的优先关系<br>这样的有向图为顶点表示活动的网即AOV网<br>拓扑序列：设G=(V,E)是一个具有n个顶点的有向图，V中的顶点序列V1，V2，……Vn满足若从顶点Vi到Vj有一条路径，则在顶点序列中顶点Vi必在顶点Vj之前,我们称这样的顶点序列为一个拓扑序列,<br>拓扑排序：所谓的拓扑排序，其实就是对一个有向图构造拓扑序列的过程,保证活动是按一定顺序进行<br><img src="/image/tuopu1.png" alt="tuopu1"></p>
+<h1 id="对AOV网进行拓扑排序的方法和步骤"><a href="#对AOV网进行拓扑排序的方法和步骤" class="headerlink" title="对AOV网进行拓扑排序的方法和步骤"></a>对AOV网进行拓扑排序的方法和步骤</h1><p>——从AOV网中选择一个没有前驱的顶点(入度为0的顶点),并且输出它；<br>——从网中删去该顶点，并且删去从该顶点发出的全部有向边(将有向边终点入度减一)<br>——重复上述两步，直到剩余网中不再没有前驱的顶点为止。<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/TopologicalSort.js" target="_blank" rel="external">代码链接</a></p>
+<h1 id="算法时间复杂度"><a href="#算法时间复杂度" class="headerlink" title="算法时间复杂度"></a>算法时间复杂度</h1><p>对一个具有n个顶点，e条边的网来说，初始建立入度为0的顶点栈，要检查所有顶点一次，执行时间为O(n);<br>排序中，若AOV网无回路，则每个顶点入、出栈各一次，每个表结点被检查一次，因而执行时间是O(n+e);<br>因此整个算法时间复杂度是O(n+e)</p>
 
           
         
@@ -855,7 +615,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/graph.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/shortestpath.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -880,8 +640,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/algorithm/graph.html" itemprop="url">
-                  图
+                <a class="post-title-link" href="/post/algorithm/shortestpath.html" itemprop="url">
+                  最短路径
                 </a>
               
             
@@ -895,8 +655,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-22T21:59:30+08:00">
-                2017-02-22
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-02T19:12:37+08:00">
+                2017-04-02
               </time>
             
 
@@ -933,7 +693,9 @@
       
         
           
-            <h1 id="图的定义"><a href="#图的定义" class="headerlink" title="图的定义"></a>图的定义</h1><p>图:由顶点的有穷非空集合和顶点之间边的集合组成，通常表示为：G(V,E),<br>     —-G表示一个图，V是图G中顶点的集合，E是图G中边的集合<br>|                | 线性表           | 树                |           图           |<br>| ————-  |:—————-:| —————–:|<br>| 数据元素       | 元素             | 结点              |           顶点         |<br>| 没有数据元素   | 空表             | 空树              | 不能没有顶点，有穷非空 |<br>| 数据元素间关系 | 相邻之间:线性关系| 相邻两层:层次关系 | 任意两个顶点之间都可能有关系顶点之间逻辑关系用边表示，边集可以是空的|<br>无向边：顶点Vi到Vj之间的边没有方向,用无序偶(Vi,Vj)表示<br>有向边/弧：顶点Vi到Vj之间的边有方向,用有序偶<vi,vj>表示,Vi称为弧尾，Vj称为弧头<br>简单图：在该类图结构中，不存在顶点到其自身的边(自己指向自己)且同一条边不重复出现<br>无向完全图:在该类图结构中，任意两个顶点之间都存在边，含n个顶点的无向完全图有n<em>(n-1)/2条边<br>有向完全图:在该类图结构中，任意两个顶点之间都存在方向互为相反的两条弧，含n个顶点的有向完全图有n</em>(n-1)条边<br>稀疏图：边或弧数小于n<em>logn(n是顶点的个数)<br>稠密图：边或弧数大于n</em>logn(n是顶点的个数)<br>权：图的边或弧带有的与它相关的数字<br>网：带权的图<br>子图：图G1(V1,E1),和G2(V2,E2),如果V2 \subseteq V1，E2 \subseteq E1 ,V2 属于 V1，E2 属于 E1则称G2为G1的子图<br><a href="http://blog.csdn.net/sanqima/article/details/48576361" target="_blank" rel="external">http://blog.csdn.net/sanqima/article/details/48576361</a><br>邻接点：无向图G=(V,E),如果边(V1,V2)属于E，则称顶点V1和V2互为邻接点，即V1和V2相邻接<br>——-边(V1,V2)依附于顶点V1和V2，或者说边(V1,V2)与顶点V1和V2相关联<br>顶点V的度：和顶点V相关联的边的数目，记为TD(V)<br>邻接：有向图G=(V,E),如果边<v1,v2>属于E，则称顶点V1邻接到顶点V2,顶点V2邻接自顶点V1<br>顶点V的入度:以顶点V为头的弧的数目，记为    ID(V)<br>顶点V的出度:以顶点V为尾的弧的数目，记为    OD(V)<br>TD(V) = ID(V) + OD(V);<br>路径:图G=(V,E)中从顶点V1到顶点V2的路线叫从顶点V1到顶点V2的路径，注意有向图和无向图的区别<br>路径的长度：路径上边/弧的数目<br>回路/环：第一个顶点和最后一个顶点相同的路径<br>简单路径：序列中顶点不重复出现的路径<br>简单回路/简单环:除了第一个顶点和最后一个顶点之外，其余顶点不重复出现的回路<br>连通：在无向图G中，如果顶点V1到顶点V2有路径则称V1和V2是连通的<br>连通图：图中任意两个顶点Vi和Vj都是连通的，则称G是连通图<br>连通分量：无向图中的极大连通子图<br>—-连通的子图<br>—-连通子图含有极大顶点数<br>—-具有极大顶点数的连通子图包含依附于这些顶点的所有边<br>强连通图：在该类有向图G中，每一对Vi到Vj都存在路径<br>强连通分量：有向图中的极大强连通子图<br>非强连通图有强连通分量，强连通分量不止属于强连通图<br>连通图的生成树：极小的连通子图，它含有图中全部n个顶点，但只有足以构成一棵树的n-1条边<br>有向树：如果一个有向图恰有一个顶点入度为0，其余顶点入度为1，则该图将生成有向树，从而构成森林</v1,v2></vi,vj></p>
+            <p>网图：两个顶点经过的边上权值之和最少的路径<br>非网图：两个顶点之间经过的边数最少的路径<br>源点：路径起始的第一个顶点<br>终点：最后一个顶点<br><img src="/image/shortestpath1.png" alt="shortestpath1"></p>
+<h1 id="迪杰斯特拉-Dijkstra-算法"><a href="#迪杰斯特拉-Dijkstra-算法" class="headerlink" title="迪杰斯特拉(Dijkstra)算法"></a>迪杰斯特拉(Dijkstra)算法</h1><p>一个顶点到所有顶点的最短路径<br>主要思路：一步步求出它们之间顶点的最短路径，过程中都是基于已经求出的最短路径的基础上，求得更远顶点的最短路径<br>编程思路：类似于最小生成树普里姆算法<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/ShortestPath_Dijkstra.js" target="_blank" rel="external">代码链接</a></p>
+<h1 id="佛洛依德-Floyd-算法"><a href="#佛洛依德-Floyd-算法" class="headerlink" title="佛洛依德(Floyd)算法"></a>佛洛依德(Floyd)算法</h1><p>扩展版迪杰斯特拉(Dijkstra)算法，求图中所有结点到所有结点的最大路径，结果由二维数组展现<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/ShortestPath_Floyd.js" target="_blank" rel="external">代码链接</a><br><img src="/image/shortestpath2.png" alt="shortestpath2"></p>
 
           
         
@@ -972,7 +734,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/reading/Poordaddyrichdaddy.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/MinimumTree.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -997,8 +759,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/reading/Poordaddyrichdaddy.html" itemprop="url">
-                  《穷爸爸富爸爸》摘抄
+                <a class="post-title-link" href="/post/algorithm/MinimumTree.html" itemprop="url">
+                  最小生成树
                 </a>
               
             
@@ -1012,8 +774,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-18T21:14:37+08:00">
-                2017-02-18
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-30T21:10:37+08:00">
+                2017-03-30
               </time>
             
 
@@ -1050,42 +812,9 @@
       
         
           
-            <ol>
-<li>富人买入资产，穷人只有支出，中产阶级购买自以为是资产的负债</li>
-<li>资产是能把钱放进你口袋里的东西，负债是把钱从你口袋里取走的东西</li>
-<li>为了财务安全，人们需要关注自己的事业，你的事业的重心是你的资产项，而不是你的的收入项。要知道资产与负债的区别，并且去买入资产。富人关心的焦点是资产而其他人关注的是收入。</li>
-<li>资产分类：<br>a.不需要我到场就可以正常运作的业务。我拥有他们，但由别人经营和管理。如果我必须在那里，那它就不是我的事业而是我的职业了<br>b.股票<br>c.债券<br>d.共同基金<br>e.能够产生收入的房地产<br>f.票据(收据)<br>g.版税，如音乐，手稿，专利<br>h.其他任何有价值，可产生收入或有增值潜力，并且有良好的销路的东西<br>5.</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">拥有公司的富人</th>
-<th style="text-align:center">为公司工作的人</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">挣钱</td>
-<td style="text-align:center">挣钱</td>
-</tr>
-<tr>
-<td style="text-align:center">支出</td>
-<td style="text-align:center">缴税</td>
-</tr>
-<tr>
-<td style="text-align:center">缴税</td>
-<td style="text-align:center">支出</td>
-</tr>
-</tbody>
-</table>
-<p>=&gt;拥有由资产组成的公司</p>
-<ol>
-<li>财商：<br>a.财务知识，会计，阅读理解数字的能力<br>b.投资策略<br>c.市场，供给，与需求<br>d.法律规章</li>
-<li>理财能手：<br>a.如何寻找其他人都忽视的机会<br>b.如何增加资金<br>c.怎样把精明的人组织起来</li>
-<li>管理技能：<br>a.对现金流的管理<br>b.对系统(你本人，时间及家庭)的管理<br>c.对人员的管理</li>
-<li>克服困难：恐惧心理、愤世嫉俗、懒惰、不良习惯、自负</li>
-<li>开发<br>我需要一个超现实的理由—-精神的力量<br>每天做出自己的选择—-选择的力量<br>慎重的选择朋友—-关系的力量<br>掌握一种模式，然后在学习一种模式—-快速学习的力量<br>首先支付自己—-自律的力量<br>给你的经纪人以优厚的报酬—-好建议的力量<br>用资产来购买奢侈品—-专注的力量<br>对英雄的崇拜—-神话的力量<br>先予后取—-给予的力量</li>
-</ol>
+            <p>图的各结点连线间存在权值，寻找一种访问路径,使得访问各结点最终的路径的权值和最小，<br>最终访问路径和结点形成树的结构，即最小生成树</p>
+<h1 id="普里姆算法"><a href="#普里姆算法" class="headerlink" title="普里姆算法"></a>普里姆算法</h1><p><img src="/image/plim.png" alt="plim"><br>主要思路：研究对象为结点，以某顶点为起点，逐步找各个顶点上最小权值的边来构建最小生成树<br>编程思路：新建一数组，初始化为起点(最小生成树的根结点)在邻接矩阵所在行的权值<br>找到该组权值最小值,最小权值下标即要选择路径的终点，同时也是接下来要比较的邻接矩阵权值行的行号，<br>将该最小权值置0，然后将新建数组与矩阵权值行比较，<br>相同位置，矩阵行若小于新建数组值，就将新建数组值替换为矩阵行的值，<br>再次寻找新建数组中的最小权值，重复以上步骤<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/MinimumTreeofPlim.js" target="_blank" rel="external">代码链接</a></p>
+<h1 id="克鲁斯卡尔算法"><a href="#克鲁斯卡尔算法" class="headerlink" title="克鲁斯卡尔算法"></a>克鲁斯卡尔算法</h1><p><img src="/image/kluse.png" alt="kluse"><br>主要思路：研究对象为边，将边集数组从小到大排序，依次取边集数组的元素，判断边与边是否形成环路，不会形成则选择该边构建最小树<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/MinimumTreeofKruskal.js" target="_blank" rel="external">代码链接</a></p>
 
           
         
@@ -1124,7 +853,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/iconfont.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/commonjs.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1149,8 +878,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/knowledge/iconfont.html" itemprop="url">
-                  阿里巴巴iconfont使用
+                <a class="post-title-link" href="/post/nodejs/commonjs.html" itemprop="url">
+                  关于commonjs、MVC、模板引擎
                 </a>
               
             
@@ -1164,8 +893,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-18T10:41:51+08:00">
-                2017-02-18
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-21T22:16:37+08:00">
+                2017-03-21
               </time>
             
 
@@ -1202,11 +931,13 @@
       
         
           
-            <p>1.登录<a href="http://iconfont.cn/plus/home/index?spm=a313x.7781069.1998910419.2.QImsN2" target="_blank" rel="external">http://iconfont.cn/plus/home/index?spm=a313x.7781069.1998910419.2.QImsN2</a> 进入搜索界面<br>2.通过输入关键字搜索自己想要的图标<br>3.将鼠标放到自己想要的图标会出现选择层，点击第一个购物车图标，添加入库<br>4.将所有想要的图标添加完后，点击右上角购物车图标打开项目添加页，点击“加入项目”右侧图标，为选择的图标新建项目,点确定<br><img src="/image/iconfont1.png" alt="iconfont1"><br><img src="/image/iconfont2.png" alt="iconfont2"><br>5.关闭项目添加页，点击导航栏的“图标管理”，进入“我的项目”栏目</p>
-<p><div><br> <img src="/image/iconfont3.png" style="width: 250px;height: 50px;margin-left: 20px" alt="图片名称" align="left"><br> <img src="/image/iconfont4.png" alt="图片名称" align="right" style="width: 150px;height: 60px;margin-top: -30px;margin-right: 80px"><br></div><br>6.使用图标到我们的HTML代码中，可以通过线上链接使用，也可以通过下载至本地使用</p>
-<h2 id="通过线上链接使用"><a href="#通过线上链接使用" class="headerlink" title="通过线上链接使用"></a>通过线上链接使用</h2><p>1.点击查看在线链接,复制代码到项目的静态资源的css文件中一般在src/assets/css路径下的文件<br>2.设置一个类icon，通过这个类的属性改变图标样式，同时在HTML中引用这个类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">.icon &#123;</div><div class="line">  font-family: &quot;iconfont&quot; !important;</div><div class="line">  font-style: normal;</div><div class="line">  display: inline-block;</div><div class="line">  vertical-align: middle;</div><div class="line">  background-size: 100% auto;</div><div class="line">  background-position: center;</div><div class="line">  -webkit-font-smoothing: asntialiased;</div><div class="line">  -webkit-text-stroke-width: 0.2px;</div><div class="line">  -moz-osx-font-smoothing: grayscale;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>3.在标签中添加icon类,在标签中间加入图标代码，例如：<i class="icon"> &#xe6ac; </i></p>
-<h2 id="下载至本地"><a href="#下载至本地" class="headerlink" title="下载至本地"></a>下载至本地</h2><p>1.点击下载至本地<br>2.将在线链接代码中用到的文件放到项目静态文件夹中，<br>3.将在线链接代码中文件的路径更改为项目中的文件路径，<br>4.其他步骤同线上路径<br>5.也可直接打开下载文件的IconFontDemo/assets/iconfont/的demo.html代码，看如何使用</p>
+            <h1 id="commonjs理解"><a href="#commonjs理解" class="headerlink" title="commonjs理解"></a>commonjs理解</h1><p>是一种编写API的标准，根据该标准写的API可以在任何支持JavaScript的环境中使用，尤其是可以满足服务端的应用<br>四个个关键词<br>modules：模块，外部用 JavaScript 封装，具有对外接口并有一定功能作用的一个文件<br>packages：包，多个module的集合，相当于提供了一些固定接口的函数库，提供更高层的的抽象<br>exports：模块对外的接口对象，在模块文件中编写的功能函数作为它的属性函数，不同写法，使用规则不一样<br>require：当我们要使用某个模块时，用来获取/加载模块接口的对象,获取模块的 exports 对象。</p>
+<h2 id="定义模块与使用"><a href="#定义模块与使用" class="headerlink" title="定义模块与使用"></a>定义模块与使用</h2><p>方式一：<br>定义<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">function Change(a) &#123;</div><div class="line">	a = 100;</div><div class="line">	console.log(a);</div><div class="line">&#125;;</div><div class="line">module.exports = Change;</div><div class="line">//定义子函数</div><div class="line">Change.childchange = function childchange(val)&#123;</div><div class="line">	console.log(val+20);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var change = require(&apos;../models/testchange.js&apos;);</div><div class="line">var a=10;</div><div class="line">var aa=change(a);//100</div><div class="line">console.log(a,aa);//10,100</div><div class="line">change.childchange(a);//30</div></pre></td></tr></table></figure></p>
+<p>方式二：<br>定义<br>同时定义多个同级函数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">exports.Change = function(a)&#123;</div><div class="line">	a = 100;</div><div class="line">	console.log(a);</div><div class="line">	return a;</div><div class="line">&#125;</div><div class="line">exports.add = function(a,b)&#123;</div><div class="line">	return a+b;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var change = require(&apos;../models/testchange.js&apos;);</div><div class="line">var a=10;</div><div class="line">var aa=change.Change(a);//100</div><div class="line">console.log(a,aa);//10 100</div><div class="line">var b=change.add(a,20);</div><div class="line">console.log(b);//30</div></pre></td></tr></table></figure></p>
+<h1 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h1><p>MODEL-VIEW-CONTROLL，模型-视图-控制器，是一种软件的设计模式<br>模型:对象及其数据结构的实现，通常包含数据库的操作<br>视图：表示用户界面，在网站中通常就是HTML的组织结构<br>控制器：用于处理用户请求和数据流，复杂模型，将输出传递给视图<br><img src="/image/noun2.png" alt="noun2"></p>
+<h1 id="模板引擎"><a href="#模板引擎" class="headerlink" title="模板引擎"></a>模板引擎</h1><p>是一个生成HTML的工具<br>其功能是将页面模板和要显示的数据结合起来生成HTML页面<br>既可以运行在服务端又可以运行在客户端，<br>大多数时候它都在服务器端直接被解析为HTML，解析完后再传输给客户端<br>有时候也可以运行在客户端，即浏览器中<br>MVC架构中，模板引擎包含在服务器端，流程如下：<br>控制器得到用户请求后，从模型(原来页面)获取数据，调用模板引擎<br>模板引擎以数据(经过后台处理，要传递给客户端的)和页面模板为输入，生成HTML页面<br>返回给控制器，由控制器交会回给客户端<br><img src="/image/noun1.png" alt="noun1"></p>
 
           
         
@@ -1245,7 +976,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/git/gittrouble.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/mongoDB.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1270,8 +1001,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/git/gittrouble.html" itemprop="url">
-                  git问题处理
+                <a class="post-title-link" href="/post/nodejs/mongoDB.html" itemprop="url">
+                  mongoDB使用
                 </a>
               
             
@@ -1285,8 +1016,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-18T09:50:30+08:00">
-                2017-02-18
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-19T21:45:37+08:00">
+                2017-03-19
               </time>
             
 
@@ -1295,24 +1026,6 @@
             
           </span>
 
-          
-            <span class="post-category" >
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/categories/" itemprop="url" rel="index">
-                    <span itemprop="name">categories</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -1341,29 +1054,20 @@
       
         
           
-            <h1 id="git-pull-更新代码出现问题"><a href="#git-pull-更新代码出现问题" class="headerlink" title="git pull 更新代码出现问题"></a>git pull 更新代码出现问题</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">There is no tracking information for the current branch.</div><div class="line">Please specify which branch you want to merge with.</div><div class="line">See git-pull(1) for details</div><div class="line"></div><div class="line">    git pull &lt;remote&gt; &lt;branch&gt;</div><div class="line"></div><div class="line">If you wish to set tracking information for this branch you can do so with:</div><div class="line"></div><div class="line">    git branch --set-upstream-to=origin/&lt;branch&gt; develop_hotfix</div></pre></td></tr></table></figure>
-<p>解决办法<br>git branch -D 分支名  ##删除本地待更新分支<br>git checkout 分支名 ##将待更新分支切回来<br>Git pull 再更新</p>
-<h1 id="git-remote-add-origin-遇到远程分支已存在的情况"><a href="#git-remote-add-origin-遇到远程分支已存在的情况" class="headerlink" title="git remote add origin 遇到远程分支已存在的情况"></a>git remote add origin 遇到远程分支已存在的情况</h1><p>解决办法<br>git remote rm origin ##先删除远程分支<br>git remote add origin 地址 ## 再修改远程仓库地址</p>
-<h1 id="git-push-遇到问题"><a href="#git-push-遇到问题" class="headerlink" title="git push 遇到问题"></a>git push 遇到问题</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">fatal: unable to access &apos;https://github.com/YooHannah/WeiXindemo.git/&apos;: Failed to connect to github.com port 443: Timed out</div></pre></td></tr></table></figure>
-<p>解决办法<br>先删除远程分支 git remote rm origin<br>再将本地分支的上游分支设置为远程分支同时push<br>git push –set-upstream origin master<br>以后再执行git push 就不会出现报以上错误或一直没反应的状况</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">error:src refspec master does not match any</div></pre></td></tr></table></figure>
-<p>只进行了init,没有add和commit,本地版本库为空, 空只进行了init,目录不能提交 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">If no other git process is currently running, this probably means a</div><div class="line">git process crashed in this repository earlier. Make sure no other git</div><div class="line">process is running and remove the file manually to continue.</div></pre></td></tr></table></figure>
-<p>解决方法：<br>rm -f ./.git/index.lock </p>
-<h1 id="npm-运行项目错误"><a href="#npm-运行项目错误" class="headerlink" title="npm 运行项目错误"></a>npm 运行项目错误</h1><p>npm run dev error [npm ERR! code ELIFECYCLE]<br>node_modules安装问题，执行以下：<br>rm -rf node_modules rm package-lock.json npm cache clear –force npm install</p>
-<h1 id="git-merge-之后，git-commit-出现问题"><a href="#git-merge-之后，git-commit-出现问题" class="headerlink" title="git merge 之后，git commit 出现问题"></a>git merge 之后，git commit 出现问题</h1><p>husky &gt; pre-commit hook failed (add –no-verify to bypass)<br>git merge 之后，git commit 出现问题，解决：<br>出现这样的原因在于楼主使用了husky，并且配置了”precommit”: “npm run lint”<br>因此会在你git commit的时候执行npm run lint 也就是eslint –ext .js src test<br>如果报错的话，会返回非0，从而组织代码commit。<br>因此有两种方式解决：</p>
-<ol>
-<li>执行npm run lint， 根据提示修改错误，如果是其他人的报错，请求别人协助（推荐）</li>
-<li>git commit -m ‘’ -n 强制推送<br>3.更新远程分支列表<br>git remote update origin –prune</li>
-</ol>
-<h1 id="IE报vuex-requires-a-Promise-polyfill-in-this-browser问题解决"><a href="#IE报vuex-requires-a-Promise-polyfill-in-this-browser问题解决" class="headerlink" title="IE报vuex requires a Promise polyfill in this browser问题解决"></a>IE报vuex requires a Promise polyfill in this browser问题解决</h1><p>第一步： 安装 babel-polyfill 。 babel-polyfill可以模拟ES6使用的环境，可以使用ES6的所有新方法<br>npm install –save babel-polyfill<br>第二步： 在 Webpack/Browserify/Node中使用<br>在webpack.config.js文件中，使用<br>module.exports = {<br>entry: {<br>app: [“babel-polyfill”, “./src/main.js”]<br>}<br>};</p>
-<h1 id="git-分支处理"><a href="#git-分支处理" class="headerlink" title="git 分支处理"></a>git 分支处理</h1><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>A同学提交了两次代码，但在第二次提交代码前，B同学有提交自己的代码，并且在合并代码时，<br>将A同学第一次提交的代码merge丢弃了，导致A同学第一次代码无法合并到主分支</p>
-<h2 id="原理知识"><a href="#原理知识" class="headerlink" title="原理知识"></a>原理知识</h2><p>git reset 可以撤销commit命令的提交<br>git rebase 把分叉提交历史’整理’成一条直线<br>git stash 可以把工作现场’储藏起来’，等以后恢复现场后可以继续工作</p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>在分支代码处理时，A同学本地有主分支host(公共分支)和自己的本地分支local，<br>工作流程是<br>在自己本地分支local分支开发完毕后，<br>切换host分支，git pull 拉取远端分支更新后，<br>将本地分支local合并merge到host分支<br>然后git push到远端</p>
-<p>而B同学直接在本地的主分支(公共分支)开发，git push时冲突，<br>git pull 拉取远端A同学第一次的代码时，直接将代码变更进行了丢弃<br>然后push了自己的代码到远端分支</p>
-<p>A同学第二次提交时，并不知道B同学丢弃了自己第一次提交的代码，<br>在进行第二次提交时，在host上拉取远程更新之后，<br>继续合并推送最终结果就是自己的第一次代码丢失了</p>
-<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>利用A同学本地分支local没有合并远程分支的间隙,将A同学的两次提交保存下来，回到两次提交前的状态<br>然后拉取B同学的提交，再将A同学的两次提交拿出来进行合并，这样就可以实现三次提交都保存下来，再提交到远端</p>
-<p>在A同学的本地分支进行操作<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">1.在主分支host上取消第二次提交</div><div class="line">git reset --hard HEAD~1</div><div class="line"></div><div class="line">2.将远端第二次提交撤销掉,让分支保留在B同学提交的状态</div><div class="line">git push --force</div><div class="line"></div><div class="line">3.切换本地分支local,回滚版本到两次提交前</div><div class="line">git reset HEAD^^ </div><div class="line"></div><div class="line">4.保存两次提交 可以通过git stash list查看保存状态</div><div class="line">git stash </div><div class="line">git stash list</div><div class="line"></div><div class="line">5. 合并主分的B同学的提交到本地分支local,这时本地分支就有B同学的代码变更了</div><div class="line">6. 取出A同学的两次提交,与B同学代码进行提交</div><div class="line">git stash pop</div><div class="line">7. 切换主分支host,合并本地分支local,推送到远端</div></pre></td></tr></table></figure></p>
+            <h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><p>cmd到mongoDB的bin文件夹,执行<br>mongod –dbpath data文件夹路径（例：D:\MongoDB\data）//运行<br>再打开一个cmd,同样切目录到bin文件夹下,执行<br>mongo //连接到数据库</p>
+<h1 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h1><h2 id="基础命令"><a href="#基础命令" class="headerlink" title="基础命令"></a>基础命令</h2><p>use dbname    //名为dbname的数据库若存在就将当前数据库切换到该数据库，若不存在，则新建该数据库并切换至该数据库<br>db   //查看当前数据库<br>show dbs    //查看所有数据库,新建的库，在插入数据后才会显示<br>db.dropDatabase() //删除当前数据库,但用db查看当前库，还是被删的这个库<br>db.tablename.drop() //删除数据库中名为tablename的集合<br>db.tablename.insert({“key”:”value”}) //创建名为objectname的表(对象),并插入数据,批量操作时可以直接在shell里面写for循环<br>show tables //查看该库中所有表(对象)<br>db.tablename.find() //在仓库中查找名为tablename的表，如果有就会将表中内容打印出来<br>db.tablename.find({“key”:”value”}) //在tablename表中查找具体数据，注意格式<br><img src="/image/mongodb1.png" alt="mongodb1"><br>db.tablename.update({查找值},{替换值}) //将查找值所在的集合替换为替换值<br><img src="/image/mongodb2.png" alt="mongodb2"><br>db.tablename.remove({查找值}) //删除查找值所在对象的全部数据，若为空，则将整表清空<br><img src="/image/mongodb3.png" alt="mongodb3"></p>
+<h2 id="条件查找"><a href="#条件查找" class="headerlink" title="条件查找"></a>条件查找</h2><p>1.比较查询<br>将查找条件放在value部分，用{}括起来<br>下图查询条件为age大于”$gt”22, 大于等于”$gte”22, 小于”$lt”22, 小于等于”$lte”22, 不等于”$ne”20,等于20的查询格式<br><img src="/image/mongodb4.png" alt="mongodb4"><br>使用正则表达式匹配时同样将正则表达式放在value的位置，而且不用{}或者””包括，直接/开始/结束<br>2.逻辑查询<br>下图查询条件分别为且，或者$or,在氛围内$in,不在范围内$nin<br><img src="/image/mongodb5.png" alt="mongodb5"></p>
+<h2 id="局部修改"><a href="#局部修改" class="headerlink" title="局部修改"></a>局部修改</h2><p>$inc 属性不存在就创建并赋值，如果存在，就在原来的基础上增加要修改的值<br>$set 仅修改<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&gt; db.person.find()</div><div class="line">&#123; &quot;_id&quot; : ObjectId(&quot;58ccdcb002efa48d7589f2ae&quot;), &quot;name&quot; : &quot;jack&quot;, &quot;age&quot; : 20 &#125;</div><div class="line">&#123; &quot;_id&quot; : ObjectId(&quot;58ccdcb502efa48d7589f2af&quot;), &quot;name&quot; : &quot;joe&quot;, &quot;age&quot; : 25 &#125;</div><div class="line">&#123; &quot;_id&quot; : ObjectId(&quot;58ccdcd302efa48d7589f2b0&quot;), &quot;name&quot; : &quot;mark&quot;, &quot;age&quot; : 15 &#125;</div><div class="line">&gt; db.person.update(&#123;&quot;name&quot;:&quot;jack&quot;&#125;,&#123;$inc:&#123;&quot;age&quot;:10&#125;&#125;)</div><div class="line">WriteResult(&#123; &quot;nMatched&quot; : 1, &quot;nUpserted&quot; : 0, &quot;nModified&quot; : 1 &#125;)</div><div class="line">&gt; db.person.update(&#123;&quot;name&quot;:&quot;mark&quot;&#125;,&#123;$set:&#123;&quot;age&quot;:10&#125;&#125;)</div><div class="line">WriteResult(&#123; &quot;nMatched&quot; : 1, &quot;nUpserted&quot; : 0, &quot;nModified&quot; : 1 &#125;)</div><div class="line">&gt; db.person.find()</div><div class="line">&#123; &quot;_id&quot; : ObjectId(&quot;58ccdcb002efa48d7589f2ae&quot;), &quot;name&quot; : &quot;jack&quot;, &quot;age&quot; : 30 &#125;</div><div class="line">&#123; &quot;_id&quot; : ObjectId(&quot;58ccdcb502efa48d7589f2af&quot;), &quot;name&quot; : &quot;joe&quot;, &quot;age&quot; : 25 &#125;</div><div class="line">&#123; &quot;_id&quot; : ObjectId(&quot;58ccdcd302efa48d7589f2b0&quot;), &quot;name&quot; : &quot;mark&quot;, &quot;age&quot; : 10 &#125;</div><div class="line">&gt;</div></pre></td></tr></table></figure></p>
+<p>特殊情况：update的第一个参数不存在，即查找值不在person中，可以如下设置，将其新增<br>db.person.update({“name”:”jackson”},{$inc:{“age”:10}},true)<br>注意：update默认仅更新匹配得到的第一个集合，如果想更新全部匹配得到的结果，<br>可以将第四个参数设为true</p>
+<h2 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a>数据处理</h2><p>1.计数<br>db.person.count()  //获取person中数据条数<br>db.person.count({“age”:20}) // 获取person中age等于20的数据条数<br>2.统计<br>db.person.distinct(“age”) //获取person中所有age的值，重复的值只取一次<br>3.分组<br>db.person.group({<br>    “key”:{“age”:true},//按age分组，age相同的分一组<br>    “initial”:{“person”:[]}, //分组内容<br>    “$reduce”:function(cur,prev){ //符合分组条件，将该条数据放入该组集合中，cur指当前处理的该条数据，prev指上次函数的累计对象，第一次为initial的值。<br>        prev.person.push(cur.name);<br>    },<br>  “finalize”:function(out){//将一条数据划分到一组后执行的处理<br>  out.count = out.person.length;<br>  },<br>  “condition”:{“age”:{$lt:25}}//分组条件，对什么样的数据进行分组<br>})<br>4.映射<br>通过map对集合进行分组，通过reduce对分组结果进行处理，理解为复杂的重组处理，最后会生成一个全新的集合<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">var map = function()&#123;</div><div class="line">	emit(this.name,&#123;count:1&#125;);  //集合按照name分组，分组内容均为&#123;count：1&#125;</div><div class="line">&#125;</div><div class="line">var reduce = function(key,value)&#123;  //对分组结果进行处理</div><div class="line">	var result = &#123;count:0&#125;;</div><div class="line">	for(var i = 0;i&lt;value.length;i++)&#123;</div><div class="line">		result.count +=value[i].count;</div><div class="line">	&#125;</div><div class="line">	return result;</div><div class="line">&#125;</div><div class="line">db.person.mapReduce(map,reduce,&#123;&quot;out&quot;:&quot;collection&quot;&#125;)</div><div class="line">db.collection.find()</div></pre></td></tr></table></figure></p>
+<p>5.循环处理<br>可以将集合赋值给一个变量然后进行循环处理，<br>var list = db.person.find();<br>list.forEach(function(x){<br>    print(x.name):<br>})</p>
+<p>6.可以多操作查询<br>对person集合数据按name排序然后分页<br>var single=db.person.find().sort({“name”,1}).skip(2).limit(2);</p>
+<p>7.索引查询<br>建立索引：<br>db.person.ensureIndex({“name”:1}) //建立按照name进行排序的索引，1为升序，-1为降序<br>db.person.ensureIndex({“name”:1},{“unique”:true}) //建立唯一索引，集合中不能出现重复键值对<br>db.person.ensureIndex({“name”:1,”birthday”:1}) //组合索引<br>查询优化器做出的选择往往是最优的，因为我们做查询时，查询优化器会使用我们建立的这些索引来创建查询方案，<br>如果某一个先执行完则其他查询方案被close掉，这种方案会被mongodb保存起来，当然如果非要用自己指定的查询方案，这也是可以的，在mongodb中给我们提供了hint方法让我们可以暴力执行。<br>db.person.find({“name”:”jack”,”birthday”:”1998-3-2”}).hint({“name”:1,”birthday”:1})</p>
+<p>删除索引：<br>db.person.dropIndexes(“name_1”)</p>
+<h1 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h1><p>将数据库数据复制到多台服务器上，防止因为一台服务器死机而导致数据无法使用的问题出现<br>将安装文件复制到其他磁盘上，模拟不同的服务器<br>启动H盘上的mongodb，把该数据库指定为主数据库<br>H:\mongoDB\bin&gt;mongod –dbpath H:\mongoDB\data –master<br>启动D盘上的mongodb，把该数据库指定为从属数据库<br>D:\mongoDB\bin&gt;mongod –dbpath D:\mongoDB\data –port 8888 –slave –source=127.0.0.1:27017<br>更换端口为8888，source表示主数据库地址<br>2017-03-20T10:12:17.424+0800 I REPL     [replslave] syncing from host:127.0.0.1:<br>27017<br>然后分别打开主shell(mongo 127.0.0.1:27017)和从shell(mongo 127.0.0.1:8888)查看所有集合<br>show dbs<br>因为从服务器上的数据库是不允许进行读写操作,所以从shell中会报错<br><img src="/image/mongodb7.png" alt="mongodb7"><br>解决，先执行：rs.slaveOk()<br>现在主shell中更改数据，在从shell中查看，看是否进行了同步<br>但有可能因为服务连接状态问题导致数据内容不同<br><img src="/image/mongodb8.png" alt="mongodb8"></p>
+<h1 id="集群"><a href="#集群" class="headerlink" title="集群"></a>集群</h1><p>不设定特定主数据库，如果哪个数据库死机了，集群就会推选一个从属数据库作为主数据库顶上，实现自动修复的效果<br>1.建立集群，命名集群名为shopex,replSet让服务器知道shopex下有端口为3333的另一个数据库服务器<br>新打开cmd<br>H:\mongoDB\bin&gt;mongod –dbpath H:\mongoDB\data –port 2222 –replSet shopex/127.0.0.1:3333<br>2.打开端口为3333的另一个数据库服务器<br>新打开cmd<br>D:\mongoDB\bin&gt;mongod –dbpath D:\mongoDB\data –port 3333 –replSet shopex/127.0.0.1:2222<br>3.在admin集合中初始化“副本集”<br>新打开cmd,开启shell<br>H:\mongoDB\bin&gt;mongo 127.0.0.1:2222/admin<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&gt; db.runCommand(&#123;&quot;replSetInitiate&quot;:&#123;</div><div class="line">... &quot;_id&quot;:&quot;shopex&quot;,</div><div class="line">... &quot;members&quot;:[</div><div class="line">... &#123;</div><div class="line">... &quot;_id&quot;:1,</div><div class="line">... &quot;host&quot;:&quot;127.0.0.1:2222&quot;</div><div class="line">... &#125;,</div><div class="line">... &#123;</div><div class="line">... &quot;_id&quot;:2,</div><div class="line">... &quot;host&quot;:&quot;127.0.0.1:3333&quot;</div><div class="line">... &#125;</div><div class="line">... ]&#125;&#125;)</div><div class="line">&#123; &quot;ok&quot; : 1 &#125;</div></pre></td></tr></table></figure></p>
+<p>4.设置仲裁服务器<br>新打开cmd,开启服务<br>D:\mongoDB\bin&gt;mongod –dbpath F:\mongoDB\data –port 4444 –replSet shopex/127.0.0.1:2222<br>开启shell,设置及产看结果<br>H:\mongoDB\bin&gt;mongo 127.0.0.1:2222/admin<br>shopex:PRIMARY&gt; rs.addArb(“127.0.0.1:4444”)<br>{ “ok” : 1 }<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div></pre></td><td class="code"><pre><div class="line">shopex:PRIMARY&gt; rs.status()</div><div class="line">&#123;</div><div class="line">        &quot;set&quot; : &quot;shopex&quot;,</div><div class="line">        &quot;date&quot; : ISODate(&quot;2017-03-20T05:55:12.742Z&quot;),</div><div class="line">        &quot;myState&quot; : 1,</div><div class="line">        &quot;term&quot; : NumberLong(1),</div><div class="line">        &quot;heartbeatIntervalMillis&quot; : NumberLong(2000),</div><div class="line">        &quot;optimes&quot; : &#123;</div><div class="line">                &quot;lastCommittedOpTime&quot; : &#123;</div><div class="line">                        &quot;ts&quot; : Timestamp(1489989307, 1),</div><div class="line">                        &quot;t&quot; : NumberLong(1)</div><div class="line">                &#125;,</div><div class="line">                &quot;appliedOpTime&quot; : &#123;</div><div class="line">                        &quot;ts&quot; : Timestamp(1489989307, 1),</div><div class="line">                        &quot;t&quot; : NumberLong(1)</div><div class="line">                &#125;,</div><div class="line">                &quot;durableOpTime&quot; : &#123;</div><div class="line">                        &quot;ts&quot; : Timestamp(1489989307, 1),</div><div class="line">                        &quot;t&quot; : NumberLong(1)</div><div class="line">                &#125;</div><div class="line">        &#125;,</div><div class="line">        &quot;members&quot; : [</div><div class="line">                &#123;</div><div class="line">                        &quot;_id&quot; : 1,</div><div class="line">                        &quot;name&quot; : &quot;127.0.0.1:2222&quot;,</div><div class="line">                        &quot;health&quot; : 1,</div><div class="line">                        &quot;state&quot; : 1,</div><div class="line">                        &quot;stateStr&quot; : &quot;PRIMARY&quot;,</div><div class="line">                        &quot;uptime&quot; : 596,</div><div class="line">                        &quot;optime&quot; : &#123;</div><div class="line">                                &quot;ts&quot; : Timestamp(1489989307, 1),</div><div class="line">                                &quot;t&quot; : NumberLong(1)</div><div class="line">                        &#125;,</div><div class="line">                        &quot;optimeDate&quot; : ISODate(&quot;2017-03-20T05:55:07Z&quot;),</div><div class="line">                        &quot;electionTime&quot; : Timestamp(1489989026, 1),</div><div class="line">                        &quot;electionDate&quot; : ISODate(&quot;2017-03-20T05:50:26Z&quot;),</div><div class="line">                        &quot;configVersion&quot; : 2,</div><div class="line">                        &quot;self&quot; : true</div><div class="line">                &#125;,</div><div class="line">                &#123;</div><div class="line">                        &quot;_id&quot; : 2,</div><div class="line">                        &quot;name&quot; : &quot;127.0.0.1:3333&quot;,</div><div class="line">                        &quot;health&quot; : 1,</div><div class="line">                        &quot;state&quot; : 2,</div><div class="line">                        &quot;stateStr&quot; : &quot;SECONDARY&quot;,</div><div class="line">                        &quot;uptime&quot; : 296,</div><div class="line">                        &quot;optime&quot; : &#123;</div><div class="line">                                &quot;ts&quot; : Timestamp(1489989307, 1),</div><div class="line">                                &quot;t&quot; : NumberLong(1)</div><div class="line">                        &#125;,</div><div class="line">                        &quot;optimeDurable&quot; : &#123;</div><div class="line">                                &quot;ts&quot; : Timestamp(1489989307, 1),</div><div class="line">                                &quot;t&quot; : NumberLong(1)</div><div class="line">                        &#125;,</div><div class="line">                        &quot;optimeDate&quot; : ISODate(&quot;2017-03-20T05:55:07Z&quot;),</div><div class="line">                        &quot;optimeDurableDate&quot; : ISODate(&quot;2017-03-20T05:55:07Z&quot;),</div><div class="line">                        &quot;lastHeartbeat&quot; : ISODate(&quot;2017-03-20T05:55:11.766Z&quot;),</div><div class="line">                        &quot;lastHeartbeatRecv&quot; : ISODate(&quot;2017-03-20T05:55:10.786Z&quot;</div><div class="line">),</div><div class="line">                        &quot;pingMs&quot; : NumberLong(0),</div><div class="line">                        &quot;syncingTo&quot; : &quot;127.0.0.1:2222&quot;,</div><div class="line">                        &quot;configVersion&quot; : 2</div><div class="line">                &#125;,</div><div class="line">                &#123;</div><div class="line">                        &quot;_id&quot; : 3,</div><div class="line">                        &quot;name&quot; : &quot;127.0.0.1:4444&quot;,</div><div class="line">                        &quot;health&quot; : 1,</div><div class="line">                        &quot;state&quot; : 7,</div><div class="line">                        &quot;stateStr&quot; : &quot;ARBITER&quot;,</div><div class="line">                        &quot;uptime&quot; : 44,</div><div class="line">                        &quot;lastHeartbeat&quot; : ISODate(&quot;2017-03-20T05:55:11.765Z&quot;),</div><div class="line">                        &quot;lastHeartbeatRecv&quot; : ISODate(&quot;2017-03-20T05:55:07.948Z&quot;</div><div class="line">),</div><div class="line">                        &quot;pingMs&quot; : NumberLong(0),</div><div class="line">                        &quot;configVersion&quot; : 2</div><div class="line">                &#125;</div><div class="line">        ],</div><div class="line">        &quot;ok&quot; : 1</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>现在如果关掉2222端口服务器，再打开，在执行rs.status(),可以看到2222的“stateStr”变成”SECONDARY”<br>“3333”的变成”PRIMARY”<br><a href="http://www.cnblogs.com/huangxincheng/archive/2012/02/29/2372699.html" target="_blank" rel="external">相关链接</a></p>
 
           
         
@@ -1402,7 +1106,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/git/gituse.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/prehensive.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1427,8 +1131,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/git/gituse.html" itemprop="url">
-                  git使用
+                <a class="post-title-link" href="/post/nodejs/prehensive.html" itemprop="url">
+                  开发小结
                 </a>
               
             
@@ -1442,8 +1146,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-15T16:56:09+08:00">
-                2017-02-15
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-15T21:42:51+08:00">
+                2017-03-15
               </time>
             
 
@@ -1480,9 +1184,10 @@
       
         
           
-            <h1 id="链接虚拟机基本步骤"><a href="#链接虚拟机基本步骤" class="headerlink" title="链接虚拟机基本步骤"></a>链接虚拟机基本步骤</h1><p>1.打开git bash<br>2.执行命令“ssh root@环境地址” 例：ssh root@172.16.6.213<br>3.输入对应密码<br>4.执行命令“cd 代码在该虚拟机的存放路径” 例：cd /usr/share/nginx/html/projrctname<br>5.git branch #查看本地分支<br>6.git checkout 分支名  #切换分支<br>7.git pull 更新代码</p>
-<h1 id="更新远程仓库地址"><a href="#更新远程仓库地址" class="headerlink" title="更新远程仓库地址"></a>更新远程仓库地址</h1><h2 id="命令行界面操作"><a href="#命令行界面操作" class="headerlink" title="命令行界面操作"></a>命令行界面操作</h2><p>显示当前远程仓库：git remote -v<br>删除当前远程仓库：git remote remove origin<br>添加新的远程仓库：git remote add origin 远程仓库地址<br><img src="/image/git1.png" alt="git1"></p>
-<h2 id="使用source-tree"><a href="#使用source-tree" class="headerlink" title="使用source tree"></a>使用source tree</h2><p>1.在 SourceTree 里打开对应的代码库。<br>2.点击右上角设置按钮<br><img src="/image/git2.png" alt="git2"><br>3.点击选择当前远程仓库路径,编辑和移除按钮恢复可用，点击“移除”<br>4.点击“新建”，“远程(仓库)名称”填入“origin”，“URL/路径”填入项目在Git服务器的地址<br>5.点击“确定”<br>6.点击设置页面”确定”<br><img src="/image/git3.png" alt="git3"></p>
+            <h1 id="对于路由的理解"><a href="#对于路由的理解" class="headerlink" title="对于路由的理解"></a>对于路由的理解</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">官方定义：</div><div class="line">路由是指如何定义应用的端点（URIs）以及如何响应客户端的请求。</div><div class="line">路由是由一个 URI、HTTP 请求（GET、POST等）和若干个句柄组成，它的结构如下： app.METHOD(path, [callback...], callback)， app 是 express 对象的一个实例， METHOD 是一个 HTTP 请求方法， path 是服务器上的路径， callback 是当路由匹配时要执行的函数。</div></pre></td></tr></table></figure>
+<p>当浏览器向服务器发过来一个http请求时，会携带请求路径和请求方法,服务器根据发过来的路径和请求方法进行匹配,二者都匹配的话，就执行对应的回调函数<br>请求的目的在客户端看来可能多种多样，比如单纯的访问页面，重新获取页面数据，向后台传递数据，但是在服务端看来都是一样的处理方法，匹配路径和方法，进行回调函数，<br>即通过匹配执行相应的动作，比如<br>客户端想访问一个页面，回调函数就执行渲染页面的操作<br>客户端要传递数据给数据库，回调函数就获取传递的数据然后给到数据库<br>作用就像一个指南针，根据客户端不同的请求，执行不同的操作<br>但涉及到的具体操作（数据处理）可能会通过其他文件的处理函数来实现<br><a href="http://www.expressjs.com.cn/guide/routing.html" target="_blank" rel="external">官方文档</a></p>
+<h1 id="对于中间件的理解"><a href="#对于中间件的理解" class="headerlink" title="对于中间件的理解"></a>对于中间件的理解</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">官方定义</div><div class="line">中间件（Middleware） 是一个函数，它可以访问请求对象（request object (req)）, 响应对象（response object (res)）, 和 web 应用中处于请求-响应循环流程中的中间件，一般被命名为 next 的变量。</div><div class="line">中间件的功能包括：</div><div class="line">执行任何代码。</div><div class="line">修改请求和响应对象。</div><div class="line">终结请求-响应循环。</div><div class="line">调用堆栈中的下一个中间件。</div><div class="line">如果当前中间件没有终结请求-响应循环，则必须调用 next() 方法将控制权交给下一个中间件，否则请求就会挂起。</div></pre></td></tr></table></figure>
+<p>粗浅的理解为功能处理函数，比如路由匹配里的回调函数，根据功能和使用方式不同分成多种<br>1.应用级中间件， app.use() 和 app.METHOD()的回调函数<br>2.路由级中间件，var router = express.Router()， router.use() 或 router.VERB() 的回调函数<br>3.错误处理中间件，进行错误处理的的函数，参数与其他不同<br>4.内置中间件, express.static<br>5.第三方中间件,通过npm安装的模块，即我们使用的模块也算是中间件<br><a href="http://www.expressjs.com.cn/guide/using-middleware.html#middleware.application" target="_blank" rel="external">官方文档</a></p>
 
           
         
@@ -1521,7 +1226,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/Huffman.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/Middleware.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1546,8 +1251,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/algorithm/Huffman.html" itemprop="url">
-                  赫夫曼编码
+                <a class="post-title-link" href="/post/nodejs/Middleware.html" itemprop="url">
+                  对于一些模块的探究
                 </a>
               
             
@@ -1561,8 +1266,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-12T15:33:37+08:00">
-                2017-02-12
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-15T21:32:51+08:00">
+                2017-03-15
               </time>
             
 
@@ -1599,12 +1304,23 @@
       
         
           
-            <p>赫夫曼编码可以构造出一种不等长的二进制，使编码后的电文长度最短，且保证不产生二义性</p>
-<h1 id="赫夫曼树"><a href="#赫夫曼树" class="headerlink" title="赫夫曼树"></a>赫夫曼树</h1><h2 id="相关定义"><a href="#相关定义" class="headerlink" title="相关定义"></a>相关定义</h2><p>权：树结点间的连线相关的数<br>结点的路径长度：从根结点到该结点的路径上的连接数<br>树的路径长度：树中每个叶子结点的路径长度之和<br>结点带权路径长度：结点的路径长度与结点权值的乘积<br>树的带权路径长度(WPL)：树中所有叶子结点的带权路径长度之和。    WPL越小,说明二叉树性能越优。</p>
-<h2 id="构造赫夫曼树"><a href="#构造赫夫曼树" class="headerlink" title="构造赫夫曼树"></a>构造赫夫曼树</h2><p>1.在森林中选出两颗根结点的权值最小的二叉树，权值小的放左边，权值大的放右边<br>2.合并两颗选出的二叉树：增加一个新结点n作为新二叉树的根，权值为左右孩子权值之和<br>3.回到森林中，选出权值最小的根结点，与刚刚形成的结点n比较，小的放左边，大的放右边<br>4.返回步骤二，直到森林中的树被选完</p>
-<p><div style="margin-bottom: 125px"><br> <img src="/image/tree7.png" style="width: 300px;height: 100px;" alt="图片名称" align="left"><br> <img src="/image/tree8.png" alt="图片名称" align="right" style="width: 300px;height: 180px;margin-top: -30px"><br></div></p>
-<h1 id="赫夫曼编码"><a href="#赫夫曼编码" class="headerlink" title="赫夫曼编码"></a>赫夫曼编码</h1><h2 id="一些名词"><a href="#一些名词" class="headerlink" title="一些名词"></a>一些名词</h2><p>定长编码：规定位数表示字符<br>变长编码：单个编码长度不一字，可以根据整体出现频率来调节<br>前缀码：没有任何码字是其他码字的前缀</p>
-<h2 id="赫夫曼编码思路"><a href="#赫夫曼编码思路" class="headerlink" title="赫夫曼编码思路"></a>赫夫曼编码思路</h2><p>1.根据输入字符串，统计字符出现次数，建立优先级队列<br>2.根据优先级队列建立输入字符串的赫夫曼树<br>3.遍历赫夫曼树，左1右0，建立字符编码表<br>4.编码encode:根据字符编码形成字符串编码<br>5.解码decode：根据编码字符串遍历赫夫曼树，左0右1，找到叶子结点的字符，从而解码字符。<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/heffman.js" target="_blank" rel="external">代码链接</a></p>
+            <h1 id="express-session"><a href="#express-session" class="headerlink" title="express-session"></a>express-session</h1><p>用来提供会话支持，获取用户的会话对象,用来维护用户相关信息<br>当浏览器访问服务器并发送第一次请求时，服务器端会创建一个session对象，生成一个类似于key,value的键值对， 然后将key(cookie)返回到浏览器(客户)端，浏览器下次再访问时，携带key(cookie)，找到对应的session(value)。 客户的信息都保存在session中。<br>当客户访问其他页面时，可以判断客户的登录状态，做出提示，相当于登录拦截。<br>session可以和Redis或者数据库等结合做持久化操作，当服务器挂掉时也不会导致某些客户信息（购物车）丢失。</p>
+<h2 id="常用参数"><a href="#常用参数" class="headerlink" title="常用参数:"></a>常用参数:</h2><p>secret: 一个String类型的字符串，作为服务器端生成session的签名。<br>name: 返回客户端的key的名称，默认为connect.sid,也可以自己设置。<br>resave: (是否允许)当客户端并行发送多个请求时，其中一个请求在另一个请求结束时对session进行修改覆盖并保存。</p>
+<p>默认为true。但是(后续版本)有可能默认失效，所以最好手动添加。</p>
+<p>saveUninitialized: 初始化session时是否保存到存储。默认为true， 但是(后续版本)有可能默认失效，所以最好手动添加。</p>
+<p>cookie: 设置返回到前端key的属性，默认值为{ path: ‘/’, httpOnly: true, secure: false, maxAge: null }。</p>
+<h2 id="一些方法"><a href="#一些方法" class="headerlink" title="一些方法:"></a>一些方法:</h2><p>Session.destroy():删除session，当检测到客户端关闭时调用。</p>
+<p>Session.reload():当session有修改时，刷新session。</p>
+<p>Session.regenerate()：将已有session初始化。</p>
+<p>Session.save()：保存session。</p>
+<h1 id="connect-flash"><a href="#connect-flash" class="headerlink" title="connect-flash"></a>connect-flash</h1><p>官方解释<br>The flash is a special area of the session used for storing messages. Messages are written to the flash and cleared after being displayed to the user. The flash is typically used in combination with redirects, ensuring that the message is available to the next page that is to be rendered.</p>
+<p>即一个在session中存放临时信息的地方，显示给用户后,在渲染下一个页面前被清空</p>
+<h2 id="函数用法："><a href="#函数用法：" class="headerlink" title="函数用法："></a>函数用法：</h2><p>(1)如果传入的参数多于两个，那么首先获取第二个以及以后的参数，然后对第二个以后的参数进行format操作，最后把数据封装到req.session.flash中，同时返回<br>req.flash(‘info’, ‘email has been sent to %s.’, userName);<br>(2)如果传入的第二个参数是一个数组，那么把这个数组每一个元素封装到req.session.flash中，然后返回特定type的数据的长度<br>(3)如果仅仅传入了type则返回指定类型的数据，并把数据从req.session.flash中删除<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">req.flash(&apos;info&apos;, &apos;email re-sent&apos;);</div><div class="line">req.flash(&apos;info&apos;);// =&gt; [&apos;email sent&apos;, &apos;email re-sent&apos;]</div><div class="line">req.flash(&apos;info&apos;);// =&gt; []这时候info已经清空了</div></pre></td></tr></table></figure></p>
+<p>(4)如果用户没有传入任何参数那么返回的原来的局部变量保存到的req.session.flash对象,清空req.session.flash域</p>
+<h2 id="实际使用："><a href="#实际使用：" class="headerlink" title="实际使用："></a>实际使用：</h2><p>安装<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ npm install express-session //flash放在session中</div><div class="line">$ npm install connect-flash</div></pre></td></tr></table></figure></p>
+<p>配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">var flash = require(&apos;connect-flash&apos;);</div><div class="line">var session = require(&apos;express-session&apos;);</div><div class="line">app.use(session(&#123; //一些参数配置</div><div class="line">  secret: params1,</div><div class="line">  key: params2,</div><div class="line">  cookie: &#123;maxAge: 60000&#125;,</div><div class="line">  resave: false,</div><div class="line">  saveUninitialized: true</div><div class="line">&#125;));</div><div class="line">app.use(flash());</div></pre></td></tr></table></figure></p>
+<p>使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">router.post(&apos;/login&apos;, function(req, res, next) &#123;</div><div class="line">  User.get(req.body.username,function(err,user)&#123;</div><div class="line">      if(!user || user.name === &apos;&apos;)&#123;</div><div class="line">        req.flash(&apos;error&apos;,&apos;用户不存在&apos;);</div><div class="line">        return res.redirect(&apos;login&apos;);</div><div class="line">      &#125;</div><div class="line">      if(req.body.password != user.password)&#123;</div><div class="line">        req.flash(&apos;error&apos;,&apos;密码不对&apos;);</div><div class="line">        return res.redirect(&apos;login&apos;);</div><div class="line">      &#125;</div><div class="line">      req.flash(&apos;info&apos;,&apos;登录成功&apos;);</div><div class="line">      res.redirect(&apos;login&apos;);</div><div class="line">  &#125;)</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>一般和redirect一起使用，保证在渲染下一个页面的时候数据可用</p>
 
           
         
@@ -1643,7 +1359,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/angular/checkbox.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/step.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1668,8 +1384,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/angular/checkbox.html" itemprop="url">
-                  利用checkbox进行各种勾选
+                <a class="post-title-link" href="/post/nodejs/step.html" itemprop="url">
+                  搭建博客步骤
                 </a>
               
             
@@ -1683,8 +1399,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-12T15:33:37+08:00">
-                2017-02-12
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-12T21:33:37+08:00">
+                2017-03-12
               </time>
             
 
@@ -1721,15 +1437,31 @@
       
         
           
-            <h1 id="单选"><a href="#单选" class="headerlink" title="单选"></a>单选</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">html:</div><div class="line">&lt;div ng-repeat=&quot;item in labels track by $index&quot; style=&quot;padding-left: 50px&quot;&gt;</div><div class="line">  &lt;label class=&quot;mt-checkbox mt-checkbox-single mt-checkbox-outline&quot; &gt;&lt;input  type=&quot;checkbox&quot; ng-model=&quot;item.isSelected&quot; ng-click=&quot;updateSingelSelection($index,labels)&quot; /&gt;&lt;span&gt;&lt;/span&gt;&lt;/label&gt;</div><div class="line">  &lt;label&gt;&#123;&#123;item.name&#125;&#125;&lt;/label&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
-<p>val1为选定值的key,或者叫序号,val2为选项集合</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"> $scope.updateSingelSelection = <span class="function"><span class="keyword">function</span>(<span class="params">val1, val2</span>) </span>&#123;</div><div class="line">  $scope.label = val2[val1];  												<span class="comment">//对选定的值做处理</span></div><div class="line">  angular.forEach(val2, <span class="function"><span class="keyword">function</span>(<span class="params">x, index</span>) </span>&#123;				 <span class="comment">//处理其他选项为未选状态</span></div><div class="line">    <span class="keyword">if</span> (val1 != index)</div><div class="line">      x.isSelected = <span class="literal">false</span>;</div><div class="line">  &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p><img src="/image/checkbox1.png" alt="checkbox1"></p>
-<h1 id="多选"><a href="#多选" class="headerlink" title="多选"></a>多选</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">&lt;div class=&quot;portlet-body dataTables_wrapper&quot; style=&quot;margin: -20px 20px 0px 20px;&quot; ng-if=&quot;detaildata.goods.length&gt;0&quot;&gt;</div><div class="line">	&lt;div class=&quot;table-scrollable&quot;&gt;</div><div class="line">		&lt;table class=&quot;table table-bordered table-hover no-footer&quot;&gt;</div><div class="line">			&lt;thead&gt;</div><div class="line">				&lt;tr role=&quot;row&quot; class=&quot;heading&quot;&gt;</div><div class="line">					&lt;th&gt;ID&lt;/th&gt;</div><div class="line">					&lt;th&gt;</div><div class="line">						&lt;label class=&quot;mt-checkbox mt-checkbox-single mt-checkbox-outline&quot;&gt;&lt;input type=&quot;checkbox&quot; ng-model=&quot;detaildata.goods.allchecked&quot; ng-change=&quot;selectall()&quot;/&gt;&lt;span&gt;&lt;/span&gt;&lt;/label&gt;</div><div class="line">					&lt;/th&gt;</div><div class="line">				&lt;/tr&gt;</div><div class="line">			&lt;/thead&gt;</div><div class="line">			&lt;tbody&gt;</div><div class="line">				&lt;tr role=&quot;row&quot; ng-repeat=&quot;item in detaildata.goods track by $index&quot;&gt;</div><div class="line">					&lt;td&gt;&#123;&#123;item.id&#125;&#125;&lt;/td&gt;</div><div class="line">					&lt;td&gt;</div><div class="line">						&lt;label class=&quot;mt-checkbox mt-checkbox-single mt-checkbox-outline&quot;&gt;&lt;input  type=&quot;checkbox&quot; ng-model=&quot;item.checked&quot; ng-click=&quot;UpdateSelection($index)&quot;/&gt;&lt;span&gt;&lt;/span&gt;&lt;/label&gt;</div><div class="line">					&lt;/td&gt;</div><div class="line">				&lt;/tr&gt;</div><div class="line">			&lt;/tbody&gt;</div><div class="line">		&lt;/table&gt;</div><div class="line">	&lt;/div&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"> $scope.UpdateSelection = function(index)&#123;</div><div class="line">    if($scope.detaildata.goods[index].checked)&#123;</div><div class="line"></div><div class="line">      tempdata2.push($scope.detaildata.goods[index]); 					//处理选中项</div><div class="line"></div><div class="line">      if(tempdata2.length == $scope.detaildata.goods.length)&#123;   //判断是否满足全选条件，						$scope.detaildata.goods.allchecked = true;                //满足则将全选按钮设置为勾选状态</div><div class="line">      &#125;else&#123;</div><div class="line">        $scope.detaildata.goods.allchecked = false;             //否则为未选状态</div><div class="line">      &#125;</div><div class="line">    &#125; else &#123;</div><div class="line">      $scope.alldata.goods[index].checked = false; //全选按钮设为</div><div class="line">      angular.forEach(tempdata2, function(list,num)&#123;</div><div class="line">        if($scope.detaildata.goods[index].deal_id == list.deal_id)&#123;</div><div class="line">         tempdata2.splice(num,1);</div><div class="line">         $scope.detaildata.goods.allchecked = false;</div><div class="line">         return;</div><div class="line">       &#125;</div><div class="line">     &#125;);</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p><div style="margin-bottom: 250px"><br> <img src="/image/checkbox2.png" style="width: 150px;height: 300px;margin-left: 80px" alt="图片名称" align="left"><br> <img src="/image/checkbox.png" alt="图片名称" align="right" style="width: 150px;height: 300px;margin-top: -30px;margin-right: 80px"><br></div></p>
-<h1 id="全选"><a href="#全选" class="headerlink" title="全选"></a>全选</h1><p>注意：若全选按钮放在表格里，那全选按钮的绑定值S也一定要是整个表格绑定值A的一个属性,即，A.S是全选按钮绑定值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">$scope.selectall = function()&#123;</div><div class="line"> if($scope.detaildata.goods.allchecked)&#123;</div><div class="line">  for(var i = 0;i &lt; $scope.detaildata.goods.length;i++)&#123;</div><div class="line">    $scope.detaildata.goods[i].checked = true;       //把每个备选项处理为已选状态</div><div class="line">    var num = 0;</div><div class="line">    for(var j = 0;j &lt; tempdata2.length;j++)&#123;</div><div class="line">      if($scope.detaildata.goods[i].deal_id != tempdata2[j].deal_id)&#123;</div><div class="line">        num = num+1;</div><div class="line">      &#125;else&#123;</div><div class="line">        num = num;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    if(num == tempdata2.length)&#123;</div><div class="line">      tempdata2.push($scope.detaildata.goods[i]); //将所有为选择的数据处理到临时集合</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;else&#123;</div><div class="line">  for(var i = 0;i &lt; $scope.detaildata.goods.length;i++)&#123;</div><div class="line">    $scope.detaildata.goods[i].checked = false; //把每个备选项处理为未选状态</div><div class="line">  &#125;</div><div class="line">  tempdata2 = []; //清空临时集合</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h1 id="勾选方法提炼"><a href="#勾选方法提炼" class="headerlink" title="勾选方法提炼"></a>勾选方法提炼</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div></pre></td><td class="code"><pre><div class="line">//表格勾选 tempdata勾选数据集合，data所有待选数据集合，status勾选状态，keyword数据标志属性</div><div class="line">APP.factory(&apos;selectAll&apos;, function()&#123;</div><div class="line">    //全选按钮的勾选</div><div class="line">  var allChoose = function (tempdata,data,status,keyword1,keyword2) &#123;</div><div class="line">        if(status)&#123;</div><div class="line">            for(var i = 0;i &lt; data.length;i++)&#123;</div><div class="line">              data[i].isSelected = true;       //把每个备选项处理为已选状态</div><div class="line">              var num = 0;</div><div class="line">              for(var j = 0;j &lt; tempdata.length;j++)&#123;</div><div class="line">                if(data[i][keyword1] != tempdata[j][keyword2])&#123;</div><div class="line">                  num = num+1;</div><div class="line">                &#125;else&#123;</div><div class="line">                  num = num;</div><div class="line">                &#125;</div><div class="line">              &#125;</div><div class="line">              if(num == tempdata.length)&#123;</div><div class="line">                tempdata.push(data[i]); //将所有未选择的数据处理到临时集合</div><div class="line">              &#125;</div><div class="line">            &#125;</div><div class="line">          &#125;else&#123;</div><div class="line">            for(var i = 0;i &lt; data.length;i++)&#123;</div><div class="line">              data[i].isSelected = false; //把每个备选项处理为未选状态</div><div class="line">               angular.forEach(tempdata, function(item,num)&#123;</div><div class="line">                if(data[i][keyword1] == item[keyword2])&#123;</div><div class="line">                tempdata.splice(num,1);</div><div class="line">               &#125;</div><div class="line">             &#125;);</div><div class="line">            &#125;</div><div class="line">          &#125;</div><div class="line">      return &#123;</div><div class="line">        &apos;tempdata&apos;:tempdata,</div><div class="line">        &apos;data&apos;:data</div><div class="line">       &#125;;</div><div class="line">  &#125;;</div><div class="line"></div><div class="line">  //检查是否满足全选</div><div class="line">  var checkAll = function (tempdata,data,keyword1,keyword2) &#123;</div><div class="line">       var temp =0;</div><div class="line">        angular.forEach(data, function(item)&#123;</div><div class="line">          item.isSelected = false;</div><div class="line">          angular.forEach(tempdata, function(term)&#123;</div><div class="line">            if(item[keyword1] == term[keyword2])&#123;</div><div class="line">              item.isSelected = true;</div><div class="line">              temp +=1;</div><div class="line">            &#125;</div><div class="line">          &#125;);</div><div class="line">        &#125;);</div><div class="line">        if(temp == data.length)&#123;</div><div class="line">          return &#123;</div><div class="line">            &apos;allChecked&apos;:true,</div><div class="line">            &apos;data&apos;:data,</div><div class="line">            &apos;tempdata&apos;:tempdata</div><div class="line">           &#125;;</div><div class="line">        &#125;else&#123;</div><div class="line">          return &#123;</div><div class="line">            &apos;allChecked&apos;:false,</div><div class="line">            &apos;data&apos;:data,</div><div class="line">            &apos;tempdata&apos;:tempdata</div><div class="line">          &#125;;</div><div class="line">       &#125;</div><div class="line">  &#125;;</div><div class="line"></div><div class="line">  //单项勾选</div><div class="line">  var UpdateSelection = function(tempdata,data,index,keyword1,keyword2)&#123;</div><div class="line">     if(data[index].isSelected)&#123; //添加选中</div><div class="line">            tempdata.push(data[index]);</div><div class="line">          &#125;else&#123;</div><div class="line">            angular.forEach(tempdata, function(item,num)&#123;</div><div class="line">              if(data[index][keyword1] == item[keyword2])&#123;</div><div class="line">               tempdata.splice(num,1);</div><div class="line">             &#125;</div><div class="line">           &#125;);</div><div class="line">          &#125;</div><div class="line">     return checkAll(tempdata,data,keyword1,keyword2)</div><div class="line">  &#125;;</div><div class="line"></div><div class="line">  //众多选项单选</div><div class="line">  var singleSelection = function (choseindex,data) &#123;</div><div class="line">      angular.forEach(data, function(x, index) &#123;</div><div class="line">          if (choseindex != index)</div><div class="line">            x.isSelected = false;</div><div class="line">        &#125;);</div><div class="line">      return data;</div><div class="line">  &#125;;</div><div class="line"></div><div class="line">  return &#123;</div><div class="line">    &apos;allChoose&apos;: allChoose,</div><div class="line">    &apos;checkAll&apos;:checkAll,</div><div class="line">    &apos;UpdateSelection&apos;:UpdateSelection,</div><div class="line">    &apos;singleSelection&apos;:singleSelection</div><div class="line">  &#125;;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+            <h1 id="搭建"><a href="#搭建" class="headerlink" title="搭建"></a>搭建</h1><p>如果全局安装express 使用npm install -g express 语句安装后，无法使用express命令<br>则先执行npm install express-generator -g<br>express在4.0之后，需要安装the executable（执行器express-generator）才能执行express命令<br>express –view=ejs microblog //在当前文件夹创建文件夹microblog，并在里面部署express<br>cd microblog //进入microblog<br>npm install //安装nodejs包<br>DEBUG=microblog:* npm start //运行<br>npm install -g supervisor //安装supervisor，监视代码改动<br>supervisor ./bin/www //运行，会提示输入rs重新开始，输入’rs’回车即可，<br>//这里就不用每次改完都去手动中断进程再重新开始</p>
+<h1 id="路由初步配置"><a href="#路由初步配置" class="headerlink" title="路由初步配置"></a>路由初步配置</h1><h2 id="匹配"><a href="#匹配" class="headerlink" title="匹配"></a>匹配</h2><p>打开app.js文件<br>var index = require(‘./routes/index’); //引入不同访问路径的回调函数所在文件<br>app.use(‘/‘, index); //为回调函数配置访问路径</p>
+<p>如果要建立分支路径，可以在回调函数文件中配置相应分支路径的回调函数<br>假如我想访问<a href="http://localhost:3000/users/111" target="_blank" rel="external">http://localhost:3000/users/111</a> 和 <a href="http://localhost:3000/users/id/111" target="_blank" rel="external">http://localhost:3000/users/id/111</a><br>首先在app.js中配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var users = require(&apos;./routes/users&apos;);</div><div class="line">app.use(&apos;/users&apos;, users);</div></pre></td></tr></table></figure></p>
+<p>然后配置routes路径下的users.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</div><div class="line"><span class="keyword">var</span> router = express.Router();</div><div class="line"></div><div class="line"><span class="comment">/* GET users listing. */</span></div><div class="line">router.get(<span class="string">'/:id'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</div><div class="line">  res.send(<span class="string">'USER:'</span>+req.params.id);</div><div class="line">&#125;);</div><div class="line"></div><div class="line">router.get(<span class="string">'/id/:id'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</div><div class="line">  res.send(<span class="string">'USERID:'</span>+req.params.id);</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = router;</div></pre></td></tr></table></figure></p>
+<p>注意路径参数id的获取，在app.js配置时是访问路径的共有前缀，在users.js中获取的是分支前缀<br><a href="http://www.expressjs.com.cn/guide/using-middleware.html" target="_blank" rel="external">深入链接</a></p>
+<h2 id="控制权转移"><a href="#控制权转移" class="headerlink" title="控制权转移"></a>控制权转移</h2><p>express 处理路由规则时，会优先匹配先定义的陆游规则，后面的规则被屏蔽<br>通过调用回调函数的第三个参数next,可以将控制权转移到后面的规则<br>即执行完先定义的规则后会继续执行后面定义的规则<br><img src="/image/node1.png" alt="node1"></p>
+<h1 id="手动安装片段视图"><a href="#手动安装片段视图" class="headerlink" title="手动安装片段视图"></a>手动安装片段视图</h1><p>由于网站中多页面head和footer相同,所以要建立模板文件，然后让其他页面文件来来填充基于这种处理方法<br>express 4.x需要手动安装partials<br>npm install express-partials<br>在app.js中注册<br>var partials = require(‘express-partials’);<br>app.use(partials());</p>
+<h1 id="引入bootstrap-和-JQuery"><a href="#引入bootstrap-和-JQuery" class="headerlink" title="引入bootstrap 和 JQuery"></a>引入bootstrap 和 JQuery</h1><p>从<a href="http://twitter.github.com/bootstrap/下载bootstrap.zip" target="_blank" rel="external">http://twitter.github.com/bootstrap/下载bootstrap.zip</a>,<br>将 img 目录复制到工程 public 目录下，<br>将 bootstrap.css、bootstrap-responsive.css 复制到 public/stylesheets 中，<br>将 bootstrap.js 复制到 public/javascripts 目录中，<br>然后从<a href="http://jquery.com/下载一份最新版的" target="_blank" rel="external">http://jquery.com/下载一份最新版的</a> jquery.js 也放入 public/javascripts 目录中。</p>
+<h1 id="界面"><a href="#界面" class="headerlink" title="界面"></a>界面</h1><p>用.ejs文件当html文件,<br>ejs 的标签系统只有以下3种标签。<br> &lt;% code %&gt;： JavaScript 代码。<br> &lt;%= code %&gt;：显示替换过 HTML 特殊字符的内容。<br> &lt;%- code %&gt;：显示原始 HTML 内容。<br>新建layout.ejs 做模板文件 ，调整index.ejs内容做首页填充内容，访问 <a href="http://localhost:3000/" target="_blank" rel="external">http://localhost:3000/</a> 查看效果</p>
+<h1 id="MongoDB-数据库"><a href="#MongoDB-数据库" class="headerlink" title="MongoDB 数据库"></a>MongoDB 数据库</h1><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>选用 MongoDB 作为网站的数据库系统<br>在<a href="http://dl.mongodb.org/dl/win32/x86_64" target="_blank" rel="external">http://dl.mongodb.org/dl/win32/x86_64</a> 可下载安装包<br>遇到该步骤时，<br><img src="/image/mongodb.png" alt="mongodb.png"><br>选择custom可以自定义安装路径<br>安装完成后，在bin所在的文件夹，与bin同级建立data文件夹，然后cmd到bin文件夹，执行<br>mongod –dbpath data文件夹路径（例：D:\MongoDB\data）<br>执行完最后一行出现：<br>2017-03-12T13:16:29.286+0800 I NETWORK  [thread1] waiting for connections on por<br>t 27017<br>浏览器输入 <a href="http://localhost:27017/" target="_blank" rel="external">http://localhost:27017/</a> 可以看到显示信息为<br>It looks like you are trying to access MongoDB over HTTP on the native driver port.<br>说明安装完成</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>修改package.json,dependencies中增加  “mongodb”: “&gt;= 0.9.9”<br>npm install  //更新依赖模块<br>在与app.js同级目录下新建settings.js,内容如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">  <span class="attr">cookieSecret</span>: <span class="string">'microblogYooHannah'</span>,</div><div class="line">  <span class="attr">db</span>: <span class="string">'microblog'</span>,</div><div class="line">  <span class="attr">host</span>: <span class="string">'localhost'</span>,</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>新建models文件夹，并在里面新建文件db.js,内容如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> settings = <span class="built_in">require</span>(<span class="string">'../settings'</span>),</div><div class="line">    Db = <span class="built_in">require</span>(<span class="string">'mongodb'</span>).Db,</div><div class="line">    Connection = <span class="built_in">require</span>(<span class="string">'mongodb'</span>).Connection,</div><div class="line">    Server = <span class="built_in">require</span>(<span class="string">'mongodb'</span>).Server;</div><div class="line">    <span class="built_in">module</span>.exports = <span class="keyword">new</span> Db(settings.db, <span class="keyword">new</span> Server(settings.host, Connection.DEFAULT_PORT, &#123;&#125;), &#123;<span class="attr">safe</span>: <span class="literal">true</span>&#125;);</div></pre></td></tr></table></figure></p>
+<p>修改package.json,dependencies中增加  “connect-mongo”: “&gt;= 0.1.7”<br>npm install更新依赖模块<br>修改app.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> MongoStore = <span class="built_in">require</span>(<span class="string">'connect-mongo'</span>);</div><div class="line"><span class="keyword">var</span> settings = <span class="built_in">require</span>(<span class="string">'./settings'</span>);</div><div class="line"></div><div class="line">app.use(express.session(&#123;</div><div class="line">  <span class="attr">secret</span>: settings.cookieSecret,</div><div class="line">  <span class="attr">store</span>: <span class="keyword">new</span> MongoStore(&#123;</div><div class="line">  <span class="attr">db</span>: settings.db</div><div class="line">  &#125;)</div><div class="line">&#125;));</div></pre></td></tr></table></figure></p>
+<p>由于session不再绑定在express上，这里会报错，所以要单独安装session<br>npm install express-session<br>修改app.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> session    = <span class="built_in">require</span>(<span class="string">'express-session'</span>);</div><div class="line"><span class="keyword">var</span> MongoStore = <span class="built_in">require</span>(<span class="string">'connect-mongo'</span>)(session);</div><div class="line"><span class="keyword">var</span> settings = <span class="built_in">require</span>(<span class="string">'./settings'</span>);</div><div class="line"></div><div class="line"></div><div class="line">app.use(session(&#123;</div><div class="line">  <span class="attr">secret</span>: settings.cookieSecret,</div><div class="line">  <span class="attr">store</span>: <span class="keyword">new</span> MongoStore(&#123;</div><div class="line">    <span class="attr">url</span>: <span class="string">'mongodb://localhost/db'</span><span class="comment">//链接数据库地址  </span></div><div class="line">  &#125;)</div><div class="line">&#125;));</div></pre></td></tr></table></figure></p>
+<p>如出现错误：<br>MongoError: failed to connect to server [localhost:27017] on first connect<br>可能是没有运行刚才安装的MongoDB,这时要回到cmd,执行<br>mongod –dbpath data文件夹路径（例：D:\MongoDB\data）<br>如出现以下提醒：<br>express-session deprecated undefined resave option;<br>express-session deprecated undefined saveUninitialized option;<br>则补充上这两个配置参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">app.use(session(&#123;</div><div class="line">  resave: false, //添加 resave 选项  </div><div class="line">  saveUninitialized: true, //添加 saveUninitialized 选项  </div><div class="line">&#125;));</div></pre></td></tr></table></figure></p>
+<h1 id="注册页面"><a href="#注册页面" class="headerlink" title="注册页面"></a>注册页面</h1><p>在view中新建reg.ejs,内容如下；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">&lt;form class=&quot;form-horizontal&quot; method=&quot;post&quot;&gt;</div><div class="line">  &lt;fieldset&gt;</div><div class="line">    &lt;legend&gt;用户注册&lt;/legend&gt;</div><div class="line">    &lt;div class=&quot;control-group&quot;&gt;</div><div class="line">      &lt;label class=&quot;control-label&quot; for=&quot;username&quot;&gt;用户名&lt;/label&gt;</div><div class="line">      &lt;div class=&quot;controls&quot;&gt;</div><div class="line">        &lt;input type=&quot;text&quot; class=&quot;input-xlarge&quot; id=&quot;username&quot; name=&quot;username&quot;&gt;</div><div class="line">        &lt;p class=&quot;help-block&quot;&gt;你的账户名称，用于登录和显示。 &lt;/p&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">    &lt;div class=&quot;control-group&quot;&gt;</div><div class="line">      &lt;label class=&quot;control-label&quot; for=&quot;password&quot;&gt;口令&lt;/label&gt;</div><div class="line">      &lt;div class=&quot;controls&quot;&gt;</div><div class="line">        &lt;input type=&quot;password&quot; class=&quot;input-xlarge&quot; id=&quot;password&quot; name=&quot;password&quot;&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">    &lt;div class=&quot;control-group&quot;&gt;</div><div class="line">      &lt;label class=&quot;control-label&quot; for=&quot;password-repeat&quot;&gt;重复输入口令&lt;/label&gt;</div><div class="line">      &lt;div class=&quot;controls&quot;&gt;</div><div class="line">        &lt;input type=&quot;password&quot; class=&quot;input-xlarge&quot; id=&quot;password-repeat&quot; name=&quot;password-repeat&quot;&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">    &lt;div class=&quot;form-actions&quot;&gt;</div><div class="line">      &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot;&gt;注册&lt;/button&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  &lt;/fieldset&gt;</div><div class="line">&lt;/form&gt;</div></pre></td></tr></table></figure></p>
+<p>在app.js和routes/index中增加访问路径和响应函数<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//app.js</span></div><div class="line"><span class="keyword">var</span> router = <span class="built_in">require</span>(<span class="string">'./routes/index'</span>);<span class="comment">//路由</span></div><div class="line"><span class="keyword">var</span> app = express();</div><div class="line">app.use(<span class="string">'/'</span>, router);</div><div class="line">app.use(<span class="string">'/reg'</span>,router );</div><div class="line"></div><div class="line"><span class="comment">//routes/index.js</span></div><div class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</div><div class="line"><span class="keyword">var</span> router = express.Router();</div><div class="line"></div><div class="line"><span class="comment">/* GET home page. */</span></div><div class="line">router.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</div><div class="line">  res.render(<span class="string">'index'</span>, &#123; <span class="attr">title</span>: <span class="string">'首页'</span> &#125;);</div><div class="line">&#125;);</div><div class="line"></div><div class="line">router.get(<span class="string">'/reg'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</div><div class="line">  res.render(<span class="string">'reg'</span>, &#123; <span class="attr">title</span>: <span class="string">'用户注册'</span> &#125;);</div><div class="line">&#125;);</div><div class="line"></div><div class="line">router.post(<span class="string">'/reg'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</div><div class="line"><span class="comment">//检验用户两次输入的口令是否一致</span></div><div class="line">  <span class="keyword">if</span> (req.body[<span class="string">'password-repeat'</span>] != req.body[<span class="string">'password'</span>]) &#123;</div><div class="line">    req.flash(<span class="string">'error'</span>, <span class="string">'两次输入的口令不一致'</span>);</div><div class="line">    <span class="keyword">return</span> res.redirect(<span class="string">'/reg'</span>);</div><div class="line">  &#125;</div><div class="line">  <span class="comment">//生成口令的散列值</span></div><div class="line">  <span class="keyword">var</span> md5 = crypto.createHash(<span class="string">'md5'</span>);</div><div class="line">  <span class="keyword">var</span> password = md5.update(req.body.password).digest(<span class="string">'base64'</span>);</div><div class="line">  <span class="keyword">var</span> newUser = <span class="keyword">new</span> User(&#123;</div><div class="line">    <span class="attr">name</span>: req.body.username,</div><div class="line">    <span class="attr">password</span>: password,</div><div class="line">  &#125;);</div><div class="line"><span class="comment">//检查用户名是否已经存在</span></div><div class="line">  User.get(newUser.name, <span class="function"><span class="keyword">function</span>(<span class="params">err, user</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (user)</div><div class="line">      err = <span class="string">'Username already exists.'</span>;</div><div class="line">    <span class="keyword">if</span> (err) &#123;</div><div class="line">      req.flash(<span class="string">'error'</span>, err);</div><div class="line">      <span class="keyword">return</span> res.redirect(<span class="string">'/reg'</span>);</div><div class="line">    &#125;</div><div class="line"><span class="comment">//如果不存在则新增用户</span></div><div class="line">    newUser.save(<span class="function"><span class="keyword">function</span>(<span class="params">err</span>) </span>&#123;</div><div class="line">      <span class="keyword">if</span> (err) &#123;</div><div class="line">        req.flash(<span class="string">'error'</span>, err);</div><div class="line">        <span class="keyword">return</span> res.redirect(<span class="string">'/reg'</span>);</div><div class="line">      &#125;</div><div class="line">      req.session.user = newUser;</div><div class="line">      req.flash(<span class="string">'success'</span>, <span class="string">'注册成功'</span>);</div><div class="line">      res.redirect(<span class="string">'/'</span>);</div><div class="line">    &#125;);</div><div class="line">  &#125;);</div><div class="line">&#125;);</div><div class="line"><span class="built_in">module</span>.exports = router;</div></pre></td></tr></table></figure></p>
+<p>响应函数中的User是用户模型,在models中创建user.js，再引入到routes/index<br>响应函数会出现<br>1.title is not defined的问题<br>解决办法就是将views/layout.ejs的title换成locals.title<br>2.req.flash会报错说req.flash is not a function，则<br>npm install connect-flash<br>app.js修改：<br>var flash = require(‘connect-flash’);<br>app.use(flash());<br>这样所有的req就可以使用flash()函数<br>3.crypto没有被定义<br>npm install crypto<br>routes/index.js引入<br>var crypto = require(‘crypto’);</p>
+<h1 id="视图交互"><a href="#视图交互" class="headerlink" title="视图交互"></a>视图交互</h1><p>实现不同登录状态下页面呈现不同内容的功能，创建动态视图助手<br>app.js<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">app.use(function(req,res,next)&#123;</div><div class="line">  res.locals.user=req.session.user;</div><div class="line"></div><div class="line">  var err = req.flash(&apos;error&apos;);</div><div class="line">  var success = req.flash(&apos;success&apos;);</div><div class="line"></div><div class="line">  res.locals.error = err.length ? err : null;</div><div class="line">  res.locals.success = success.length ? success : null;</div><div class="line"></div><div class="line">  next();</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>放在路由配置前面<br>接下来，修改 layout.ejs中的导航栏部分,为已登入用户和未登入用户显示不同的信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;ul class=&quot;nav&quot;&gt;</div><div class="line">&lt;li class=&quot;active&quot;&gt;&lt;a href=&quot;/&quot;&gt;首页&lt;/a&gt;&lt;/li&gt;</div><div class="line">&lt;% if (!user) &#123; %&gt;</div><div class="line">&lt;li&gt;&lt;a href=&quot;/login&quot;&gt;登入&lt;/a&gt;&lt;/li&gt;</div><div class="line">&lt;li&gt;&lt;a href=&quot;/reg&quot;&gt;注册&lt;/a&gt;&lt;/li&gt;</div><div class="line">&lt;% &#125; else &#123; %&gt;</div><div class="line">&lt;li&gt;&lt;a href=&quot;/logout&quot;&gt;登出&lt;/a&gt;&lt;/li&gt;</div><div class="line">&lt;% &#125; %&gt;</div><div class="line">&lt;/ul&gt;</div></pre></td></tr></table></figure></p>
+<p>在 container 中，&lt;%- body %&gt;之前加入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;% if (success) &#123; %&gt;</div><div class="line">&lt;div class=&quot;alert alert-success&quot;&gt;</div><div class="line">&lt;%= success %&gt;</div><div class="line">&lt;/div&gt;</div><div class="line">&lt;% &#125; %&gt;</div><div class="line">&lt;% if (error) &#123; %&gt;</div><div class="line">&lt;div class=&quot;alert alert-error&quot;&gt;</div><div class="line">&lt;%= error %&gt;</div><div class="line">&lt;/div&gt;</div><div class="line">&lt;% &#125; %&gt;</div></pre></td></tr></table></figure></p>
+<p>它的功能是页面通知。</p>
+<h1 id="登录登出操作-状态判断-建立微博模型，处理微博发表操作"><a href="#登录登出操作-状态判断-建立微博模型，处理微博发表操作" class="headerlink" title="登录登出操作,状态判断;建立微博模型，处理微博发表操作"></a>登录登出操作,状态判断;建立微博模型，处理微博发表操作</h1><p>同样建立连接路由，写响应函数</p>
+<h1 id="处理首页登录前后状态"><a href="#处理首页登录前后状态" class="headerlink" title="处理首页登录前后状态"></a>处理首页登录前后状态</h1><p>省略步骤可参考书籍<br><a href="https://github.com/YooHannah/NodejsofMicroblog" target="_blank" rel="external">代码详见</a></p>
+
           
         
       
@@ -1762,7 +1494,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/15/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/17/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/15/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/17/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1803,7 +1535,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">199</span>
+              <span class="site-state-item-count">215</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

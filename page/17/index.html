@@ -259,7 +259,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/treetransform.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/sync.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -284,8 +284,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/algorithm/treetransform.html" itemprop="url">
-                  树、森林和二叉树的转换与遍历
+                <a class="post-title-link" href="/post/nodejs/sync.html" itemprop="url">
+                  同步/异步和使用
                 </a>
               
             
@@ -299,8 +299,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-12T14:38:37+08:00">
-                2017-02-12
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-11T09:31:15+08:00">
+                2017-03-11
               </time>
             
 
@@ -337,14 +337,11 @@
       
         
           
-            <h1 id="树转化为二叉树"><a href="#树转化为二叉树" class="headerlink" title="树转化为二叉树"></a>树转化为二叉树</h1><div style="margin-bottom: 125px"><br> <img src="/image/tree3.png" style="width: 300px;height: 180px;" alt="图片名称" align="left"><br> <img src="/image/tree4.png" alt="图片名称" align="right" style="width: 300px;height: 180px;margin-top: -30px"><br></div>
-
-<p>1.在树中所有的兄弟结点之间加一连线<br>2.对每个结点，除了保留与其长子的连线外，去掉该结点与其他孩子的连线<br>3.调整位置结构（顺时针旋转一定角度），变成只有左子树的二叉树</p>
-<h1 id="森林转化为二叉树"><a href="#森林转化为二叉树" class="headerlink" title="森林转化为二叉树"></a>森林转化为二叉树</h1><p><div style="margin-bottom: 125px"><br><img src="/image/tree5.png" width="300" height="200" alt="图片名称" align="left"><br> <img src="/image/tree6.png" alt="图片名称" align="right" style="width: 300px;height: 180px;margin-top: -30px"><br> </div><br>1.先将森林中的每颗树变为二叉树<br>2.再将各二叉树的根结点视为兄弟从左至右连在一起<br>3调整位置结构，形成拥有左右子树的二叉树</p>
-<h1 id="二叉树转化树、森林"><a href="#二叉树转化树、森林" class="headerlink" title="二叉树转化树、森林"></a>二叉树转化树、森林</h1><p>1.若结点x是其双亲y的左孩子，则把x的右孩子，右孩子的右孩子，……，都与y用连线连起来<br>2.去掉所有双亲到右孩子之间的连线<br>注意：如二叉树有右孩子则将转化为森林，反之转化为普通树</p>
-<h1 id="树的遍历"><a href="#树的遍历" class="headerlink" title="树的遍历"></a>树的遍历</h1><p><img src="/image/tree3.png" alt="tree3"><br>1.先根遍历<br>先访问树的根结点，然后再依次先跟遍历每颗子树<br>ABEFCGDHIJ<br>2.后根遍历<br>先依次遍历每颗子树，然后再访问根结点<br>EFBGCHIJDA</p>
-<h1 id="森林遍历"><a href="#森林遍历" class="headerlink" title="森林遍历"></a>森林遍历</h1><p>1.前序遍历：按树的先根遍历<br>2.后续遍历：按树的后跟遍历</p>
-<p>小结：<br>树、森林的前根遍历和二叉树前序遍历结果相同，<br>树、森林的后根遍历和二叉树的中序遍历相同,<br>因此对于树、森林的遍历可以转化为二叉树的遍历</p>
+            <h1 id="同步-异步"><a href="#同步-异步" class="headerlink" title="同步/异步"></a>同步/异步</h1><p>同步读取一个文件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//readfile.js</span></div><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line"><span class="keyword">var</span> data = fs.readFileSync(<span class="string">'file.txt'</span>,<span class="string">'utf-8'</span>);</div><div class="line"><span class="built_in">console</span>.log(data);</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'end.'</span>);</div><div class="line"><span class="comment">//执行</span></div><div class="line">$node readfile.js</div><div class="line">contents <span class="keyword">of</span> the file.</div><div class="line">end.</div></pre></td></tr></table></figure></p>
+<p>异步读取一个文件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//readfile.js</span></div><div class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</div><div class="line">fs.readFile(<span class="string">'file.txt'</span>,<span class="string">'utf-8'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">err,data</span>) </span>&#123;</div><div class="line">	<span class="keyword">if</span> (err) &#123;</div><div class="line">	  <span class="built_in">console</span>.log(err);</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">	  <span class="built_in">console</span>.log(data);</div><div class="line">	&#125;</div><div class="line">&#125;)</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'end.'</span>);</div><div class="line"><span class="comment">//执行</span></div><div class="line">$node readfile.js</div><div class="line">end.</div><div class="line">contents <span class="keyword">of</span> the file.</div></pre></td></tr></table></figure></p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="node的REPL模式"><a href="#node的REPL模式" class="headerlink" title="node的REPL模式"></a>node的REPL模式</h2><p>即输入代码回车立即执行的模式<br>在command prompt中直接输入node进入该模式，连续两次Ctrl+C可退出</p>
+<h2 id="监视代码改动"><a href="#监视代码改动" class="headerlink" title="监视代码改动"></a>监视代码改动</h2><p>npm install -g supervisor //安装supervisor<br>supervisor app.js //代替node app.js，修改代码后自动终止进程并重启</p>
+<h2 id="包"><a href="#包" class="headerlink" title="包"></a>包</h2><p>把文件夹封装为一个模块，即所谓的包，包通常是一些模块的集合，在模块的基础上提供了更高层的抽象，相当于一些固定接口的函数库<br>包安装：作为工程运行，通过本地安装;如果要在命令行下使用,则使用全局模式安装</p>
 
           
         
@@ -383,7 +380,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/Cluebinarytree.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/jssummary.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -408,8 +405,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/algorithm/Cluebinarytree.html" itemprop="url">
-                  线索二叉树
+                <a class="post-title-link" href="/post/nodejs/jssummary.html" itemprop="url">
+                  js理解
                 </a>
               
             
@@ -423,8 +420,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-11T17:47:37+08:00">
-                2017-02-11
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-11T08:23:09+08:00">
+                2017-03-11
               </time>
             
 
@@ -461,9 +458,18 @@
       
         
           
-            <p>节省叶子结点空指针浪费的空间，来记录该结点按遍历顺序的前驱后继<br>只有中序遍历满足每隔一个结点会出现一个浪费空间的结点</p>
-<p>结点由五个属性组成；{<br>  lchild:取决于ltag<br>  ltag:为0时，lchild指向该结点左孩子，为1时lchild指向该结点的前驱<br>  data:该结点数据<br>  rchild:取决于rtag<br>  rtag:为0时，rchild指向该结点右孩子，为1时rchild指向该结点的后继<br>}</p>
-<p><a href="https://github.com/YooHannah/algorithm/blob/master/js/btree.js" target="_blank" rel="external">代码链接</a></p>
+            <h1 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h1><p>不通过花括号来界定，通过函数来定义，<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(<span class="literal">true</span>)&#123;</div><div class="line">	<span class="keyword">var</span> somevar = <span class="string">"value"</span>;</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(somevar);<span class="comment">//value</span></div></pre></td></tr></table></figure></p>
+<p>在访问未定义的变量或定义了但没有初始化的变量时都会获得undefined<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> scope = <span class="string">"1111"</span>;</div><div class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(scope); <span class="comment">//undefined</span></div><div class="line">	<span class="keyword">var</span> scope = <span class="string">'f'</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>作用域的嵌套关系在定义时确定，不在调用时确定<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> scope = <span class="string">"top"</span>;</div><div class="line"><span class="keyword">var</span> f1 = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(scope);</div><div class="line">&#125;;</div><div class="line">f1();<span class="comment">//top</span></div><div class="line"><span class="keyword">var</span> f2 = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> scope = <span class="string">'f2'</span>;</div><div class="line">	f1();</div><div class="line">&#125;;</div><div class="line">f2(); <span class="comment">//top</span></div></pre></td></tr></table></figure></p>
+<p>全局作用域是个对象，这个对象叫全局对象，nodejs是global对象，浏览器是window对象，包括<br>在最外层定义的变量<br>全局对象的属性<br>未用var定义直接赋值的变量</p>
+<h1 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h1><p>由函数(环境)及其封闭的自由变量组成的集合体，<br>可以想象成一个容器，里面包括一个函数和它用到的变量，每当想使用一次这个容器里的函数，就将这个容器复制一次给调用者：<br>1.不通调用者得到的容器相互隔离，没有关系，<br>2.被复制到调用者的函数，会自己形成一个独立的运行环境，每次调用完会根据变量性质，更新变量值,不会释放变量<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> generateClosuer = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> count = <span class="number">0</span>;</div><div class="line">  <span class="keyword">var</span> get = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    count++;</div><div class="line">    <span class="keyword">return</span> count;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> get;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> counter1 = generateClosuer();</div><div class="line"><span class="keyword">var</span> counter2 = generateClosuer();</div><div class="line"><span class="built_in">console</span>.log(counter1()); <span class="comment">//1</span></div><div class="line"><span class="built_in">console</span>.log(counter1()); <span class="comment">//2</span></div><div class="line"><span class="built_in">console</span>.log(counter2()); <span class="comment">//1</span></div><div class="line"><span class="built_in">console</span>.log(counter1()); <span class="comment">//3</span></div></pre></td></tr></table></figure></p>
+<h1 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h1><p>上下文对象即this指针，即被调用函数所处的环境，<br>上下文对象的作用是在一个函数内部引用调用它的对象本身。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">User</span>(<span class="params">name,url</span>)</span>&#123;</div><div class="line">	<span class="keyword">this</span>.name = name;</div><div class="line">	<span class="keyword">this</span>.url = url;</div><div class="line">	<span class="keyword">this</span>.diaplay = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> someuser = <span class="keyword">new</span> User(<span class="string">'byvoid'</span>,<span class="string">'http://www.byvoid.com'</span>);</div></pre></td></tr></table></figure></p>
+<p>创建someuser对象时，构造函数的this指调用它的someuser<br>函数类型的变量指向这个函数实体的一个引用，在引用之间赋值不会对对象产生复制行为。<br>我们可以通过函数的任何一个引用调用这个函数，但该函数的上下文即this不同<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> someuser = &#123;</div><div class="line">	<span class="attr">name</span>:<span class="string">'byvoid'</span>,</div><div class="line">	<span class="attr">func</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</div><div class="line">&#125;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> foo = &#123;</div><div class="line">	<span class="attr">name</span>:<span class="string">'foobar'</span></div><div class="line">&#125;;</div><div class="line">someuser.func();<span class="comment">//byvoid</span></div><div class="line">foo.func = someuser.func; <span class="comment">//引用someuser.func这个函数实体，其实就是someuser.func的代码内容</span></div><div class="line">foo.func();<span class="comment">//foobar this是foo</span></div><div class="line"></div><div class="line">name = <span class="string">'global'</span>;</div><div class="line">func = someuser.func;</div><div class="line">func();<span class="comment">//global</span></div></pre></td></tr></table></figure></p>
+<h2 id="call-apply"><a href="#call-apply" class="headerlink" title="call/apply"></a>call/apply</h2><p>让其他对象调用本对象的方法<br>A对象名.函数属性名.call(B对象名,函数参数表(逗号隔开)); //B调用A的方法<br>A对象名.函数属性名.apply(B对象名,函数参数数组);//B调用A的方法</p>
+<h2 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h2><p>永久绑定函数的上下文，使其无论被谁调用，上下文都是固定的<br>A对象名.函数属性名.bind(B对象名,函数参数表(逗号隔开));<br>bind方法返回上下文为B对象的A对象的函数<br>如果在使用bind时，绑定了参数表，则在调用返回函数时，只需要传入未绑定的参数即可<br>注意不能重复绑定<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> someuser = &#123;</div><div class="line">	<span class="attr">name</span>:<span class="string">'byvoid'</span>,</div><div class="line">	<span class="attr">func</span>:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		<span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</div><div class="line"> &#125;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> foo = &#123;</div><div class="line">	<span class="attr">name</span>:<span class="string">'foobar'</span></div><div class="line">&#125;;</div><div class="line">func = someuser.func.bind(foo);</div><div class="line">func();<span class="comment">//foobar</span></div><div class="line"></div><div class="line">func2 = func.bind(someuser);</div><div class="line">func2();<span class="comment">//foobar;</span></div></pre></td></tr></table></figure></p>
+<h2 id="原型"><a href="#原型" class="headerlink" title="原型"></a>原型</h2><p>构造函数创建属性<br>除非必须用构造函数闭包，否则尽量用原型定义成员函数<br>原型定义的成员是多个实例共享的，因此尽量在构造函数内定义一般成员尤其是对象或数组<br>原型链<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">function Foo()&#123;</div><div class="line">&#125;</div><div class="line">object.prototype.name = &apos;my object&apos;;</div><div class="line">Foo.prototype.name = &apos;Bar&apos;;</div><div class="line">var obj = new object();</div><div class="line">var foo = new Foo();</div><div class="line">console.log(obj.name);//my object</div><div class="line">console.log(foo.name);//Bar</div><div class="line">console.log(foo.__proto__.name);//Bar</div><div class="line">console.log(foo.__proto__.__proto__.name);//my object</div><div class="line">console.log(foo.__proto__.constructor.prototype.name);//Bar</div></pre></td></tr></table></figure></p>
+<p><img src="/image/typeof.png" alt="typeof"></p>
+<p>【广发证券nodejs应用](<a href="http://slides.com/loskael/node#/" target="_blank" rel="external">http://slides.com/loskael/node#/</a>)</p>
 
           
         
@@ -502,7 +508,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/angular/plugin.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/MapTraversal.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -527,8 +533,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/angular/plugin.html" itemprop="url">
-                  小插件使用
+                <a class="post-title-link" href="/post/algorithm/MapTraversal.html" itemprop="url">
+                  深度广度优先遍历+马踏棋盘算法
                 </a>
               
             
@@ -542,8 +548,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-11T10:24:37+08:00">
-                2017-02-11
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-07T21:06:37+08:00">
+                2017-03-07
               </time>
             
 
@@ -580,9 +586,13 @@
       
         
           
-            <h1 id="ng-clip-angularjs点击复制插件"><a href="#ng-clip-angularjs点击复制插件" class="headerlink" title="ng-clip/angularjs点击复制插件"></a>ng-clip/angularjs点击复制插件</h1><p><a href="https://github.com/YooHannah/algorithm/blob/master/plugin/clipboard.min.js" target="_blank" rel="external">插件所需js文件链接</a><br>用法：<br>1.在将要使用的控制器里配置好插件文件<br>2.在HTML里用data-clipboard-text绑定要复制的值，并用class或者id绑定复制动作所在的标签<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;a  class=&quot;font-green-meadow clicopy&quot; data-clipboard-text=&quot;&#123;&#123;x.scan_url&#125;&#125;&quot; &gt;&lt;i class=&quot;fa fa-copy&quot;&gt;&lt;/i&gt; 复制扫描链接&lt;/a&gt;</div></pre></td></tr></table></figure></p>
-<p>3.在控制器里面初始化复制插件对象，并写回调函数<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//复制链接</span></div><div class="line">$scope.copy = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> clipboard = <span class="keyword">new</span> Clipboard(<span class="string">'.clicopy'</span>);</div><div class="line">    clipboard.on(<span class="string">'success'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">      toastr.success(<span class="string">'复制成功!'</span>,<span class="string">'成功'</span>);</div><div class="line">      e.clearSelection();</div><div class="line">       &#125;);</div><div class="line"></div><div class="line">      clipboard.on(<span class="string">'error'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">         toastr.error(<span class="string">'复制失败!'</span>,<span class="string">'失败'</span>);</div><div class="line">      &#125;);</div><div class="line">  &#125;</div><div class="line">$scope.copy();</div></pre></td></tr></table></figure></p>
-<h1 id="md5-加密处理"><a href="#md5-加密处理" class="headerlink" title="md5  加密处理"></a>md5  加密处理</h1><p><a href="https://github.com/YooHannah/algorithm/blob/master/plugin/md5.js" target="_blank" rel="external">所需文件</a><br>用法：<br> var hash = hex_md5($scope.password);<br>其实加密文件就是一个算法文件，加密算法也分好多种，所以不同算法加密加载不同的算法文件即可<br>nodejs的Crypto模块是一个加密模块，也可用于加密处理<br><a href="http://www.thinksaas.cn/topics/0/35/35489.html" target="_blank" rel="external">相关链接</a></p>
+            <h1 id="深度优先遍历-深度优化搜索DFS"><a href="#深度优先遍历-深度优化搜索DFS" class="headerlink" title="深度优先遍历/深度优化搜索DFS"></a>深度优先遍历/深度优化搜索DFS</h1><p><img src="/image/Traversal1.png" alt="Traversal1"><br>右手原则：在没有碰到重复顶点的1情况下，分叉路口始终是向右手边走，没路过一个顶点就做一个记号</p>
+<p>主要思路是右手原则，把自己想象成从一个顶点出发的小人,每次选择下一步要走的路径时，就选择右手方向的路径，并给自己即将离开的顶点做一个已经遍历过的标记，直到碰到右手选择的路径将要到达的顶点是已经遍历过的顶点，这时则判断从右手方向开始的路径的终点顶点是否已遍历，若没有遍历，则选择该路径继续往下，若碰到所有路径终点顶点都是已经遍历过的，则沿到达该顶点的路径返回上一个顶点，检查上一顶点的其他路径顶点是否已经遍历，未遍历的话，则沿该路径走下去，即碰到所有路径顶点都遍历过则返回上一顶点，以此类推，直到返回起点顶点</p>
+<p>整个图的遍历过程算法上是一个递归的过程，遍历方式上类似于树的前序遍历<br><img src="/image/Traversal2.png" alt="Traversal2"><br>看蓝色的路径即顶点遍历过程<br>A-&gt;B-&gt;C-&gt;D-&gt;E-&gt;F-&gt;G-&gt;H (往回走，看红色路径顶点都已遍历过)-&gt;G-&gt;F-&gt;E-&gt;D-&gt;I-&gt;D-&gt;C-&gt;B-&gt;A</p>
+<p>编程思路：<br>遍历图的邻接矩阵，邻接矩阵建立时注意选择是使用右手原则还是左手原则，从起点开始遍历该顶点所在行，便利到非0值且对应的列顶点未访问过就开始遍历该列顶点对应顶点所在的行，同样遍历非0未遍历过的顶点，如果该行所有顶点都遍历过则返回上一顶点继续重复遍历找未遍历的顶点，直到返回起点位置<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/MapDeepTraversal.js" target="_blank" rel="external">代码链接</a></p>
+<h1 id="马踏棋盘问题"><a href="#马踏棋盘问题" class="headerlink" title="马踏棋盘问题"></a>马踏棋盘问题</h1><p>国际象棋的棋盘为8*8的方格棋盘，现将“马”放在任意指定的方格中，按照“马”走棋的规则将“马”进行移动<br>要求每个方格只能进入一次，最终使得“马”走遍棋盘64个方格</p>
+<p>一个位置最多有八种选择，如下<br><img src="/image/chess.png" alt="chess"><br><a href="https://github.com/YooHannah/algorithm/blob/master/C/checkerboard.c" target="_blank" rel="external">代码链接</a></p>
+<h1 id="图的广度优先遍历"><a href="#图的广度优先遍历" class="headerlink" title="图的广度优先遍历"></a>图的广度优先遍历</h1><p>主要思路：树的层序遍历<br>结构：队列<br>原则：右手原则<br>将复杂的图调整结构为层的形状，从最上一层结点唯一结点出发，入队列<br>遍历第二层，从与上一层结点相连的右手边的结点开始遍历，先将上一层相连的结点出队列，然后第二层结点入队列<br>以此类推，即在本层遍历时，先将与将要遍历的结点的上层结点出队列，然后将本层结点入队列，<br>遍历完一个上层结点的本层连接点，先将上层下一个结点出队列，在将上层下一个节点的本层链接点入队列<br>出队列顺序即遍历顺序<br><img src="/image/tug1.png" alt="tug1"><br>选定一个起点结点(A)，依次遍历与该结点相连结点(B、F)，每个结点遍历完后添加遍历标记，<br>再依次遍历刚刚遍历过的结点(先B后F)的相连结点(CIG、E),同样遍历完要加标记<br>以此类推，再遍历C的连接点D，G的连接点H<br><img src="/image/BreadthMaptraversal2.png" alt="BreadthMaptraversal2"><br>编程思路：<br>将每次遍历的结点入队列，每遍历完一层，出一次队列，出队列顺序即遍历顺序<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/BreadthMaptraversal.js" target="_blank" rel="external">代码链接</a></p>
 
           
         
@@ -621,7 +631,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/Binarytree.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/js~~.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -646,8 +656,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/algorithm/Binarytree.html" itemprop="url">
-                  二叉树
+                <a class="post-title-link" href="/post/js/js~~.html" itemprop="url">
+                  js 的~~
                 </a>
               
             
@@ -661,8 +671,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-11T10:14:37+08:00">
-                2017-02-11
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-06T07:12:37+08:00">
+                2017-03-06
               </time>
             
 
@@ -699,14 +709,8 @@
       
         
           
-            <h1 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>定义：是n(n&gt;=0)个结点的有限集合，该集合或者为空集(空二叉树)，或者由一个<br>根节点和两颗不互相交的、分别称为根的左子树和右子树的二叉树<br>特点：<br>-每个结点最多有两颗子树，不存在度大于2的结点<br>-左右子树有顺序，次序不能颠倒，即使只有一颗子树也要区分它是左子树还是右子树</p>
-<h2 id="五种基本形态："><a href="#五种基本形态：" class="headerlink" title="五种基本形态："></a>五种基本形态：</h2><p>空二叉树<br>只有一个根节点<br>根结点只有左子树<br>根结点只有右子树<br>根结点既有左子树又有右子树</p>
-<h2 id="特殊二叉树"><a href="#特殊二叉树" class="headerlink" title="特殊二叉树"></a>特殊二叉树</h2><p>1.斜树：只有左子树或只有右子树<br>2.满二叉树：该二叉树中，如果所有分支结点都存在左子树和右子树，并且所有叶子都在同一层上<br>  –特点：<br>  1.叶子只能出现在最下一层<br>  2.非叶子结点的度一定是2<br>  3.在同样深度的二叉树中，满二叉树的节点个数一定最多，同时叶子也最多<br>3.完全二叉树：对一颗具有N个结点的二叉树按层序编号，如果编号为i(i&lt;=i&lt;=n)的结点与同样深度的满二叉树中编号为i的<br>结点位置完全相同，则这棵树称为完全二叉树<br>–特点：<br>1.叶子结点只能出现在最下两层<br>2.最下层的叶子一定集中在左部连续位置<br>3、倒数第二层，若有叶子结点，一定都在右部连续位置<br>4.如果结点度为1，则该结点只有左孩子<br>5.同样结点数的二叉树，完全二叉树的深度最小<br>满二叉树一定是完全二叉树，但完全二叉树不一定是满二叉树</p>
-<h1 id="二叉树存储结构"><a href="#二叉树存储结构" class="headerlink" title="二叉树存储结构"></a>二叉树存储结构</h1><h2 id="顺序结构"><a href="#顺序结构" class="headerlink" title="顺序结构"></a>顺序结构</h2><p>用数组存储，按层序遍历对比满二叉树顺序，没有结点的位置数组在该位置填空<br><img src="/image/btree1.png" alt="btree1"></p>
-<h2 id="二叉链表"><a href="#二叉链表" class="headerlink" title="二叉链表"></a>二叉链表</h2><p>每个结点包含一个数据域和两个指针域，两个指针分别指向该结点左右孩子结点<br><img src="/image/btree2.png" alt="btree2"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">typedef struct BiTNode</div><div class="line">&#123;</div><div class="line">ElemType data;</div><div class="line">struct BiTNode *lchild,*rchild;</div><div class="line">&#125;BiTNode,8BiTree;</div></pre></td></tr></table></figure></p>
-<h1 id="二叉树的遍历"><a href="#二叉树的遍历" class="headerlink" title="二叉树的遍历"></a>二叉树的遍历</h1><p><img src="/image/btree3.png" alt="btree3"><br>从根结点出发，按照某种次序访问二叉树中所有结点，使每个结点被访问一次且仅被访问一次<br>1.前序遍历：根左右<br>若二叉树为空，则空操作返回;否则先访问根结点，然后前序遍历左子树，再前序遍历右子树<br>a.先访问根结点，然后访问根结点的左孩子<br>b.将根结点的左孩子视作子树根结点,继续访问其左孩子，再以这个左孩子结点为根再访问其左孩子直到叶结点<br>c.访问完该叶结点后，再访问该叶结点双亲的右孩子，<br>d.如果没有右孩子，则该子树访问完毕，继续访问该结点双亲的双亲的右孩子，再以该右孩子为根继续从步骤a开始访问<br>核心：从整棵树的根结点开始，每次将左孩子看成子树根结点,从上到下，从左到右<br>ABDHIEJCFKG<br>2.中序遍历 ：左根右<br>若二叉树为空，则空操作返回;否则从根节点根结点开始(并不是先访问根结点)，然后中序遍历左子树，然后访问根结点，再中序遍历右子树<br>核心：无论什么级别的子树树都从最左端叶结点开始，按左孩子，双亲，右孩子顺序遍历，从下到上，从左到右<br>HDIBEJAFKCG<br>3.后序遍历 ：左右根<br>若二叉树为空，则空操作返回;否则从左到右先叶子结点的方式遍历左右子树，最后访问根结点<br>核心：从最左端叶结点开始，按左孩子，右孩子，双亲顺序遍历，从左到右，从下到上<br>HIDJEBKFGCA<br>4.层序遍历<br>若二叉树为空，则空操作返回;否则从根节点开始，按层依次往下，每层从左到右依次遍历</p>
-<h1 id="二叉树的性质"><a href="#二叉树的性质" class="headerlink" title="二叉树的性质"></a>二叉树的性质</h1><p>性质一：在二叉树的第i层上至多有2^(i-1)个结点(i&gt;=1)<br>性质二：深度为K的二叉树至多有2^K-1个结点(K&gt;=1)<br>性质三：对于任何一颗二叉树T，如果其终端结点数为n0,度为2的结点数为n2,则n0=n2+1<br>性质四：具有n个结点的完全二叉树的深度为log2n取下限加1<br>性质五：如果对一颗有n个结点的完全二叉树(其深度为log2n取下限加1)的结点按层序编号对任一结点i(1&lt;=i&lt;=n)有以下性质<br>        如果i=1,则结点i是二叉树的根，无双亲;如果i&gt;1，则其双亲是结点i/2取下限<br>        如果2i&gt;n,则结点i无左孩子(结点i为叶子结点);否则其左孩子是结点2i<br>        如果2i+1&gt;n,则结点i无右孩子(结点i为叶子结点);否则其右孩子是结点2i+1</p>
-<p>计算：<br>输出指定结点在该树中所在的层数<br><img src="/image/btree4.png" alt="btree4"><br>[未完成]<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">var str=&quot;AB DEC #&quot;;//约定前序遍历输入</div><div class="line">var btree = &#123;</div><div class="line">  data:&apos;&apos;,</div><div class="line">  lchild:&#123;&#125;,</div><div class="line">  rchild:&#123;&#125;</div><div class="line">&#125;;</div><div class="line">console.log(btree);</div><div class="line">function creatbtree(num,item)&#123;</div><div class="line">  console.log(str[num])</div><div class="line">  if(str[num]==&quot;#&quot;);</div><div class="line">  &#123;</div><div class="line">  return</div><div class="line">  &#125;</div><div class="line">  if(str[num] == &quot; &quot;)&#123;</div><div class="line">    item = null;</div><div class="line">  &#125;else&#123;</div><div class="line">    item.data = str[num];</div><div class="line">    num+=1;</div><div class="line">    item.lchild =&#123;</div><div class="line">      data:&apos;&apos;,</div><div class="line">      lchild:&#123;&#125;,</div><div class="line">      rchild:&#123;&#125;</div><div class="line">    &#125;  </div><div class="line">    creatbtree(num,item.lchild);</div><div class="line">    num+=1;</div><div class="line">    item.rchild =&#123;</div><div class="line">      data:&apos;&apos;,</div><div class="line">      lchild:&#123;&#125;,</div><div class="line">      rchild:&#123;&#125;</div><div class="line">    &#125;</div><div class="line">    creatbtree(num,item.rchild);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">creatbtree(0,btree);</div><div class="line">console.log(btree.rchild)</div></pre></td></tr></table></figure></p>
+            <p>~~ 符号是一种类型转换符号，将参数转换成数据类型<br>~~true == 1<br>~~false == 0<br>~~”” == 0<br>~~[] == 0<br>~~undefined ==0<br>~~!undefined == 1<br>~~null == 0<br>~~!null == 1</p>
+<p>应用：计算大数相加<br>function add(a,b) {<br>  // 实现该函数<br>  var res=’’, c=0;<br>    a = a.split(‘’);<br>    b = b.split(‘’);<br>    while (a.length || b.length || c){<br>        c += ~~a.pop() + ~~b.pop();//对应位相加，加上前一位进位<br>        res = c % 10 + res;//去掉进位,累积拼接取对应位相加后的结果，<br>        c = c&gt;9;//本轮相加，有进位，c是1，没进位c是0<br>    }<br>    return res.replace(/^0+/,’’);//把开头0去掉<br>}</p>
 
           
         
@@ -745,7 +749,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/tree.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/es6.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -770,8 +774,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/algorithm/tree.html" itemprop="url">
-                  关于树的一些定义
+                <a class="post-title-link" href="/post/js/es6.html" itemprop="url">
+                  ES6
                 </a>
               
             
@@ -785,8 +789,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-08T21:47:37+08:00">
-                2017-02-08
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-06T07:12:37+08:00">
+                2017-03-06
               </time>
             
 
@@ -823,314 +827,827 @@
       
         
           
-            <h1 id="树"><a href="#树" class="headerlink" title="树"></a>树</h1><p><img src="/image/tree1.png" alt="tree1"><br>定义：n(n&gt;=0)个结点的有限集。当n=0时称为空树，在任意一颗非空树中：<br>——有且仅有一个特定的结点称为根<br>——当n&gt;1时，其余结点可分为m(m&gt;0)个互不相交]的有限集T1、T2…Tm,其中每一个集合本身又是一颗树，并且称为根的子树<br>结点：图中每一个圆圈称为树的一个结点<br>结点的度：结点拥有的子树数称为该结点的度<br>树的度：树内各结点度的最大值<br>叶结点/终端结点：度为0的结点<br>分支结点/非终端结点：度不为0的结点<br>内部结点：分支结点中除根节点以外的结点<br>结点的孩子：D是B的孩子<br>孩子的双亲：B是D的双亲<br>兄弟：D和E互称为兄弟<br>结点的祖先：从根到该结点所经过分支上的所有结点<br>结点的层次：从根开始定在一起,根为第一层，根的孩子为第二层<br>树的深度/高度：树中结点的最大层次,图中树的深度为3<br>有序树:如果将树中结点的各子树看成从左至右是有次序的不能互换的，则称该树为有序树，否则称为无序树<br>森林:m(m&gt;=0)棵互不相交的树的集合。对树中每个结点而言，其子树的集合即为森林</p>
-<p><img src="/image/tree2.png" alt="tree2"><br>以下遍历采用层序遍历</p>
-<h1 id="双亲表示法"><a href="#双亲表示法" class="headerlink" title="双亲表示法"></a>双亲表示法</h1><p>每个结点由该结点数据和该结点双亲的下标组成,根结点双亲下标赋值为-1</p>
-<table>
+            <h1 id="let"><a href="#let" class="headerlink" title="let"></a>let</h1><p>1.let 声明的变量在let 命令所在的代码快内有效<br>2.不声明直接用变量或者先用再声明都会报错<br>3.暂时性死区:在变量声明之前就使用变量的代码块<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">暂时性死区的本质就是，只要一进入当前作用域，所要使用的变量就已经存在了，但是不可获取，只有等到声明变量的那一行代码出现，才可以获取和使用该变量。</div></pre></td></tr></table></figure></p>
+<p>4.不允许在同一级别块域内重复声明一个变量<br>5.let 声明的变量,外层代码块不受内层代码块的影响<br>—-外层作用域无法读取内层作用域的变量<br>—-内层作用域可以定义外层作用域的同名变量<br>6.块级作用域内声明的函数，行为类似于var声明的变量,仅在所在的代码块内有效</p>
+<h1 id="const"><a href="#const" class="headerlink" title="const"></a>const</h1><p>1.声明的同时进行复制<br>2.作用域特征同let<br>3.当声明的变量为对象或者数组时，只可以改变对象属性或数组元素的值，但不可以将变量重新赋值</p>
+<p>ES6 6种声明变量的方法：var、function、let、const、import、class<br>var命令和function命令声明的全局变量，依旧是顶层对象的属性;let命令、const命令、class命令声明的全局变量，不属于顶层对象的属性。</p>
+<h1 id="解构赋值"><a href="#解构赋值" class="headerlink" title="解构赋值"></a>解构赋值</h1><h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><p>1.‘模式匹配’，左右对应相等，变量取值由位置决定<br>2.当右边的数据量大于左边变量数，如果是单层数组，则依次匹配，多余形成数组赋给最后一个变量<br>—-如果变量组成多层数组，则依次匹配，剩余的舍弃<br>3.当右边小于左边变量数，多余的变量的值就等于undefined<br>4.可以提前给变量赋默认值，默认值可以是已声明的其他变量，<br>–注意给变量赋‘undefined’的值的时候，如果变量原来的值不严格等于‘===’undefined，将不会被赋值为undefined</p>
+<h2 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h2><p>1.对象的属性没有次序，变量必须与属性同名，才能取到正确的值，属性是匹配的标志<br>2.若变量与属性名不一致，则先找到同名属性，然后再赋给对应的变量。真正被赋值的是后者(变量)，而不是前者(属性)<br>3.如果在声明对象变量的时候为属性值的变量赋值，则相当于同时声明属性值的变量<br>4.进行套嵌赋值时，注意分清属性名和变量名，被赋值的是变量名，不是属性名<br>5.进行默认值赋值规则同数组，赋空不会生效<br>6.属性名表达式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">let arr = [1, 2, 3];</div><div class="line">let &#123;0 : first, [arr.length - 1] : last&#125; = arr;</div><div class="line">first // 1</div><div class="line">last // 3</div></pre></td></tr></table></figure></p>
+<p>数组arr的0键对应的值是1，[arr.length - 1]就是2键，对应的值是3</p>
+<h2 id="函数参数"><a href="#函数参数" class="headerlink" title="函数参数"></a>函数参数</h2><p>类似数组，但注意下面两种写法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">function move(&#123;x = 0, y = 0&#125; = &#123;&#125;) &#123;</div><div class="line">  return [x, y];</div><div class="line">&#125;</div><div class="line"></div><div class="line">move(&#123;x: 3, y: 8&#125;); // [3, 8]</div><div class="line">move(&#123;x: 3&#125;); // [3, 0]</div><div class="line">move(&#123;&#125;); // [0, 0]</div><div class="line">move(); // [0, 0]</div></pre></td></tr></table></figure></p>
+<p>为变量x和y赋值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">function move(&#123;x, y&#125; = &#123; x: 0, y: 0 &#125;) &#123;</div><div class="line">  return [x, y];</div><div class="line">&#125;</div><div class="line"></div><div class="line">move(&#123;x: 3, y: 8&#125;); // [3, 8]</div><div class="line">move(&#123;x: 3&#125;); // [3, undefined]</div><div class="line">move(&#123;&#125;); // [undefined, undefined]</div><div class="line">move(); // [0, 0]</div></pre></td></tr></table></figure></p>
+<p>为x,y的默认值赋值</p>
+<h2 id="字符串、数字、布尔"><a href="#字符串、数字、布尔" class="headerlink" title="字符串、数字、布尔"></a>字符串、数字、布尔</h2><p>字符串：字符串被转换成数组<br>数字/布尔：先转换成对象</p>
+<h1 id="字符串方法"><a href="#字符串方法" class="headerlink" title="字符串方法"></a>字符串方法</h1><table>
 <thead>
 <tr>
-<th style="text-align:center">下标</th>
-<th style="text-align:center">data</th>
-<th style="text-align:center">parent</th>
+<th>方法</th>
+<th style="text-align:right">es5/js</th>
+<th style="text-align:center">es6</th>
+<th>2017</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">0</td>
-<td style="text-align:center">A</td>
-<td style="text-align:center">-1</td>
+<td>Unicode表示法</td>
+<td style="text-align:right">只限于\u0000——\uFFFF之间的字符</td>
+<td style="text-align:center">只要将码点放入大括号，就能正确解读该字符</td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">B</td>
-<td style="text-align:center">0</td>
+<td>charCodeAt</td>
+<td style="text-align:right">只会正确返回16位的UTF-16字符的码点</td>
+<td style="text-align:center"></td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">C</td>
-<td style="text-align:center">0</td>
+<td>codePointAt</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">会正确返回32位的UTF-16字符的码点</td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">D</td>
-<td style="text-align:center">0</td>
+<td></td>
+<td style="text-align:right"></td>
+<td style="text-align:center"></td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">E</td>
-<td style="text-align:center">1</td>
+<td></td>
+<td style="text-align:right"></td>
+<td style="text-align:center"></td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">F</td>
-<td style="text-align:center">3</td>
+<td>String.fromCharCode</td>
+<td style="text-align:right">只会识别16位的UTF-16字符</td>
+<td style="text-align:center"></td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align:center">6</td>
-<td style="text-align:center">G</td>
-<td style="text-align:center">3</td>
+<td>String.fromCodePoint</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">会会识别32位的UTF-16字符</td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align:center">7</td>
-<td style="text-align:center">K</td>
-<td style="text-align:center">6</td>
+<td>for</td>
+<td style="text-align:right">不可以识别大于0xFFFF的码点</td>
+<td style="text-align:center"></td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align:center">8</td>
-<td style="text-align:center">H</td>
-<td style="text-align:center">4</td>
+<td>for…of</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">可以识别大于0xFFFF的码点</td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align:center">9</td>
-<td style="text-align:center">I</td>
-<td style="text-align:center">4</td>
+<td>charAt</td>
+<td style="text-align:right">不能识别码点大于0xFFFF的字符</td>
+<td style="text-align:center"></td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align:center">10</td>
-<td style="text-align:center">J</td>
-<td style="text-align:center">4</td>
+<td>at</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">能识别码点大于0xFFFF的字符</td>
+<td></td>
+</tr>
+<tr>
+<td>normalize</td>
+<td style="text-align:right">‘\u01D1’===’\u004F\u030C’ //false</td>
+<td style="text-align:center">‘\u01D1’.normalize() === ‘\u004F\u030C’.normalize()// true</td>
+<td></td>
+</tr>
+<tr>
+<td>indexOf</td>
+<td style="text-align:right">确定一个字符串是否包含在另一个字符串中</td>
+<td style="text-align:center"></td>
+<td></td>
+</tr>
+<tr>
+<td>includes()</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回布尔值，表示是否找到了参数字符串</td>
+<td></td>
+</tr>
+<tr>
+<td>startsWith</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回布尔值，表示参数字符串是否在源字符串的头部</td>
+<td></td>
+</tr>
+<tr>
+<td>endsWith</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回布尔值，表示参数字符串是否在源字符串的尾部</td>
+<td></td>
+</tr>
+<tr>
+<td>repeat(n)</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回一个新字符串，表示将原字符串重复n次。</td>
+<td></td>
+</tr>
+<tr>
+<td>padStart()，padEnd()</td>
+<td style="text-align:right"></td>
+<td style="text-align:center"></td>
+<td>padStart()用于头部补全，padEnd()用于尾部补全</td>
+</tr>
+<tr>
+<td>模板字符串</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">反引号(`),保留空格和换行,变量名写在${}中</td>
 </tr>
 </tbody>
 </table>
-<h1 id="孩子表示法"><a href="#孩子表示法" class="headerlink" title="孩子表示法"></a>孩子表示法</h1><p>每个结点由该结点数据和该结点双亲的下标、该结点孩子的下标组成,根结点双亲下标赋值为-1<br>无孩子则孩子属性赋值-1</p>
-<table>
+<h1 id="数值处理方法"><a href="#数值处理方法" class="headerlink" title="数值处理方法"></a>数值处理方法</h1><table>
 <thead>
 <tr>
-<th style="text-align:center">下标</th>
-<th style="text-align:center">data</th>
-<th style="text-align:center">parent</th>
-<th style="text-align:center">children</th>
+<th>方法</th>
+<th style="text-align:right">es5/js</th>
+<th style="text-align:center">es6</th>
+<th>2017</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">0</td>
-<td style="text-align:center">A</td>
-<td style="text-align:center">-1</td>
-<td style="text-align:center">1,2,3</td>
+<td>二进制和八进制表示法</td>
+<td style="text-align:right">在严格模式之中，八进制就不再允许使用前缀0表示</td>
+<td style="text-align:center">二进制0b或0B、八进制0o或0O</td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">B</td>
-<td style="text-align:center">0</td>
-<td style="text-align:center">4</td>
+<td>isFinite()/isNaN()</td>
+<td style="text-align:right">先调用Number()将非数值的值转为数值，再进行判断</td>
+<td style="text-align:center"></td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">C</td>
-<td style="text-align:center">0</td>
-<td style="text-align:center">-1</td>
+<td>Number.isFinite()</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">检查一个数值是否为有限的,非数值一律返回false。</td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">D</td>
-<td style="text-align:center">0</td>
-<td style="text-align:center">5,6</td>
+<td>Number.isNaN()</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">检查一个值是否为NaN,非数值一律返回false。</td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">E</td>
-<td style="text-align:center">1</td>
-<td style="text-align:center">8,9,10</td>
+<td>parseInt()、parseFloat()</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">移植到Number对象上面，行为完全保持不变。</td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">F</td>
-<td style="text-align:center">3</td>
-<td style="text-align:center">-1</td>
+<td>Number.isInteger()</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">判断一个值是否为整数</td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align:center">6</td>
-<td style="text-align:center">G</td>
-<td style="text-align:center">3</td>
-<td style="text-align:center">-1</td>
+<td>Number.EPSILON</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">极小的常量,为浮点数计算设置一个误差范围</td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align:center">7</td>
-<td style="text-align:center">K</td>
-<td style="text-align:center">6</td>
-<td style="text-align:center">-1</td>
+<td>Number.isSafeInteger</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">判断一个整数是否落在整数范围之内</td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align:center">8</td>
-<td style="text-align:center">H</td>
-<td style="text-align:center">4</td>
-<td style="text-align:center">-1</td>
+<td>Number.MAX_SAFE_INTEGER、Number.MIN_SAFE_INTEGER</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">表示整数范围的上下限</td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align:center">9</td>
-<td style="text-align:center">I</td>
-<td style="text-align:center">4</td>
-<td style="text-align:center">-1</td>
+<td>Math.trunc</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">去除一个数的小数部分，返回整数部分</td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align:center">10</td>
-<td style="text-align:center">J</td>
-<td style="text-align:center">4</td>
-<td style="text-align:center">-1</td>
+<td>Math.sign</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">判断一个数到底是正数、负数、还是零</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.cbrt</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">计算一个数的立方根</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.clz32</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回一个数的32位无符号整数形式有多少个前导0</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.imul</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回两个数以32位带符号整数形式相乘的结果，返回的也是一个32位的带符号整数。</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.fround</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回一个数的单精度浮点数形式</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.hypot</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回所有参数的平方和的平方根</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.expm1(x)</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回Math.exp(x) - 1</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.log1p(x)</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回1 + x的自然对数</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.log10(x)</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回以10为底的x的对数</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.log2(x)</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回以2为底的x的对数</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.sign()</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">判断一个值的正负</td>
+<td></td>
+</tr>
+<tr>
+<td>指数运算符(**)</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">指数运算符与Math.pow的实现不相同</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.sinh(x)</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回x的双曲正弦</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.cosh(x)</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回x的双曲余弦</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.tanh(x)</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回x的双曲正切</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.asinh(x)</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回x的反双曲正弦</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.acosh(x)</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回x的反双曲余弦</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.atanh(x)</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回x的反双曲正切</td>
 </tr>
 </tbody>
 </table>
-<h1 id="兄弟表示法"><a href="#兄弟表示法" class="headerlink" title="兄弟表示法"></a>兄弟表示法</h1><p>每个结点由该结点数据和该结点双亲的下标、该结点兄弟的下标组成,根结点双亲下标赋值为-1<br>无兄弟则兄弟属性赋值-1</p>
+<h1 id="深入理解es6笔记"><a href="#深入理解es6笔记" class="headerlink" title="深入理解es6笔记"></a>深入理解es6笔记</h1><h2 id="let-const"><a href="#let-const" class="headerlink" title="let/const"></a>let/const</h2><p>常量如果是对象，则对象中的值可以修改</p>
+<p>js引擎在扫描代码发现变量声明时，要么将它们提升至作用域顶部（var）,要么将声明放到TDZ(let/const)，访问TDZ中的变量会触发运行时错误，只有执行过变量声明语句后，变量才会从TDZ中移出，然后可正常访问。<br>TDZ在块作用域中，相对于let,const所在块作用域来说。<br>但在let声明的作用域外对该变量使用typeof不会报错<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">console.log(typeof val);</div><div class="line">if(condition) &#123;</div><div class="line">  let value = &apos;blue&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="字符串、正则表达式"><a href="#字符串、正则表达式" class="headerlink" title="字符串、正则表达式"></a>字符串、正则表达式</h2><p>在对字符串进行比较排序操作前，按照统一标准进行标准化<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let normalized = values.map(function(text)&#123;</div><div class="line">  return text.normalize();// 默认NFC格式</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>正则表达式Y修饰符使用注意：<br>1.只有调用exec()和test()这些正则表达式对象的方法时才会涉及lastIndex属性，调用字符串方法，例如match(),则不会触发粘滞行为<br>2.对于粘滞正则表达式而言，如果使用^字符串来匹配字符串开端，只会从字符串的起始位置或多行模式的首行进行匹配。</p>
+<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><p>函数name属性不一定引用同名变量，他只是协助调试用的额外信息，所以不能使用name属性的值来获取对函数的引用</p>
+<p>js函数有两个不同的内部[[Call]]和[[Construct]]<br>当通过new关键字调用函数时，执行的是[[Construct]]函数，他负责创建一个被称作实例的新对象<br>然后在执行函数将this绑定到实例上;<br>如果不通过new关键字调用函数，则执行[[Call]]函数，从而直接执行代码中的函数体<br>具有[[Construct]]方法的函数被统称为构造函数。</p>
+<p>可以在函数内部使用new.target来判断是否在使用new 操作符调用函数，<br>以及判断是否被某个特定构造函数调用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">1.</div><div class="line">function Person(name)&#123;</div><div class="line">  if(typeof new.target !== &apos;undefined&apos;)&#123;</div><div class="line">    this.name = name;</div><div class="line">  &#125;else &#123;</div><div class="line">    throw new Error(&apos;必须通过new 操作符调用该函数&apos;)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">2.</div><div class="line">function Person(name)&#123;</div><div class="line">  if(typeof new.target !== &apos;Person&apos;)&#123;</div><div class="line">    this.name = name;</div><div class="line">  &#125;else &#123;</div><div class="line">    throw new Error(&apos;必须通过new 操作符调用该函数&apos;)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">function AnotherPerson(name)&#123;</div><div class="line">  Person.call(this,name)</div><div class="line">&#125;</div><div class="line"></div><div class="line">var person = new Person(&apos;kely&apos;);</div><div class="line">var anotherPerson = new AnotherPerson(&apos;kely&apos;); // 抛出错误</div></pre></td></tr></table></figure></p>
+<p>如果箭头函数被非箭头函数包含，则this绑定的是最近一层非箭头函数的this;<br>否则this会被设置为全局对象</p>
+<h2 id="对象-1"><a href="#对象-1" class="headerlink" title="对象"></a>对象</h2><p>在使用===进行比较时，+0和-0得到结果相等；NaN和自身比较不相等<br>但可以使用Object.is()方法弥补<br>Object.js(+0,-0)得到false;<br>Object.js(NaN,NaN)得到true.</p>
+<p>Object.assign()方法不能将提供者的访问器属性复制到接收对象中<br>会被转变成接收对象中的一个数据属性。</p>
+<p>对象自有属性枚举顺序的基本规则是<br>1.所有数字键按升序排序<br>2.所有字符串键按照他们被加入对象的顺序排序<br>3.所有Symbol键按照他们被加入对象的顺序排序</p>
+<p>Super引用相当于指向对象原型的指针，实际上也就是Object.getPrototypeof(this)的值</p>
+<h2 id="解构"><a href="#解构" class="headerlink" title="解构"></a>解构</h2><p>获取数组副本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let colors = [&apos;red&apos;,&apos;green&apos;];</div><div class="line"></div><div class="line">let [...cloneColor] = colors;</div></pre></td></tr></table></figure></p>
+<p>通过给解构参数提供默认值，将解构参数定义为可选的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">function setCookie(name, value ,&#123;secure,path,domain&#125;=&#123;&#125;)&#123;&#125;</div></pre></td></tr></table></figure>
+<p>为解构参数指定默认值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">const setCookieDefaults = &#123;</div><div class="line">  secure: false,</div><div class="line">  path:&apos;/&apos;,</div><div class="line">  damin:&apos;example.com&apos;</div><div class="line">&#125;</div><div class="line">function setCookie(name,value,&#123;</div><div class="line">  secure = setCookieDefaults.secure,</div><div class="line">  path = setCookieDefaults.path,</div><div class="line">  domain = setCookieDefaults.domain</div><div class="line">&#125; = setCookieDeaults)</div></pre></td></tr></table></figure>
+<h2 id="Symbol"><a href="#Symbol" class="headerlink" title="Symbol"></a>Symbol</h2><p>使用Symbol.for()可以创建可共享的Symbol<br>使用Symbol.keyFor()可以在Symbol全局注册表中检索共享的Symbol<br>使用Symbol创建的Symbol属性不能用Symbol.keyFor()去查找</p>
+<p>Symbol类型的值不可以被转化为数字或者字符串</p>
+<p>Object.getOwnPropertySymbol()可以返回包含所有Symbol自有属性的数组</p>
+<p>一些特殊的Symbol值被用于暴露更多语言内部逻辑<br>主要使用思路就是通过这些特殊Symbol属性覆盖掉原始方法的响应方式<br>例如<br>给一个对象A定义<br>|属性|覆盖方法|被调用时机|<br>|—|—|—|<br>|Symbol.hasInstance|instanceOf|C instanceOf A|<br>|Symbol.toPrimitive|默认数字字符串转换值|A+’!’|<br>|Symbol.toStringTag|Object.prototype.toString(),Object.prototype.toString.call()方法时的返回值|A.toString或者Object.prototype.toString.call(A)|</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">1.</div><div class="line">默认模式只用于==，+及Date构造函数传递一个参数时，大多数操作使用字符串、数字模式</div><div class="line">function Temperature(degrees) &#123;</div><div class="line">  this.degerees = degrees;</div><div class="line">&#125;</div><div class="line"></div><div class="line">Temperature.prototype[Symbol.toPrimitive] = function(hint)&#123;</div><div class="line">  switch(hint) &#123;</div><div class="line">    case &apos;string&apos; : return this.degerees+&apos;123&apos;</div><div class="line">    case &apos;number&apos;: return this.degerees</div><div class="line">    case &apos;default&apos;: return this.degerees+&apos; degrees&apos;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">var freezing = new Temperature(32);</div><div class="line">console.log(freezing + &apos;!&apos;); // 32 degrees</div><div class="line">console.log(freezing/2);// 16</div><div class="line">console.log(String(freezing));// 32123</div><div class="line"></div><div class="line">2.Symbol.toString 的使用</div><div class="line">覆盖Object.prototype.toString</div><div class="line">function Person(name)&#123;</div><div class="line">  this.name = name</div><div class="line">&#125;</div><div class="line">Person.prototype[Symbol.toString] = &apos;Person&apos;</div><div class="line"></div><div class="line">Person.prototype.toString = function() &#123;</div><div class="line">  return this.name</div><div class="line">&#125;</div><div class="line"></div><div class="line">var me = new Person(&apos;ww&apos;);</div><div class="line"></div><div class="line">console.log(me.toString())// ww</div><div class="line">console.log(Object.prototype.toString.call(me)) // [object.Person]</div></pre></td></tr></table></figure>
+<p>用于覆盖正则表达式的方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">let hasLengthOf10 = &#123;</div><div class="line">  [Symbol.match]: function(value)&#123;return ...&#125;,</div><div class="line">  [Symbol.replace]: function(value,replacement)&#123;return 。。。&#125;,</div><div class="line">  [Symbol.search]: function(value)&#123;return ...&#125;,</div><div class="line">  [Symbol.split]: function(value)&#123;return ...&#125;,</div><div class="line">&#125;</div><div class="line"></div><div class="line">let str = &apos;hwrwrirrrk&apos;;</div><div class="line">console.log(str.match(hasLengthOf10))</div><div class="line">console.log(str.replace(hasLengthOf10))</div><div class="line">console.log(str.search(hasLengthOf10))</div><div class="line">console.log(str.split(hasLengthOf10))</div></pre></td></tr></table></figure></p>
+<h2 id="Set-和-Map"><a href="#Set-和-Map" class="headerlink" title="Set 和 Map"></a>Set 和 Map</h2><p>Set中如果存储对象的话，是强引用，只要Set实例中引用存在，垃圾回收机制就不能释放该对象的内存空间。<br>WeakSet 只存储对象弱引用，并且不可以存储原始值，如果集合中的弱引用是对象的唯一引用，则会被回收并释放相应内存<br>所以如果只需要跟踪对象引用，应该使用WeakSet集合而不是普通的Set集合。</p>
+<p>WeakMap集合中的键名必须是一个对象，如果使用非对象键名会报错：<br>集合中保存的是这些对象的弱引用，如果在弱引用之外不存在其他的强引用，<br>引擎的垃圾回收机制会自动回收这个对象，同时也会移除WeakMap集合中的键值对<br>但是只有集合的键名遵从这个规则，键名对应的值如果是一个对象，则保存的是对象的强引用，不会触发垃圾回收机制</p>
+<h2 id="数组方法"><a href="#数组方法" class="headerlink" title="数组方法"></a>数组方法</h2><p>find和findIndex方法都接受两个参数，一个是回调函数，<br>另一个是可选参数，用于指定回调函数中this的值</p>
+<p>fill 方法可以传入第二个和第三个参数用于只改变一部分值，分别指定开始索引和不包含结束索引</p>
+<h2 id="Proxy-和-Reflect"><a href="#Proxy-和-Reflect" class="headerlink" title="Proxy 和 Reflect"></a>Proxy 和 Reflect</h2><p>使用Proxy的陷阱方法，可以拦截对象的默认特性方法<br>对应的Reflect方法可以在proxy陷阱方法中重新使用对象的内减特性</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div></pre></td><td class="code"><pre><div class="line">let target = &#123;</div><div class="line">  name: &apos;target&apos;</div><div class="line">&#125;</div><div class="line"></div><div class="line">let proxy = new Proxy(target,&#123;</div><div class="line">  // set 写入一个属性时</div><div class="line">  // 代理目标对象target，要写入的键，要写入的值，proxy代理本身</div><div class="line">  set (trapTarget,key,value,receiver)&#123;</div><div class="line">    // 忽略不希望受到影响的已有属性</div><div class="line">    if(!trapTarget.hasOwnProperty(key))&#123;</div><div class="line">      if(isNaN(value))&#123;</div><div class="line">        throw new TypeError(&apos;属性必须是数字&apos;)</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    // 添加属性</div><div class="line">    return Reflect.set(trapTarget,key,value,receiver);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  // 读取一个属性时</div><div class="line">  // 代理目标对象，要读的键，代理对象本身</div><div class="line">  get(trapTarget,key,receiver) &#123;</div><div class="line">    if(!key in receiver)&#123;</div><div class="line">      throw new TypeError(&apos;属性&apos;+key+&apos;不存在&apos;)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    return Reflect.get(trapTarget,key,receiver)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  // 使用in操作符时</div><div class="line">  has(trapTarget,key)&#123;</div><div class="line">    if(key === &apos;value&apos;)&#123;</div><div class="line">      return false;</div><div class="line">    &#125; else &#123;</div><div class="line">      return Reflect.has(trapTarget,key)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  // 使用delete操作符删除对象属性时</div><div class="line">  deleteProperty(trapTarget,key)&#123;</div><div class="line">    if(key === &apos;value&apos;)&#123;</div><div class="line">      return false;</div><div class="line">    &#125; else &#123;</div><div class="line">      return Reflect.deleteProperty(trapTarget,key)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  // Object.getPrototypeOf(proxy)时</div><div class="line">  //区别</div><div class="line">  // Object.getPrototypeOf()如果传入值非对象会将参数强制转成对象</div><div class="line">  // Reflect.getPrototypeOf()如果传入非对象，则报错</div><div class="line">  getPrototypeOf(trapTarget) &#123;</div><div class="line">    // return null</div><div class="line">    return  Reflect.getPrototypeOf(trapTarget) //返回默认行为，但有上述区别</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  // Object.setPrototypeOf(proxy, &#123;&#125;)时</div><div class="line">  // 区别</div><div class="line">  // Object.getPrototypeOf()操作失败就报错</div><div class="line">  // Reflect.setPrototypeOf()返回布尔来表示操作是否成功</div><div class="line">  setPrototypeOf(trapTarget,proto) &#123;</div><div class="line">    // return false</div><div class="line">    return  Reflect.setPrototypeOf(trapTarget,proto)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  // Object.isExtensible(proxy)时，</div><div class="line">  // 返回布尔值，表示对象是否可扩展</div><div class="line">  // 区别</div><div class="line">  // Object.isExtensible() 传入非对象返回false</div><div class="line">  // Reflect.isExtensible() 传入非对象报错</div><div class="line">  isExtensible(trapTarget) &#123;</div><div class="line">    // return null</div><div class="line">    return  Reflect.isExtensible(trapTarget)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  // Object.preventExtension(proxy)时，</div><div class="line">  // 阻止对象扩展，返回布尔表示操作是否成功</div><div class="line">  // 区别</div><div class="line">  // Object.preventExtension()无论参数是否为对象都返回参数</div><div class="line">  // Reflect.preventExtension()参数非对象报错，否则根据操作是否成功返回布尔值</div><div class="line">  preventExtension(trapTarget) &#123;</div><div class="line">    // return null</div><div class="line">    return  Reflect.preventExtension(trapTarget) // 会转发到底层，target也会被阻止掉</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  // Object.defineProperty(proxy)时，</div><div class="line">  // 区别</div><div class="line">  // Object.defineProperty()返回第一个参数</div><div class="line">  // Reflect.defineProperty()根据操作是否成功返回布尔值</div><div class="line">  defineProperty(trapTarget,key,descriptor) &#123;</div><div class="line">    return  Reflect.defineProperty(trapTarget,key,descriptor)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  // Object.getOwnPropertyDescriptor(proxy)时，</div><div class="line">  // 区别</div><div class="line">  // Object.getOwnPropertyDescriptor()传入非对象转成对象</div><div class="line">  // Reflect.getOwnPropertyDescriptor()传入非对象报错</div><div class="line">  getOwnPropertyDescriptor(trapTarget,key) &#123;</div><div class="line">    return  Reflect.getOwnPropertyDescriptor(trapTarget,key)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  // 拦截内部方法[[OwnPropertyKeys]],</div><div class="line">  // Object.keys(),Object.getOwnPropertyName() （不含Symbol属性）</div><div class="line">  // Object.assign()（字符串和Symbol属性）,Object.getOwnPropertySymbols()（仅含Symbol属性）</div><div class="line">  //4个方法调用时会被拦截到，输出的数组再被以上4个方法处理返回</div><div class="line">  ownKeys(trapTarget) &#123;</div><div class="line">    return Reflect.ownKeys(trapTarget).filter(key=&gt;&#123;</div><div class="line">      return typeof key !== &apos;string&apos; || key[0] !== &apos;_&apos;</div><div class="line">    &#125;)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  // 代理目标是一个函数才可以，函数被普通调用执行时会被拦截</div><div class="line">  // 代理目标函数，函数被调用时内部this值，传给函数的参数数组</div><div class="line">  apply(trapTarget,thisArg, argumentList) &#123;</div><div class="line">    return  Reflect.apply(trapTarget,thisArg, argumentList)</div><div class="line">  &#125;</div><div class="line">  // 通过这样操作，可以实现不用new 调用函数，实现new调用函数的效果</div><div class="line">  apply(trapTarget,thisArg, argumentList) &#123;</div><div class="line">    return  Reflect.construct(trapTarget,thisArg, argumentList)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  // 代理目标是一个函数才可以，函数被new调用时会被拦截</div><div class="line">  // 代理目标函数，传给函数的参数数组</div><div class="line">   construct(trapTarget,argumentList) &#123;</div><div class="line">    return  Reflect.construct(trapTarget, argumentList)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">&#125;)</div><div class="line"></div><div class="line">// proxy是可被插销的代理对象，调用revoke方法后，不能在通过proxy代理到target对象</div><div class="line">let &#123; proxy,revoke &#125; = Proxy.revocable(target,&#123;&#125;)</div><div class="line">revoke()</div></pre></td></tr></table></figure>
+<h2 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h2><p>用逗号将默认的本地名称与大括号包裹的非默认值分隔开,请记住，在import语句中，默认值必须排在非默认值之前。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/ze.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/js/ze.html" itemprop="url">
+                  正则表达式
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-06T07:05:37+08:00">
+                2017-03-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="判断邮箱格式"><a href="#判断邮箱格式" class="headerlink" title="判断邮箱格式"></a>判断邮箱格式</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var match = /.+@.+\.[a-zA-Z]&#123;2,4&#125;$/;</div><div class="line">match.test(变量)</div></pre></td></tr></table></figure>
+<h1 id="输入框input只允许输入数字"><a href="#输入框input只允许输入数字" class="headerlink" title="输入框input只允许输入数字"></a>输入框input只允许输入数字</h1><p>在input标签里添加：<br>onKeyUp=”value=value.replace(/[^\d]/g,’’)”</p>
+<p>以上方法input 限制了仅输入数字，但更换中文输入法之后还能输入出数字之外字符<br>解决办法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">html:</div><div class="line">  &lt;input type=&quot;text&quot;   class=&quot;form-control form-filter&quot; id=&quot;inputorp_i&quot; autocomplete=&quot;off&quot; ng-model=&quot;min_score&quot; placeholder=&quot;正整数&quot;&gt;</div><div class="line">  js:</div><div class="line"> var bind_name = &apos;input&apos;;</div><div class="line"> 　　 if (navigator.userAgent.indexOf(&quot;MSIE&quot;) != -1)&#123;</div><div class="line"> 　　 bind_name = &apos;propertychange&apos;;</div><div class="line"> 　　&#125;</div><div class="line"> 　　 $(&apos;#inputorp_i&apos;).bind(bind_name, function()&#123;</div><div class="line"> 　　clearNoNum(this);</div><div class="line"> 　　 &#125;)</div><div class="line"> $(&apos;#inputorp_i1&apos;).bind(bind_name, function()&#123;</div><div class="line"> 　　clearNoNum(this);</div><div class="line"> 　　 &#125;)</div><div class="line"> function clearNoNum(obj)</div><div class="line"></div><div class="line"> &#123;</div><div class="line"> //先把非数字的都替换掉，除了数字</div><div class="line"> obj.value = obj.value.replace(/[^\d]/g,&quot;&quot;);</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+<h1 id="判断输入值是否是url"><a href="#判断输入值是否是url" class="headerlink" title="判断输入值是否是url"></a>判断输入值是否是url</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"> javascript</div><div class="line">var match = /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&amp;:\/~\+#]*[\w\-\@?^=%&amp;\/~\+#])?$/;</div><div class="line">match.test(变量)</div></pre></td></tr></table></figure>
+<p><a href="http://www.cnblogs.com/zfc2201/archive/2012/12/18/2824107.html" target="_blank" rel="external">常用正则表达式</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/graphstruct.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/algorithm/graphstruct.html" itemprop="url">
+                  图的存储结构
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-01T21:59:30+08:00">
+                2017-03-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="1-邻接矩阵"><a href="#1-邻接矩阵" class="headerlink" title="1.邻接矩阵"></a>1.邻接矩阵</h1><h2 id="1-无向图"><a href="#1-无向图" class="headerlink" title="1.无向图"></a>1.无向图</h2><p><img src="/image/graph1.png" alt="graph1"><br>一个一维数组存储图中顶点信息，</p>
 <table>
 <thead>
 <tr>
-<th style="text-align:center">下标</th>
-<th style="text-align:center">data</th>
-<th style="text-align:center">parent</th>
-<th style="text-align:center">rightsib</th>
+<th>顶点数组</th>
+<th>v0</th>
+<th>v1</th>
+<th>v2</th>
+<th>v3</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">0</td>
-<td style="text-align:center">A</td>
-<td style="text-align:center">-1</td>
-<td style="text-align:center">-1</td>
-</tr>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">B</td>
-<td style="text-align:center">0</td>
-<td style="text-align:center">2</td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">C</td>
-<td style="text-align:center">0</td>
-<td style="text-align:center">3</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">D</td>
-<td style="text-align:center">0</td>
-<td style="text-align:center">-1</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">E</td>
-<td style="text-align:center">1</td>
-<td style="text-align:center">5</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">F</td>
-<td style="text-align:center">3</td>
-<td style="text-align:center">6</td>
-</tr>
-<tr>
-<td style="text-align:center">6</td>
-<td style="text-align:center">G</td>
-<td style="text-align:center">3</td>
-<td style="text-align:center">-1</td>
-</tr>
-<tr>
-<td style="text-align:center">7</td>
-<td style="text-align:center">K</td>
-<td style="text-align:center">6</td>
-<td style="text-align:center">-1</td>
-</tr>
-<tr>
-<td style="text-align:center">8</td>
-<td style="text-align:center">H</td>
-<td style="text-align:center">4</td>
-<td style="text-align:center">9</td>
-</tr>
-<tr>
-<td style="text-align:center">9</td>
-<td style="text-align:center">I</td>
-<td style="text-align:center">4</td>
-<td style="text-align:center">10</td>
-</tr>
-<tr>
-<td style="text-align:center">10</td>
-<td style="text-align:center">J</td>
-<td style="text-align:center">4</td>
-<td style="text-align:center">-1</td>
+<td></td>
 </tr>
 </tbody>
 </table>
-<h1 id="双亲孩子表示法"><a href="#双亲孩子表示法" class="headerlink" title="双亲孩子表示法"></a>双亲孩子表示法</h1><p>所有结点组成一个数组，每个结点包含该结点数据属性,该结点双亲属性(由双亲结点下标表示)以及第一个孩子结点的下标<br>每一个孩子结点包含下一个孩子结点的下标,用js数组实现相当于兄弟表示法</p>
+<p>一个二维数组(邻接矩阵)存储图中边或弧的信息<br>0表示不存在顶点间的边，1表示顶点间存在边</p>
 <table>
 <thead>
 <tr>
-<th style="text-align:center">下标</th>
-<th style="text-align:center">data</th>
-<th style="text-align:center">parent</th>
-<th style="text-align:center">nextchildren</th>
+<th></th>
+<th>v0</th>
+<th>v1</th>
+<th>v2</th>
+<th>v3</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">0</td>
-<td style="text-align:center">A</td>
-<td style="text-align:center">-1</td>
-<td style="text-align:center">-1</td>
+<td>v0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
 </tr>
 <tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">B</td>
-<td style="text-align:center">0</td>
-<td style="text-align:center">2</td>
+<td>v1</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
 </tr>
 <tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">C</td>
-<td style="text-align:center">0</td>
-<td style="text-align:center">3</td>
+<td>v2</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
 </tr>
 <tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">D</td>
-<td style="text-align:center">0</td>
-<td style="text-align:center">-1</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">E</td>
-<td style="text-align:center">1</td>
-<td style="text-align:center">5</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">F</td>
-<td style="text-align:center">3</td>
-<td style="text-align:center">6</td>
-</tr>
-<tr>
-<td style="text-align:center">6</td>
-<td style="text-align:center">G</td>
-<td style="text-align:center">3</td>
-<td style="text-align:center">-1</td>
-</tr>
-<tr>
-<td style="text-align:center">7</td>
-<td style="text-align:center">K</td>
-<td style="text-align:center">6</td>
-<td style="text-align:center">-1</td>
-</tr>
-<tr>
-<td style="text-align:center">8</td>
-<td style="text-align:center">H</td>
-<td style="text-align:center">4</td>
-<td style="text-align:center">9</td>
-</tr>
-<tr>
-<td style="text-align:center">9</td>
-<td style="text-align:center">I</td>
-<td style="text-align:center">4</td>
-<td style="text-align:center">10</td>
-</tr>
-<tr>
-<td style="text-align:center">10</td>
-<td style="text-align:center">J</td>
-<td style="text-align:center">4</td>
-<td style="text-align:center">-1</td>
+<td>v3</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
 </tr>
 </tbody>
 </table>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"># define MAX_TREE_SIZE 100</div><div class="line">typedef char ElemType;</div><div class="line">//孩子结点</div><div class="line">typedef struct</div><div class="line">&#123;</div><div class="line">	int child;						//孩子结点的下标</div><div class="line">	struct CTNode *next;	//指向下一个孩子结点的指针</div><div class="line">&#125;*ChildPtr;</div><div class="line"></div><div class="line">//表头结构</div><div class="line">typedef struct</div><div class="line">&#123;</div><div class="line">	ElemType data;				//存放在树中的结点数据</div><div class="line">	int parent;						//存放双亲的下标</div><div class="line">	ChildPtr firstchild;	//指向第一个孩子的指针</div><div class="line">&#125;</div><div class="line">//树结构</div><div class="line">typedef struct</div><div class="line">&#123;</div><div class="line">CTBox nodes[MAX_TREE_SIZE];//结点数组</div><div class="line">int r,n;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>js实现：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> tree=[];</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i =<span class="number">0</span>;i&lt;<span class="number">11</span>;i++)&#123;</div><div class="line">  <span class="keyword">var</span> prior = <span class="number">-1</span>;</div><div class="line">  <span class="keyword">var</span> next = [];</div><div class="line">  <span class="keyword">if</span>(i==<span class="number">0</span>)&#123;</div><div class="line">    prior =<span class="number">-1</span>;</div><div class="line">  &#125;<span class="keyword">else</span> <span class="keyword">if</span>(i&gt;<span class="number">0</span>&amp;&amp;i&lt;<span class="number">4</span>)&#123;</div><div class="line">    prior = <span class="number">0</span>;</div><div class="line">  &#125;<span class="keyword">else</span> <span class="keyword">if</span>(i==<span class="number">4</span>)&#123;</div><div class="line">    prior = <span class="number">1</span>;</div><div class="line">  &#125;<span class="keyword">else</span> <span class="keyword">if</span>(i==<span class="number">5</span> || i==<span class="number">6</span>)&#123;</div><div class="line">    prior = <span class="number">3</span>;</div><div class="line">  &#125;<span class="keyword">else</span> <span class="keyword">if</span>(i&gt;<span class="number">6</span> &amp;&amp; i&lt;<span class="number">10</span>)&#123;</div><div class="line">    prior = <span class="number">4</span>;</div><div class="line">  &#125;<span class="keyword">else</span>&#123;</div><div class="line">    prior = <span class="number">6</span>;</div><div class="line">  &#125;</div><div class="line">  tree.push(&#123;</div><div class="line">    <span class="attr">data</span>:i,</div><div class="line">    <span class="attr">parent</span>:prior,</div><div class="line">  &#125;);</div><div class="line">&#125;</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i =<span class="number">0</span>;i&lt;<span class="number">11</span>;i++)&#123;</div><div class="line"> <span class="keyword">var</span> children=[];</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> j =<span class="number">0</span>;j&lt;<span class="number">11</span>;j++)&#123;</div><div class="line">   <span class="keyword">if</span>(tree[j].parent == i)&#123;</div><div class="line">     children.push(j);</div><div class="line">   &#125;</div><div class="line">  &#125;</div><div class="line">  tree[i].children = children.slice();</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(tree);</div></pre></td></tr></table></figure></p>
+<p>无向图构成的邻接矩阵为对称矩阵，对角线值为0<br>—–顶点Vi在邻接矩阵中第i行(或第i列)的元素之和为该顶点的度<br>—–扫描矩阵中第i行元素，元素为1的列为顶点Vi的邻接点</p>
+<h2 id="2-有向图"><a href="#2-有向图" class="headerlink" title="2.有向图"></a>2.有向图</h2><p><img src="/image/graph2.png" alt="graph2"><br>一个一维数组存储图中顶点信息，</p>
+<table>
+<thead>
+<tr>
+<th>顶点数组</th>
+<th>v0</th>
+<th>v1</th>
+<th>v2</th>
+<th>v3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>坐标[Vi][Vj]的值，1表示Vi指向Vj的弧存在，0表示不存在</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>v0</th>
+<th>v1</th>
+<th>v2</th>
+<th>v3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>v1</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>v2</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>v3</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>第Vi列的元素之和为顶点Vi的入度<br>第Vi行的元素之和为顶点Vi的出度</p>
+<h2 id="3-网"><a href="#3-网" class="headerlink" title="3.网"></a>3.网</h2><p><img src="/image/tu3.png" alt="tu3"><br>邻接矩阵各元素的值不再用0/1表示，而是用权表示<br>顶点间若不存在弧，则用\infty无穷表示,顶点自己到自己的权为0</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>v0</th>
+<th>v1</th>
+<th>v2</th>
+<th>v3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v0</td>
+<td>0</td>
+<td>\infty</td>
+<td>\infty</td>
+<td>18</td>
+</tr>
+<tr>
+<td>v1</td>
+<td>8</td>
+<td>0</td>
+<td>2</td>
+<td>\infty</td>
+</tr>
+<tr>
+<td>v2</td>
+<td>4</td>
+<td>\infty</td>
+<td>0</td>
+<td>\infty</td>
+</tr>
+<tr>
+<td>v3</td>
+<td>\infty</td>
+<td>\infty</td>
+<td>\infty</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<h1 id="2-邻接表"><a href="#2-邻接表" class="headerlink" title="2.邻接表"></a>2.邻接表</h1><h2 id="无向图"><a href="#无向图" class="headerlink" title="无向图"></a>无向图</h2><p>顶点用一个一维数组存储<br>每个顶点Vi的所有邻接点构成一个线性表，由于个数不确定，用单链表来表示<br><img src="/image/tu4.png" alt="tu4"><br><img src="/image/tu5.png" alt="tu5"></p>
+<h2 id="有向图"><a href="#有向图" class="headerlink" title="有向图"></a>有向图</h2><p>把顶点当弧尾建立邻接表，邻接表长度就是该顶点出度<br><img src="/image/tu6.png" alt="tu6"><br>把顶点当弧头建的表叫逆邻接表，邻接表长度就是该顶点入度<br><img src="/image/tu7.png" alt="tu7"></p>
+<h2 id="网"><a href="#网" class="headerlink" title="网"></a>网</h2><p>在边表结点定义中再增加一个数据域来存储权值<br><img src="/image/tu8.png" alt="tu8"></p>
+<h1 id="3-十字链表-有向图"><a href="#3-十字链表-有向图" class="headerlink" title="3.十字链表(有向图)"></a>3.十字链表(有向图)</h1><p>顶点表结构</p>
+<p>|data|firstIn|firstOut|<br>data：顶点数据<br>firstIn:第一个入边表的指针<br>firstOut:第一个出边表的指针</p>
+<p>边表结点结构 表示以条边</p>
+<table>
+<thead>
+<tr>
+<th>tailVex</th>
+<th>headVex</th>
+<th>headLink</th>
+<th>tailLink</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>tailVex:该弧起点的顶点在顶点表的下标<br>headVex:该弧终点的顶点在顶点表的下标<br>headLink:指向headVex的弧的指针<br>tailLink: 从tailVex出发的弧的指针<br><img src="/image/graph2.png" alt="graph2"><br><img src="/image/tu9.png" alt="tu9"></p>
+<h1 id="4-邻接多重表-无向表"><a href="#4-邻接多重表-无向表" class="headerlink" title="4.邻接多重表(无向表)"></a>4.邻接多重表(无向表)</h1><p>关注对象是图中的表不是顶点<br>|iVex|iLink|jVex|jLink|<br>iVex和jVex是与某条边依附的两个顶点在顶点表中的下标<br>iLink：指向依附顶点iVex的下一条边，<br>jLink：指向依附顶点jVex的下一条边，<br><img src="/image/tu10.png" alt="tu10"></p>
+<h1 id="5-边集数组"><a href="#5-边集数组" class="headerlink" title="5.边集数组"></a>5.边集数组</h1><p>由两个一维数组构成<br>一个是存储顶点的信息<br>另一个存储边的信息<br>边数组的每个数据元素由一条边的起点下标(begin)、终点下标(end)和权(weight)组成</p>
+<p><img src="/image/tu11.png" alt="tu11"></p>
+<table>
+<thead>
+<tr>
+<th>顶点数组</th>
+<th>v0</th>
+<th>v1</th>
+<th>v2</th>
+<th>v3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>边数组</th>
+<th>begin</th>
+<th>end</th>
+<th>weight</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>edges[0]</td>
+<td>0</td>
+<td>3</td>
+<td>5</td>
+</tr>
+<tr>
+<td>edges[1]</td>
+<td>1</td>
+<td>0</td>
+<td>4</td>
+</tr>
+<tr>
+<td>edges[2]</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>edges[3]</td>
+<td>2</td>
+<td>0</td>
+<td>8</td>
+</tr>
+</tbody>
+</table>
 
           
         
@@ -1169,7 +1686,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/string.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/performance/compatible_date.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1194,8 +1711,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/algorithm/string.html" itemprop="url">
-                  字符串(串结构)
+                <a class="post-title-link" href="/post/performance/compatible_date.html" itemprop="url">
+                  日期格式兼容
                 </a>
               
             
@@ -1209,8 +1726,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-07T22:54:37+08:00">
-                2017-02-07
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-26T21:14:37+08:00">
+                2017-02-26
               </time>
             
 
@@ -1247,8 +1764,9 @@
       
         
           
-            <h1 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h1><p>定义：串是由0个或多个字符组成的有限序列，又名字符串<br>1.空串：没有字符，直接由””表示<br>2.主串与子串：”hello”是”helloworld”的子串,”helloworld”是”hello”主串<br>3.字符串比较：比较字符串里每个字符的ASCII码大小,没有意义，一般看是否相等<br>4.存储结构<br>    顺序存储：用一组地址连续的存储单元来存储串中的字符序列，<br>    按照预定义大小，为每个定义的字符串变量分配一个固定长度的存储区，一般用定长数组来定义<br>  链式存储：不常用<br>5.BF算法：<br>    有两个字符串S和T，长度为N和M，首先S[1]和T[1]比较，若相等，则再比较S[2]和T[2],一直到T[M-1]为止;<br>    若S[1]和T[1]不等，则T向右移动一个字符的位置，再依次进行比较<br>6.字符串模式匹配：依据BF算法,S是主串,T是子串这种定位操作即字符串模式匹配</p>
-<h1 id="BF算法"><a href="#BF算法" class="headerlink" title="BF算法"></a>BF算法</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> string1=<span class="string">"hellohannahworld"</span>;</div><div class="line"><span class="keyword">var</span> string2=<span class="string">"hannah"</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">BF</span>(<span class="params">str1,str2</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> i = <span class="number">0</span>;</div><div class="line">  <span class="keyword">var</span> j = <span class="number">0</span>;</div><div class="line">  <span class="keyword">while</span>(i&lt;str2.length)&#123;</div><div class="line">    <span class="keyword">while</span>(j&lt;str1.length)&#123;</div><div class="line">      <span class="keyword">if</span>(str2[i]==str1[j])&#123;</div><div class="line">        <span class="keyword">if</span>(i==str2.length<span class="number">-1</span>)&#123;</div><div class="line">          <span class="keyword">var</span> temp=j-str2.length+<span class="number">1</span>;</div><div class="line">          <span class="built_in">console</span>.log(<span class="string">"字符串匹配的起始位置为"</span>+temp);</div><div class="line">          <span class="keyword">return</span></div><div class="line">        &#125;</div><div class="line">        j++;</div><div class="line">        i++;</div><div class="line">      &#125;<span class="keyword">else</span>&#123;</div><div class="line">        <span class="keyword">if</span>(i&gt;<span class="number">0</span>)&#123;</div><div class="line">          i=<span class="number">0</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(i==<span class="number">0</span>)&#123;</div><div class="line">          j++</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">"两字符串一点也不匹配!"</span>)</div><div class="line">  <span class="keyword">return</span></div><div class="line">&#125;</div><div class="line">BF(string1,string2);</div></pre></td></tr></table></figure>
+            <h1 id="IE11-chrome-360-火狐兼容日期格式兼容"><a href="#IE11-chrome-360-火狐兼容日期格式兼容" class="headerlink" title="IE11/chrome/360/火狐兼容日期格式兼容"></a>IE11/chrome/360/火狐兼容日期格式兼容</h1><p> $scope.date= new Date().toLocaleDateString().replace(/\//g,’-‘);<br> 获取到的”year-month-day”格式支持/chrome/360/火狐，但到了IE11就变成”year年month月day”</p>
+<p> var date = new Date();<br> var y = date.getFullYear();<br> var m = date.getMonth()+1;<br> var d = date.getDate();<br> var day = date.getDay();<br> var dateString=y+”-“+m+”-“+d;<br> $scope.date= dateString;</p>
+<p> 这样获取的”year-month-day”格式支持以上四种浏览器</p>
 
           
         
@@ -1287,7 +1805,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/git/gitrepository.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/angular/imgupload.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1312,8 +1830,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/git/gitrepository.html" itemprop="url">
-                  使用Git Bash建立本地仓库并同步github仓库
+                <a class="post-title-link" href="/post/angular/imgupload.html" itemprop="url">
+                  AngularJs自定义指令实现图片上传
                 </a>
               
             
@@ -1327,8 +1845,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-05T10:43:04+08:00">
-                2017-02-05
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-22T22:14:30+08:00">
+                2017-02-22
               </time>
             
 
@@ -1365,15 +1883,12 @@
       
         
           
-            <h1 id="建立本地仓库"><a href="#建立本地仓库" class="headerlink" title="建立本地仓库"></a>建立本地仓库</h1><p>1.选择仓库存放位置,新建文件夹,用作本地仓库<br>2.打开Git bash,cd 切换路径到该文件夹<br>3.执行以下命令<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">echo "该项目简短说明" &gt;&gt; README.md     ##输入“该项目简短说明”内容到README.md文件</div><div class="line">git init</div><div class="line">git add README.md                      ##将提交的文件(README.md)的信息添加到索引库</div><div class="line">git commit -m "第一次提交"             ##依据索引库中的内容来进行文件的提交</div><div class="line">																			 ##同时提交更改描述“第一次提交”</div></pre></td></tr></table></figure></p>
-<p>以上步骤完成本地仓库建立和将文件提交到本地仓库的工作</p>
-<h1 id="建立远成仓库"><a href="#建立远成仓库" class="headerlink" title="建立远成仓库"></a>建立远成仓库</h1><p>1.登录github账号,点击右上角“+”,选择“New repository”<br>2.填写仓库名称,简单描述<br>3.为避免与本地仓库READMD.md冲突，初始化时不勾选“Initialize this repository with a README”<br>4.点击“Create repository”,生成远程仓库</p>
-<h1 id="同步仓库"><a href="#同步仓库" class="headerlink" title="同步仓库"></a>同步仓库</h1><p>1.点击“Clone or download”, 复制远程仓库地址<br>2.执行以下代码<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git remote add origin 远程仓库地址     ##将本地仓库推送到远成仓库</div><div class="line">git push -u origin master              ##将本地仓库推送到远程分支</div></pre></td></tr></table></figure></p>
-<p>以上步骤即完成本地仓库同步到远程仓库</p>
-<p>执行git remote时，<br>若出现提示出错信息：fatal: remote origin already exists.<br>则先输入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git remote rm origin ##删除远程仓库</div></pre></td></tr></table></figure></p>
-<p>再执行推送语句 “git remote add origin 远程仓库地址”</p>
-<h1 id="更新远成仓库"><a href="#更新远成仓库" class="headerlink" title="更新远成仓库"></a>更新远成仓库</h1><p>若对本地仓库进行了修改<br>git add &lt;文件名&gt; 只是添加一个文件<br>git add .  可添加全部仓库文件<br>若执行“git add .”时，总出现警告：warning: LF will be replaced by CRLF in XXXXXXXXXXXXXX.<br>可执行语句 “git config core.autocrlf false”<br>添加完文件后执行提交操作<br>git commit -m “”<br>最后推送到远程仓库<br>git push -u origin master</p>
-<p>[资源共享]（<a href="http://www.cnblogs.com/len0031/p/5831571.html" target="_blank" rel="external">http://www.cnblogs.com/len0031/p/5831571.html</a>)</p>
+            <p>//定义file-Model指令的代码<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">MetronicApp.directive(<span class="string">'fileModel'</span>, [<span class="string">'$parse'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">$parse</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> &#123;</div><div class="line">    <span class="attr">restrict</span>: <span class="string">'A'</span>,</div><div class="line">    <span class="attr">link</span>: <span class="function"><span class="keyword">function</span>(<span class="params">scope, element, attrs, ngModel</span>) </span>&#123;</div><div class="line">      <span class="keyword">var</span> model = $parse(attrs.fileModel);</div><div class="line">      <span class="keyword">var</span> modelSetter = model.assign;</div><div class="line">      element.bind(<span class="string">'change'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>&#123;</div><div class="line">        scope.$apply(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">          modelSetter(scope, element[<span class="number">0</span>].files[<span class="number">0</span>]);</div><div class="line">        &#125;);</div><div class="line">        <span class="comment">//附件预览</span></div><div class="line">           scope.file = (event.srcElement || event.target).files[<span class="number">0</span>];</div><div class="line">            scope.getFile();</div><div class="line">            <span class="keyword">this</span>.value = <span class="string">''</span>; <span class="comment">//清除已上传的文件，否则无法连续上传相同文件</span></div><div class="line">      &#125;);</div><div class="line">    &#125;</div><div class="line">  &#125;;</div><div class="line">&#125;</div><div class="line">])</div></pre></td></tr></table></figure></p>
+<p>//在HTML使用时的代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"> &lt;div class=&quot;form-group&quot;&gt;</div><div class="line">    &lt;label class=&quot;control-label col-md-3&quot;&gt;图片上传&lt;/label&gt;</div><div class="line">     &lt;div class=&quot;col-md-9 fileinput&quot;&gt;</div><div class="line">         &lt;img src=&quot;&#123;&#123;detaildata.banner&#125;&#125;&quot; name=&quot;img&quot; style=&quot;width:40px;height: 40px;&quot;&gt;</div><div class="line">        &lt;span class=&quot;btn red btn-outline btn-file&quot; style=&quot;margin-left: 10px;margin-top:0px;&quot;&gt;</div><div class="line">        &lt;span class=&quot;fileinput-new&quot;&gt; 重新上传 &lt;/span&gt;</div><div class="line">        &lt;input type=&quot;hidden&quot;&gt;&lt;input id=&quot;upload&quot; type=&quot;file&quot; file-model=&quot;myFile&quot; name=&quot;...&quot; accept=&quot;image/*&quot; &gt;</div><div class="line">        &lt;/span&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure></p>
+<p>//Controller中上传图片时的js函数<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$scope.getFile = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">   <span class="keyword">var</span> postData = &#123;</div><div class="line">            <span class="attr">fileName</span>: $scope.file</div><div class="line">          &#125;;</div><div class="line">       fileReader.readAsDataUrl($rootScope.settings.url + <span class="string">""</span>, postData).success( <span class="function"><span class="keyword">function</span>(<span class="params">response</span>) </span>&#123;</div><div class="line">                $scope.detaildata.banner = response;</div><div class="line">        &#125;);</div><div class="line"> &#125;;</div></pre></td></tr></table></figure></p>
+<p> //定义fileReader服务的代码<br> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">angular.module(<span class="string">'MetronicApp'</span>)</div><div class="line">.factory(<span class="string">'fileReader'</span>, [<span class="string">"$http"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">$http</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> readAsDataURL = <span class="function"><span class="keyword">function</span> (<span class="params">url, data</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> fd = <span class="keyword">new</span> FormData();</div><div class="line">          angular.forEach(data, <span class="function"><span class="keyword">function</span>(<span class="params">val, key</span>) </span>&#123;</div><div class="line">            fd.append(key, val);</div><div class="line">          &#125;);</div><div class="line">          <span class="keyword">var</span> args = &#123;</div><div class="line">            <span class="attr">method</span>: <span class="string">'POST'</span>,</div><div class="line">            <span class="attr">url</span>: url,</div><div class="line">            <span class="attr">data</span>: fd,</div><div class="line">            <span class="attr">headers</span>: &#123;<span class="string">'Content-Type'</span>: <span class="literal">undefined</span>&#125;,</div><div class="line">            <span class="attr">transformRequest</span>: angular.identity</div><div class="line">          &#125;;</div><div class="line">          <span class="keyword">return</span> $http(args);</div><div class="line">  &#125;;</div><div class="line">  <span class="keyword">return</span> &#123;</div><div class="line">    <span class="attr">readAsDataUrl</span>: readAsDataURL</div><div class="line">  &#125;;</div><div class="line">&#125;])</div></pre></td></tr></table></figure></p>
+<p>整个上传的过程，点击“重新上传”按钮，file-model指令绑定的change事件会检测本次选择的图片与上次是否为一致，不一致则会执行file-model定义时的代码<br> element.bind(‘change’, function(event){<br>        scope.$apply(function(){<br>          modelSetter(scope, element[0].files[0]);<br>        });<br>        //附件预览<br>           scope.file = (event.srcElement || event.target).files[0];      //给Controller 中$scope.file赋值<br>            scope.getFile();    //调用Controller 中 $scope.getFile();<br>          this.value = ‘’; //清除已上传的文件，否则无法连续上传相同文件<br>      });<br>控制器中的$scope.getFile()函数用到fileReader.readAsDataUrl函数上传图片给后台，这个函数在定义fileReader时被定义</p>
+<p>定义指令时，若没有清除已上传文件，连续多次上传时，将导致无法连续上传相同图片的bug.</p>
 
           
         
@@ -1412,7 +1927,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/loopqueue.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/graph.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1437,8 +1952,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/algorithm/loopqueue.html" itemprop="url">
-                  循环队列
+                <a class="post-title-link" href="/post/algorithm/graph.html" itemprop="url">
+                  图
                 </a>
               
             
@@ -1452,8 +1967,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-02T12:47:37+08:00">
-                2017-02-02
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-22T21:59:30+08:00">
+                2017-02-22
               </time>
             
 
@@ -1490,258 +2005,7 @@
       
         
           
-            <h1 id="假溢出"><a href="#假溢出" class="headerlink" title="假溢出"></a>假溢出</h1><p><img src="/image/queue9.png" alt="queue9"><br>循环队列的容量是固定的，并且它的对头和队尾指针都可以随着元素出入队列而发生改变，<br>这样循环队列逻辑上就好像是一个环形存储空间,但在实际内存中，是不可能有真正的环形存储区的，<br>我们只是用顺序表模拟逻辑上的循环<br>因此,为防止发生假溢出,当我们采用循环队列时,front和rear不断加1,即使超出了地址范围，<br>也会自动从头开始,判断溢出，可采用取模处理<br>(rear+1)%QueueSize<br>(front+1)%QueueSize<br>取模即取余数，取得的值永远不会大于除数</p>
-<h1 id="定义一个循环队列"><a href="#定义一个循环队列" class="headerlink" title="定义一个循环队列"></a>定义一个循环队列</h1><p><img src="/image/queue12.png" alt="queue12"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># define MAXSIZE 100</div><div class="line">typedef struct&#123;</div><div class="line">	ElemType *base;	##存放内存分配基地址，也可以用数组存放</div><div class="line">	int front;</div><div class="line">	int rear;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h1 id="初始化一个循环队列"><a href="#初始化一个循环队列" class="headerlink" title="初始化一个循环队列"></a>初始化一个循环队列</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">initQueue(cyclQueue *q)&#123;</div><div class="line">	q-&gt;base = (ElemType *)malloc(MAXSIZE sizeof(ElemType));</div><div class="line">	if(!q-&gt;base)&#123;</div><div class="line">	exit(0);</div><div class="line">	&#125;</div><div class="line">	q-&gt;front = q-&gt;rear = 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h1 id="入队列操作"><a href="#入队列操作" class="headerlink" title="入队列操作"></a>入队列操作</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">insertQueue(cyclQueue *q,ElemType e)&#123;</div><div class="line">	if((q-&gt;rear+1)%MAXSIZE == q-&gt;front)&#123;</div><div class="line">	return;	##队列已满</div><div class="line">	&#125;</div><div class="line">	q-&gt;base[q-&gt;rear] = e;</div><div class="line">	q-&gt;rear = (q-&gt;rear+1)%MAXSIZE;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h1 id="出队列操作"><a href="#出队列操作" class="headerlink" title="出队列操作"></a>出队列操作</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">DeleteQueue(cyclQueue *q,ElemType e)&#123;</div><div class="line">	if(q-&gt;rear == q-&gt;front)&#123;</div><div class="line">	return;	##队列为空</div><div class="line">	&#125;</div><div class="line">	*e = q-&gt;base[q-&gt;front];</div><div class="line">	q-&gt;front = (q-&gt;front+1)%MAXSIZE;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/Recursion.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/algorithm/Recursion.html" itemprop="url">
-                  递归
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-02T12:34:37+08:00">
-                2017-02-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h1><p>1.把有一个直接调用自己或通过一系列的调用语句间接的调用用自己的函数，称作递归函数<br>2.每个递归函数必须有一个终止调用的条件语句，否则陷入永不结束的无穷递归</p>
-<h1 id="斐波那契数列"><a href="#斐波那契数列" class="headerlink" title="斐波那契数列"></a>斐波那契数列</h1><p>迭代实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">var a=[];</div><div class="line">a[0] = 1;</div><div class="line">a[1] = 1;</div><div class="line">for(var i =2;i&lt;40;i++)&#123;</div><div class="line">  a[i]=a[i-1]+a[i-2];</div><div class="line">&#125;</div><div class="line">for(var j=0;j&lt;40;j++)&#123;</div><div class="line">  console.log(j,a[j]);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>递归实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">function fib(n)&#123;</div><div class="line">  if(n&lt;2)&#123;</div><div class="line">    return 1;</div><div class="line">  &#125;</div><div class="line">  if(n&gt;1 &amp;&amp; n&lt;40)&#123;</div><div class="line">    return fib(n-1)+fib(n-2);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">console.log(fib(4));</div></pre></td></tr></table></figure></p>
-<h1 id="n-阶乘递归算法"><a href="#n-阶乘递归算法" class="headerlink" title="n!阶乘递归算法"></a>n!阶乘递归算法</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">function fib(n)&#123;</div><div class="line">    if(n&gt;0)&#123;</div><div class="line">      return n*fib(n-1);</div><div class="line">    &#125;else&#123;</div><div class="line">      return 1;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;</div><div class="line">console.log(fib(4));</div></pre></td></tr></table></figure>
-<h1 id="汉诺塔问题"><a href="#汉诺塔问题" class="headerlink" title="汉诺塔问题"></a>汉诺塔问题</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">function hanoita(n,x,y,z)&#123;</div><div class="line">  if(n==1)&#123;</div><div class="line">    console.log(x+&quot;-&gt;&quot;+z);</div><div class="line">  &#125;else&#123;</div><div class="line">    hanoita(n-1,x,z,y);</div><div class="line">    console.log(x+&quot;-&gt;&quot;+z);</div><div class="line">    hanoita(n-1,y,x,z);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">hanoita(3,&quot;x&quot;,&quot;y&quot;,&apos;z&apos;);</div></pre></td></tr></table></figure>
-<h1 id="递归字符串翻转"><a href="#递归字符串翻转" class="headerlink" title="递归字符串翻转"></a>递归字符串翻转</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> string = <span class="string">"hello#"</span>;</div><div class="line"><span class="keyword">var</span> count = <span class="number">0</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">print</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(string[count]!=<span class="string">"#"</span>)&#123;</div><div class="line">    count++;</div><div class="line">    print();</div><div class="line">  &#125;</div><div class="line">  count--;</div><div class="line">  <span class="keyword">if</span>(count&gt;<span class="number">-1</span> &amp;&amp; string[count]!=<span class="string">"#"</span>)&#123;</div><div class="line">    <span class="built_in">console</span>.log(string[count]);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">print();</div></pre></td></tr></table></figure>
-<h1 id="折中查找法递归"><a href="#折中查找法递归" class="headerlink" title="折中查找法递归"></a>折中查找法递归</h1><p><a href="https://github.com/YooHannah/algorithm/blob/master/js/Recursion_compromisefind.js" target="_blank" rel="external">代码链接</a></p>
-<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>1.迭代使用循环结构，递归使用选择结构<br>2.递归能使程序结构更清晰、简洁、容易让人理解，从而减少读懂代码的时间<br>3.大量的递归会建立函数的副本，会消耗大量时间和内存，而迭代不需要<br>4.递归函数分为调用和回退阶段，递归的回退顺序是它调用顺序的逆序</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/queue.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/algorithm/queue.html" itemprop="url">
-                  队列
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-02T12:34:37+08:00">
-                2017-02-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="队列"><a href="#队列" class="headerlink" title="队列"></a>队列</h1><p>1.先进先出的线性表，有顺序表和链表<br>2.只允许在一段插入，另一端删除</p>
-<h1 id="队列的链式存储结构"><a href="#队列的链式存储结构" class="headerlink" title="队列的链式存储结构"></a>队列的链式存储结构</h1><p>和栈相反，队列常用链表实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">typedef sruct QNode&#123;</div><div class="line">	ElemType data;</div><div class="line">	struct QNode *next;</div><div class="line">&#125;QNode,*QueuePrt;</div><div class="line">typedef struct &#123;</div><div class="line">	QueuePrt front;	##队头指针指向链队列的头结点(头结点不是必要的)</div><div class="line">	QueuePrt rear;	##队尾指针指向终端结点，空队列时，front，rear都指向头结点</div><div class="line">&#125;LinkQueue;</div></pre></td></tr></table></figure></p>
-<p><img src="/image/queue1.png" alt="queue1"><br><img src="/image/queue2.png" alt="queue2"></p>
-<h1 id="入队列"><a href="#入队列" class="headerlink" title="入队列"></a>入队列</h1><p><img src="/image/queue3.png" alt="queue3"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">InsertQueue(LinkQueue *q,ElemType e)&#123;</div><div class="line">	QueuePrt p;</div><div class="line">	p = (QueuePtr)malloc(sizeof(QNode));</div><div class="line">	if(p==NULL)&#123;</div><div class="line">		exit(0);</div><div class="line">	&#125;</div><div class="line">	p-&gt;data = e;</div><div class="line">	p-&gt;next = NULL;</div><div class="line">	q-&gt;rear-&gt;next = p;</div><div class="line">	q-&gt;rear = p;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h1 id="出队列"><a href="#出队列" class="headerlink" title="出队列"></a>出队列</h1><p><img src="/image/queue5.png" alt="queue5"><br><img src="/image/queue6.png" alt="queue6"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">DeleteQueue(LinkQueue *q,ElemType e)&#123;</div><div class="line">	QueuePrt p;</div><div class="line">	if(q-&gt;front ==q-&gt;rear)</div><div class="line">	&#123;</div><div class="line">		retrun;</div><div class="line">	&#125;</div><div class="line">	p=q-&gt;front-&gt;next;</div><div class="line">	*e=p-&gt;data;</div><div class="line">	q-&gt;front-&gt;next = p-&gt;next;</div><div class="line">	if(q-&gt;rear ==p)&#123;</div><div class="line">		q-&gt;rear = q-&gt;front;</div><div class="line">	&#125;</div><div class="line">	free(p);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h1 id="销毁一个队列"><a href="#销毁一个队列" class="headerlink" title="销毁一个队列"></a>销毁一个队列</h1><p>由于链队列建立在内存的动态区，因此当一个队列<br>不在有用时，应当及时销毁掉，以免过多占用内存空间<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">DestroyQueue(LinkQueue *q)&#123;</div><div class="line">	while(q-&gt;front)&#123;</div><div class="line">	q-&gt;rear = q-&gt;front-&gt;next;</div><div class="line">	free(q-&gt;front):</div><div class="line">	q-&gt;front = q-&gt;rear;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>简单实现<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> list = [];</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)&#123;</div><div class="line">  list.push(&#123;</div><div class="line">    <span class="attr">next</span>:i+<span class="number">1</span></div><div class="line">  &#125;)</div><div class="line">&#125;</div><div class="line">list[<span class="number">4</span>].next = <span class="literal">null</span>;</div><div class="line"><span class="built_in">console</span>.log(list);</div><div class="line"><span class="comment">//入队列</span></div><div class="line"><span class="keyword">var</span> length = list.length;</div><div class="line">list.push(&#123;</div><div class="line">  <span class="attr">next</span>:<span class="literal">null</span></div><div class="line">&#125;)</div><div class="line">list[length<span class="number">-1</span>].next=length;</div><div class="line"><span class="built_in">console</span>.log(list);</div><div class="line"><span class="comment">//出队列</span></div><div class="line">list.splice(<span class="number">0</span>,<span class="number">1</span>);</div><div class="line"><span class="built_in">console</span>.log(list);</div><div class="line"><span class="comment">//清空</span></div><div class="line">list=[];</div></pre></td></tr></table></figure></p>
+            <h1 id="图的定义"><a href="#图的定义" class="headerlink" title="图的定义"></a>图的定义</h1><p>图:由顶点的有穷非空集合和顶点之间边的集合组成，通常表示为：G(V,E),<br>     —-G表示一个图，V是图G中顶点的集合，E是图G中边的集合<br>|                | 线性表           | 树                |           图           |<br>| ————-  |:—————-:| —————–:|<br>| 数据元素       | 元素             | 结点              |           顶点         |<br>| 没有数据元素   | 空表             | 空树              | 不能没有顶点，有穷非空 |<br>| 数据元素间关系 | 相邻之间:线性关系| 相邻两层:层次关系 | 任意两个顶点之间都可能有关系顶点之间逻辑关系用边表示，边集可以是空的|<br>无向边：顶点Vi到Vj之间的边没有方向,用无序偶(Vi,Vj)表示<br>有向边/弧：顶点Vi到Vj之间的边有方向,用有序偶<vi,vj>表示,Vi称为弧尾，Vj称为弧头<br>简单图：在该类图结构中，不存在顶点到其自身的边(自己指向自己)且同一条边不重复出现<br>无向完全图:在该类图结构中，任意两个顶点之间都存在边，含n个顶点的无向完全图有n<em>(n-1)/2条边<br>有向完全图:在该类图结构中，任意两个顶点之间都存在方向互为相反的两条弧，含n个顶点的有向完全图有n</em>(n-1)条边<br>稀疏图：边或弧数小于n<em>logn(n是顶点的个数)<br>稠密图：边或弧数大于n</em>logn(n是顶点的个数)<br>权：图的边或弧带有的与它相关的数字<br>网：带权的图<br>子图：图G1(V1,E1),和G2(V2,E2),如果V2 \subseteq V1，E2 \subseteq E1 ,V2 属于 V1，E2 属于 E1则称G2为G1的子图<br><a href="http://blog.csdn.net/sanqima/article/details/48576361" target="_blank" rel="external">http://blog.csdn.net/sanqima/article/details/48576361</a><br>邻接点：无向图G=(V,E),如果边(V1,V2)属于E，则称顶点V1和V2互为邻接点，即V1和V2相邻接<br>——-边(V1,V2)依附于顶点V1和V2，或者说边(V1,V2)与顶点V1和V2相关联<br>顶点V的度：和顶点V相关联的边的数目，记为TD(V)<br>邻接：有向图G=(V,E),如果边<v1,v2>属于E，则称顶点V1邻接到顶点V2,顶点V2邻接自顶点V1<br>顶点V的入度:以顶点V为头的弧的数目，记为    ID(V)<br>顶点V的出度:以顶点V为尾的弧的数目，记为    OD(V)<br>TD(V) = ID(V) + OD(V);<br>路径:图G=(V,E)中从顶点V1到顶点V2的路线叫从顶点V1到顶点V2的路径，注意有向图和无向图的区别<br>路径的长度：路径上边/弧的数目<br>回路/环：第一个顶点和最后一个顶点相同的路径<br>简单路径：序列中顶点不重复出现的路径<br>简单回路/简单环:除了第一个顶点和最后一个顶点之外，其余顶点不重复出现的回路<br>连通：在无向图G中，如果顶点V1到顶点V2有路径则称V1和V2是连通的<br>连通图：图中任意两个顶点Vi和Vj都是连通的，则称G是连通图<br>连通分量：无向图中的极大连通子图<br>—-连通的子图<br>—-连通子图含有极大顶点数<br>—-具有极大顶点数的连通子图包含依附于这些顶点的所有边<br>强连通图：在该类有向图G中，每一对Vi到Vj都存在路径<br>强连通分量：有向图中的极大强连通子图<br>非强连通图有强连通分量，强连通分量不止属于强连通图<br>连通图的生成树：极小的连通子图，它含有图中全部n个顶点，但只有足以构成一棵树的n-1条边<br>有向树：如果一个有向图恰有一个顶点入度为0，其余顶点入度为1，则该图将生成有向树，从而构成森林</v1,v2></vi,vj></p>
 
           
         
@@ -1775,7 +2039,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/16/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><span class="page-number current">17</span><a class="page-number" href="/page/18/">18</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/18/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/16/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><span class="page-number current">17</span><a class="page-number" href="/page/18/">18</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/18/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1816,7 +2080,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">199</span>
+              <span class="site-state-item-count">215</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

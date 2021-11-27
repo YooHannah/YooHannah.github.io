@@ -259,7 +259,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/lineartable-chain.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/tree.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -284,8 +284,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/algorithm/lineartable-chain.html" itemprop="url">
-                  线性表链式存储结构
+                <a class="post-title-link" href="/post/algorithm/tree.html" itemprop="url">
+                  关于树的一些定义
                 </a>
               
             
@@ -299,7 +299,674 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-02T09:12:37+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-08T21:47:37+08:00">
+                2017-02-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="树"><a href="#树" class="headerlink" title="树"></a>树</h1><p><img src="/image/tree1.png" alt="tree1"><br>定义：n(n&gt;=0)个结点的有限集。当n=0时称为空树，在任意一颗非空树中：<br>——有且仅有一个特定的结点称为根<br>——当n&gt;1时，其余结点可分为m(m&gt;0)个互不相交]的有限集T1、T2…Tm,其中每一个集合本身又是一颗树，并且称为根的子树<br>结点：图中每一个圆圈称为树的一个结点<br>结点的度：结点拥有的子树数称为该结点的度<br>树的度：树内各结点度的最大值<br>叶结点/终端结点：度为0的结点<br>分支结点/非终端结点：度不为0的结点<br>内部结点：分支结点中除根节点以外的结点<br>结点的孩子：D是B的孩子<br>孩子的双亲：B是D的双亲<br>兄弟：D和E互称为兄弟<br>结点的祖先：从根到该结点所经过分支上的所有结点<br>结点的层次：从根开始定在一起,根为第一层，根的孩子为第二层<br>树的深度/高度：树中结点的最大层次,图中树的深度为3<br>有序树:如果将树中结点的各子树看成从左至右是有次序的不能互换的，则称该树为有序树，否则称为无序树<br>森林:m(m&gt;=0)棵互不相交的树的集合。对树中每个结点而言，其子树的集合即为森林</p>
+<p><img src="/image/tree2.png" alt="tree2"><br>以下遍历采用层序遍历</p>
+<h1 id="双亲表示法"><a href="#双亲表示法" class="headerlink" title="双亲表示法"></a>双亲表示法</h1><p>每个结点由该结点数据和该结点双亲的下标组成,根结点双亲下标赋值为-1</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">下标</th>
+<th style="text-align:center">data</th>
+<th style="text-align:center">parent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">A</td>
+<td style="text-align:center">-1</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">B</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">C</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">D</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">E</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">F</td>
+<td style="text-align:center">3</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center">G</td>
+<td style="text-align:center">3</td>
+</tr>
+<tr>
+<td style="text-align:center">7</td>
+<td style="text-align:center">K</td>
+<td style="text-align:center">6</td>
+</tr>
+<tr>
+<td style="text-align:center">8</td>
+<td style="text-align:center">H</td>
+<td style="text-align:center">4</td>
+</tr>
+<tr>
+<td style="text-align:center">9</td>
+<td style="text-align:center">I</td>
+<td style="text-align:center">4</td>
+</tr>
+<tr>
+<td style="text-align:center">10</td>
+<td style="text-align:center">J</td>
+<td style="text-align:center">4</td>
+</tr>
+</tbody>
+</table>
+<h1 id="孩子表示法"><a href="#孩子表示法" class="headerlink" title="孩子表示法"></a>孩子表示法</h1><p>每个结点由该结点数据和该结点双亲的下标、该结点孩子的下标组成,根结点双亲下标赋值为-1<br>无孩子则孩子属性赋值-1</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">下标</th>
+<th style="text-align:center">data</th>
+<th style="text-align:center">parent</th>
+<th style="text-align:center">children</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">A</td>
+<td style="text-align:center">-1</td>
+<td style="text-align:center">1,2,3</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">B</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">4</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">C</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">-1</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">D</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">5,6</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">E</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">8,9,10</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">F</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">-1</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center">G</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">-1</td>
+</tr>
+<tr>
+<td style="text-align:center">7</td>
+<td style="text-align:center">K</td>
+<td style="text-align:center">6</td>
+<td style="text-align:center">-1</td>
+</tr>
+<tr>
+<td style="text-align:center">8</td>
+<td style="text-align:center">H</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">-1</td>
+</tr>
+<tr>
+<td style="text-align:center">9</td>
+<td style="text-align:center">I</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">-1</td>
+</tr>
+<tr>
+<td style="text-align:center">10</td>
+<td style="text-align:center">J</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">-1</td>
+</tr>
+</tbody>
+</table>
+<h1 id="兄弟表示法"><a href="#兄弟表示法" class="headerlink" title="兄弟表示法"></a>兄弟表示法</h1><p>每个结点由该结点数据和该结点双亲的下标、该结点兄弟的下标组成,根结点双亲下标赋值为-1<br>无兄弟则兄弟属性赋值-1</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">下标</th>
+<th style="text-align:center">data</th>
+<th style="text-align:center">parent</th>
+<th style="text-align:center">rightsib</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">A</td>
+<td style="text-align:center">-1</td>
+<td style="text-align:center">-1</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">B</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">2</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">C</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">3</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">D</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">-1</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">E</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">5</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">F</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">6</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center">G</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">-1</td>
+</tr>
+<tr>
+<td style="text-align:center">7</td>
+<td style="text-align:center">K</td>
+<td style="text-align:center">6</td>
+<td style="text-align:center">-1</td>
+</tr>
+<tr>
+<td style="text-align:center">8</td>
+<td style="text-align:center">H</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">9</td>
+</tr>
+<tr>
+<td style="text-align:center">9</td>
+<td style="text-align:center">I</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">10</td>
+</tr>
+<tr>
+<td style="text-align:center">10</td>
+<td style="text-align:center">J</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">-1</td>
+</tr>
+</tbody>
+</table>
+<h1 id="双亲孩子表示法"><a href="#双亲孩子表示法" class="headerlink" title="双亲孩子表示法"></a>双亲孩子表示法</h1><p>所有结点组成一个数组，每个结点包含该结点数据属性,该结点双亲属性(由双亲结点下标表示)以及第一个孩子结点的下标<br>每一个孩子结点包含下一个孩子结点的下标,用js数组实现相当于兄弟表示法</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">下标</th>
+<th style="text-align:center">data</th>
+<th style="text-align:center">parent</th>
+<th style="text-align:center">nextchildren</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">A</td>
+<td style="text-align:center">-1</td>
+<td style="text-align:center">-1</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">B</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">2</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">C</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">3</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">D</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">-1</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">E</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">5</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">F</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">6</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center">G</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">-1</td>
+</tr>
+<tr>
+<td style="text-align:center">7</td>
+<td style="text-align:center">K</td>
+<td style="text-align:center">6</td>
+<td style="text-align:center">-1</td>
+</tr>
+<tr>
+<td style="text-align:center">8</td>
+<td style="text-align:center">H</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">9</td>
+</tr>
+<tr>
+<td style="text-align:center">9</td>
+<td style="text-align:center">I</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">10</td>
+</tr>
+<tr>
+<td style="text-align:center">10</td>
+<td style="text-align:center">J</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">-1</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"># define MAX_TREE_SIZE 100</div><div class="line">typedef char ElemType;</div><div class="line">//孩子结点</div><div class="line">typedef struct</div><div class="line">&#123;</div><div class="line">	int child;						//孩子结点的下标</div><div class="line">	struct CTNode *next;	//指向下一个孩子结点的指针</div><div class="line">&#125;*ChildPtr;</div><div class="line"></div><div class="line">//表头结构</div><div class="line">typedef struct</div><div class="line">&#123;</div><div class="line">	ElemType data;				//存放在树中的结点数据</div><div class="line">	int parent;						//存放双亲的下标</div><div class="line">	ChildPtr firstchild;	//指向第一个孩子的指针</div><div class="line">&#125;</div><div class="line">//树结构</div><div class="line">typedef struct</div><div class="line">&#123;</div><div class="line">CTBox nodes[MAX_TREE_SIZE];//结点数组</div><div class="line">int r,n;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>js实现：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> tree=[];</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i =<span class="number">0</span>;i&lt;<span class="number">11</span>;i++)&#123;</div><div class="line">  <span class="keyword">var</span> prior = <span class="number">-1</span>;</div><div class="line">  <span class="keyword">var</span> next = [];</div><div class="line">  <span class="keyword">if</span>(i==<span class="number">0</span>)&#123;</div><div class="line">    prior =<span class="number">-1</span>;</div><div class="line">  &#125;<span class="keyword">else</span> <span class="keyword">if</span>(i&gt;<span class="number">0</span>&amp;&amp;i&lt;<span class="number">4</span>)&#123;</div><div class="line">    prior = <span class="number">0</span>;</div><div class="line">  &#125;<span class="keyword">else</span> <span class="keyword">if</span>(i==<span class="number">4</span>)&#123;</div><div class="line">    prior = <span class="number">1</span>;</div><div class="line">  &#125;<span class="keyword">else</span> <span class="keyword">if</span>(i==<span class="number">5</span> || i==<span class="number">6</span>)&#123;</div><div class="line">    prior = <span class="number">3</span>;</div><div class="line">  &#125;<span class="keyword">else</span> <span class="keyword">if</span>(i&gt;<span class="number">6</span> &amp;&amp; i&lt;<span class="number">10</span>)&#123;</div><div class="line">    prior = <span class="number">4</span>;</div><div class="line">  &#125;<span class="keyword">else</span>&#123;</div><div class="line">    prior = <span class="number">6</span>;</div><div class="line">  &#125;</div><div class="line">  tree.push(&#123;</div><div class="line">    <span class="attr">data</span>:i,</div><div class="line">    <span class="attr">parent</span>:prior,</div><div class="line">  &#125;);</div><div class="line">&#125;</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i =<span class="number">0</span>;i&lt;<span class="number">11</span>;i++)&#123;</div><div class="line"> <span class="keyword">var</span> children=[];</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> j =<span class="number">0</span>;j&lt;<span class="number">11</span>;j++)&#123;</div><div class="line">   <span class="keyword">if</span>(tree[j].parent == i)&#123;</div><div class="line">     children.push(j);</div><div class="line">   &#125;</div><div class="line">  &#125;</div><div class="line">  tree[i].children = children.slice();</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(tree);</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/string.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/algorithm/string.html" itemprop="url">
+                  字符串(串结构)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-07T22:54:37+08:00">
+                2017-02-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h1><p>定义：串是由0个或多个字符组成的有限序列，又名字符串<br>1.空串：没有字符，直接由””表示<br>2.主串与子串：”hello”是”helloworld”的子串,”helloworld”是”hello”主串<br>3.字符串比较：比较字符串里每个字符的ASCII码大小,没有意义，一般看是否相等<br>4.存储结构<br>    顺序存储：用一组地址连续的存储单元来存储串中的字符序列，<br>    按照预定义大小，为每个定义的字符串变量分配一个固定长度的存储区，一般用定长数组来定义<br>  链式存储：不常用<br>5.BF算法：<br>    有两个字符串S和T，长度为N和M，首先S[1]和T[1]比较，若相等，则再比较S[2]和T[2],一直到T[M-1]为止;<br>    若S[1]和T[1]不等，则T向右移动一个字符的位置，再依次进行比较<br>6.字符串模式匹配：依据BF算法,S是主串,T是子串这种定位操作即字符串模式匹配</p>
+<h1 id="BF算法"><a href="#BF算法" class="headerlink" title="BF算法"></a>BF算法</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> string1=<span class="string">"hellohannahworld"</span>;</div><div class="line"><span class="keyword">var</span> string2=<span class="string">"hannah"</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">BF</span>(<span class="params">str1,str2</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> i = <span class="number">0</span>;</div><div class="line">  <span class="keyword">var</span> j = <span class="number">0</span>;</div><div class="line">  <span class="keyword">while</span>(i&lt;str2.length)&#123;</div><div class="line">    <span class="keyword">while</span>(j&lt;str1.length)&#123;</div><div class="line">      <span class="keyword">if</span>(str2[i]==str1[j])&#123;</div><div class="line">        <span class="keyword">if</span>(i==str2.length<span class="number">-1</span>)&#123;</div><div class="line">          <span class="keyword">var</span> temp=j-str2.length+<span class="number">1</span>;</div><div class="line">          <span class="built_in">console</span>.log(<span class="string">"字符串匹配的起始位置为"</span>+temp);</div><div class="line">          <span class="keyword">return</span></div><div class="line">        &#125;</div><div class="line">        j++;</div><div class="line">        i++;</div><div class="line">      &#125;<span class="keyword">else</span>&#123;</div><div class="line">        <span class="keyword">if</span>(i&gt;<span class="number">0</span>)&#123;</div><div class="line">          i=<span class="number">0</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(i==<span class="number">0</span>)&#123;</div><div class="line">          j++</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">"两字符串一点也不匹配!"</span>)</div><div class="line">  <span class="keyword">return</span></div><div class="line">&#125;</div><div class="line">BF(string1,string2);</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/git/gitrepository.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/git/gitrepository.html" itemprop="url">
+                  使用Git Bash建立本地仓库并同步github仓库
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-05T10:43:04+08:00">
+                2017-02-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="建立本地仓库"><a href="#建立本地仓库" class="headerlink" title="建立本地仓库"></a>建立本地仓库</h1><p>1.选择仓库存放位置,新建文件夹,用作本地仓库<br>2.打开Git bash,cd 切换路径到该文件夹<br>3.执行以下命令<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">echo "该项目简短说明" &gt;&gt; README.md     ##输入“该项目简短说明”内容到README.md文件</div><div class="line">git init</div><div class="line">git add README.md                      ##将提交的文件(README.md)的信息添加到索引库</div><div class="line">git commit -m "第一次提交"             ##依据索引库中的内容来进行文件的提交</div><div class="line">																			 ##同时提交更改描述“第一次提交”</div></pre></td></tr></table></figure></p>
+<p>以上步骤完成本地仓库建立和将文件提交到本地仓库的工作</p>
+<h1 id="建立远成仓库"><a href="#建立远成仓库" class="headerlink" title="建立远成仓库"></a>建立远成仓库</h1><p>1.登录github账号,点击右上角“+”,选择“New repository”<br>2.填写仓库名称,简单描述<br>3.为避免与本地仓库READMD.md冲突，初始化时不勾选“Initialize this repository with a README”<br>4.点击“Create repository”,生成远程仓库</p>
+<h1 id="同步仓库"><a href="#同步仓库" class="headerlink" title="同步仓库"></a>同步仓库</h1><p>1.点击“Clone or download”, 复制远程仓库地址<br>2.执行以下代码<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git remote add origin 远程仓库地址     ##将本地仓库推送到远成仓库</div><div class="line">git push -u origin master              ##将本地仓库推送到远程分支</div></pre></td></tr></table></figure></p>
+<p>以上步骤即完成本地仓库同步到远程仓库</p>
+<p>执行git remote时，<br>若出现提示出错信息：fatal: remote origin already exists.<br>则先输入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git remote rm origin ##删除远程仓库</div></pre></td></tr></table></figure></p>
+<p>再执行推送语句 “git remote add origin 远程仓库地址”</p>
+<h1 id="更新远成仓库"><a href="#更新远成仓库" class="headerlink" title="更新远成仓库"></a>更新远成仓库</h1><p>若对本地仓库进行了修改<br>git add &lt;文件名&gt; 只是添加一个文件<br>git add .  可添加全部仓库文件<br>若执行“git add .”时，总出现警告：warning: LF will be replaced by CRLF in XXXXXXXXXXXXXX.<br>可执行语句 “git config core.autocrlf false”<br>添加完文件后执行提交操作<br>git commit -m “”<br>最后推送到远程仓库<br>git push -u origin master</p>
+<p>[资源共享]（<a href="http://www.cnblogs.com/len0031/p/5831571.html" target="_blank" rel="external">http://www.cnblogs.com/len0031/p/5831571.html</a>)</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/loopqueue.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/algorithm/loopqueue.html" itemprop="url">
+                  循环队列
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-02T12:47:37+08:00">
                 2017-02-02
               </time>
             
@@ -337,15 +1004,11 @@
       
         
           
-            <h1 id="链式存储结构"><a href="#链式存储结构" class="headerlink" title="链式存储结构"></a>链式存储结构</h1><p>用一组任意的存储单元存储线性表数据元素，这组存储单元可以存在内存中未被占用的任意位置；每个元素需要两个位置，一个存储元素本身，一个存储它后继元素的存储地址（指针）<br>数据域：存储数据元素信息的域；<br>指针域：存储直接后继位置的域；<br>指针/链：指针域中存储的信息<br>存储映像/结点（node）：数据域和指针域这两部分信息组成的数据元素<br>链式存储结构：n个结点连接成一个链表<br>单链表：链表中每个结点中只包含一个指针域<br><img src="/image/chaintable1.png" alt="chaintable1"><br>头指针：链表中第一个结点的存储位置<br>最后一个结点指针为空<br><img src="/image/chaintable2.png" alt="chaintable2"><br>头结点的数据域一般不存储任何信息<br>头指针<br>—— 指 指向链表第一个结点的指针，若链表有头结点，则是指向头结点的指针<br>在头结点之前<br>—— 头指针具有标志作用，所以常用头指针冠以链表的名字（指针变量的名字）<br>—— 无论链表是否为空，头指针均不为空<br>—— 头指针是链表的必要元素<br>头结点<br>—— 为了操作统一和方便而设立，放在第一个元素的结点之前，其数据域一般无<br>    意义（但也可以用来存放链表的长度）<br>—— 有了头结点，对第一个元素节点前插入结点和删除第一个结点操作与其他结<br>点的操作就统一了<br>——头结点不一定是链表的必须要素<br><img src="/image/chaintable3.png" alt="chaintable3"><br>用结构指针来描述单链表<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">typedef struct Node</div><div class="line">&#123;</div><div class="line">	ElemType data;//数据域</div><div class="line">	struct Node* Next;//指针域</div><div class="line">&#125;Node;</div><div class="line">Typedef struct Node* LinkList</div></pre></td></tr></table></figure></p>
-<p>Typedef struct Node<em>  LinkList 将Node</em>取别名为LinkList<br>结点由存放数据元素的数据域和存放后继结点的地址指针组成</p>
-<p>假设P是指向线性表第i个元素的指针，则该结点ai的数据域为p-&gt;data<br>指针域为p-&gt;next,因为p-&gt;next是一个指针，它指向第i+1个元素ai+1<br>因此，如果p-&gt;data=ai,那么p-&gt;next-&gt;data=ai+1</p>
-<h1 id="单链表元素读取"><a href="#单链表元素读取" class="headerlink" title="单链表元素读取"></a>单链表元素读取</h1><p>链表元素不像顺序存储线性表通过位置计算可以得到，需要一个一个找<br><img src="/image/chaintable6.png" alt="chaintable6"></p>
-<p>时间复杂度为O（n）;核心思想：“工作指针后移”</p>
-<h1 id="单链表元素插入O-n"><a href="#单链表元素插入O-n" class="headerlink" title="单链表元素插入O(n)"></a>单链表元素插入O(n)</h1><p><img src="/image/chaintable8.png" alt="chaintable8"><br><img src="/image/chaintable9.png" alt="chaintable9"></p>
-<h1 id="单链表元素删除O-n"><a href="#单链表元素删除O-n" class="headerlink" title="单链表元素删除O(n)"></a>单链表元素删除O(n)</h1><p><img src="/image/chaintable11.png" alt="chaintable11"><br><img src="/image/chaintable12.png" alt="chaintable12"><br><img src="/image/chaintable13.png" alt="chaintable13"></p>
-<p><a href="https://github.com/YooHannah/algorithm/blob/master/C/%E5%8D%95%E9%93%BE%E8%A1%A8.c" target="_blank" rel="external">以上操作代码链接</a></p>
-<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>如果我们想从第i个位置开始，插入连续10个元素，<br>对顺序存储结构意味着，每次插入都需要移动n-i个位置,所以每次都是O(n);<br>而单链表，只需要在第一次找到第i个位置的指针，此时时间复杂度为O(n),<br>接下来只是简单的赋值移动指针而已，时间复杂度都是O(1)<br>因此对于频繁插入或删除数据来说，单链表效率更高。</p>
+            <h1 id="假溢出"><a href="#假溢出" class="headerlink" title="假溢出"></a>假溢出</h1><p><img src="/image/queue9.png" alt="queue9"><br>循环队列的容量是固定的，并且它的对头和队尾指针都可以随着元素出入队列而发生改变，<br>这样循环队列逻辑上就好像是一个环形存储空间,但在实际内存中，是不可能有真正的环形存储区的，<br>我们只是用顺序表模拟逻辑上的循环<br>因此,为防止发生假溢出,当我们采用循环队列时,front和rear不断加1,即使超出了地址范围，<br>也会自动从头开始,判断溢出，可采用取模处理<br>(rear+1)%QueueSize<br>(front+1)%QueueSize<br>取模即取余数，取得的值永远不会大于除数</p>
+<h1 id="定义一个循环队列"><a href="#定义一个循环队列" class="headerlink" title="定义一个循环队列"></a>定义一个循环队列</h1><p><img src="/image/queue12.png" alt="queue12"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># define MAXSIZE 100</div><div class="line">typedef struct&#123;</div><div class="line">	ElemType *base;	##存放内存分配基地址，也可以用数组存放</div><div class="line">	int front;</div><div class="line">	int rear;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h1 id="初始化一个循环队列"><a href="#初始化一个循环队列" class="headerlink" title="初始化一个循环队列"></a>初始化一个循环队列</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">initQueue(cyclQueue *q)&#123;</div><div class="line">	q-&gt;base = (ElemType *)malloc(MAXSIZE sizeof(ElemType));</div><div class="line">	if(!q-&gt;base)&#123;</div><div class="line">	exit(0);</div><div class="line">	&#125;</div><div class="line">	q-&gt;front = q-&gt;rear = 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="入队列操作"><a href="#入队列操作" class="headerlink" title="入队列操作"></a>入队列操作</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">insertQueue(cyclQueue *q,ElemType e)&#123;</div><div class="line">	if((q-&gt;rear+1)%MAXSIZE == q-&gt;front)&#123;</div><div class="line">	return;	##队列已满</div><div class="line">	&#125;</div><div class="line">	q-&gt;base[q-&gt;rear] = e;</div><div class="line">	q-&gt;rear = (q-&gt;rear+1)%MAXSIZE;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="出队列操作"><a href="#出队列操作" class="headerlink" title="出队列操作"></a>出队列操作</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">DeleteQueue(cyclQueue *q,ElemType e)&#123;</div><div class="line">	if(q-&gt;rear == q-&gt;front)&#123;</div><div class="line">	return;	##队列为空</div><div class="line">	&#125;</div><div class="line">	*e = q-&gt;base[q-&gt;front];</div><div class="line">	q-&gt;front = (q-&gt;front+1)%MAXSIZE;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
           
         
@@ -384,7 +1047,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/lineartable-sequence.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/Recursion.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -409,8 +1072,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/algorithm/lineartable-sequence.html" itemprop="url">
-                  线性表顺序存储结构
+                <a class="post-title-link" href="/post/algorithm/Recursion.html" itemprop="url">
+                  递归
                 </a>
               
             
@@ -424,7 +1087,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-02T09:12:37+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-02T12:34:37+08:00">
                 2017-02-02
               </time>
             
@@ -462,13 +1125,14 @@
       
         
           
-            <h1 id="顺序存储结构"><a href="#顺序存储结构" class="headerlink" title="顺序存储结构"></a>顺序存储结构</h1><p>结构struct{<br> 数据类型 数组名data[数组最大长度MAXSIZE]；<br> Int length;(线性表当前长度/数组当前数据个数)<br>}</p>
-<p>封装3个属性<br>1.存储空间起始位置，数组data,它的存储位置就是线性表存储空间的存储位置<br>2.线性表最大存储容量：maxsize ,初始化后一般不变<br>3.线性表当前长度：length，时刻改变</p>
-<h1 id="地址计算方法"><a href="#地址计算方法" class="headerlink" title="地址计算方法"></a>地址计算方法</h1><p>假设每个元素占C个存储单元（字节），LOC表示获得存储位置的函数<br>LOC( )= loc( )+C<br>LOC( )= loc( )+(i-1)*C<br>假设,线性表最大长度设置为10；当前长度为4；如下<br>var maxsize = 10;<br>var list ={<br>  data:[1,2,3,4],<br>  length:4<br>}</p>
-<h1 id="获取线性表第i个位置的元素"><a href="#获取线性表第i个位置的元素" class="headerlink" title="获取线性表第i个位置的元素"></a>获取线性表第i个位置的元素</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getitem</span>(<span class="params">list,i</span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(i&lt;<span class="number">1</span> || i &gt;list.length || list.length == <span class="number">0</span>)&#123;   <span class="comment">//线性表位置从1 开始</span></div><div class="line">    <span class="built_in">console</span>.log(<span class="string">"input is error"</span>)</div><div class="line">    <span class="keyword">return</span></div><div class="line">  &#125;</div><div class="line">  <span class="keyword">var</span> item;</div><div class="line">  item = list[i<span class="number">-1</span>]; <span class="comment">//数组下标从0 开始，与线性表差1</span></div><div class="line">  <span class="keyword">return</span> item;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> ff = getitem(list.data,<span class="number">0</span>);</div><div class="line"><span class="built_in">console</span>.log(ff);</div></pre></td></tr></table></figure>
-<h1 id="在线性表第i个位置插入元素item"><a href="#在线性表第i个位置插入元素item" class="headerlink" title="在线性表第i个位置插入元素item"></a>在线性表第i个位置插入元素item</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">insertitem</span>(<span class="params">list,i,item</span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(list.data.length == maxsize)&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">"the list is full"</span>);</div><div class="line">    <span class="keyword">return</span></div><div class="line">  &#125;</div><div class="line">  <span class="keyword">if</span>(i&lt;<span class="number">1</span> || i &gt;list.data.length)&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">"the position is not in the range"</span>)</div><div class="line">    <span class="keyword">return</span></div><div class="line">  &#125;</div><div class="line">  <span class="keyword">if</span>(i&lt;list.data.length)&#123;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> j = list.data.length <span class="number">-1</span>;j&gt;=i<span class="number">-1</span>;j--)&#123;</div><div class="line">      list.data[j+<span class="number">1</span>] = list.data[j];</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  list.data[i<span class="number">-1</span>] = item; </div><div class="line">  list.length = list.length+<span class="number">1</span>;</div><div class="line">&#125;</div><div class="line">insertitem(list,<span class="number">2</span>,<span class="number">5</span>);</div><div class="line"><span class="built_in">console</span>.log(list);</div></pre></td></tr></table></figure>
-<h1 id="删除线性表第i个位置的元素"><a href="#删除线性表第i个位置的元素" class="headerlink" title="删除线性表第i个位置的元素"></a>删除线性表第i个位置的元素</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">deleteitem</span>(<span class="params">list,i</span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(list.data.length == <span class="number">0</span>)&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">"the list is empty"</span>)</div><div class="line">    <span class="keyword">return</span></div><div class="line">  &#125;</div><div class="line">  <span class="keyword">if</span>(i&lt;<span class="number">1</span> || i &gt;list.data.length)&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">"the position is not in the range"</span>)</div><div class="line">    <span class="keyword">return</span></div><div class="line">  &#125;</div><div class="line">  <span class="keyword">var</span> temp = list.data[i<span class="number">-1</span>];<span class="comment">//被删除的元素</span></div><div class="line">  <span class="keyword">if</span>(i&lt;list.data.length)&#123;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> j = i ;j&lt;list.data.length;j++)&#123;</div><div class="line">      list.data[j<span class="number">-1</span>] = list.data[j];</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">  &#125;</div><div class="line">  list.data.splice(list.data.length<span class="number">-1</span>,<span class="number">1</span>);<span class="comment">//删除最后一个</span></div><div class="line">  list.length = list.length<span class="number">-1</span>;</div><div class="line">&#125;</div><div class="line">deleteitem(list,<span class="number">3</span>);</div><div class="line"><span class="built_in">console</span>.log(list);</div></pre></td></tr></table></figure>
-<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>在存、读数据时，不管是那个位置,时间复杂度都是O(1).<br>而在插入或删除时，时间复杂度都是O(n);<br>比较适合元素个数稳定，不经常插入和删除元素，而更多操作是存取数据的应用。<br>优点：<br>1.无需为表示表中元素之间的逻辑关系而增加额外的存储空间<br>2.可以快速存取表中任意位置元素<br>缺点<br>1.插入和删除操作需要移动大量元素<br>2.当线性表长度变化较大时，难以确定存储空间的容量<br>3.容易造成存储空间的碎片</p>
+            <h1 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h1><p>1.把有一个直接调用自己或通过一系列的调用语句间接的调用用自己的函数，称作递归函数<br>2.每个递归函数必须有一个终止调用的条件语句，否则陷入永不结束的无穷递归</p>
+<h1 id="斐波那契数列"><a href="#斐波那契数列" class="headerlink" title="斐波那契数列"></a>斐波那契数列</h1><p>迭代实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">var a=[];</div><div class="line">a[0] = 1;</div><div class="line">a[1] = 1;</div><div class="line">for(var i =2;i&lt;40;i++)&#123;</div><div class="line">  a[i]=a[i-1]+a[i-2];</div><div class="line">&#125;</div><div class="line">for(var j=0;j&lt;40;j++)&#123;</div><div class="line">  console.log(j,a[j]);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>递归实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">function fib(n)&#123;</div><div class="line">  if(n&lt;2)&#123;</div><div class="line">    return 1;</div><div class="line">  &#125;</div><div class="line">  if(n&gt;1 &amp;&amp; n&lt;40)&#123;</div><div class="line">    return fib(n-1)+fib(n-2);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">console.log(fib(4));</div></pre></td></tr></table></figure></p>
+<h1 id="n-阶乘递归算法"><a href="#n-阶乘递归算法" class="headerlink" title="n!阶乘递归算法"></a>n!阶乘递归算法</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">function fib(n)&#123;</div><div class="line">    if(n&gt;0)&#123;</div><div class="line">      return n*fib(n-1);</div><div class="line">    &#125;else&#123;</div><div class="line">      return 1;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;</div><div class="line">console.log(fib(4));</div></pre></td></tr></table></figure>
+<h1 id="汉诺塔问题"><a href="#汉诺塔问题" class="headerlink" title="汉诺塔问题"></a>汉诺塔问题</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">function hanoita(n,x,y,z)&#123;</div><div class="line">  if(n==1)&#123;</div><div class="line">    console.log(x+&quot;-&gt;&quot;+z);</div><div class="line">  &#125;else&#123;</div><div class="line">    hanoita(n-1,x,z,y);</div><div class="line">    console.log(x+&quot;-&gt;&quot;+z);</div><div class="line">    hanoita(n-1,y,x,z);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">hanoita(3,&quot;x&quot;,&quot;y&quot;,&apos;z&apos;);</div></pre></td></tr></table></figure>
+<h1 id="递归字符串翻转"><a href="#递归字符串翻转" class="headerlink" title="递归字符串翻转"></a>递归字符串翻转</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> string = <span class="string">"hello#"</span>;</div><div class="line"><span class="keyword">var</span> count = <span class="number">0</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">print</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(string[count]!=<span class="string">"#"</span>)&#123;</div><div class="line">    count++;</div><div class="line">    print();</div><div class="line">  &#125;</div><div class="line">  count--;</div><div class="line">  <span class="keyword">if</span>(count&gt;<span class="number">-1</span> &amp;&amp; string[count]!=<span class="string">"#"</span>)&#123;</div><div class="line">    <span class="built_in">console</span>.log(string[count]);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">print();</div></pre></td></tr></table></figure>
+<h1 id="折中查找法递归"><a href="#折中查找法递归" class="headerlink" title="折中查找法递归"></a>折中查找法递归</h1><p><a href="https://github.com/YooHannah/algorithm/blob/master/js/Recursion_compromisefind.js" target="_blank" rel="external">代码链接</a></p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>1.迭代使用循环结构，递归使用选择结构<br>2.递归能使程序结构更清晰、简洁、容易让人理解，从而减少读懂代码的时间<br>3.大量的递归会建立函数的副本，会消耗大量时间和内存，而迭代不需要<br>4.递归函数分为调用和回退阶段，递归的回退顺序是它调用顺序的逆序</p>
 
           
         
@@ -507,7 +1171,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/basicconcept.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/kmp.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -532,8 +1196,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/algorithm/basicconcept.html" itemprop="url">
-                  基础概念
+                <a class="post-title-link" href="/post/algorithm/kmp.html" itemprop="url">
+                  KMP算法
                 </a>
               
             
@@ -547,8 +1211,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-01T21:21:30+08:00">
-                2017-02-01
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-02T12:34:37+08:00">
+                2017-02-02
               </time>
             
 
@@ -585,16 +1249,86 @@
       
         
           
-            <h1 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h1><p>逻辑结构：数据元素之间的关系<br>物理结构：逻辑结构在计算机中的存储形式</p>
-<p>四大逻辑结构：<br>1.集合结构：同属一个集合，相互之间无关系<br>2.线性:一对一<br>3.树形：一对多<br>4.图形：多对多</p>
-<p>物理机构：<br>顺序存储：地址连续<br>链式存储：可连续可不连续</p>
-<h1 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h1><p>1.特性<br>输入：0或多个<br>输出：至少1个或多个<br>有穷性：不会无限循环，有限时间内结束<br>确定性：无歧义，一条路径得到结果相同<br>可行性：有限次数完成</p>
-<p>2.设计要求<br>正确性：<br> 算法程序没有语法错误；<br> 对于合法输入能够产生满足要求的输出；<br> 对于非法输入能够产生满足规格的说明；<br> 对于故意刁难得测试输入都有满足要求的输出结果；<br>可读性：<br>便于阅读和修改<br>健壮性：<br>当输入数据不合法时，算法也能做出相关处理，而不是产生异常、崩溃或明明奇妙结果<br>时间效率高和存储量低</p>
-<h1 id="函数渐进增长"><a href="#函数渐进增长" class="headerlink" title="函数渐进增长"></a>函数渐进增长</h1><p>函数F(n)在n&gt;N时,始终大于函数G(n),就说G(n)渐进增长F(n)</p>
-<p>X为输入规模，Y 为算法执行次数（复杂度） aX^b+cX+d 执行次数计算方法<br>Y= aX^b+cX+d    a,c,d对Y值的影响均可忽略，此时只看b值，b越大Y 增长越快<br>Y= cX+d         c,d忽略,Y随X增长<br>Y = d            d无论为多大常熟，均视作1</p>
-<h1 id="时间复杂度"><a href="#时间复杂度" class="headerlink" title="时间复杂度"></a>时间复杂度</h1><p>T(n)=O(f(n));  f(n)是n的某个函数<br>执行次数 = 时间<br>O() 大O记法<br>T(n)增长最慢的算法为最优算法</p>
-<h1 id="推导大O阶"><a href="#推导大O阶" class="headerlink" title="推导大O阶"></a>推导大O阶</h1><p>用常熟1取代运行时间中的所有加法常数<br>在修改后的运行次数函数中，只保留最高阶项<br>如果最高阶项存在且不是1，则去除与这个项相乘的常数</p>
-<p>时间复杂度耗时从小到大O(以下项)<br><img src="/image/timelength.png" alt="timelength"></p>
+            <h1 id="next数组"><a href="#next数组" class="headerlink" title="next数组"></a>next数组</h1><p>经推导发现,进行模式匹配时,子串的移位规律与主串内容无关，与子串的内容有关,<br>因此根据子串的内容,生成基于子串的next数组，用来存放在对应位置如果发生失配,<br>应该将子串的哪个位置移动到失配位置<br>1.失配位置的前缀：永远是子串第一位<br>2.失配位置的后缀：失配位置的前一位<br>3.失配位置的前后缀相同位数：<br>从第一位开始的n位和从后缀开始倒数的n位相同,但前缀连续长度最长不能包含后缀那一位,<br>后缀也不能包含前缀,重叠也没关系,就说失配位置的前缀和后缀有n位相同<br>例：<br>ababc<br>若在倒数第二位的b位置(位置4)失配，则位置4的前缀是位置1的a,后缀是位置3的a,<br>从位置1和位置3开始,二者只有一位相同，则前后缀有1为相同,<br>若在最后一位位置5失配,前缀a虽然和后缀b不相同，但前缀连续两位ab和后缀连续两位ab相同<br>则c的前后缀有两位相同<br>ssssb<br>若在b位置失配,前缀连续sss,后缀连续sss,虽然重叠位置2和位置3的s,但前后缀相同位数为3<br>4.next数组值<br>失配位置的next数组值 = 失配位置的前后缀相同位数 + 1<br>特殊情况:子串位置1的next数组值为0,位置2的next数组值为1<br>例：</p>
+<table>
+<thead>
+<tr>
+<th>T:</th>
+<th style="text-align:right">a</th>
+<th style="text-align:right">b</th>
+<th style="text-align:right">a</th>
+<th style="text-align:right">b</th>
+<th style="text-align:right">a</th>
+<th style="text-align:right">a</th>
+<th style="text-align:right">a</th>
+<th style="text-align:right">b</th>
+<th style="text-align:right">a</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>下标:</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">6</td>
+<td style="text-align:right">7</td>
+<td style="text-align:right">8</td>
+<td style="text-align:right">9</td>
+</tr>
+<tr>
+<td>next:</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">3</td>
+</tr>
+</tbody>
+</table>
+<p>next数组获取代码实现</p>
+<table>
+<thead>
+<tr>
+<th>i后缀</th>
+<th style="text-align:right">1</th>
+<th style="text-align:right">2</th>
+<th style="text-align:right">。</th>
+<th style="text-align:right">3</th>
+<th style="text-align:right">4</th>
+<th style="text-align:right">5</th>
+<th style="text-align:right">6</th>
+<th style="text-align:right">7</th>
+<th style="text-align:right">。</th>
+<th style="text-align:right">8</th>
+<th style="text-align:right">9</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>j前缀</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">3</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">var string = "9ababaaaba"; //第一位存放字符串长度</div><div class="line">function getnext(T)&#123;</div><div class="line">  var next=[];</div><div class="line">  next[0]=T.length-1;</div><div class="line">  var i = 1;## 前缀</div><div class="line">  var j = 0;## 后缀</div><div class="line">  next[1] = 0;</div><div class="line">  while(i&lt;T[0])&#123;</div><div class="line">    if(j==0 || T[i] == T[j])&#123;// 子串自己匹配自己</div><div class="line">      i++;</div><div class="line">      j++;</div><div class="line">      next[i]=j;</div><div class="line">    &#125;else&#123;</div><div class="line">      j = next[j]; // 自己匹配发生失配,则视前缀为子串,后缀为主串,将前缀回溯</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  console.log(next);</div><div class="line">&#125;</div><div class="line">getnext(string);</div></pre></td></tr></table></figure>
+<h1 id="KMP算法"><a href="#KMP算法" class="headerlink" title="KMP算法"></a>KMP算法</h1><p><a href="https://github.com/YooHannah/algorithm/blob/master/js/KMP.js" target="_blank" rel="external">代码链接</a></p>
 
           
         
@@ -633,7 +1367,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/print.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/queue.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -658,8 +1392,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/knowledge/print.html" itemprop="url">
-                  打印文件
+                <a class="post-title-link" href="/post/algorithm/queue.html" itemprop="url">
+                  队列
                 </a>
               
             
@@ -673,8 +1407,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-01T17:57:25+08:00">
-                2017-02-01
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-02T12:34:37+08:00">
+                2017-02-02
               </time>
             
 
@@ -711,10 +1445,13 @@
       
         
           
-            <h1 id="打印文件"><a href="#打印文件" class="headerlink" title="打印文件"></a>打印文件</h1><p>  关键语句：Window.print();<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$scope.print= function()&#123;</div><div class="line">      $(&quot;#noprint&quot;).css(&apos;display&apos;,&apos;none&apos;);</div><div class="line">      $(&quot;#print&quot;).css(&apos;display&apos;,&apos;block&apos;);</div><div class="line">      window.print();</div><div class="line">      $(&quot;#print&quot;).css(&apos;display&apos;,&apos;none&apos;);</div><div class="line">      $(&quot;#noprint&quot;).css(&apos;display&apos;,&apos;block&apos;);</div><div class="line">     &#125;</div></pre></td></tr></table></figure></p>
-<p><a href="https://github.com/YooHannah/algorithm/blob/master/html/print.html" target="_blank" rel="external">一个具有打印功能的HTML代码地址</a></p>
-<h1 id="浏览器分页打印"><a href="#浏览器分页打印" class="headerlink" title="浏览器分页打印"></a>浏览器分页打印</h1><p>在需要分页的地方插入语句<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;div class=&quot;PageNext&quot; ng-if=&apos;$index&lt;printdata.length-1&apos;&gt;&lt;/div&gt;</div><div class="line">  .PageNext</div><div class="line">  &#123;</div><div class="line">      page-break-after: always;</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
-<p>例如打印多个表格，每一张表格内容的分页由浏览器决定，但是A表格结束到B表格开始,B表格另起一页开始打印由添加的语句决定<br>另外，打印一张表格当内容产生多页时，将表名放在thead中可以使表名打印在该表的每一页上<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">&lt;div ng-repeat=&quot;line in printdata&quot; class=&quot;row&quot;&gt;&lt;!--打印多张表--&gt;</div><div class="line">     &lt;table width=&quot;98%&quot; border=&quot;1&quot; align=&quot;center&quot; cellpadding=&quot;2&quot; cellspacing=&quot;0&quot; bordercolor=&quot;#000000&quot; class=&quot;tabp&quot;&gt;</div><div class="line">      &lt;thead&gt;</div><div class="line">        &lt;tr&gt;&lt;!-- 表名,合并单元格,去边框--&gt;</div><div class="line">            &lt;td colspan=&quot;3&quot; style=&quot;border: 1px solid #fff;border-bottom-color: black;&quot;&gt;</div><div class="line">              &lt;span style=&quot;float: left&quot;&gt;日期：&#123;&#123;date&#125;&#125;&lt;/span&gt;&lt;span&gt;&#123;&#123;line.line_title&#125;&#125;&lt;/span&gt;</div><div class="line">            &lt;/td&gt;</div><div class="line">        &lt;/tr&gt;</div><div class="line">        &lt;tr&gt;</div><div class="line">          &lt;th width=&quot;5%&quot;&gt; 序号 &lt;/th&gt;</div><div class="line">          &lt;th width=&quot;13&quot;&gt; 分类 &lt;/th&gt;</div><div class="line">          &lt;th width=&quot;82%&quot;&gt; 明细&lt;/th&gt;</div><div class="line">        &lt;/tr&gt;</div><div class="line">      &lt;/thead&gt;</div><div class="line">      &lt;tbody&gt;</div><div class="line">        &lt;tr ng-if=&quot;line.columns.length&gt;0&quot; ng-repeat=&quot;item in line.columns&quot;&gt;</div><div class="line">          &lt;td&gt;&#123;&#123;$index+1&#125;&#125;&lt;/td&gt;</div><div class="line">          &lt;td&gt;&#123;&#123;item.column_name&#125;&#125;&lt;/td&gt;</div><div class="line">          &lt;td style=&quot;text-align: left&quot;&gt;&lt;span ng-repeat=&quot;bar in item.products&quot;&gt;&#123;&#123;bar.name&#125;&#125;x&#123;&#123;bar.count&#125;&#125;&lt;i class=&quot;fa fa-square-o&quot;&gt;&lt;/i&gt;, &lt;/span&gt;&lt;/td&gt;</div><div class="line">        &lt;/tr&gt;</div><div class="line">      &lt;/tbody&gt;</div><div class="line">    &lt;/table&gt;</div><div class="line">    &lt;hr align=&quot;center&quot; width=&quot;98%&quot; size=&quot;1&quot; noshade class=&quot;NOPRINT&quot; ng-if=&apos;$index&lt;printdata.length-1&apos;&gt;&lt;!--下划线做装饰 --&gt;</div><div class="line">    &lt;div class=&quot;PageNext&quot; ng-if=&apos;$index&lt;printdata.length-1&apos;&gt;&lt;/div&gt;&lt;!--每一个表结束,另起一页打印下一个表--&gt;</div><div class="line">  &lt;/div&gt;</div><div class="line">  &lt;style type=&quot;text/css&quot;&gt;</div><div class="line">  	 .PageNext</div><div class="line">  &#123;</div><div class="line">      page-break-after: always;</div><div class="line">  &#125;</div><div class="line">  &lt;/style&gt;</div></pre></td></tr></table></figure></p>
+            <h1 id="队列"><a href="#队列" class="headerlink" title="队列"></a>队列</h1><p>1.先进先出的线性表，有顺序表和链表<br>2.只允许在一段插入，另一端删除</p>
+<h1 id="队列的链式存储结构"><a href="#队列的链式存储结构" class="headerlink" title="队列的链式存储结构"></a>队列的链式存储结构</h1><p>和栈相反，队列常用链表实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">typedef sruct QNode&#123;</div><div class="line">	ElemType data;</div><div class="line">	struct QNode *next;</div><div class="line">&#125;QNode,*QueuePrt;</div><div class="line">typedef struct &#123;</div><div class="line">	QueuePrt front;	##队头指针指向链队列的头结点(头结点不是必要的)</div><div class="line">	QueuePrt rear;	##队尾指针指向终端结点，空队列时，front，rear都指向头结点</div><div class="line">&#125;LinkQueue;</div></pre></td></tr></table></figure></p>
+<p><img src="/image/queue1.png" alt="queue1"><br><img src="/image/queue2.png" alt="queue2"></p>
+<h1 id="入队列"><a href="#入队列" class="headerlink" title="入队列"></a>入队列</h1><p><img src="/image/queue3.png" alt="queue3"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">InsertQueue(LinkQueue *q,ElemType e)&#123;</div><div class="line">	QueuePrt p;</div><div class="line">	p = (QueuePtr)malloc(sizeof(QNode));</div><div class="line">	if(p==NULL)&#123;</div><div class="line">		exit(0);</div><div class="line">	&#125;</div><div class="line">	p-&gt;data = e;</div><div class="line">	p-&gt;next = NULL;</div><div class="line">	q-&gt;rear-&gt;next = p;</div><div class="line">	q-&gt;rear = p;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h1 id="出队列"><a href="#出队列" class="headerlink" title="出队列"></a>出队列</h1><p><img src="/image/queue5.png" alt="queue5"><br><img src="/image/queue6.png" alt="queue6"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">DeleteQueue(LinkQueue *q,ElemType e)&#123;</div><div class="line">	QueuePrt p;</div><div class="line">	if(q-&gt;front ==q-&gt;rear)</div><div class="line">	&#123;</div><div class="line">		retrun;</div><div class="line">	&#125;</div><div class="line">	p=q-&gt;front-&gt;next;</div><div class="line">	*e=p-&gt;data;</div><div class="line">	q-&gt;front-&gt;next = p-&gt;next;</div><div class="line">	if(q-&gt;rear ==p)&#123;</div><div class="line">		q-&gt;rear = q-&gt;front;</div><div class="line">	&#125;</div><div class="line">	free(p);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h1 id="销毁一个队列"><a href="#销毁一个队列" class="headerlink" title="销毁一个队列"></a>销毁一个队列</h1><p>由于链队列建立在内存的动态区，因此当一个队列<br>不在有用时，应当及时销毁掉，以免过多占用内存空间<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">DestroyQueue(LinkQueue *q)&#123;</div><div class="line">	while(q-&gt;front)&#123;</div><div class="line">	q-&gt;rear = q-&gt;front-&gt;next;</div><div class="line">	free(q-&gt;front):</div><div class="line">	q-&gt;front = q-&gt;rear;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>简单实现<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> list = [];</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)&#123;</div><div class="line">  list.push(&#123;</div><div class="line">    <span class="attr">next</span>:i+<span class="number">1</span></div><div class="line">  &#125;)</div><div class="line">&#125;</div><div class="line">list[<span class="number">4</span>].next = <span class="literal">null</span>;</div><div class="line"><span class="built_in">console</span>.log(list);</div><div class="line"><span class="comment">//入队列</span></div><div class="line"><span class="keyword">var</span> length = list.length;</div><div class="line">list.push(&#123;</div><div class="line">  <span class="attr">next</span>:<span class="literal">null</span></div><div class="line">&#125;)</div><div class="line">list[length<span class="number">-1</span>].next=length;</div><div class="line"><span class="built_in">console</span>.log(list);</div><div class="line"><span class="comment">//出队列</span></div><div class="line">list.splice(<span class="number">0</span>,<span class="number">1</span>);</div><div class="line"><span class="built_in">console</span>.log(list);</div><div class="line"><span class="comment">//清空</span></div><div class="line">list=[];</div></pre></td></tr></table></figure></p>
 
           
         
@@ -753,7 +1490,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/link.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/stacklinked.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -778,8 +1515,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/knowledge/link.html" itemprop="url">
-                  链接(页面跳转)
+                <a class="post-title-link" href="/post/algorithm/stacklinked.html" itemprop="url">
+                  逆波兰表达式/后缀表达式
                 </a>
               
             
@@ -793,8 +1530,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-18T00:20:07+08:00">
-                2016-12-18
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-02T11:48:37+08:00">
+                2017-02-02
               </time>
             
 
@@ -831,249 +1568,11 @@
       
         
           
-            <h1 id="跳转打开新页面"><a href="#跳转打开新页面" class="headerlink" title="跳转打开新页面"></a>跳转打开新页面</h1><pre><code>1.window.Open(url);
-2.&lt;a href= “” target=&quot;view_window&quot;&gt;&lt;/a&gt;
-</code></pre><p>a 标签的 target 属性规定在何处打开链接文档。<br>如果在一个 a 标签内包含一个 target 属性，浏览器将会载入和显示用这个标签的 href 属性命名的、名称与这个目标吻合的框架或者窗口中的文档。如果这个指定名称或 id 的框架或者窗口不存在，浏览器将打开一个新的窗口，给这个窗口一个指定的标记，然后将新的文档载入那个窗口。从此以后，超链接文档就可以指向这个新的窗口。</p>
-<h1 id="本页跳转"><a href="#本页跳转" class="headerlink" title="本页跳转"></a>本页跳转</h1><pre><code>1.window.location.href=&quot;url&quot;;
-2.&lt;a href=“”&gt;&lt;/a&gt;
-3.window.open(&apos;&apos;,&apos;_self&apos;)
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/imageshow.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/knowledge/imageshow.html" itemprop="url">
-                  图片显示
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-18T00:15:51+08:00">
-                2016-12-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>1.按一定大小，直接在img 标签里设置style<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;img src=&quot;&#123;&#123;detaildata.image&#125;&#125;&quot; name=&quot;img&quot; style=&quot;width:32px;height: 32px;&quot;&gt;</div></pre></td></tr></table></figure></p>
-<p>2.按图片原本大小自适应显示，不在容器里设置任何大小</p>
-<h1 id="鼠标滑过，图片自动在可视区域中心显示"><a href="#鼠标滑过，图片自动在可视区域中心显示" class="headerlink" title="鼠标滑过，图片自动在可视区域中心显示"></a>鼠标滑过，图片自动在可视区域中心显示</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;divImage&quot; style=&quot;display:none;left:50%;position:fixed;z-index:9999999;&quot;&gt;</div><div class="line"> &lt;img id=&quot;imgbig&quot; src=&quot;&quot; alt=&quot;预览&quot;  /&gt;</div><div class="line"> &lt;/div&gt;</div><div class="line"></div><div class="line"> $scope.imgclick = function(val)&#123;</div><div class="line">      $(&quot;#divImage&quot;)[0].style.display=&quot;&quot;;</div><div class="line">      $(&quot;#imgbig&quot;)[0].src=val;</div><div class="line">      var sceenwidth =  document.body.clientWidth;</div><div class="line">      var sceenheight = document.body.offsetHeight; //获取可视区大小</div><div class="line">      let img = new Image();</div><div class="line">          img.src = val; //获取图片</div><div class="line">          img.onerror = function()&#123;</div><div class="line">          toastr.error(&quot; 图片加载失败，请检查url是否正确&quot;,&apos;失败&apos;);</div><div class="line">          return false;</div><div class="line">         &#125;;</div><div class="line"></div><div class="line">          if(img.complete)&#123;</div><div class="line">           $(&quot;#divImage&quot;)[0].style.top =(sceenheight-img.height)/2+&apos;px&apos;;</div><div class="line">            $(&quot;#divImage&quot;)[0].style.left =(sceenwidth-img.width)/2+&apos;px&apos;; //根据图片大小确定中心点</div><div class="line">          &#125;else&#123;</div><div class="line">          img.onload = function()&#123;</div><div class="line">          img.onload=null;//避免重复加载</div><div class="line">          &#125;</div><div class="line">          &#125;</div><div class="line">    &#125;</div><div class="line">    $scope.closeimg = function()&#123;</div><div class="line">    $(&quot;#divImage&quot;)[0].style.display=&quot;none&quot;;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/angular/Angular-binding.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/angular/Angular-binding.html" itemprop="url">
-                  Angular 绑定
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-18T00:14:37+08:00">
-                2016-12-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>数据: ng-model<br>点击: ng-click=”closeimg()”<br>鼠标经过: ng-mouseenter=”imgclick(item.img_url)”   ng-mouseleave=”closeimg()”<br>显示：ng-show   ng-if<br>禁用：ng-disabled</p>
-<p>select 数据绑定<br>1.显示name,绑定id;<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;select <span class="class"><span class="keyword">class</span></span>=<span class="string">"sel"</span> ng-model=<span class="string">"supplier.status"</span> ng-options=<span class="string">"item.id as item.name for item in statuss"</span> ng-disabled=<span class="string">"read2"</span>&gt;&lt;/select&gt;</div></pre></td></tr></table></figure></p>
-<p>2.显示title，绑定整个对象<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;select <span class="class"><span class="keyword">class</span></span>=<span class="string">"col-md-1"</span> ng-model=<span class="string">"usertype"</span> ng-options=<span class="string">"item.title for item in usertypes"</span> ng-change=<span class="string">"usertypechange()"</span>&gt;</div><div class="line">&lt;option selected value=""&gt;请选择&lt;/option&gt;</div><div class="line">&lt;<span class="regexp">/select&gt;</span></div></pre></td></tr></table></figure></p>
+            <h1 id="栈的链式存储结构"><a href="#栈的链式存储结构" class="headerlink" title="栈的链式存储结构"></a>栈的链式存储结构</h1><h2 id="栈的链式存储结构-1"><a href="#栈的链式存储结构-1" class="headerlink" title="栈的链式存储结构"></a>栈的链式存储结构</h2><p><img src="/image/stack2.png" alt="stack2"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">typedef struct StackNode&#123;</div><div class="line">  ElemType data;          ##存放栈的数据</div><div class="line">  struct StackNode *next;</div><div class="line">&#125;StackNode,*LinkStackPtr;</div><div class="line">typedef struct LinkStack&#123;</div><div class="line">  LinkStackPrt top;        ##top指针</div><div class="line">  int count;               ##栈元素计数器</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="栈链的入栈操作"><a href="#栈链的入栈操作" class="headerlink" title="栈链的入栈操作"></a>栈链的入栈操作</h2><p>假设元素值e的新结点是s,top为栈顶指针<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Status Push(LinkStack *s,ElemType e)&#123;</div><div class="line">  LinkStackPtr p=(LinkStackPtr)malloc(sizeof(StackNode));</div><div class="line">  p-&gt;data = e;</div><div class="line">  p-&gt;next = s-&gt;top;</div><div class="line">  s-&gt;top = p;</div><div class="line">  s-&gt;count++;</div><div class="line">  <span class="keyword">return</span> OK;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="栈的出栈操作"><a href="#栈的出栈操作" class="headerlink" title="栈的出栈操作"></a>栈的出栈操作</h2><p>假设变量p用来存储要删除的栈顶结点，将栈顶指针下移一位，最后释放p<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">Status Pop(LinkStack *s,ElemType e)&#123;</div><div class="line">  LinkStackPtr p;</div><div class="line">  <span class="keyword">if</span>(StackEmpty(*s))&#123;</div><div class="line">  <span class="keyword">return</span> ERROR;</div><div class="line">  &#125;</div><div class="line">  *e=s-&gt;top-&gt;data;</div><div class="line">  p=s-&gt;top;</div><div class="line">  s-&gt;top = s-&gt;top-&gt;next;</div><div class="line">  free(p);</div><div class="line">  s-&gt;count--;</div><div class="line">  <span class="keyword">return</span> OK;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h1 id="逆波兰表达式-后缀表达式"><a href="#逆波兰表达式-后缀表达式" class="headerlink" title="逆波兰表达式/后缀表达式"></a>逆波兰表达式/后缀表达式</h1><p>正常表达式–&gt;后缀表达式<br>（1-2)x(4+5）–&gt; 1 2 - 4 5 + x<br>1.计算后缀表达式<br>主要思想是判断字符是否为运算符，若为数字，则入栈，为运算符则连续出栈两次进行运算，再将运算结果入栈<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> list =[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="string">'-'</span>,<span class="string">'*'</span>,<span class="string">'+'</span>]</div><div class="line"><span class="keyword">var</span> stack = [];</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;list.length;i++)&#123;</div><div class="line">  <span class="keyword">if</span>(!<span class="built_in">isNaN</span>(list[i]))&#123;</div><div class="line">      stack.push(list[i]);</div><div class="line">    &#125;<span class="keyword">else</span>&#123;</div><div class="line">       <span class="keyword">var</span> a = stack.pop();</div><div class="line">       <span class="keyword">var</span> b = stack.pop();</div><div class="line">       <span class="keyword">if</span>(list[i] ==<span class="string">"+"</span>)&#123;</div><div class="line">        stack.push(b+a);</div><div class="line">       &#125;<span class="keyword">else</span> <span class="keyword">if</span>(list[i] ==<span class="string">"-"</span>)&#123;</div><div class="line">        stack.push(b-a);</div><div class="line">       &#125;<span class="keyword">else</span> <span class="keyword">if</span>(list[i] ==<span class="string">"*"</span>)&#123;</div><div class="line">        stack.push(b*a);</div><div class="line">       &#125;<span class="keyword">else</span> <span class="keyword">if</span>(list[i] ==<span class="string">"/"</span>)&#123;</div><div class="line">        stack.push(b/a);</div><div class="line">       &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(stack);</div></pre></td></tr></table></figure></p>
+<p>2.计算表达式转后缀表达式<br>主要思路<br>1，表达式中参与运算的数字、运算符以及小括号分割，形成待处理数组<br>2，循环判断<br>  A.若字符为数字，入栈2，<br>  B.若字符为“+”、“-”，分情况讨论<br>（1）此时栈1为空，入栈；<br>（2）栈1不为空，将“（”左括号以上的符号从栈1 pop到栈2，“（”留          在栈1，处理完后，将“+”、“-”入栈1；<br>   C若字符为“）”，将“（”以上符号从栈1 pop到栈2，“（”也pop出来<br>     但不入栈2<br>   D若字符为“/”“*”“（”直接入栈2<br>   E其他情况，非法字符，抛出异常<br>3.将栈1元素pop到栈2；<br>栈2即后缀表达式<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/%E8%AE%A1%E7%AE%97%E5%BC%8F%E8%BD%AC%E5%90%8E%E7%BC%80%E8%A1%A8%E8%BE%BE%E5%BC%8F(%E6%A0%88%EF%BC%89.js" target="_blank" rel="external">代码链接</a></p>
 
           
         
@@ -1112,7 +1611,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/tableshow.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/stack.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1137,8 +1636,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/knowledge/tableshow.html" itemprop="url">
-                  表格处理
+                <a class="post-title-link" href="/post/algorithm/stack.html" itemprop="url">
+                  栈
                 </a>
               
             
@@ -1152,8 +1651,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-18T00:00:06+08:00">
-                2016-12-18
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-02T11:48:37+08:00">
+                2017-02-02
               </time>
             
 
@@ -1190,17 +1689,12 @@
       
         
           
-            <h1 id="jquery获取表格"><a href="#jquery获取表格" class="headerlink" title="jquery获取表格"></a>jquery获取表格</h1><p>获取行: $(“#table tr”)[val+1];<br>获取改行第一列: $(“#table tr”)[val+1].children[0];<br>表格内容：$(“#table tr td:nth-child(4)”)[val].innerText</p>
-<p>Jquery及时获取输入数据<br>$(‘#username’).bind(‘input propertychange’, function () {<br>    console.log($(“input[name=username]”).val());<br>    var iusername = $(“input[name=username]”).val();<br>    console.log(iusername);<br>});<br>html中用$parent.$index获取到父级的$index</p>
-<h1 id="多表头，一行对应多列"><a href="#多表头，一行对应多列" class="headerlink" title="多表头，一行对应多列"></a>多表头，一行对应多列</h1><p>[相关链接]（<a href="http://www.jb51.net/web/138278.html" target="_blank" rel="external">http://www.jb51.net/web/138278.html</a>)<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">&lt;table class="table table-bordered table-hover no-footer"&gt;</div><div class="line">&lt;thead&gt;</div><div class="line">  &lt;tr role="row" class="heading"&gt;</div><div class="line">    &lt;th colspan="2"&gt;基本信息&lt;/th&gt;</div><div class="line">    &lt;th colspan="6"&gt;配送速度&lt;/th&gt;</div><div class="line">    &lt;th colspan="6"&gt;服务态度&lt;/th&gt;</div><div class="line">  &lt;/tr&gt;</div><div class="line">  &lt;tr role="row" class="heading"&gt;</div><div class="line">      &lt;th&gt;配送员&lt;/th&gt;</div><div class="line">      &lt;th&gt;服务社区&lt;/th&gt;</div><div class="line">      &lt;th&gt;5星&lt;/th&gt;</div><div class="line">      &lt;th&gt;4星&lt;/th&gt;</div><div class="line">      &lt;th&gt;3星&lt;/th&gt;</div><div class="line">      &lt;th&gt;2星&lt;/th&gt;</div><div class="line">      &lt;th&gt;1星&lt;/th&gt;</div><div class="line">      &lt;th&gt;未评论&lt;/th&gt;</div><div class="line">      &lt;th&gt;5星&lt;/th&gt;</div><div class="line">      &lt;th&gt;4星&lt;/th&gt;</div><div class="line">      &lt;th&gt;3星&lt;/th&gt;</div><div class="line">      &lt;th&gt;2星&lt;/th&gt;</div><div class="line">      &lt;th&gt;1星&lt;/th&gt;</div><div class="line">      &lt;th&gt;未评论&lt;/th&gt;</div><div class="line">  &lt;/tr&gt;</div><div class="line">&lt;/thead&gt;</div><div class="line">&lt;tbody ng-show="data.length&gt;0"&gt;</div><div class="line">  &lt;tr role="row" ng-repeat="item in data track by $index"&gt;</div><div class="line">      &lt;td&gt;&#123;&#123;item.id&#125;&#125;&lt;/td&gt;</div><div class="line">      &lt;td&gt;&#123;&#123;item.id&#125;&#125;&lt;/td&gt;</div><div class="line">      &lt;td&gt;&#123;&#123;item.id&#125;&#125;&lt;/td&gt;</div><div class="line">      &lt;td&gt;&#123;&#123;item.id&#125;&#125;&lt;/td&gt;</div><div class="line">      &lt;td&gt;&#123;&#123;item.id&#125;&#125;&lt;/td&gt;</div><div class="line">      &lt;td&gt;&#123;&#123;item.id&#125;&#125;&lt;/td&gt;</div><div class="line">      &lt;td&gt;&#123;&#123;item.id&#125;&#125;&lt;/td&gt;</div><div class="line">      &lt;td&gt;&#123;&#123;item.id&#125;&#125;&lt;/td&gt;</div><div class="line">      &lt;td&gt;&#123;&#123;item.id&#125;&#125;&lt;/td&gt;</div><div class="line">      &lt;td&gt;&#123;&#123;item.id&#125;&#125;&lt;/td&gt;</div><div class="line">      &lt;td&gt;&#123;&#123;item.id&#125;&#125;&lt;/td&gt;</div><div class="line">      &lt;td&gt;&#123;&#123;item.id&#125;&#125;&lt;/td&gt;</div><div class="line">      &lt;td&gt;&#123;&#123;item.id&#125;&#125;&lt;/td&gt;</div><div class="line">      &lt;td&gt;&#123;&#123;item.id&#125;&#125;&lt;/td&gt;</div><div class="line">  &lt;/tr&gt;</div><div class="line">&lt;/tbody&gt;</div><div class="line">&lt;/table&gt;</div></pre></td></tr></table></figure></p>
-<p><img src="/image/table1.png" alt="table1"></p>
-<h1 id="一列对多行"><a href="#一列对多行" class="headerlink" title="一列对多行"></a>一列对多行</h1><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">&lt;table class="table  table-hover table-light"&gt;</div><div class="line">&lt;thead&gt;</div><div class="line">  &lt;tr role="row" class="heading"&gt;</div><div class="line">    &lt;th width="3.6%"&gt; 订单ID &lt;/th&gt;</div><div class="line">    &lt;th width="6.6%"&gt; 社区 &lt;/th&gt;</div><div class="line">    &lt;th width="6.6%"&gt; 供应商名称 &lt;/th&gt;</div><div class="line">    &lt;th width="6.6%"&gt; 商品名称 &lt;/th&gt;</div><div class="line">    &lt;th width="6.6%"&gt; 条码 &lt;/th&gt;</div><div class="line">    &lt;th width="6.6%"&gt; 批发价 &lt;/th&gt;</div><div class="line">    &lt;th width="6.6%"&gt; 预购价 &lt;/th&gt;</div><div class="line">    &lt;th width="5.6%"&gt; 数量 &lt;/th&gt;</div><div class="line">    &lt;th width="5.6%"&gt; 收货人 &lt;/th&gt;</div><div class="line">    &lt;th width="6.6%"&gt; 联系方式 &lt;/th&gt;</div><div class="line">    &lt;th width="7.6%"&gt; 收货地址 &lt;/th&gt;</div><div class="line">    &lt;th width="6.6%"&gt; 下单时间 &lt;/th&gt;</div><div class="line">    &lt;th width="6.6%"&gt; 配送方式 &lt;/th&gt;</div><div class="line">    &lt;th width="3.6%"&gt; 状态 &lt;/th&gt;</div><div class="line">    &lt;th width="14.6%"&gt; 操作 &lt;/th&gt;</div><div class="line">  &lt;/tr&gt;</div><div class="line">&lt;/thead&gt;</div><div class="line">&lt;tbody ng-if="data.length&gt;0" ng-repeat="x in data"&gt;</div><div class="line">  &lt;tr role="row" class="gradeX odd" ng-repeat="y in x.orders_items"&gt;</div><div class="line">    &lt;td ng-if="$index == 0" rowspan=&#123;&#123;x.orders_items.length&#125;&#125;&gt; &#123;&#123;x.order_id&#125;&#125;&lt;/td&gt;</div><div class="line">    &lt;td ng-if="$index == 0" rowspan=&#123;&#123;x.orders_items.length&#125;&#125;&gt; &#123;&#123;x.region_name&#125;&#125; &lt;/td&gt;</div><div class="line">    &lt;td ng-if="$index == 0" rowspan=&#123;&#123;x.orders_items.length&#125;&#125;&gt; &#123;&#123;x.vendor_name&#125;&#125; &lt;/td&gt;</div><div class="line">    &lt;td&gt;&lt;span ng-bind="y.name"&gt;&lt;/span&gt;&lt;/td&gt;</div><div class="line">    &lt;td&gt;&lt;span ng-bind="y.barcode"&gt;&lt;/span&gt;&lt;/td&gt;</div><div class="line">    &lt;td&gt;&lt;span ng-bind="y.trade_price"&gt;&lt;/span&gt;&lt;/td&gt;</div><div class="line">    &lt;td&gt;&lt;span ng-bind="y.pre_selling_price"&gt;&lt;/span&gt;&lt;/td&gt;</div><div class="line">    &lt;td&gt;&lt;span ng-bind="y.count"&gt;&lt;/span&gt;&lt;/td&gt;</div><div class="line">    &lt;td ng-if="$index == 0" rowspan=&#123;&#123;x.orders_items.length&#125;&#125;&gt; &#123;&#123;x.consignee&#125;&#125;&lt;/td&gt;</div><div class="line">    &lt;td ng-if="$index == 0" rowspan=&#123;&#123;x.orders_items.length&#125;&#125;&gt; &#123;&#123;x.contacts_tel&#125;&#125; &lt;/td&gt;</div><div class="line">    &lt;td ng-if="$index == 0" rowspan=&#123;&#123;x.orders_items.length&#125;&#125;&gt; &#123;&#123;x.address&#125;&#125; &lt;/td&gt;</div><div class="line">    &lt;td ng-if="$index == 0" rowspan=&#123;&#123;x.orders_items.length&#125;&#125;&gt; &#123;&#123;x.order_time&#125;&#125;&lt;/td&gt;</div><div class="line">    &lt;td ng-if="$index == 0" rowspan=&#123;&#123;x.orders_items.length&#125;&#125;&gt; &#123;&#123;x.transport_desc&#125;&#125; &lt;/td&gt;</div><div class="line">    &lt;td ng-if="$index == 0" rowspan=&#123;&#123;x.orders_items.length&#125;&#125;&gt; &lt;span class="label" ng-class="x.labelClass"&gt;&#123;&#123;x.export_status_desc&#125;&#125; &lt;/span&gt; &lt;/td&gt;</div><div class="line">    &lt;td ng-if="$index == 0" rowspan=&#123;&#123;x.orders_items.length&#125;&#125;&gt;</div><div class="line">     &lt;a class="btn btn-link font-purple-seance" href="/supply/order/&#123;&#123;x.order_id&#125;&#125;" target="view_window"&gt;&lt;i class="fa fa-eye"&gt;&lt;/i&gt; 详情&lt;/a&gt;</div><div class="line">   &lt;/td&gt;</div><div class="line"> &lt;/tr&gt;</div><div class="line">&lt;/tbody&gt;</div><div class="line">&lt;/table&gt;</div></pre></td></tr></table></figure>
-<p><img src="/image/table2.png" alt="table2"></p>
-<h1 id="套嵌循环，三层一列多行用js-循环拼接实现"><a href="#套嵌循环，三层一列多行用js-循环拼接实现" class="headerlink" title="套嵌循环，三层一列多行用js 循环拼接实现"></a>套嵌循环，三层一列多行用js 循环拼接实现</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">$scope.dealdata= <span class="function"><span class="keyword">function</span>(<span class="params">val</span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(val.length&lt;<span class="number">1</span>)&#123;</div><div class="line">    <span class="keyword">return</span></div><div class="line">  &#125;</div><div class="line">  <span class="keyword">var</span> tabstring = <span class="string">""</span>;</div><div class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;val.length;i++)&#123;</div><div class="line">    <span class="keyword">var</span> goodslength = <span class="number">0</span>;</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> m = <span class="number">0</span>;m&lt;val[i].category.length;m++)&#123;</div><div class="line">      goodslength+=val[i].category[m].purchase.length</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">var</span> str1 = <span class="string">"&lt;td rowspan="</span>+goodslength+<span class="string">"&gt;"</span>+val[i].purchase_name+<span class="string">"&lt;/td&gt;"</span>;</div><div class="line">     <span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="number">0</span>;j&lt;val[i].category.length;j++)&#123;</div><div class="line">        <span class="keyword">var</span> str2 = <span class="string">""</span>;</div><div class="line">        <span class="keyword">if</span>(j == <span class="number">0</span>)&#123;</div><div class="line">          str2 = str1 + <span class="string">"&lt;td rowspan="</span>+val[i].category[j].purchase.length+<span class="string">"&gt;"</span>+val[i].category[j].category_name+<span class="string">"&lt;/td&gt;"</span>;</div><div class="line">        &#125;<span class="keyword">else</span>&#123;</div><div class="line">          str2 = <span class="string">"&lt;td rowspan="</span>+val[i].category[j].purchase.length+<span class="string">"&gt;"</span>+val[i].category[j].category_name+<span class="string">"&lt;/td&gt;"</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> k = <span class="number">0</span>;k&lt;val[i].category[j].purchase.length;k++)&#123;</div><div class="line">          <span class="keyword">var</span> str3 = <span class="string">""</span>;</div><div class="line">          <span class="keyword">var</span> item = val[i].category[j].purchase[k];</div><div class="line">          <span class="keyword">if</span>(k == <span class="number">0</span>)&#123;</div><div class="line">            str3 = str2 + <span class="string">"&lt;td&gt;"</span>+item.product_name+<span class="string">"&lt;/td&gt;"</span>+</div><div class="line">                          <span class="string">"&lt;td&gt;"</span>+item.product_num+<span class="string">"&lt;/td&gt;"</span>+</div><div class="line">                          <span class="string">"&lt;td&gt;"</span>+item.unit+<span class="string">"&lt;/td&gt;"</span>+</div><div class="line">                          <span class="string">"&lt;td&gt;"</span>+item.price+<span class="string">"&lt;/td&gt;"</span>+</div><div class="line">                          <span class="string">"&lt;td&gt;"</span>+item.total_amount+<span class="string">"&lt;/td&gt;"</span></div><div class="line">          &#125;<span class="keyword">else</span>&#123;</div><div class="line">            str3 = <span class="string">"&lt;td&gt;"</span>+item.product_name+<span class="string">"&lt;/td&gt;"</span>+</div><div class="line">                    <span class="string">"&lt;td&gt;"</span>+item.product_num+<span class="string">"&lt;/td&gt;"</span>+</div><div class="line">                    <span class="string">"&lt;td&gt;"</span>+item.unit+<span class="string">"&lt;/td&gt;"</span>+</div><div class="line">                    <span class="string">"&lt;td&gt;"</span>+item.price+<span class="string">"&lt;/td&gt;"</span>+</div><div class="line">                    <span class="string">"&lt;td&gt;"</span>+item.total_amount+<span class="string">"&lt;/td&gt;"</span></div><div class="line">          &#125;</div><div class="line">          tabstring += <span class="string">"&lt;tr&gt;"</span> + str3 + <span class="string">"&lt;/tr&gt;"</span></div><div class="line">        &#125;</div><div class="line">     &#125;</div><div class="line">  &#125;</div><div class="line">  $(<span class="string">"#table"</span>).html(tabstring);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>效果如下<br><img src="/image/table3.png" alt="table3"></p>
-<h1 id="固定复杂表头"><a href="#固定复杂表头" class="headerlink" title="固定复杂表头"></a>固定复杂表头</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line">&lt;table id=&quot;tab&quot; cellpadding=&quot;1&quot; cellspacing=&quot;1&quot; border=&quot;1&quot; align=&quot;center&quot;&gt;</div><div class="line">&lt;tr&gt;</div><div class="line">&lt;th rowspan=&quot;2&quot;&gt;序号&lt;/th&gt;</div><div class="line">&lt;th rowspan=&quot;2&quot;&gt;社区&lt;/th&gt;</div><div class="line">&lt;th colspan=&quot;4&quot; ng-repeat=&quot;x in detaildata2.title&quot;&gt;&#123;&#123;x&#125;&#125;&lt;/th&gt;</div><div class="line">&lt;/tr&gt;</div><div class="line">&lt;tr&gt;</div><div class="line">&lt;th&gt;订单数&lt;/th&gt;</div><div class="line">&lt;th&gt;订单金额&lt;/th&gt;</div><div class="line">&lt;th&gt;客单价&lt;/th&gt;</div><div class="line">&lt;th&gt;累计新注册用户数&lt;/th&gt;</div><div class="line">&lt;th&gt;订单数&lt;/th&gt;</div><div class="line">&lt;th&gt;订单金额&lt;/th&gt;</div><div class="line">&lt;th&gt;客单价&lt;/th&gt;</div><div class="line">&lt;th&gt;累计新注册用户数&lt;/th&gt;</div><div class="line">&lt;th&gt;订单数&lt;/th&gt;</div><div class="line">&lt;th&gt;订单金额&lt;/th&gt;</div><div class="line">&lt;th&gt;客单价&lt;/th&gt;</div><div class="line">&lt;th&gt;累计新注册用户数&lt;/th&gt;</div><div class="line">&lt;/tr&gt;</div><div class="line">&lt;tr&gt;</div><div class="line">  &lt;th colspan=&quot;2&quot;&gt;社区合计&lt;/th&gt;</div><div class="line">  &lt;th ng-repeat=&quot;x in detaildata2.total&quot;&gt;&#123;&#123;x&#125;&#125;&lt;/th&gt;</div><div class="line">&lt;/tr&gt;</div><div class="line">&lt;tr ng-repeat=&quot;x in detaildata2.info&quot;&gt;</div><div class="line">&lt;th&gt;&#123;&#123;x.id&#125;&#125;&lt;/th&gt;</div><div class="line">&lt;th&gt;&#123;&#123;x.society&#125;&#125;&lt;/th&gt;</div><div class="line">&lt;th&gt;&#123;&#123;x.orders&#125;&#125;&lt;/th&gt;</div><div class="line">&lt;th&gt;&#123;&#123;x.ordersamount&#125;&#125;&lt;/th&gt;</div><div class="line">&lt;th&gt;&#123;&#123;x.price&#125;&#125;&lt;/th&gt;</div><div class="line">&lt;th&gt;&#123;&#123;x.users&#125;&#125;&lt;/th&gt;</div><div class="line">&lt;th&gt;&#123;&#123;x.orders1&#125;&#125;&lt;/th&gt;</div><div class="line">&lt;th&gt;&#123;&#123;x.ordersamount1&#125;&#125;&lt;/th&gt;</div><div class="line">&lt;th&gt;&#123;&#123;x.price1&#125;&#125;&lt;/th&gt;</div><div class="line">&lt;th&gt;&#123;&#123;x.users1&#125;&#125;&lt;/th&gt;</div><div class="line">&lt;th&gt;&#123;&#123;x.orders2&#125;&#125;&lt;/th&gt;</div><div class="line">&lt;th&gt;&#123;&#123;x.ordersamount2&#125;&#125;&lt;/th&gt;</div><div class="line">&lt;th&gt;&#123;&#123;x.price2&#125;&#125;&lt;/th&gt;</div><div class="line">&lt;th&gt;&#123;&#123;x.users2&#125;&#125;&lt;/th&gt;</div><div class="line">&lt;/tr&gt;</div><div class="line">&lt;tr&gt;</div><div class="line">&lt;/table&gt;</div><div class="line">&lt;style type=&quot;text/css&quot;&gt;</div><div class="line">th</div><div class="line">&#123;</div><div class="line">    text-align:center;</div><div class="line">&#125;</div><div class="line">&lt;/style&gt;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">数据结构</div><div class="line">$scope.detaildata2 =&#123;</div><div class="line">        title:[0,1,2],</div><div class="line">        total:[1,2,3,4,5,6,7,8,9,0,11,22],</div><div class="line">        info:[&#123;</div><div class="line">          id:0,</div><div class="line">          society:&quot;社区1&quot;,</div><div class="line">          orders:0,</div><div class="line">          ordersamount:50,</div><div class="line">          price:11,</div><div class="line">          users:35,</div><div class="line">          orders1:0,</div><div class="line">          ordersamount1:50,</div><div class="line">          price1:11,</div><div class="line">          users1:35,</div><div class="line">          orders2:0,</div><div class="line">          ordersamount2:50,</div><div class="line">          price2:11,</div><div class="line">          users2:35</div><div class="line">          &#125;,&#123;</div><div class="line">          id:1,</div><div class="line">          society:&quot;社区2&quot;,</div><div class="line">          orders:0,</div><div class="line">          ordersamount:50,</div><div class="line">          price:11,</div><div class="line">          users:35,</div><div class="line">          orders1:0,</div><div class="line">          ordersamount1:50,</div><div class="line">          price1:11,</div><div class="line">          users1:35,</div><div class="line">          orders2:0,</div><div class="line">          ordersamount2:50,</div><div class="line">          price2:11,</div><div class="line">          users2:35</div><div class="line">          &#125;]</div><div class="line">      &#125;;</div></pre></td></tr></table></figure>
-<p>效果如下<br><img src="/image/table4.png" alt="table4"></p>
+            <h1 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h1><p>1.特殊线性表,所以也分为顺序存储和链式存储结构<br>2.表尾称为栈尾，表头称为栈底<br>3.元素必须后进先出;所有操作只能在表尾进行<br>4.插入操作叫做进栈/入栈/压栈，删除操作叫出栈/弹栈<br>5.最开始栈中不含有任何数据，叫空栈，此时栈顶就是栈底，<br>  然后数据从栈顶进入，栈顶栈底分离，整个栈的当前容量变大，<br>  数据出栈时从栈顶弹出，栈顶下移，整个栈的当前容量变小<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">栈的顺序存储结构</div><div class="line">typedef struct</div><div class="line">&#123;</div><div class="line">  ElemType *base; ##指向栈底的指针变量</div><div class="line">  ElemType *top;  ##指向栈顶的指针变量</div><div class="line">  int stackSize;  ##栈当前可使用的最大容量</div><div class="line">&#125;sqStack;</div></pre></td></tr></table></figure></p>
+<h1 id="入栈操作"><a href="#入栈操作" class="headerlink" title="入栈操作"></a>入栈操作</h1><p>  每次向栈中压入一个数据，top指针+1，直到栈满为止</p>
+<h1 id="出栈操作"><a href="#出栈操作" class="headerlink" title="出栈操作"></a>出栈操作</h1><p>  在栈顶取数，栈顶指针随之下移，当前容量-1，</p>
+<h1 id="JS数组push和pop方法对数组处理"><a href="#JS数组push和pop方法对数组处理" class="headerlink" title="JS数组push和pop方法对数组处理"></a>JS数组push和pop方法对数组处理</h1><p>二进制转10进制<br>主要思想，每次pop数组最后一项，即二进制的位数依次增长，顺序i正好为指数<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> list = [<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>];</div><div class="line"><span class="keyword">var</span> sum = <span class="number">0</span>;</div><div class="line"><span class="keyword">var</span> length = list.length;</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;length;i++)&#123;</div><div class="line">  <span class="keyword">var</span> pop = list.pop();</div><div class="line">  sum+= pop*<span class="built_in">Math</span>.pow(<span class="number">2</span>,i);</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(sum);</div></pre></td></tr></table></figure></p>
+<p>二进制转8进制<br>主要思想，三位一组生成10进制，最后十进制按位数相加<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> list = [<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>];</div><div class="line"><span class="keyword">var</span> hex = <span class="number">0</span>;</div><div class="line"><span class="keyword">var</span> length = list.length;</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;length/<span class="number">3</span>+<span class="number">1</span>;i++)&#123;</div><div class="line">  <span class="keyword">var</span> sum = <span class="number">0</span>;</div><div class="line">   <span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="number">0</span>;j&lt;<span class="number">3</span>;j++)&#123;</div><div class="line">    <span class="keyword">if</span>(list.length&gt;<span class="number">0</span>)&#123;</div><div class="line">      sum+=list.pop()*<span class="built_in">Math</span>.pow(<span class="number">2</span>,j);</div><div class="line">    &#125;</div><div class="line">   &#125;</div><div class="line">   hex +=sum*<span class="built_in">Math</span>.pow(<span class="number">10</span>,i);</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(hex);</div></pre></td></tr></table></figure></p>
+<p>二进制转16进制<br>注意 &gt;9时，转换成字母，pop，进行反序链接<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> list = [<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">1</span>];</div><div class="line"><span class="keyword">var</span> hex = [];</div><div class="line"><span class="keyword">var</span> length = list.length;</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;length/<span class="number">4</span>+<span class="number">1</span>;i++)&#123;</div><div class="line">  <span class="keyword">var</span> sum = <span class="number">0</span>;</div><div class="line">   <span class="keyword">if</span>(list.length&gt;<span class="number">0</span>)&#123;</div><div class="line">   <span class="keyword">for</span>(<span class="keyword">var</span> j = <span class="number">0</span>;j&lt;<span class="number">4</span>;j++)&#123;</div><div class="line">    <span class="keyword">if</span>(list.length&gt;<span class="number">0</span>)&#123;</div><div class="line">      sum+=list.pop()*<span class="built_in">Math</span>.pow(<span class="number">2</span>,j);</div><div class="line">    &#125;</div><div class="line">   &#125;</div><div class="line">   <span class="keyword">if</span> (sum &gt;<span class="number">-1</span>&amp;&amp;sum&lt;<span class="number">10</span>) &#123;</div><div class="line">    hex.push(<span class="built_in">String</span>.fromCharCode(sum+<span class="number">48</span>));</div><div class="line">   &#125;</div><div class="line">   <span class="keyword">if</span>(sum &gt;<span class="number">9</span> &amp;&amp; sum &lt;<span class="number">16</span>)&#123;</div><div class="line">     hex.push(<span class="built_in">String</span>.fromCharCode(sum+<span class="number">55</span>));</div><div class="line">   &#125;</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> str = <span class="string">""</span>;</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> l = hex.length<span class="number">-1</span>;l&gt;<span class="number">-1</span>;l--)&#123;</div><div class="line">  str+=hex[l];</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(str);</div></pre></td></tr></table></figure></p>
 
           
         
@@ -1239,7 +1733,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/angular/formforbid.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/Doublylinkedlist.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1264,8 +1758,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/angular/formforbid.html" itemprop="url">
-                  表单禁用
+                <a class="post-title-link" href="/post/algorithm/Doublylinkedlist.html" itemprop="url">
+                  双向循环链表
                 </a>
               
             
@@ -1279,8 +1773,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-17T23:51:15+08:00">
-                2016-12-17
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-02T11:33:37+08:00">
+                2017-02-02
               </time>
             
 
@@ -1317,129 +1811,8 @@
       
         
           
-            <p>var checkk = $(“#bossstorechose input”);<br>  checkk.setAttribute(“disabled”,”disabled”);</p>
-<p>$(“#unity button”).attr(“disabled”, true);</p>
-<p>HTML添加angular属性ng-diabled:”val”;<br>  js赋值变量值为true val=true;</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/updownload.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/knowledge/updownload.html" itemprop="url">
-                  下载文件
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-17T22:19:51+08:00">
-                2016-12-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="下载-导出文件"><a href="#下载-导出文件" class="headerlink" title="下载/导出文件"></a>下载/导出文件</h2><h3 id="1-不带参数"><a href="#1-不带参数" class="headerlink" title="1.不带参数"></a>1.不带参数</h3><pre><code>window.open(url);
-</code></pre><h3 id="2-带参数"><a href="#2-带参数" class="headerlink" title="2.带参数"></a>2.带参数</h3><pre><code>window.open(&quot;.../?para1=&quot;+para1val+&quot;&amp;para2=&quot;+para2val);
-</code></pre><h1 id="前端处理下载数据"><a href="#前端处理下载数据" class="headerlink" title="前端处理下载数据"></a>前端处理下载数据</h1><h2 id="H5-chrome支持；IE-11-IE-edge-不支持"><a href="#H5-chrome支持；IE-11-IE-edge-不支持" class="headerlink" title="H5 chrome支持；IE 11;IE edge 不支持"></a>H5 chrome支持；IE 11;IE edge 不支持</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"> download(filename, text) &#123;</div><div class="line">        var element = document.createElement(&apos;a&apos;)</div><div class="line">        element.setAttribute(&apos;href&apos;, &apos;data:text/plain;charset=utf-8,&apos; + encodeURIComponent(text))</div><div class="line">        element.setAttribute(&apos;download&apos;, filename)</div><div class="line">      </div><div class="line">        element.style.display = &apos;none&apos;</div><div class="line">        document.body.appendChild(element)</div><div class="line">      </div><div class="line">        element.click()</div><div class="line">      </div><div class="line">        document.body.removeChild(element)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="使用blob-下载"><a href="#使用blob-下载" class="headerlink" title="使用blob 下载"></a>使用blob 下载</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">download(filename, text) &#123;</div><div class="line">    var aLink = document.createElement(&apos;a&apos;)</div><div class="line">    var blob = new Blob([text], &#123;</div><div class="line">      type: &apos;text/plain&apos;</div><div class="line">    &#125;)</div><div class="line">    aLink.download = filename</div><div class="line">    aLink.href = URL.createObjectURL(blob)</div><div class="line">    if(!!window.ActiveXObject || &apos;ActiveXObject&apos; in window)&#123; //兼容IE</div><div class="line">      window.navigator.msSaveOrOpenBlob(blob, filename)</div><div class="line">    &#125;else &#123;</div><div class="line">      aLink.click()</div><div class="line">    &#125;</div><div class="line">    URL.revokeObjectURL(blob)</div><div class="line">    aLink = null</div><div class="line">    blob = null</div><div class="line"> &#125;,</div></pre></td></tr></table></figure>
+            <p>结构<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">typedef struct DualNode&#123;</div><div class="line">	ElemType data;</div><div class="line">	struct DualNode *prior;//前驱结点</div><div class="line">	struct DualNode *next;//后继结点</div><div class="line">&#125;DualNode,*DuLinkList;</div></pre></td></tr></table></figure></p>
+<p><img src="/image/doublylinklist1.png" alt="doublylinklist1"><br><img src="/image/doublylinklist2.png" alt="doublylinklist2"><br>双向链表插入<br><img src="/image/doublylinklist3.png" alt="doublylinklist3"><br>s-&gt;next = p;<br>s-&gt;prior = p-&gt;prior;<br>p-&gt;prior-&gt;next = s;<br>p-&gt;prior = s;<br>双向链表删除<br><img src="/image/doublylinklist4.png" alt="doublylinklist4"><br>p-&gt;prior-&gt;next = p-&gt;next;<br>p-&gt;next -&gt;prior = p-&gt;prior;<br>free(p)<br>小结<br>双向链表相对于单链表来说复杂一点，每个结点对了一个prior指针，在进行插入和删除时需要注意;<br>双向链表可以有效提高算法的时间性能，用空间换取时间</p>
 
           
         
@@ -1473,7 +1846,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/18/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><span class="page-number current">19</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/20/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/18/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><span class="page-number current">19</span><a class="page-number" href="/page/20/">20</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/20/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1514,7 +1887,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">199</span>
+              <span class="site-state-item-count">215</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

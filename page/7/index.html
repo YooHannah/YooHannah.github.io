@@ -259,7 +259,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/course/formList.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/vue/mvvm.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -284,8 +284,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/react/course/formList.html" itemprop="url">
-                  表单 & 列表
+                <a class="post-title-link" href="/post/vue/mvvm.html" itemprop="url">
+                  VUE 数据绑定初探
                 </a>
               
             
@@ -299,8 +299,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-04T21:12:37+08:00">
-                2018-12-04
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-30T16:38:15+08:00">
+                2018-12-30
               </time>
             
 
@@ -337,40 +337,23 @@
       
         
           
-            <h1 id="表单功能点"><a href="#表单功能点" class="headerlink" title="表单功能点"></a>表单功能点</h1><ol>
-<li>初始数据，提交和跳转</li>
-</ol>
-<p>表单各项配置的优化，可以通过对UI框架的API进行封装成高阶组件，然后在使用时，通过配置高阶组件的属性，将需要的配置项传递给UI框架API，减少代码冗余，配置清晰</p>
-<p>提交后状态通过中间件返回promise判断接下来操作</p>
-<p>2.<br>错误处理（可依靠UI框架进行判断）<br>动态表单元素（在传入高阶组件属性时采用函数返回值形式动态加载表单元素，在函数中处理要不要显示表单元素）<br>内容动态加载（在componentDidMount中进行数据请求，以及初始状态处理）</p>
-<h1 id="列表页功能点"><a href="#列表页功能点" class="headerlink" title="列表页功能点"></a>列表页功能点</h1><h2 id="搜索，数据缓存和分页"><a href="#搜索，数据缓存和分页" class="headerlink" title="搜索，数据缓存和分页"></a>搜索，数据缓存和分页</h2><p>开发列表也要考虑的技术要点<br>1.如何翻页 (数据来自服务器还是客户端缓存)<br>2.如何进行内容搜索 （当前页面数据搜索还是服务器端数据搜索）<br>3.如何缓存数据<br>4.何时进行页面刷新</p>
-<p>列表页数据通过store拿数据渲染，翻页，查找，刷新通过触发action然后从服务器拿到数据后，更新store,从而组件重新渲染</p>
-<p>store 模型<br>listItems:当前页id集合数组[id1,id2]<br>byId:{id1:{id:id1,name:xxx},id2:{id:id2,name:xxx}}<br>keyword:关键字string<br>page:number 页数<br>fetchListPending:bool是否正在加载数据<br>FetchListError:OBJECT数据加载出错<br>listNeedReload:bool是否需要重新加载（做判断条件，例如编辑之后，设为true,在列表页拿到判断为true则重新获取列表数据）</p>
-<p>URL设计<br>将页数和关键字当做路由参数传递在componentDidupdated中获取参数判断是否重新获取数据</p>
-<h2 id="缓存更新，加载状态，错误处理"><a href="#缓存更新，加载状态，错误处理" class="headerlink" title="缓存更新，加载状态，错误处理"></a>缓存更新，加载状态，错误处理</h2><p>通过store模型中的相关数据进行判断展示</p>
-<h1 id="页面数据需要来源多个请求的处理"><a href="#页面数据需要来源多个请求的处理" class="headerlink" title="页面数据需要来源多个请求的处理"></a>页面数据需要来源多个请求的处理</h1><p>页面数据来自多个请求<br>1.请求之间无依赖关系，可以并发进行<br>2.请求有依赖，需要依次进行 （promise）<br>3.请求完成之前，页面显示 Loading 状态<br>loading数据状态由当前数据推导确定</p>
-<h1 id="内容页的加载和缓存"><a href="#内容页的加载和缓存" class="headerlink" title="内容页的加载和缓存"></a>内容页的加载和缓存</h1><p>内容页和列表页的数据关系<br>1.简单业务：列表页数据包含内容页的数据 （注意页面刷新情况数据的获取）<br>2.复杂业务：内容页数据需要额外获取 （每次进来都重新获取）<br>3.内容页数据的缓存（将数据放在store中，在store中拿数据）</p>
-<h1 id="基于React-Router-实现分步操作"><a href="#基于React-Router-实现分步操作" class="headerlink" title="基于React Router 实现分步操作"></a>基于React Router 实现分步操作</h1><p>向导页面需要考虑的技术要点<br>1.使用 URL进行导航的好处 （可以直接刷新其中一个步骤）</p>
-<ol>
-<li>表单内容存放的位置 </li>
-<li>页面状态如何切换</li>
-</ol>
-<p>将表单元素放在一个统一的form中，通过路由判断第几步，进而显示不同的表单元素，需要注意的是，切换下一步时，当前组件消失，配置的数据也会消失，需要将当前所填数据进行保存，以便在返回上一步时有数据</p>
-<h1 id="集成第三方-JS-库的技术要点"><a href="#集成第三方-JS-库的技术要点" class="headerlink" title="集成第三方 JS 库的技术要点"></a>集成第三方 JS 库的技术要点</h1><p>1.使用 ref 获取原生 DOM 节点引用<br>2.手动将组件状态更新到 DOM 节点<br>(对于数据驱动UI展示的情况,第一次渲染和之后更新需要手动操作DOM的过程，将数据注入过程隔离出来，单独处理成一个函数，再当react 部分操作导致需要重新渲染时，再调用，将react状态映射到第三方DOM中)<br>3.组件销毁时移除原生节点 DOM 事件</p>
-<h1 id="基于路由实现菜单导航"><a href="#基于路由实现菜单导航" class="headerlink" title="基于路由实现菜单导航"></a>基于路由实现菜单导航</h1><p>1.菜单导航只是改变 URL 状态<br>2.根据当前 URL 显示菜单的当前状态(使用navLink标签实现，注意react-router和redux一起使用时，url发生变化，组建要重新render时，必须要让组件绑定到router的store上，即让react-router也一起渲染)</p>
-<h1 id="如何避免应用出现性能问题"><a href="#如何避免应用出现性能问题" class="headerlink" title="如何避免应用出现性能问题"></a>如何避免应用出现性能问题</h1><p>1.了解常见的性能问题场景 （键盘输入，鼠标移动是否卡顿）<br>2.时刻注意代码的潜在性能问题 （何时拆分组件，有优化空间；能否高效更新，组件拆分是否够细，足够细的话，组件越接近纯函数，就越可能减少参与到diff操作的可能性，从而提高渲染速度）<br>3.注重可重构的代码 （代码耦合性低，几乎不依赖外界，也不被外界依赖，对于有重构可能性的代码保留重构空间，当其他优先级较高的性能问题解决后，再进行代码重构）<br>4.了解如何使用工具定位性能问题</p>
-<h1 id="网络性能优化：自动化按需加载"><a href="#网络性能优化：自动化按需加载" class="headerlink" title="网络性能优化：自动化按需加载"></a>网络性能优化：自动化按需加载</h1><p>1.什么是按需加载 (切换页面时才加载相应页面，而不是一开始就将所有页面加载进来)<br>2.使用 Webpack 的 import API<br>3.使用 react-loadable 库实现 React 异步加载<br>利用分包加载,在配置路由时实现,在总路由中删除，防止打包到总包中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">import loadable from &apos;react-loadable&apos;</div><div class="line">const listPage = loadable(&#123;</div><div class="line">    loader:()=&gt;import (&apos;./listPage&apos;),</div><div class="line">    loading:()=&gt;&lt;div&gt;loading...&lt;/div&gt;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
-<p>listPage页面在加载该页时，会自动加载listPage的独立打包文件</p>
-<p>使用 reselect 避免重复计算<br>reselect 可以创建自动缓存的数据处理流程，通过保存计算结果，避免重复计算</p>
-<h1 id="异步渲染的两个部分"><a href="#异步渲染的两个部分" class="headerlink" title="异步渲染的两个部分"></a>异步渲染的两个部分</h1><p>时间分片<br>DOM操作的优先级低于浏览器原生行为，例如键盘和鼠标输入，从而保证操作的流畅。<br>（setstate导致的重新render等页面行为（滚动，输入）结束后再执行）<br>1.虚拟 DOM 的 diff 操作可以分片进行 （对操作进行序列化，然后进行合并或者优先级处理）<br>2.React 新 API: unstatble_deferredUpdates（低级别的setstate）<br>3.Chrome 新 API:requestIdleCallback(浏览器级别的api,告诉代码内存空闲（不再滚动或敲击键盘），可以进行一些之前优先级低的UI更新操作，时间分片基础)</p>
-<p>渲染挂起<br>虚拟DOM节点可以等待某个异步操作的完成,并指定timeout后,才完成真正的渲染<br>（可以不再注意什么时候显示loading状态，取消loading状态，虚拟dom节点可以自己等待异步操作的完成，只要虚拟dom节点返回一个promise,渲染引擎就会等promise结束后再去render）</p>
-<ol>
-<li><p>新内置组件：Timeout </p>
-</li>
-<li><p>unstatble_deferUpdate</p>
-</li>
-</ol>
-<h1 id="借助工具发现性能问题"><a href="#借助工具发现性能问题" class="headerlink" title="借助工具发现性能问题"></a>借助工具发现性能问题</h1><p>1.使用 React DevTool 找到多余渲染<br>chrome 插件，可查看react应用的状态，帮助找到不必要的render，从而进行调优—&gt; [highlight update]<br>2.使用 Chrome DevTool 定位性能瓶颈<br>什么样的组件花了多长时间做了什么样的渲染—&gt;performance</p>
+            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>项目中遇到一个需求是需要渲染一个列表，然后点击每一行展开按钮，显示该行一个详情<br><img src="/image/vuedata1.png" alt="vuedata1"><br>初步实现想法是在拿到列表数据时，给每一项添加属性show,初始值为false,点击按钮将show改为!show，从而控制详情显示隐藏<br>但发现不生效，详情没有按照预期显示<br>探究其原因是因为数据的改变没有引起界面的重新渲染<br>那么数据是怎么引发界面重新渲染的呢？什么样的数据改变才会引起界面重新渲染呢？</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>VUE 在进行数据双向绑定时，主要用到了两个思想：数据劫持和订阅发布模式</p>
+<h2 id="数据劫持"><a href="#数据劫持" class="headerlink" title="数据劫持"></a>数据劫持</h2><p>vue 在拿到export default 的data中声明的变量后，会进行跟踪处理，<br>这个跟踪处理主要就是将变量的赋值和读取,参照对象属性的setter和getter进行使用Object.defineProperty重写成响应对象<br>即读取一个变量的数据时会通过调用getter方法return获取值，<br>重新赋值时会通过setter方法判断新值旧值是否相同，不同则进行更新，从而调用更新函数，进行视图更新</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * Define a reactive property on an Object.</div><div class="line"> */</div><div class="line">export function defineReactive (</div><div class="line">  obj: Object,</div><div class="line">  key: string,</div><div class="line">  val: any,</div><div class="line">  customSetter?: ?Function,</div><div class="line">  shallow?: boolean</div><div class="line">) &#123;</div><div class="line">  const dep = new Dep()</div><div class="line"></div><div class="line">  const property = Object.getOwnPropertyDescriptor(obj, key)</div><div class="line">  if (property &amp;&amp; property.configurable === false) &#123;</div><div class="line">    return</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  // cater for pre-defined getter/setters</div><div class="line">  const getter = property &amp;&amp; property.get</div><div class="line">  if (!getter &amp;&amp; arguments.length === 2) &#123;</div><div class="line">    val = obj[key]</div><div class="line">  &#125;</div><div class="line">  const setter = property &amp;&amp; property.set</div><div class="line"></div><div class="line">  let childOb = !shallow &amp;&amp; observe(val)</div><div class="line">  Object.defineProperty(obj, key, &#123;</div><div class="line">    enumerable: true,</div><div class="line">    configurable: true,</div><div class="line">    /******/</div><div class="line">    get: function reactiveGetter () &#123;</div><div class="line">      const value = getter ? getter.call(obj) : val</div><div class="line">      if (Dep.target) &#123; </div><div class="line">        dep.depend()//获取这个值时，即将获取的这个地方当作订阅者放到订阅者列表中</div><div class="line">        if (childOb) &#123;</div><div class="line">          childOb.dep.depend()</div><div class="line">          if (Array.isArray(value)) &#123;</div><div class="line">            dependArray(value)</div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">      return value</div><div class="line">    &#125;,</div><div class="line">    /******/</div><div class="line">    /******/</div><div class="line">    set: function reactiveSetter (newVal) &#123;</div><div class="line">      const value = getter ? getter.call(obj) : val</div><div class="line">      /* eslint-disable no-self-compare */</div><div class="line">      if (newVal === value || (newVal !== newVal &amp;&amp; value !== value)) &#123; //与旧值相同，直接return 不更新</div><div class="line">        return</div><div class="line">      &#125;</div><div class="line">      /* eslint-enable no-self-compare */</div><div class="line">      if (process.env.NODE_ENV !== &apos;production&apos; &amp;&amp; customSetter) &#123;</div><div class="line">        customSetter()</div><div class="line">      &#125;</div><div class="line">      if (setter) &#123;</div><div class="line">        setter.call(obj, newVal)</div><div class="line">      &#125; else &#123;</div><div class="line">        val = newVal //与旧值不同，重新赋值</div><div class="line">      &#125;</div><div class="line">      childOb = !shallow &amp;&amp; observe(newVal)</div><div class="line">      dep.notify() //通知更新</div><div class="line">    &#125;</div><div class="line">    /******/</div><div class="line">  &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="订阅发布模式"><a href="#订阅发布模式" class="headerlink" title="订阅发布模式"></a>订阅发布模式</h2><p>进行视图更新时,更新函数需要知道视图哪些地方需要更新，以及由于该变量发生变化可能引起的其他变量变化或者触发一定的功能函数，<br>所以我们需要对数据的变化进行监听，并告知用到变量的地方（即订阅者），变量发生了变化，需要执行依据此变化要做的事<br>因为订阅者很可能不止一个（即一个变量被多处用到,包括js和html模板）,所以我们需要一个地方存放订阅者，并批量通知订阅者进行更新</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line">mport type Watcher from &apos;./watcher&apos; //或初始化watcher</div><div class="line">import &#123; remove &#125; from &apos;../util/index&apos;</div><div class="line"></div><div class="line">let uid = 0</div><div class="line"></div><div class="line">/**</div><div class="line"> * A dep is an observable that can have multiple</div><div class="line"> * directives subscribing to it.</div><div class="line"> */</div><div class="line">export default class Dep &#123;</div><div class="line">  static target: ?Watcher;</div><div class="line">  id: number;</div><div class="line">  subs: Array&lt;Watcher&gt;;</div><div class="line"></div><div class="line">  constructor () &#123;</div><div class="line">    this.id = uid++</div><div class="line">    this.subs = [] //订阅者集合</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  addSub (sub: Watcher) &#123;  //添加订阅者集合</div><div class="line">    this.subs.push(sub)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  removeSub (sub: Watcher) &#123;</div><div class="line">    remove(this.subs, sub)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  depend () &#123;</div><div class="line">    if (Dep.target) &#123;</div><div class="line">      Dep.target.addDep(this)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  notify () &#123; //批量更新</div><div class="line">    // stabilize the subscriber list first</div><div class="line">    const subs = this.subs.slice()</div><div class="line">    for (let i = 0, l = subs.length; i &lt; l; i++) &#123;</div><div class="line">      subs[i].update()</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// the current target watcher being evaluated.</div><div class="line">// this is globally unique because there could be only one</div><div class="line">// watcher being evaluated at any time.</div><div class="line">Dep.target = null</div><div class="line">const targetStack = []</div><div class="line"></div><div class="line">export function pushTarget (_target: ?Watcher) &#123;</div><div class="line">  if (Dep.target) targetStack.push(Dep.target)</div><div class="line">  Dep.target = _target  //将watcher缓存到Dep.target</div><div class="line">&#125;</div><div class="line"></div><div class="line">export function popTarget () &#123;</div><div class="line">  Dep.target = targetStack.pop()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>定义订阅者，订阅者需要自己将自己放到变量的订阅者列表中，采用的方法是将自己暂存在Dep.target上，<br>在初始化的时候调用一下变量，利用变量getter方法，将自己添加到订阅者列表，然后将Dep.target至空，取消暂存<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div></pre></td><td class="code"><pre><div class="line">export default class Watcher &#123;</div><div class="line">  vm: Component;</div><div class="line">  expression: string;</div><div class="line">  cb: Function;</div><div class="line">  id: number;</div><div class="line">  deep: boolean;</div><div class="line">  user: boolean;</div><div class="line">  lazy: boolean;</div><div class="line">  sync: boolean;</div><div class="line">  dirty: boolean;</div><div class="line">  active: boolean;</div><div class="line">  deps: Array&lt;Dep&gt;;</div><div class="line">  newDeps: Array&lt;Dep&gt;;</div><div class="line">  depIds: SimpleSet;</div><div class="line">  newDepIds: SimpleSet;</div><div class="line">  getter: Function;</div><div class="line">  value: any;</div><div class="line"></div><div class="line">  constructor (</div><div class="line">    vm: Component,</div><div class="line">    expOrFn: string | Function,</div><div class="line">    cb: Function,</div><div class="line">    options?: ?Object,</div><div class="line">    isRenderWatcher?: boolean</div><div class="line">  ) &#123;</div><div class="line">    this.value = this.lazy</div><div class="line">      ? undefined</div><div class="line">      : this.get() //将watcher 自己装进变量的订阅者列表</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  /**</div><div class="line">   * Evaluate the getter, and re-collect dependencies.</div><div class="line">   */</div><div class="line">  get () &#123;</div><div class="line">    pushTarget(this) //暂存到Dep.target</div><div class="line">    let value</div><div class="line">    const vm = this.vm</div><div class="line">    try &#123;</div><div class="line">      value = this.getter.call(vm, vm) //调用变量的getter函数，将自己装到订阅者列表</div><div class="line">    &#125; catch (e) &#123;</div><div class="line">      if (this.user) &#123;</div><div class="line">        handleError(e, vm, `getter for watcher &quot;$&#123;this.expression&#125;&quot;`)</div><div class="line">      &#125; else &#123;</div><div class="line">        throw e</div><div class="line">      &#125;</div><div class="line">    &#125; finally &#123;</div><div class="line">      // &quot;touch&quot; every property so they are all tracked as</div><div class="line">      // dependencies for deep watching</div><div class="line">      if (this.deep) &#123;</div><div class="line">        traverse(value)</div><div class="line">      &#125;</div><div class="line">      popTarget()//取消watcher暂存，释放该watcher的绑定</div><div class="line">      this.cleanupDeps()</div><div class="line">    &#125;</div><div class="line">    return value</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  </div><div class="line">  /**</div><div class="line">   * Subscriber interface.</div><div class="line">   * Will be called when a dependency changes.</div><div class="line">   */</div><div class="line">  update () &#123; //dep批量更新调用</div><div class="line">    /* istanbul ignore else */</div><div class="line">    if (this.lazy) &#123;</div><div class="line">      this.dirty = true</div><div class="line">    &#125; else if (this.sync) &#123;</div><div class="line">      this.run()</div><div class="line">    &#125; else &#123;</div><div class="line">      queueWatcher(this)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  /**</div><div class="line">   * Scheduler job interface.</div><div class="line">   * Will be called by the scheduler.</div><div class="line">   */</div><div class="line">  run () &#123;</div><div class="line">    if (this.active) &#123;</div><div class="line">      const value = this.get()</div><div class="line">      if (</div><div class="line">        value !== this.value ||</div><div class="line">        // Deep watchers and watchers on Object/Arrays should fire even</div><div class="line">        // when the value is the same, because the value may</div><div class="line">        // have mutated.</div><div class="line">        isObject(value) ||</div><div class="line">        this.deep</div><div class="line">      ) &#123;</div><div class="line">        // set new value</div><div class="line">        const oldValue = this.value</div><div class="line">        this.value = value</div><div class="line">        if (this.user) &#123;</div><div class="line">          try &#123;</div><div class="line">            this.cb.call(this.vm, value, oldValue) //执行更新回调</div><div class="line">          &#125; catch (e) &#123;</div><div class="line">            handleError(e, this.vm, `callback for watcher &quot;$&#123;this.expression&#125;&quot;`)</div><div class="line">          &#125;</div><div class="line">        &#125; else &#123;</div><div class="line">          this.cb.call(this.vm, value, oldValue) //执行更新回调</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="解析模板"><a href="#解析模板" class="headerlink" title="解析模板"></a>解析模板</h2><p>在解析模板时遇到指令或者&#123;&#123;&#125;&#125;时，将变量值替换到dom节点中，然后生成一个订阅者(根据参数将自己添加到对应绑定变量的订阅者列表中)，将自己的更新订阅到变量的变化中，从而在变量变化时，更新视图，<br>每解析到一个地方用到同一个变量，就生成一个watcher,从而反应出需要使用订阅者列表进行批量更新</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>综上，当变量在声明时会被劫持转成可响应对象，变量的读取更新，通过get和set完成，<br>在get时添加自己的订阅者，在set时告诉订阅者进行批量更新<br>订阅者管家由一个Dep对象负责，进行添加，触发更新等工作<br>订阅者对象需要表明自己是谁，能够将自己添加到订阅者列表，根据变量变化执行更新回调<br>页面上的变量会在编译时生成订阅器，将自己订阅到变量的订阅列表中，从而在变量变化时得到更新</p>
+<p><img src="/image/vuedata2.png" alt="vuedata2"></p>
+<h1 id="回归问题"><a href="#回归问题" class="headerlink" title="回归问题"></a>回归问题</h1><p>vue 在进行数据劫持时，会对对象进行递归处理，直到递归到的属性值是一个基本变量，即监听到基本变量变化，值监听<br>所以变量本身值是一个基本变量，则直接进行响应对象转化<br>但会根据变量是否是数组进行特殊处理，只是对数组每一项进行监听，除非值又是一个数组才会递归</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div></pre></td><td class="code"><pre><div class="line">export class Observer &#123;</div><div class="line">  value: any;</div><div class="line">  dep: Dep;</div><div class="line">  vmCount: number; // number of vms that has this object as root $data</div><div class="line"></div><div class="line">  constructor (value: any) &#123;</div><div class="line">    this.value = value</div><div class="line">    this.dep = new Dep()</div><div class="line">    this.vmCount = 0</div><div class="line">    def(value, &apos;__ob__&apos;, this)</div><div class="line">    if (Array.isArray(value)) &#123; //数组</div><div class="line">      const augment = hasProto</div><div class="line">        ? protoAugment</div><div class="line">        : copyAugment</div><div class="line">      augment(value, arrayMethods, arrayKeys)</div><div class="line">      this.observeArray(value)</div><div class="line">    &#125; else &#123;</div><div class="line">      this.walk(value)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  /**</div><div class="line">   * Walk through each property and convert them into</div><div class="line">   * getter/setters. This method should only be called when</div><div class="line">   * value type is Object.</div><div class="line">   */</div><div class="line">  walk (obj: Object) &#123;</div><div class="line">    const keys = Object.keys(obj)</div><div class="line">    for (let i = 0; i &lt; keys.length; i++) &#123;</div><div class="line">      defineReactive(obj, keys[i])</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  /**</div><div class="line">   * Observe a list of Array items.</div><div class="line">   */</div><div class="line">  observeArray (items: Array&lt;any&gt;) &#123;</div><div class="line">    for (let i = 0, l = items.length; i &lt; l; i++) &#123;</div><div class="line">      observe(items[i]) //判断对数组值进行判断</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">export function observe (value: any, asRootData: ?boolean): Observer | void &#123;</div><div class="line">  if (!isObject(value) || value instanceof VNode) &#123;</div><div class="line">    return</div><div class="line">  &#125;</div><div class="line">  let ob: Observer | void</div><div class="line">  if (hasOwn(value, &apos;__ob__&apos;) &amp;&amp; value.__ob__ instanceof Observer) &#123;</div><div class="line">    ob = value.__ob__</div><div class="line">  &#125; else if (</div><div class="line">    shouldObserve &amp;&amp;</div><div class="line">    !isServerRendering() &amp;&amp;</div><div class="line">    (Array.isArray(value) || isPlainObject(value)) &amp;&amp; //值又是数组</div><div class="line">    Object.isExtensible(value) &amp;&amp;</div><div class="line">    !value._isVue</div><div class="line">  ) &#123;</div><div class="line">    ob = new Observer(value) //递归转化</div><div class="line">  &#125;</div><div class="line">  if (asRootData &amp;&amp; ob) &#123;</div><div class="line">    ob.vmCount++</div><div class="line">  &#125;</div><div class="line">  return ob</div></pre></td></tr></table></figure>
+<p>带来的缺陷就是<br>对于对象来说，初始化以后，对象新增的属性不会被纳入监听范围,属性的删除也不能被监听到<br>对于数组来说，如果是一个对象数组，则数组里每一个对象里的属性值的增删改均不会被监听到</p>
+<p>解决办法<br>对于数组来说，通过使用代码规定的<br>  ‘push’,<br>  ‘pop’,<br>  ‘shift’,<br>  ‘unshift’,<br>  ‘splice’,<br>  ‘sort’,<br>  ‘reverse’<br>几种方法可触发更新，实现对数组的修改，<br>例如，这里的问题，使用this.data.splice(index,1,obj),将原来的数组项替换掉，<br>从而达到更新</p>
+<p>对于对象来说,可以使用如下两中方法进行更新<br>this.$set(obj,keyStr,val)//新增属性<br>obj = Object.assign({},obj,newItemObj) //删除/更改</p>
+<p>在本问题中，目前的解决办法是引入新变量存放点击的行数，根据该变量值是否等于当前行，<br>更改class值，从而控制展开关闭</p>
+<p><a href="https://www.cnblogs.com/libin-1/p/6893712.html" target="_blank" rel="external">参照资料</a><br><a href="https://github.com/vuejs/vue/tree/dev/src/core/observer" target="_blank" rel="external">源码链接</a></p>
 
           
         
@@ -409,7 +392,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/course/rekit.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/vue/VeeValidate&select.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -434,8 +417,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/react/course/rekit.html" itemprop="url">
-                  Rekit
+                <a class="post-title-link" href="/post/vue/VeeValidate&select.html" itemprop="url">
+                  结合VeeValidate实现对select校验
                 </a>
               
             
@@ -449,8 +432,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-04T21:12:37+08:00">
-                2018-12-04
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-22T12:32:15+08:00">
+                2018-12-22
               </time>
             
 
@@ -487,39 +470,27 @@
       
         
           
-            <p>背景<br> 一个独立功能通常需要多个文件组成 （组件，reducer,action,路由等文件）<br> 代码模板很复杂 （reducer,action需要代码模板，实际上填写的逻辑只是一小部分）<br> 重构极为困难<br> （需要改动的地方很多）<br> 项目复杂后很难理解和维护（无法直观的看到他们之间的关系）</p>
-<h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>Rekit：更好的代码导航</p>
-<ol>
-<li>语义化的组织源代码文件 </li>
-<li>使用子 Tab来展示项目元素的各个部分 </li>
-<li>直观的显示和导航某个功能的所有依赖</li>
-</ol>
-<p>Rekit： 一键生成项目元素（它是一个IDE）</p>
-<ol>
-<li>直观的 UI 用于生成组件，action,reducer 等 </li>
-<li>模板代码遵循最佳实践（只需填入具体逻辑）</li>
-<li>支持命令行方式创建项目元素</li>
-</ol>
-<p>Rekit： 重构非常容易</p>
-<ol>
-<li>右键菜单重命名或者删除某个项目元素 </li>
-<li>所有相关代码都会一次性重构从而保证一致性 </li>
-<li>详细的 log信息显示重构的完整修改</li>
-</ol>
-<p>Rekit： 可视化的项目架构</p>
-<ol>
-<li>项目总体架构的可视化图表 </li>
-<li>项目依赖关系的图表</li>
-</ol>
-<p>Rekit 是如何工作的？</p>
-<ol>
-<li>定义了基于feature 的可扩展文件夹结构（文件夹结构有一定规则，可以进行解析）</li>
-<li>基于最佳实践生成代码和管理项目元素 </li>
-<li>提供工具和 IDE 确保代码和文件夹结构遵循最佳实践<br>（减少工作量）</li>
-</ol>
-<h1 id="遵循最佳实践"><a href="#遵循最佳实践" class="headerlink" title="遵循最佳实践"></a>遵循最佳实践</h1><p>1.以 feature 方式组织代码 （功能如果是必须的就放在已有模块底层实现，如果是原有功能增强的实现，则新拆分成功能模块）<br>2.拆分组件,action 和 reducer<br>3.拆分路由配置</p>
-<p>通过代码自动生成保持一致性<br>1.文件夹结构一致性<br>2.文件名一致性<br>3.变量名一致性<br>4.代码逻辑的一致性</p>
-<h1 id="使用-React-Router-管理路由授权"><a href="#使用-React-Router-管理路由授权" class="headerlink" title="使用 React Router 管理路由授权"></a>使用 React Router 管理路由授权</h1><p>1.实现基础:React Router 的动态路由机制 （<br> 不采用各个页面判断是否登录再redirect的方式跳转，路由配置（添加属性，那些可以在未登录下访问，或者哪些在未登录下不能访问）时就去动态监测当前用户是否登录，如果登录则全部路由生效；反之某些路由配置就不生效===&gt;不生效处理，在解析router JSON数据时根据store中登录状态和路由配置的属性判断,未登录则跳转403，其子路由清空<br>）<br>2.区分受保护路由和公开路由<br>3.访问未授权路由时重定向到登录页面 </p>
+            <p>1.对校验项进行手动触发校验</p>
+<p>配置 VeeValidate 时，触发事件event设置为‘blur’,而表单在点击提交按钮时，没有对整个表单进行校验，用户如果点开配置表单，不做任何操作就提交的话，会导致页面上不会有任何反应，因此调用 VeeValidate手动触发函数this.$validator.validate()，进行整体校验</p>
+<p>this.$validator.validate()会返回promise, resolve的回调函数的参数result 为false时校验不通过，true时校验通过</p>
+<p>2.添加select 验证</p>
+<p>因为 VeeValidate 只对 input 进行，所以当表单配置项以select呈现时，就算在标签上添加v-validate，也不会对其进行校验，反而还会导致之前配置的blur触发事件失效，所以手动添加对select的校验</p>
+<p>之前调用this.$validator.validate()进行手动触发校验input ,返回的是promise,因此在校验完input之后先不管input的校验结果，直接对select 进行校验</p>
+<p>select 出现在配置项中有两种情况，一种是通过配置表单时，配置过来的，另外一种是通过slot套嵌进来的，slot也属于配置对象config里面的一种type</p>
+<p>之所以会出现需要通过slot 来添加select的情况,是因为这类的select一般需要绑定change事件,与其他配置项形成关联关系，如果以配置项的方式给select添加绑定change事件,会导致infinity loop错误，</p>
+<p>导致出现这个错误的原因是渲染配置项的时候用的是一个v-for，一项一项把配置的input,select根据type渲染出来,这时，如果给select绑上change事件,而且change事件的内容是对v-for的对象的属性进行修改vue的机制就会认为触发了无限循环，开始死循环,因此不为配置的项添加change事件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">父组件配置对象</div><div class="line">modelConfig: &#123;</div><div class="line">        title: &apos;授权&apos;,</div><div class="line">        modalId: &apos;modelConfig&apos;,</div><div class="line">        isAdd: true,</div><div class="line">        config: [</div><div class="line">          &#123;label: &apos;策略&apos;, value: &apos;v_policy_selected&apos;, option: &apos;v_policy_option&apos;, placeholder: &apos;&apos;, disabled: false, type: &apos;select&apos;,v_validate: &apos;required:true&apos;,isError: false&#125;,</div><div class="line">          &#123;name: &apos;selectAz&apos;, type: &apos;slot&apos;, v_validate:[</div><div class="line">            &#123;label: &apos;租户&apos;, value: &apos;v_tenant_selected&apos;, isError: &apos;v_tenant_isError&apos;, type: &apos;select&apos;&#125;,</div><div class="line">            &#123;label: &apos;项目&apos;, value: &apos;v_project_selected&apos;, isError: &apos;v_project_isError&apos;, type: &apos;select&apos;&#125;</div><div class="line">          ]&#125;],</div><div class="line">        addRow: &#123; // 其他配置项绑定的数据</div><div class="line">          </div><div class="line">        &#125;,</div><div class="line">        v_select_configs: &#123;</div><div class="line">          v_policy_selected: null, // 选中数据</div><div class="line">          v_policy_option: [], // 选择数据</div><div class="line">          v_project_selected: null, // 选中数据</div><div class="line">          v_project_option: [], // 选择数据</div><div class="line">          v_project_isError: false,</div><div class="line">          v_tenant_selected: null, // 选中数据</div><div class="line">          v_tenant_option: [], // 选择数据</div><div class="line">          v_tenant_isError: false</div><div class="line">        &#125;,</div><div class="line">        saveFunc: &apos;authSave&apos;</div><div class="line">      &#125;</div></pre></td></tr></table></figure></p>
+<p>主要验证逻辑如下：</p>
+<p>校验之前设置flag = true,标志select的校验结果，最后用于与input校验结果result共同决定校验结果</p>
+<p>先判断该配置项是否显示在表单中，因为有时新增和编辑的配置项不同，如果不在就不对该项进行校验，continue</p>
+<p>对通过配置项展示的select，进行校验,如配置了校验规则v_validate，而且值为未选状态,则显示校验错误提示,同时设置flag = false,否则，不显示校验错误提示</p>
+<p>这种错误提示同input,其显示通过配置项对象里面的一个属性决定，因此效果就是，显示提示该属性就设为true,否则设为false<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;label v-show=&quot;errors.has(item.value) &amp;&amp; isHide(item.hide)&quot; class=&quot;col-md-7 help is-danger&quot;&gt;&#123;&#123;item.label&#125;&#125; &#123;&#123;errors.first(item.value)&#125;&#125;&lt;/label&gt;</div><div class="line">&lt;label v-if=&quot;item.type === &apos;select&apos; &amp;&amp; item.isError&quot; class=&quot;col-md-7 help is-danger&quot;&gt;&#123;&#123;item.label&#125;&#125; 不能为空&lt;/label&gt;</div></pre></td></tr></table></figure></p>
+<p>对通过slot展示的select, 进行校验, 所有需要校验的配置放在v_validate属性中,遍历v_validate，判断select的值是否为未选，未选则显示提示，已选则不显示</p>
+<p>错误提示放在slot的代码中,每一项配置自己的错误提示label,label的显示通过v_validate里面每一项配置的对应的错误提示属性的绑定值决定<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;div slot=&quot;selectAz&quot;&gt;</div><div class="line">&lt;v-select</div><div class="line">          v-model=&quot;modelConfig.v_select_configs.v_region_selected&quot;</div><div class="line">          label=&quot;name&quot;</div><div class="line">          class=&quot;col-md-7 v-selectss &quot;</div><div class="line">          :on-change=&quot;changeRegion&quot;</div><div class="line">          :options=&quot;modelConfig.v_select_configs.v_region_option&quot;&gt;</div><div class="line">&lt;/v-select&gt;</div><div class="line">&lt;label class=&quot;required-tip&quot;&gt;*&lt;/label&gt;</div><div class="line">&lt;label v-if=&quot;modelConfig.v_select_configs.v_region_isError&quot; class=&quot;col-md-7 help is-danger&quot;&gt;xxx 不能为空&lt;/label&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">具体代码</div><div class="line"> formValidate () &#123;</div><div class="line">        return this.$validator.validate().then(result =&gt; &#123;</div><div class="line">          //result 为false插件验证input没有填写完整,true为验证填写完整</div><div class="line">          /** 验证 select是否进行了选填 实例可参照 [manage][authorizations]user-authorized.vue **/</div><div class="line">          let flag = true</div><div class="line">          for(let i=0; i&lt; this.modelConfig.config.length; i++)&#123;</div><div class="line">            if(!this.isHide (this.modelConfig.config[i].hide))&#123;</div><div class="line">              continue</div><div class="line">            &#125;</div><div class="line">            /* ****** 配置里面的select ***** */</div><div class="line">            //配置规则为：在配置type:selcet时，如需校验则添加v_validate: &apos;required:true&apos;,isError: false==&gt;控制错误提示label显示</div><div class="line">            //如果无需校验，则不添加</div><div class="line">            if(this.modelConfig.config[i].type === &apos;select&apos; &amp;&amp; this.modelConfig.config[i].v_validate) &#123; </div><div class="line">              let obj = this.modelConfig.config[i]</div><div class="line">              if(!this.modelConfig.v_select_configs[obj.value])&#123;</div><div class="line">                this.modelConfig.config[i].isError = true</div><div class="line">                flag = false</div><div class="line">              &#125;else&#123;</div><div class="line">                this.modelConfig.config[i].isError = false</div><div class="line">              &#125;</div><div class="line">            &#125;</div><div class="line">            /* ******  slot里面的select  ****** */</div><div class="line">            //配置规则为：在配置type:slot 时，添加 v_validate:[],数组里面存放需要校验的select的配置信息</div><div class="line">            //value:绑定值,isError:错误标签显示绑定值，type:select  ===&gt; 如果以后再校验其他类型，再增加判断逻辑</div><div class="line">            //&#123;name:&apos;xxxx&apos;,type:&apos;slot&apos;,v_validate:[&#123;value: &apos;v_xxx_selected&apos;, isError: &apos;v_xxx_isError&apos;, type: &apos;select&apos;&#125;]&#125;</div><div class="line">            //同时在this.modelConfig.v_select_configs里面定义v_xxx_isError：false</div><div class="line">            //slot里面错误提示label显示用 v-if=&quot;modelConfig.v_select_configs.v_xxx_isError&quot; 搭配其他具体规则进行组合</div><div class="line">            if(this.modelConfig.config[i].type === &apos;slot&apos;) &#123; </div><div class="line">              let arr = this.modelConfig.config[i].v_validate ? this.modelConfig.config[i].v_validate :[]</div><div class="line">              for(let j =0;j&lt;arr.length;j++)&#123;</div><div class="line">                let key = arr[j].isError</div><div class="line">                let value = arr[j].value</div><div class="line">                if(arr[j].type === &apos;select&apos; &amp;&amp; !this.modelConfig.v_select_configs[value]) &#123;</div><div class="line">                  this.modelConfig.v_select_configs[key] = true</div><div class="line">                  flag = false</div><div class="line">                &#125;else&#123;</div><div class="line">                  this.modelConfig.v_select_configs[key] = false</div><div class="line">                &#125;</div><div class="line">              &#125;</div><div class="line">            &#125;</div><div class="line">          &#125;</div><div class="line">          return result &amp;&amp; flag</div><div class="line">        &#125;)</div><div class="line">      &#125;,</div></pre></td></tr></table></figure>
+<p>3.勾选选项后错误消失</p>
+<p> 在公共组件里面为prop添加watch方法，当对象属性发生变化时就检查select是否有值了，有的话，就将提示隐藏掉<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">data () &#123;</div><div class="line">     return &#123;</div><div class="line">       configCopy:this.modelConfig,</div><div class="line">       FLAG:false</div><div class="line">     &#125;</div><div class="line">   &#125;,</div><div class="line">props: [&apos;modelConfig&apos;],</div><div class="line">watch:&#123;</div><div class="line">     configCopy: &#123;</div><div class="line">       handler()&#123; </div><div class="line">         //select选择完将提示隐藏，如果日后保留&apos;X&apos;删除功能，如需要，再增加显示处理逻辑</div><div class="line">         for(let key in this.modelConfig.v_select_configs) &#123; //slot select</div><div class="line">           if(key.endsWith(&apos;isError&apos;))&#123;</div><div class="line">             let prefix = key.slice(0,-7)</div><div class="line">             if(this.modelConfig.v_select_configs[key] &amp;&amp; this.modelConfig.v_select_configs[prefix+&apos;selected&apos;])&#123;</div><div class="line">               this.modelConfig.v_select_configs[key] = false</div><div class="line">             &#125;</div><div class="line">           &#125;</div><div class="line">         &#125;</div><div class="line">         for(let i=0; i&lt; this.modelConfig.config.length; i++)&#123; //config select</div><div class="line">           if(this.modelConfig.config[i].type === &apos;select&apos; &amp;&amp; this.modelConfig.config[i].v_validate) &#123; </div><div class="line">             let obj = this.modelConfig.config[i]</div><div class="line">             if(this.modelConfig.v_select_configs[obj.value])&#123;</div><div class="line">               this.modelConfig.config[i].isError = false</div><div class="line">             &#125;</div><div class="line">           &#125;</div><div class="line">         &#125;</div><div class="line">       &#125;,</div><div class="line">       deep:true</div><div class="line">     &#125;</div><div class="line">   &#125;,</div></pre></td></tr></table></figure></p>
+<p>4.关闭配置页面的清空</p>
+<p>  检查配置项对象里面所有的select配置项，将其负责错误提示显示的项设置为false<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">// 清除表单selected</div><div class="line">     for(let i=0; i&lt;this.modelConfig.config.length; i++)&#123;</div><div class="line">       if(this.modelConfig.config[i].type === &apos;select&apos; &amp;&amp; this.modelConfig.config[i].v_validate) &#123;</div><div class="line">         this.modelConfig.config[i].isError = false</div><div class="line">       &#125;</div><div class="line">       if(this.modelConfig.config[i].type === &apos;slot&apos;) &#123; </div><div class="line">         let arr = this.modelConfig.config[i].v_validate ? this.modelConfig.config[i].v_validate :[]</div><div class="line">         for(let j =0;j&lt;arr.length;j++)&#123;</div><div class="line">           let key = arr[j].isError</div><div class="line">           let value = arr[j].value</div><div class="line">           if(arr[j].type === &apos;select&apos; &amp;&amp; !this.modelConfig.v_select_configs[value]) &#123;</div><div class="line">             this.modelConfig.v_select_configs[key] = false</div><div class="line">           &#125;</div><div class="line">         &#125;</div><div class="line">       &#125;</div><div class="line">     &#125;</div></pre></td></tr></table></figure></p>
 
           
         
@@ -558,7 +529,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/course/redux.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/vue/customcommander.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -583,8 +554,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/react/course/redux.html" itemprop="url">
-                  Redux
+                <a class="post-title-link" href="/post/vue/customcommander.html" itemprop="url">
+                  自定义VUE指令
                 </a>
               
             
@@ -598,8 +569,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-04T21:10:37+08:00">
-                2018-12-04
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-22T12:30:15+08:00">
+                2018-12-22
               </time>
             
 
@@ -636,33 +607,9 @@
       
         
           
-            <h1 id="为什么需要redux"><a href="#为什么需要redux" class="headerlink" title="为什么需要redux"></a>为什么需要redux</h1><p>原有组件间通信方式错综复杂，逐层传递，不明了，方便组件间通信<br>用store管理所有组件的状态</p>
-<h1 id="redux-特性"><a href="#redux-特性" class="headerlink" title="redux 特性"></a>redux 特性</h1><p>single source of truth：状态来源唯一；</p>
-<p>可预测性：state +action = new state</p>
-<p>纯函数更新Store：输出取决于输入，内部不会依赖任何除参数以外外部元素产生副作用</p>
-<p>store 三个函数</p>
-<p>getState()</p>
-<p>dispatch(action)</p>
-<p>subscribe(listener)</p>
-<p>action 描述行为的对象集合</p>
-<p>reducer 更新state的具体行为</p>
-<h1 id="几个工具函数"><a href="#几个工具函数" class="headerlink" title="几个工具函数"></a>几个工具函数</h1><p>combineReducers   把多个reducer 合成一个新的reducer，并定义每个reducer在store中的对应节点</p>
-<p>bindActionCreators  封装actionCreator和store.dispatch调用过程<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">function actionCreator()&#123;</div><div class="line">return &#123;</div><div class="line">type:&apos;addItem&apos;,</div><div class="line">text:&apos;......&apos;</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">store.dispatch(actionCreator())</div><div class="line">===&gt;</div><div class="line">actionCreator = bindActionCreators(actionCreator,store.dispatch)</div><div class="line">actionCreator()</div></pre></td></tr></table></figure></p>
-<p>connect  创建高阶组件，对store 特定属性进行监听和绑定，从而在这些属性变化时自动刷新组件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div></pre></td><td class="code"><pre><div class="line">import React from &quot;react&quot;;</div><div class="line">import &#123; bindActionCreators, createStore &#125; from &quot;redux&quot;;</div><div class="line">import &#123; Provider, connect &#125; from &quot;react-redux&quot;;</div><div class="line"></div><div class="line">// Store initial state</div><div class="line">const initialState = &#123; count: 0 &#125;;</div><div class="line"></div><div class="line">// reducer</div><div class="line">const counter = (state = initialState, action) =&gt; &#123;</div><div class="line">    switch (action.type) &#123;</div><div class="line">        case &quot;PLUS_ONE&quot;:</div><div class="line">            return &#123; count: state.count + 1 &#125;;</div><div class="line">        case &quot;MINUS_ONE&quot;:</div><div class="line">            return &#123; count: state.count - 1 &#125;;</div><div class="line">        case &quot;CUSTOM_COUNT&quot;:</div><div class="line">            return &#123; count: state.count + action.payload.count &#125;;</div><div class="line">        default:</div><div class="line">            break;</div><div class="line">    &#125;</div><div class="line">    return state;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">// Create store</div><div class="line">const store = createStore(counter);</div><div class="line"></div><div class="line">// Action creator</div><div class="line">function plusOne() &#123;</div><div class="line">// action</div><div class="line">return &#123; type: &quot;PLUS_ONE&quot; &#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line">function minusOne() &#123;</div><div class="line">return &#123; type: &quot;MINUS_ONE&quot; &#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line">export class Counter extends React.Component &#123;</div><div class="line">    render() &#123;</div><div class="line">        const &#123; count, plusOne, minusOne &#125; = this.props;//这三者通过connect关联store后获得</div><div class="line">        return (</div><div class="line">            &lt;div className=&quot;counter&quot;&gt;</div><div class="line">            &lt;button onClick=&#123;minusOne&#125;&gt;-&lt;/button&gt;</div><div class="line">            &lt;span style=&#123;&#123; display: &quot;inline-block&quot;, margin: &quot;0 10px&quot; &#125;&#125;&gt;</div><div class="line">            &#123;count&#125;</div><div class="line">            &lt;/span&gt;</div><div class="line">            &lt;button onClick=&#123;plusOne&#125;&gt;+&lt;/button&gt;</div><div class="line">            &lt;/div&gt;</div><div class="line">        );</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">//组件需要数据,state是store.getState()获得的数据集合根节点</div><div class="line">//性能问题：如果将store中的整个state绑定到组件上，那state上任何一个属性发生变化都会引起组件更新，所以向组件传递数据时，将数据绑定到尽可能的最小范围，实现只有绑定的数据变化时才引起组件更新</div><div class="line">function mapStateToProps(state) &#123; </div><div class="line">    return &#123;</div><div class="line">        count: state.count</div><div class="line">    &#125;;</div><div class="line">&#125;</div><div class="line">//组件中需要用到的触发函数</div><div class="line">function mapDispatchToProps(dispatch) &#123;</div><div class="line">    return bindActionCreators(&#123; plusOne, minusOne &#125;, dispatch);</div><div class="line">&#125;</div><div class="line">//使用connect将redux和react 组件结合起来,形成高阶组件</div><div class="line">const ConnectedCounter = connect(mapStateToProps, mapDispatchToProps)(Counter);</div><div class="line"></div><div class="line">export default class CounterSample extends React.Component &#123;</div><div class="line">    render() &#123;</div><div class="line">        return (</div><div class="line">            &lt;Provider store=&#123;store&#125;&gt; //根节点定义Provider，挂上store,其所有子节点均可以访问到</div><div class="line">                &lt;ConnectedCounter /&gt;</div><div class="line">            &lt;/Provider&gt;</div><div class="line">        );</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>主要流程</p>
-<p>1.定义redux store中需要的东西：reducer,actionCreator<br>2.使用createStore 根据reducer创建store<br>3.定义组件，确定需要哪些数据和触发函数<br>4.根据组件需要,创建数据获取函数，封装触发函数相应actionCreator<br>5.使用connect结合redux和组件形成高阶组件在Provider 中使用</p>
-<h1 id="异步Action"><a href="#异步Action" class="headerlink" title="异步Action"></a>异步Action</h1><p>异步 action不是特殊action而是多个同步 action的组合使用</p>
-<p>一个AJAX的Action发出后，到达中间件，进行预处理，根据预处理的结果dispatch不同的action出去,给reducer,然后更新store</p>
-<p>异步Action不是redux的一个概念而是action的一种设计模式</p>
-<p>不同的action还是同步的action,只是异步action把这些同步的action放在了不同阶段去dispath</p>
-<p> 中间件<br>1.截获某种特定类型的action,进行特殊处理<br>2.发出action</p>
-<h1 id="如何组织action和reducer"><a href="#如何组织action和reducer" class="headerlink" title="如何组织action和reducer"></a>如何组织action和reducer</h1><p>‘标准’形式redux action的问题<br>1.所有Action放一个文件，会无限扩展<br>2.Action,Reducer分开,实现业务逻辑时需要来回切换<br>3.系统中有哪些Action不够直观<br>新的方式<br>单个action和reducer放在同一个文件，一个文件一个action<br>然后将所有action导入同一文件，所有reducer导入同一文件<br>1.易于开发：不用在action和reducer文件间来回切换<br>2.易于维护：每个action文件都很小，容易理解<br>3.易于测试：每个业务逻辑只需要对应一个测试文件<br>4.易于理解：文件名就是action名字，文件列表就是action列表<br><a href="https://github.com/supnate/rekit-todomvc" target="_blank" rel="external">a sample</a><br>问题：拆分这么细的话，文件会多很多，对包的大小也会有影响</p>
-<p>答：webpack 确实会为每个文件生成一小段固定的元代码，同样的代码行数，文件越多 bundle 确实会越大。但这个并不会成为性能瓶颈，两个原因：1. 拆分后代码数量不会显著增多，增加的元代码部分相比整个包的大小基本可以忽略；2. 生产环境普遍会启用 gzip，对于重复的元代码信息会被有效压缩，对比拆分前，gzip 后的包大小基本没有差异</p>
-<h1 id="不可变数据"><a href="#不可变数据" class="headerlink" title="不可变数据"></a>不可变数据</h1><p>redux在修改state时采用新对象替换老对象的思路，不在原来对象上做修改，在新对象中复制老对象,包含要修改的部分,通过对比新老对象的引用不同，引起节点更新—-redux运行基础</p>
-<p>为何需要不可变数据<br>1.性能优化（通过对比新旧state不是同一个引用即可判断store发生了变化，从而不用进行深层遍历，比较具体的值，redux中的store都是不可变数据，每个节点都是不可变数据，当一个组件绑定在一个节点上，只需判断前后状态的引用是否相等，从而判断store是否发生变化，进而决定是否要更新组件）<br>2.易于调试和跟踪（store变化时可以看到前后状态，便于调试）<br>3.易于推测(任何时刻可以知道是什么引起store发生变化，根据action前后的状态判断，action是否被进行了正确处理)</p>
-<p>如何操作不可变数据<br>1.原生写法{…},Object.assign() 性能最好<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">const state = &#123;</div><div class="line">    filter:&apos;completed&apos;,</div><div class="line">    todos:[&apos;learn react&apos;]</div><div class="line">&#125;</div><div class="line">const newState1 = &#123;...state,todos:[...state.todos,&apos;learn redux&apos;]&#125;</div><div class="line">const newState = Object.assign(&#123;&#125;,state,&#123;todos:[...state.todos,&apos;learn redux&apos;]&#125;)</div></pre></td></tr></table></figure></p>
-<p>2.immutability-helper 适合需要深层次节点处理，需要引入类库，熟悉相应语法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">import update from &apos;immutability-helper&apos;</div><div class="line">const state = &#123;</div><div class="line">    filter:&apos;completed&apos;,</div><div class="line">    todos:[&apos;learn react&apos;]</div><div class="line">&#125;</div><div class="line">const newState = update(state,&#123;todos:&#123;$push:[&apos;learn redux&apos;]&#125;)</div></pre></td></tr></table></figure></p>
-<p>3.immer 可以像操作原对象一样生成新对象，性能最差(当节点层数多，结构复杂时，需要为每个属性建立代理)，适合应用程序小，场景简单的情况<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">import produce from &apos;immer&apos;</div><div class="line">const state = &#123;</div><div class="line">    filter:&apos;completed&apos;,</div><div class="line">    todos:[&apos;learn react&apos;]</div><div class="line">&#125;</div><div class="line">const newState = produce(state,draftState =&gt;&#123;</div><div class="line">    draftState.todos.push(&apos;learn redux&apos;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+            <p>使用marquee标签实现文字悬浮滚动效果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">//一般实现</div><div class="line"> &lt;div id=&quot;demo&quot;&gt;</div><div class="line">    &lt;div v-if=&quot;show&quot; style=&quot;z-index:99999;width200px;margin-left:20px;margin-top:-20px;background-color:#00a4ff;width:200px;position: absolute;border-radius:5px;padding-top: 5px;&quot;&gt;</div><div class="line">      &lt;marquee &gt;</div><div class="line">      &lt;span style=&quot;font-weight: bolder;font-size: 10px;color: white;&quot;&gt;Welcom CMRH!&lt;/span&gt;</div><div class="line">    &lt;/marquee&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  &lt;button @mouseover=&quot;show = !show&quot; @mouseout=&quot;show = !show&quot;&gt;</div><div class="line">    Toggle</div><div class="line">  &lt;/button&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">//全局定义</div><div class="line">Vue.directive(&apos;demo&apos;, function (el, binding) &#123;</div><div class="line">  console.log(el,binding)</div><div class="line">  let str = &apos;&lt;div id=&quot;pointer&quot; style=&quot;z-index:99999;width200px;margin-left:20px;margin-top:-20px;background-color:#00a4ff;width:200px;position: absolute;border-radius:5px;padding-top: 5px;&quot;&gt;&lt;marquee&gt;&lt;span style=&quot;font-weight: bolder;font-size: 10px;color: white;&quot;&gt;&apos;</div><div class="line">   + binding.value.text + </div><div class="line">   &apos;&lt;/span&gt;&lt;/marquee&gt;&lt;/div&gt;&apos;</div><div class="line">  $(el).mouseover (function() &#123;</div><div class="line">    $(el).prepend(str)</div><div class="line">  &#125;)</div><div class="line">  $(el).mouseout (function() &#123;</div><div class="line">    $(&apos;#pointer&apos;).remove()</div><div class="line">  &#125;)</div><div class="line">&#125;)</div><div class="line"></div><div class="line">//使用</div><div class="line">&lt;div v-demo=&quot;&#123; color: &apos;white&apos;, text: &apos;hello!&apos; &#125;&quot;&gt;111111&lt;/div&gt;</div></pre></td></tr></table></figure>
+<p>通过指令传递的数据，通过binding.value读取</p>
 
           
         
@@ -701,7 +648,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/course/router.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/vue/basic/commanders.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -726,8 +673,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/react/course/router.html" itemprop="url">
-                  路由
+                <a class="post-title-link" href="/post/vue/basic/commanders.html" itemprop="url">
+                  指令
                 </a>
               
             
@@ -741,8 +688,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-04T21:08:37+08:00">
-                2018-12-04
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-22T11:40:37+08:00">
+                2018-12-22
               </time>
             
 
@@ -779,33 +726,295 @@
       
         
           
-            <h1 id="为什么需要路由"><a href="#为什么需要路由" class="headerlink" title="为什么需要路由"></a>为什么需要路由</h1><p>1.单页应用需要进行页面切换<br>2.通过URL可以定位到页面<br>3.更有语义的组织资源</p>
-<h1 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h1><p>在组件容器里根据URL决定显示什么样的组件</p>
-<h1 id="REACT-router特性（和后端路由对比）"><a href="#REACT-router特性（和后端路由对比）" class="headerlink" title="REACT router特性（和后端路由对比）"></a>REACT router特性（和后端路由对比）</h1><p>1.声明式路由定义</p>
-<p>通过react组件标签进行声明，可以放在任何地方，不需要具体的路由表进行声明</p>
-<p>2.动态路由</p>
-<p>传统路由一旦配置了它就是一个配置文件，成为一个静态文件<br>而react router的路由是页面在render的时候才会被解析的，有相应路由的标记标签就是有相应的配置，没有标签就没有相应的配置</p>
-<h1 id="三种路由实现方式"><a href="#三种路由实现方式" class="headerlink" title="三种路由实现方式"></a>三种路由实现方式</h1><ol>
-<li><p>url路径：通过改变URl更改视图</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">import React from &quot;react&quot;;</div><div class="line">import &#123; BroswerRouter as Router, Route, Link &#125; from &quot;react-router-dom&quot;;</div><div class="line"></div><div class="line">const Home = () =&gt; &lt;h1&gt;Home&lt;/h1&gt;;</div><div class="line">const Hello = () =&gt; &lt;h1&gt;Hello&lt;/h1&gt;;</div><div class="line">const About = () =&gt; &lt;h1&gt;About Us&lt;/h1&gt;;</div><div class="line"></div><div class="line">export default class RouterSample extends React.PureComponent &#123;</div><div class="line">  render() &#123;</div><div class="line">    return (</div><div class="line">      &lt;Router&gt;</div><div class="line">        &lt;div&gt;</div><div class="line">          &lt;ul id=&quot;menu&quot;&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/home&quot;&gt;Home&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/hello&quot;&gt;Hello&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/about&quot;&gt;About&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">          &lt;/ul&gt;</div><div class="line"></div><div class="line">          &lt;div id=&quot;page-container&quot;&gt;</div><div class="line">            &lt;Route path=&quot;/home&quot; component=&#123;Home&#125; /&gt;</div><div class="line">            &lt;Route path=&quot;/hello&quot; component=&#123;Hello&#125; /&gt;</div><div class="line">            &lt;Route path=&quot;/about&quot; component=&#123;About&#125; /&gt;</div><div class="line">          &lt;/div&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">      &lt;/Router&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>hash路由：使用Router 的HashRouter组件 进行路由容器包裹,切换路由时，<br>具体的路径会被放在URl的#后面，通过改变hash更变视图《兼容低版本浏览器》</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">import React from &quot;react&quot;;</div><div class="line">import &#123; HashRouter as Router, Route, Link &#125; from &quot;react-router-dom&quot;;</div><div class="line"></div><div class="line">const Home = () =&gt; &lt;h1&gt;Home&lt;/h1&gt;;</div><div class="line">const Hello = () =&gt; &lt;h1&gt;Hello&lt;/h1&gt;;</div><div class="line">const About = () =&gt; &lt;h1&gt;About Us&lt;/h1&gt;;</div><div class="line"></div><div class="line">export default class RouterSample extends React.PureComponent &#123;</div><div class="line">  render() &#123;</div><div class="line">    return (</div><div class="line">      &lt;Router&gt;</div><div class="line">        &lt;div&gt;</div><div class="line">          &lt;ul id=&quot;menu&quot;&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/home&quot;&gt;Home&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/hello&quot;&gt;Hello&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/about&quot;&gt;About&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">          &lt;/ul&gt;</div><div class="line"></div><div class="line">          &lt;div id=&quot;page-container&quot;&gt;</div><div class="line">            &lt;Route path=&quot;/home&quot; component=&#123;Home&#125; /&gt;</div><div class="line">            &lt;Route path=&quot;/hello&quot; component=&#123;Hello&#125; /&gt;</div><div class="line">            &lt;Route path=&quot;/about&quot; component=&#123;About&#125; /&gt;</div><div class="line">          &lt;/div&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">      &lt;/Router&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>存路由：使用react-router 的MemoryRouter组件进行路由容器包裹，路由信息放在内存中管理，URL不变的情况下，即可进行视图切换</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">import React from &quot;react&quot;;</div><div class="line">import &#123; HashRouter as Router, Route, Link &#125; from &quot;react-router-dom&quot;;</div><div class="line">import &#123; MemoryRouter &#125; from &quot;react-router&quot;;</div><div class="line"></div><div class="line">const Home = () =&gt; &lt;h1&gt;Home&lt;/h1&gt;;</div><div class="line">const Hello = () =&gt; &lt;h1&gt;Hello&lt;/h1&gt;;</div><div class="line">const About = () =&gt; &lt;h1&gt;About Us&lt;/h1&gt;;</div><div class="line"></div><div class="line">export default class RouterSample extends React.PureComponent &#123;</div><div class="line">  render() &#123;</div><div class="line">    return (</div><div class="line">      &lt;MemoryRouter&gt;</div><div class="line">        &lt;div&gt;</div><div class="line">          &lt;ul id=&quot;menu&quot;&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/home&quot;&gt;Home&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/hello&quot;&gt;Hello&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/about&quot;&gt;About&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">          &lt;/ul&gt;</div><div class="line"></div><div class="line">          &lt;div id=&quot;page-container&quot;&gt;</div><div class="line">            &lt;Route path=&quot;/home&quot; component=&#123;Home&#125; /&gt;</div><div class="line">            &lt;Route path=&quot;/hello&quot; component=&#123;Hello&#125; /&gt;</div><div class="line">            &lt;Route path=&quot;/about&quot; component=&#123;About&#125; /&gt;</div><div class="line">          &lt;/div&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">      &lt;/MemoryRouter&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>基于路由配置进行资源组织 好处</p>
-<p>1.实现业务逻辑的松耦合<br>2.易于扩展，重构和维护<br>3.路由层面实现Lazy Load</p>
-<h1 id="REACT-Router-API"><a href="#REACT-Router-API" class="headerlink" title="REACT Router API"></a>REACT Router API</h1><p>1.<link>:普通链接,会触发浏览器刷新<br>类似a标签，但是不会触发浏览器的刷新，点击时router会接管导航，对切换进行处理不会传递到浏览器，让其进行真正的页面切换<br>to属性代表链接到的URl的地址<br>2.<navlink>:类似 Link但是会添加当前选中状态<br>可以添加activeClassName属性，当当前链接符合to属性值时,显示相应的样式 还有其他属性，详情请看react-router文档<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;NavLink to=&quot;/faq&quot; activeClassName=&apos;selected&apos;&gt;FAQs&lt;/NavLink&gt;</div></pre></td></tr></table></figure></navlink></p>
-<p>3.<prompt>:满足条件时提示用户是否离开当前页面<br>切换页面时，跟用户提供一个确认的操作</prompt></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">import &#123; Prompt &#125; from &quot;react-router&quot;;</div><div class="line">&lt;Prompt</div><div class="line">    when=&#123;formIsHalfFilledOut&#125;</div><div class="line">    message=&apos;Are you sure you want to leave&apos;</div><div class="line">/&gt;</div></pre></td></tr></table></figure>
-<p>4.<redirect>重定向当前页面,例如登录判断<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">import &#123; Redirect,Route &#125; from &quot;react-router&quot;;</div><div class="line">&lt;Route exact path=&apos;/&apos; render=&#123;()=&gt;(</div><div class="line">    loggedIn?(</div><div class="line">    &lt;Redirect to=&apos;/dashboard&apos; /&gt;</div><div class="line">    ) : (</div><div class="line">        &lt;PublicHomePage/&gt;</div><div class="line">    )</div><div class="line">)&#125;/&gt;</div></pre></td></tr></table></figure></redirect></p>
-<p>5.<route>:路由配置的核心标记,路径匹配时显示对应组件<br>path：路由<br>component:相应要显示的组件<br>exact：是否精准配置path<br>多个route path都符合当前路由时，那相应组件都会进行显示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;Route exact path=&quot;/&quot; component=&#123;Home&#125; /&gt;</div></pre></td></tr></table></figure></route></p>
-<p>6.<switch>:只显示第一个匹配的路由<br>找到一个匹配的路径就只显示这个路径相应的组件，其他组件不显示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">import &#123; Switch,Route &#125; from &quot;react-router&quot;;</div><div class="line">&lt;Switch&gt;</div><div class="line">&lt;Route path=&quot;/home&quot; component=&#123;Home&#125; /&gt;</div><div class="line">&lt;Route path=&quot;/hello&quot; component=&#123;Hello&#125; /&gt;</div><div class="line">&lt;Route path=&quot;/about&quot; component=&#123;About&#125; /&gt;</div><div class="line">&lt;Route component=&#123;Nomatch&#125; /&gt;</div><div class="line">&lt;/Switch&gt;</div></pre></td></tr></table></figure></switch></p>
-<h1 id="参数传递"><a href="#参数传递" class="headerlink" title="参数传递"></a>参数传递</h1><p>通过URL传递参数 :<route path="/topic/:id" ...=""><br>获取参数：this.props.match.params<br>页面状态尽量通过URl参数定义,方便页面间跳转时数据传递，否则需要将数据转化成组件内部state进行渲染，过程复杂</route></p>
-<h1 id="套嵌路由"><a href="#套嵌路由" class="headerlink" title="套嵌路由"></a>套嵌路由</h1><p>1.每个React组件都可以时路由容器<br>2.React Router的声明式语法可以方便的定义嵌套路由<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line">import React from &quot;react&quot;;</div><div class="line">import &#123;</div><div class="line">  BrowserRouter as Router,</div><div class="line">  Route,</div><div class="line">  Link</div><div class="line">&#125; from &quot;react-router-dom&quot;;</div><div class="line"></div><div class="line">const Category = (&#123; match &#125;) =&gt; (</div><div class="line">  &lt;h1&gt;Sub Category &#123;match.params.subId&#125;&lt;/h1&gt;</div><div class="line">);</div><div class="line"></div><div class="line">const SubCategory = (&#123; match &#125;) =&gt; (</div><div class="line">  &lt;div&gt;</div><div class="line">    &lt;h1&gt;Category &#123;match.params.id&#125;&lt;/h1&gt;</div><div class="line"></div><div class="line">    &lt;ul id=&quot;menu&quot;&gt;</div><div class="line">      &lt;li&gt;</div><div class="line">        &lt;Link to=&#123;`/category/$&#123;match.params.id&#125;/sub/1`&#125;&gt;</div><div class="line">          Sub Category 1</div><div class="line">        &lt;/Link&gt;</div><div class="line">      &lt;/li&gt;</div><div class="line">      &lt;li&gt;</div><div class="line">        &lt;Link to=&#123;`/category/$&#123;match.params.id&#125;/sub/2`&#125;&gt;</div><div class="line">          Sub Category 2</div><div class="line">        &lt;/Link&gt;</div><div class="line">      &lt;/li&gt;</div><div class="line">      &lt;li&gt;</div><div class="line">        &lt;Link to=&#123;`/category/$&#123;match.params.id&#125;/sub/3`&#125;&gt;</div><div class="line">          Sub Category 3</div><div class="line">        &lt;/Link&gt;</div><div class="line">      &lt;/li&gt;</div><div class="line">    &lt;/ul&gt;</div><div class="line">    &lt;div id=&quot;page-container-2&quot;&gt;</div><div class="line">      &lt;Route</div><div class="line">        path=&quot;/category/:id/sub/:subId&quot;</div><div class="line">        component=&#123;Category&#125;</div><div class="line">      /&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  &lt;/div&gt;</div><div class="line">);</div><div class="line"></div><div class="line">export default class NestedRoute extends React.PureComponent &#123;</div><div class="line">  render() &#123;</div><div class="line">    return (</div><div class="line">      &lt;Router&gt;</div><div class="line">        &lt;div&gt;</div><div class="line">          &lt;ul id=&quot;menu&quot;&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/category/1&quot;&gt;Category 1&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/category/2&quot;&gt;Category 2&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/category/3&quot;&gt;Category 3&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">          &lt;/ul&gt;</div><div class="line"></div><div class="line">          &lt;div id=&quot;page-container&quot;&gt;</div><div class="line">            &lt;Route</div><div class="line">              path=&quot;/category/:id&quot;</div><div class="line">              component=&#123;SubCategory&#125;</div><div class="line">            /&gt;</div><div class="line">          &lt;/div&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">      &lt;/Router&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+            <p>指令的职责是，当表达式的值改变时，将其产生的连带影响，响应式地作用于 DOM</p>
+<h1 id="简单指令"><a href="#简单指令" class="headerlink" title="简单指令"></a>简单指令</h1><p>v-if 条件指令，绑定值为真时构建DOM,假时bu构建或者删除已存在DOM<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;p v-if=&quot;seen&quot;&gt;现在你看到我了&lt;/p&gt;</div><div class="line"></div><div class="line">export default &#123;</div><div class="line">    name: &apos;vpc&apos;,</div><div class="line">    data () &#123;</div><div class="line">      return &#123;</div><div class="line">        seen: true</div><div class="line">      &#125;</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>v-for 循环指令，根据绑定值，循环输出DOM元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;div v-for=&quot;(item, index) in modalFooter&quot;&gt;</div><div class="line">  &lt;button  @click=&quot;customFunc(item.Func)&quot; type=&quot;button&quot; class=&quot;btn btn-primary&quot; v-if=&apos;item.name&apos;&gt;&#123;&#123;item.name&#125;&#125;&lt;/button&gt;</div><div class="line">&lt;/div&gt;</div><div class="line">//根据数据modalFooter数组循环出多个数组</div></pre></td></tr></table></figure></p>
+<p>v-on 监听 DOM 事件的指令,触发事件的回调函数放在method中，可以简写成‘@事件名’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;app-5&quot;&gt;</div><div class="line">  &lt;p&gt;&#123;&#123; message &#125;&#125;&lt;/p&gt;</div><div class="line">  &lt;button v-on:click=&quot;reverseMessage&quot;&gt;逆转消息&lt;/button&gt;</div><div class="line"> //或者 &lt;button @click=&quot;reverseMessage&quot;&gt;逆转消息&lt;/button&gt;</div><div class="line">&lt;/div&gt;</div><div class="line"></div><div class="line">var app5 = new Vue(&#123;</div><div class="line">  el: &apos;#app-5&apos;,</div><div class="line">  data: &#123;</div><div class="line">    message: &apos;Hello Vue.js!&apos;</div><div class="line">  &#125;,</div><div class="line">  methods: &#123;</div><div class="line">    reverseMessage: function () &#123;</div><div class="line">      this.message = this.message.split(&apos;&apos;).reverse().join(&apos;&apos;)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>v-model 双向绑定指令,绑定的值在页面更改后js可以及时更改，js改变该值后,页面能马上渲染响应<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;app-6&quot;&gt;</div><div class="line">  &lt;p&gt;&#123;&#123; message &#125;&#125;&lt;/p&gt;</div><div class="line">  &lt;input v-model=&quot;message&quot;&gt;</div><div class="line">&lt;/div&gt;</div><div class="line"></div><div class="line">var app6 = new Vue(&#123;</div><div class="line">  el: &apos;#app-6&apos;,</div><div class="line">  data: &#123;</div><div class="line">    message: &apos;Hello Vue!&apos;</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>v-bind 绑定HTML标签属性,响应式地更新 HTML 特性 缩写形式”  :属性名=’响应函数名’  “<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;app-2&quot;&gt;</div><div class="line">  &lt;span v-bind:title=&quot;message&quot;&gt;</div><div class="line">  //或者&lt;span :title=&quot;message&quot;&gt;</div><div class="line">    鼠标悬停几秒钟查看此处动态绑定的提示信息！</div><div class="line">  &lt;/span&gt;</div><div class="line">&lt;/div&gt;</div><div class="line"></div><div class="line">var app2 = new Vue(&#123;</div><div class="line">  el: &apos;#app-2&apos;,</div><div class="line">  data: &#123;</div><div class="line">    message: &apos;页面加载于 &apos; + new Date().toLocaleString()</div><div class="line">  &#125;</div><div class="line">&#125;)</div><div class="line">//在这里，该指令的意思是：“将这个元素节点的 title 特性和 Vue 实例的 message 属性保持一致”</div></pre></td></tr></table></figure></p>
+<h1 id="自定义指令"><a href="#自定义指令" class="headerlink" title="自定义指令"></a>自定义指令</h1>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/vue/basic/vueprops.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/vue/basic/vueprops.html" itemprop="url">
+                  vue对象属性
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-22T11:40:37+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="el"><a href="#el" class="headerlink" title="el"></a>el</h1><p>其值为vue模板挂载ID,用于标识vue的APP template挂载在index.html的什么位置</p>
+<h1 id="data"><a href="#data" class="headerlink" title="data"></a>data</h1><h1 id="method"><a href="#method" class="headerlink" title="method"></a>method</h1><h1 id="计算属性computed"><a href="#计算属性computed" class="headerlink" title="计算属性computed"></a>计算属性computed</h1><p>通过&#123; &#123;&#125;&#125;}插值的时候,可以在大括号里面添加一个简单的计算表达式，从而将计算结果插入,但是对于复杂的计算,需要执行多个计算表达式时不能放在大括号里面的，为方便绑定，在computed属性中定义计算属性A，A是一个函数用到变量b，然后将该A属性插入，从而实现相关值b变化，插入值A随之响应的效果</p>
+<p>相当于计算属性因为依赖项改变而执行计算，将计算结果插入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">例</div><div class="line"> &lt;p&gt;Original data: &quot;&#123;&#123; value &#125;&#125;&quot;&lt;/p&gt;</div><div class="line"> &lt;p&gt;Computed result: &quot;&#123;&#123; doubleValue &#125;&#125;&quot;&lt;/p&gt;</div><div class="line"> &lt;button @click=&apos;changeValue&apos;&gt;&lt;button&gt;</div><div class="line"> </div><div class="line">  export default &#123;</div><div class="line">    data() &#123;</div><div class="line">        value: 10</div><div class="line">    &#125;,</div><div class="line">    computed: &#123;</div><div class="line">        doubleValue: function() &#123;</div><div class="line">            return this.value * 2</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    method: &#123;</div><div class="line">        changeValue: function() &#123;</div><div class="line">            this.value++</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"> //当value 变化时，doubleValue通过运算将结果插入</div></pre></td></tr></table></figure></p>
+<p>与method区别</p>
+<p>也可以在大括号里面调用method中定义的方法，达到计算响应<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&lt;p&gt;&#123;&#123;doubleVlue()&#125;&#125;&lt;/p&gt;</div><div class="line">&lt;button @click=&apos;changeValue&apos;&gt;&lt;button&gt;</div><div class="line">export default &#123;</div><div class="line">    data() &#123;</div><div class="line">        value: 10</div><div class="line">    &#125;,</div><div class="line">    method: &#123;</div><div class="line">        doubleValue: function() &#123;</div><div class="line">            return this.value * 2</div><div class="line">        &#125;,</div><div class="line">        changeValue: function() &#123;</div><div class="line">            this.value++</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<p>当计算属性函数依赖的值不发生变化时，每次调用计算属性都会去取最后一次运算的结果，即读取缓存的结果</p>
+<p>比如有一个计算属性A需要遍历一个庞大的数组然后得到一个结果，而这个结果则用于其他计算，这样我们就不需要每次去运算A属性函数得到结果，直接读取缓存结果即可</p>
+<p>但如果属性A结果的得来是通过运行method方法，那么每次调用A就会进行计算一次，就会造成很大开销</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">//computed方式</div><div class="line">&lt;p&gt;Original data: &quot;&#123;&#123; value &#125;&#125;&quot;&lt;/p&gt;</div><div class="line">&lt;p&gt;Computed result: &#123;&#123; double &#125;&#125;&lt;/p&gt;</div><div class="line">&lt;button @click=&apos;changeValue&apos;&gt;&lt;button&gt;</div><div class="line"></div><div class="line">export default &#123;</div><div class="line">    data() &#123;</div><div class="line">        value: 10</div><div class="line">    &#125;,</div><div class="line">    computed: &#123;</div><div class="line">      double: function() &#123;</div><div class="line">        return  this.value + this.doubleValue</div><div class="line">      &#125;,</div><div class="line">      doubleValue: function() &#123;</div><div class="line">        console.log(&apos;double&apos;) //只打印一次</div><div class="line">        return  2</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    method: &#123;</div><div class="line">        changeValue: function() &#123;</div><div class="line">            this.value++</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">//method方式</div><div class="line"></div><div class="line">&lt;p&gt;Original data: &quot;&#123;&#123; value &#125;&#125;&quot;&lt;/p&gt;</div><div class="line">&lt;p&gt;Computed result: &#123;&#123; value + doubleValue() &#125;&#125;&lt;/p&gt;</div><div class="line">&lt;button @click=&apos;changeValue&apos;&gt;1234&lt;button&gt;</div><div class="line"></div><div class="line">export default &#123;</div><div class="line">    data() &#123;</div><div class="line">        value: 10</div><div class="line">    &#125;,</div><div class="line">    method: &#123;</div><div class="line">        doubleValue: function() &#123;</div><div class="line">            console.log(&apos;double&apos;) //value 改变一次，打印一次,即函数会被执行一次</div><div class="line">            return 2</div><div class="line">        &#125;,</div><div class="line">        changeValue: function() &#123;</div><div class="line">            this.value++</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>计算属性还可以设置getter和setter<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">computed: &#123;</div><div class="line">  fullName: &#123;</div><div class="line">    // getter</div><div class="line">    get: function () &#123;</div><div class="line">      return this.firstName + &apos; &apos; + this.lastName</div><div class="line">    &#125;,</div><div class="line">    // setter</div><div class="line">    set: function (newValue) &#123;</div><div class="line">      var names = newValue.split(&apos; &apos;)</div><div class="line">      this.firstName = names[0]</div><div class="line">      this.lastName = names[names.length - 1]</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">//给fullName设置值的时候,比如fullName = &apos;John Doe&apos; 时，setter 会被调用，firstName 和 lastName 也会相应地被更新</div></pre></td></tr></table></figure></p>
+<h1 id="watch"><a href="#watch" class="headerlink" title="watch"></a>watch</h1><p>定义某个变量发生变化时需要执行的函数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&lt;p&gt;Original data: &quot;&#123;&#123; value &#125;&#125;&quot;&lt;/p&gt;</div><div class="line">&lt;p&gt;Computed result: &#123;&#123; result &#125;&#125;&lt;/p&gt;</div><div class="line">&lt;button @click=&apos;changeValue&apos;&gt;1234&lt;button&gt;</div><div class="line"></div><div class="line">export default &#123;</div><div class="line">    data() &#123;</div><div class="line">        value: 10</div><div class="line">        result: 0</div><div class="line">    &#125;,</div><div class="line">    watch: &#123;</div><div class="line">        value: function() &#123;</div><div class="line">            this.result +=10</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    method: &#123;</div><div class="line">        changeValue: function() &#123;</div><div class="line">            this.value++</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">//当value发生变化的时候，就会执行watch绑定的函数，从而可以让result发生响应</div></pre></td></tr></table></figure></p>
+<p>对比computed属性,假设一个结果需要依赖多个变量，如果使用watch方法则需要定义多个响应函数，而且响应函数是重复的，而如果使用computed属性则只需要定义一次即可<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">例</div><div class="line">//computed方式</div><div class="line">&lt;p&gt;Original data: &quot;&#123;&#123; value &#125;&#125;&quot;&lt;/p&gt;</div><div class="line">&lt;p&gt;Computed result: &#123;&#123; result &#125;&#125;&lt;/p&gt;</div><div class="line">&lt;button @click=&apos;changeValue&apos;&gt;1234&lt;/button&gt;</div><div class="line">export default &#123;</div><div class="line">    data() &#123;</div><div class="line">        value: 10,</div><div class="line">        val:1</div><div class="line">    &#125;,</div><div class="line">   computed: &#123;</div><div class="line">      result: function() &#123;</div><div class="line">          return this.val + this.value</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    method: &#123;</div><div class="line">        changeValue: function() &#123;</div><div class="line">            this.value++</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">//watch方式</div><div class="line">&lt;p&gt;Original data: &quot;&#123;&#123; value &#125;&#125;&quot;&lt;/p&gt;</div><div class="line">&lt;p&gt;Computed result: &#123;&#123; result &#125;&#125;&lt;/p&gt;</div><div class="line">&lt;button @click=&apos;changeValue&apos;&gt;1234&lt;/button&gt;</div><div class="line"></div><div class="line">export default &#123;</div><div class="line">    data() &#123;</div><div class="line">        value: 10,</div><div class="line">        val:1</div><div class="line">    &#125;,</div><div class="line">    watch: &#123;</div><div class="line">      value: function() &#123;</div><div class="line">         this.result = this.val + this.value</div><div class="line">      &#125;,</div><div class="line">      val: function() &#123;</div><div class="line">          this.result = this.val + this.value</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    method: &#123;</div><div class="line">        changeValue: function() &#123;</div><div class="line">            this.value++</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<h1 id="生命周期钩子函数"><a href="#生命周期钩子函数" class="headerlink" title="生命周期钩子函数"></a>生命周期钩子函数</h1><h1 id="components"><a href="#components" class="headerlink" title="components"></a>components</h1>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/vue/basic/filestructor.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/vue/basic/filestructor.html" itemprop="url">
+                  文件结构
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-22T11:40:37+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h1><p>使用命令行构建<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">npm install --global vue-cli //全局安装vue命令</div><div class="line">vue init webpack my-project //使用vue命令构建名为my-project的项目</div><div class="line">cd my-project //进入项目所在文件夹</div><div class="line">npm run dev //运行项目</div></pre></td></tr></table></figure></p>
+<h1 id="文件结构"><a href="#文件结构" class="headerlink" title="文件结构"></a>文件结构</h1><pre><code class="lang-bash">.
+├── build/                      <span class="hljs-comment"># webpack config files</span>
+│   └── ...
+├── config/
+│   ├── index.js                <span class="hljs-comment"># main project config</span>
+│   └── ...
+├── src/
+│   ├── main.js                 <span class="hljs-comment"># app entry file</span>
+│   ├── App.vue                 <span class="hljs-comment"># main app component</span>
+│   ├── components/             <span class="hljs-comment"># ui components</span>
+│   │   └── ...
+│   └── assets/                 <span class="hljs-comment"># module assets (processed by webpack)</span>
+│       └── ...
+├── static/                     <span class="hljs-comment"># pure static assets (directly copied)</span>
+├── <span class="hljs-built_in">test</span>/
+│   └── unit/                   <span class="hljs-comment"># unit tests</span>
+│   │   ├── specs/              <span class="hljs-comment"># test spec files</span>
+│   │   ├── eslintrc            <span class="hljs-comment"># config file for eslint with extra settings only for unit tests</span>
+│   │   ├── index.js            <span class="hljs-comment"># test build entry file</span>
+│   │   ├── jest.conf.js        <span class="hljs-comment"># Config file when using Jest for unit tests</span>
+│   │   └── karma.conf.js       <span class="hljs-comment"># test runner config file when using Karma for unit tests</span>
+│   │   ├── setup.js            <span class="hljs-comment"># file that runs before Jest runs your unit tests</span>
+│   └── e2e/                    <span class="hljs-comment"># e2e tests</span>
+│   │   ├── specs/              <span class="hljs-comment"># test spec files</span>
+│   │   ├── custom-assertions/  <span class="hljs-comment"># custom assertions for e2e tests</span>
+│   │   ├── runner.js           <span class="hljs-comment"># test runner script</span>
+│   │   └── nightwatch.conf.js  <span class="hljs-comment"># test runner config file</span>
+├── .babelrc                    <span class="hljs-comment"># babel config</span>
+├── .editorconfig               <span class="hljs-comment"># indentation, spaces/tabs and similar settings for your editor</span>
+├── .eslintrc.js                <span class="hljs-comment"># eslint config</span>
+├── .eslintignore               <span class="hljs-comment"># eslint ignore rules</span>
+├── .gitignore                  <span class="hljs-comment"># sensible defaults for gitignore</span>
+├── .postcssrc.js               <span class="hljs-comment"># postcss config</span>
+├── index.html                  <span class="hljs-comment"># index.html template</span>
+├── package.json                <span class="hljs-comment"># build scripts and dependencies</span>
+└── README.md                   <span class="hljs-comment"># Default README file</span>
+</code></pre>
+
 
           
         
@@ -844,7 +1053,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/course/construct.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/renderfire.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -869,8 +1078,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/react/course/construct.html" itemprop="url">
-                  构建
+                <a class="post-title-link" href="/post/react/renderfire.html" itemprop="url">
+                  触发render
                 </a>
               
             
@@ -884,8 +1093,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-04T21:05:37+08:00">
-                2018-12-04
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-22T11:40:37+08:00">
+                2018-12-22
               </time>
             
 
@@ -922,52 +1131,13 @@
       
         
           
-            <h1 id="UI库"><a href="#UI库" class="headerlink" title="UI库"></a>UI库</h1><p>ant design 适合企业级应用，复杂交付，密集数据展示<br>material UI：时尚，花哨，具有的美观性，更适合开发面向消费者的应用（google版原始react实现）<br>sematic UI:把UI当做一种language来描述（jquery版原始react实现）</p>
-<p>选择UI库的考虑因素</p>
-<ol>
-<li>组件库是否齐全（齐全的话可以减少很多工作量，不用自己实现）</li>
-<li>样式风格是否符合业务需求（企业级应用一般要求简洁明了，对于密集性数据展示比较合理；对于移动端面向消费者一般要求好看，button，字体比较大）</li>
-<li>API 设计是否便捷和灵活（使用起来是否方便，从而会影响开发效率）</li>
-<li>技术支持是否完善（技术文档是否齐全；github上提issue时，能不能得到快速解答）</li>
-<li>开发是否活跃（是否有稳定团队在进行快速迭代和维护，在遇到BUG或者需要新功能时可以得到满足）</li>
-</ol>
-<h1 id="使用next-js-构建react-同构应用"><a href="#使用next-js-构建react-同构应用" class="headerlink" title="使用next.js 构建react 同构应用"></a>使用next.js 构建react 同构应用</h1><p>同构应用：浏览器第一次向服务器请求页面时，服务器返回解析好的页面，不需要浏览器执行js来进行渲染（这样可以加快页面首次打开的速度），之后页面的操作/切换，像单页面一样，不需要浏览器刷新，均由前端完成，包括UI渲染，页面路由切换等，不需要再向服务端请求页面</p>
-<p>next.js的几个规则<br>1.页面就是pages目录下的一个组件<br>所有页面放在pages文件夹下，一个页面即一个组件，文件名和文件路径对应路由路径<br>2.static目录映射静态文件（图片）<br>3.page具有特殊静态方法 getInitialProps<br>next.js提供给react组件初始化props的方法</p>
-<p>命令行装包：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install --save react react-dom next</div></pre></td></tr></table></figure></p>
-<p>在页面中使用其它 react 组件<br>1.页面也是标准的node模块,可使用其它 react组件<br>2.页面会针对性打包,仅包含其引入的组件<br>,不会加载其他额外的资源</p>
-<p>所有组件放在components文件夹下，在pages文件夹下的页面js中使用时，直接用路径import进去</p>
-<p>使用Link实现同构路由</p>
-<p>1.使用 next/link 定义链接<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">import Link from &apos;next/link&apos;</div><div class="line">export default ()=&gt;</div><div class="line">&lt;div&gt;</div><div class="line">&lt;Link href=&apos;/about&apos;&gt;&lt;a&gt;here&lt;/a&gt;&lt;/Link&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure></p>
-<p>2.点击链接时页面不会刷新<br>如果使用a标签会产生刷新</p>
-<p>3.使用 prefatch预加载目标资源<br>如果不添加该属性，则链接对应的组件，在切换的时候再加载相应页面打包的内容，有该属性，则next.js 打包时就会获取所有链接对应的组件，会预加载所有的js内容，从而提高页面切换速度，但是并不会预加载需要从服务器端API请求的数据</p>
-<p>4.使用 replace 属性替换 url<br>替换当前页在路由中的history,无法后退回当前页</p>
-<p>动态加载页面<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">import dynamic from &apos;next/dynamic&apos;</div><div class="line">const DynamicComponet=dynamic(import(&apos;../components/hello&apos;))</div><div class="line">export default ()=&gt;</div><div class="line">&lt;div&gt;</div><div class="line">&lt;DynamicComponet/&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure></p>
-<p>页面在加载时，除了加载整个页面的main.js,还会加载动态加载的组件的js包，当这个动态组件被render的时候才会被加载</p>
-<h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><p>react 让前端单元测试变得容易<br>1.react 应用很少需要访问浏览器 API<br>2.虚拟 Dom 可以在 NodeJs 环境运行和测试 （不需要浏览器环境，在内存中render虚拟DOM即可完成测试）<br>3.Redux隔离了状态管理,纯数据层单元测试</p>
-<p>单元测试涉及的工具<br>1.Jest: Facebook 开源的 JS 单元测试框架 （零配置，可以直接开始测试）<br>2.JS dom浏览器环境的 NodeJS 模拟 （一个在nodejs中可以模拟浏览器的library）<br>3.Enzyme:React组件渲染和测试 (在nodejs中渲染虚拟DOM进行测试，通过进行不同程度的render(shallow Rendering,Full Rendering,Static Rendering,进行不同程度的测试，比如利用shallow Rendering浅渲染测试渲染结果是否符合预期的DOM结构)<br>4.Nock: 模拟 HTTP请求 （模拟得到请求返回数据）<br>5.Sinon: 函数模拟和调用跟踪 （例如测试组件UI时，跟踪响应函数有没有被调用，调用几次，而不是去测试响应函数是否符合预期，测试响应函数是否符合预期属于响应函数测试范畴。集成在JEST中）<br>6.istanbul:单元测试覆盖率（通过对已有代码的修改和埋点去判断相关代码有没有被执行到）</p>
-<h1 id="开发调试工具"><a href="#开发调试工具" class="headerlink" title="开发调试工具"></a>开发调试工具</h1><p>eslint<br>1.使用 .eslintrc 进行规则的配置<br>2.使用 airbnb 的 JavaScript 代码风格</p>
-<p>检查语法风格，拼写错误，会报错，保证代码的一致性</p>
-<p>Prettier<br>vscode 的一款插件，根据一定规则做代码格式化 .eslintrc<br>1.代码格式化的神器<br>2.保证更容易写出风格一致的代码<br>不会报错,会直接根据规则将代码格式化</p>
-<p>React DevTool chrome插件<br>定位组件，可以以组件树的形式查看DOM结构，<br>勾选highlight updates可看到需要更新的组件</p>
-<p>Redux DevTool chrome插件<br>可查看action和action引起的变化<br>time machine 功能，可以回溯action,方便观察loading过程，进而对loading进行优化<br>可自动生成测试代码</p>
-<h1 id="理想架构"><a href="#理想架构" class="headerlink" title="理想架构"></a>理想架构</h1><p>易于开发（但可能会不容易扩展和维护）<br>1.开发工具是否完善 （采用的技术栈是否有相应的开发工具来支持）<br>2.生态圈是否繁荣 （是否有类似项目遇到过相同问题可以借鉴）<br>3.社区是否活跃（提问有人回答）</p>
-<p>易于扩展<br>1.增加新功能是否容易<br>2.新功能是否会显著增加系统复杂度（系统放大之后会难以扩展和维护，考虑引进新功能时，如何架构能保证减少系统复杂度的提高）</p>
-<p>易于维护<br>1.代码是否容易理解 （基于一定的最佳实践规范去编写，保证多人开发有一定的规则）<br>2.文档是否健全（通过注释，架构图，具体文档描述项目中的一些关键点，方便后续工作人员查看，也方便日后回头开发能快速理解关键点，来维护已有项目）</p>
-<p>易于测试<br>1.功能的分层是否清晰 （UI，数据层之间依赖少）<br>2.副作用少 （模块高内聚，对外部依赖少）<br>3.尽量使用纯函数（输入决定输出，确定）</p>
-<p>易于构建<br>1.使用通用技术和架构 （保证现有项目不需要定制化，就可以打包部署）<br>2.构建工具的选择（webpack ,roolup,使用常用技术栈，减少额外配置）</p>
-<p>大型前端应用需要拆分复杂度原因<br>当项目增加更多功能的时候，项目复杂度并不会指数级的上升，始终保持在一个可控的范围之内</p>
-<p>拆分复杂度技术架构</p>
-<p>从功能上进行区分，将业务逻辑拆成高内聚松耦合的模块，每个模块负责一个功能，拥有自己的componet,action和reducer,这样即使当一个功能需要删除时，只要删除相应的模块即可，也保证其他模块不受影响；路由不再由一个文件统一定义，每个feature自己定义一个路由，然后由route的loader把每个模块的路由文件加载进根结点的routing文件</p>
-<p>技术上的component,路由，reducer是按照功能的方式组织在模块上</p>
-<p>如何组织 component,action 和reducer<br>文件夹结构<br>• 按 feature 组织源文件<br>• 组件和样式文件同一级<br>• React 单独文件夹<br>• 单元测试保持同样目录结构放在 tests 文件夹</p>
-<p>组件和样式组织<br>一个功能的组件js和样式文件放在一个模块中，再由一个index.js引入各个模块的组件js文件，一个style文件引入各个模块的样式文件，进行统一管理输出,打包时就只是打包index.js和style文件<br>注意：<br>如果组件中引入样式文件，那么当这个组件被重复使用时，样式文件会被多次引入，打包时就会多次进行打包，造成不必要的代码冗余<br>使用上述加载方式，样式文件独立加载，js文件只需要加载它所需要的资源，就不会发生多次加载</p>
-<p>action 和 reducer组织<br>一个模块的，action 和 reducer 一一对应放在同一文件，再由一个actions.js引入所有action,一个reducers.js引入所有reducer，这两个文件只是充当loader的角色<br>好处：action 和 reducer 非常小，不会被无限的去扩展，更容易理解</p>
-<p>CONSTANTS.js中命名的常量一功能名开头，避免与其他模块常量命名冲突</p>
-<p>再由rootreducer加载所有模块下的reducer,进行combineReducers挂载，实现全局使用</p>
-<p>优点：一个模块内部是高内聚的，各个模块之间是松耦合的</p>
-<p>主要思想：使用 root loader 加载 feature的各个资源</p>
-<p>路由配置<br>每个模块（页面级）路由通过export JSON格式数据 ，自己配，再loader到根路由，由根路由统一处理解析json格式为react Router的声明式形式</p>
-<p>每个模块都有都有自己的专属路由配置<br>顶层路由使用JSON配置更易维护和理解</p>
+            <p>在react中，触发render的有4条路径。</p>
+<p>以下假设shouldComponentUpdate都是按照默认返回true的方式。</p>
+<p>首次渲染Initial Render</p>
+<p>调用this.setState （并不是一次setState会触发一次render，React可能会合并操作，再一次性进行render）</p>
+<p>父组件发生更新（一般就是props发生改变，但是就算props没有改变或者父子组件之间没有数据交换也会触发render）</p>
+<p>调用this.forceUpdate</p>
+<p><a href="https://www.cnblogs.com/AnnieBabygn/p/6560833.html" target="_blank" rel="external">https://www.cnblogs.com/AnnieBabygn/p/6560833.html</a></p>
 
           
         
@@ -1006,7 +1176,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/course/thinking.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/clock.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1031,8 +1201,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/react/course/thinking.html" itemprop="url">
-                  开发思想
+                <a class="post-title-link" href="/post/knowledge/clock.html" itemprop="url">
+                  定时器
                 </a>
               
             
@@ -1046,8 +1216,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-04T21:01:37+08:00">
-                2018-12-04
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-22T11:40:37+08:00">
+                2018-12-22
               </time>
             
 
@@ -1084,38 +1254,8 @@
       
         
           
-            <p><a href="https://codesandbox.io/s/6n20nrzlxz" target="_blank" rel="external">源码</a><br><a href="https://github.com/supnate/react-geek-time" target="_blank" rel="external">git仓库</a></p>
-<h1 id="传统框架存在问题"><a href="#传统框架存在问题" class="headerlink" title="传统框架存在问题"></a>传统框架存在问题</h1><p>1.传统 UI操作关注太多细节<br>DOM API 繁多，需要手动调用，且要经过多步骤进行更新<br>react 解决办法：始终整体‘刷新’页面 ，无需关心细节，（不管谁是哪部分新增或更改的，根据现在状态整体刷新页面）</p>
-<p>2.应用程序状态分散在各处f难以追踪和维护<br>传统数据模型存在问题：传统 MVC结构复杂，难以扩展和维护<br>react 解决办法：Flux 单向数据流</p>
-<p>创建组件<br>1.创建静态 UI<br>2.考虑组件的状态组成 ：是由state内部维护还是用外部传进来的props维护<br>3.考虑组件的交互方式：内部进行了操作，如何告知/把状态暴露到父组件</p>
-<h1 id="受控组件VS非受控组件"><a href="#受控组件VS非受控组件" class="headerlink" title="受控组件VS非受控组件"></a>受控组件VS非受控组件</h1><p>受控组件: 表单元素状态由使用者维护<br>组件发生变化，利用onchange将状态给到到父组件（使用者），父组件更新状态，再通过props传递状态给组件，组件重新渲染</p>
-<p>非受控组件:表单元素状态 DOM自身维护</p>
-<h1 id="创建原则：单一职责原则"><a href="#创建原则：单一职责原则" class="headerlink" title="创建原则：单一职责原则"></a>创建原则：单一职责原则</h1><p>1.每个组件只做一件事<br>2.如果组件变得复杂，那么应该拆分成小组件<br>   拆分成小组件好处：<br>   a.降低复杂度；<br>   b.提高性能，如果一个组件足够大之后，任何一种状态变化，都会引起整个组件刷新，<br>拆分成小组件后，未涉及到的小组件，没有状态变化，就不会刷新</p>
-<h1 id="数据状态管理：DRY（Don’t-Repeat-Yourself）原则"><a href="#数据状态管理：DRY（Don’t-Repeat-Yourself）原则" class="headerlink" title="数据状态管理：DRY（Don’t Repeat Yourself）原则"></a>数据状态管理：DRY（Don’t Repeat Yourself）原则</h1><p>1.能计算得到的状态就不要单独存储 :<br>2.组件尽量无状态，所需数据通过 props 获取</p>
-<h1 id="JSX"><a href="#JSX" class="headerlink" title="JSX"></a>JSX</h1><p>本质：不是模板语言，而是一种语法糖(相当于使用React.createElement创建组件)<br>优点：<br>1.声明式创建界面的直观（可以使用自定义和原生标签直接进行创建，方便构建UI）<br>2.代码动态创建界面的灵活 （节点的创建，属性更改，消失完全可以向写JS一样进行操作）<br>3.无需学习新的模板语言（JS+JSX特性）<br>约定：自定义组件以大写字母开头<br>1.react 认为小写的 tag是原生 dom 节点,如 div<br>2.大写字母开头为自定义组件<br>3.JSX 标记可以直接使用属性语法，例如<meau.item>，使用属性语法，可以不以大写字母开头<br>JSX防注入攻击<br>React DOM 在渲染之前默认会 过滤 所有传入的值。它可以确保你的应用不会被注入攻击。<br>所有的内容在渲染之前都被转换成了字符串。这样可以有效地防止 XSS(跨站脚本) 攻击</meau.item></p>
-<h1 id="生命周期方法"><a href="#生命周期方法" class="headerlink" title="生命周期方法"></a>生命周期方法</h1><p>constructor<br>js标准类的构造函数<br>1.用于初始化内部状态，很少使用（初始化工作一般会在其他声明周期内使用）<br>2.唯一可以直接修改state的地方(可以这么写this.state.xxx = ‘abc’)</p>
-<p>getDerivedStateFromProps<br>react 16.3新引入的API<br>从属性props初始化内部状态state<br>1.当 state 需要从 props 初始化时使用<br>2.尽量不要使用：维护两者状态一致性会增加复杂度<br>    如果state需要从props获得，一般使用props可以通过动态计算得到，如果用state进行单独存储，就有必要时刻维护二者的一致性<br>    维护一致性则增加了复杂度，容易出BUG<br>3.每次 render都会调用<br>    该方代替原来的componentwillreceiveProps方法<br>4.典型场景:表单控件获取默认值<br>    初始值来自props,用户输入后为用户输入的值</p>
-<p>componentDidMount<br>1.UI渲染完成后调用<br>2.只执行一次<br>3.典型场景:获取外部资源（只需要获取一次资源）</p>
-<p>componentWillUnmount<br>1.组件移除时被调用<br>2.典型场景：资源释放</p>
-<p>getSnapshotBeforeUpdate<br>1.在页面 render之前调用，state 已更新<br>2.典型场景：获取 render之前的 DOM 状态</p>
-<p>componentDidUpdate<br>捕获每一次更新<br>1.每次 UI 更新时被调用<br>2.典型场景:页面需要根据 props 变化重新获取数据</p>
-<p>shouldComponentUpdate<br>1.组件决定 Virtual DOM是否要重绘<br>2.一般可以由 PureComponent 自动实现<br>3.典型场景:细节性能优化</p>
-<p>在react 16.3中去掉的方法有<br>componentWillMount<br>componentWillReceive<br>componentWillUpdate</p>
-<p>状态更新可能是异步的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">//此代码可能无法更新计数器</div><div class="line">this.setState(&#123;</div><div class="line">  counter: this.state.counter + this.props.increment,</div><div class="line">&#125;);</div><div class="line">//更改为以下写法即可</div><div class="line">this.setState((prevState, props) =&gt; (&#123;</div><div class="line">  counter: prevState.counter + props.increment</div><div class="line">&#125;));</div></pre></td></tr></table></figure></p>
-<p>1.算法复杂度O(n):通过广度优先分层比较/遍历实现线性算法</p>
-<p>2.虚拟 DOM如何计算 diff<br>虚拟 DOM的两个假设<br>a.组件的 DOM结构是相对稳定的<br>b.类型相同的兄弟节点可以被唯一标识<br>根结点比较<br>属性变化及顺序：利用标识调整位置<br>节点类型发生变化：删除原有结点，构建新类型结点<br>节点跨层移动：删除原有结点，在应有（新）位置构建相同类型新结点</p>
-<p>3.key属性的作用：提高性能</p>
-<h1 id="组件复用设计模式"><a href="#组件复用设计模式" class="headerlink" title="组件复用设计模式"></a>组件复用设计模式</h1><p>1.高阶组件</p>
-<p>传入原始组件，结合生命周期创建一些额外的功能，然后附加到原始组件上，返回增加功能后的原始组件<br>额外的功能一般都是一些通用的功能，避免在原始组建上增加额外功能<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">import React from &quot;react&quot;;</div><div class="line"></div><div class="line">export default function withTimer(WrappedComponent) &#123;</div><div class="line">  return class extends React.Component &#123;</div><div class="line">    state = &#123; time: new Date() &#125;;</div><div class="line">    componentDidMount() &#123;</div><div class="line">      this.timerID = setInterval(() =&gt; this.tick(), 1000);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    componentWillUnmount() &#123;</div><div class="line">      clearInterval(this.timerID);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    tick() &#123;</div><div class="line">      this.setState(&#123;</div><div class="line">        time: new Date()</div><div class="line">      &#125;);</div><div class="line">    &#125;</div><div class="line">    render() &#123;</div><div class="line">      return &lt;WrappedComponent time=&#123;this.state.time&#125; &#123;...this.props&#125; /&gt;;</div><div class="line">    &#125;</div><div class="line">  &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>2.函数子组件</p>
-<p>将子组件以函数返回值形式作为children属性传入原始组件，在原始组件中，在需要显示原始组件的地方执行函数，<br>或者在合适的生命周期中执行函数拿到多个子组件，再决定在什么位置显示不同的子组件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">//写法一</div><div class="line">&lt;Mouse children=&#123;mouse =&gt; (</div><div class="line">  &lt;p&gt;The mouse position is &#123;mouse.x&#125;, &#123;mouse.y&#125;&lt;/p&gt;</div><div class="line">)&#125;/&gt;</div><div class="line">//写法二</div><div class="line">&lt;Mouse&gt;</div><div class="line">  &#123;mouse =&gt; (</div><div class="line">    &lt;p&gt;The mouse position is &#123;mouse.x&#125;, &#123;mouse.y&#125;&lt;/p&gt;</div><div class="line">  )&#125;</div><div class="line">&lt;/Mouse&gt;</div><div class="line"></div><div class="line">//在原始组件应用子组件</div><div class="line">class Mouse extends React.Component&#123;</div><div class="line">    render()&#123;</div><div class="line">        &lt;div&gt;</div><div class="line">            &#123;this.props.children(&#123;x:50,y:100&#125;)&#125;</div><div class="line">        &lt;/div&gt;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h1 id="context-API"><a href="#context-API" class="headerlink" title="context API"></a>context API</h1><p>应用场景：全局性的一些字段，如theme的切换<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line">import React from &quot;react&quot;;</div><div class="line"></div><div class="line">const enStrings = &#123;</div><div class="line">  submit: &quot;Submit&quot;,</div><div class="line">  cancel: &quot;Cancel&quot;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">const cnStrings = &#123;</div><div class="line">  submit: &quot;提交&quot;,</div><div class="line">  cancel: &quot;取消&quot;</div><div class="line">&#125;;</div><div class="line">//传入原始数据/默认值，创建context</div><div class="line">const LocaleContext = React.createContext(enStrings);</div><div class="line"></div><div class="line">class LocaleProvider extends React.Component &#123;</div><div class="line">  state = &#123; locale: cnStrings &#125;;</div><div class="line">  toggleLocale = () =&gt; &#123;</div><div class="line">    const locale =</div><div class="line">      this.state.locale === enStrings</div><div class="line">        ? cnStrings</div><div class="line">        : enStrings;</div><div class="line">    this.setState(&#123; locale &#125;);</div><div class="line">  &#125;;</div><div class="line">  render() &#123;</div><div class="line">    return (</div><div class="line">      // context的 Provider属性是一个组件，包裹需要用到context数据子组件的组件，其value值为相应在子组件中需要用到的数据</div><div class="line">      &lt;LocaleContext.Provider value=&#123;this.state.locale&#125;&gt;</div><div class="line">        &lt;button onClick=&#123;this.toggleLocale&#125;&gt;</div><div class="line">          切换语言</div><div class="line">        &lt;/button&gt;</div><div class="line">        &#123;this.props.children&#125;</div><div class="line">      &lt;/LocaleContext.Provider&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class LocaledButtons extends React.Component &#123;</div><div class="line">  render() &#123;</div><div class="line">    return (</div><div class="line">    //context的 Consumer属性也是一个组件，包裹需要使用context数据的子组件,</div><div class="line">      &lt;LocaleContext.Consumer&gt;</div><div class="line">        &#123;locale =&gt; (//local 即Context.Provider 的value值</div><div class="line">          &lt;div&gt;</div><div class="line">            &lt;button&gt;&#123;locale.cancel&#125;&lt;/button&gt;</div><div class="line">            &amp;nbsp;&lt;button&gt;&#123;locale.submit&#125;&lt;/button&gt;</div><div class="line">          &lt;/div&gt;</div><div class="line">        )&#125;</div><div class="line">      &lt;/LocaleContext.Consumer&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">export default () =&gt; (</div><div class="line">  &lt;div&gt;</div><div class="line">    &lt;LocaleProvider&gt;</div><div class="line">      &lt;div&gt;</div><div class="line">        &lt;br /&gt;</div><div class="line">        &lt;LocaledButtons /&gt;//使用context数据的组件必须为Provider组件的子组件，</div><div class="line">      &lt;/div&gt;</div><div class="line">    &lt;/LocaleProvider&gt;</div><div class="line">    &lt;LocaledButtons /&gt;//如果子组件在Context.Provider形成组件的外面使用，则只会应用默认数据，不会随Value属性发生变化</div><div class="line">  &lt;/div&gt;</div><div class="line">);</div></pre></td></tr></table></figure></p>
-<h1 id="为什么需要脚手架"><a href="#为什么需要脚手架" class="headerlink" title="为什么需要脚手架"></a>为什么需要脚手架</h1><p>react:进行UI开发<br>redux:进行状态的管理<br>react/router:进行路由的管理<br>babel:把最新的js特性翻译成兼容浏览器的旧的JS语法<br>webpack:进行打包<br>eslint:语法检查<br>因而需要引入以上几个技术栈的几十个个package,不但要了解，还要知道如何让进行相应的配置<br>在开启一个项目时，配置过程做完一次基本/只要实现一次，就基本可以复用，用来再开启新项目<br>所以为方便开发，用脚手架实现配置过程</p>
-<p>脚手架有：<br>Create React App 基础（webpack,）<br>Rekit 开源项目<br>Codesandbox 在线开发工具<br>dva 蚂蚁金服的一套脚手架工具</p>
-<h1 id="为什么需要打包"><a href="#为什么需要打包" class="headerlink" title="为什么需要打包"></a>为什么需要打包</h1><p>1.编译ES6语法特性，编译JSX（保证浏览器可以兼容执行）<br>2.整合资源，例如图片，Less/Sass，svg<br>3.优化代码体积(对变量名进行缩短，去除注释，去除空格，去除不必要的变量等等)</p>
-<p>webpack<br>将项目中所有资源进行整合，将每种资源（js，png，sass…）使用插件的方式载入对应的Loader,<br>loader能够决定自己支持什么样的语法，loader的输出是可以执行的js语言，可以兼容多平台多版本浏览器<br>可以部署的语言</p>
-<p>打包注意事项<br>1.设置nodejs环境为production<br>开发环境可能需要检查输入的参数的类型，语法，拼写等问题，但生产环境不需要</p>
-<p>2.禁用开发时专用代码，比如logger<br>打包时可以根据环境判断决定是否执行一定的代码，所以开发用到的代码在打包时不应被打到生产环境，要做区分<br>3.设置应用根路径<br>告诉应用到哪里获取地址</p>
+            <p>1.使用 setInterval<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">this.timerID = setInterval(fn, time);</div><div class="line">clearInterval(this.timerID);</div></pre></td></tr></table></figure></p>
+<p> 2.angular 中使用 $interval<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">this.timerID = $interval(fn, time);</div><div class="line">$interval.cancel(this.timerID)</div></pre></td></tr></table></figure></p>
 
           
         
@@ -1154,7 +1294,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/designMode/command.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/flex-direction.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1179,8 +1319,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/designMode/command.html" itemprop="url">
-                  命令模式
+                <a class="post-title-link" href="/post/knowledge/flex-direction.html" itemprop="url">
+                  flex-drection属性使用
                 </a>
               
             
@@ -1194,8 +1334,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-08T21:09:09+08:00">
-                2018-11-08
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-22T11:29:37+08:00">
+                2018-12-22
               </time>
             
 
@@ -1232,11 +1372,13 @@
       
         
           
-            <h1 id="应用情景"><a href="#应用情景" class="headerlink" title="应用情景"></a>应用情景</h1><p>有时候需要向某些对象发送请求，但是并不知道请求的接收者是谁，也不知道被请求的操作是什么。<br>此时希望用一种松耦合的方式设计软件，使得请求发送者和请求接收者能够消除彼此之间的耦合关系</p>
-<h1 id="主要思想"><a href="#主要思想" class="headerlink" title="主要思想"></a>主要思想</h1><p>将命令接收者的具体执行函数存入 命令堆栈，命令发起者需要执行/撤销动作时，对堆栈进行处理<br>命令接收者可以以闭包形式被执行，也可以作为对象属性被执行到</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line">//闭包形式</div><div class="line">var setCommand = function(btn,fn)&#123;</div><div class="line">	btn.onclick = function()&#123;</div><div class="line">		fn()</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">var MenuBar = &#123;</div><div class="line">	refresh:function()&#123;</div><div class="line">		console.log(&apos;refresh menu&apos;)</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">var RefreshMenuBarCommand = function(reciver)&#123;</div><div class="line">	return function()&#123;reciver.refresh()&#125;</div><div class="line">&#125;</div><div class="line">var refreshMenuBarCommand = RefreshMenuBarCommand(Menubar)</div><div class="line">setCommand(btn1,refreshMenuBarCommand)</div><div class="line"></div><div class="line">//宏命令，组装一个可以一次性触发多个命令的命令；属性形式，统一使用execute触发</div><div class="line">var MacroCommand = function()&#123;</div><div class="line">	return &#123;</div><div class="line">		commandsList:[],</div><div class="line">		add:function(command)&#123;</div><div class="line">			this.commandsList.push(command);</div><div class="line">		&#125;,</div><div class="line">		execute:function()&#123;</div><div class="line">			for(var i=0,cammand;command = this.commandsList[i++];)&#123;</div><div class="line">				command.execute();</div><div class="line">			&#125;</div><div class="line">		&#125;,</div><div class="line">		undo:function()&#123;</div><div class="line">			for(var i=0,cammand;command = this.commandsList[i++];)&#123;</div><div class="line">				command.undo();</div><div class="line">			&#125;</div><div class="line">		&#125;,</div><div class="line">		</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">var closeDoorCom =&#123;</div><div class="line">	execute:function()&#123;</div><div class="line">		console.log(&apos;close door&apos;)</div><div class="line">	&#125;,</div><div class="line">	undo:function()&#123;console.log(&apos;open door&apos;)&#125;</div><div class="line">&#125;</div><div class="line">var openTvCom =&#123;</div><div class="line">	execute:function()&#123;</div><div class="line">		console.log(&apos;open TV&apos;)</div><div class="line">	&#125;,</div><div class="line">	undo:function()&#123;console.log(&apos;close Tv&apos;)&#125;</div><div class="line">&#125;</div><div class="line">var macroCommand = MacroCommand()</div><div class="line">macroCommand.add(closeDoorCom)</div><div class="line">macroCommand.add(openTvCom)</div><div class="line">macroCommand.execute()</div><div class="line">macroCommand.undo()</div></pre></td></tr></table></figure>
-<h1 id="与策略区别"><a href="#与策略区别" class="headerlink" title="与策略区别"></a>与策略区别</h1><p>策略模式指向问题域更小，所有策略对象目标一致，他们只是达到这个目的的不同手段，内部实现针对‘算法’<br>命令对象解决的目标更具发散性，还可以完成撤销，排队等功能</p>
-
+            <p>在display:flex基础上使用flex-direction,可用于多子模块布局</p>
+<p>flex-direction可以为四个值</p>
+<p>row:水平并行排列在左侧</p>
+<p>row-reverse：水平并行排列在右侧，顺序与书写顺序相反,最前的在最右边</p>
+<p>column:垂直排列在上方,相当于display:block状态下模块默认布局</p>
+<p>column-reverse:垂直排列在下方,顺序与书写顺序相反，最前的在最下边</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line">&lt;!doctype html&gt;</div><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;style&gt;</div><div class="line">        #main1 </div><div class="line">        &#123;</div><div class="line">            width:200px;</div><div class="line">            height: 300px;</div><div class="line">            border:1px solid black;</div><div class="line">            display: flex;</div><div class="line">            flex-direction:row;</div><div class="line">        &#125;</div><div class="line">        #main2 </div><div class="line">        &#123;</div><div class="line">            width:200px;</div><div class="line">            height: 300px;</div><div class="line">            border:1px solid black;</div><div class="line">            display: flex;</div><div class="line">            flex-direction:row-reverse;</div><div class="line">        &#125;</div><div class="line">        #main3 </div><div class="line">        &#123;</div><div class="line">            width:200px;</div><div class="line">            height: 300px;</div><div class="line">            border:1px solid black;</div><div class="line">            display: flex;</div><div class="line">            flex-direction:column;</div><div class="line">        &#125;</div><div class="line">        #main4 </div><div class="line">        &#123;</div><div class="line">            width:200px;</div><div class="line">            height: 300px;</div><div class="line">            border:1px solid black;</div><div class="line">            display: flex;</div><div class="line">            flex-direction:column-reverse;</div><div class="line">        &#125;</div><div class="line">    &lt;/style&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;h4&gt;This is an example for flex-direction:row(default)&lt;/h4&gt;</div><div class="line">&lt;div id=&quot;main1&quot;&gt;</div><div class="line">    &lt;div style=&quot;background-color:red;&quot;&gt;RED&lt;/div&gt;</div><div class="line">    &lt;div style=&quot;background-color:lightblue;&quot;&gt;BLUE&lt;/div&gt;</div><div class="line">    &lt;div style=&quot;background-color:lightgreen;&quot;&gt;GREEN&lt;/div&gt;</div><div class="line">&lt;/div&gt;</div><div class="line">&lt;h4&gt;This is an example for flex-direction:row-reverse&lt;/h4&gt;</div><div class="line">&lt;div id=&quot;main2&quot;&gt;</div><div class="line">    &lt;div style=&quot;background-color:red;&quot;&gt;RED&lt;/div&gt;</div><div class="line">    &lt;div style=&quot;background-color:lightblue;&quot;&gt;BLUE&lt;/div&gt;</div><div class="line">    &lt;div style=&quot;background-color:lightgreen;&quot;&gt;GREEN&lt;/div&gt;</div><div class="line">&lt;/div&gt;</div><div class="line">&lt;h4&gt;This is an example for flex-direction:column&lt;/h4&gt;</div><div class="line">&lt;div id=&quot;main3&quot;&gt;</div><div class="line">    &lt;div style=&quot;background-color:red;&quot;&gt;RED&lt;/div&gt;</div><div class="line">    &lt;div style=&quot;background-color:lightblue;&quot;&gt;BLUE&lt;/div&gt;</div><div class="line">    &lt;div style=&quot;background-color:lightgreen;&quot;&gt;GREEN&lt;/div&gt;</div><div class="line">&lt;/div&gt;</div><div class="line">&lt;h4&gt;This is an example for flex-direction:column-reverse&lt;/h4&gt;</div><div class="line">&lt;div id=&quot;main4&quot;&gt;</div><div class="line">    &lt;div style=&quot;background-color:red;&quot;&gt;RED&lt;/div&gt;</div><div class="line">    &lt;div style=&quot;background-color:lightblue;&quot;&gt;BLUE&lt;/div&gt;</div><div class="line">    &lt;div style=&quot;background-color:lightgreen;&quot;&gt;GREEN&lt;/div&gt;</div><div class="line">&lt;/div&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
           
         
       
@@ -1274,7 +1416,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/designMode/event.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/map&reduce.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1299,8 +1441,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/designMode/event.html" itemprop="url">
-                  订阅发布模式
+                <a class="post-title-link" href="/post/js/map&reduce.html" itemprop="url">
+                  数组的map和reduce
                 </a>
               
             
@@ -1314,8 +1456,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-08T20:57:09+08:00">
-                2018-11-08
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-22T11:25:37+08:00">
+                2018-12-22
               </time>
             
 
@@ -1352,257 +1494,35 @@
       
         
           
-            <h1 id="主要思想"><a href="#主要思想" class="headerlink" title="主要思想"></a>主要思想</h1><p>通过逻辑处理函数/对象event，使事件订阅和发布过程忽略事件的具体处理过程<br>订阅时只需要给到event要订阅的事件A，和响应函数，<br>发布时给到event事件A被触发和相关参数，即可执行订阅时的响应函数<br>event 充当中介者的角色，管理事件响应的存储和执行</p>
-<p>1.简单实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">let event = &#123;</div><div class="line">	caches:&#123;&#125;,</div><div class="line">	on:function(name,fn)&#123;</div><div class="line">		if(!this.caches[name])&#123;</div><div class="line">			this.caches[name] = []</div><div class="line">		&#125;</div><div class="line">		this.caches[name].push(fn)</div><div class="line">	&#125;,</div><div class="line">	emit:function(name,...args)&#123;</div><div class="line">		if(!this.caches[name])&#123;return&#125;</div><div class="line">		for(let i=0;i&lt;this.caches[name].length;i++)&#123;</div><div class="line">			let fn=this.caches[name][i]</div><div class="line">			fn(args)</div><div class="line">		&#125;</div><div class="line">	&#125;,</div><div class="line">	remove:function(name,fn)&#123;</div><div class="line">		if(this.caches[name].length&lt;1)&#123;return&#125;</div><div class="line">		for(let i=0;i&lt;this.caches[name].length;i++)&#123;</div><div class="line">			let fn1=this.caches[name][i]</div><div class="line">			if(fn === fn1)&#123;</div><div class="line">				this.caches[name].splice(i,1)</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">let fn1 = (val)=&gt;&#123;console.log(val,1)&#125;</div><div class="line">let fn2 = (val)=&gt;&#123;console.log(val,2)&#125;</div><div class="line">event.on(&apos;aaa&apos;,fn1)</div><div class="line">event.on(&apos;aaa&apos;,fn2)</div><div class="line">event.emit(&apos;aaa&apos;,&apos;fire!&apos;)</div></pre></td></tr></table></figure></p>
-<p>2.全局事件冲突<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div></pre></td><td class="code"><pre><div class="line">var Event = (function()&#123; </div><div class="line">    var global = this,</div><div class="line">        Event,_default = &apos;default&apos;; </div><div class="line">    Event = function()&#123;         </div><div class="line">        var _listen, </div><div class="line">        _trigger,</div><div class="line">        _remove,</div><div class="line">        _slice = Array.prototype.slice,</div><div class="line">        _shift = Array.prototype.shift,</div><div class="line">        _unshift = Array.prototype.unshift,              </div><div class="line">        namespaceCache = &#123;&#125;,              </div><div class="line">        _create,              </div><div class="line">        find,             </div><div class="line">        each = function( ary, fn )&#123;                 </div><div class="line">            var ret;                 </div><div class="line">            for ( var i = 0, l = ary.length; i &lt; l; i++ )&#123;</div><div class="line">                var n = ary[i];                     </div><div class="line">                ret = fn.call( n, i, n);                 </div><div class="line">            &#125;                 </div><div class="line">            return ret;             </div><div class="line">            &#125;; </div><div class="line"></div><div class="line">           _listen = function( key, fn, cache )&#123;                </div><div class="line">               if ( !cache[ key ] )&#123;                    </div><div class="line">                   cache[ key ] = [];                </div><div class="line">                &#125;               </div><div class="line">                cache[key].push( fn );            </div><div class="line">            &#125;; </div><div class="line"></div><div class="line">           _remove = function( key, cache ,fn)&#123;                </div><div class="line">               if ( cache[ key ] )&#123;                    </div><div class="line">                   if( fn )&#123;                        </div><div class="line">                       for( var i = cache[ key ].length; i &gt;= 0; i-- )&#123;                            </div><div class="line">                           if( cache[ key ][i] === fn )&#123;                                </div><div class="line">                               cache[ key ].splice( i, 1 );                            </div><div class="line">                            &#125;                        </div><div class="line">                        &#125;                    </div><div class="line">                    &#125;else&#123;                        </div><div class="line">                        cache[ key ] = [];                    </div><div class="line">                    &#125;                </div><div class="line">                &#125;            </div><div class="line">            &#125;; </div><div class="line"> </div><div class="line">           _trigger = function()&#123;                </div><div class="line">               var cache = _shift.call(arguments),                      </div><div class="line">               key = _shift.call(arguments),                      </div><div class="line">               args = arguments,                      </div><div class="line">               _self = this,                     </div><div class="line">              ret,                      </div><div class="line">              stack = cache[ key ]; </div><div class="line"> </div><div class="line">              if ( !stack || !stack.length )&#123;                    </div><div class="line">                   return;                </div><div class="line">              &#125; </div><div class="line"> </div><div class="line">               return each( stack, function()&#123;                    </div><div class="line">                   return this.apply( _self, args );                </div><div class="line">                &#125;);             </div><div class="line">            &#125;; </div><div class="line"> </div><div class="line">            _create = function( namespace )&#123;                 </div><div class="line">                var namespace = namespace || _default;                 </div><div class="line">                var cache = &#123;&#125;,                     </div><div class="line">                offlineStack = [],    // 离线事件                      </div><div class="line">                ret = &#123;                         </div><div class="line">                    listen: function( key, fn, last )&#123;                             </div><div class="line">                        _listen( key, fn, cache );                             </div><div class="line">                        if ( offlineStack === null )&#123;                                 </div><div class="line">                            return;                             </div><div class="line">                        &#125;                             </div><div class="line">                        if ( last === &apos;last&apos; )&#123;                        </div><div class="line">                            offlineStack.length &amp;&amp; offlineStack.pop()();                             </div><div class="line">                        &#125;else&#123;                                 </div><div class="line">                            each( offlineStack, function()&#123;                                 </div><div class="line">                                this();                             </div><div class="line">                                &#125;);                          </div><div class="line">                        &#125; </div><div class="line"> </div><div class="line">                         offlineStack = null;                      </div><div class="line">                    &#125;,</div><div class="line"></div><div class="line">                    one: function( key, fn, last )&#123;                          </div><div class="line">                        _remove( key, cache );                          </div><div class="line">                        this.listen( key, fn ,last );                      </div><div class="line">                    &#125;,                      </div><div class="line">                        </div><div class="line">                    remove: function( key, fn )&#123;                          </div><div class="line">                        _remove( key, cache ,fn);                      </div><div class="line">                    &#125;,                      </div><div class="line">                    trigger: function()&#123;                          </div><div class="line">                        var fn,                              </div><div class="line">                        args,                              </div><div class="line">                        _self = this; </div><div class="line"> </div><div class="line">                        _unshift.call( arguments, cache );                          </div><div class="line">                        args = arguments;                          </div><div class="line">                        fn = function()&#123;                              </div><div class="line">                            return _trigger.apply( _self, args );                          </div><div class="line">                        &#125;; </div><div class="line"> </div><div class="line">                        if ( offlineStack )&#123;                              </div><div class="line">                            return offlineStack.push( fn );                          </div><div class="line">                        &#125;                        </div><div class="line">                        return fn();                       </div><div class="line">                    &#125;                    </div><div class="line">                &#125;; </div><div class="line">                return namespace ?( namespaceCache[ namespace ] ? namespaceCache[ namespace ] :            namespaceCache[ namespace ] = ret ): ret;                </div><div class="line">            &#125;; </div><div class="line"> </div><div class="line">        return &#123;                 </div><div class="line">            create: _create,                 </div><div class="line">            one: function( key,fn, last )&#123;                     </div><div class="line">                var event = this.create( );                         </div><div class="line">                event.one( key,fn,last );                 </div><div class="line">                &#125;,                 </div><div class="line">            remove: function( key,fn )&#123;                  </div><div class="line">                var event = this.create( );                     </div><div class="line">                event.remove( key,fn );                 </div><div class="line">                &#125;,                 </div><div class="line">            listen: function( key, fn, last )&#123;                     </div><div class="line">                var event = this.create( );                         </div><div class="line">                event.listen( key, fn, last );                     </div><div class="line">                &#125;,                 </div><div class="line">            trigger: function()&#123; </div><div class="line">                var event = this.create( );                     </div><div class="line">                event.trigger.apply( this, arguments );                  </div><div class="line">                &#125;           </div><div class="line">            &#125;;     </div><div class="line">    &#125;(); </div><div class="line"></div><div class="line">    return Event; </div><div class="line"> </div><div class="line">&#125;)();</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/designMode/AOP.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/designMode/AOP.html" itemprop="url">
-                  AOP(切面)编程/装饰者模式
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-07T21:57:09+08:00">
-                2018-11-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>在不改变对象自身的基础上，在程序运行期间给对象动态的添加职责</p>
-<h1 id="主要思想"><a href="#主要思想" class="headerlink" title="主要思想"></a>主要思想</h1><p>在每次要执行具体函数B时，先执行A，在每次执行完B之后都执行C，<br>以此类推，有必要的话，在C执行完再执行D，从而形成执行链</p>
-<h1 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h1><p>先用一个temp函数包住AB,再用一个final函数包住temp和C，这样，在执行final函数时，会按顺序A-B-C执行</p>
-<p>1.使用普通函数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">let before=(fn,beforeFn)=&gt;&#123;</div><div class="line">	return (...args)=&gt;&#123;</div><div class="line">		beforeFn(args)</div><div class="line">		return fn(args)</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">let after = (fn,afterFn)=&gt;&#123;</div><div class="line">	return (...args)=&gt;&#123;</div><div class="line">		let ret = fn(args)</div><div class="line">		afterFn(args)</div><div class="line">		return ret</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">let a = ()=&gt;&#123;console.log(2)&#125;</div><div class="line">a = before(a,()=&gt;&#123;console.log(1)&#125;)</div><div class="line">a = after(a,()=&gt;&#123;console.log(3)&#125;)</div><div class="line">a() //1,2,3</div></pre></td></tr></table></figure></p>
-<p>2.改造Function对象,可以实现链式添加职责</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">Function.prototype.before = function(beforeFn)&#123;</div><div class="line">	return ()=&gt;&#123;</div><div class="line">		beforeFn(arguments);</div><div class="line">		return this(arguments);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">Function.prototype.after = function(afterFn)&#123;</div><div class="line">	return ()=&gt;&#123;</div><div class="line">		let ret = this(arguments);</div><div class="line">		afterFn(arguments);</div><div class="line">		return ret;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">var func = function ()&#123;</div><div class="line">console.log(2); </div><div class="line">return 15&#125;</div><div class="line">func = func.before(()=&gt;&#123;console.log(1)&#125;).after(()=&gt;&#123;console.log(3)&#125;)</div><div class="line">func() //1,2,3 返回15</div></pre></td></tr></table></figure>
-<h1 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h1><p>1.数据统计上报<br>  将点击响应事件包含的上报动作隔离出来，以after的顺序，装饰到点击事件响应函数上</p>
-<p>2.动态改变函数参数<br>  组装ajax请求参数时，在请求函数前装饰before函数，进行不同参数参加处理</p>
-<p>3.插件式表单验证<br>  在submit函数前装饰before函数进行不同条件验证</p>
-<h1 id="区分代理模式"><a href="#区分代理模式" class="headerlink" title="区分代理模式"></a>区分代理模式</h1><p>代理模式的意图是当直接访问本体不方便或者不符合需要时，为这个本体提供一个替代者，<br>本体定义了关键功能，而代理提供或拒绝对它的访问，或者在访问本体之前做一些额外的事情<br>通常只有一层代理-本体的引用</p>
-<p>AOP的作用用于对对象加入行为，一开始不能确定对象的全部功能时，<br>经常会形成一条装饰链</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/designMode/iterator.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/designMode/iterator.html" itemprop="url">
-                  迭代器模式
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-06T22:23:09+08:00">
-                2018-11-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>提供一种方法顺序访问一个聚合对象种的各个元素，而又不需要暴露该对象的内部表示<br>把迭代过程从业务逻辑中分离出来，不用关心对象的内部构造，可以按顺序访问其中的每个元素</p>
-<h1 id="用途-场景"><a href="#用途-场景" class="headerlink" title="用途/场景"></a>用途/场景</h1><p>查找可用组件，进行数据处理</p>
-<h1 id="主要思想"><a href="#主要思想" class="headerlink" title="主要思想"></a>主要思想</h1><p>内部迭代器<br>函数内部定义好迭代规则，完全接手整个迭代过程，外部只需要一次初始调用</p>
-<p>外部迭代器<br>需要调用进行下一轮迭代的函数，可以手工控制迭代的过程或者顺序</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">//使用内部迭代器实现</div><div class="line">var iteratorInner=(arr,fn)=&gt;&#123;</div><div class="line">	for(let i=0;i&lt;arr.length;i++)&#123;</div><div class="line">		fn(arr,i)</div><div class="line">	&#125;</div><div class="line">	return arr</div><div class="line">&#125;</div><div class="line">console.log(iteratorInner([1,2,3],(arr,i)=&gt;&#123;arr[i]++&#125;)) //[2,3,4] </div><div class="line"></div><div class="line">//使用外部迭代器</div><div class="line">let iteratorOuter = (arr,fn)=&gt;&#123;</div><div class="line">	let count = 0;</div><div class="line">    let nextFn =()=&gt;&#123;</div><div class="line">		if(count &lt;arr.length)&#123;</div><div class="line">			fn(arr,count)</div><div class="line">		&#125;</div><div class="line">		return &#123;</div><div class="line">			result:arr,</div><div class="line">			count:count === arr.length ? count:++count,,</div><div class="line">			done:count === arr.length</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	return &#123;</div><div class="line">		next:nextFn,</div><div class="line">		isdone:count === arr.length</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">var it = iteratorOuter([1,2,3],(arr,i)=&gt;&#123;</div><div class="line">	arr[i]++</div><div class="line">&#125;)</div><div class="line">console.log(it.next())</div><div class="line">//count: 1</div><div class="line">//done: false</div><div class="line">//result: (3) [2, 3, 4]</div><div class="line">console.log(it.next())</div><div class="line">//count: 2</div><div class="line">//done: false</div><div class="line">//result: (3) [2, 3, 4]</div><div class="line">console.log(it.next())</div><div class="line">//count: 3</div><div class="line">//done: true</div><div class="line">//result: (3) [2, 3, 4]</div></pre></td></tr></table></figure>
+            <h1 id="数组的map方法"><a href="#数组的map方法" class="headerlink" title="数组的map方法"></a>数组的map方法</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">let arr = [1,2,3,4,5];</div><div class="line">let arr1 = arr.map(function(val,index,arr)&#123;</div><div class="line">	console.log(val,index,arr)</div><div class="line">	return val+1</div><div class="line">&#125;)</div><div class="line">console.log(arr1)//[2, 3, 4, 5, 6]</div><div class="line">console.log(arr) //[1, 2, 3, 4, 5]</div></pre></td></tr></table></figure>
+<p>在map中可以传递一个函数，数组的每一项作为参数调用这个函数，然后返回根据该数组项得到的结果，每一个数组项返会一个结果，从而组成新的数组</p>
+<p>函数的参数有三个，第一项为数组按序传进的一个值，该值的index和数组本身</p>
+<p>整个结果产生新数组，原来数组不变</p>
+<h1 id="数组的reduce-方法"><a href="#数组的reduce-方法" class="headerlink" title="数组的reduce 方法"></a>数组的reduce 方法</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">例1.</div><div class="line">let arr = [1,2,3];</div><div class="line">let result = arr.reduce(function(preresult,item)&#123;</div><div class="line">	return preresult += item;</div><div class="line">&#125;,0)</div><div class="line">console.log(result)   //6</div><div class="line"></div><div class="line">例2.</div><div class="line">let result4 = arr.reduce(function(preresult,item)&#123;</div><div class="line">    preresult.name += item;</div><div class="line">	return preresult</div><div class="line">&#125;,&#123;name:0&#125;)</div><div class="line">console.log(result4); //&#123;name:6&#125;</div></pre></td></tr></table></figure>
+<p>reduce 用于对数组每一项进行累计计算，每一项计算结果作为参数参加数组下一项的计算,最终返回计算结果</p>
+<p>例1中单纯对数组每一项进行叠加处理，返回叠加结果<br>例2同样进行叠加只是叠加结果放在对象中返回</p>
+<p>reduce(callback(),initval)</p>
+<p>需要两个参数，一个是用于累计计算的callback函数，一个是初始值，见上两例</p>
+<p>callback()函数有四个参数依次为：</p>
+<p>preVal （上一次调用回调返回的值，或者是提供的初始值（initialValue））</p>
+<p>currentValue （数组中当前被处理的元素）</p>
+<p>index （当前元素在数组中的索引）</p>
+<p>array （调用 reduce 的数组）</p>
+<p>初始值会在第一次调用时当作回调函数callback的第一个参数使用</p>
+<p>希望返回值是什么类型的数据，初始值就要设置为什么样的类型，callback返回值也是该类型；或者说是在这里设置返回值的类型</p>
+<p>整个处理过程就是拿初始值initval和数组第一个值在callback里面进行处理，返回结果result,result当作callback的preval参数和数组第二个元素传入callback在处理，直到数组全部元素被处理完，返回一个最终处理结果</p>
+<p>高级应用<br>对对象数组元素进行累计计算<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">var reducers = &#123;  </div><div class="line">  totalInEuros : function(state, item) &#123;</div><div class="line">    return state.euros += item.price * 0.897424392;</div><div class="line">  &#125;,</div><div class="line">  totalInYen : function(state, item) &#123;</div><div class="line">    return state.yens += item.price * 113.852;</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">var manageReducers = function(reducers) &#123;</div><div class="line">  return function(state, item) &#123;</div><div class="line">    return Object.keys(reducers).reduce(</div><div class="line">      function(nextState, key) &#123;</div><div class="line">        reducers[key](state, item);</div><div class="line">        return state;</div><div class="line">      &#125;,</div><div class="line">      &#123;&#125;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">var bigTotalPriceReducer = manageReducers(reducers);</div><div class="line">var initialState = &#123;euros:0, yens: 0&#125;;</div><div class="line">var items = [&#123;price: 10&#125;, &#123;price: 120&#125;, &#123;price: 1000&#125;];</div><div class="line">var totals = items.reduce(bigTotalPriceReducer, initialState);</div><div class="line">console.log(totals);</div><div class="line">//&#123;euros: 1014.08956296, yens: 128652.76&#125;</div></pre></td></tr></table></figure></p>
+<p>该例的目的是将对象数组items的元素属性price进行不同处理操作然后将结果分别保存到结果对象的属性中</p>
+<p>处理的关键是manageReducers返回的作为items callback的函数bigTotalPriceReducer，</p>
+<p>处理思路是items每用一个元素调用callback时,callback的处理过程是将这个元素作为参数调用reducers 对象里面设置的每一个处理函数,</p>
+<p>调用reducers处理函数的过程同样使用一个reduce方法进行处理</p>
+<p>Object.keys(obj)方法返回对象键值组成的数组</p>
+<p>当items的元素参加完reducers所有处理函数后,返回的结果参加下一个元素的计算最终返回结果</p>
+<p>扩展：</p>
+<p>1.在reduces中设置对items不同属性的计算，从而得到不同属性的结算结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">var reducers = &#123;  </div><div class="line">  totalInEuros : function(state, item) &#123;</div><div class="line">    return state.euros += item.p1;</div><div class="line">  &#125;,</div><div class="line">  totalInYen : function(state, item) &#123;</div><div class="line">    return state.yens += item.price * 113.852;</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">var bigTotalPriceReducer = manageReducers(reducers);</div><div class="line">var initialState = &#123;euros:0, yens: 0&#125;;</div><div class="line">var items = [&#123;price: 10,p1:1&#125;, &#123;price: 120,p1:1&#125;, &#123;price: 1000,p1:1&#125;];</div><div class="line">var totals = items.reduce(bigTotalPriceReducer, initialState);</div><div class="line">console.log(totals);</div><div class="line">//&#123;euros: 3, yens: 128652.76&#125;</div></pre></td></tr></table></figure>
+<p>2.计算对象数组属性值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">var manageReducers = function(state, item) &#123;</div><div class="line">    return Object.keys(item).reduce(</div><div class="line">      function(nextState, key) &#123;</div><div class="line">        state[key] +=item[key];</div><div class="line">        return state;</div><div class="line">      &#125;,</div><div class="line">      &#123;&#125;</div><div class="line">    );</div><div class="line">&#125;;</div><div class="line"></div><div class="line">var initialState = &#123;price:0, p1: 0&#125;;</div><div class="line">var items = [&#123;price: 10,p1:1&#125;, &#123;price: 120,p1:1&#125;, &#123;price: 1000,p1:1&#125;];</div><div class="line">var totals = items.reduce(manageReducers, initialState);</div><div class="line">console.log(totals);</div><div class="line">//&#123;price: 1130, p1: 3&#125;</div></pre></td></tr></table></figure></p>
+<p><a href="https://segmentfault.com/a/1190000010731933" target="_blank" rel="external">参阅资料</a></p>
 
           
         
@@ -1636,7 +1556,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1677,7 +1597,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">199</span>
+              <span class="site-state-item-count">215</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
