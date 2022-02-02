@@ -259,6 +259,149 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/course/router.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/react/course/router.html" itemprop="url">
+                  路由
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-04T21:08:37+08:00">
+                2018-12-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="为什么需要路由"><a href="#为什么需要路由" class="headerlink" title="为什么需要路由"></a>为什么需要路由</h1><p>1.单页应用需要进行页面切换<br>2.通过URL可以定位到页面<br>3.更有语义的组织资源</p>
+<h1 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h1><p>在组件容器里根据URL决定显示什么样的组件</p>
+<h1 id="REACT-router特性（和后端路由对比）"><a href="#REACT-router特性（和后端路由对比）" class="headerlink" title="REACT router特性（和后端路由对比）"></a>REACT router特性（和后端路由对比）</h1><p>1.声明式路由定义</p>
+<p>通过react组件标签进行声明，可以放在任何地方，不需要具体的路由表进行声明</p>
+<p>2.动态路由</p>
+<p>传统路由一旦配置了它就是一个配置文件，成为一个静态文件<br>而react router的路由是页面在render的时候才会被解析的，有相应路由的标记标签就是有相应的配置，没有标签就没有相应的配置</p>
+<h1 id="三种路由实现方式"><a href="#三种路由实现方式" class="headerlink" title="三种路由实现方式"></a>三种路由实现方式</h1><ol>
+<li><p>url路径：通过改变URl更改视图</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">import React from &quot;react&quot;;</div><div class="line">import &#123; BroswerRouter as Router, Route, Link &#125; from &quot;react-router-dom&quot;;</div><div class="line"></div><div class="line">const Home = () =&gt; &lt;h1&gt;Home&lt;/h1&gt;;</div><div class="line">const Hello = () =&gt; &lt;h1&gt;Hello&lt;/h1&gt;;</div><div class="line">const About = () =&gt; &lt;h1&gt;About Us&lt;/h1&gt;;</div><div class="line"></div><div class="line">export default class RouterSample extends React.PureComponent &#123;</div><div class="line">  render() &#123;</div><div class="line">    return (</div><div class="line">      &lt;Router&gt;</div><div class="line">        &lt;div&gt;</div><div class="line">          &lt;ul id=&quot;menu&quot;&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/home&quot;&gt;Home&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/hello&quot;&gt;Hello&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/about&quot;&gt;About&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">          &lt;/ul&gt;</div><div class="line"></div><div class="line">          &lt;div id=&quot;page-container&quot;&gt;</div><div class="line">            &lt;Route path=&quot;/home&quot; component=&#123;Home&#125; /&gt;</div><div class="line">            &lt;Route path=&quot;/hello&quot; component=&#123;Hello&#125; /&gt;</div><div class="line">            &lt;Route path=&quot;/about&quot; component=&#123;About&#125; /&gt;</div><div class="line">          &lt;/div&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">      &lt;/Router&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>hash路由：使用Router 的HashRouter组件 进行路由容器包裹,切换路由时，<br>具体的路径会被放在URl的#后面，通过改变hash更变视图《兼容低版本浏览器》</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">import React from &quot;react&quot;;</div><div class="line">import &#123; HashRouter as Router, Route, Link &#125; from &quot;react-router-dom&quot;;</div><div class="line"></div><div class="line">const Home = () =&gt; &lt;h1&gt;Home&lt;/h1&gt;;</div><div class="line">const Hello = () =&gt; &lt;h1&gt;Hello&lt;/h1&gt;;</div><div class="line">const About = () =&gt; &lt;h1&gt;About Us&lt;/h1&gt;;</div><div class="line"></div><div class="line">export default class RouterSample extends React.PureComponent &#123;</div><div class="line">  render() &#123;</div><div class="line">    return (</div><div class="line">      &lt;Router&gt;</div><div class="line">        &lt;div&gt;</div><div class="line">          &lt;ul id=&quot;menu&quot;&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/home&quot;&gt;Home&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/hello&quot;&gt;Hello&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/about&quot;&gt;About&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">          &lt;/ul&gt;</div><div class="line"></div><div class="line">          &lt;div id=&quot;page-container&quot;&gt;</div><div class="line">            &lt;Route path=&quot;/home&quot; component=&#123;Home&#125; /&gt;</div><div class="line">            &lt;Route path=&quot;/hello&quot; component=&#123;Hello&#125; /&gt;</div><div class="line">            &lt;Route path=&quot;/about&quot; component=&#123;About&#125; /&gt;</div><div class="line">          &lt;/div&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">      &lt;/Router&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>存路由：使用react-router 的MemoryRouter组件进行路由容器包裹，路由信息放在内存中管理，URL不变的情况下，即可进行视图切换</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">import React from &quot;react&quot;;</div><div class="line">import &#123; HashRouter as Router, Route, Link &#125; from &quot;react-router-dom&quot;;</div><div class="line">import &#123; MemoryRouter &#125; from &quot;react-router&quot;;</div><div class="line"></div><div class="line">const Home = () =&gt; &lt;h1&gt;Home&lt;/h1&gt;;</div><div class="line">const Hello = () =&gt; &lt;h1&gt;Hello&lt;/h1&gt;;</div><div class="line">const About = () =&gt; &lt;h1&gt;About Us&lt;/h1&gt;;</div><div class="line"></div><div class="line">export default class RouterSample extends React.PureComponent &#123;</div><div class="line">  render() &#123;</div><div class="line">    return (</div><div class="line">      &lt;MemoryRouter&gt;</div><div class="line">        &lt;div&gt;</div><div class="line">          &lt;ul id=&quot;menu&quot;&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/home&quot;&gt;Home&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/hello&quot;&gt;Hello&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/about&quot;&gt;About&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">          &lt;/ul&gt;</div><div class="line"></div><div class="line">          &lt;div id=&quot;page-container&quot;&gt;</div><div class="line">            &lt;Route path=&quot;/home&quot; component=&#123;Home&#125; /&gt;</div><div class="line">            &lt;Route path=&quot;/hello&quot; component=&#123;Hello&#125; /&gt;</div><div class="line">            &lt;Route path=&quot;/about&quot; component=&#123;About&#125; /&gt;</div><div class="line">          &lt;/div&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">      &lt;/MemoryRouter&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>基于路由配置进行资源组织 好处</p>
+<p>1.实现业务逻辑的松耦合<br>2.易于扩展，重构和维护<br>3.路由层面实现Lazy Load</p>
+<h1 id="REACT-Router-API"><a href="#REACT-Router-API" class="headerlink" title="REACT Router API"></a>REACT Router API</h1><p>1.<link>:普通链接,会触发浏览器刷新<br>类似a标签，但是不会触发浏览器的刷新，点击时router会接管导航，对切换进行处理不会传递到浏览器，让其进行真正的页面切换<br>to属性代表链接到的URl的地址<br>2.<navlink>:类似 Link但是会添加当前选中状态<br>可以添加activeClassName属性，当当前链接符合to属性值时,显示相应的样式 还有其他属性，详情请看react-router文档<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;NavLink to=&quot;/faq&quot; activeClassName=&apos;selected&apos;&gt;FAQs&lt;/NavLink&gt;</div></pre></td></tr></table></figure></navlink></p>
+<p>3.<prompt>:满足条件时提示用户是否离开当前页面<br>切换页面时，跟用户提供一个确认的操作</prompt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">import &#123; Prompt &#125; from &quot;react-router&quot;;</div><div class="line">&lt;Prompt</div><div class="line">    when=&#123;formIsHalfFilledOut&#125;</div><div class="line">    message=&apos;Are you sure you want to leave&apos;</div><div class="line">/&gt;</div></pre></td></tr></table></figure>
+<p>4.<redirect>重定向当前页面,例如登录判断<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">import &#123; Redirect,Route &#125; from &quot;react-router&quot;;</div><div class="line">&lt;Route exact path=&apos;/&apos; render=&#123;()=&gt;(</div><div class="line">    loggedIn?(</div><div class="line">    &lt;Redirect to=&apos;/dashboard&apos; /&gt;</div><div class="line">    ) : (</div><div class="line">        &lt;PublicHomePage/&gt;</div><div class="line">    )</div><div class="line">)&#125;/&gt;</div></pre></td></tr></table></figure></redirect></p>
+<p>5.<route>:路由配置的核心标记,路径匹配时显示对应组件<br>path：路由<br>component:相应要显示的组件<br>exact：是否精准配置path<br>多个route path都符合当前路由时，那相应组件都会进行显示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;Route exact path=&quot;/&quot; component=&#123;Home&#125; /&gt;</div></pre></td></tr></table></figure></route></p>
+<p>6.<switch>:只显示第一个匹配的路由<br>找到一个匹配的路径就只显示这个路径相应的组件，其他组件不显示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">import &#123; Switch,Route &#125; from &quot;react-router&quot;;</div><div class="line">&lt;Switch&gt;</div><div class="line">&lt;Route path=&quot;/home&quot; component=&#123;Home&#125; /&gt;</div><div class="line">&lt;Route path=&quot;/hello&quot; component=&#123;Hello&#125; /&gt;</div><div class="line">&lt;Route path=&quot;/about&quot; component=&#123;About&#125; /&gt;</div><div class="line">&lt;Route component=&#123;Nomatch&#125; /&gt;</div><div class="line">&lt;/Switch&gt;</div></pre></td></tr></table></figure></switch></p>
+<h1 id="参数传递"><a href="#参数传递" class="headerlink" title="参数传递"></a>参数传递</h1><p>通过URL传递参数 :<route path="/topic/:id" ...=""><br>获取参数：this.props.match.params<br>页面状态尽量通过URl参数定义,方便页面间跳转时数据传递，否则需要将数据转化成组件内部state进行渲染，过程复杂</route></p>
+<h1 id="套嵌路由"><a href="#套嵌路由" class="headerlink" title="套嵌路由"></a>套嵌路由</h1><p>1.每个React组件都可以时路由容器<br>2.React Router的声明式语法可以方便的定义嵌套路由<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line">import React from &quot;react&quot;;</div><div class="line">import &#123;</div><div class="line">  BrowserRouter as Router,</div><div class="line">  Route,</div><div class="line">  Link</div><div class="line">&#125; from &quot;react-router-dom&quot;;</div><div class="line"></div><div class="line">const Category = (&#123; match &#125;) =&gt; (</div><div class="line">  &lt;h1&gt;Sub Category &#123;match.params.subId&#125;&lt;/h1&gt;</div><div class="line">);</div><div class="line"></div><div class="line">const SubCategory = (&#123; match &#125;) =&gt; (</div><div class="line">  &lt;div&gt;</div><div class="line">    &lt;h1&gt;Category &#123;match.params.id&#125;&lt;/h1&gt;</div><div class="line"></div><div class="line">    &lt;ul id=&quot;menu&quot;&gt;</div><div class="line">      &lt;li&gt;</div><div class="line">        &lt;Link to=&#123;`/category/$&#123;match.params.id&#125;/sub/1`&#125;&gt;</div><div class="line">          Sub Category 1</div><div class="line">        &lt;/Link&gt;</div><div class="line">      &lt;/li&gt;</div><div class="line">      &lt;li&gt;</div><div class="line">        &lt;Link to=&#123;`/category/$&#123;match.params.id&#125;/sub/2`&#125;&gt;</div><div class="line">          Sub Category 2</div><div class="line">        &lt;/Link&gt;</div><div class="line">      &lt;/li&gt;</div><div class="line">      &lt;li&gt;</div><div class="line">        &lt;Link to=&#123;`/category/$&#123;match.params.id&#125;/sub/3`&#125;&gt;</div><div class="line">          Sub Category 3</div><div class="line">        &lt;/Link&gt;</div><div class="line">      &lt;/li&gt;</div><div class="line">    &lt;/ul&gt;</div><div class="line">    &lt;div id=&quot;page-container-2&quot;&gt;</div><div class="line">      &lt;Route</div><div class="line">        path=&quot;/category/:id/sub/:subId&quot;</div><div class="line">        component=&#123;Category&#125;</div><div class="line">      /&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  &lt;/div&gt;</div><div class="line">);</div><div class="line"></div><div class="line">export default class NestedRoute extends React.PureComponent &#123;</div><div class="line">  render() &#123;</div><div class="line">    return (</div><div class="line">      &lt;Router&gt;</div><div class="line">        &lt;div&gt;</div><div class="line">          &lt;ul id=&quot;menu&quot;&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/category/1&quot;&gt;Category 1&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/category/2&quot;&gt;Category 2&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/category/3&quot;&gt;Category 3&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">          &lt;/ul&gt;</div><div class="line"></div><div class="line">          &lt;div id=&quot;page-container&quot;&gt;</div><div class="line">            &lt;Route</div><div class="line">              path=&quot;/category/:id&quot;</div><div class="line">              component=&#123;SubCategory&#125;</div><div class="line">            /&gt;</div><div class="line">          &lt;/div&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">      &lt;/Router&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/course/construct.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1414,127 +1557,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/designMode/singleInstance.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/designMode/singleInstance.html" itemprop="url">
-                  单例模式
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-04T23:11:09+08:00">
-                2018-11-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>单例模式定义：保证一个类仅有一个实例，并提供一个访问它的全局访问点</p>
-<p>主要思想&lt;通用惰性单例&gt;<br>管理单例逻辑（保证实现单例的过程）和创建过程（具体业务逻辑）分开，创建过程函数作为参数给到管理单例逻辑函数中，<br>通过调用单例逻辑函数，业务逻辑函数只执行一次</p>
-<p>用途<br>1.创建单一对象<br>2.利用业务逻辑仅执行一次，进行事件挂载</p>
-<p>注意事项<br>业务逻辑函数一定要return 一个真正</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">var getSingle = function(fn)&#123;</div><div class="line"> 	var ret;</div><div class="line"> 	return function()&#123;</div><div class="line"> 		return ret || (ret = fn.apply(this,arguments));</div><div class="line"> 		//第一次执行时，会运行函数，返回创建的实例给到ret,</div><div class="line"> 		//以后再执行时，ret 即第一次创建的实例直接返回</div><div class="line"> 	&#125;</div><div class="line"> &#125;</div><div class="line"> </div><div class="line"> //返回单例</div><div class="line"> var creatObj = function(name)&#123;</div><div class="line"> 	this.aaaa = &#123;</div><div class="line">		name:name,</div><div class="line">		getName:function()&#123;console.log(this)&#125;</div><div class="line">	&#125;</div><div class="line">	return this </div><div class="line"> &#125;</div><div class="line">var creatObj1 = getSingle(creatObj)</div><div class="line">var obj = creatObj1(&apos;aaa&apos;)</div><div class="line">console.log(obj)  //返回window 对象(满足全局可访问)，带有aaaa属性，值为字面量对象</div><div class="line">obj.aaaa.getName()//&#123;name: &quot;kitty&quot;, getName: ƒ&#125;</div><div class="line"></div><div class="line">var obj1 = creatObj1(&apos;aaa&apos;)</div><div class="line">console.log(obj=== obj1) //true</div><div class="line"></div><div class="line">obj1.aaaa.getName() //&#123;name: &quot;kitty&quot;, getName: ƒ&#125;</div><div class="line"></div><div class="line">//事件仅挂载一次</div><div class="line"></div><div class="line">var bindEvent = getSingle(function()&#123;</div><div class="line">	document.getElementById(&apos;div1&apos;).onclick = function()&#123;</div><div class="line">		console.log(&apos;click&apos;)</div><div class="line">	&#125;</div><div class="line">	return true //保证只执行一次</div><div class="line">&#125;)</div><div class="line"></div><div class="line">var render = function()&#123;</div><div class="line">	console.log(&apos;开始渲染&apos;)；</div><div class="line">	bindEvent()</div><div class="line">&#125;</div><div class="line"></div><div class="line">render()</div><div class="line">render()</div><div class="line">render()</div><div class="line">//渲染多次，div1只挂载一次事件</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1580,7 +1602,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">215</span>
+              <span class="site-state-item-count">216</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1597,7 +1619,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">19</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -1644,7 +1666,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

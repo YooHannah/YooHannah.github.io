@@ -259,7 +259,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/js1.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/map&reduce.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -284,7 +284,152 @@
             
               
                 
-                <a class="post-title-link" href="/post/js/js1.html" itemprop="url">
+                <a class="post-title-link" href="/post/js/map&reduce.html" itemprop="url">
+                  数组的map和reduce
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-22T11:25:37+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="数组的map方法"><a href="#数组的map方法" class="headerlink" title="数组的map方法"></a>数组的map方法</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">let arr = [1,2,3,4,5];</div><div class="line">let arr1 = arr.map(function(val,index,arr)&#123;</div><div class="line">	console.log(val,index,arr)</div><div class="line">	return val+1</div><div class="line">&#125;)</div><div class="line">console.log(arr1)//[2, 3, 4, 5, 6]</div><div class="line">console.log(arr) //[1, 2, 3, 4, 5]</div></pre></td></tr></table></figure>
+<p>在map中可以传递一个函数，数组的每一项作为参数调用这个函数，然后返回根据该数组项得到的结果，每一个数组项返会一个结果，从而组成新的数组</p>
+<p>函数的参数有三个，第一项为数组按序传进的一个值，该值的index和数组本身</p>
+<p>整个结果产生新数组，原来数组不变</p>
+<h1 id="数组的reduce-方法"><a href="#数组的reduce-方法" class="headerlink" title="数组的reduce 方法"></a>数组的reduce 方法</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">例1.</div><div class="line">let arr = [1,2,3];</div><div class="line">let result = arr.reduce(function(preresult,item)&#123;</div><div class="line">	return preresult += item;</div><div class="line">&#125;,0)</div><div class="line">console.log(result)   //6</div><div class="line"></div><div class="line">例2.</div><div class="line">let result4 = arr.reduce(function(preresult,item)&#123;</div><div class="line">    preresult.name += item;</div><div class="line">	return preresult</div><div class="line">&#125;,&#123;name:0&#125;)</div><div class="line">console.log(result4); //&#123;name:6&#125;</div></pre></td></tr></table></figure>
+<p>reduce 用于对数组每一项进行累计计算，每一项计算结果作为参数参加数组下一项的计算,最终返回计算结果</p>
+<p>例1中单纯对数组每一项进行叠加处理，返回叠加结果<br>例2同样进行叠加只是叠加结果放在对象中返回</p>
+<p>reduce(callback(),initval)</p>
+<p>需要两个参数，一个是用于累计计算的callback函数，一个是初始值，见上两例</p>
+<p>callback()函数有四个参数依次为：</p>
+<p>preVal （上一次调用回调返回的值，或者是提供的初始值（initialValue））</p>
+<p>currentValue （数组中当前被处理的元素）</p>
+<p>index （当前元素在数组中的索引）</p>
+<p>array （调用 reduce 的数组）</p>
+<p>初始值会在第一次调用时当作回调函数callback的第一个参数使用</p>
+<p>希望返回值是什么类型的数据，初始值就要设置为什么样的类型，callback返回值也是该类型；或者说是在这里设置返回值的类型</p>
+<p>整个处理过程就是拿初始值initval和数组第一个值在callback里面进行处理，返回结果result,result当作callback的preval参数和数组第二个元素传入callback在处理，直到数组全部元素被处理完，返回一个最终处理结果</p>
+<p>高级应用<br>对对象数组元素进行累计计算<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">var reducers = &#123;  </div><div class="line">  totalInEuros : function(state, item) &#123;</div><div class="line">    return state.euros += item.price * 0.897424392;</div><div class="line">  &#125;,</div><div class="line">  totalInYen : function(state, item) &#123;</div><div class="line">    return state.yens += item.price * 113.852;</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">var manageReducers = function(reducers) &#123;</div><div class="line">  return function(state, item) &#123;</div><div class="line">    return Object.keys(reducers).reduce(</div><div class="line">      function(nextState, key) &#123;</div><div class="line">        reducers[key](state, item);</div><div class="line">        return state;</div><div class="line">      &#125;,</div><div class="line">      &#123;&#125;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">var bigTotalPriceReducer = manageReducers(reducers);</div><div class="line">var initialState = &#123;euros:0, yens: 0&#125;;</div><div class="line">var items = [&#123;price: 10&#125;, &#123;price: 120&#125;, &#123;price: 1000&#125;];</div><div class="line">var totals = items.reduce(bigTotalPriceReducer, initialState);</div><div class="line">console.log(totals);</div><div class="line">//&#123;euros: 1014.08956296, yens: 128652.76&#125;</div></pre></td></tr></table></figure></p>
+<p>该例的目的是将对象数组items的元素属性price进行不同处理操作然后将结果分别保存到结果对象的属性中</p>
+<p>处理的关键是manageReducers返回的作为items callback的函数bigTotalPriceReducer，</p>
+<p>处理思路是items每用一个元素调用callback时,callback的处理过程是将这个元素作为参数调用reducers 对象里面设置的每一个处理函数,</p>
+<p>调用reducers处理函数的过程同样使用一个reduce方法进行处理</p>
+<p>Object.keys(obj)方法返回对象键值组成的数组</p>
+<p>当items的元素参加完reducers所有处理函数后,返回的结果参加下一个元素的计算最终返回结果</p>
+<p>扩展：</p>
+<p>1.在reduces中设置对items不同属性的计算，从而得到不同属性的结算结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">var reducers = &#123;  </div><div class="line">  totalInEuros : function(state, item) &#123;</div><div class="line">    return state.euros += item.p1;</div><div class="line">  &#125;,</div><div class="line">  totalInYen : function(state, item) &#123;</div><div class="line">    return state.yens += item.price * 113.852;</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">var bigTotalPriceReducer = manageReducers(reducers);</div><div class="line">var initialState = &#123;euros:0, yens: 0&#125;;</div><div class="line">var items = [&#123;price: 10,p1:1&#125;, &#123;price: 120,p1:1&#125;, &#123;price: 1000,p1:1&#125;];</div><div class="line">var totals = items.reduce(bigTotalPriceReducer, initialState);</div><div class="line">console.log(totals);</div><div class="line">//&#123;euros: 3, yens: 128652.76&#125;</div></pre></td></tr></table></figure>
+<p>2.计算对象数组属性值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">var manageReducers = function(state, item) &#123;</div><div class="line">    return Object.keys(item).reduce(</div><div class="line">      function(nextState, key) &#123;</div><div class="line">        state[key] +=item[key];</div><div class="line">        return state;</div><div class="line">      &#125;,</div><div class="line">      &#123;&#125;</div><div class="line">    );</div><div class="line">&#125;;</div><div class="line"></div><div class="line">var initialState = &#123;price:0, p1: 0&#125;;</div><div class="line">var items = [&#123;price: 10,p1:1&#125;, &#123;price: 120,p1:1&#125;, &#123;price: 1000,p1:1&#125;];</div><div class="line">var totals = items.reduce(manageReducers, initialState);</div><div class="line">console.log(totals);</div><div class="line">//&#123;price: 1130, p1: 3&#125;</div></pre></td></tr></table></figure></p>
+<p><a href="https://segmentfault.com/a/1190000010731933" target="_blank" rel="external">参阅资料</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/designMode/js1.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/designMode/js1.html" itemprop="url">
                   js 知识点 一
                 </a>
               
@@ -338,13 +483,12 @@
         
           
             <h1 id="1-lt-script-gt-标签几个属性"><a href="#1-lt-script-gt-标签几个属性" class="headerlink" title="1.&lt; script &gt; 标签几个属性"></a>1.&lt; script &gt; 标签几个属性</h1><p><b>async :</b>立即异步下载，因此不保证能够按指定的先后顺序执行，但会在load事件前，DOMContentLoad前后执行<br><b>defer :</b>延迟执行，也不保证按顺序执行，在DOMContentLoad前后执行<br><b>src :</b>外部文件链接<br><b>charset :</b>src指定代码的字符集，防止出现乱码<br><b>language :</b>已废弃，表示脚本语言，<br><b>type :</b>值为脚本语言内容类型（MIME），language替代属性，服务器传递过来类型为application/x-javascript需要注意，一个是可能导致脚本被忽略，另一个是可能触发浏览器XHTML标准模式；另外外链文件不是js文件时，一定要设置该值</p>
-<h1 id="2-js-代码执行过程"><a href="#2-js-代码执行过程" class="headerlink" title="2.js 代码执行过程"></a>2.js 代码执行过程</h1><p>包括两个部分一个是编译，或者叫预处理过程，一个是执行<br>编译过程 首先会创建一个全局作用域，然后进行词法分析，<br>词法分析过程会涉及到变量提升和函数声明提前处理，<br>即词法分析到变量时会先判断当前域到全局域有没有该变量声明，如果有，就会将该声明的变量挂到该作用域的对象上，<br>如果到全局域都没有则以全局为背景，新建该变量，并为其分配内存，<br>对于基本类型，变量中会保存它的值，对于对象，变量中会保存值所在内存的内存地址，<br>在一定场景下，这里就相当于发生了变量提升，把变量从局部提升到了全局，或者将声明提前到了使用之前，<br><b>避免变量提升</b>可以使用es6的let 关键字或者使用立即执行实现变量声明使用，但要注意使用let重复声明会报错，var 会同名覆盖；<br>当遇到函数声明时，会直接按声明顺序，将声明提前到代码顶端，<br><b>重复声明</b> 的函数会被后者覆盖，<br>如果变量名与函数名相同，则无论原来词法位置如何，先将函数声明提前到顶端，不再进行变量声明，变量名在哪赋值，则原函数在哪被覆盖，<br>覆盖之前调用使用原函数<br>提前之后会为函数创建作用域，<br>这时创建的作用域就是函数的 【【scope】】属性，保存着指向父域到全局域的指针<br>（指针就是指向活动对象的一个地址，全局域浏览器环境就是windows,nodejs环境就是global）<br>将来执行时会根据此指针建立作用域链，作用域链就是指针列表，指向不同层级作用域的内存，在里面取值<br>以上就基本上是编译过程，除了一些特定的编译规则，编译过程还会会使用大量技巧进行优化提升编译速度<br>但在使用js时，需要注意try-catch,with和eval三个语法关键字的使用，因为在使用它们时，会创建块级作用域，<br>破坏掉编译器原有的创建管理作用域的规则，在编译时，编译器也就不会对其中的代码进行优化，最终导致性能变差</p>
-<p>运行过程，基本就是在运行函数，函数在运行时会首先根据【【scope】】属性拿到父域到全局的指针，创建指针列表即作用域链，<br>然后创建函数执行的局部作用域，将函数中声明的变量挂到局部作用域活动对象上，然后将局部作用域指针推向作用域链前端，<br>在用到变量值时，会根据作用域链依次查找取值<br>函数执行结束后，局部活动对象被销毁，作用域链被销毁，进行垃圾回收<br>但是对于声明在一个函数内部的函数来说，这个声明的函数在声明时，就会包含其父域的活动对象，<br>因此在外部使用该函数时，可以访问到其父域的变量，实现了父域访问子域变量，延长了变量的使用范围，也就是常见的闭包现象，<br>缺点就是闭包的函数执行完毕后，因为本身【【scope】】会指向父域的活动对象，所以父域的活动对象始终不会被回收,除非闭包函数被销毁<br>从而有可能造成内存泄露，为什么说有可能，因为父活动对象占的内存其实是比较小的，造成内存泄露的真正原因是使用闭包易造成循环引用，<br>尤其是闭包作用域中保存dom结点时，如果是在IE中，dom和bom都是以C++的COM对象保存的，垃圾回收机制是计数策略，<br>因此循环引用的话，永远都不会被回收</p>
+<h1 id="2-js-代码执行过程"><a href="#2-js-代码执行过程" class="headerlink" title="2.js 代码执行过程"></a>2.js 代码执行过程</h1><p>包括两个部分一个是编译，或者叫预处理过程，一个是执行<br>编译过程 首先会创建一个全局作用域，然后进行词法分析，<br>词法分析过程会涉及到变量提升和函数声明提前处理，<br>即词法分析到变量声明会先判断当前域到全局域有没有该变量声明，如果有，就会将该变量挂到该作用域的对象上，<br>如果到全局域都没有则以全局为背景，新建该变量，并为其分配内存，<br>对于基本类型，变量中会保存它的值，对于对象，变量中会保存值所在内存的内存地址，<br>在一定场景下，这里就相当于发生了变量提升，把变量从局部提升到了全局，或者将声明提前到了使用之前，<br><b>避免变量提升</b>可以使用es6的let 关键字或者使用立即执行实现变量声明使用，但要注意使用let重复声明会报错，var 会同名覆盖；<br>当遇到函数声明时，会直接按声明顺序，将声明提前到代码顶端，<br><b>重复声明</b> 的函数会被后者覆盖，<br>如果变量名与函数名相同，则无论原来词法位置如何，先将函数声明提前到顶端，不再进行变量声明，变量名在哪赋值，则原函数在哪被覆盖，<br>覆盖之前调用使用原函数<br>提前之后会为函数创建作用域，<br>这时创建的作用域就是函数的 【【scope】】属性，保存着指向父域到全局域的指针<br>（指针就是指向活动对象的一个地址，全局域浏览器环境就是windows,nodejs环境就是global）<br>将来执行时会根据此指针建立作用域链，作用域链就是指针列表，指向不同层级作用域的内存，在里面取值<br>以上就基本上是编译过程，除了一些特定的编译规则，编译过程还会会使用大量技巧进行优化提升编译速度<br>但在使用js时，需要注意try-catch,with和eval三个语法关键字的使用，因为在使用它们时，会创建块级作用域，<br>破坏掉编译器原有的创建管理作用域的规则，在编译时，编译器也就不会对其中的代码进行优化，最终导致性能变差</p>
+<p>运行过程，基本就是在运行函数，函数在运行时会首先根据【【scope】】属性拿到父域到全局的指针，创建指针列表即作用域链，<br>然后创建函数执行的局部作用域，将函数中声明的变量挂到局部作用域活动对象上，然后将局部作用域指针推向作用域链前端，<br>在用到变量值时，会根据作用域链依次查找取值<br>函数执行结束后，局部活动对象被销毁，作用域链被销毁，进行垃圾回收<br>但是对于声明在一个函数内部的函数来说，这个声明的函数在声明时，就会包含其父域的活动对象，<br>因此在外部使用该函数时，可以访问到其父域的变量，实现了父域访问子域变量，延长了变量的使用范围，也就是常见的闭包现象，<br>缺点就是闭包的函数执行完毕后，因为本身【【scope】】会指向父域的活动对象，所以父域的活动对象始终不会被回收,除非闭包函数被销毁<br>从而有可能造成内存泄露，为什么说有可能，因为父活动对象占的内存其实是比较小的，造成内存泄露的真正原因是使用闭包易造成循环引用，<br>尤其是闭包作用域中保存dom结点时，如果是在IE中，dom和bom都是以C++的COM对象保存的，垃圾回收机制是技术策略，<br>因此循环引用的话，永远都不会被回收</p>
 <p>补充，对于未以分号结尾的语句，会采用能合就合的原则，即，会尝试和下一行语句合并执行，如果能合并执行就合并执行，<br>不能合并执行就在中间加分号再执行，如果再执行不了就会报错<br>好处就是对于条件判断语句可进行一行一行判断<br>坏处就是如果下一行以大括号开头，上一行语句就会变成函数，导致出现意想不到的结果<br>两个例外，<br>对于return，break,continue语句不会做尝试合并；<br>对于++，–自增自减符后没有分号，上一行也没分号情况，自增自减会和下一行合并，上一行自行添加分号</p>
 <p>以上即是我所了解的js运行机制</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">//补充1</div><div class="line">每个值都有内存地址，变量名指向内存地址/保存内存地址</div><div class="line">变量名携带内存地址存储在栈中</div><div class="line">保存变量值的内存空间在堆中(数据类型：object,function,函数缓存区，函数加载区)，相同模样的值，内存地址不同，（即不同变量名，赋值为看似一样的对象时，会不相等；更改变量的值，即更改指向的地址）</div><div class="line">常量值保存在池中（数据类型：string,number,boolean），相同值，内存地址相同</div><div class="line"></div><div class="line">变量是个引用，常量是个值</div><div class="line">== 比较值</div><div class="line">=== 比较地址</div><div class="line"></div><div class="line">//补充2</div><div class="line">function func(a,b,c)&#123;</div><div class="line">  /*</div><div class="line">   * 逻辑代码执行前</div><div class="line">   * step1 创建AO对象</div><div class="line">   * AO =&#123;&#125;</div><div class="line">   * step2 初始化AO对象</div><div class="line">   * AO = &#123;</div><div class="line">   *  this:undefined,//内置</div><div class="line">   *  arguments:undefined,//默认</div><div class="line">   *  a:undefined,//参数</div><div class="line">   *  b:undefined,//参数</div><div class="line">   *  c:undefined,//参数</div><div class="line">   *  inner:undefined//函数内声明</div><div class="line">   * &#125;</div><div class="line">   * step3 赋值</div><div class="line">   * AO = &#123;</div><div class="line">   *  this:window,//内置</div><div class="line">   *  arguments:[length:2,0:1,1:2],//默认</div><div class="line">   *  a:1,//参数</div><div class="line">   *  b:2,//参数</div><div class="line">   *  c:undefined,//参数</div><div class="line">   *  inner:undefined//仅声明还未执行</div><div class="line">   * &#125;</div><div class="line">   *  step4 处理函数声明，有相同变量名的函数覆盖赋值已有变量名,新函数名直接挂到AO上</div><div class="line">   * AO = &#123;</div><div class="line">   *  this:window,//内置</div><div class="line">   *  arguments:[length:2,0:1,1:2],//默认</div><div class="line">   *  a:function a()&#123;&#125;,//有同名函数声明进行覆盖</div><div class="line">   *  b:2,//参数</div><div class="line">   *  c:undefined,//参数</div><div class="line">   *  inner:undefined,//仅声明还未执行</div><div class="line">   *  innerFunc:function()&#123;&#125;//添加函数声明</div><div class="line">   * &#125;</div><div class="line">   */</div><div class="line">  console.log(arguments);</div><div class="line">  console.log(global)</div><div class="line">  console.log(inner)</div><div class="line">  ////////////////</div><div class="line">  var inner = 20;//执行到该步,inner被赋值为20</div><div class="line">  function inner()&#123;</div><div class="line"></div><div class="line">  &#125;</div><div class="line">  function innerFunc()&#123;</div><div class="line"></div><div class="line">  &#125;</div><div class="line">  console.log(inner)</div><div class="line">&#125;</div><div class="line"></div><div class="line">var global=20</div><div class="line">func(1,2)</div></pre></td></tr></table></figure>
 <h1 id="3-关于对象继承"><a href="#3-关于对象继承" class="headerlink" title="3.关于对象继承"></a>3.关于对象继承</h1><p>3.0  new 操作符调用构造函数 执行过程<br>  1.创建或者构造一个全新的对象<br>  2.将构造函数的作用域赋给这个新的对象,<br>  3.执行构造函数 (为这个新对象添加属性) ，第二，三步相当于func.call(newobj)<br>  4.如果构造函数没有返回值或返回值非对象，则返回新对象，否则返回构造函数return的对象</p>
-<p>3.1 继承的6种方式及优缺点<br>    <b>第一种原型链方式</b>，子类的原型对象指向父类的实例<br>    缺点<br>        给原型添加方法必须要在替换原型的语句之后；<br>        不能实现多继承（原型指向多个父对象）；<br>        所有属性共享<br>        无法传递参数到父类进行初始化<br>    <b>第二种借助构造函数</b>，在子类构造函数中使用call或者apply执行父类构造函数<br>    优点<br>        可以实现多继承<br>        可以传递参数<br>        属性不共享<br>    缺点<br>        只能继承构造函数中属性，不能继承原型上方法，不能复用方法<br>        实例仅为子类实例，不是父类实例<br>    <b>第三种组合继承</b>，以上两组结合在一起，两种方式都执行<br>    缺点<br>        要调用两次父类构造函数，影响性能<br>        实例属性和原型属性各占一份，同名覆盖机制，重复占内存，没必要<br>    <b>第四种原型式继承</b>，借助object()或者object.create()函数,缺点同原型链方式</p>
+<p>3.1 继承的6种方式及优缺点<br>    <b>第一种原型链方式</b>，子类的原型对象指向父类的实例<br>    缺点<br>        给原型添加方法必须要在替换原型的语句之后；<br>        不能实现多继承（原型指向多个父对象）；<br>        所有属性共享<br>        无法传递参数到父类进行初始化<br>    <b>第二种借助构造函数</b>，在子类构造函数中使用call或者apply执行父类构造函数<br>    优点<br>        可以实现多继承<br>        可以传递参数<br>        方法属性不共享<br>    缺点<br>        只能继承构造函数中属性，不能继承原型上方法，不能复用方法<br>        实例仅为子类实例，不是父类实例<br>    <b>第三种组合继承</b>，以上两组结合在一起，两种方式都执行<br>    缺点<br>        要调用两次父类构造函数，影响性能<br>        实例属性和原型属性各占一份，同名覆盖机制，重复占内存，没必要<br>    <b>第四种原型式继承</b>，借助object()或者object.create()函数,缺点同原型链方式</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">function object(o)&#123;</div><div class="line"> function F()&#123;&#125;</div><div class="line"> F.prototype = o;</div><div class="line"> return new F();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p><b>第五种寄生式继承</b>，利用原型式继承和增强对象过程的封装函数创建子类，缺点同原型链方式<br><b>第六种寄生组合式继承</b>，保留借助构造函数部分，原型部分功能借助中间函数处理，<br>中间函数借助object拿到父类prototype，给到子类的prototype,从而完美解决组合继承的缺点</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">function inheritPrototype(subType,superType)&#123;</div><div class="line">  var prototype = object(superType.prototype)</div><div class="line">  prototype.constructor = subType</div><div class="line">  subType.prototype = prototype</div><div class="line">&#125;</div><div class="line">subType.prototype.__proto__ = superType</div></pre></td></tr></table></figure>
@@ -376,13 +520,12 @@
 <p>&#43;二元运算侧重转字符串，然后进行字符串拼接<br>其中一个为字符串或者两个都是对象时，转字符串拼接<br>undefined,null,Boolean,数字混合运算+时，会被转数字再计算<br>{}为第一个运算值时，会被当做函数结束，不参与计算<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">null + null --&gt; 0</div><div class="line">undefined + null --&gt; NaN</div><div class="line">[] + [] --&gt; &apos;&apos;</div><div class="line">1 + [1,2] --&gt; &apos;11,2&apos;</div><div class="line">1 + &#123;a:1&#125; --&gt; &apos;1[object object]&apos;</div><div class="line">&#123;a:1&#125; + 1 --&gt; 1</div><div class="line">&#123;&#125; + &#123;&#125; --&gt; NaN</div><div class="line">(&#123;&#125;) + &#123;&#125; --&gt; &apos;[object object][object object]&apos;</div><div class="line">[] + &#123;&#125; --&gt; &apos;[object object]&apos;</div><div class="line">&#123;&#125; + [] --&gt; 0</div><div class="line">var a = &#123;&#125;</div><div class="line">a + a --&gt;&apos;[object object][object object]&apos;</div></pre></td></tr></table></figure></p>
 <p>&#42;/- 转数字，进行相减,如果不能转数字，返回NaN</p>
 <p>&gt;/&lt; 侧重转数字<br>string &lt; string 字典比较<br>非字符串&lt;非字符串/字符串 都转数字然后比较</p>
-<p>string == number 字符串转数字<br>boolean == 其他类型 二者转数字然后比较<br>null == undefined —&gt;true undefined和null只与对方和自己==比较时为true，其他均为false<br>null === undefined —&gt;false<br>非对象 == 对象 与数字比较object转数字，与字符串比较二者转数字再比较<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">&apos;0&apos; == null  //false</div><div class="line">&apos;0&apos; == undefined  //false</div><div class="line">&apos;0&apos; == false  //true</div><div class="line">&apos;0&apos; == NaN  //false</div><div class="line">&apos;0&apos; == 0  //true</div><div class="line">&apos;0&apos; == &apos;&apos;  //false</div><div class="line"></div><div class="line">false == null  //false</div><div class="line">false == undefined  //false</div><div class="line">false == NaN  //false</div><div class="line">false == 0  //true</div><div class="line">false == &apos;&apos;  //true</div><div class="line">false == []  //true</div><div class="line">false == &#123;&#125; //false</div><div class="line"></div><div class="line">&apos;&apos; == null  //false</div><div class="line">&apos;&apos; == undefined  //false</div><div class="line">&apos;&apos; == NaN  //false</div><div class="line">&apos;&apos; == 0  //true</div><div class="line">&apos;&apos; == []  //true</div><div class="line">&apos;&apos; == &#123;&#125; //false</div><div class="line"></div><div class="line">0 == null  //false</div><div class="line">0 == undefined  //false</div><div class="line">0 == NaN  //false</div><div class="line">0 == []  //true</div><div class="line">0 == &#123;&#125; //false</div><div class="line"></div><div class="line">[] == ![] //true</div></pre></td></tr></table></figure></p>
+<p>string == number 字符串转数字<br>boolean == 其他类型 二者转数字然后比较<br>null == undefined —&gt;true undefined和null只与对方和自己==比较时为true，其他均为false<br>null === undefined —&gt;false<br>非对象 == 对象 与数字比较object转数字，与字符串比较二者转数字再比较<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">&apos;0&apos; == null  //false</div><div class="line">&apos;0&apos; == undefined  //false</div><div class="line">&apos;0&apos; == false  //true</div><div class="line">&apos;0&apos; == NaN  //false</div><div class="line">&apos;0&apos; == 0  //true</div><div class="line">&apos;0&apos; == &apos;&apos;  //true</div><div class="line"></div><div class="line">false == null  //false</div><div class="line">false == undefined  //false</div><div class="line">false == NaN  //false</div><div class="line">false == 0  //true</div><div class="line">false == &apos;&apos;  //true</div><div class="line">false == []  //true</div><div class="line">false == &#123;&#125; //false</div><div class="line"></div><div class="line">&apos;&apos; == null  //false</div><div class="line">&apos;&apos; == undefined  //false</div><div class="line">&apos;&apos; == NaN  //false</div><div class="line">&apos;&apos; == 0  //true</div><div class="line">&apos;&apos; == []  //true</div><div class="line">&apos;&apos; == &#123;&#125; //false</div><div class="line"></div><div class="line">0 == null  //false</div><div class="line">0 == undefined  //false</div><div class="line">0 == NaN  //false</div><div class="line">0 == []  //true</div><div class="line">0 == &#123;&#125; //false</div><div class="line"></div><div class="line">[] == ![]</div></pre></td></tr></table></figure></p>
 <p>&amp;&amp;和|| 计算结果根据短路原则判断到了哪里，返回最后一个进行判断的值</p>
 <p>运算符优先级<br>属性访问.<br>一元操作符（+，-，++，–）<br>二元操作符（+-*/）<br>比较（&gt;,&lt;)<br>相等（==，===，！=）<br>与&amp;&amp;，或||<br>三目运算符<br>赋值</p>
 <p>运算符结合性<br>除了一元操作符，三目运算符和赋值是右结合，其他都是左结合</p>
 <p>减少小数计算误差<br>尽量不使用小数进行比较或运算<br>转整数计算，再转回相应位数小数<br>使用toFixed()四舍五入<br>两个情境需要重复计算时，保证前后书写顺序</p>
-<h1 id="13-数组相关方法"><a href="#13-数组相关方法" class="headerlink" title="13. 数组相关方法"></a>13. 数组相关方法</h1><p><img src="/image/arrmethod.jpg" alt="arrmethod"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let arr = []</div><div class="line">let iterator = arr[Symbol.iterator]() //可以获取数组迭代器</div></pre></td></tr></table></figure></p>
-<p>遍历对象/数组的方法<br>for<br>while(do…while)<br>forEach<br>map<br>reduce<br>for…of<br>for…in<br>iterator<br>generator</p>
+<h1 id="13-数组相关方法"><a href="#13-数组相关方法" class="headerlink" title="13. 数组相关方法"></a>13. 数组相关方法</h1><p><img src="/image/arrmethod.jpg" alt="arrmethod"></p>
 <h1 id="14-字符串相关方法"><a href="#14-字符串相关方法" class="headerlink" title="14.字符串相关方法"></a>14.字符串相关方法</h1><p><img src="/image/strmethod.jpg" alt="strmethod"></p>
 <h1 id="15-日期相关方法"><a href="#15-日期相关方法" class="headerlink" title="15.日期相关方法"></a>15.日期相关方法</h1><p>   一共 33个<br>   set/get（UTC）FullYear,Month,Date,Hours,Minutes,Seconds,Millseconds<br>   set/get Time<br>   get(UTC) Day<br>   getTimezoneOffset</p>
 <h1 id="16-Math三个舍入方法"><a href="#16-Math三个舍入方法" class="headerlink" title="16. Math三个舍入方法"></a>16. Math三个舍入方法</h1><p>  Math.ceil:比值大的最小整数<br>  Math.round:四舍五入<br>  Math.floor:比值小的最大整数</p>
@@ -564,7 +707,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/designMode/js1.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/js1.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -589,7 +732,7 @@
             
               
                 
-                <a class="post-title-link" href="/post/designMode/js1.html" itemprop="url">
+                <a class="post-title-link" href="/post/js/js1.html" itemprop="url">
                   js 知识点 一
                 </a>
               
@@ -643,12 +786,13 @@
         
           
             <h1 id="1-lt-script-gt-标签几个属性"><a href="#1-lt-script-gt-标签几个属性" class="headerlink" title="1.&lt; script &gt; 标签几个属性"></a>1.&lt; script &gt; 标签几个属性</h1><p><b>async :</b>立即异步下载，因此不保证能够按指定的先后顺序执行，但会在load事件前，DOMContentLoad前后执行<br><b>defer :</b>延迟执行，也不保证按顺序执行，在DOMContentLoad前后执行<br><b>src :</b>外部文件链接<br><b>charset :</b>src指定代码的字符集，防止出现乱码<br><b>language :</b>已废弃，表示脚本语言，<br><b>type :</b>值为脚本语言内容类型（MIME），language替代属性，服务器传递过来类型为application/x-javascript需要注意，一个是可能导致脚本被忽略，另一个是可能触发浏览器XHTML标准模式；另外外链文件不是js文件时，一定要设置该值</p>
-<h1 id="2-js-代码执行过程"><a href="#2-js-代码执行过程" class="headerlink" title="2.js 代码执行过程"></a>2.js 代码执行过程</h1><p>包括两个部分一个是编译，或者叫预处理过程，一个是执行<br>编译过程 首先会创建一个全局作用域，然后进行词法分析，<br>词法分析过程会涉及到变量提升和函数声明提前处理，<br>即词法分析到变量声明会先判断当前域到全局域有没有该变量声明，如果有，就会将该变量挂到该作用域的对象上，<br>如果到全局域都没有则以全局为背景，新建该变量，并为其分配内存，<br>对于基本类型，变量中会保存它的值，对于对象，变量中会保存值所在内存的内存地址，<br>在一定场景下，这里就相当于发生了变量提升，把变量从局部提升到了全局，或者将声明提前到了使用之前，<br><b>避免变量提升</b>可以使用es6的let 关键字或者使用立即执行实现变量声明使用，但要注意使用let重复声明会报错，var 会同名覆盖；<br>当遇到函数声明时，会直接按声明顺序，将声明提前到代码顶端，<br><b>重复声明</b> 的函数会被后者覆盖，<br>如果变量名与函数名相同，则无论原来词法位置如何，先将函数声明提前到顶端，不再进行变量声明，变量名在哪赋值，则原函数在哪被覆盖，<br>覆盖之前调用使用原函数<br>提前之后会为函数创建作用域，<br>这时创建的作用域就是函数的 【【scope】】属性，保存着指向父域到全局域的指针<br>（指针就是指向活动对象的一个地址，全局域浏览器环境就是windows,nodejs环境就是global）<br>将来执行时会根据此指针建立作用域链，作用域链就是指针列表，指向不同层级作用域的内存，在里面取值<br>以上就基本上是编译过程，除了一些特定的编译规则，编译过程还会会使用大量技巧进行优化提升编译速度<br>但在使用js时，需要注意try-catch,with和eval三个语法关键字的使用，因为在使用它们时，会创建块级作用域，<br>破坏掉编译器原有的创建管理作用域的规则，在编译时，编译器也就不会对其中的代码进行优化，最终导致性能变差</p>
-<p>运行过程，基本就是在运行函数，函数在运行时会首先根据【【scope】】属性拿到父域到全局的指针，创建指针列表即作用域链，<br>然后创建函数执行的局部作用域，将函数中声明的变量挂到局部作用域活动对象上，然后将局部作用域指针推向作用域链前端，<br>在用到变量值时，会根据作用域链依次查找取值<br>函数执行结束后，局部活动对象被销毁，作用域链被销毁，进行垃圾回收<br>但是对于声明在一个函数内部的函数来说，这个声明的函数在声明时，就会包含其父域的活动对象，<br>因此在外部使用该函数时，可以访问到其父域的变量，实现了父域访问子域变量，延长了变量的使用范围，也就是常见的闭包现象，<br>缺点就是闭包的函数执行完毕后，因为本身【【scope】】会指向父域的活动对象，所以父域的活动对象始终不会被回收,除非闭包函数被销毁<br>从而有可能造成内存泄露，为什么说有可能，因为父活动对象占的内存其实是比较小的，造成内存泄露的真正原因是使用闭包易造成循环引用，<br>尤其是闭包作用域中保存dom结点时，如果是在IE中，dom和bom都是以C++的COM对象保存的，垃圾回收机制是技术策略，<br>因此循环引用的话，永远都不会被回收</p>
+<h1 id="2-js-代码执行过程"><a href="#2-js-代码执行过程" class="headerlink" title="2.js 代码执行过程"></a>2.js 代码执行过程</h1><p>包括两个部分一个是编译，或者叫预处理过程，一个是执行<br>编译过程 首先会创建一个全局作用域，然后进行词法分析，<br>词法分析过程会涉及到变量提升和函数声明提前处理，<br>即词法分析到变量时会先判断当前域到全局域有没有该变量声明，如果有，就会将该声明的变量挂到该作用域的对象上，<br>如果到全局域都没有则以全局为背景，新建该变量，并为其分配内存，<br>对于基本类型，变量中会保存它的值，对于对象，变量中会保存值所在内存的内存地址，<br>在一定场景下，这里就相当于发生了变量提升，把变量从局部提升到了全局，或者将声明提前到了使用之前，<br><b>避免变量提升</b>可以使用es6的let 关键字或者使用立即执行实现变量声明使用，但要注意使用let重复声明会报错，var 会同名覆盖；<br>当遇到函数声明时，会直接按声明顺序，将声明提前到代码顶端，<br><b>重复声明</b> 的函数会被后者覆盖，<br>如果变量名与函数名相同，则无论原来词法位置如何，先将函数声明提前到顶端，不再进行变量声明，变量名在哪赋值，则原函数在哪被覆盖，<br>覆盖之前调用使用原函数<br>提前之后会为函数创建作用域，<br>这时创建的作用域就是函数的 【【scope】】属性，保存着指向父域到全局域的指针<br>（指针就是指向活动对象的一个地址，全局域浏览器环境就是windows,nodejs环境就是global）<br>将来执行时会根据此指针建立作用域链，作用域链就是指针列表，指向不同层级作用域的内存，在里面取值<br>以上就基本上是编译过程，除了一些特定的编译规则，编译过程还会会使用大量技巧进行优化提升编译速度<br>但在使用js时，需要注意try-catch,with和eval三个语法关键字的使用，因为在使用它们时，会创建块级作用域，<br>破坏掉编译器原有的创建管理作用域的规则，在编译时，编译器也就不会对其中的代码进行优化，最终导致性能变差</p>
+<p>运行过程，基本就是在运行函数，函数在运行时会首先根据【【scope】】属性拿到父域到全局的指针，创建指针列表即作用域链，<br>然后创建函数执行的局部作用域，将函数中声明的变量挂到局部作用域活动对象上，然后将局部作用域指针推向作用域链前端，<br>在用到变量值时，会根据作用域链依次查找取值<br>函数执行结束后，局部活动对象被销毁，作用域链被销毁，进行垃圾回收<br>但是对于声明在一个函数内部的函数来说，这个声明的函数在声明时，就会包含其父域的活动对象，<br>因此在外部使用该函数时，可以访问到其父域的变量，实现了父域访问子域变量，延长了变量的使用范围，也就是常见的闭包现象，<br>缺点就是闭包的函数执行完毕后，因为本身【【scope】】会指向父域的活动对象，所以父域的活动对象始终不会被回收,除非闭包函数被销毁<br>从而有可能造成内存泄露，为什么说有可能，因为父活动对象占的内存其实是比较小的，造成内存泄露的真正原因是使用闭包易造成循环引用，<br>尤其是闭包作用域中保存dom结点时，如果是在IE中，dom和bom都是以C++的COM对象保存的，垃圾回收机制是计数策略，<br>因此循环引用的话，永远都不会被回收</p>
 <p>补充，对于未以分号结尾的语句，会采用能合就合的原则，即，会尝试和下一行语句合并执行，如果能合并执行就合并执行，<br>不能合并执行就在中间加分号再执行，如果再执行不了就会报错<br>好处就是对于条件判断语句可进行一行一行判断<br>坏处就是如果下一行以大括号开头，上一行语句就会变成函数，导致出现意想不到的结果<br>两个例外，<br>对于return，break,continue语句不会做尝试合并；<br>对于++，–自增自减符后没有分号，上一行也没分号情况，自增自减会和下一行合并，上一行自行添加分号</p>
 <p>以上即是我所了解的js运行机制</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">//补充1</div><div class="line">每个值都有内存地址，变量名指向内存地址/保存内存地址</div><div class="line">变量名携带内存地址存储在栈中</div><div class="line">保存变量值的内存空间在堆中(数据类型：object,function,函数缓存区，函数加载区)，相同模样的值，内存地址不同，（即不同变量名，赋值为看似一样的对象时，会不相等；更改变量的值，即更改指向的地址）</div><div class="line">常量值保存在池中（数据类型：string,number,boolean），相同值，内存地址相同</div><div class="line"></div><div class="line">变量是个引用，常量是个值</div><div class="line">== 比较值</div><div class="line">=== 比较地址</div><div class="line"></div><div class="line">//补充2</div><div class="line">function func(a,b,c)&#123;</div><div class="line">  /*</div><div class="line">   * 逻辑代码执行前</div><div class="line">   * step1 创建AO对象</div><div class="line">   * AO =&#123;&#125;</div><div class="line">   * step2 初始化AO对象</div><div class="line">   * AO = &#123;</div><div class="line">   *  this:undefined,//内置</div><div class="line">   *  arguments:undefined,//默认</div><div class="line">   *  a:undefined,//参数</div><div class="line">   *  b:undefined,//参数</div><div class="line">   *  c:undefined,//参数</div><div class="line">   *  inner:undefined//函数内声明</div><div class="line">   * &#125;</div><div class="line">   * step3 赋值</div><div class="line">   * AO = &#123;</div><div class="line">   *  this:window,//内置</div><div class="line">   *  arguments:[length:2,0:1,1:2],//默认</div><div class="line">   *  a:1,//参数</div><div class="line">   *  b:2,//参数</div><div class="line">   *  c:undefined,//参数</div><div class="line">   *  inner:undefined//仅声明还未执行</div><div class="line">   * &#125;</div><div class="line">   *  step4 处理函数声明，有相同变量名的函数覆盖赋值已有变量名,新函数名直接挂到AO上</div><div class="line">   * AO = &#123;</div><div class="line">   *  this:window,//内置</div><div class="line">   *  arguments:[length:2,0:1,1:2],//默认</div><div class="line">   *  a:function a()&#123;&#125;,//有同名函数声明进行覆盖</div><div class="line">   *  b:2,//参数</div><div class="line">   *  c:undefined,//参数</div><div class="line">   *  inner:undefined,//仅声明还未执行</div><div class="line">   *  innerFunc:function()&#123;&#125;//添加函数声明</div><div class="line">   * &#125;</div><div class="line">   */</div><div class="line">  console.log(arguments);</div><div class="line">  console.log(global)</div><div class="line">  console.log(inner)</div><div class="line">  ////////////////</div><div class="line">  var inner = 20;//执行到该步,inner被赋值为20</div><div class="line">  function inner()&#123;</div><div class="line"></div><div class="line">  &#125;</div><div class="line">  function innerFunc()&#123;</div><div class="line"></div><div class="line">  &#125;</div><div class="line">  console.log(inner)</div><div class="line">&#125;</div><div class="line"></div><div class="line">var global=20</div><div class="line">func(1,2)</div></pre></td></tr></table></figure>
 <h1 id="3-关于对象继承"><a href="#3-关于对象继承" class="headerlink" title="3.关于对象继承"></a>3.关于对象继承</h1><p>3.0  new 操作符调用构造函数 执行过程<br>  1.创建或者构造一个全新的对象<br>  2.将构造函数的作用域赋给这个新的对象,<br>  3.执行构造函数 (为这个新对象添加属性) ，第二，三步相当于func.call(newobj)<br>  4.如果构造函数没有返回值或返回值非对象，则返回新对象，否则返回构造函数return的对象</p>
-<p>3.1 继承的6种方式及优缺点<br>    <b>第一种原型链方式</b>，子类的原型对象指向父类的实例<br>    缺点<br>        给原型添加方法必须要在替换原型的语句之后；<br>        不能实现多继承（原型指向多个父对象）；<br>        所有属性共享<br>        无法传递参数到父类进行初始化<br>    <b>第二种借助构造函数</b>，在子类构造函数中使用call或者apply执行父类构造函数<br>    优点<br>        可以实现多继承<br>        可以传递参数<br>        方法属性不共享<br>    缺点<br>        只能继承构造函数中属性，不能继承原型上方法，不能复用方法<br>        实例仅为子类实例，不是父类实例<br>    <b>第三种组合继承</b>，以上两组结合在一起，两种方式都执行<br>    缺点<br>        要调用两次父类构造函数，影响性能<br>        实例属性和原型属性各占一份，同名覆盖机制，重复占内存，没必要<br>    <b>第四种原型式继承</b>，借助object()或者object.create()函数,缺点同原型链方式</p>
+<p>3.1 继承的6种方式及优缺点<br>    <b>第一种原型链方式</b>，子类的原型对象指向父类的实例<br>    缺点<br>        给原型添加方法必须要在替换原型的语句之后；<br>        不能实现多继承（原型指向多个父对象）；<br>        所有属性共享<br>        无法传递参数到父类进行初始化<br>    <b>第二种借助构造函数</b>，在子类构造函数中使用call或者apply执行父类构造函数<br>    优点<br>        可以实现多继承<br>        可以传递参数<br>        属性不共享<br>    缺点<br>        只能继承构造函数中属性，不能继承原型上方法，不能复用方法<br>        实例仅为子类实例，不是父类实例<br>    <b>第三种组合继承</b>，以上两组结合在一起，两种方式都执行<br>    缺点<br>        要调用两次父类构造函数，影响性能<br>        实例属性和原型属性各占一份，同名覆盖机制，重复占内存，没必要<br>    <b>第四种原型式继承</b>，借助object()或者object.create()函数,缺点同原型链方式</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">function object(o)&#123;</div><div class="line"> function F()&#123;&#125;</div><div class="line"> F.prototype = o;</div><div class="line"> return new F();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p><b>第五种寄生式继承</b>，利用原型式继承和增强对象过程的封装函数创建子类，缺点同原型链方式<br><b>第六种寄生组合式继承</b>，保留借助构造函数部分，原型部分功能借助中间函数处理，<br>中间函数借助object拿到父类prototype，给到子类的prototype,从而完美解决组合继承的缺点</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">function inheritPrototype(subType,superType)&#123;</div><div class="line">  var prototype = object(superType.prototype)</div><div class="line">  prototype.constructor = subType</div><div class="line">  subType.prototype = prototype</div><div class="line">&#125;</div><div class="line">subType.prototype.__proto__ = superType</div></pre></td></tr></table></figure>
@@ -680,12 +824,13 @@
 <p>&#43;二元运算侧重转字符串，然后进行字符串拼接<br>其中一个为字符串或者两个都是对象时，转字符串拼接<br>undefined,null,Boolean,数字混合运算+时，会被转数字再计算<br>{}为第一个运算值时，会被当做函数结束，不参与计算<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">null + null --&gt; 0</div><div class="line">undefined + null --&gt; NaN</div><div class="line">[] + [] --&gt; &apos;&apos;</div><div class="line">1 + [1,2] --&gt; &apos;11,2&apos;</div><div class="line">1 + &#123;a:1&#125; --&gt; &apos;1[object object]&apos;</div><div class="line">&#123;a:1&#125; + 1 --&gt; 1</div><div class="line">&#123;&#125; + &#123;&#125; --&gt; NaN</div><div class="line">(&#123;&#125;) + &#123;&#125; --&gt; &apos;[object object][object object]&apos;</div><div class="line">[] + &#123;&#125; --&gt; &apos;[object object]&apos;</div><div class="line">&#123;&#125; + [] --&gt; 0</div><div class="line">var a = &#123;&#125;</div><div class="line">a + a --&gt;&apos;[object object][object object]&apos;</div></pre></td></tr></table></figure></p>
 <p>&#42;/- 转数字，进行相减,如果不能转数字，返回NaN</p>
 <p>&gt;/&lt; 侧重转数字<br>string &lt; string 字典比较<br>非字符串&lt;非字符串/字符串 都转数字然后比较</p>
-<p>string == number 字符串转数字<br>boolean == 其他类型 二者转数字然后比较<br>null == undefined —&gt;true undefined和null只与对方和自己==比较时为true，其他均为false<br>null === undefined —&gt;false<br>非对象 == 对象 与数字比较object转数字，与字符串比较二者转数字再比较<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">&apos;0&apos; == null  //false</div><div class="line">&apos;0&apos; == undefined  //false</div><div class="line">&apos;0&apos; == false  //true</div><div class="line">&apos;0&apos; == NaN  //false</div><div class="line">&apos;0&apos; == 0  //true</div><div class="line">&apos;0&apos; == &apos;&apos;  //true</div><div class="line"></div><div class="line">false == null  //false</div><div class="line">false == undefined  //false</div><div class="line">false == NaN  //false</div><div class="line">false == 0  //true</div><div class="line">false == &apos;&apos;  //true</div><div class="line">false == []  //true</div><div class="line">false == &#123;&#125; //false</div><div class="line"></div><div class="line">&apos;&apos; == null  //false</div><div class="line">&apos;&apos; == undefined  //false</div><div class="line">&apos;&apos; == NaN  //false</div><div class="line">&apos;&apos; == 0  //true</div><div class="line">&apos;&apos; == []  //true</div><div class="line">&apos;&apos; == &#123;&#125; //false</div><div class="line"></div><div class="line">0 == null  //false</div><div class="line">0 == undefined  //false</div><div class="line">0 == NaN  //false</div><div class="line">0 == []  //true</div><div class="line">0 == &#123;&#125; //false</div><div class="line"></div><div class="line">[] == ![]</div></pre></td></tr></table></figure></p>
+<p>string == number 字符串转数字<br>boolean == 其他类型 二者转数字然后比较<br>null == undefined —&gt;true undefined和null只与对方和自己==比较时为true，其他均为false<br>null === undefined —&gt;false<br>非对象 == 对象 与数字比较object转数字，与字符串比较二者转数字再比较<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">&apos;0&apos; == null  //false</div><div class="line">&apos;0&apos; == undefined  //false</div><div class="line">&apos;0&apos; == false  //true</div><div class="line">&apos;0&apos; == NaN  //false</div><div class="line">&apos;0&apos; == 0  //true</div><div class="line">&apos;0&apos; == &apos;&apos;  //false</div><div class="line"></div><div class="line">false == null  //false</div><div class="line">false == undefined  //false</div><div class="line">false == NaN  //false</div><div class="line">false == 0  //true</div><div class="line">false == &apos;&apos;  //true</div><div class="line">false == []  //true</div><div class="line">false == &#123;&#125; //false</div><div class="line"></div><div class="line">&apos;&apos; == null  //false</div><div class="line">&apos;&apos; == undefined  //false</div><div class="line">&apos;&apos; == NaN  //false</div><div class="line">&apos;&apos; == 0  //true</div><div class="line">&apos;&apos; == []  //true</div><div class="line">&apos;&apos; == &#123;&#125; //false</div><div class="line"></div><div class="line">0 == null  //false</div><div class="line">0 == undefined  //false</div><div class="line">0 == NaN  //false</div><div class="line">0 == []  //true</div><div class="line">0 == &#123;&#125; //false</div><div class="line"></div><div class="line">[] == ![] //true</div></pre></td></tr></table></figure></p>
 <p>&amp;&amp;和|| 计算结果根据短路原则判断到了哪里，返回最后一个进行判断的值</p>
 <p>运算符优先级<br>属性访问.<br>一元操作符（+，-，++，–）<br>二元操作符（+-*/）<br>比较（&gt;,&lt;)<br>相等（==，===，！=）<br>与&amp;&amp;，或||<br>三目运算符<br>赋值</p>
 <p>运算符结合性<br>除了一元操作符，三目运算符和赋值是右结合，其他都是左结合</p>
 <p>减少小数计算误差<br>尽量不使用小数进行比较或运算<br>转整数计算，再转回相应位数小数<br>使用toFixed()四舍五入<br>两个情境需要重复计算时，保证前后书写顺序</p>
-<h1 id="13-数组相关方法"><a href="#13-数组相关方法" class="headerlink" title="13. 数组相关方法"></a>13. 数组相关方法</h1><p><img src="/image/arrmethod.jpg" alt="arrmethod"></p>
+<h1 id="13-数组相关方法"><a href="#13-数组相关方法" class="headerlink" title="13. 数组相关方法"></a>13. 数组相关方法</h1><p><img src="/image/arrmethod.jpg" alt="arrmethod"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">let arr = []</div><div class="line">let iterator = arr[Symbol.iterator]() //可以获取数组迭代器</div></pre></td></tr></table></figure></p>
+<p>遍历对象/数组的方法<br>for<br>while(do…while)<br>forEach<br>map<br>reduce<br>for…of<br>for…in<br>iterator<br>generator</p>
 <h1 id="14-字符串相关方法"><a href="#14-字符串相关方法" class="headerlink" title="14.字符串相关方法"></a>14.字符串相关方法</h1><p><img src="/image/strmethod.jpg" alt="strmethod"></p>
 <h1 id="15-日期相关方法"><a href="#15-日期相关方法" class="headerlink" title="15.日期相关方法"></a>15.日期相关方法</h1><p>   一共 33个<br>   set/get（UTC）FullYear,Month,Date,Hours,Minutes,Seconds,Millseconds<br>   set/get Time<br>   get(UTC) Day<br>   getTimezoneOffset</p>
 <h1 id="16-Math三个舍入方法"><a href="#16-Math三个舍入方法" class="headerlink" title="16. Math三个舍入方法"></a>16. Math三个舍入方法</h1><p>  Math.ceil:比值大的最小整数<br>  Math.round:四舍五入<br>  Math.floor:比值小的最大整数</p>
@@ -1538,149 +1683,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/course/router.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/course/router.html" itemprop="url">
-                  路由
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-04T21:08:37+08:00">
-                2018-12-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="为什么需要路由"><a href="#为什么需要路由" class="headerlink" title="为什么需要路由"></a>为什么需要路由</h1><p>1.单页应用需要进行页面切换<br>2.通过URL可以定位到页面<br>3.更有语义的组织资源</p>
-<h1 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h1><p>在组件容器里根据URL决定显示什么样的组件</p>
-<h1 id="REACT-router特性（和后端路由对比）"><a href="#REACT-router特性（和后端路由对比）" class="headerlink" title="REACT router特性（和后端路由对比）"></a>REACT router特性（和后端路由对比）</h1><p>1.声明式路由定义</p>
-<p>通过react组件标签进行声明，可以放在任何地方，不需要具体的路由表进行声明</p>
-<p>2.动态路由</p>
-<p>传统路由一旦配置了它就是一个配置文件，成为一个静态文件<br>而react router的路由是页面在render的时候才会被解析的，有相应路由的标记标签就是有相应的配置，没有标签就没有相应的配置</p>
-<h1 id="三种路由实现方式"><a href="#三种路由实现方式" class="headerlink" title="三种路由实现方式"></a>三种路由实现方式</h1><ol>
-<li><p>url路径：通过改变URl更改视图</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">import React from &quot;react&quot;;</div><div class="line">import &#123; BroswerRouter as Router, Route, Link &#125; from &quot;react-router-dom&quot;;</div><div class="line"></div><div class="line">const Home = () =&gt; &lt;h1&gt;Home&lt;/h1&gt;;</div><div class="line">const Hello = () =&gt; &lt;h1&gt;Hello&lt;/h1&gt;;</div><div class="line">const About = () =&gt; &lt;h1&gt;About Us&lt;/h1&gt;;</div><div class="line"></div><div class="line">export default class RouterSample extends React.PureComponent &#123;</div><div class="line">  render() &#123;</div><div class="line">    return (</div><div class="line">      &lt;Router&gt;</div><div class="line">        &lt;div&gt;</div><div class="line">          &lt;ul id=&quot;menu&quot;&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/home&quot;&gt;Home&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/hello&quot;&gt;Hello&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/about&quot;&gt;About&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">          &lt;/ul&gt;</div><div class="line"></div><div class="line">          &lt;div id=&quot;page-container&quot;&gt;</div><div class="line">            &lt;Route path=&quot;/home&quot; component=&#123;Home&#125; /&gt;</div><div class="line">            &lt;Route path=&quot;/hello&quot; component=&#123;Hello&#125; /&gt;</div><div class="line">            &lt;Route path=&quot;/about&quot; component=&#123;About&#125; /&gt;</div><div class="line">          &lt;/div&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">      &lt;/Router&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>hash路由：使用Router 的HashRouter组件 进行路由容器包裹,切换路由时，<br>具体的路径会被放在URl的#后面，通过改变hash更变视图《兼容低版本浏览器》</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">import React from &quot;react&quot;;</div><div class="line">import &#123; HashRouter as Router, Route, Link &#125; from &quot;react-router-dom&quot;;</div><div class="line"></div><div class="line">const Home = () =&gt; &lt;h1&gt;Home&lt;/h1&gt;;</div><div class="line">const Hello = () =&gt; &lt;h1&gt;Hello&lt;/h1&gt;;</div><div class="line">const About = () =&gt; &lt;h1&gt;About Us&lt;/h1&gt;;</div><div class="line"></div><div class="line">export default class RouterSample extends React.PureComponent &#123;</div><div class="line">  render() &#123;</div><div class="line">    return (</div><div class="line">      &lt;Router&gt;</div><div class="line">        &lt;div&gt;</div><div class="line">          &lt;ul id=&quot;menu&quot;&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/home&quot;&gt;Home&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/hello&quot;&gt;Hello&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/about&quot;&gt;About&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">          &lt;/ul&gt;</div><div class="line"></div><div class="line">          &lt;div id=&quot;page-container&quot;&gt;</div><div class="line">            &lt;Route path=&quot;/home&quot; component=&#123;Home&#125; /&gt;</div><div class="line">            &lt;Route path=&quot;/hello&quot; component=&#123;Hello&#125; /&gt;</div><div class="line">            &lt;Route path=&quot;/about&quot; component=&#123;About&#125; /&gt;</div><div class="line">          &lt;/div&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">      &lt;/Router&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>存路由：使用react-router 的MemoryRouter组件进行路由容器包裹，路由信息放在内存中管理，URL不变的情况下，即可进行视图切换</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">import React from &quot;react&quot;;</div><div class="line">import &#123; HashRouter as Router, Route, Link &#125; from &quot;react-router-dom&quot;;</div><div class="line">import &#123; MemoryRouter &#125; from &quot;react-router&quot;;</div><div class="line"></div><div class="line">const Home = () =&gt; &lt;h1&gt;Home&lt;/h1&gt;;</div><div class="line">const Hello = () =&gt; &lt;h1&gt;Hello&lt;/h1&gt;;</div><div class="line">const About = () =&gt; &lt;h1&gt;About Us&lt;/h1&gt;;</div><div class="line"></div><div class="line">export default class RouterSample extends React.PureComponent &#123;</div><div class="line">  render() &#123;</div><div class="line">    return (</div><div class="line">      &lt;MemoryRouter&gt;</div><div class="line">        &lt;div&gt;</div><div class="line">          &lt;ul id=&quot;menu&quot;&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/home&quot;&gt;Home&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/hello&quot;&gt;Hello&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/about&quot;&gt;About&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">          &lt;/ul&gt;</div><div class="line"></div><div class="line">          &lt;div id=&quot;page-container&quot;&gt;</div><div class="line">            &lt;Route path=&quot;/home&quot; component=&#123;Home&#125; /&gt;</div><div class="line">            &lt;Route path=&quot;/hello&quot; component=&#123;Hello&#125; /&gt;</div><div class="line">            &lt;Route path=&quot;/about&quot; component=&#123;About&#125; /&gt;</div><div class="line">          &lt;/div&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">      &lt;/MemoryRouter&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>基于路由配置进行资源组织 好处</p>
-<p>1.实现业务逻辑的松耦合<br>2.易于扩展，重构和维护<br>3.路由层面实现Lazy Load</p>
-<h1 id="REACT-Router-API"><a href="#REACT-Router-API" class="headerlink" title="REACT Router API"></a>REACT Router API</h1><p>1.<link>:普通链接,会触发浏览器刷新<br>类似a标签，但是不会触发浏览器的刷新，点击时router会接管导航，对切换进行处理不会传递到浏览器，让其进行真正的页面切换<br>to属性代表链接到的URl的地址<br>2.<navlink>:类似 Link但是会添加当前选中状态<br>可以添加activeClassName属性，当当前链接符合to属性值时,显示相应的样式 还有其他属性，详情请看react-router文档<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;NavLink to=&quot;/faq&quot; activeClassName=&apos;selected&apos;&gt;FAQs&lt;/NavLink&gt;</div></pre></td></tr></table></figure></navlink></p>
-<p>3.<prompt>:满足条件时提示用户是否离开当前页面<br>切换页面时，跟用户提供一个确认的操作</prompt></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">import &#123; Prompt &#125; from &quot;react-router&quot;;</div><div class="line">&lt;Prompt</div><div class="line">    when=&#123;formIsHalfFilledOut&#125;</div><div class="line">    message=&apos;Are you sure you want to leave&apos;</div><div class="line">/&gt;</div></pre></td></tr></table></figure>
-<p>4.<redirect>重定向当前页面,例如登录判断<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">import &#123; Redirect,Route &#125; from &quot;react-router&quot;;</div><div class="line">&lt;Route exact path=&apos;/&apos; render=&#123;()=&gt;(</div><div class="line">    loggedIn?(</div><div class="line">    &lt;Redirect to=&apos;/dashboard&apos; /&gt;</div><div class="line">    ) : (</div><div class="line">        &lt;PublicHomePage/&gt;</div><div class="line">    )</div><div class="line">)&#125;/&gt;</div></pre></td></tr></table></figure></redirect></p>
-<p>5.<route>:路由配置的核心标记,路径匹配时显示对应组件<br>path：路由<br>component:相应要显示的组件<br>exact：是否精准配置path<br>多个route path都符合当前路由时，那相应组件都会进行显示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;Route exact path=&quot;/&quot; component=&#123;Home&#125; /&gt;</div></pre></td></tr></table></figure></route></p>
-<p>6.<switch>:只显示第一个匹配的路由<br>找到一个匹配的路径就只显示这个路径相应的组件，其他组件不显示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">import &#123; Switch,Route &#125; from &quot;react-router&quot;;</div><div class="line">&lt;Switch&gt;</div><div class="line">&lt;Route path=&quot;/home&quot; component=&#123;Home&#125; /&gt;</div><div class="line">&lt;Route path=&quot;/hello&quot; component=&#123;Hello&#125; /&gt;</div><div class="line">&lt;Route path=&quot;/about&quot; component=&#123;About&#125; /&gt;</div><div class="line">&lt;Route component=&#123;Nomatch&#125; /&gt;</div><div class="line">&lt;/Switch&gt;</div></pre></td></tr></table></figure></switch></p>
-<h1 id="参数传递"><a href="#参数传递" class="headerlink" title="参数传递"></a>参数传递</h1><p>通过URL传递参数 :<route path="/topic/:id" ...=""><br>获取参数：this.props.match.params<br>页面状态尽量通过URl参数定义,方便页面间跳转时数据传递，否则需要将数据转化成组件内部state进行渲染，过程复杂</route></p>
-<h1 id="套嵌路由"><a href="#套嵌路由" class="headerlink" title="套嵌路由"></a>套嵌路由</h1><p>1.每个React组件都可以时路由容器<br>2.React Router的声明式语法可以方便的定义嵌套路由<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line">import React from &quot;react&quot;;</div><div class="line">import &#123;</div><div class="line">  BrowserRouter as Router,</div><div class="line">  Route,</div><div class="line">  Link</div><div class="line">&#125; from &quot;react-router-dom&quot;;</div><div class="line"></div><div class="line">const Category = (&#123; match &#125;) =&gt; (</div><div class="line">  &lt;h1&gt;Sub Category &#123;match.params.subId&#125;&lt;/h1&gt;</div><div class="line">);</div><div class="line"></div><div class="line">const SubCategory = (&#123; match &#125;) =&gt; (</div><div class="line">  &lt;div&gt;</div><div class="line">    &lt;h1&gt;Category &#123;match.params.id&#125;&lt;/h1&gt;</div><div class="line"></div><div class="line">    &lt;ul id=&quot;menu&quot;&gt;</div><div class="line">      &lt;li&gt;</div><div class="line">        &lt;Link to=&#123;`/category/$&#123;match.params.id&#125;/sub/1`&#125;&gt;</div><div class="line">          Sub Category 1</div><div class="line">        &lt;/Link&gt;</div><div class="line">      &lt;/li&gt;</div><div class="line">      &lt;li&gt;</div><div class="line">        &lt;Link to=&#123;`/category/$&#123;match.params.id&#125;/sub/2`&#125;&gt;</div><div class="line">          Sub Category 2</div><div class="line">        &lt;/Link&gt;</div><div class="line">      &lt;/li&gt;</div><div class="line">      &lt;li&gt;</div><div class="line">        &lt;Link to=&#123;`/category/$&#123;match.params.id&#125;/sub/3`&#125;&gt;</div><div class="line">          Sub Category 3</div><div class="line">        &lt;/Link&gt;</div><div class="line">      &lt;/li&gt;</div><div class="line">    &lt;/ul&gt;</div><div class="line">    &lt;div id=&quot;page-container-2&quot;&gt;</div><div class="line">      &lt;Route</div><div class="line">        path=&quot;/category/:id/sub/:subId&quot;</div><div class="line">        component=&#123;Category&#125;</div><div class="line">      /&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  &lt;/div&gt;</div><div class="line">);</div><div class="line"></div><div class="line">export default class NestedRoute extends React.PureComponent &#123;</div><div class="line">  render() &#123;</div><div class="line">    return (</div><div class="line">      &lt;Router&gt;</div><div class="line">        &lt;div&gt;</div><div class="line">          &lt;ul id=&quot;menu&quot;&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/category/1&quot;&gt;Category 1&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/category/2&quot;&gt;Category 2&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&quot;/category/3&quot;&gt;Category 3&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">          &lt;/ul&gt;</div><div class="line"></div><div class="line">          &lt;div id=&quot;page-container&quot;&gt;</div><div class="line">            &lt;Route</div><div class="line">              path=&quot;/category/:id&quot;</div><div class="line">              component=&#123;SubCategory&#125;</div><div class="line">            /&gt;</div><div class="line">          &lt;/div&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">      &lt;/Router&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1726,7 +1728,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">215</span>
+              <span class="site-state-item-count">216</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1743,7 +1745,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">19</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -1790,7 +1792,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

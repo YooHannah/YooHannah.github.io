@@ -259,6 +259,126 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/SyntheticEvent.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/react/SyntheticEvent.html" itemprop="url">
+                  react 合成事件原理
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-05T15:37:37+08:00">
+                2019-01-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="事件注册"><a href="#事件注册" class="headerlink" title="事件注册"></a>事件注册</h1><h2 id="注册到document"><a href="#注册到document" class="headerlink" title="注册到document"></a>注册到document</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div></pre></td><td class="code"><pre><div class="line">1. reactDOMComponent.js</div><div class="line">export function setInitialProperties(</div><div class="line">  domElement: Element,</div><div class="line">  tag: string,</div><div class="line">  rawProps: Object,</div><div class="line">  rootContainerElement: Element | Document,</div><div class="line">): void &#123;</div><div class="line">  const isCustomComponentTag = isCustomComponent(tag, rawProps);</div><div class="line">  if (__DEV__) &#123; ... &#125;</div><div class="line">  let props: Object;</div><div class="line">  switch (tag) &#123;</div><div class="line">    case &apos;iframe&apos;:</div><div class="line">    case &apos;object&apos;:</div><div class="line">      trapBubbledEvent(TOP_LOAD, domElement); //trapBubbledEvent</div><div class="line">      props = rawProps;</div><div class="line">      break;</div><div class="line">    case &apos;video&apos;:</div><div class="line">    case &apos;audio&apos;:</div><div class="line">      // Create listener for each media event</div><div class="line">      for (let i = 0; i &lt; mediaEventTypes.length; i++) &#123;</div><div class="line">        trapBubbledEvent(mediaEventTypes[i], domElement); //trapBubbledEvent</div><div class="line">      &#125;</div><div class="line">      props = rawProps;</div><div class="line">      break;</div><div class="line">    case &apos;source&apos;:</div><div class="line">      trapBubbledEvent(TOP_ERROR, domElement); //trapBubbledEvent</div><div class="line">      props = rawProps;</div><div class="line">      break;</div><div class="line">    case &apos;img&apos;:</div><div class="line">    case &apos;image&apos;:</div><div class="line">    case &apos;link&apos;:</div><div class="line">      trapBubbledEvent(TOP_ERROR, domElement); //trapBubbledEvent</div><div class="line">      trapBubbledEvent(TOP_LOAD, domElement); //trapBubbledEvent</div><div class="line">      props = rawProps;</div><div class="line">      break;</div><div class="line">    case &apos;form&apos;:</div><div class="line">      trapBubbledEvent(TOP_RESET, domElement);  //trapBubbledEvent</div><div class="line">      trapBubbledEvent(TOP_SUBMIT, domElement); //trapBubbledEvent</div><div class="line">      props = rawProps;</div><div class="line">      break;</div><div class="line">    case &apos;details&apos;:</div><div class="line">      trapBubbledEvent(TOP_TOGGLE, domElement); //trapBubbledEvent</div><div class="line">      props = rawProps;</div><div class="line">      break;</div><div class="line">    case &apos;input&apos;:</div><div class="line">      ReactDOMInputInitWrapperState(domElement, rawProps);</div><div class="line">      props = ReactDOMInputGetHostProps(domElement, rawProps);</div><div class="line">      trapBubbledEvent(TOP_INVALID, domElement);  //trapBubbledEvent</div><div class="line">      // For controlled components we always need to ensure we&apos;re listening</div><div class="line">      // to onChange. Even if there is no listener.</div><div class="line">      ensureListeningTo(rootContainerElement, &apos;onChange&apos;); // ensureListeningTo</div><div class="line">      break;</div><div class="line">    case &apos;option&apos;:</div><div class="line">      ReactDOMOptionValidateProps(domElement, rawProps);</div><div class="line">      props = ReactDOMOptionGetHostProps(domElement, rawProps);</div><div class="line">      break;</div><div class="line">    case &apos;select&apos;:</div><div class="line">      ReactDOMSelectInitWrapperState(domElement, rawProps);</div><div class="line">      props = ReactDOMSelectGetHostProps(domElement, rawProps);</div><div class="line">      trapBubbledEvent(TOP_INVALID, domElement);    //trapBubbledEvent</div><div class="line">      // For controlled components we always need to ensure we&apos;re listening</div><div class="line">      // to onChange. Even if there is no listener.</div><div class="line">      ensureListeningTo(rootContainerElement, &apos;onChange&apos;);  // ensureListeningTo</div><div class="line">      break;</div><div class="line">    case &apos;textarea&apos;:</div><div class="line">      ReactDOMTextareaInitWrapperState(domElement, rawProps);</div><div class="line">      props = ReactDOMTextareaGetHostProps(domElement, rawProps);</div><div class="line">      trapBubbledEvent(TOP_INVALID, domElement);  //trapBubbledEvent</div><div class="line">      // For controlled components we always need to ensure we&apos;re listening</div><div class="line">      // to onChange. Even if there is no listener.</div><div class="line">      ensureListeningTo(rootContainerElement, &apos;onChange&apos;); // ensureListeningTo</div><div class="line">      break;</div><div class="line">    default:</div><div class="line">      props = rawProps;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  assertValidProps(tag, props);</div><div class="line"></div><div class="line">  setInitialDOMProperties(</div><div class="line">    tag,</div><div class="line">    domElement,</div><div class="line">    rootContainerElement,</div><div class="line">    props,</div><div class="line">    isCustomComponentTag,</div><div class="line">  );//这个函数中也会用到 ensureListeningTo</div><div class="line"></div><div class="line">  switch (tag) &#123;</div><div class="line">   //给一些DOM标签通过setAttribute赋值</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">function setInitialDOMProperties(</div><div class="line">  tag: string,</div><div class="line">  domElement: Element,</div><div class="line">  rootContainerElement: Element | Document,</div><div class="line">  nextProps: Object,</div><div class="line">  isCustomComponentTag: boolean,</div><div class="line">): void &#123;</div><div class="line">    if(...)&#123;</div><div class="line">      ...</div><div class="line">    &#125; else if (registrationNameModules.hasOwnProperty(propKey)) &#123;</div><div class="line">      if (nextProp != null) &#123;</div><div class="line">        if (__DEV__ &amp;&amp; typeof nextProp !== &apos;function&apos;) &#123;</div><div class="line">          warnForInvalidEventListener(propKey, nextProp);</div><div class="line">        &#125;</div><div class="line">        ensureListeningTo(rootContainerElement, propKey); // ensureListeningTo</div><div class="line">      &#125;</div><div class="line">    &#125; else if (nextProp != null) &#123;</div><div class="line">      setValueForProperty(domElement, propKey, nextProp, isCustomComponentTag);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">function ensureListeningTo(rootContainerElement, registrationName) &#123;</div><div class="line">  const isDocumentOrFragment =</div><div class="line">    rootContainerElement.nodeType === DOCUMENT_NODE ||</div><div class="line">    rootContainerElement.nodeType === DOCUMENT_FRAGMENT_NODE;</div><div class="line">  const doc = isDocumentOrFragment</div><div class="line">    ? rootContainerElement</div><div class="line">    : rootContainerElement.ownerDocument;</div><div class="line">  listenTo(registrationName, doc);</div><div class="line">&#125;</div><div class="line"></div><div class="line">2.ReactBrowerEventEmitter.js</div><div class="line"></div><div class="line">export function listenTo(</div><div class="line">  registrationName: string,</div><div class="line">  mountAt: Document | Element,</div><div class="line">) &#123;</div><div class="line">  const isListening = getListeningForDocument(mountAt);</div><div class="line">  const dependencies = registrationNameDependencies[registrationName];</div><div class="line"></div><div class="line">  for (let i = 0; i &lt; dependencies.length; i++) &#123;</div><div class="line">    const dependency = dependencies[i];</div><div class="line">    if (!(isListening.hasOwnProperty(dependency) &amp;&amp; isListening[dependency])) &#123;</div><div class="line">      switch (dependency) &#123;</div><div class="line">        case TOP_SCROLL:</div><div class="line">          trapCapturedEvent(TOP_SCROLL, mountAt);</div><div class="line">          break;</div><div class="line">        case TOP_FOCUS:</div><div class="line">        case TOP_BLUR:</div><div class="line">          trapCapturedEvent(TOP_FOCUS, mountAt);</div><div class="line">          trapCapturedEvent(TOP_BLUR, mountAt);</div><div class="line">          // We set the flag for a single dependency later in this function,</div><div class="line">          // but this ensures we mark both as attached rather than just one.</div><div class="line">          isListening[TOP_BLUR] = true;</div><div class="line">          isListening[TOP_FOCUS] = true;</div><div class="line">          break;</div><div class="line">        case TOP_CANCEL:</div><div class="line">        case TOP_CLOSE:</div><div class="line">          if (isEventSupported(getRawEventName(dependency))) &#123;</div><div class="line">            trapCapturedEvent(dependency, mountAt);</div><div class="line">          &#125;</div><div class="line">          break;</div><div class="line">        case TOP_INVALID:</div><div class="line">        case TOP_SUBMIT:</div><div class="line">        case TOP_RESET:</div><div class="line">          // We listen to them on the target DOM elements.</div><div class="line">          // Some of them bubble so we don&apos;t want them to fire twice.</div><div class="line">          break;</div><div class="line">        default:</div><div class="line">          // By default, listen on the top level to all non-media events.</div><div class="line">          // Media events don&apos;t bubble so adding the listener wouldn&apos;t do anything.</div><div class="line">          const isMediaEvent = mediaEventTypes.indexOf(dependency) !== -1;</div><div class="line">          if (!isMediaEvent) &#123;</div><div class="line">            trapBubbledEvent(dependency, mountAt);</div><div class="line">          &#125;</div><div class="line">          break;</div><div class="line">      &#125;</div><div class="line">      isListening[dependency] = true;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">3. ReactDOMEventListener.js</div><div class="line"></div><div class="line">export function trapBubbledEvent(</div><div class="line">  topLevelType: DOMTopLevelEventType,</div><div class="line">  element: Document | Element,</div><div class="line">) &#123;</div><div class="line">  if (!element) &#123;</div><div class="line">    return null;</div><div class="line">  &#125;</div><div class="line">  const dispatch = isInteractiveTopLevelEventType(topLevelType) </div><div class="line">    ? dispatchInteractiveEvent</div><div class="line">    : dispatchEvent;</div><div class="line"></div><div class="line">  addEventBubbleListener(</div><div class="line">    element,//document</div><div class="line">    getRawEventName(topLevelType),//事件类型</div><div class="line">    // Check if interactive and wrap in interactiveUpdates</div><div class="line">    dispatch.bind(null, topLevelType), //回调函数是分发函数 详见执行过程</div><div class="line">  );</div><div class="line">&#125;</div><div class="line">export function trapCapturedEvent(topLevelType, element)&#123;...&#125;</div><div class="line">export function dispatchEvent(topLevelType,nativeEvent) &#123;... &#125;</div><div class="line"></div><div class="line">4. EventListener.js</div><div class="line">export function addEventBubbleListener(</div><div class="line">  element: Document | Element,</div><div class="line">  eventType: string,</div><div class="line">  listener: Function,</div><div class="line">): void &#123;</div><div class="line">  element.addEventListener(eventType, listener, false);</div><div class="line">&#125;</div><div class="line">export function addEventCaptureListener()&#123;...&#125;</div></pre></td></tr></table></figure>
+<p>在使用setInitialProperties对标签属性初始化的时候，<br>会根据不同标签自动绑定上冒泡事件或者监听事件<br>document事件回调函数是分发功能函数，不会对任何事件的直接回调函数进行处理，只会根据事件类型进行分发</p>
+<h2 id="存储回调函数"><a href="#存储回调函数" class="headerlink" title="存储回调函数"></a>存储回调函数</h2><h1 id="事件执行"><a href="#事件执行" class="headerlink" title="事件执行"></a>事件执行</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div></pre></td><td class="code"><pre><div class="line">//ReactDOMEventListener</div><div class="line">export function dispatchEvent(</div><div class="line">  topLevelType: DOMTopLevelEventType,</div><div class="line">  nativeEvent: AnyNativeEvent,</div><div class="line">) &#123;</div><div class="line">  if (!_enabled) &#123;</div><div class="line">    return;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  const nativeEventTarget = getEventTarget(nativeEvent);</div><div class="line">  let targetInst = getClosestInstanceFromNode(nativeEventTarget);</div><div class="line">  if (</div><div class="line">    targetInst !== null &amp;&amp;</div><div class="line">    typeof targetInst.tag === &apos;number&apos; &amp;&amp;</div><div class="line">    !isFiberMounted(targetInst)</div><div class="line">  ) &#123;</div><div class="line">    // If we get an event (ex: img onload) before committing that</div><div class="line">    // component&apos;s mount, ignore it for now (that is, treat it as if it was an</div><div class="line">    // event on a non-React tree). We might also consider queueing events and</div><div class="line">    // dispatching them after the mount.</div><div class="line">    targetInst = null;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  const bookKeeping = getTopLevelCallbackBookKeeping(</div><div class="line">    topLevelType,</div><div class="line">    nativeEvent,</div><div class="line">    targetInst,</div><div class="line">  );</div><div class="line"></div><div class="line">  try &#123;</div><div class="line">    // Event queue being processed in the same cycle allows</div><div class="line">    // `preventDefault`.</div><div class="line">    batchedUpdates(handleTopLevel, bookKeeping);</div><div class="line">  &#125; finally &#123;</div><div class="line">    releaseTopLevelCallbackBookKeeping(bookKeeping);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">function handleTopLevel(bookKeeping) &#123;</div><div class="line">  let targetInst = bookKeeping.targetInst;</div><div class="line"></div><div class="line">  // Loop through the hierarchy, in case there&apos;s any nested components.</div><div class="line">  // It&apos;s important that we build the array of ancestors before calling any</div><div class="line">  // event handlers, because event handlers can modify the DOM, leading to</div><div class="line">  // inconsistencies with ReactMount&apos;s node cache. See #1105.</div><div class="line">  let ancestor = targetInst;</div><div class="line">  do &#123;</div><div class="line">    if (!ancestor) &#123;</div><div class="line">      bookKeeping.ancestors.push(ancestor);</div><div class="line">      break;</div><div class="line">    &#125;</div><div class="line">    const root = findRootContainerNode(ancestor);</div><div class="line">    if (!root) &#123;</div><div class="line">      break;</div><div class="line">    &#125;</div><div class="line">    bookKeeping.ancestors.push(ancestor);</div><div class="line">    ancestor = getClosestInstanceFromNode(root);</div><div class="line">  &#125; while (ancestor);</div><div class="line"></div><div class="line">  for (let i = 0; i &lt; bookKeeping.ancestors.length; i++) &#123;</div><div class="line">    targetInst = bookKeeping.ancestors[i];</div><div class="line">    runExtractedEventsInBatch(</div><div class="line">      bookKeeping.topLevelType,</div><div class="line">      targetInst,</div><div class="line">      bookKeeping.nativeEvent,</div><div class="line">      getEventTarget(bookKeeping.nativeEvent),</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">//ReactGenericBatching.js</div><div class="line">export function batchedUpdates(fn, bookkeeping) &#123;</div><div class="line">  if (isBatching) &#123;</div><div class="line">    // If we are currently inside another batch, we need to wait until it</div><div class="line">    // fully completes before restoring state.</div><div class="line">    return fn(bookkeeping);</div><div class="line">  &#125;</div><div class="line">  isBatching = true;</div><div class="line">  try &#123;</div><div class="line">    return _batchedUpdatesImpl(fn, bookkeeping);</div><div class="line">  &#125; finally &#123;</div><div class="line">    // Here we wait until all updates have propagated, which is important</div><div class="line">    // when using controlled components within layers:</div><div class="line">    // https://github.com/facebook/react/issues/1698</div><div class="line">    // Then we restore state of any controlled component.</div><div class="line">    isBatching = false;</div><div class="line">    const controlledComponentsHavePendingUpdates = needsStateRestore();</div><div class="line">    if (controlledComponentsHavePendingUpdates) &#123;</div><div class="line">      // If a controlled event was fired, we may need to restore the state of</div><div class="line">      // the DOM node back to the controlled value. This is necessary when React</div><div class="line">      // bails out of the update without touching the DOM.</div><div class="line">      _flushInteractiveUpdatesImpl();</div><div class="line">      restoreStateIfNeeded();</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">let _batchedUpdatesImpl = function(fn, bookkeeping) &#123;</div><div class="line">  return fn(bookkeeping);</div><div class="line">&#125;;</div><div class="line"></div><div class="line">//EventPluginHub</div><div class="line">export function runExtractedEventsInBatch(</div><div class="line">  topLevelType: TopLevelType,</div><div class="line">  targetInst: null | Fiber,</div><div class="line">  nativeEvent: AnyNativeEvent,</div><div class="line">  nativeEventTarget: EventTarget,</div><div class="line">) &#123;</div><div class="line">  const events = extractEvents(//生成合成事件</div><div class="line">    topLevelType,</div><div class="line">    targetInst,</div><div class="line">    nativeEvent,</div><div class="line">    nativeEventTarget,</div><div class="line">  );</div><div class="line">  runEventsInBatch(events); //批量更新</div><div class="line">&#125;</div><div class="line">export function runEventsInBatch(</div><div class="line">  events: Array&lt;ReactSyntheticEvent&gt; | ReactSyntheticEvent | null,</div><div class="line">) &#123;</div><div class="line">  if (events !== null) &#123;</div><div class="line">    eventQueue = accumulateInto(eventQueue, events);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  // Set `eventQueue` to null before processing it so that we can tell if more</div><div class="line">  // events get enqueued while processing.</div><div class="line">  const processingEventQueue = eventQueue;</div><div class="line">  eventQueue = null;</div><div class="line"></div><div class="line">  if (!processingEventQueue) &#123;</div><div class="line">    return;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  forEachAccumulated(processingEventQueue, executeDispatchesAndReleaseTopLevel);//批量执行</div><div class="line">  invariant(</div><div class="line">    !eventQueue,</div><div class="line">    &apos;processEventQueue(): Additional events were enqueued while processing &apos; +</div><div class="line">      &apos;an event queue. Support for this has not yet been implemented.&apos;,</div><div class="line">  );</div><div class="line">  // This would be a good time to rethrow if any of the event handlers threw.</div><div class="line">  rethrowCaughtError();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="生成合成事件"><a href="#生成合成事件" class="headerlink" title="生成合成事件"></a>生成合成事件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">//EventPluginHub</div><div class="line">function extractEvents(</div><div class="line">  topLevelType: TopLevelType,</div><div class="line">  targetInst: null | Fiber,</div><div class="line">  nativeEvent: AnyNativeEvent,</div><div class="line">  nativeEventTarget: EventTarget,</div><div class="line">): Array&lt;ReactSyntheticEvent&gt; | ReactSyntheticEvent | null &#123;</div><div class="line">  let events = null;</div><div class="line">  for (let i = 0; i &lt; plugins.length; i++) &#123;</div><div class="line">    // Not every plugin in the ordering may be loaded at runtime.</div><div class="line">    const possiblePlugin: PluginModule&lt;AnyNativeEvent&gt; = plugins[i];</div><div class="line">    if (possiblePlugin) &#123;</div><div class="line">      const extractedEvents = possiblePlugin.extractEvents(</div><div class="line">        topLevelType,</div><div class="line">        targetInst,</div><div class="line">        nativeEvent,</div><div class="line">        nativeEventTarget,</div><div class="line">      );</div><div class="line">      if (extractedEvents) &#123;</div><div class="line">        events = accumulateInto(events, extractedEvents);</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  return events;</div><div class="line">&#125;</div><div class="line"></div><div class="line">//DOMEventPluginOrder</div><div class="line">const DOMEventPluginOrder = [</div><div class="line">  &apos;ResponderEventPlugin&apos;,</div><div class="line">  &apos;SimpleEventPlugin&apos;,</div><div class="line">  &apos;EnterLeaveEventPlugin&apos;,</div><div class="line">  &apos;ChangeEventPlugin&apos;,</div><div class="line">  &apos;SelectEventPlugin&apos;,</div><div class="line">  &apos;BeforeInputEventPlugin&apos;,</div><div class="line">];</div><div class="line"></div><div class="line">export default DOMEventPluginOrder;</div></pre></td></tr></table></figure>
+<h2 id="获取回调函数"><a href="#获取回调函数" class="headerlink" title="获取回调函数"></a>获取回调函数</h2><h2 id="批量执行"><a href="#批量执行" class="headerlink" title="批量执行"></a>批量执行</h2>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/vue/mvvm.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -648,7 +768,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/vue/basic/commanders.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/renderfire.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -673,8 +793,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/vue/basic/commanders.html" itemprop="url">
-                  指令
+                <a class="post-title-link" href="/post/react/renderfire.html" itemprop="url">
+                  触发render
                 </a>
               
             
@@ -726,13 +846,132 @@
       
         
           
-            <p>指令的职责是，当表达式的值改变时，将其产生的连带影响，响应式地作用于 DOM</p>
-<h1 id="简单指令"><a href="#简单指令" class="headerlink" title="简单指令"></a>简单指令</h1><p>v-if 条件指令，绑定值为真时构建DOM,假时bu构建或者删除已存在DOM<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;p v-if=&quot;seen&quot;&gt;现在你看到我了&lt;/p&gt;</div><div class="line"></div><div class="line">export default &#123;</div><div class="line">    name: &apos;vpc&apos;,</div><div class="line">    data () &#123;</div><div class="line">      return &#123;</div><div class="line">        seen: true</div><div class="line">      &#125;</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>v-for 循环指令，根据绑定值，循环输出DOM元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;div v-for=&quot;(item, index) in modalFooter&quot;&gt;</div><div class="line">  &lt;button  @click=&quot;customFunc(item.Func)&quot; type=&quot;button&quot; class=&quot;btn btn-primary&quot; v-if=&apos;item.name&apos;&gt;&#123;&#123;item.name&#125;&#125;&lt;/button&gt;</div><div class="line">&lt;/div&gt;</div><div class="line">//根据数据modalFooter数组循环出多个数组</div></pre></td></tr></table></figure></p>
-<p>v-on 监听 DOM 事件的指令,触发事件的回调函数放在method中，可以简写成‘@事件名’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;app-5&quot;&gt;</div><div class="line">  &lt;p&gt;&#123;&#123; message &#125;&#125;&lt;/p&gt;</div><div class="line">  &lt;button v-on:click=&quot;reverseMessage&quot;&gt;逆转消息&lt;/button&gt;</div><div class="line"> //或者 &lt;button @click=&quot;reverseMessage&quot;&gt;逆转消息&lt;/button&gt;</div><div class="line">&lt;/div&gt;</div><div class="line"></div><div class="line">var app5 = new Vue(&#123;</div><div class="line">  el: &apos;#app-5&apos;,</div><div class="line">  data: &#123;</div><div class="line">    message: &apos;Hello Vue.js!&apos;</div><div class="line">  &#125;,</div><div class="line">  methods: &#123;</div><div class="line">    reverseMessage: function () &#123;</div><div class="line">      this.message = this.message.split(&apos;&apos;).reverse().join(&apos;&apos;)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
-<p>v-model 双向绑定指令,绑定的值在页面更改后js可以及时更改，js改变该值后,页面能马上渲染响应<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;app-6&quot;&gt;</div><div class="line">  &lt;p&gt;&#123;&#123; message &#125;&#125;&lt;/p&gt;</div><div class="line">  &lt;input v-model=&quot;message&quot;&gt;</div><div class="line">&lt;/div&gt;</div><div class="line"></div><div class="line">var app6 = new Vue(&#123;</div><div class="line">  el: &apos;#app-6&apos;,</div><div class="line">  data: &#123;</div><div class="line">    message: &apos;Hello Vue!&apos;</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
-<p>v-bind 绑定HTML标签属性,响应式地更新 HTML 特性 缩写形式”  :属性名=’响应函数名’  “<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;app-2&quot;&gt;</div><div class="line">  &lt;span v-bind:title=&quot;message&quot;&gt;</div><div class="line">  //或者&lt;span :title=&quot;message&quot;&gt;</div><div class="line">    鼠标悬停几秒钟查看此处动态绑定的提示信息！</div><div class="line">  &lt;/span&gt;</div><div class="line">&lt;/div&gt;</div><div class="line"></div><div class="line">var app2 = new Vue(&#123;</div><div class="line">  el: &apos;#app-2&apos;,</div><div class="line">  data: &#123;</div><div class="line">    message: &apos;页面加载于 &apos; + new Date().toLocaleString()</div><div class="line">  &#125;</div><div class="line">&#125;)</div><div class="line">//在这里，该指令的意思是：“将这个元素节点的 title 特性和 Vue 实例的 message 属性保持一致”</div></pre></td></tr></table></figure></p>
-<h1 id="自定义指令"><a href="#自定义指令" class="headerlink" title="自定义指令"></a>自定义指令</h1>
+            <p>在react中，触发render的有4条路径。</p>
+<p>以下假设shouldComponentUpdate都是按照默认返回true的方式。</p>
+<p>首次渲染Initial Render</p>
+<p>调用this.setState （并不是一次setState会触发一次render，React可能会合并操作，再一次性进行render）</p>
+<p>父组件发生更新（一般就是props发生改变，但是就算props没有改变或者父子组件之间没有数据交换也会触发render）</p>
+<p>调用this.forceUpdate</p>
+<p><a href="https://www.cnblogs.com/AnnieBabygn/p/6560833.html" target="_blank" rel="external">https://www.cnblogs.com/AnnieBabygn/p/6560833.html</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/clock.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/knowledge/clock.html" itemprop="url">
+                  定时器
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-22T11:40:37+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>1.使用 setInterval<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">this.timerID = setInterval(fn, time);</div><div class="line">clearInterval(this.timerID);</div></pre></td></tr></table></figure></p>
+<p> 2.angular 中使用 $interval<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">this.timerID = $interval(fn, time);</div><div class="line">$interval.cancel(this.timerID)</div></pre></td></tr></table></figure></p>
+
           
         
       
@@ -1053,7 +1292,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/renderfire.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/vue/basic/commanders.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1078,8 +1317,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/react/renderfire.html" itemprop="url">
-                  触发render
+                <a class="post-title-link" href="/post/vue/basic/commanders.html" itemprop="url">
+                  指令
                 </a>
               
             
@@ -1131,132 +1370,13 @@
       
         
           
-            <p>在react中，触发render的有4条路径。</p>
-<p>以下假设shouldComponentUpdate都是按照默认返回true的方式。</p>
-<p>首次渲染Initial Render</p>
-<p>调用this.setState （并不是一次setState会触发一次render，React可能会合并操作，再一次性进行render）</p>
-<p>父组件发生更新（一般就是props发生改变，但是就算props没有改变或者父子组件之间没有数据交换也会触发render）</p>
-<p>调用this.forceUpdate</p>
-<p><a href="https://www.cnblogs.com/AnnieBabygn/p/6560833.html" target="_blank" rel="external">https://www.cnblogs.com/AnnieBabygn/p/6560833.html</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/clock.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/knowledge/clock.html" itemprop="url">
-                  定时器
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-22T11:40:37+08:00">
-                2018-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>1.使用 setInterval<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">this.timerID = setInterval(fn, time);</div><div class="line">clearInterval(this.timerID);</div></pre></td></tr></table></figure></p>
-<p> 2.angular 中使用 $interval<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">this.timerID = $interval(fn, time);</div><div class="line">$interval.cancel(this.timerID)</div></pre></td></tr></table></figure></p>
-
+            <p>指令的职责是，当表达式的值改变时，将其产生的连带影响，响应式地作用于 DOM</p>
+<h1 id="简单指令"><a href="#简单指令" class="headerlink" title="简单指令"></a>简单指令</h1><p>v-if 条件指令，绑定值为真时构建DOM,假时bu构建或者删除已存在DOM<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;p v-if=&quot;seen&quot;&gt;现在你看到我了&lt;/p&gt;</div><div class="line"></div><div class="line">export default &#123;</div><div class="line">    name: &apos;vpc&apos;,</div><div class="line">    data () &#123;</div><div class="line">      return &#123;</div><div class="line">        seen: true</div><div class="line">      &#125;</div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>v-for 循环指令，根据绑定值，循环输出DOM元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;div v-for=&quot;(item, index) in modalFooter&quot;&gt;</div><div class="line">  &lt;button  @click=&quot;customFunc(item.Func)&quot; type=&quot;button&quot; class=&quot;btn btn-primary&quot; v-if=&apos;item.name&apos;&gt;&#123;&#123;item.name&#125;&#125;&lt;/button&gt;</div><div class="line">&lt;/div&gt;</div><div class="line">//根据数据modalFooter数组循环出多个数组</div></pre></td></tr></table></figure></p>
+<p>v-on 监听 DOM 事件的指令,触发事件的回调函数放在method中，可以简写成‘@事件名’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;app-5&quot;&gt;</div><div class="line">  &lt;p&gt;&#123;&#123; message &#125;&#125;&lt;/p&gt;</div><div class="line">  &lt;button v-on:click=&quot;reverseMessage&quot;&gt;逆转消息&lt;/button&gt;</div><div class="line"> //或者 &lt;button @click=&quot;reverseMessage&quot;&gt;逆转消息&lt;/button&gt;</div><div class="line">&lt;/div&gt;</div><div class="line"></div><div class="line">var app5 = new Vue(&#123;</div><div class="line">  el: &apos;#app-5&apos;,</div><div class="line">  data: &#123;</div><div class="line">    message: &apos;Hello Vue.js!&apos;</div><div class="line">  &#125;,</div><div class="line">  methods: &#123;</div><div class="line">    reverseMessage: function () &#123;</div><div class="line">      this.message = this.message.split(&apos;&apos;).reverse().join(&apos;&apos;)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>v-model 双向绑定指令,绑定的值在页面更改后js可以及时更改，js改变该值后,页面能马上渲染响应<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;app-6&quot;&gt;</div><div class="line">  &lt;p&gt;&#123;&#123; message &#125;&#125;&lt;/p&gt;</div><div class="line">  &lt;input v-model=&quot;message&quot;&gt;</div><div class="line">&lt;/div&gt;</div><div class="line"></div><div class="line">var app6 = new Vue(&#123;</div><div class="line">  el: &apos;#app-6&apos;,</div><div class="line">  data: &#123;</div><div class="line">    message: &apos;Hello Vue!&apos;</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>v-bind 绑定HTML标签属性,响应式地更新 HTML 特性 缩写形式”  :属性名=’响应函数名’  “<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;app-2&quot;&gt;</div><div class="line">  &lt;span v-bind:title=&quot;message&quot;&gt;</div><div class="line">  //或者&lt;span :title=&quot;message&quot;&gt;</div><div class="line">    鼠标悬停几秒钟查看此处动态绑定的提示信息！</div><div class="line">  &lt;/span&gt;</div><div class="line">&lt;/div&gt;</div><div class="line"></div><div class="line">var app2 = new Vue(&#123;</div><div class="line">  el: &apos;#app-2&apos;,</div><div class="line">  data: &#123;</div><div class="line">    message: &apos;页面加载于 &apos; + new Date().toLocaleString()</div><div class="line">  &#125;</div><div class="line">&#125;)</div><div class="line">//在这里，该指令的意思是：“将这个元素节点的 title 特性和 Vue 实例的 message 属性保持一致”</div></pre></td></tr></table></figure></p>
+<h1 id="自定义指令"><a href="#自定义指令" class="headerlink" title="自定义指令"></a>自定义指令</h1>
           
         
       
@@ -1407,151 +1527,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/map&reduce.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/js/map&reduce.html" itemprop="url">
-                  数组的map和reduce
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-22T11:25:37+08:00">
-                2018-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="数组的map方法"><a href="#数组的map方法" class="headerlink" title="数组的map方法"></a>数组的map方法</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">let arr = [1,2,3,4,5];</div><div class="line">let arr1 = arr.map(function(val,index,arr)&#123;</div><div class="line">	console.log(val,index,arr)</div><div class="line">	return val+1</div><div class="line">&#125;)</div><div class="line">console.log(arr1)//[2, 3, 4, 5, 6]</div><div class="line">console.log(arr) //[1, 2, 3, 4, 5]</div></pre></td></tr></table></figure>
-<p>在map中可以传递一个函数，数组的每一项作为参数调用这个函数，然后返回根据该数组项得到的结果，每一个数组项返会一个结果，从而组成新的数组</p>
-<p>函数的参数有三个，第一项为数组按序传进的一个值，该值的index和数组本身</p>
-<p>整个结果产生新数组，原来数组不变</p>
-<h1 id="数组的reduce-方法"><a href="#数组的reduce-方法" class="headerlink" title="数组的reduce 方法"></a>数组的reduce 方法</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">例1.</div><div class="line">let arr = [1,2,3];</div><div class="line">let result = arr.reduce(function(preresult,item)&#123;</div><div class="line">	return preresult += item;</div><div class="line">&#125;,0)</div><div class="line">console.log(result)   //6</div><div class="line"></div><div class="line">例2.</div><div class="line">let result4 = arr.reduce(function(preresult,item)&#123;</div><div class="line">    preresult.name += item;</div><div class="line">	return preresult</div><div class="line">&#125;,&#123;name:0&#125;)</div><div class="line">console.log(result4); //&#123;name:6&#125;</div></pre></td></tr></table></figure>
-<p>reduce 用于对数组每一项进行累计计算，每一项计算结果作为参数参加数组下一项的计算,最终返回计算结果</p>
-<p>例1中单纯对数组每一项进行叠加处理，返回叠加结果<br>例2同样进行叠加只是叠加结果放在对象中返回</p>
-<p>reduce(callback(),initval)</p>
-<p>需要两个参数，一个是用于累计计算的callback函数，一个是初始值，见上两例</p>
-<p>callback()函数有四个参数依次为：</p>
-<p>preVal （上一次调用回调返回的值，或者是提供的初始值（initialValue））</p>
-<p>currentValue （数组中当前被处理的元素）</p>
-<p>index （当前元素在数组中的索引）</p>
-<p>array （调用 reduce 的数组）</p>
-<p>初始值会在第一次调用时当作回调函数callback的第一个参数使用</p>
-<p>希望返回值是什么类型的数据，初始值就要设置为什么样的类型，callback返回值也是该类型；或者说是在这里设置返回值的类型</p>
-<p>整个处理过程就是拿初始值initval和数组第一个值在callback里面进行处理，返回结果result,result当作callback的preval参数和数组第二个元素传入callback在处理，直到数组全部元素被处理完，返回一个最终处理结果</p>
-<p>高级应用<br>对对象数组元素进行累计计算<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">var reducers = &#123;  </div><div class="line">  totalInEuros : function(state, item) &#123;</div><div class="line">    return state.euros += item.price * 0.897424392;</div><div class="line">  &#125;,</div><div class="line">  totalInYen : function(state, item) &#123;</div><div class="line">    return state.yens += item.price * 113.852;</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">var manageReducers = function(reducers) &#123;</div><div class="line">  return function(state, item) &#123;</div><div class="line">    return Object.keys(reducers).reduce(</div><div class="line">      function(nextState, key) &#123;</div><div class="line">        reducers[key](state, item);</div><div class="line">        return state;</div><div class="line">      &#125;,</div><div class="line">      &#123;&#125;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">var bigTotalPriceReducer = manageReducers(reducers);</div><div class="line">var initialState = &#123;euros:0, yens: 0&#125;;</div><div class="line">var items = [&#123;price: 10&#125;, &#123;price: 120&#125;, &#123;price: 1000&#125;];</div><div class="line">var totals = items.reduce(bigTotalPriceReducer, initialState);</div><div class="line">console.log(totals);</div><div class="line">//&#123;euros: 1014.08956296, yens: 128652.76&#125;</div></pre></td></tr></table></figure></p>
-<p>该例的目的是将对象数组items的元素属性price进行不同处理操作然后将结果分别保存到结果对象的属性中</p>
-<p>处理的关键是manageReducers返回的作为items callback的函数bigTotalPriceReducer，</p>
-<p>处理思路是items每用一个元素调用callback时,callback的处理过程是将这个元素作为参数调用reducers 对象里面设置的每一个处理函数,</p>
-<p>调用reducers处理函数的过程同样使用一个reduce方法进行处理</p>
-<p>Object.keys(obj)方法返回对象键值组成的数组</p>
-<p>当items的元素参加完reducers所有处理函数后,返回的结果参加下一个元素的计算最终返回结果</p>
-<p>扩展：</p>
-<p>1.在reduces中设置对items不同属性的计算，从而得到不同属性的结算结果</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">var reducers = &#123;  </div><div class="line">  totalInEuros : function(state, item) &#123;</div><div class="line">    return state.euros += item.p1;</div><div class="line">  &#125;,</div><div class="line">  totalInYen : function(state, item) &#123;</div><div class="line">    return state.yens += item.price * 113.852;</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">var bigTotalPriceReducer = manageReducers(reducers);</div><div class="line">var initialState = &#123;euros:0, yens: 0&#125;;</div><div class="line">var items = [&#123;price: 10,p1:1&#125;, &#123;price: 120,p1:1&#125;, &#123;price: 1000,p1:1&#125;];</div><div class="line">var totals = items.reduce(bigTotalPriceReducer, initialState);</div><div class="line">console.log(totals);</div><div class="line">//&#123;euros: 3, yens: 128652.76&#125;</div></pre></td></tr></table></figure>
-<p>2.计算对象数组属性值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">var manageReducers = function(state, item) &#123;</div><div class="line">    return Object.keys(item).reduce(</div><div class="line">      function(nextState, key) &#123;</div><div class="line">        state[key] +=item[key];</div><div class="line">        return state;</div><div class="line">      &#125;,</div><div class="line">      &#123;&#125;</div><div class="line">    );</div><div class="line">&#125;;</div><div class="line"></div><div class="line">var initialState = &#123;price:0, p1: 0&#125;;</div><div class="line">var items = [&#123;price: 10,p1:1&#125;, &#123;price: 120,p1:1&#125;, &#123;price: 1000,p1:1&#125;];</div><div class="line">var totals = items.reduce(manageReducers, initialState);</div><div class="line">console.log(totals);</div><div class="line">//&#123;price: 1130, p1: 3&#125;</div></pre></td></tr></table></figure></p>
-<p><a href="https://segmentfault.com/a/1190000010731933" target="_blank" rel="external">参阅资料</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1597,7 +1572,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">215</span>
+              <span class="site-state-item-count">216</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1614,7 +1589,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">19</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -1661,7 +1636,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

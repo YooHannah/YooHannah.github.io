@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoohannah.github.io/"/>
-  <updated>2021-11-27T03:15:23.913Z</updated>
+  <updated>2022-02-02T04:02:31.222Z</updated>
   <id>http://yoohannah.github.io/</id>
   
   <author>
@@ -14,6 +14,67 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>系统设计案例</title>
+    <link href="http://yoohannah.github.io/post/knowledge/systemDesign.html"/>
+    <id>http://yoohannah.github.io/post/knowledge/systemDesign.html</id>
+    <published>2022-02-02T01:31:06.000Z</published>
+    <updated>2022-02-02T04:02:31.222Z</updated>
+    
+    <content type="html"><![CDATA[<p>案例：用户将存储内容粘贴到站点，站点给用户返回一个短地址，用户通过短地址，可以访问之前粘贴的内容或者跳转之前的原始站点</p>
+<h1 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h1><ol>
+<li><p>对于用户来说操作要简单，生成的短地址要简单，而且要唯一，不同用户即使内容一样也要生成唯一的短地址</p>
+</li>
+<li><p>时间有效性，从存储角度来说，不可能一直帮用户存储所有生成的短地址，不然存储会越来越大，所以通过设置短地址有效的访问时间，可以减少存储成本</p>
+</li>
+</ol>
+<h1 id="技术"><a href="#技术" class="headerlink" title="技术"></a>技术</h1><ol>
+<li>可用性(high Availability)， 保障用户功能可用</li>
+<li>低延时(low latency)，用户拿到短地址或者通过短地址跳转其他网站时，重定向时间不宜过长</li>
+<li>安全性（non guessable），不能被猜出来，用户在生成一定短地址时如果携带一些个人信息，不应体现在短地址中，否则会造成用户信息泄露</li>
+<li>对于ins/微博/小红书之类的社交功能还要保障一致性，博主发的照片，follower看到的内容应该是一样的</li>
+</ol>
+<h1 id="容量负载能力假设"><a href="#容量负载能力假设" class="headerlink" title="容量负载能力假设"></a>容量负载能力假设</h1><p>对一个用户来说，可以抽象出两个主要请求</p>
+<ol>
+<li>请求生成短url，我们要把请求参数或者原始信息存储起来 inbound</li>
+<li>请求访问url，把生成的url返回给用户使用，进行重定向 outbound</li>
+</ol>
+<p>假设一个短地址按500byte大小存储</p>
+<h2 id="容量"><a href="#容量" class="headerlink" title="容量"></a>容量</h2><p>假设一个月会有100万个新短地址生成，<br>那么5年会产生</p>
+<p>100万<em>5年</em>12个月 ==&gt; 约等于60亿个短地址</p>
+<p>60亿*500byte ==&gt; 3TB 会有需要3TB大小的容量存储</p>
+<h2 id="负载能力"><a href="#负载能力" class="headerlink" title="负载能力"></a>负载能力</h2><p>假设一个月有100个用户，每个用户会进行100万次访问短地址进行重定向的操作</p>
+<p>那么每秒钟会有<br>（100 <em> 100万）/（30D </em> 24H * 3600s） ==&gt; 约等于4000个短url 要给到用户<br>同时会有<br>4000/ 100 ==&gt; 大概40个短url 需要被生成</p>
+<p>那么服务所需要的带宽就可以计算出来</p>
+<p>inbound : 40<em> 500 byte 约等于 20kb/s<br>outbound: 4000</em> 500 byte 约等于 20MB/s</p>
+<h1 id="API-数据库设计"><a href="#API-数据库设计" class="headerlink" title="API 数据库设计"></a>API 数据库设计</h1><h2 id="api"><a href="#api" class="headerlink" title="api"></a>api</h2><p>假设会用到简单的增删<br>生成短url createURL(api-key, originUrl, expired-Date, userId)<br>删除url  deleteURL(api-key,shortUrl)</p>
+<h2 id="DataBase"><a href="#DataBase" class="headerlink" title="DataBase"></a>DataBase</h2><p>对于shortUrl</p>
+<p>pk: hash<br>originUrl,<br>expired-date,<br>userId<br>…</p>
+<p>对于user<br>pk: userId<br>name<br>…</p>
+<h2 id="生成shortUrl"><a href="#生成shortUrl" class="headerlink" title="生成shortUrl"></a>生成shortUrl</h2><p>假如计划生成一个6个字符的短url，使用base64的加密算法的话可以生成64 ^ 6 大约640个短url,</p>
+<p>满足之前5年会产生60个亿的唯一性需求</p>
+<h1 id="整体逻辑"><a href="#整体逻辑" class="headerlink" title="整体逻辑"></a>整体逻辑</h1><p>用户 —&gt;request shortUrl generation —&gt; app</p>
+<p>app —&gt; base64 encoding + 从key generation DB中拿一个nonUse 的key —&gt; 得到shortUrl —&gt;DB</p>
+<p>DB —&gt; app –&gt;用户</p>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="Cache"><a href="#Cache" class="headerlink" title="Cache"></a>Cache</h2><p>2-8原则</p>
+<p>用存储的20% 的url做cache内容，可以满足80% 的访问需求</p>
+<h2 id="load-balance"><a href="#load-balance" class="headerlink" title="load balance"></a>load balance</h2><p>均衡流量</p>
+<h2 id="过期后的url处理，key的处理"><a href="#过期后的url处理，key的处理" class="headerlink" title="过期后的url处理，key的处理"></a>过期后的url处理，key的处理</h2><h2 id="分布式存储，分片"><a href="#分布式存储，分片" class="headerlink" title="分布式存储，分片"></a>分布式存储，分片</h2><h2 id="对于社交功能的newFeed的推送"><a href="#对于社交功能的newFeed的推送" class="headerlink" title="对于社交功能的newFeed的推送"></a>对于社交功能的newFeed的推送</h2><p>pull / push / pull + push hybrid</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;案例：用户将存储内容粘贴到站点，站点给用户返回一个短地址，用户通过短地址，可以访问之前粘贴的内容或者跳转之前的原始站点&lt;/p&gt;
+&lt;h1 id=&quot;功能&quot;&gt;&lt;a href=&quot;#功能&quot; class=&quot;headerlink&quot; title=&quot;功能&quot;&gt;&lt;/a&gt;功能&lt;/h1&gt;&lt;ol&gt;
+&lt;
+    
+    </summary>
+    
+    
+      <category term="systemDesign" scheme="http://yoohannah.github.io/tags/systemDesign/"/>
+    
+  </entry>
   
   <entry>
     <title>如何提升应用打开速度</title>
@@ -719,43 +780,6 @@
     
     
       <category term="knowledge" scheme="http://yoohannah.github.io/tags/knowledge/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>一些奇思妙想(二)</title>
-    <link href="http://yoohannah.github.io/post/js/strange2.html"/>
-    <id>http://yoohannah.github.io/post/js/strange2.html</id>
-    <published>2020-08-03T11:19:15.000Z</published>
-    <updated>2020-08-22T06:34:36.981Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="Jquery-链式调用原理"><a href="#Jquery-链式调用原理" class="headerlink" title="Jquery 链式调用原理"></a>Jquery 链式调用原理</h1><p>例子<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$(&apos;div&apos;).eq(0).show().end().eq(1).hide();</div></pre></td></tr></table></figure></p>
-<p>jquery 通过<b>更替this指向</b>实现<b>链式</b>调用<br>实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line">jQuery.fn = jQuery.prototype = &#123;</div><div class="line">  pushStack: function( elems ) &#123;</div><div class="line">		// Build a new jQuery matched element set</div><div class="line">		var ret = jQuery.merge( this.constructor(), elems );</div><div class="line">		// Add the old object onto the stack (as a reference)</div><div class="line">		ret.prevObject = this;</div><div class="line">		// Return the newly-formed element set</div><div class="line">		return ret;</div><div class="line">	&#125;,</div><div class="line">  eq: function( i ) &#123;</div><div class="line">		var len = this.length,</div><div class="line">			j = +i + ( i &lt; 0 ? len : 0 );</div><div class="line">		return this.pushStack( j &gt;= 0 &amp;&amp; j &lt; len ? [ this[ j ] ] : [] );</div><div class="line">	&#125;,</div><div class="line">  show: function() &#123;</div><div class="line">		return showHide( this, true );</div><div class="line">	&#125;,</div><div class="line">  hide: function() &#123;</div><div class="line">		return showHide( this );</div><div class="line">	&#125;,</div><div class="line">	end: function() &#123;</div><div class="line">		return this.prevObject || this.constructor();</div><div class="line">	&#125;,</div><div class="line">  </div><div class="line">  css: function( name, value ) &#123;</div><div class="line">		return access( this, function( elem, name, value ) &#123;	。。。。&#125;, name, value, arguments.length &gt; 1 );</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">function showHide( elements, show ) &#123;</div><div class="line">  。。。。</div><div class="line">  return elements;</div><div class="line">&#125;</div><div class="line">var access = function( elems, fn, key, value, chainable, emptyGet, raw ) &#123;</div><div class="line">  var i = 0,</div><div class="line">    len = elems.length,</div><div class="line">    bulk = key == null;</div><div class="line">  if ( toType( key ) === &quot;object&quot; ) &#123;</div><div class="line">    chainable = true;</div><div class="line">    for ( i in key ) &#123;。。。。&#125;</div><div class="line">  &#125; else if ( value !== undefined ) &#123;</div><div class="line">    chainable = true;</div><div class="line">    if ( !isFunction( value ) ) &#123; 。。。。&#125;</div><div class="line">    if ( bulk ) &#123; 。。。。&#125;</div><div class="line">    if ( fn ) &#123; 。。。。。&#125;</div><div class="line">  &#125;</div><div class="line">  //当是链式调用时，返回对象</div><div class="line">  if ( chainable ) &#123;</div><div class="line">    return elems;</div><div class="line">  &#125;</div><div class="line">  // Gets</div><div class="line">  if ( bulk ) &#123;</div><div class="line">    return fn.call( elems );</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  return len ? fn( elems[ 0 ], key ) : emptyGet;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
-<p>当showHide，access传入this的时候，返回的即this,接着可以实现链式</p>
-<h1 id="promise-then-原理"><a href="#promise-then-原理" class="headerlink" title="promise then 原理"></a>promise then 原理</h1><p>利用promise 对象去实现一系列功能的过程，可以理解为一个<b>链式</b>结构组成的过程<br>then 和 catch 函数的调用其实是对后续功能的收集<br><b>返回新的</b>promise对象，区别存放每个阶段的执行结果<br>resolve  和 rejec 函数的调用为后续then/catch收集的函数进行定调，决定到底执行什么<br>resolve和reject函数执行过程中根据返回值，实现链式结构的拼接和后续函数的执行顺序处理<br><a href="https://juejin.im/post/6844903839179472910" target="_blank" rel="external">相关链接</a><br><a href="">代码实现</a></p>
-<h1 id="async-await-原理"><a href="#async-await-原理" class="headerlink" title="async await 原理"></a>async await 原理</h1><p>借助generator,通过封装promise，利用<b>递归</b>可以实现相同的效果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">function asyncToGenerator(generatorFunc) &#123;</div><div class="line">    return function() &#123;</div><div class="line">      const gen = generatorFunc.apply(this, arguments)</div><div class="line">      return new Promise((resolve, reject) =&gt; &#123;</div><div class="line">        function step(key, arg) &#123;</div><div class="line">          let generatorResult</div><div class="line">          try &#123;</div><div class="line">            generatorResult = gen[key](arg)</div><div class="line">          &#125; catch (error) &#123;</div><div class="line">            return reject(error)</div><div class="line">          &#125;</div><div class="line">          const &#123; value, done &#125; = generatorResult</div><div class="line">          if (done) &#123;</div><div class="line">            return resolve(value)</div><div class="line">          &#125; else &#123;</div><div class="line">            return Promise.resolve(value).then(</div><div class="line">              val =&gt; step(&apos;next&apos;, val), //递归</div><div class="line">              err =&gt; step(&apos;throw&apos;, err)</div><div class="line">            )</div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line">        step(&quot;next&quot;)</div><div class="line">      &#125;)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h1 id="KOA-app-use-next-原理"><a href="#KOA-app-use-next-原理" class="headerlink" title="KOA app.use next 原理"></a>KOA app.use next 原理</h1><p>主要思想是<b>递归</b>实现<br><a href="https://yoohannah.github.io/post/nodejs/middlwareSrc.html">详见</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">let index = -1</div><div class="line">return dispatch(0) //从第一个中间件开始执行</div><div class="line">function dispatch (i) &#123;</div><div class="line">  //防止next 在一个中间件中被调用多次</div><div class="line">  if (i &lt;= index) return Promise.reject(new Error(&apos;next() called multiple times&apos;))</div><div class="line">  index = i</div><div class="line">  let fn = middleware[i] //拿到中间件</div><div class="line">  if (i === middleware.length) fn = next //如果中间件函数全部调用完，fn 赋值为next,next为undefined</div><div class="line">  if (!fn) return Promise.resolve() //fn为next=&gt;undefined时成立，即执行到最后返回一个Promise.resolve() 可以继续写then</div><div class="line">  try &#123;//try-catch 用于保证错误在promise的情况能够正常捕获</div><div class="line">    //执行中间件函数，传入ctx,next参数，next即dispatch.bind(null, i + 1)，</div><div class="line">    //递归调用下一个中间件函数</div><div class="line">    //从这一步可以实现await next()时，先执行下一个中间件函数</div><div class="line">    //中间件有调用next,就利用await暂停当前中间件执行，开始执行下一个中间件</div><div class="line">    return Promise.resolve(fn(context, dispatch.bind(null, i + 1)));</div><div class="line">  &#125; catch (err) &#123;</div><div class="line">    return Promise.reject(err)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h1 id="VUEROUTER-next-原理"><a href="#VUEROUTER-next-原理" class="headerlink" title="VUEROUTER next 原理"></a>VUEROUTER next 原理</h1><p>利用迭代器思想<b>递归</b>调用钩子函数<br>在vueRouter 的声明周期使用时，next函数会当做默认参数传递进去，如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">router.beforeEach((to, from, next) =&gt; &#123;</div><div class="line">  next()</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
-<p>源码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">function confirmTransition (route, onComplete, onAbort) &#123;</div><div class="line">  var queue = [].concat(</div><div class="line">    // in-component leave guards</div><div class="line">    extractLeaveGuards(deactivated),</div><div class="line">    // global before hooks</div><div class="line">    this.router.beforeHooks, //beforeEach钩子函数传入的函数集合</div><div class="line">    extractUpdateHooks(updated),</div><div class="line">    activated.map(function (m) &#123; return m.beforeEnter; &#125;),</div><div class="line">    resolveAsyncComponents(activated)</div><div class="line">  );</div><div class="line">  this.pending = route;</div><div class="line">  var iterator = function (hook, next) &#123;</div><div class="line">    if (this$1.pending !== route) &#123;</div><div class="line">      return abort()</div><div class="line">    &#125;</div><div class="line">    try &#123;</div><div class="line">      hook(route, current, function (to) &#123; 。。。。。。&#125;);</div><div class="line">    &#125; catch (e) &#123;</div><div class="line">      abort(e);</div><div class="line">    &#125;</div><div class="line">  &#125;;</div><div class="line">  runQueue(queue, iterator, function () &#123;</div><div class="line">    var postEnterCbs = [];</div><div class="line">    var isValid = function () &#123; return this$1.current === route; &#125;;</div><div class="line">    var enterGuards = extractEnterGuards(activated, postEnterCbs, isValid);</div><div class="line">    var queue = enterGuards.concat(this$1.router.resolveHooks);</div><div class="line">    runQueue(queue, iterator, function () &#123;。。。。&#125;);</div><div class="line">  &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>可见 beforeEach 钩子函数被装在queue数组中，传递给了runQueue函数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">function runQueue (queue, fn, cb) &#123;</div><div class="line">    var step = function (index) &#123;</div><div class="line">      if (index &gt;= queue.length) &#123;</div><div class="line">        cb();</div><div class="line">      &#125; else &#123;</div><div class="line">        if (queue[index]) &#123; //拿到生命周期函数传递给fn函数</div><div class="line">          fn(queue[index], function () &#123;</div><div class="line">            step(index + 1);</div><div class="line">          &#125;);</div><div class="line">        &#125; else &#123;</div><div class="line">          step(index + 1);</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;;</div><div class="line">    step(0);</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
-<p>参数fn函数是 iterator</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">iterator = function (hook, next) &#123;</div><div class="line">    if (this$1.pending !== route) &#123;</div><div class="line">      return abort()</div><div class="line">    &#125;</div><div class="line">    try &#123;</div><div class="line">      hook(route, current, function (to) &#123; 。。。。。。&#125;);</div><div class="line">    &#125; catch (e) &#123;</div><div class="line">      abort(e);</div><div class="line">    &#125;</div><div class="line">  &#125;;</div></pre></td></tr></table></figure>
-<p>参数hook即钩子函数，来看传递给它的三个参数</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">hook(route, current, function (to) &#123; 。。。。。。&#125;);</div></pre></td></tr></table></figure>
-<p>第三个参数即next</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">function (to) &#123;</div><div class="line">  if (to === false || isError(to)) &#123;</div><div class="line">    // next(false) -&gt; abort navigation, ensure current URL</div><div class="line">    this$1.ensureURL(true);</div><div class="line">    abort(to);</div><div class="line">  &#125; else if (</div><div class="line">    typeof to === &apos;string&apos; ||</div><div class="line">    (typeof to === &apos;object&apos; &amp;&amp;</div><div class="line">      (typeof to.path === &apos;string&apos; || typeof to.name === &apos;string&apos;))</div><div class="line">  ) &#123;</div><div class="line">    // next(&apos;/&apos;) or next(&#123; path: &apos;/&apos; &#125;) -&gt; redirect</div><div class="line">    abort();</div><div class="line">    if (typeof to === &apos;object&apos; &amp;&amp; to.replace) &#123;</div><div class="line">      this$1.replace(to);</div><div class="line">    &#125; else &#123;</div><div class="line">      this$1.push(to);</div><div class="line">    &#125;</div><div class="line">  &#125; else &#123;</div><div class="line">    // confirm transition and pass on the value</div><div class="line">    next(to);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这里面的next 指向参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">function () &#123;</div><div class="line">  step(index + 1);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>即当我们在钩子函数调用next不传递任何参数时，<br>只是在调用迭代器函数，递归进行下一个函数的执行</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Jquery-链式调用原理&quot;&gt;&lt;a href=&quot;#Jquery-链式调用原理&quot; class=&quot;headerlink&quot; title=&quot;Jquery 链式调用原理&quot;&gt;&lt;/a&gt;Jquery 链式调用原理&lt;/h1&gt;&lt;p&gt;例子&lt;br&gt;&lt;figure class=&quot;highl
-    
-    </summary>
-    
-    
-      <category term="js" scheme="http://yoohannah.github.io/tags/js/"/>
     
   </entry>
   
