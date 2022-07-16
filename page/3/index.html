@@ -1391,6 +1391,7 @@
 <h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>1.碰到问题一时，很无厘头，但分析出原因后，让人感觉很无语，正确的说是，让人很没面子，遇到问题应该善于分析，戒骄戒躁<br>2.问题二，有时候，你认为很恶心的做法，恰巧可能会被采纳</p>
 <h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>发版到线上后，发现部分同事登陆成功后又跳回登录页面，中间发起的请求报401</p>
 <p>经过查看同事浏览器的cookie发现,存在设置了httponly的_a，即我们所有系统统一使用的token标识，<br>cookie设置了httponly意味着js没有权限进行获取更改甚至不能删除，所以新登录的token是没有写进去的，拿到的token也就是错的<br>解决办法就是让后台同事强制写一个没有httponly的_a进去，让后台覆盖后台，<br>说明浏览器优先级是先处理set-cookie的cookie逻辑，再看是否有httponly,决定js是否有权限处理cookie</p>
+<p>相关链接<br><a href="https://www.cnblogs.com/zdz8207/p/vue-cookie-https-secure.html" target="_blank" rel="external">Cookie写不进去问题深入调查 https Secure Cookie</a><br><a href="https://blog.csdn.net/Paranoid99/article/details/101015172" target="_blank" rel="external">js创建cookie时获取一级域名设置domain解决跨域问题</a><br><a href="https://www.cnblogs.com/gg1234/p/5611086.html" target="_blank" rel="external">js与cookie的domain和path之间的关系</a><br><a href="https://www.cnblogs.com/Easty/p/7338940.html" target="_blank" rel="external">前端单点登录（SSO）实现方法（二级域名与主域名）</a></p>
 
           
         
