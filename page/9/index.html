@@ -259,6 +259,989 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/designMode/js1.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/designMode/js1.html" itemprop="url">
+                  js 知识点 一
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-08T09:29:37+08:00">
+                2018-12-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="1-lt-script-gt-标签几个属性"><a href="#1-lt-script-gt-标签几个属性" class="headerlink" title="1.&lt; script &gt; 标签几个属性"></a>1.&lt; script &gt; 标签几个属性</h1><p><b>async :</b>立即异步下载，因此不保证能够按指定的先后顺序执行，但会在load事件前，DOMContentLoad前后执行<br><b>defer :</b>延迟执行，也不保证按顺序执行，在DOMContentLoad前后执行<br><b>src :</b>外部文件链接<br><b>charset :</b>src指定代码的字符集，防止出现乱码<br><b>language :</b>已废弃，表示脚本语言，<br><b>type :</b>值为脚本语言内容类型（MIME），language替代属性，服务器传递过来类型为application/x-javascript需要注意，一个是可能导致脚本被忽略，另一个是可能触发浏览器XHTML标准模式；另外外链文件不是js文件时，一定要设置该值</p>
+<h1 id="2-js-代码执行过程"><a href="#2-js-代码执行过程" class="headerlink" title="2.js 代码执行过程"></a>2.js 代码执行过程</h1><p>包括两个部分一个是编译，或者叫预处理过程，一个是执行<br>编译过程 首先会创建一个全局作用域，然后进行词法分析，<br>词法分析过程会涉及到变量提升和函数声明提前处理，<br>即词法分析到变量声明会先判断当前域到全局域有没有该变量声明，如果有，就会将该变量挂到该作用域的对象上，<br>如果到全局域都没有则以全局为背景，新建该变量，并为其分配内存，<br>对于基本类型，变量中会保存它的值，对于对象，变量中会保存值所在内存的内存地址，<br>在一定场景下，这里就相当于发生了变量提升，把变量从局部提升到了全局，或者将声明提前到了使用之前，<br><b>避免变量提升</b>可以使用es6的let 关键字或者使用立即执行实现变量声明使用，但要注意使用let重复声明会报错，var 会同名覆盖；<br>当遇到函数声明时，会直接按声明顺序，将声明提前到代码顶端，<br><b>重复声明</b> 的函数会被后者覆盖，<br>如果变量名与函数名相同，则无论原来词法位置如何，先将函数声明提前到顶端，不再进行变量声明，变量名在哪赋值，则原函数在哪被覆盖，<br>覆盖之前调用使用原函数<br>提前之后会为函数创建作用域，<br>这时创建的作用域就是函数的 【【scope】】属性，保存着指向父域到全局域的指针<br>（指针就是指向活动对象的一个地址，全局域浏览器环境就是windows,nodejs环境就是global）<br>将来执行时会根据此指针建立作用域链，作用域链就是指针列表，指向不同层级作用域的内存，在里面取值<br>以上就基本上是编译过程，除了一些特定的编译规则，编译过程还会会使用大量技巧进行优化提升编译速度<br>但在使用js时，需要注意try-catch,with和eval三个语法关键字的使用，因为在使用它们时，会创建块级作用域，<br>破坏掉编译器原有的创建管理作用域的规则，在编译时，编译器也就不会对其中的代码进行优化，最终导致性能变差</p>
+<p>运行过程，基本就是在运行函数，函数在运行时会首先根据【【scope】】属性拿到父域到全局的指针，创建指针列表即作用域链，<br>然后创建函数执行的局部作用域，将函数中声明的变量挂到局部作用域活动对象上，然后将局部作用域指针推向作用域链前端，<br>在用到变量值时，会根据作用域链依次查找取值<br>函数执行结束后，局部活动对象被销毁，作用域链被销毁，进行垃圾回收<br>但是对于声明在一个函数内部的函数来说，这个声明的函数在声明时，就会包含其父域的活动对象，<br>因此在外部使用该函数时，可以访问到其父域的变量，实现了父域访问子域变量，延长了变量的使用范围，也就是常见的闭包现象，<br>缺点就是闭包的函数执行完毕后，因为本身【【scope】】会指向父域的活动对象，所以父域的活动对象始终不会被回收,除非闭包函数被销毁<br>从而有可能造成内存泄露，为什么说有可能，因为父活动对象占的内存其实是比较小的，造成内存泄露的真正原因是使用闭包易造成循环引用，<br>尤其是闭包作用域中保存dom结点时，如果是在IE中，dom和bom都是以C++的COM对象保存的，垃圾回收机制是技术策略，<br>因此循环引用的话，永远都不会被回收</p>
+<p>补充，对于未以分号结尾的语句，会采用能合就合的原则，即，会尝试和下一行语句合并执行，如果能合并执行就合并执行，<br>不能合并执行就在中间加分号再执行，如果再执行不了就会报错<br>好处就是对于条件判断语句可进行一行一行判断<br>坏处就是如果下一行以大括号开头，上一行语句就会变成函数，导致出现意想不到的结果<br>两个例外，<br>对于return，break,continue语句不会做尝试合并；<br>对于++，–自增自减符后没有分号，上一行也没分号情况，自增自减会和下一行合并，上一行自行添加分号</p>
+<p>以上即是我所了解的js运行机制</p>
+<h1 id="3-关于对象继承"><a href="#3-关于对象继承" class="headerlink" title="3.关于对象继承"></a>3.关于对象继承</h1><p>3.0  new 操作符调用构造函数 执行过程<br>  1.创建或者构造一个全新的对象<br>  2.将构造函数的作用域赋给这个新的对象,<br>  3.执行构造函数 (为这个新对象添加属性) ，第二，三步相当于func.call(newobj)<br>  4.如果构造函数没有返回值或返回值非对象，则返回新对象，否则返回构造函数return的对象</p>
+<p>3.1 继承的6种方式及优缺点<br>    <b>第一种原型链方式</b>，子类的原型对象指向父类的实例<br>    缺点<br>        给原型添加方法必须要在替换原型的语句之后；<br>        不能实现多继承（原型指向多个父对象）；<br>        所有属性共享<br>        无法传递参数到父类进行初始化<br>    <b>第二种借助构造函数</b>，在子类构造函数中使用call或者apply执行父类构造函数<br>    优点<br>        可以实现多继承<br>        可以传递参数<br>        方法属性不共享<br>    缺点<br>        只能继承构造函数中属性，不能继承原型上方法，不能复用方法<br>        实例仅为子类实例，不是父类实例<br>    <b>第三种组合继承</b>，以上两组结合在一起，两种方式都执行<br>    缺点<br>        要调用两次父类构造函数，影响性能<br>        实例属性和原型属性各占一份，同名覆盖机制，重复占内存，没必要<br>    <b>第四种原型式继承</b>，借助object()或者object.create()函数,缺点同原型链方式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">function object(o)&#123;</div><div class="line"> function F()&#123;&#125;</div><div class="line"> F.prototype = o;</div><div class="line"> return new F();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><b>第五种寄生式继承</b>，利用原型式继承和增强对象过程的封装函数创建子类，缺点同原型链方式<br><b>第六种寄生组合式继承</b>，保留借助构造函数部分，原型部分功能借助中间函数处理，<br>中间函数借助object拿到父类prototype，给到子类的prototype,从而完美解决组合继承的缺点</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">function inheritPrototype(subType,superType)&#123;</div><div class="line">  var prototype = object(superType.prototype)</div><div class="line">  prototype.constructor = subType</div><div class="line">  subType.prototype = prototype</div><div class="line">&#125;</div><div class="line">subType.prototype.__proto__ = superType</div></pre></td></tr></table></figure>
+<p>3.2 es6 使用class extend实现继承<br>使用class声明构造函数时，本来挂在this上的属性，放在constructor（）函数里面执行初始化，<br>挂在prototype上的方法直接放在class里面声明</p>
+<p>使用extend继承时，需要在constructor里面先执行super函数才能使用this关键字，<br>增强方法同样直接在class中和constructor并列声明，相当于挂在prototype上</p>
+<p>注意super函数只能在consructor中运行；super用作对象在constructor中使用时，相当于this,<br>添加属性会添加在当前对象上，运行函数时会调用继承的父类的方法</p>
+<p>还有就是class extend继承null和 什么也不继承是，相当于继承Function.prototype<br>继承Object时，子类就相当于object 的复制，子类实例就是object实例</p>
+<h1 id="4-关于this-四种使用场景"><a href="#4-关于this-四种使用场景" class="headerlink" title="4.关于this 四种使用场景"></a>4.关于this 四种使用场景</h1><p>   普通函数执行，指向全局作用域<br>   对象属性方法调用，指向调用对象<br>   call,apply中强制绑定对象，this执行绑定的对象<br>   构造函数中this指向构造的新对象<br>   （箭头函数中this,指向词法作用域的父域）</p>
+<h1 id="5-js文件位置"><a href="#5-js文件位置" class="headerlink" title="5.js文件位置"></a>5.js文件位置</h1><p>   放html底部原因：<br>   下载解析执行过程是阻断式的，会停止页面渲染，造成白屏，影响用户体验；<br>   另外JS中如果有对dom的操作，页面中还没有dom,获取不到，是不符合逻辑的，会报错</p>
+<p>   哪些js功能文件可以放顶部：<br>   与css相关的js,比如rem单位的换算，需要根据根结点进行设置<br>   使用的框架需要在根结点将浏览器支持的样式罗列出来</p>
+<h1 id="6-什么情况下用内部文件，内部文件比外部文件好处在哪？"><a href="#6-什么情况下用内部文件，内部文件比外部文件好处在哪？" class="headerlink" title="6.什么情况下用内部文件，内部文件比外部文件好处在哪？"></a>6.什么情况下用内部文件，内部文件比外部文件好处在哪？</h1><p>   内部文件相比外部文件最大好处就是性能提升，因为访问外部文件时，不管文件大小都会造成一次网络请求链接，请求服务器，下载文件，<br>   解析文件，除了文件本身代码外，还要处理文件头文件尾的请求，增加了链接数，从而造成性能影响<br>   对于功能短小精悍，不会被到处复用的js代码不适合采用外部文件，应该采用内部文件写法，尤其对手机端页面有性能提升</p>
+<h1 id="7-开发过程避免缓存方法"><a href="#7-开发过程避免缓存方法" class="headerlink" title="7.开发过程避免缓存方法"></a>7.开发过程避免缓存方法</h1><p>   在浏览器开启禁用缓存的模式<br>   手动清缓存 ctrl+shfit+del<br>   引用的文件名添加随机数，浏览器根据文件名不同，就会重新获取资源更新缓存</p>
+<h1 id="8-使用严格模式弊端及解决办法"><a href="#8-使用严格模式弊端及解决办法" class="headerlink" title="8.使用严格模式弊端及解决办法"></a>8.使用严格模式弊端及解决办法</h1><p>   在代码压缩时，’use strict’ 这一行可能不在位于第一行，<br>   或者后续代码不需要在严格模式下执行，被压缩在了严格模式范围内，导致了全部以严格模式执行</p>
+<p>   解决办法就是，将需要严格模式执行的代码放在匿名函数中，形成代码块，在函数中使用严格模式</p>
+<h1 id="9-立即执行函数好处"><a href="#9-立即执行函数好处" class="headerlink" title="9.立即执行函数好处"></a>9.立即执行函数好处</h1><p>   避免变量污染：有些变量仅在小功能内使用，将小功能封装起来，就可以避免这些变量暴露到全局，<br>   另外函数本身没有函数名，不会增加全局变量<br>   提升性能：功能所需变量全都在函数内时，查找变量快<br>   有利于压缩：一部分代码执行需要用到的变量变量名太长，将这段代码封装成立即执行函数，将长变量名以参数形式传进去<br>   避免全局命名冲突：一段代码需要用到两个代表不同功能但名称相同的变量，可以将该段代码封装成立即执行函数，<br>   将其中一个变量以参数形式传递进来，达到换名的目的<br>   保存闭包状态：循环执行异步代码时，将异步代码用立即执行函数包裹，函数内可保存本次循环的状态<br>   改变代码运行顺序：umd,通用模块规范，function（fn）{fn()}()</p>
+<h1 id="10-变量类型"><a href="#10-变量类型" class="headerlink" title="10.变量类型"></a>10.变量类型</h1><p>   根据当前变量的值的类型确定<br>   如果想要进行标记，方法有三种<br>   初始化时指定相应类型值<br>   使用匈牙利标记法，用单字母表示类型，添加到变量命中，例sName 代表string类型<br>   使用注释，变量声明时，在旁边添加注释</p>
+<h1 id="11-null-vs-undefined"><a href="#11-null-vs-undefined" class="headerlink" title="11.null vs undefined"></a>11.null vs undefined</h1><p>   转数字时，null –&gt;0;undefined–&gt;NaN<br>   undefined可以当做windows对象上的一个属性，null不行</p>
+<h1 id="12-类型转换"><a href="#12-类型转换" class="headerlink" title="12. 类型转换"></a>12. 类型转换</h1><p>基本类型包括，undefined，null,boolean,string,number</p>
+<p>基本类型 —&gt; boolean   Boolean(someval) 相当于 !!someval<br>undefined，null,NaN,’’,+0,-0 —&gt; false<br>其他 —&gt; true </p>
+<p>基本类型 —&gt; string  String（someval）相当于 someval+’’<br>一般情况直接加引号<br>[] —&gt; ‘’<br>{} —&gt; ‘[object object]’</p>
+<p>基本类型—&gt;number  + someval  相当于 Number（someval）<br>undefined,{} —&gt; NaN<br>false, null,’’,[],—&gt; 0<br>true —&gt; 1<br>‘123’ —&gt; 123<br>‘abc’ —&gt; NaN<br>[]—&gt; toString —&gt; ‘’ —&gt; 0<br>{} —&gt; valueOf —&gt; {} —&gt; toString —&gt; ‘[object object]’ —&gt; NaN</p>
+<p>基本类型 —&gt;对象<br>undefined，null —&gt; {}<br>true/123 —&gt; {initval:true/123}<br>‘abc’ —&gt; {initval:’abc’,length:3,0:’a’,1:’b’,2:’c’}</p>
+<p>对象 —&gt;基本类型</p>
+<p>关于–对象分类：<br>内部对象（错误对象；常用对象：Boolean,Number,String,Object,Array,Function,Date,Exec;内置对象：Math,global,Json）<br>宿主对象：windows,document<br>自定义对象</p>
+<p>关于–属性访问<br>obj.someprop—&gt;检查obj是不是null/undefined—&gt;是|不是—&gt;报错|是不是Object,不是的话转object—&gt;取值<br>obj[someval]—&gt;检查obj是不是null/undefined—&gt;是|不是—&gt;报错|是不是Object,不是的话转object—&gt;计算someval拿到string—&gt;取值</p>
+<p>Boolean —&gt;true<br>Number —&gt;基本类型转的|{}/{a:1}|Date—&gt;相应值|NaN|时间戳<br>Array.toString:数组每一项转字符串<br>Function.toString:原代码字符串形式<br>Date.toString:日期和时间组合形式<br>Exec.toString:正则字符串形式</p>
+<p>运算转换</p>
+<p>Number()参数不能有非数字<br>parseInt()参数只能为字符串，非字符串会进行强制转化字符串，可含非数字，但不能以非数字开头<br>一元操作符对任何数据类型有效，得到数字</p>
+<p>&#43;二元运算侧重转字符串，然后进行字符串拼接<br>其中一个为字符串或者两个都是对象时，转字符串拼接<br>undefined,null,Boolean,数字混合运算+时，会被转数字再计算<br>{}为第一个运算值时，会被当做函数结束，不参与计算<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">null + null --&gt; 0</div><div class="line">undefined + null --&gt; NaN</div><div class="line">[] + [] --&gt; &apos;&apos;</div><div class="line">1 + [1,2] --&gt; &apos;11,2&apos;</div><div class="line">1 + &#123;a:1&#125; --&gt; &apos;1[object object]&apos;</div><div class="line">&#123;a:1&#125; + 1 --&gt; 1</div><div class="line">&#123;&#125; + &#123;&#125; --&gt; NaN</div><div class="line">(&#123;&#125;) + &#123;&#125; --&gt; &apos;[object object][object object]&apos;</div><div class="line">[] + &#123;&#125; --&gt; &apos;[object object]&apos;</div><div class="line">&#123;&#125; + [] --&gt; 0</div><div class="line">var a = &#123;&#125;</div><div class="line">a + a --&gt;&apos;[object object][object object]&apos;</div></pre></td></tr></table></figure></p>
+<p>&#42;/- 转数字，进行相减,如果不能转数字，返回NaN</p>
+<p>&gt;/&lt; 侧重转数字<br>string &lt; string 字典比较<br>非字符串&lt;非字符串/字符串 都转数字然后比较</p>
+<p>string == number 字符串转数字<br>boolean == 其他类型 二者转数字然后比较<br>null == undefined —&gt;true undefined和null只与对方和自己==比较时为true，其他均为false<br>null === undefined —&gt;false<br>非对象 == 对象 与数字比较object转数字，与字符串比较二者转数字再比较<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">&apos;0&apos; == null  //false</div><div class="line">&apos;0&apos; == undefined  //false</div><div class="line">&apos;0&apos; == false  //true</div><div class="line">&apos;0&apos; == NaN  //false</div><div class="line">&apos;0&apos; == 0  //true</div><div class="line">&apos;0&apos; == &apos;&apos;  //true</div><div class="line"></div><div class="line">false == null  //false</div><div class="line">false == undefined  //false</div><div class="line">false == NaN  //false</div><div class="line">false == 0  //true</div><div class="line">false == &apos;&apos;  //true</div><div class="line">false == []  //true</div><div class="line">false == &#123;&#125; //false</div><div class="line"></div><div class="line">&apos;&apos; == null  //false</div><div class="line">&apos;&apos; == undefined  //false</div><div class="line">&apos;&apos; == NaN  //false</div><div class="line">&apos;&apos; == 0  //true</div><div class="line">&apos;&apos; == []  //true</div><div class="line">&apos;&apos; == &#123;&#125; //false</div><div class="line"></div><div class="line">0 == null  //false</div><div class="line">0 == undefined  //false</div><div class="line">0 == NaN  //false</div><div class="line">0 == []  //true</div><div class="line">0 == &#123;&#125; //false</div><div class="line"></div><div class="line">[] == ![]</div></pre></td></tr></table></figure></p>
+<p>&amp;&amp;和|| 计算结果根据短路原则判断到了哪里，返回最后一个进行判断的值</p>
+<p>运算符优先级<br>属性访问.<br>一元操作符（+，-，++，–）<br>二元操作符（+-*/）<br>比较（&gt;,&lt;)<br>相等（==，===，！=）<br>与&amp;&amp;，或||<br>三目运算符<br>赋值</p>
+<p>运算符结合性<br>除了一元操作符，三目运算符和赋值是右结合，其他都是左结合</p>
+<p>减少小数计算误差<br>尽量不使用小数进行比较或运算<br>转整数计算，再转回相应位数小数<br>使用toFixed()四舍五入<br>两个情境需要重复计算时，保证前后书写顺序</p>
+<h1 id="13-数组相关方法"><a href="#13-数组相关方法" class="headerlink" title="13. 数组相关方法"></a>13. 数组相关方法</h1><p><img src="/image/arrmethod.jpg" alt="arrmethod"></p>
+<h1 id="14-字符串相关方法"><a href="#14-字符串相关方法" class="headerlink" title="14.字符串相关方法"></a>14.字符串相关方法</h1><p><img src="/image/strmethod.jpg" alt="strmethod"></p>
+<h1 id="15-日期相关方法"><a href="#15-日期相关方法" class="headerlink" title="15.日期相关方法"></a>15.日期相关方法</h1><p>   一共 33个<br>   set/get（UTC）FullYear,Month,Date,Hours,Minutes,Seconds,Millseconds<br>   set/get Time<br>   get(UTC) Day<br>   getTimezoneOffset</p>
+<h1 id="16-Math三个舍入方法"><a href="#16-Math三个舍入方法" class="headerlink" title="16. Math三个舍入方法"></a>16. Math三个舍入方法</h1><p>  Math.ceil:比值大的最小整数<br>  Math.round:四舍五入<br>  Math.floor:比值小的最大整数</p>
+<h1 id="17-setInterval-注意问题"><a href="#17-setInterval-注意问题" class="headerlink" title="17. setInterval 注意问题"></a>17. setInterval 注意问题</h1><p>累积效应<br>代码执行时间大于间隔时间，后续调用会进行累积，累积会在短时间内连续触发</p>
+<p>当用于动画时，因与显示器刷新频率不统一会造成视觉卡顿，解决办法如下：<br>一种是使用CSS3创建动画，根据显示器刷新执行动画<br>另一种是使用 requestAnimationframe(function(){})函数，也是在显示器刷新时执行<br>可以解决CSS3无法实现的，例如滚动控制等效果</p>
+<h1 id="18-关于DOM"><a href="#18-关于DOM" class="headerlink" title="18. 关于DOM"></a>18. 关于DOM</h1><p>   document 三个属性<br>   url：地址栏中URL<br>   domain:域名，跨域域名 X；父域名到子域名 X；<br>   referer:上一页URL,可在跳转时，判断与当前页是否在同一域，是的话，就可以back,否则 location.href其他页面<br>   dom.getAttribute(‘style’),得到样式字符串<br>   dom.style 得到到样式对象<br>   dom.getAttribute(‘onclick’) ,得到代码字符串<br>   dom.onclick 得到函数对象</p>
+<p>   动态合集<br>   使用时可能会造成死循环<br>   使用框架如Jquery获取的合集不具有动态性<br>   使用 queryselect(all)()获取到的也是静态合集</p>
+<p>   动态合集生成原理：<br>   浏览器通过DOM树预先缓存起来，获取时，浏览器会通过缓存直接注册，创建一个变量返回</p>
+<p>   静态合集生成原理：<br>   获取标识是一个CSS选择器，浏览器会先去解析字符串，判断是一个CSS选择器，<br>   分析选择器并创建一个选择器结构，浏览器根据DOM树创建一个静态文件，即DOM树的一个快照<br>   然后拿选择器和快照进行对比，符合选择器就放到合集中，知道整个快照对比完，再把合集的快照返回</p>
+<h1 id="19-事件"><a href="#19-事件" class="headerlink" title="19. 事件"></a>19. 事件</h1><p>   绑定方式</p>
+<p>   直接通过HTML属性绑定<br>   缺点<br>   有可能响应函数还未被解析就被触发<br>   事件名和回调1对1，修改繁琐<br>   响应执行时，作用域为全局，不同浏览器解析规则不同，造成某些对象无法访问</p>
+<p>   使用dom属性绑定<br>   冒泡阶段执行<br>   缺点<br>   只能绑定一个响应，后续赋值会被覆盖</p>
+<p>   IE attachEvent/detachEvent绑定/解绑<br>   冒泡阶段执行<br>   绑定多个时按按绑定顺序的逆序执行</p>
+<p>   addEventListener()/removeEventListener()绑定/解绑<br>   第三个参数为对象时，passive属性为true时，会针对touchstart,touchend等特定事件通过开启两个线程，<br>   一个执行浏览器默认行为，一个执行JS进行优化</p>
+<p>   事件优先级<br>   浏览器在绑定事件而不是JS在绑定事件</p>
+<p>   1.html标签绑定事件会被dom属性事件覆盖<br>   2.html标签优先执行，即使被属性事件覆盖，则执行被覆盖的属性事件<br>   3.仅有监听事件和属性事件时，按绑定顺序执行，即事件对象的冒泡事件可能会在捕获事件之前执行</p>
+<p>   event对象属性<br>   curentTarget:响应函数绑定的对象<br>   target:发生事件的对象</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/course/drag.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/react/course/drag.html" itemprop="url">
+                  拖拽
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-04T21:19:37+08:00">
+                2018-12-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="使用-React-实现拖放的技术要点"><a href="#使用-React-实现拖放的技术要点" class="headerlink" title="使用 React 实现拖放的技术要点"></a>使用 React 实现拖放的技术要点</h1><p>1.如何使用 React 的鼠标事件系统<br>2.如何判断拖放开始和拖放结束<br>3.如何实现拖放元素的位置移动 (可分为两种，一种是直接拖着具体要被移动的dom移动；另外一种是具体dom留在原位，拖着具体dom的影子移动，确定位置后，再将具体的dom放过去)<br>4.拖放状态在组件中如何维护</p>
+<p>鼠标移动可能会超出要移动的组件和他的父组件，除了在document上监听，还可以在一个全局透明遮罩层上监听MouseMove和MouseUp好处：拖放过程不会选中其他任何元素，防止点击到其他组件</p>
+<p>其他情景思考：<br>每个条目高度不一致，如何确定移动位置？<br>条目所在的列表有折叠，存在滚动条，如何根据滚动条确定位置？<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">import React, &#123; Component &#125; from &quot;react&quot;;</div><div class="line"></div><div class="line">require(&quot;./DndSample.css&quot;);</div><div class="line"></div><div class="line">const list = [];</div><div class="line">for (let i = 0; i &lt; 10; i++) &#123;</div><div class="line">  list.push(`Item $&#123;i + 1&#125;`);</div><div class="line">&#125;</div><div class="line"></div><div class="line">const move = (arr, startIndex, toIndex) =&gt; &#123;</div><div class="line">  arr = arr.slice();</div><div class="line">  arr.splice(toIndex, 0, arr.splice(startIndex, 1)[0]);</div><div class="line">  return arr;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">const lineHeight = 42;</div><div class="line">class DndSample extends Component &#123;</div><div class="line">  constructor(props) &#123;</div><div class="line">    super(props);</div><div class="line">    this.state.list = list;</div><div class="line">  &#125;</div><div class="line">  state = &#123;</div><div class="line">    dragging: false,</div><div class="line">    draggingIndex: -1,</div><div class="line">    startPageY: 0,</div><div class="line">    offsetPageY: 0,</div><div class="line">  &#125;;</div><div class="line"></div><div class="line">  handleMounseDown = (evt, index) =&gt; &#123;</div><div class="line">    this.setState(&#123;</div><div class="line">      dragging: true,</div><div class="line">      startPageY: evt.pageY,</div><div class="line">      currentPageY: evt.pageY,</div><div class="line">      draggingIndex: index,</div><div class="line">    &#125;);</div><div class="line">  &#125;;</div><div class="line">  handleMouseUp = () =&gt; &#123;</div><div class="line">    this.setState(&#123; dragging: false, startPageY: 0, draggingIndex: -1 &#125;);</div><div class="line">  &#125;;</div><div class="line">  //如果往下滑，就一次把下一条数据交换位置，如果往上移动，就一次把上一条数据交换位置，</div><div class="line">  handleMouseMove = evt =&gt; &#123;</div><div class="line">    let offset = evt.pageY - this.state.startPageY;</div><div class="line">    const draggingIndex = this.state.draggingIndex;</div><div class="line">    if (offset &gt; lineHeight &amp;&amp; draggingIndex &lt; this.state.list.length - 1) &#123;</div><div class="line">      // move down</div><div class="line">      offset -= lineHeight;</div><div class="line">      this.setState(&#123;</div><div class="line">        list: move(this.state.list, draggingIndex, draggingIndex + 1),</div><div class="line">        draggingIndex: draggingIndex + 1,</div><div class="line">        startPageY: this.state.startPageY + lineHeight,</div><div class="line">      &#125;);</div><div class="line">    &#125; else if (offset &lt; -lineHeight &amp;&amp; draggingIndex &gt; 0) &#123;</div><div class="line">      // move up</div><div class="line">      offset += lineHeight;</div><div class="line">      this.setState(&#123;</div><div class="line">        list: move(this.state.list, draggingIndex, draggingIndex - 1),</div><div class="line">        draggingIndex: draggingIndex - 1,</div><div class="line">        startPageY: this.state.startPageY - lineHeight,</div><div class="line">      &#125;);</div><div class="line">    &#125;</div><div class="line">    this.setState(&#123; offsetPageY: offset &#125;);</div><div class="line">  &#125;;</div><div class="line"></div><div class="line">  getDraggingStyle(index) &#123;</div><div class="line">    if (index !== this.state.draggingIndex) return &#123;&#125;;</div><div class="line">    return &#123;</div><div class="line">      backgroundColor: &quot;#eee&quot;,</div><div class="line">      transform: `translate(10px, $&#123;this.state.offsetPageY&#125;px)`,</div><div class="line">      opacity: 0.5,</div><div class="line">    &#125;;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  render() &#123;</div><div class="line">    return (</div><div class="line">      &lt;div className=&quot;dnd-sample&quot;&gt;</div><div class="line">        &lt;ul&gt;</div><div class="line">          &#123;this.state.list.map((text, i) =&gt; (</div><div class="line">            &lt;li</div><div class="line">              key=&#123;text&#125;</div><div class="line">              onMouseDown=&#123;evt =&gt; this.handleMounseDown(evt, i)&#125;</div><div class="line">              style=&#123;this.getDraggingStyle(i)&#125;</div><div class="line">            &gt;</div><div class="line">              &#123;text&#125;</div><div class="line">            &lt;/li&gt;</div><div class="line">          ))&#125;</div><div class="line">        &lt;/ul&gt;</div><div class="line">        &#123;this.state.dragging &amp;&amp; ( //在一个遮罩层上监听MouseMove和MouseUp</div><div class="line">          &lt;div</div><div class="line">            className=&quot;dnd-sample-mask&quot;</div><div class="line">            onMouseMove=&#123;this.handleMouseMove&#125;</div><div class="line">            onMouseUp=&#123;this.handleMouseUp&#125;</div><div class="line">          /&gt;</div><div class="line">        )&#125;</div><div class="line">      &lt;/div&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">export default DndSample;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">.dnd-sample ul &#123;</div><div class="line">  display: inline-block;</div><div class="line">  margin: 0;</div><div class="line">  padding: 0;</div><div class="line">  background-color: #eee;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.dnd-sample li &#123;</div><div class="line">  cursor: default;</div><div class="line">  list-style: none;</div><div class="line">  border-bottom: 1px solid #ddd;</div><div class="line">  padding: 10px;</div><div class="line">  margin: 0;</div><div class="line">  width: 300px;</div><div class="line">  background-color: #fff;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.dnd-sample-mask &#123;</div><div class="line">  position: fixed;</div><div class="line">  left: 0;</div><div class="line">  right: 0;</div><div class="line">  top: 0;</div><div class="line">  bottom: 0;</div><div class="line">  background: rgba(0, 0, 0, 0.1);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/course/dialog.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/react/course/dialog.html" itemprop="url">
+                  对话框
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-04T21:18:37+08:00">
+                2018-12-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="使用React-Portals"><a href="#使用React-Portals" class="headerlink" title="使用React Portals"></a>使用React Portals</h1><p>React 16.3 新引入的 API<br>可以将虚拟 DOM 映射到任何真实 DOM 节点<br>解决了漂浮层的问题,比如Dialog,Tooltip 等</p>
+<p>主要思路使用ReactDOM.createPortal将自定义dialog利用id挂到根标签上，dialog样式(包括悬浮)自己需要通过css定义,弹窗的显示和隐藏通过state操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">mport React from &quot;react&quot;;</div><div class="line">import ReactDOM from &quot;react-dom&quot;;</div><div class="line">import &#123; Button &#125; from &quot;antd&quot;;</div><div class="line">import &quot;./PortalSample.css&quot;;</div><div class="line"></div><div class="line">export default class PortalSample extends React.PureComponent &#123;</div><div class="line">  state = &#123; visible: false &#125;;</div><div class="line">  renderButton() &#123;</div><div class="line">    return (</div><div class="line">      &lt;Button type=&quot;primary&quot; onClick=&#123;() =&gt; this.setState(&#123; visible: true &#125;)&#125;&gt;</div><div class="line">        打开对话框</div><div class="line">      &lt;/Button&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">  renderDialog() &#123;</div><div class="line">    return (</div><div class="line">      &lt;div className=&quot;portal-sample&quot;&gt;</div><div class="line">        &lt;div&gt;这是一个对话框！&lt;/div&gt;</div><div class="line">        &lt;br /&gt;</div><div class="line">        &lt;Button</div><div class="line">          type=&quot;primary&quot;</div><div class="line">          onClick=&#123;() =&gt; this.setState(&#123; visible: false &#125;)&#125;</div><div class="line">        &gt;</div><div class="line">          关闭对话框</div><div class="line">        &lt;/Button&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">  render() &#123;</div><div class="line">    if (!this.state.visible) return this.renderButton();</div><div class="line">    return ReactDOM.createPortal(</div><div class="line">      this.renderDialog(),</div><div class="line">      document.getElementById(&quot;dialog-container&quot;),//在APP组件中定义</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">.portal-sample &#123;</div><div class="line">  position: absolute;</div><div class="line">  padding: 20px;</div><div class="line">  width: 500px;</div><div class="line">  height: 300px;</div><div class="line">  left: 50%;</div><div class="line">  top: 50%;</div><div class="line">  transform: translate(-50%, -50%);</div><div class="line">  background-color: #fff;</div><div class="line">  border-radius: 10px;</div><div class="line">  border: 1px solid #ddd;</div><div class="line">  box-shadow: 0px 0px 20px 2px #ddd;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="使用UI组件库"><a href="#使用UI组件库" class="headerlink" title="使用UI组件库"></a>使用UI组件库</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">import React from &quot;react&quot;;</div><div class="line">import ReactDOM from &quot;react-dom&quot;;</div><div class="line">import &#123; Button, Modal &#125; from &quot;antd&quot;;</div><div class="line">import &quot;./PortalSample.css&quot;;</div><div class="line"></div><div class="line">export default class PortalSample extends React.PureComponent &#123;</div><div class="line">  state = &#123; visible: false &#125;;</div><div class="line">  renderButton() &#123;</div><div class="line">    return (</div><div class="line">      &lt;Button type=&quot;primary&quot; onClick=&#123;() =&gt; this.setState(&#123; visible: true &#125;)&#125;&gt;</div><div class="line">        打开对话框</div><div class="line">      &lt;/Button&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">  renderDialog() &#123;</div><div class="line">    return (</div><div class="line">      &lt;Modal</div><div class="line">        visible=&#123;this.state.visible&#125;</div><div class="line">        onCancel=&#123;() =&gt; this.setState(&#123; visible: false &#125;)&#125;</div><div class="line">      &gt;</div><div class="line">        &lt;div&gt;这是一个对话框！&lt;/div&gt;</div><div class="line">      &lt;/Modal&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">  render() &#123;</div><div class="line">    return (</div><div class="line">      &lt;div&gt;</div><div class="line">        &#123;this.renderButton()&#125;</div><div class="line">        &#123;this.renderDialog()&#125;</div><div class="line">      &lt;/div&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/course/layout.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/react/course/layout.html" itemprop="url">
+                  布局
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-04T21:17:37+08:00">
+                2018-12-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="实现布局的几种方式"><a href="#实现布局的几种方式" class="headerlink" title="实现布局的几种方式"></a>实现布局的几种方式</h1><p>1.从0开始用 CSS实现<br>2.使用 CSS Grid 系统 （通过class实现，无需关心布局如何实现,同时可以适应不同屏幕的尺寸）<br>3.使用组件库,例如 antd（通过组件标签实现）</p>
+<p>布局常见场景:侧边栏宽度可调整<br>1.手动实现拖放逻辑<br>2.使用 local storage 存储宽度位置</p>
+<h2 id="上中下结构-中间高度随父级高度自适应，头部和底部高度固定"><a href="#上中下结构-中间高度随父级高度自适应，头部和底部高度固定" class="headerlink" title="上中下结构,中间高度随父级高度自适应，头部和底部高度固定"></a>上中下结构,中间高度随父级高度自适应，头部和底部高度固定</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;div className=&quot;app-layout1&quot;&gt;</div><div class="line">    &lt;div className=&quot;header&quot;&gt;Header&lt;/div&gt;</div><div class="line">    &lt;div className=&quot;content&quot;&gt;content&lt;/div&gt;</div><div class="line">    &lt;div className=&quot;footer&quot;&gt;Footer&lt;/div&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">&lt;style&gt;</div><div class="line">.app-layout1 &#123;</div><div class="line">  width: 500px;</div><div class="line">  height: 400px;</div><div class="line">  position: relative;</div><div class="line">  background-color: #eee;</div><div class="line">  text-align: center;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.app-layout1 .header &#123;</div><div class="line">  line-height: 60px;</div><div class="line">  border-bottom: 2px solid #fff;</div><div class="line">&#125;</div><div class="line">.app-layout1 .content &#123;</div><div class="line">  position: absolute;</div><div class="line">  bottom: 60px;</div><div class="line">  top: 60px;</div><div class="line">  left: 0;</div><div class="line">  right: 0;</div><div class="line">&#125;</div><div class="line">.app-layout1 .footer &#123;</div><div class="line">  border-top: 2px solid #fff;</div><div class="line">  line-height: 60px;</div><div class="line">  bottom: 0;</div><div class="line">  left: 0;</div><div class="line">  right: 0;</div><div class="line">  position: absolute;</div><div class="line">&#125;</div><div class="line">&lt;/style&gt;</div></pre></td></tr></table></figure>
+<h2 id="导航布局，左边是导航栏，右边上中下结构"><a href="#导航布局，左边是导航栏，右边上中下结构" class="headerlink" title="导航布局，左边是导航栏，右边上中下结构"></a>导航布局，左边是导航栏，右边上中下结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;div className=&quot;app-layout2&quot;&gt;</div><div class="line">    &lt;div className=&quot;header&quot;&gt;Header&lt;/div&gt;</div><div class="line">    &lt;div className=&quot;sider&quot;&gt;Sider&lt;/div&gt;</div><div class="line">    &lt;div className=&quot;content&quot;&gt;Content&lt;/div&gt;</div><div class="line">    &lt;div className=&quot;footer&quot;&gt;Footer&lt;/div&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">.app-layout2 &#123;</div><div class="line">  width: 500px;</div><div class="line">  height: 400px;</div><div class="line">  position: relative;</div><div class="line">  background-color: #eee;</div><div class="line">  text-align: center;</div><div class="line">  padding-left: 150px;</div><div class="line">  line-height: 60px;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.app-layout2 .header &#123;</div><div class="line">  border-bottom: 2px solid #fff;</div><div class="line">&#125;</div><div class="line">.app-layout2 .content &#123;</div><div class="line">  position: absolute;</div><div class="line">  bottom: 60px;</div><div class="line">  top: 60px;</div><div class="line">  left: 150px;</div><div class="line">  right: 0;</div><div class="line">&#125;</div><div class="line">.app-layout2 .sider &#123;</div><div class="line">  width: 150px;</div><div class="line">  position: absolute;</div><div class="line">  border-right: 2px solid #fff;</div><div class="line">  top: 0;</div><div class="line">  left: 0;</div><div class="line">  bottom: 0;</div><div class="line">&#125;</div><div class="line">.app-layout2 .footer &#123;</div><div class="line">  border-top: 2px solid #fff;</div><div class="line">  bottom: 0;</div><div class="line">  left: 150px;</div><div class="line">  right: 0;</div><div class="line">  position: absolute;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="导航栏随鼠标滑动调整宽度"><a href="#导航栏随鼠标滑动调整宽度" class="headerlink" title="导航栏随鼠标滑动调整宽度"></a>导航栏随鼠标滑动调整宽度</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">import React from &quot;react&quot;;</div><div class="line">import &#123; Button &#125; from &quot;antd&quot;;</div><div class="line">import &quot;./LayoutResize.css&quot;;</div><div class="line"></div><div class="line">export default class LayoutResize extends React.PureComponent &#123;</div><div class="line">  state = &#123;</div><div class="line">    dragging: false,</div><div class="line">    startPageX: 0,</div><div class="line">    siderWidth: 150,</div><div class="line">  &#125;;</div><div class="line"></div><div class="line">  handleMouseDown = evt =&gt; &#123;</div><div class="line">    this.setState(&#123;</div><div class="line">      dragging: true,</div><div class="line">      startPageX: evt.pageX,</div><div class="line">    &#125;);</div><div class="line">  &#125;;</div><div class="line">  handleMouseUp = () =&gt; &#123;</div><div class="line">    this.setState(&#123;</div><div class="line">      dragging: false,</div><div class="line">    &#125;);</div><div class="line">  &#125;;</div><div class="line">  handleMouseMove = evt =&gt; &#123;</div><div class="line">    let siderWidth = this.state.siderWidth + evt.pageX - this.state.startPageX;</div><div class="line">    if (siderWidth &lt; 20 || siderWidth &gt; 300) return;</div><div class="line">    this.setState(&#123;</div><div class="line">      siderWidth,</div><div class="line">      startPageX: evt.pageX,</div><div class="line">    &#125;);</div><div class="line">  &#125;;</div><div class="line">  render() &#123;</div><div class="line">    const &#123; dragging, siderWidth &#125; = this.state;</div><div class="line">    const pxWidth = `$&#123;siderWidth&#125;px`;</div><div class="line">    return (</div><div class="line">      &lt;div className=&quot;app-layout-resize&quot; style=&#123;&#123; paddingLeft: pxWidth &#125;&#125;&gt;</div><div class="line">        &lt;div className=&quot;header&quot;&gt;Header&lt;/div&gt;</div><div class="line">        &lt;div className=&quot;sider&quot; style=&#123;&#123; width: pxWidth &#125;&#125;&gt;</div><div class="line">          Sider</div><div class="line">        &lt;/div&gt;</div><div class="line">        &lt;div className=&quot;content&quot; style=&#123;&#123; left: pxWidth &#125;&#125;&gt;</div><div class="line">          Content</div><div class="line">        &lt;/div&gt;</div><div class="line">        &lt;div className=&quot;footer&quot; style=&#123;&#123; left: pxWidth &#125;&#125;&gt;</div><div class="line">          Footer</div><div class="line">        &lt;/div&gt;</div><div class="line">        &lt;div</div><div class="line">          className=&quot;sider-resizer&quot;</div><div class="line">          style=&#123;&#123; left: pxWidth &#125;&#125;</div><div class="line">          onMouseDown=&#123;this.handleMouseDown&#125;</div><div class="line">        /&gt;</div><div class="line">        &#123;dragging &amp;&amp; (</div><div class="line">          &lt;div</div><div class="line">            className=&quot;resize-mask&quot;</div><div class="line">            onMouseMove=&#123;this.handleMouseMove&#125;</div><div class="line">            onMouseUp=&#123;this.handleMouseUp&#125;</div><div class="line">          /&gt;</div><div class="line">        )&#125;</div><div class="line">      &lt;/div&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">.app-layout-resize &#123;</div><div class="line">  width: 500px;</div><div class="line">  height: 400px;</div><div class="line">  position: relative;</div><div class="line">  background-color: #eee;</div><div class="line">  text-align: center;</div><div class="line">  padding-left: 150px;</div><div class="line">  line-height: 60px;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.app-layout-resize .header &#123;</div><div class="line">  border-bottom: 2px solid #fff;</div><div class="line">&#125;</div><div class="line">.app-layout-resize .content &#123;</div><div class="line">  position: absolute;</div><div class="line">  bottom: 60px;</div><div class="line">  top: 60px;</div><div class="line">  left: 0;</div><div class="line">  right: 0;</div><div class="line">&#125;</div><div class="line">.app-layout-resize .sider &#123;</div><div class="line">  width: 150px;</div><div class="line">  position: absolute;</div><div class="line">  border-right: 2px solid #fff;</div><div class="line">  top: 0;</div><div class="line">  left: 0;</div><div class="line">  bottom: 0;</div><div class="line">&#125;</div><div class="line">.app-layout-resize .footer &#123;</div><div class="line">  border-top: 2px solid #fff;</div><div class="line">  bottom: 0;</div><div class="line">  left: 150px;</div><div class="line">  right: 0;</div><div class="line">  position: absolute;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.app-layout-resize .sider-resizer &#123;</div><div class="line">  position: absolute;</div><div class="line">  left: 148px;</div><div class="line">  width: 6px;</div><div class="line">  top: 0;</div><div class="line">  bottom: 0;</div><div class="line">  cursor: col-resize;</div><div class="line">&#125;</div><div class="line">.app-layout-resize .resize-mask &#123;</div><div class="line">  background: rgba(0, 0, 0, 0);</div><div class="line">  position: fixed;</div><div class="line">  left: 0;</div><div class="line">  top: 0;</div><div class="line">  right: 0;</div><div class="line">  bottom: 0;</div><div class="line">  cursor: col-resize;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/course/rekit.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/react/course/rekit.html" itemprop="url">
+                  Rekit
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-04T21:12:37+08:00">
+                2018-12-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>背景<br> 一个独立功能通常需要多个文件组成 （组件，reducer,action,路由等文件）<br> 代码模板很复杂 （reducer,action需要代码模板，实际上填写的逻辑只是一小部分）<br> 重构极为困难<br> （需要改动的地方很多）<br> 项目复杂后很难理解和维护（无法直观的看到他们之间的关系）</p>
+<h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>Rekit：更好的代码导航</p>
+<ol>
+<li>语义化的组织源代码文件 </li>
+<li>使用子 Tab来展示项目元素的各个部分 </li>
+<li>直观的显示和导航某个功能的所有依赖</li>
+</ol>
+<p>Rekit： 一键生成项目元素（它是一个IDE）</p>
+<ol>
+<li>直观的 UI 用于生成组件，action,reducer 等 </li>
+<li>模板代码遵循最佳实践（只需填入具体逻辑）</li>
+<li>支持命令行方式创建项目元素</li>
+</ol>
+<p>Rekit： 重构非常容易</p>
+<ol>
+<li>右键菜单重命名或者删除某个项目元素 </li>
+<li>所有相关代码都会一次性重构从而保证一致性 </li>
+<li>详细的 log信息显示重构的完整修改</li>
+</ol>
+<p>Rekit： 可视化的项目架构</p>
+<ol>
+<li>项目总体架构的可视化图表 </li>
+<li>项目依赖关系的图表</li>
+</ol>
+<p>Rekit 是如何工作的？</p>
+<ol>
+<li>定义了基于feature 的可扩展文件夹结构（文件夹结构有一定规则，可以进行解析）</li>
+<li>基于最佳实践生成代码和管理项目元素 </li>
+<li>提供工具和 IDE 确保代码和文件夹结构遵循最佳实践<br>（减少工作量）</li>
+</ol>
+<h1 id="遵循最佳实践"><a href="#遵循最佳实践" class="headerlink" title="遵循最佳实践"></a>遵循最佳实践</h1><p>1.以 feature 方式组织代码 （功能如果是必须的就放在已有模块底层实现，如果是原有功能增强的实现，则新拆分成功能模块）<br>2.拆分组件,action 和 reducer<br>3.拆分路由配置</p>
+<p>通过代码自动生成保持一致性<br>1.文件夹结构一致性<br>2.文件名一致性<br>3.变量名一致性<br>4.代码逻辑的一致性</p>
+<h1 id="使用-React-Router-管理路由授权"><a href="#使用-React-Router-管理路由授权" class="headerlink" title="使用 React Router 管理路由授权"></a>使用 React Router 管理路由授权</h1><p>1.实现基础:React Router 的动态路由机制 （<br> 不采用各个页面判断是否登录再redirect的方式跳转，路由配置（添加属性，那些可以在未登录下访问，或者哪些在未登录下不能访问）时就去动态监测当前用户是否登录，如果登录则全部路由生效；反之某些路由配置就不生效===&gt;不生效处理，在解析router JSON数据时根据store中登录状态和路由配置的属性判断,未登录则跳转403，其子路由清空<br>）<br>2.区分受保护路由和公开路由<br>3.访问未授权路由时重定向到登录页面 </p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/course/formList.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/react/course/formList.html" itemprop="url">
+                  表单 & 列表
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-04T21:12:37+08:00">
+                2018-12-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="表单功能点"><a href="#表单功能点" class="headerlink" title="表单功能点"></a>表单功能点</h1><ol>
+<li>初始数据，提交和跳转</li>
+</ol>
+<p>表单各项配置的优化，可以通过对UI框架的API进行封装成高阶组件，然后在使用时，通过配置高阶组件的属性，将需要的配置项传递给UI框架API，减少代码冗余，配置清晰</p>
+<p>提交后状态通过中间件返回promise判断接下来操作</p>
+<p>2.<br>错误处理（可依靠UI框架进行判断）<br>动态表单元素（在传入高阶组件属性时采用函数返回值形式动态加载表单元素，在函数中处理要不要显示表单元素）<br>内容动态加载（在componentDidMount中进行数据请求，以及初始状态处理）</p>
+<h1 id="列表页功能点"><a href="#列表页功能点" class="headerlink" title="列表页功能点"></a>列表页功能点</h1><h2 id="搜索，数据缓存和分页"><a href="#搜索，数据缓存和分页" class="headerlink" title="搜索，数据缓存和分页"></a>搜索，数据缓存和分页</h2><p>开发列表也要考虑的技术要点<br>1.如何翻页 (数据来自服务器还是客户端缓存)<br>2.如何进行内容搜索 （当前页面数据搜索还是服务器端数据搜索）<br>3.如何缓存数据<br>4.何时进行页面刷新</p>
+<p>列表页数据通过store拿数据渲染，翻页，查找，刷新通过触发action然后从服务器拿到数据后，更新store,从而组件重新渲染</p>
+<p>store 模型<br>listItems:当前页id集合数组[id1,id2]<br>byId:{id1:{id:id1,name:xxx},id2:{id:id2,name:xxx}}<br>keyword:关键字string<br>page:number 页数<br>fetchListPending:bool是否正在加载数据<br>FetchListError:OBJECT数据加载出错<br>listNeedReload:bool是否需要重新加载（做判断条件，例如编辑之后，设为true,在列表页拿到判断为true则重新获取列表数据）</p>
+<p>URL设计<br>将页数和关键字当做路由参数传递在componentDidupdated中获取参数判断是否重新获取数据</p>
+<h2 id="缓存更新，加载状态，错误处理"><a href="#缓存更新，加载状态，错误处理" class="headerlink" title="缓存更新，加载状态，错误处理"></a>缓存更新，加载状态，错误处理</h2><p>通过store模型中的相关数据进行判断展示</p>
+<h1 id="页面数据需要来源多个请求的处理"><a href="#页面数据需要来源多个请求的处理" class="headerlink" title="页面数据需要来源多个请求的处理"></a>页面数据需要来源多个请求的处理</h1><p>页面数据来自多个请求<br>1.请求之间无依赖关系，可以并发进行<br>2.请求有依赖，需要依次进行 （promise）<br>3.请求完成之前，页面显示 Loading 状态<br>loading数据状态由当前数据推导确定</p>
+<h1 id="内容页的加载和缓存"><a href="#内容页的加载和缓存" class="headerlink" title="内容页的加载和缓存"></a>内容页的加载和缓存</h1><p>内容页和列表页的数据关系<br>1.简单业务：列表页数据包含内容页的数据 （注意页面刷新情况数据的获取）<br>2.复杂业务：内容页数据需要额外获取 （每次进来都重新获取）<br>3.内容页数据的缓存（将数据放在store中，在store中拿数据）</p>
+<h1 id="基于React-Router-实现分步操作"><a href="#基于React-Router-实现分步操作" class="headerlink" title="基于React Router 实现分步操作"></a>基于React Router 实现分步操作</h1><p>向导页面需要考虑的技术要点<br>1.使用 URL进行导航的好处 （可以直接刷新其中一个步骤）</p>
+<ol>
+<li>表单内容存放的位置 </li>
+<li>页面状态如何切换</li>
+</ol>
+<p>将表单元素放在一个统一的form中，通过路由判断第几步，进而显示不同的表单元素，需要注意的是，切换下一步时，当前组件消失，配置的数据也会消失，需要将当前所填数据进行保存，以便在返回上一步时有数据</p>
+<h1 id="集成第三方-JS-库的技术要点"><a href="#集成第三方-JS-库的技术要点" class="headerlink" title="集成第三方 JS 库的技术要点"></a>集成第三方 JS 库的技术要点</h1><p>1.使用 ref 获取原生 DOM 节点引用<br>2.手动将组件状态更新到 DOM 节点<br>(对于数据驱动UI展示的情况,第一次渲染和之后更新需要手动操作DOM的过程，将数据注入过程隔离出来，单独处理成一个函数，再当react 部分操作导致需要重新渲染时，再调用，将react状态映射到第三方DOM中)<br>3.组件销毁时移除原生节点 DOM 事件</p>
+<h1 id="基于路由实现菜单导航"><a href="#基于路由实现菜单导航" class="headerlink" title="基于路由实现菜单导航"></a>基于路由实现菜单导航</h1><p>1.菜单导航只是改变 URL 状态<br>2.根据当前 URL 显示菜单的当前状态(使用navLink标签实现，注意react-router和redux一起使用时，url发生变化，组建要重新render时，必须要让组件绑定到router的store上，即让react-router也一起渲染)</p>
+<h1 id="如何避免应用出现性能问题"><a href="#如何避免应用出现性能问题" class="headerlink" title="如何避免应用出现性能问题"></a>如何避免应用出现性能问题</h1><p>1.了解常见的性能问题场景 （键盘输入，鼠标移动是否卡顿）<br>2.时刻注意代码的潜在性能问题 （何时拆分组件，有优化空间；能否高效更新，组件拆分是否够细，足够细的话，组件越接近纯函数，就越可能减少参与到diff操作的可能性，从而提高渲染速度）<br>3.注重可重构的代码 （代码耦合性低，几乎不依赖外界，也不被外界依赖，对于有重构可能性的代码保留重构空间，当其他优先级较高的性能问题解决后，再进行代码重构）<br>4.了解如何使用工具定位性能问题</p>
+<h1 id="网络性能优化：自动化按需加载"><a href="#网络性能优化：自动化按需加载" class="headerlink" title="网络性能优化：自动化按需加载"></a>网络性能优化：自动化按需加载</h1><p>1.什么是按需加载 (切换页面时才加载相应页面，而不是一开始就将所有页面加载进来)<br>2.使用 Webpack 的 import API<br>3.使用 react-loadable 库实现 React 异步加载<br>利用分包加载,在配置路由时实现,在总路由中删除，防止打包到总包中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">import loadable from &apos;react-loadable&apos;</div><div class="line">const listPage = loadable(&#123;</div><div class="line">    loader:()=&gt;import (&apos;./listPage&apos;),</div><div class="line">    loading:()=&gt;&lt;div&gt;loading...&lt;/div&gt;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>listPage页面在加载该页时，会自动加载listPage的独立打包文件</p>
+<p>使用 reselect 避免重复计算<br>reselect 可以创建自动缓存的数据处理流程，通过保存计算结果，避免重复计算</p>
+<h1 id="异步渲染的两个部分"><a href="#异步渲染的两个部分" class="headerlink" title="异步渲染的两个部分"></a>异步渲染的两个部分</h1><p>时间分片<br>DOM操作的优先级低于浏览器原生行为，例如键盘和鼠标输入，从而保证操作的流畅。<br>（setstate导致的重新render等页面行为（滚动，输入）结束后再执行）<br>1.虚拟 DOM 的 diff 操作可以分片进行 （对操作进行序列化，然后进行合并或者优先级处理）<br>2.React 新 API: unstatble_deferredUpdates（低级别的setstate）<br>3.Chrome 新 API:requestIdleCallback(浏览器级别的api,告诉代码内存空闲（不再滚动或敲击键盘），可以进行一些之前优先级低的UI更新操作，时间分片基础)</p>
+<p>渲染挂起<br>虚拟DOM节点可以等待某个异步操作的完成,并指定timeout后,才完成真正的渲染<br>（可以不再注意什么时候显示loading状态，取消loading状态，虚拟dom节点可以自己等待异步操作的完成，只要虚拟dom节点返回一个promise,渲染引擎就会等promise结束后再去render）</p>
+<ol>
+<li><p>新内置组件：Timeout </p>
+</li>
+<li><p>unstatble_deferUpdate</p>
+</li>
+</ol>
+<h1 id="借助工具发现性能问题"><a href="#借助工具发现性能问题" class="headerlink" title="借助工具发现性能问题"></a>借助工具发现性能问题</h1><p>1.使用 React DevTool 找到多余渲染<br>chrome 插件，可查看react应用的状态，帮助找到不必要的render，从而进行调优—&gt; [highlight update]<br>2.使用 Chrome DevTool 定位性能瓶颈<br>什么样的组件花了多长时间做了什么样的渲染—&gt;performance</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/course/redux.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/react/course/redux.html" itemprop="url">
+                  Redux
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-04T21:10:37+08:00">
+                2018-12-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="为什么需要redux"><a href="#为什么需要redux" class="headerlink" title="为什么需要redux"></a>为什么需要redux</h1><p>原有组件间通信方式错综复杂，逐层传递，不明了，方便组件间通信<br>用store管理所有组件的状态</p>
+<h1 id="redux-特性"><a href="#redux-特性" class="headerlink" title="redux 特性"></a>redux 特性</h1><p>single source of truth：状态来源唯一；</p>
+<p>可预测性：state +action = new state</p>
+<p>纯函数更新Store：输出取决于输入，内部不会依赖任何除参数以外外部元素产生副作用</p>
+<p>store 三个函数</p>
+<p>getState()</p>
+<p>dispatch(action)</p>
+<p>subscribe(listener)</p>
+<p>action 描述行为的对象集合</p>
+<p>reducer 更新state的具体行为</p>
+<h1 id="几个工具函数"><a href="#几个工具函数" class="headerlink" title="几个工具函数"></a>几个工具函数</h1><p>combineReducers   把多个reducer 合成一个新的reducer，并定义每个reducer在store中的对应节点</p>
+<p>bindActionCreators  封装actionCreator和store.dispatch调用过程<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">function actionCreator()&#123;</div><div class="line">return &#123;</div><div class="line">type:&apos;addItem&apos;,</div><div class="line">text:&apos;......&apos;</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">store.dispatch(actionCreator())</div><div class="line">===&gt;</div><div class="line">actionCreator = bindActionCreators(actionCreator,store.dispatch)</div><div class="line">actionCreator()</div></pre></td></tr></table></figure></p>
+<p>connect  创建高阶组件，对store 特定属性进行监听和绑定，从而在这些属性变化时自动刷新组件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div></pre></td><td class="code"><pre><div class="line">import React from &quot;react&quot;;</div><div class="line">import &#123; bindActionCreators, createStore &#125; from &quot;redux&quot;;</div><div class="line">import &#123; Provider, connect &#125; from &quot;react-redux&quot;;</div><div class="line"></div><div class="line">// Store initial state</div><div class="line">const initialState = &#123; count: 0 &#125;;</div><div class="line"></div><div class="line">// reducer</div><div class="line">const counter = (state = initialState, action) =&gt; &#123;</div><div class="line">    switch (action.type) &#123;</div><div class="line">        case &quot;PLUS_ONE&quot;:</div><div class="line">            return &#123; count: state.count + 1 &#125;;</div><div class="line">        case &quot;MINUS_ONE&quot;:</div><div class="line">            return &#123; count: state.count - 1 &#125;;</div><div class="line">        case &quot;CUSTOM_COUNT&quot;:</div><div class="line">            return &#123; count: state.count + action.payload.count &#125;;</div><div class="line">        default:</div><div class="line">            break;</div><div class="line">    &#125;</div><div class="line">    return state;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">// Create store</div><div class="line">const store = createStore(counter);</div><div class="line"></div><div class="line">// Action creator</div><div class="line">function plusOne() &#123;</div><div class="line">// action</div><div class="line">return &#123; type: &quot;PLUS_ONE&quot; &#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line">function minusOne() &#123;</div><div class="line">return &#123; type: &quot;MINUS_ONE&quot; &#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line">export class Counter extends React.Component &#123;</div><div class="line">    render() &#123;</div><div class="line">        const &#123; count, plusOne, minusOne &#125; = this.props;//这三者通过connect关联store后获得</div><div class="line">        return (</div><div class="line">            &lt;div className=&quot;counter&quot;&gt;</div><div class="line">            &lt;button onClick=&#123;minusOne&#125;&gt;-&lt;/button&gt;</div><div class="line">            &lt;span style=&#123;&#123; display: &quot;inline-block&quot;, margin: &quot;0 10px&quot; &#125;&#125;&gt;</div><div class="line">            &#123;count&#125;</div><div class="line">            &lt;/span&gt;</div><div class="line">            &lt;button onClick=&#123;plusOne&#125;&gt;+&lt;/button&gt;</div><div class="line">            &lt;/div&gt;</div><div class="line">        );</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">//组件需要数据,state是store.getState()获得的数据集合根节点</div><div class="line">//性能问题：如果将store中的整个state绑定到组件上，那state上任何一个属性发生变化都会引起组件更新，所以向组件传递数据时，将数据绑定到尽可能的最小范围，实现只有绑定的数据变化时才引起组件更新</div><div class="line">function mapStateToProps(state) &#123; </div><div class="line">    return &#123;</div><div class="line">        count: state.count</div><div class="line">    &#125;;</div><div class="line">&#125;</div><div class="line">//组件中需要用到的触发函数</div><div class="line">function mapDispatchToProps(dispatch) &#123;</div><div class="line">    return bindActionCreators(&#123; plusOne, minusOne &#125;, dispatch);</div><div class="line">&#125;</div><div class="line">//使用connect将redux和react 组件结合起来,形成高阶组件</div><div class="line">const ConnectedCounter = connect(mapStateToProps, mapDispatchToProps)(Counter);</div><div class="line"></div><div class="line">export default class CounterSample extends React.Component &#123;</div><div class="line">    render() &#123;</div><div class="line">        return (</div><div class="line">            &lt;Provider store=&#123;store&#125;&gt; //根节点定义Provider，挂上store,其所有子节点均可以访问到</div><div class="line">                &lt;ConnectedCounter /&gt;</div><div class="line">            &lt;/Provider&gt;</div><div class="line">        );</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>主要流程</p>
+<p>1.定义redux store中需要的东西：reducer,actionCreator<br>2.使用createStore 根据reducer创建store<br>3.定义组件，确定需要哪些数据和触发函数<br>4.根据组件需要,创建数据获取函数，封装触发函数相应actionCreator<br>5.使用connect结合redux和组件形成高阶组件在Provider 中使用</p>
+<h1 id="异步Action"><a href="#异步Action" class="headerlink" title="异步Action"></a>异步Action</h1><p>异步 action不是特殊action而是多个同步 action的组合使用</p>
+<p>一个AJAX的Action发出后，到达中间件，进行预处理，根据预处理的结果dispatch不同的action出去,给reducer,然后更新store</p>
+<p>异步Action不是redux的一个概念而是action的一种设计模式</p>
+<p>不同的action还是同步的action,只是异步action把这些同步的action放在了不同阶段去dispath</p>
+<p> 中间件<br>1.截获某种特定类型的action,进行特殊处理<br>2.发出action</p>
+<h1 id="如何组织action和reducer"><a href="#如何组织action和reducer" class="headerlink" title="如何组织action和reducer"></a>如何组织action和reducer</h1><p>‘标准’形式redux action的问题<br>1.所有Action放一个文件，会无限扩展<br>2.Action,Reducer分开,实现业务逻辑时需要来回切换<br>3.系统中有哪些Action不够直观<br>新的方式<br>单个action和reducer放在同一个文件，一个文件一个action<br>然后将所有action导入同一文件，所有reducer导入同一文件<br>1.易于开发：不用在action和reducer文件间来回切换<br>2.易于维护：每个action文件都很小，容易理解<br>3.易于测试：每个业务逻辑只需要对应一个测试文件<br>4.易于理解：文件名就是action名字，文件列表就是action列表<br><a href="https://github.com/supnate/rekit-todomvc" target="_blank" rel="external">a sample</a><br>问题：拆分这么细的话，文件会多很多，对包的大小也会有影响</p>
+<p>答：webpack 确实会为每个文件生成一小段固定的元代码，同样的代码行数，文件越多 bundle 确实会越大。但这个并不会成为性能瓶颈，两个原因：1. 拆分后代码数量不会显著增多，增加的元代码部分相比整个包的大小基本可以忽略；2. 生产环境普遍会启用 gzip，对于重复的元代码信息会被有效压缩，对比拆分前，gzip 后的包大小基本没有差异</p>
+<h1 id="不可变数据"><a href="#不可变数据" class="headerlink" title="不可变数据"></a>不可变数据</h1><p>redux在修改state时采用新对象替换老对象的思路，不在原来对象上做修改，在新对象中复制老对象,包含要修改的部分,通过对比新老对象的引用不同，引起节点更新—-redux运行基础</p>
+<p>为何需要不可变数据<br>1.性能优化（通过对比新旧state不是同一个引用即可判断store发生了变化，从而不用进行深层遍历，比较具体的值，redux中的store都是不可变数据，每个节点都是不可变数据，当一个组件绑定在一个节点上，只需判断前后状态的引用是否相等，从而判断store是否发生变化，进而决定是否要更新组件）<br>2.易于调试和跟踪（store变化时可以看到前后状态，便于调试）<br>3.易于推测(任何时刻可以知道是什么引起store发生变化，根据action前后的状态判断，action是否被进行了正确处理)</p>
+<p>如何操作不可变数据<br>1.原生写法{…},Object.assign() 性能最好<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">const state = &#123;</div><div class="line">    filter:&apos;completed&apos;,</div><div class="line">    todos:[&apos;learn react&apos;]</div><div class="line">&#125;</div><div class="line">const newState1 = &#123;...state,todos:[...state.todos,&apos;learn redux&apos;]&#125;</div><div class="line">const newState = Object.assign(&#123;&#125;,state,&#123;todos:[...state.todos,&apos;learn redux&apos;]&#125;)</div></pre></td></tr></table></figure></p>
+<p>2.immutability-helper 适合需要深层次节点处理，需要引入类库，熟悉相应语法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">import update from &apos;immutability-helper&apos;</div><div class="line">const state = &#123;</div><div class="line">    filter:&apos;completed&apos;,</div><div class="line">    todos:[&apos;learn react&apos;]</div><div class="line">&#125;</div><div class="line">const newState = update(state,&#123;todos:&#123;$push:[&apos;learn redux&apos;]&#125;)</div></pre></td></tr></table></figure></p>
+<p>3.immer 可以像操作原对象一样生成新对象，性能最差(当节点层数多，结构复杂时，需要为每个属性建立代理)，适合应用程序小，场景简单的情况<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">import produce from &apos;immer&apos;</div><div class="line">const state = &#123;</div><div class="line">    filter:&apos;completed&apos;,</div><div class="line">    todos:[&apos;learn react&apos;]</div><div class="line">&#125;</div><div class="line">const newState = produce(state,draftState =&gt;&#123;</div><div class="line">    draftState.todos.push(&apos;learn redux&apos;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/course/router.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -703,865 +1686,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/designMode/command.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/designMode/command.html" itemprop="url">
-                  命令模式
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-08T21:09:09+08:00">
-                2018-11-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="应用情景"><a href="#应用情景" class="headerlink" title="应用情景"></a>应用情景</h1><p>有时候需要向某些对象发送请求，但是并不知道请求的接收者是谁，也不知道被请求的操作是什么。<br>此时希望用一种松耦合的方式设计软件，使得请求发送者和请求接收者能够消除彼此之间的耦合关系</p>
-<h1 id="主要思想"><a href="#主要思想" class="headerlink" title="主要思想"></a>主要思想</h1><p>将命令接收者的具体执行函数存入 命令堆栈，命令发起者需要执行/撤销动作时，对堆栈进行处理<br>命令接收者可以以闭包形式被执行，也可以作为对象属性被执行到</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line">//闭包形式</div><div class="line">var setCommand = function(btn,fn)&#123;</div><div class="line">	btn.onclick = function()&#123;</div><div class="line">		fn()</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">var MenuBar = &#123;</div><div class="line">	refresh:function()&#123;</div><div class="line">		console.log(&apos;refresh menu&apos;)</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">var RefreshMenuBarCommand = function(reciver)&#123;</div><div class="line">	return function()&#123;reciver.refresh()&#125;</div><div class="line">&#125;</div><div class="line">var refreshMenuBarCommand = RefreshMenuBarCommand(Menubar)</div><div class="line">setCommand(btn1,refreshMenuBarCommand)</div><div class="line"></div><div class="line">//宏命令，组装一个可以一次性触发多个命令的命令；属性形式，统一使用execute触发</div><div class="line">var MacroCommand = function()&#123;</div><div class="line">	return &#123;</div><div class="line">		commandsList:[],</div><div class="line">		add:function(command)&#123;</div><div class="line">			this.commandsList.push(command);</div><div class="line">		&#125;,</div><div class="line">		execute:function()&#123;</div><div class="line">			for(var i=0,cammand;command = this.commandsList[i++];)&#123;</div><div class="line">				command.execute();</div><div class="line">			&#125;</div><div class="line">		&#125;,</div><div class="line">		undo:function()&#123;</div><div class="line">			for(var i=0,cammand;command = this.commandsList[i++];)&#123;</div><div class="line">				command.undo();</div><div class="line">			&#125;</div><div class="line">		&#125;,</div><div class="line">		</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">var closeDoorCom =&#123;</div><div class="line">	execute:function()&#123;</div><div class="line">		console.log(&apos;close door&apos;)</div><div class="line">	&#125;,</div><div class="line">	undo:function()&#123;console.log(&apos;open door&apos;)&#125;</div><div class="line">&#125;</div><div class="line">var openTvCom =&#123;</div><div class="line">	execute:function()&#123;</div><div class="line">		console.log(&apos;open TV&apos;)</div><div class="line">	&#125;,</div><div class="line">	undo:function()&#123;console.log(&apos;close Tv&apos;)&#125;</div><div class="line">&#125;</div><div class="line">var macroCommand = MacroCommand()</div><div class="line">macroCommand.add(closeDoorCom)</div><div class="line">macroCommand.add(openTvCom)</div><div class="line">macroCommand.execute()</div><div class="line">macroCommand.undo()</div></pre></td></tr></table></figure>
-<h1 id="与策略区别"><a href="#与策略区别" class="headerlink" title="与策略区别"></a>与策略区别</h1><p>策略模式指向问题域更小，所有策略对象目标一致，他们只是达到这个目的的不同手段，内部实现针对‘算法’<br>命令对象解决的目标更具发散性，还可以完成撤销，排队等功能</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/designMode/event.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/designMode/event.html" itemprop="url">
-                  订阅发布模式
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-08T20:57:09+08:00">
-                2018-11-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="主要思想"><a href="#主要思想" class="headerlink" title="主要思想"></a>主要思想</h1><p>通过逻辑处理函数/对象event，使事件订阅和发布过程忽略事件的具体处理过程<br>订阅时只需要给到event要订阅的事件A，和响应函数，<br>发布时给到event事件A被触发和相关参数，即可执行订阅时的响应函数<br>event 充当中介者的角色，管理事件响应的存储和执行</p>
-<p>1.简单实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">let event = &#123;</div><div class="line">	caches:&#123;&#125;,</div><div class="line">	on:function(name,fn)&#123;</div><div class="line">		if(!this.caches[name])&#123;</div><div class="line">			this.caches[name] = []</div><div class="line">		&#125;</div><div class="line">		this.caches[name].push(fn)</div><div class="line">	&#125;,</div><div class="line">	emit:function(name,...args)&#123;</div><div class="line">		if(!this.caches[name])&#123;return&#125;</div><div class="line">		for(let i=0;i&lt;this.caches[name].length;i++)&#123;</div><div class="line">			let fn=this.caches[name][i]</div><div class="line">			fn(args)</div><div class="line">		&#125;</div><div class="line">	&#125;,</div><div class="line">	remove:function(name,fn)&#123;</div><div class="line">		if(this.caches[name].length&lt;1)&#123;return&#125;</div><div class="line">		for(let i=0;i&lt;this.caches[name].length;i++)&#123;</div><div class="line">			let fn1=this.caches[name][i]</div><div class="line">			if(fn === fn1)&#123;</div><div class="line">				this.caches[name].splice(i,1)</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">let fn1 = (val)=&gt;&#123;console.log(val,1)&#125;</div><div class="line">let fn2 = (val)=&gt;&#123;console.log(val,2)&#125;</div><div class="line">event.on(&apos;aaa&apos;,fn1)</div><div class="line">event.on(&apos;aaa&apos;,fn2)</div><div class="line">event.emit(&apos;aaa&apos;,&apos;fire!&apos;)</div></pre></td></tr></table></figure></p>
-<p>2.全局事件冲突<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div></pre></td><td class="code"><pre><div class="line">var Event = (function()&#123; </div><div class="line">    var global = this,</div><div class="line">        Event,_default = &apos;default&apos;; </div><div class="line">    Event = function()&#123;         </div><div class="line">        var _listen, </div><div class="line">        _trigger,</div><div class="line">        _remove,</div><div class="line">        _slice = Array.prototype.slice,</div><div class="line">        _shift = Array.prototype.shift,</div><div class="line">        _unshift = Array.prototype.unshift,              </div><div class="line">        namespaceCache = &#123;&#125;,              </div><div class="line">        _create,              </div><div class="line">        find,             </div><div class="line">        each = function( ary, fn )&#123;                 </div><div class="line">            var ret;                 </div><div class="line">            for ( var i = 0, l = ary.length; i &lt; l; i++ )&#123;</div><div class="line">                var n = ary[i];                     </div><div class="line">                ret = fn.call( n, i, n);                 </div><div class="line">            &#125;                 </div><div class="line">            return ret;             </div><div class="line">            &#125;; </div><div class="line"></div><div class="line">           _listen = function( key, fn, cache )&#123;                </div><div class="line">               if ( !cache[ key ] )&#123;                    </div><div class="line">                   cache[ key ] = [];                </div><div class="line">                &#125;               </div><div class="line">                cache[key].push( fn );            </div><div class="line">            &#125;; </div><div class="line"></div><div class="line">           _remove = function( key, cache ,fn)&#123;                </div><div class="line">               if ( cache[ key ] )&#123;                    </div><div class="line">                   if( fn )&#123;                        </div><div class="line">                       for( var i = cache[ key ].length; i &gt;= 0; i-- )&#123;                            </div><div class="line">                           if( cache[ key ][i] === fn )&#123;                                </div><div class="line">                               cache[ key ].splice( i, 1 );                            </div><div class="line">                            &#125;                        </div><div class="line">                        &#125;                    </div><div class="line">                    &#125;else&#123;                        </div><div class="line">                        cache[ key ] = [];                    </div><div class="line">                    &#125;                </div><div class="line">                &#125;            </div><div class="line">            &#125;; </div><div class="line"> </div><div class="line">           _trigger = function()&#123;                </div><div class="line">               var cache = _shift.call(arguments),                      </div><div class="line">               key = _shift.call(arguments),                      </div><div class="line">               args = arguments,                      </div><div class="line">               _self = this,                     </div><div class="line">              ret,                      </div><div class="line">              stack = cache[ key ]; </div><div class="line"> </div><div class="line">              if ( !stack || !stack.length )&#123;                    </div><div class="line">                   return;                </div><div class="line">              &#125; </div><div class="line"> </div><div class="line">               return each( stack, function()&#123;                    </div><div class="line">                   return this.apply( _self, args );                </div><div class="line">                &#125;);             </div><div class="line">            &#125;; </div><div class="line"> </div><div class="line">            _create = function( namespace )&#123;                 </div><div class="line">                var namespace = namespace || _default;                 </div><div class="line">                var cache = &#123;&#125;,                     </div><div class="line">                offlineStack = [],    // 离线事件                      </div><div class="line">                ret = &#123;                         </div><div class="line">                    listen: function( key, fn, last )&#123;                             </div><div class="line">                        _listen( key, fn, cache );                             </div><div class="line">                        if ( offlineStack === null )&#123;                                 </div><div class="line">                            return;                             </div><div class="line">                        &#125;                             </div><div class="line">                        if ( last === &apos;last&apos; )&#123;                        </div><div class="line">                            offlineStack.length &amp;&amp; offlineStack.pop()();                             </div><div class="line">                        &#125;else&#123;                                 </div><div class="line">                            each( offlineStack, function()&#123;                                 </div><div class="line">                                this();                             </div><div class="line">                                &#125;);                          </div><div class="line">                        &#125; </div><div class="line"> </div><div class="line">                         offlineStack = null;                      </div><div class="line">                    &#125;,</div><div class="line"></div><div class="line">                    one: function( key, fn, last )&#123;                          </div><div class="line">                        _remove( key, cache );                          </div><div class="line">                        this.listen( key, fn ,last );                      </div><div class="line">                    &#125;,                      </div><div class="line">                        </div><div class="line">                    remove: function( key, fn )&#123;                          </div><div class="line">                        _remove( key, cache ,fn);                      </div><div class="line">                    &#125;,                      </div><div class="line">                    trigger: function()&#123;                          </div><div class="line">                        var fn,                              </div><div class="line">                        args,                              </div><div class="line">                        _self = this; </div><div class="line"> </div><div class="line">                        _unshift.call( arguments, cache );                          </div><div class="line">                        args = arguments;                          </div><div class="line">                        fn = function()&#123;                              </div><div class="line">                            return _trigger.apply( _self, args );                          </div><div class="line">                        &#125;; </div><div class="line"> </div><div class="line">                        if ( offlineStack )&#123;                              </div><div class="line">                            return offlineStack.push( fn );                          </div><div class="line">                        &#125;                        </div><div class="line">                        return fn();                       </div><div class="line">                    &#125;                    </div><div class="line">                &#125;; </div><div class="line">                return namespace ?( namespaceCache[ namespace ] ? namespaceCache[ namespace ] :            namespaceCache[ namespace ] = ret ): ret;                </div><div class="line">            &#125;; </div><div class="line"> </div><div class="line">        return &#123;                 </div><div class="line">            create: _create,                 </div><div class="line">            one: function( key,fn, last )&#123;                     </div><div class="line">                var event = this.create( );                         </div><div class="line">                event.one( key,fn,last );                 </div><div class="line">                &#125;,                 </div><div class="line">            remove: function( key,fn )&#123;                  </div><div class="line">                var event = this.create( );                     </div><div class="line">                event.remove( key,fn );                 </div><div class="line">                &#125;,                 </div><div class="line">            listen: function( key, fn, last )&#123;                     </div><div class="line">                var event = this.create( );                         </div><div class="line">                event.listen( key, fn, last );                     </div><div class="line">                &#125;,                 </div><div class="line">            trigger: function()&#123; </div><div class="line">                var event = this.create( );                     </div><div class="line">                event.trigger.apply( this, arguments );                  </div><div class="line">                &#125;           </div><div class="line">            &#125;;     </div><div class="line">    &#125;(); </div><div class="line"></div><div class="line">    return Event; </div><div class="line"> </div><div class="line">&#125;)();</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/designMode/AOP.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/designMode/AOP.html" itemprop="url">
-                  AOP(切面)编程/装饰者模式
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-07T21:57:09+08:00">
-                2018-11-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>在不改变对象自身的基础上，在程序运行期间给对象动态的添加职责</p>
-<h1 id="主要思想"><a href="#主要思想" class="headerlink" title="主要思想"></a>主要思想</h1><p>在每次要执行具体函数B时，先执行A，在每次执行完B之后都执行C，<br>以此类推，有必要的话，在C执行完再执行D，从而形成执行链</p>
-<h1 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h1><p>先用一个temp函数包住AB,再用一个final函数包住temp和C，这样，在执行final函数时，会按顺序A-B-C执行</p>
-<p>1.使用普通函数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">let before=(fn,beforeFn)=&gt;&#123;</div><div class="line">	return (...args)=&gt;&#123;</div><div class="line">		beforeFn(args)</div><div class="line">		return fn(args)</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">let after = (fn,afterFn)=&gt;&#123;</div><div class="line">	return (...args)=&gt;&#123;</div><div class="line">		let ret = fn(args)</div><div class="line">		afterFn(args)</div><div class="line">		return ret</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">let a = ()=&gt;&#123;console.log(2)&#125;</div><div class="line">a = before(a,()=&gt;&#123;console.log(1)&#125;)</div><div class="line">a = after(a,()=&gt;&#123;console.log(3)&#125;)</div><div class="line">a() //1,2,3</div></pre></td></tr></table></figure></p>
-<p>2.改造Function对象,可以实现链式添加职责</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">Function.prototype.before = function(beforeFn)&#123;</div><div class="line">	return ()=&gt;&#123;</div><div class="line">		beforeFn(arguments);</div><div class="line">		return this(arguments);</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">Function.prototype.after = function(afterFn)&#123;</div><div class="line">	return ()=&gt;&#123;</div><div class="line">		let ret = this(arguments);</div><div class="line">		afterFn(arguments);</div><div class="line">		return ret;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">var func = function ()&#123;</div><div class="line">console.log(2); </div><div class="line">return 15&#125;</div><div class="line">func = func.before(()=&gt;&#123;console.log(1)&#125;).after(()=&gt;&#123;console.log(3)&#125;)</div><div class="line">func() //1,2,3 返回15</div></pre></td></tr></table></figure>
-<h1 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h1><p>1.数据统计上报<br>  将点击响应事件包含的上报动作隔离出来，以after的顺序，装饰到点击事件响应函数上</p>
-<p>2.动态改变函数参数<br>  组装ajax请求参数时，在请求函数前装饰before函数，进行不同参数参加处理</p>
-<p>3.插件式表单验证<br>  在submit函数前装饰before函数进行不同条件验证</p>
-<h1 id="区分代理模式"><a href="#区分代理模式" class="headerlink" title="区分代理模式"></a>区分代理模式</h1><p>代理模式的意图是当直接访问本体不方便或者不符合需要时，为这个本体提供一个替代者，<br>本体定义了关键功能，而代理提供或拒绝对它的访问，或者在访问本体之前做一些额外的事情<br>通常只有一层代理-本体的引用</p>
-<p>AOP的作用用于对对象加入行为，一开始不能确定对象的全部功能时，<br>经常会形成一条装饰链</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/designMode/iterator.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/designMode/iterator.html" itemprop="url">
-                  迭代器模式
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-06T22:23:09+08:00">
-                2018-11-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>提供一种方法顺序访问一个聚合对象种的各个元素，而又不需要暴露该对象的内部表示<br>把迭代过程从业务逻辑中分离出来，不用关心对象的内部构造，可以按顺序访问其中的每个元素</p>
-<h1 id="用途-场景"><a href="#用途-场景" class="headerlink" title="用途/场景"></a>用途/场景</h1><p>查找可用组件，进行数据处理</p>
-<h1 id="主要思想"><a href="#主要思想" class="headerlink" title="主要思想"></a>主要思想</h1><p>内部迭代器<br>函数内部定义好迭代规则，完全接手整个迭代过程，外部只需要一次初始调用</p>
-<p>外部迭代器<br>需要调用进行下一轮迭代的函数，可以手工控制迭代的过程或者顺序</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">//使用内部迭代器实现</div><div class="line">var iteratorInner=(arr,fn)=&gt;&#123;</div><div class="line">	for(let i=0;i&lt;arr.length;i++)&#123;</div><div class="line">		fn(arr,i)</div><div class="line">	&#125;</div><div class="line">	return arr</div><div class="line">&#125;</div><div class="line">console.log(iteratorInner([1,2,3],(arr,i)=&gt;&#123;arr[i]++&#125;)) //[2,3,4] </div><div class="line"></div><div class="line">//使用外部迭代器</div><div class="line">let iteratorOuter = (arr,fn)=&gt;&#123;</div><div class="line">	let count = 0;</div><div class="line">    let nextFn =()=&gt;&#123;</div><div class="line">		if(count &lt;arr.length)&#123;</div><div class="line">			fn(arr,count)</div><div class="line">		&#125;</div><div class="line">		return &#123;</div><div class="line">			result:arr,</div><div class="line">			count:count === arr.length ? count:++count,,</div><div class="line">			done:count === arr.length</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	return &#123;</div><div class="line">		next:nextFn,</div><div class="line">		isdone:count === arr.length</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">var it = iteratorOuter([1,2,3],(arr,i)=&gt;&#123;</div><div class="line">	arr[i]++</div><div class="line">&#125;)</div><div class="line">console.log(it.next())</div><div class="line">//count: 1</div><div class="line">//done: false</div><div class="line">//result: (3) [2, 3, 4]</div><div class="line">console.log(it.next())</div><div class="line">//count: 2</div><div class="line">//done: false</div><div class="line">//result: (3) [2, 3, 4]</div><div class="line">console.log(it.next())</div><div class="line">//count: 3</div><div class="line">//done: true</div><div class="line">//result: (3) [2, 3, 4]</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/designMode/adapter.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/designMode/adapter.html" itemprop="url">
-                  适配器模式
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-06T22:11:09+08:00">
-                2018-11-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>定义<br>解决俩个软件实体间接口不兼容的问题，使用适配器模式之后，原本由于接口不兼容而不能工作的两个软件实体，可以一起工作</p>
-<p>用途/场景<br>1.调用第三方（地图/支付）接口时，不同平台提供的相同功能的接口函数名不同，或者调用时需要进行的操作过程不同，<br>  将这些过程封装/分类，通过适配器决定如何使用</p>
-<p>2.处理数据,将不符合使用要求的数据结构转换成预期的样子</p>
-<p>主要思想<br>将处理过程封装在适配器函数中,直接在适配器函数中进行处理，或者让适配器返回处理后的可适用结果<br>调用适配器传入需要处理的数据/条件，适配器进行处理或返回处理结果</p>
-<p>注意事项<br>那些繁琐的处理代码始终是存在的，只不过在写业务的时候看不到它罢了</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div></pre></td><td class="code"><pre><div class="line">1.转换数据结构</div><div class="line">//将如下数据结构</div><div class="line">var guangdongCity = [&#123;             </div><div class="line">        name: &apos;shenzhen&apos;,             </div><div class="line">        id: 11,         </div><div class="line">    &#125;, &#123;             </div><div class="line">        name: &apos;guangzhou&apos;,             </div><div class="line">        id: 12,         </div><div class="line">    &#125;];</div><div class="line">//转换成如下数据结构</div><div class="line">var guangdongCity = &#123;     shenzhen: 11,      guangzhou: 12&#125;;</div><div class="line"></div><div class="line">var adapter = (data)=&gt;&#123;</div><div class="line">	let temp = &#123;&#125;;</div><div class="line">	for(let i=0;i&lt;data.length;i++)&#123;</div><div class="line">		temp[data[i].name] = data[i].id</div><div class="line">	&#125;</div><div class="line">	return temp</div><div class="line">&#125;</div><div class="line">console.log(adapter(guangdongCity))</div><div class="line"></div><div class="line">2.SDK适配例子1</div><div class="line">var googleMap = &#123;      </div><div class="line">    show: function()&#123;          </div><div class="line">        console.log( &apos;开始渲染谷歌地图&apos; );      </div><div class="line">        &#125;  </div><div class="line">    &#125;; </div><div class="line">var baiduMap = &#123;       </div><div class="line">        display: function()&#123;          </div><div class="line">            console.log( &apos;开始渲染百度地图&apos; );      </div><div class="line">        &#125;  </div><div class="line">    &#125;; </div><div class="line">var baiduMapAdapter = &#123;      </div><div class="line">        show: function()&#123;          </div><div class="line">            return baiduMap.display();    </div><div class="line">        &#125;  </div><div class="line">    &#125;;</div><div class="line">var renderMap = function( map )&#123;     </div><div class="line">    if ( map.show instanceof Function )&#123;         </div><div class="line">        map.show();     </div><div class="line">    &#125; </div><div class="line">&#125;; </div><div class="line">renderMap( googleMap );        // 输出：开始渲染谷歌地图 </div><div class="line">renderMap( baiduMapAdapter );    // 输出：开始渲染百度地图 </div><div class="line">3.SDK适配例子2</div><div class="line">function pay (&#123;</div><div class="line">  price,</div><div class="line">  goodsId</div><div class="line">&#125;) &#123;</div><div class="line">  return new Promise((resolve, reject) =&gt; &#123;</div><div class="line">    const config = &#123;&#125;</div><div class="line"> </div><div class="line">    switch (platform) &#123;</div><div class="line">      case &apos;wechat&apos;:</div><div class="line">        // 微信的处理逻辑</div><div class="line">        config.price = price</div><div class="line">        config.goodsId = goodsId</div><div class="line">        config.appId = &apos;XXX&apos;</div><div class="line">        config.secretKey = &apos;XXX&apos;</div><div class="line">        wx.pay(config).then((err, data) =&gt; &#123;</div><div class="line">          if (err) return reject(err)</div><div class="line"> </div><div class="line">          resolve(data)</div><div class="line">        &#125;)</div><div class="line">      break</div><div class="line">      case &apos;QQ&apos;:</div><div class="line">        // QQ的处理逻辑</div><div class="line">        config.price = price * 100</div><div class="line">        config.gid = goodsId</div><div class="line">        config.appId = &apos;XXX&apos;</div><div class="line">        config.secretKey = &apos;XXX&apos;</div><div class="line">        config.success = resolve</div><div class="line">        config.error = reject</div><div class="line">        qq.pay(config)</div><div class="line">      break</div><div class="line">      case &apos;alipay&apos;:</div><div class="line">        // 支付宝的处理逻辑</div><div class="line">        config.payment = price</div><div class="line">        config.id = goodsId</div><div class="line">        config.token = &apos;XXX&apos;</div><div class="line">        alipay.pay(config, resolve, reject)</div><div class="line">      break</div><div class="line">    &#125;</div><div class="line">  &#125;)</div><div class="line">&#125;</div><div class="line">// run anywhere</div><div class="line">await pay(&#123;</div><div class="line">  price: 10,</div><div class="line">  goodsId: 1</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<p>对于SDK提供方，仅仅需要知道自己所需要的一些参数，然后按照自己的方式进行数据返回。</p>
-<p>对于SDK调用方，仅仅需要我们约定好的通用的参数，以及按照约定的方式进行监听回调处理。</p>
-<p>整合多个第三方SDK的任务交由适配器来做，然后将适配器的代码压缩，混淆，放在一个看不见的角落里去，这样的代码逻辑就会变得很清晰了<br>参考资料:<a href="https://mp.weixin.qq.com/s/QRqeDCzD0APyj2g7BNqtpg" target="_blank" rel="external">适配器在JavaScript中的体现</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/designMode/proxy.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/designMode/proxy.html" itemprop="url">
-                  代理模式
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-06T22:10:09+08:00">
-                2018-11-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h1><p>保护代理<br>代理B可以帮助A过滤掉一些请求，可以直接在代理B中拒绝掉<br>用于控制不同权限的对象对目标对象的访问</p>
-<p>虚拟代理<br>把一些开销很大的对象，延迟到真正需要它的时候才去创建</p>
-<h1 id="单一职责原则"><a href="#单一职责原则" class="headerlink" title="单一职责原则"></a>单一职责原则</h1><p>就一个类（通常也包括对象和函数）而言，应该仅有一个引起它变化的原因。</p>
-<h1 id="主要思想"><a href="#主要思想" class="headerlink" title="主要思想"></a>主要思想</h1><p>A想调用C，要经过B，B在中间做C的代理，用于判断什么时候可以执行C<br>比如多次调用缓存起来再一起执行C；传入相同参数只计算一次，将结果保存，以后传入相同参数直接返回结果，不再计算</p>
-<h1 id="用途-实现"><a href="#用途-实现" class="headerlink" title="用途/实现"></a>用途/实现</h1><p>1.虚拟代理合并 HTTP请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">//可以通过一个代理函数 proxySynchronousFile 来收集一段时间之内的请求， 后一次性发送给服务器。</div><div class="line">var synchronousFile = function( id )&#123;     </div><div class="line">    console.log( &apos;开始同步文件，id 为: &apos; + id ); </div><div class="line">&#125;; </div><div class="line"> </div><div class="line">var proxySynchronousFile = (function()&#123;     </div><div class="line">    var cache = [],    // 保存一段时间内需要同步的 ID         </div><div class="line">    timer;    // 定时器 </div><div class="line">    return function( id )&#123;         </div><div class="line">        cache.push( id );  //每次进来收集       </div><div class="line">        if ( timer )&#123;    </div><div class="line">            // 保证不会覆盖已经启动的定时器             </div><div class="line">            return;         </div><div class="line">        &#125; </div><div class="line">        timer = setTimeout(function()&#123;             </div><div class="line">            synchronousFile( cache.join( &apos;,&apos; ) );    // 2 秒后向本体发送需要同步的 ID 集合 到时间统一处理           clearTimeout( timer );    // 清空定时器             </div><div class="line">            timer = null;             </div><div class="line">            cache.length = 0; // 清空 ID 集合         </div><div class="line">            &#125;, 2000 );     </div><div class="line">        &#125; </div><div class="line">    &#125;)(); </div><div class="line">var checkbox = document.getElementsByTagName( &apos;input&apos; ); </div><div class="line">for ( var i = 0, c; c = checkbox[ i++ ]; )&#123; </div><div class="line">     c.onclick = function()&#123;         </div><div class="line">        if ( this.checked === true )&#123;             </div><div class="line">            proxySynchronousFile( this.id );         </div><div class="line">        &#125;     </div><div class="line">    &#125; </div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
-<p>2.缓存代理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">var mult = function()&#123;     </div><div class="line">    console.log( &apos;开始计算乘积&apos; );     </div><div class="line">    var a = 1;     </div><div class="line">    for ( var i = 0, l = arguments.length; i &lt; l; i++ )&#123;         </div><div class="line">        a = a * arguments[i];      </div><div class="line">    &#125;      </div><div class="line">    return a; </div><div class="line">&#125;; </div><div class="line">// 创建缓存代理的工厂 </div><div class="line">var createProxyFactory = function( fn )&#123;     </div><div class="line">    var cache = &#123;&#125;;     </div><div class="line">    return function()&#123;         </div><div class="line">        var args = Array.prototype.join.call( arguments, &apos;,&apos; );         </div><div class="line">        if ( args in cache )&#123;             </div><div class="line">            return cache[ args ];         </div><div class="line">            &#125;         </div><div class="line">        return  cache[ args ] = fn.apply( this, arguments );     </div><div class="line">    &#125; </div><div class="line">&#125;; </div><div class="line">var proxyMult = createProxyFactory( mult ), </div><div class="line"> proxyMult( 1, 2, 3, 4 );    // 输出：24  </div><div class="line"> proxyMult( 1, 2, 3, 4 );    // 输出：24</div></pre></td></tr></table></figure></p>
-<p>扩展：用于ajax异步请求数据，下次请求相同数据时，是否可以取消请求，直接用之前缓存的数据，适用固定数据</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/designMode/strategies.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/designMode/strategies.html" itemprop="url">
-                  策略模式
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-06T22:09:09+08:00">
-                2018-11-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="主要思想"><a href="#主要思想" class="headerlink" title="主要思想"></a>主要思想</h1><p>定义一系列的算法，把它们一个个封装起来，通过逻辑函数使他们可以相互替换<br>避免if-else多分支判断</p>
-<h1 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h1><p>定义一些系列算法（具体处理过程），把他们各自封装成策略类，算法被封装在策略类内部方法里。在客户对Context(如何调用算法的处理函数)发起请求时，Context总是把请求委托给这些策略对象中间的某一个进行计算</p>
-<h1 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h1><p>编写代理函数时，注意如何调用，让算法得到<b>执行</b><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">let strategies = &#123; //算法集合</div><div class="line">	 &quot;S&quot;: function( salary )&#123; </div><div class="line">        return salary * 4;     </div><div class="line">		&#125;,</div><div class="line">     &quot;A&quot;: function( salary )&#123;</div><div class="line">         return salary * 3;</div><div class="line">     &#125;,</div><div class="line">     &quot;B&quot;: function( salary )&#123;</div><div class="line">         return salary * 2;</div><div class="line">     &#125;</div><div class="line"> &#125;; </div><div class="line">var calculateBonus = function( level, salary )&#123; //Context,委托函数，负责调用哪个算法</div><div class="line">     return strategies[ level ]( salary ); </div><div class="line">&#125;;</div><div class="line"> </div><div class="line">console.log( calculateBonus( &apos;S&apos;, 20000 ) );//80000</div><div class="line">console.log( calculateBonus( &apos;A&apos;, 10000 ) );//30000</div><div class="line"></div><div class="line">变形：</div><div class="line">var S = function( salary )&#123;      return salary * 4;  &#125;; </div><div class="line">var A = function( salary )&#123;     return salary * 3; &#125;; </div><div class="line">var B = function( salary )&#123;     return salary * 2; &#125;; </div><div class="line">var calculateBonus = function( func, salary )&#123;     return func( salary ); &#125;; </div><div class="line">calculateBonus( S, 10000  )</div></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div></pre></td><td class="code"><pre><div class="line">//具体策略方法</div><div class="line"> var strategies = &#123;             </div><div class="line">     isNonEmpty: function( value, errorMsg )&#123;                 </div><div class="line">         if ( value === &apos;&apos; )&#123;                     </div><div class="line">             return errorMsg;                 </div><div class="line">        &#125;             </div><div class="line">    &#125;,             </div><div class="line">    minLength: function( value, length, errorMsg )&#123;                 </div><div class="line">        if ( value.length &lt; length )&#123;                     </div><div class="line">            return errorMsg;                 </div><div class="line">        &#125;             </div><div class="line">    &#125;,             </div><div class="line">    isMobile: function( value, errorMsg )&#123;                 </div><div class="line">        if ( !/(^1[3|5|8][0-9]&#123;9&#125;$)/.test( value ) )&#123;                     </div><div class="line">            return errorMsg;                 </div><div class="line">        &#125;             </div><div class="line">    &#125;         </div><div class="line">&#125;; </div><div class="line">//执行代理 Context</div><div class="line"> var Validator = function()&#123;             </div><div class="line">        this.cache = [];         </div><div class="line">     &#125;; </div><div class="line"></div><div class="line">    Validator.prototype.add = function( dom, rules )&#123; </div><div class="line">        var self = this;</div><div class="line">        for ( var i = 0, rule; rule = rules[ i++ ]; )&#123;                 </div><div class="line">            (function( rule )&#123;                     </div><div class="line">                var strategyAry = rule.strategy.split( &apos;:&apos; );                     </div><div class="line">                var errorMsg = rule.errorMsg; </div><div class="line">                self.cache.push(function()&#123;                         </div><div class="line">                    var strategy = strategyAry.shift(); </div><div class="line">                    strategyAry.unshift( dom.value );                       </div><div class="line">                    strategyAry.push( errorMsg ); //strategyAry，传递到具体算法函数参数，这里进行处理          </div><div class="line">                    return strategies[ strategy ].apply( dom, strategyAry );                     </div><div class="line">                &#125;);                 </div><div class="line">            &#125;)( rule )             </div><div class="line">        &#125; </div><div class="line">    &#125;; </div><div class="line">    Validator.prototype.start = function()&#123;             </div><div class="line">        for ( var i = 0, validatorFunc; validatorFunc = this.cache[ i++ ]; )&#123;                 </div><div class="line">            var errorMsg = validatorFunc();                 </div><div class="line">            if ( errorMsg )&#123;                     </div><div class="line">                return errorMsg;                 </div><div class="line">            &#125;             </div><div class="line">        &#125;         </div><div class="line">    &#125;;</div><div class="line">//具体应用</div><div class="line">    var registerForm = document.getElementById( &apos;registerForm&apos; ); </div><div class="line">    var validataFunc = function()&#123;             </div><div class="line">        var validator = new Validator(); </div><div class="line">        validator.add( registerForm.userName, [&#123;                 </div><div class="line">            strategy: &apos;isNonEmpty&apos;,                 </div><div class="line">            errorMsg: &apos;用户名不能为空&apos;             </div><div class="line">        &#125;, &#123;                 </div><div class="line">            strategy: &apos;minLength:6&apos;,                </div><div class="line">            errorMsg: &apos;用户名长度不能小于 10 位&apos;             </div><div class="line">        &#125;]); </div><div class="line">        validator.add( registerForm.password, [&#123;                 </div><div class="line">            strategy: &apos;minLength:6&apos;,                 </div><div class="line">            errorMsg: &apos;密码长度不能小于 6 位&apos;             </div><div class="line">        &#125;]); </div><div class="line">        validator.add( registerForm.phoneNumber, [&#123;                 </div><div class="line">            strategy: &apos;isMobile&apos;,                 </div><div class="line">            errorMsg: &apos;手机号码格式不正确&apos;             </div><div class="line">        &#125;]); </div><div class="line">        var errorMsg = validator.start();             </div><div class="line">        return errorMsg;         </div><div class="line">    &#125; </div><div class="line">    registerForm.onsubmit = function()&#123;                  </div><div class="line">        var errorMsg = validataFunc(); </div><div class="line">        if ( errorMsg )&#123;                   </div><div class="line">            alert ( errorMsg );                   </div><div class="line">            return false;              </div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/">23</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1602,7 +1731,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">216</span>
+              <span class="site-state-item-count">223</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1666,7 +1795,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

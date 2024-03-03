@@ -259,6 +259,908 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1128.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/react/hooks/1128.html" itemprop="url">
+                  重新认识路由
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-28T16:20:02+08:00">
+                2021-11-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>路由管理，就是让你的页面能够根据 URL 的变化进行页面的切换，这是前端应用中一个非常重要的机制</p>
+<p>路由的核心逻辑就是根据 URL 路径这个状态，来决定在主内容区域显示什么组件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">// 自定义路由</div><div class="line">const MyRouter = (&#123; children &#125;) =&gt; &#123;</div><div class="line">  const routes = _.keyBy(</div><div class="line">    children.map((c) =&gt; c.props),</div><div class="line">    &quot;path&quot;,</div><div class="line">  );</div><div class="line">  const [hash] = useHash();</div><div class="line">  const Page = routes[hash.replace(&quot;#&quot;, &quot;&quot;)]?.component;</div><div class="line">  // 如果路由不存在就返回 Not found.</div><div class="line">  return Page ? &lt;Page /&gt; : &quot;Not found.&quot;;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"></div><div class="line">const Route = () =&gt; null;</div><div class="line"></div><div class="line">// 应用</div><div class="line">function SamplePages &#123;</div><div class="line">  return (</div><div class="line">    &lt;div className=&quot;sample-pages&quot;&gt;</div><div class="line">      &#123;/* 定义了侧边导航栏 */&#125;</div><div class="line">      &lt;div className=&quot;sider&quot;&gt;</div><div class="line">        &lt;a href=&quot;#page1&quot;&gt;Page 1&lt;/a&gt;</div><div class="line">        &lt;a href=&quot;#page2&quot;&gt;Page 2&lt;/a&gt;</div><div class="line">        &lt;a href=&quot;#page3&quot;&gt;Page 3&lt;/a&gt;</div><div class="line">        &lt;a href=&quot;#page4&quot;&gt;Page 4&lt;/a&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">      &lt;div className=&quot;exp-15-page-container&quot;&gt;</div><div class="line">        &#123;/* 定义路由配置 */&#125;</div><div class="line">        &lt;MyRouter&gt;</div><div class="line">          &lt;Route path=&quot;page1&quot; component=&#123;Page1&#125; /&gt;</div><div class="line">          &lt;Route path=&quot;page2&quot; component=&#123;Page2&#125; /&gt;</div><div class="line">          &lt;Route path=&quot;page3&quot; component=&#123;Page3&#125; /&gt;</div><div class="line">          &lt;Route path=&quot;page4&quot; component=&#123;Page4&#125; /&gt;</div><div class="line">        &lt;/MyRouter&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    &lt;/&gt;</div><div class="line">  );</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h1 id="使用React-Router"><a href="#使用React-Router" class="headerlink" title="使用React Router"></a>使用React Router</h1><h2 id="简单应用"><a href="#简单应用" class="headerlink" title="简单应用"></a>简单应用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">// 从 react-router-dom 引入路由框架提供的一些组件</div><div class="line">import &#123; BrowserRouter, Switch, Route, Link &#125; from &quot;react-router-dom&quot;;</div><div class="line">// 引入了两个课程示例页面</div><div class="line">import Counter from &quot;./01/Counter&quot;;</div><div class="line">import UserList from &quot;./01/UserList&quot;;</div><div class="line"></div><div class="line"></div><div class="line">// 使用数组定义了页面组件和导航的标题，从而方便下面的渲染逻辑</div><div class="line">const routes = [</div><div class="line">  [&quot;01 Counter&quot;, Counter],</div><div class="line">  [&quot;01 UserList&quot;, UserList],</div><div class="line">];</div><div class="line">function App() &#123;</div><div class="line">  return (</div><div class="line">    &lt;BrowserRouter&gt;</div><div class="line">      &lt;div className=&quot;app&quot;&gt;</div><div class="line">        &lt;ul className=&quot;sider&quot;&gt;</div><div class="line">          &#123;routes.map(([label]) =&gt; (</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&#123;`/$&#123;label.replace(&quot; &quot;, &quot;/&quot;)&#125;`&#125;&gt;&#123;label&#125;&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">          ))&#125;</div><div class="line">        &lt;/ul&gt;</div><div class="line">        &lt;div id=&quot;pageContainer&quot; className=&quot;page-container&quot;&gt;</div><div class="line">          &lt;Switch&gt;</div><div class="line">            &#123;routes.map(([label, Component]) =&gt; (</div><div class="line">              &lt;Route key=&#123;label&#125; path=&#123;`/$&#123;label.replace(&quot; &quot;, &quot;/&quot;)&#125;`&#125;&gt;</div><div class="line">                &lt;Component /&gt;</div><div class="line">              &lt;/Route&gt;</div><div class="line">            ))&#125;</div><div class="line">            &#123;/* 定义一个默认的路由 */&#125;</div><div class="line">            &lt;Route path=&quot;/&quot; exact&gt;</div><div class="line">              &lt;h1&gt;Welcome!&lt;/h1&gt;</div><div class="line">            &lt;/Route&gt;</div><div class="line">            &lt;Route path=&quot;*&quot;&gt;Page not found.&lt;/Route&gt;</div><div class="line">          &lt;/Switch&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    &lt;/BrowserRouter&gt;</div><div class="line">  );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>相关组件作用</p>
+<p>BrowserRouter：标识用标准的 URL 路径去管理路由，比如 /my-page1 这样的标准 URL 路径。<br>除此之外，还有 MemoryRouter，表示通过内存管理路由；<br>HashRouter，标识通过 hash 管理路由。<br>自己实现的例子其实就是用的 hash 来实现路由。</p>
+<p>Link：定义一个导航链接，点击时可以无刷新地改变页面 URL，从而实现 React Router 控制的导航。</p>
+<p>Route: 定义一条路由规则，可以指定匹配的路径、要渲染的内容等等。</p>
+<p>Switch：在默认情况下，所有匹配的 Route 节点都会被展示，但是 Switch 标记可以保证只有第一个匹配到的路由才会被渲染。</p>
+<p><a href="https://v5.reactrouter.com/web/guides/quick-start" target="_blank" rel="external">react router</a></p>
+<h2 id="使用嵌套路由：实现二级导航页面"><a href="#使用嵌套路由：实现二级导航页面" class="headerlink" title="使用嵌套路由：实现二级导航页面"></a>使用嵌套路由：实现二级导航页面</h2><p>需要路由框架具备两个能力：</p>
+<p>能够模糊匹配。比如 /page1/general 、/page1/profile 这样两个路由，需要都能匹配到 Page1 这样一个组件。<br>然后 Page1 内部呢，再根据 general 和 profile 这两个子路由决定展示哪个具体的页面。</p>
+<p>Route 能够嵌套使用。在我们自定义 Route 的例子中，Route 组件仅用于收集路由定义的信息，不渲染任何内容。<br>如果需要路由能嵌套使用，那就意味着需要在 Route 下还能嵌套使用 Route。而这在 React Router 是提供支持的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">import &#123; BrowserRouter, Route, Link &#125; from &quot;react-router-dom&quot;;</div><div class="line"></div><div class="line"></div><div class="line">const Page1 = () =&gt; &#123;</div><div class="line">  return (</div><div class="line">    &lt;div className=&quot;exp-15-page1&quot;&gt;</div><div class="line">      &lt;div className=&quot;exp-15-page1-header&quot;&gt;</div><div class="line">        &lt;Link to=&quot;/page1/general&quot;&gt;General&lt;/Link&gt;</div><div class="line">        &lt;Link to=&quot;/page1/profile&quot;&gt;Profile&lt;/Link&gt;</div><div class="line">        &lt;Link to=&quot;/page1/settings&quot;&gt;Settings&lt;/Link&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">      &lt;div className=&quot;exp-15-page1-content&quot;&gt;</div><div class="line">        &lt;Route path=&quot;/page1/general&quot;&gt;General Page&lt;/Route&gt;</div><div class="line">        &lt;Route path=&quot;/page1/profile&quot;&gt;Profile Page&lt;/Route&gt;</div><div class="line">        &lt;Route path=&quot;/page1/settings&quot;&gt;Settings Page&lt;/Route&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  );</div><div class="line">&#125;;</div><div class="line">const Page2 = () =&gt; &quot;Page 2&quot;;</div><div class="line">const Page3 = () =&gt; &quot;Page 3&quot;;</div><div class="line"></div><div class="line"></div><div class="line">function NestedRouting() &#123;</div><div class="line">  return (</div><div class="line">    &lt;BrowserRouter&gt;</div><div class="line">      &lt;h1&gt;Nested Routing&lt;/h1&gt;</div><div class="line">      &lt;div className=&quot;exp-15-nested-routing&quot;&gt;</div><div class="line">        &lt;div className=&quot;exp-15-sider&quot;&gt;</div><div class="line">          &lt;Link to=&quot;/page1&quot;&gt;Page 1&lt;/Link&gt;</div><div class="line">          &lt;Link to=&quot;/page2&quot;&gt;Page 2&lt;/Link&gt;</div><div class="line">          &lt;Link to=&quot;/page3&quot;&gt;Page 3&lt;/Link&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">        &lt;div className=&quot;exp-15-page-container&quot;&gt;</div><div class="line">          &lt;Route path=&quot;/page1&quot;&gt;&lt;Page1 /&gt;&lt;/Route&gt;</div><div class="line">          &lt;Route path=&quot;/page2&quot;&gt;&lt;Page2 /&gt;&lt;/Route&gt;</div><div class="line">          &lt;Route path=&quot;/page3&quot;&gt;&lt;Page3 /&gt;&lt;/Route&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    &lt;/BrowserRouter&gt;</div><div class="line">  );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="在-URL-中保存页面状态（页面参数）"><a href="#在-URL-中保存页面状态（页面参数）" class="headerlink" title="在 URL 中保存页面状态（页面参数）"></a>在 URL 中保存页面状态（页面参数）</h2><p>在url携带页面相关信息，将页面的一些状态存放到 URL 中，<br>一方面可以提升用户体验，另一方面也可以简化页面之间的交互。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;Route path=&quot;/tabs-page/:activeTab&quot; component=&#123;TabsPage&#125; /&gt;</div><div class="line"></div><div class="line">import &#123; useCallback &#125; from &quot;react&quot;;</div><div class="line">import &#123; Tabs, Table &#125; from &quot;antd&quot;;</div><div class="line">import &#123; useHistory, useParams &#125; from &quot;react-router-dom&quot;;</div><div class="line">import data from &quot;../10/data&quot;;</div><div class="line">import &#123; useSearchParam &#125; from &quot;react-use&quot;;</div><div class="line"></div><div class="line"></div><div class="line">const &#123; TabPane &#125; = Tabs;</div><div class="line"></div><div class="line"></div><div class="line">export default () =&gt; &#123;</div><div class="line">  // 通过 React Router 的 API 获取 activeTab 这个参数信息</div><div class="line">  const &#123; activeTab = &quot;users&quot; &#125; = useParams();</div><div class="line">  // 通过查询字符串获取当前的页码信息</div><div class="line">  const page = parseInt(useSearchParam(&quot;page&quot;), 10) || 1;</div><div class="line">  </div><div class="line">  // 通过 React Router 提供的 history 对象来操作 URL</div><div class="line">  const history = useHistory();</div><div class="line">  const handleTabChange = useCallback(</div><div class="line">    (tab) =&gt; history.push(`/15/TabsPage/$&#123;tab&#125;`),</div><div class="line">    [history],</div><div class="line">  );</div><div class="line">  // 定义表格的翻页功能</div><div class="line">  const pagination = &#123;</div><div class="line">    pageSize: 3,</div><div class="line">    current: page,</div><div class="line">    onChange: (p) =&gt; &#123;</div><div class="line">      history.push(`/15/TabsPage/$&#123;activeTab&#125;?page=$&#123;p&#125;`);</div><div class="line">    &#125;,</div><div class="line">  &#125;;</div><div class="line">  return (</div><div class="line">    &lt;div&gt;</div><div class="line">      &lt;h1&gt;Tabs Page&lt;/h1&gt;</div><div class="line">      &lt;Tabs activeKey=&#123;activeTab&#125; onChange=&#123;handleTabChange&#125;&gt;</div><div class="line">        &lt;TabPane tab=&quot;Users&quot; key=&quot;users&quot;&gt;</div><div class="line">          &lt;Table</div><div class="line">            dataSource=&#123;data&#125;</div><div class="line">            columns=&#123;[</div><div class="line">              &#123; dataIndex: &quot;name&quot;, title: &quot;User Name&quot; &#125;,</div><div class="line">              &#123; dataIndex: &quot;city&quot;, title: &quot;City&quot; &#125;,</div><div class="line">            ]&#125;</div><div class="line">            pagination=&#123;pagination&#125;</div><div class="line">          /&gt;</div><div class="line">        &lt;/TabPane&gt;</div><div class="line">        &lt;TabPane tab=&quot;Jobs&quot; key=&quot;jobs&quot;&gt;</div><div class="line">          &lt;Table</div><div class="line">            dataSource=&#123;data&#125;</div><div class="line">            columns=&#123;[&#123; dataIndex: &quot;job&quot;, title: &quot;Job Title&quot; &#125;]&#125;</div><div class="line">            pagination=&#123;pagination&#125;</div><div class="line">          /&gt;</div><div class="line">        &lt;/TabPane&gt;</div><div class="line">      &lt;/Tabs&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注意</p>
+<p>这里遵循了唯一数据源的原则，避免定义中间状态去存储 tab 和页码的信息，而是直接去操作 URL，这样可以让代码逻辑更加清晰和直观。</p>
+<h2 id="路由层面实现权限控制"><a href="#路由层面实现权限控制" class="headerlink" title="路由层面实现权限控制"></a>路由层面实现权限控制</h2><p>利用前端路由的动态特性。路由是通过 JSX 以声明式的方式去定义的，这就意味着路由的定义规则是可以根据条件进行变化的，也就是所谓的动态路由。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">import &#123; useState &#125; from &quot;react&quot;;</div><div class="line">import &#123; Button &#125; from &quot;antd&quot;;</div><div class="line">import &#123; Route, Link &#125; from &quot;react-router-dom&quot;;</div><div class="line"></div><div class="line"></div><div class="line">// 定义了两个示例页面组件</div><div class="line">const Page1 = () =&gt; &quot;Page 1&quot;;</div><div class="line">const Page2 = () =&gt; &quot;Page 2&quot;;</div><div class="line"></div><div class="line"></div><div class="line">// 定义了一个组件用户展示未登录状态</div><div class="line">const UnauthedPage = () =&gt; (</div><div class="line">  &lt;span style=&#123;&#123; color: &quot;red&quot; &#125;&#125;&gt;Unauthorized, please log in first.&lt;/span&gt;</div><div class="line">);</div><div class="line">export default () =&gt; &#123;</div><div class="line">  // 模拟用户是否登录的状态，通过一个按钮进行切换</div><div class="line">  const [loggedIn, setLoggedIn] = useState(false);</div><div class="line">  </div><div class="line">  // 定义了两套路由，一套用于登录后，一套用于未登录状态</div><div class="line">  const routes = loggedIn</div><div class="line">    ? [</div><div class="line">        &#123;</div><div class="line">          path: &quot;/15/RouterAuth&quot;,</div><div class="line">          component: Page1,</div><div class="line">        &#125;,</div><div class="line">        &#123;</div><div class="line">          path: &quot;/15/RouterAuth/page1&quot;,</div><div class="line">          component: Page1,</div><div class="line">        &#125;,</div><div class="line">        &#123;</div><div class="line">          path: &quot;/15/RouterAuth/page2&quot;,</div><div class="line">          component: Page2,</div><div class="line">        &#125;,</div><div class="line">      ]</div><div class="line">      // 如果未登录，那么对于所有 /15/RouterAuth 开头的路径，显示未授权页面</div><div class="line">    : [&#123; path: &quot;/15/RouterAuth&quot;, component: UnauthedPage &#125;];</div><div class="line"></div><div class="line"></div><div class="line">  return (</div><div class="line">    &lt;div&gt;</div><div class="line">      &lt;h1&gt;Router Auth&lt;/h1&gt;</div><div class="line">      &lt;Button</div><div class="line">        type=&#123;loggedIn ? &quot;primary&quot; : &quot;&quot;&#125;</div><div class="line">        onClick=&#123;() =&gt; setLoggedIn((v) =&gt; !v)&#125;</div><div class="line">      &gt;</div><div class="line">        &#123;loggedIn ? &quot;Log Out&quot; : &quot;Log In&quot;&#125;</div><div class="line">      &lt;/Button&gt;</div><div class="line"></div><div class="line"></div><div class="line">      &lt;div className=&quot;exp-15-router-auth&quot;&gt;</div><div class="line">        &lt;div className=&quot;exp-15-sider&quot;&gt;</div><div class="line">          &lt;Link to=&quot;/15/RouterAuth/page1&quot;&gt;Page 1&lt;/Link&gt;</div><div class="line">          &lt;Link to=&quot;/15/RouterAuth/page2&quot;&gt;Page 2&lt;/Link&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">        &lt;div className=&quot;exp-15-page-container&quot;&gt;</div><div class="line">          &#123;/* */&#125;</div><div class="line">          &#123;routes.map((r) =&gt; (</div><div class="line">            &lt;Route path=&#123;r.path&#125; component=&#123;r.component&#125; /&gt;</div><div class="line">          ))&#125;</div><div class="line">        &lt;/div&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  );</div></pre></td></tr></table></figure>
+<p>代码中核心的机制就在于我们根据登录状态，创建了不同的路由规则，这样就能在源头上对权限进行集中控制，避免用户未经授权就访问某些受保护的页面。</p>
+<p>同时呢，因为在相同的 URL 下进行了信息提示，那么也就更容易实现用户登录后还能返回原页面的功能。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1127.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/react/hooks/1127.html" itemprop="url">
+                  Hooks 在forms上的使用
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-27T16:20:02+08:00">
+                2021-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>应用思想就是在这个 Hook 去维护整个表单的状态，并提供根据名字去取值和设值的方法，从而方便表单在组件中的使用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div></pre></td><td class="code"><pre><div class="line">// 包含验证功能validators 的hooks, 处理表单状态管理</div><div class="line">const useForm = (initialValues = &#123;&#125;, validators) =&gt; &#123;</div><div class="line">  const [values, setValues] = useState(initialValues);</div><div class="line">  // 定义了 errors 状态</div><div class="line">  const [errors, setErrors] = useState(&#123;&#125;);</div><div class="line"></div><div class="line">  const setFieldValue = useCallback(</div><div class="line">    (name, value) =&gt; &#123;</div><div class="line">      setValues((values) =&gt; (&#123;</div><div class="line">        ...values,</div><div class="line">        [name]: value,</div><div class="line">      &#125;));</div><div class="line"></div><div class="line">      // 如果存在验证函数，则调用验证用户输入</div><div class="line">      if (validators[name]) &#123;</div><div class="line">        const errMsg = validators[name](value);</div><div class="line">        setErrors((errors) =&gt; (&#123;</div><div class="line">          ...errors,</div><div class="line">          // 如果返回错误信息，则将其设置到 errors 状态，否则清空错误状态</div><div class="line">          [name]: errMsg || null,</div><div class="line">        &#125;));</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    [validators],</div><div class="line">  );</div><div class="line">  // 将 errors 状态也返回给调用者</div><div class="line">  return &#123; values, errors, setFieldValue &#125;;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">// 应用</div><div class="line"></div><div class="line">import &#123; useCallback &#125; from &quot;react&quot;;</div><div class="line">import useForm from &apos;./useForm&apos;;</div><div class="line"></div><div class="line">export default () =&gt; &#123;</div><div class="line">  const validators = useMemo(() =&gt; &#123;</div><div class="line">    return &#123;</div><div class="line">      name: (value) =&gt; &#123;</div><div class="line">        // 要求 name 的长度不得小于 2</div><div class="line">        if (value.length &lt; 2) return &quot;Name length should be no less than 2.&quot;;</div><div class="line">        return null;</div><div class="line">      &#125;,</div><div class="line">      email: (value) =&gt; &#123;</div><div class="line">        // 简单的实现一个 email 验证逻辑：必须包含 @ 符号。</div><div class="line">        if (!value.includes(&quot;@&quot;)) return &quot;Invalid email address&quot;;</div><div class="line">        return null;</div><div class="line">      &#125;,</div><div class="line">    &#125;;</div><div class="line">  &#125;, []);</div><div class="line">  // 使用 useForm 得到表单的状态管理逻辑</div><div class="line">  const &#123; values, errors, setFieldValue &#125; = useForm(&#123;&#125;, validators);</div><div class="line">  // 处理表单的提交事件</div><div class="line">  const handleSubmit = useCallback(</div><div class="line">    (evt) =&gt; &#123;</div><div class="line">      // 使用 preventDefault() 防止页面被刷新</div><div class="line">      evt.preventDefault();</div><div class="line">      console.log(values);</div><div class="line">    &#125;,</div><div class="line">    [values],</div><div class="line">  );</div><div class="line">  return (</div><div class="line">    &lt;form onSubmit=&#123;handleSubmit&#125;&gt;</div><div class="line">      &lt;div&gt;</div><div class="line">        &lt;label&gt;Name: &lt;/label&gt;</div><div class="line">        &lt;input</div><div class="line">          value=&#123;values.name || null&#125;</div><div class="line">          onChange=&#123;(evt) =&gt; setFieldValue(&quot;name&quot;, evt.target.value)&#125;</div><div class="line">        /&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line"></div><div class="line">      &lt;div&gt;</div><div class="line">        &lt;label&gt;Email:&lt;/label&gt;</div><div class="line">        &lt;input</div><div class="line">          value=&#123;values.email || null&#125;</div><div class="line">          onChange=&#123;(evt) =&gt; setFieldValue(&quot;email&quot;, evt.target.value)&#125;</div><div class="line">        /&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">      &lt;button type=&quot;submit&quot;&gt;Submit&lt;/button&gt;</div><div class="line">    &lt;/form&gt;</div><div class="line">  );</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>把表单的状态管理单独提取出来，成为一个可重用的 Hook。<br>这样在表单的实现组件中，就只需要更多地去关心 UI 的渲染，而无需关心状态是如何存储和管理的，从而方便表单组件的开发。</p>
+<p>Form 最为核心的机制就是我们将表单元素的所有状态提取出来，<br>这样表单就可以分为状态逻辑和 UI 展现逻辑，从而实现数据层和表现层的分离。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1126.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/react/hooks/1126.html" itemprop="url">
+                  合理组织项目文件结构
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-26T16:20:02+08:00">
+                2021-11-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>按领域组织文件夹结构</p>
+<p>每增加一个新的功能，整个应用程序的复杂度不应该明显上升。这样才能保证我们的应用程序始终可扩展，可维护。</p>
+<p>软件复杂度的根源完全来自复杂的依赖关系</p>
+<p>从业务功能去理解，依赖可以分为两种。<br>第一种是硬依赖。如果功能 A 的实现必须基于功能 B，也就是说没有功能 B，功能 A 就是不可运行的，那么我们可以说 A 硬依赖于 B。<br>比如对于博客系统，评论功能肯定是基于文章功能的，因为评论的对象就是文章，脱离了文章，评论功能就没有意义。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">import CommentList from &apos;./CommentList&apos;;</div><div class="line">function ArticleView() &#123;</div><div class="line">  return (</div><div class="line">    &lt;div className=&quot;article-view&quot;&gt;</div><div class="line">      &lt;MainContent /&gt;</div><div class="line">      &lt;CommentList /&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>第二种是软依赖。如果功能 B 扩展了功能 A，也就是说，没有功能 B，功能 A 自身也是可以独立工作的，只是缺少了某些能力。<br>同样对于博客应用，文章管理是主要的功能，而评论功能则可以认为是增强了文章的功能。<br>照此来看，即使没有评论功能，文章功能也是可以独立运行的。这样就可以认为文章功能软依赖于评论功能。<br>我们应该让文章功能相关的代码，不要硬依赖于评论功能的代码。</p>
+<p>在业务功能上是一个软依赖，但是在代码实现层面，却往往做成了硬依赖。<br>这就导致随着功能的不断增加，整个应用变得越来越复杂，最终降低了整体的开发效率</p>
+<p>让模块之间的交互不再通过硬依赖。<br>解决办法就是<br><b>扩展点机制</b>：在任何可能产生单点复杂度的模块中，通过扩展点的方式，允许其它模块为其增加功能。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">// 在需要扩展的地方定义扩展点</div><div class="line">function ArticleView(&#123; id &#125;) &#123;</div><div class="line">  const &#123; article &#125; = useArticle(id);</div><div class="line">  return (</div><div class="line">    &lt;div className=&quot;article-view&quot;&gt;</div><div class="line">      &lt;MainContent article=&#123;article&#125; /&gt;</div><div class="line">      &#123;/* 定义了一个名为 article.footer 的扩展点 */&#125;</div><div class="line">      &lt;Extension name=&quot;article.footer&quot; args=&#123;article&#125; /&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  );</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 在被扩展的组件里，将自己挂到扩展点上，这样就算被扩展组件直接删除，对需要扩展的功能组件来说也毫无影响</div><div class="line">extensionEngine.register(&apos;article.footer&apos;, article =&gt; &#123;</div><div class="line">  return &lt;CommentList article=&#123;article&#125; /&gt;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>软件复杂度产生的根源，来自复杂的依赖关系。<br>随着功能的增加，系统复杂度也在不断增加，那么整个项目就会到达一个不可维护的状态。<br>所以我们首先需要从项目结构层面，去对复杂度做物理上的隔离，确保业务模块相关的代码都能在独立的文件夹中。<br>其次，我们要妥善地处理业务模块之间的依赖关系。<br>不仅需要在业务上区分硬依赖和软依赖。<br>同时呢，在技术的实现层面也要能做到模块的松耦合。<br>当然，上面的所有介绍要落实到实际的项目，还有很多细节问题需要考虑，<br>比如如何避免在单点模块定义所有的路由，如何避免一个导航菜单组件包含了所有业务功能的导航逻辑，等等。<br>总结来说，这里是整个隔离复杂度的思路，可以根据实际场景进行有针对性的思考，进而解决复杂度的问题。<br>同时更为重要的是，在进行实际项目开发，尤其是大型项目的架构设计时，一定要时刻有管理系统复杂度的意识，<br>不能只考虑功能是否实现，而不管复杂度，那样终究会导致系统越来越复杂，不断降低开发和维护的效率，甚至导致项目失败。</p>
+<p><a href="https://github.com/rekit/js-plugin" target="_blank" rel="external">一个扩展点引擎</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1125.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/react/hooks/1125.html" itemprop="url">
+                  使用hooks封装自定义事件
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-25T16:20:02+08:00">
+                2021-11-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>事件处理</p>
+<p>1.原生事件</p>
+<p>只要原生 DOM 有的事件，在 React 中基本都可以使用，只是写法上采用骆驼体就可以了</p>
+<p>2.是不是所有的回调函数都需要用 useCallback 进行封装呢？是不是简单的回调函数就可以不用封装了呢？</p>
+<p>其实是否需要 useCallback ，和函数的复杂度没有必然关系，而是和回调函数绑定到哪个组件有关。<br>这是为了避免因组件属性变化而导致不必要的重新渲染。<br>如果你的事件处理函数是传递给原生节点，那么不写 callback，也几乎不会有任何性能的影响。<br>但是如果你使用的是自定义组件，或者一些 UI 框架的组件，那么回调函数还都应该用 useCallback 进行封装。</p>
+<h1 id="React-原生事件的原理：合成事件（Synthetic-Events）"><a href="#React-原生事件的原理：合成事件（Synthetic-Events）" class="headerlink" title="React 原生事件的原理：合成事件（Synthetic Events）"></a>React 原生事件的原理：合成事件（Synthetic Events）</h1><p>由于虚拟 DOM 的存在，在 React 中即使绑定一个事件到原生的 DOM 节点，事件也并不是绑定在对应的节点上，而是所有的事件都是绑定在根节点上。<br>然后由 React 统一监听和管理，获取事件后再分发到具体的虚拟 DOM 节点上。</p>
+<p>在 React 17 之前，所有的事件都是绑定在 document 上的，<br>而从 React 17 开始，所有的事件都绑定在整个 App 上的根节点上，这主要是为了以后页面上可能存在多版本 React 的考虑。</p>
+<p>具体来说，React 这么做的原因主要有两个。</p>
+<p>第一，虚拟 DOM render 的时候， DOM 很可能还没有真实地 render 到页面上，所以无法绑定事件。<br>第二，React 可以屏蔽底层事件的细节，避免浏览器的兼容性问题。<br>同时呢，对于 React Native 这种不是通过浏览器 render 的运行时，也能提供一致的 API。</p>
+<p>浏览器原生事件机制是冒泡模型。<br>无论事件在哪个节点被触发， React 都可以通过事件的 srcElement 这个属性，知道它是从哪个节点开始发出的，<br>这样 React 就可以收集管理所有的事件，然后再以一致的 API 暴露出来。</p>
+<h1 id="自定义事件"><a href="#自定义事件" class="headerlink" title="自定义事件"></a>自定义事件</h1><p>虽然自定义事件和原生事件看上去类似，但是两者的机制是完全不一样的：</p>
+<p>原生事件是浏览器的机制；</p>
+<p>而自定义事件则是纯粹的组件自己的行为，本质是一种回调函数机制。</p>
+<p>Hooks 具备绑定任何数据源的能力, 通过分析事件中用到的数据，将数据进行抽离，从hooks角度去处理事件<br>可以实现定义一次，然后在任何组件中重复使用的效果<br>用hooks的思维去简化事件处理逻辑。</p>
+<p>比如封装键盘输入事件<br>只要把键盘按键看做是一个不断变化的数据源，这样，就可以去实时监听某个 DOM 节点上触发的键盘事件了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">import &#123; useEffect, useState &#125; from &quot;react&quot;;</div><div class="line"></div><div class="line">// 使用 document.body 作为默认的监听节点</div><div class="line">const useKeyPress = (domNode = document.body) =&gt; &#123;</div><div class="line">  const [key, setKey] = useState(null);</div><div class="line">  useEffect(() =&gt; &#123;</div><div class="line">    const handleKeyPress = (evt) =&gt; &#123;</div><div class="line">      setKey(evt.keyCode);</div><div class="line">    &#125;;</div><div class="line">    // 监听按键事件</div><div class="line">    domNode.addEventListener(&quot;keypress&quot;, handleKeyPress);</div><div class="line">    return () =&gt; &#123;</div><div class="line">      // 接触监听按键事件</div><div class="line">      domNode.removeEventListener(&quot;keypress&quot;, handleKeyPress);</div><div class="line">    &#125;;</div><div class="line">  &#125;, [domNode]);</div><div class="line">  return key;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">// 使用</div><div class="line"></div><div class="line"></div><div class="line">import useKeyPress from &apos;./useKeyPress&apos;;</div><div class="line"></div><div class="line">function UseKeyPressExample() =&gt; &#123;</div><div class="line">  const key = useKeyPress();</div><div class="line">  return (</div><div class="line">    &lt;div&gt;</div><div class="line">      &lt;h1&gt;UseKeyPress&lt;/h1&gt;</div><div class="line">      &lt;label&gt;Key pressed: &#123;key || &quot;N/A&quot;&#125;&lt;/label&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  );</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1124.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/react/hooks/1124.html" itemprop="url">
+                  应对复杂条件渲染场景
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-24T16:20:02+08:00">
+                2021-11-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="容器模式：实现按条件执行-Hooks"><a href="#容器模式：实现按条件执行-Hooks" class="headerlink" title="容器模式：实现按条件执行 Hooks"></a>容器模式：实现按条件执行 Hooks</h1><p>把条件判断的结果放到两个组件之中，确保真正 render UI 的组件收到的所有属性都是有值的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">// 定义一个容器组件用于封装真正的 UserInfoModal</div><div class="line">export default function UserInfoModalWrapper(&#123;</div><div class="line">  visible,</div><div class="line">  ...rest, // 使用 rest 获取除了 visible 之外的属性</div><div class="line">&#125;) &#123;</div><div class="line">  // 如果对话框不显示，则不 render 任何内容</div><div class="line">  if (!visible) return null; </div><div class="line">  // 否则真正执行对话框的组件逻辑</div><div class="line">  return &lt;UserInfoModal visible &#123;...rest&#125; /&gt;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在容器模式中可以看到，条件的隔离对象是多个子组件，这就意味着它通常用于一些比较大块逻辑的隔离。<br>所以对于一些比较细节的控制，其实还有一种做法，就是把判断条件放到 Hooks 中去。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">function useUser(id) &#123;</div><div class="line">  const [data, setData] = useState(null);</div><div class="line">  const [loading, setLoading] = useState(false);</div><div class="line">  const [error, setError] = useState(null);</div><div class="line">  useEffect(() =&gt; &#123;</div><div class="line">    // 当 id 不存在，直接返回，不发送请求</div><div class="line">    if (!id) return</div><div class="line">    // 获取用户信息的逻辑</div><div class="line">  &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>通过这样一个容器模式，我们把原来需要条件运行的 Hooks 拆分成子组件，<br>然后通过一个容器组件来进行实际的条件判断，从而渲染不同的组件，实现按条件渲染的目的。<br>这在一些复杂的场景之下，也能达到拆分复杂度，让每个组件更加精简的目的.</p>
+<h1 id="使用-render-props-模式重用-UI-逻辑"><a href="#使用-render-props-模式重用-UI-逻辑" class="headerlink" title="使用 render props 模式重用 UI 逻辑"></a>使用 render props 模式重用 UI 逻辑</h1><p>render props 就是把一个 render 函数作为属性传递给某个组件，<br>由这个组件去执行这个函数从而 render 实际的内容</p>
+<p>Hooks 是逻辑重用的第一选择。<br>不过在如今的函数组件情况下，Hooks 有一个局限，那就是只能用作数据逻辑的重用，<br>而一旦涉及 UI 表现逻辑的重用，就有些力不从心了，<br>而这正是 render props 擅长的地方。<br>所以，即使有了 Hooks，我们也要掌握 render props 这个设计模式的用法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">import &#123; Popover &#125; from &quot;antd&quot;;</div><div class="line"></div><div class="line">function ListWithMore(&#123; renderItem, data = [], max &#125;) &#123;</div><div class="line">  const elements = data.map((item, index) =&gt; renderItem(item, index, data));</div><div class="line">  const show = elements.slice(0, max);</div><div class="line">  const hide = elements.slice(max);</div><div class="line">  return (</div><div class="line">    &lt;span className=&quot;exp-10-list-with-more&quot;&gt;</div><div class="line">      &#123;show&#125;</div><div class="line">      &#123;hide.length &gt; 0 &amp;&amp; (</div><div class="line">        &lt;Popover content=&#123;&lt;div style=&#123;&#123; maxWidth: 500 &#125;&#125;&gt;&#123;hide&#125;&lt;/div&gt;&#125;&gt;</div><div class="line">          &lt;span className=&quot;more-items-wrapper&quot;&gt;</div><div class="line">            and&#123;&quot; &quot;&#125;</div><div class="line">            &lt;span className=&quot;more-items-trigger&quot;&gt; &#123;hide.length&#125; more...&lt;/span&gt;</div><div class="line">          &lt;/span&gt;</div><div class="line">        &lt;/Popover&gt;</div><div class="line">      )&#125;</div><div class="line">    &lt;/span&gt;</div><div class="line">  );</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 这里用一个示例数据</div><div class="line">import data from &apos;./data&apos;;</div><div class="line"></div><div class="line">function ListWithMoreExample () =&gt; &#123;</div><div class="line">  return (</div><div class="line">    &lt;div className=&quot;exp-10-list-with-more&quot;&gt;</div><div class="line">      &lt;h1&gt;User Names&lt;/h1&gt;</div><div class="line">      &lt;div className=&quot;user-names&quot;&gt;</div><div class="line">        Liked by:&#123;&quot; &quot;&#125;</div><div class="line">        &lt;ListWithMore</div><div class="line">          renderItem=&#123;(user) =&gt; &#123;</div><div class="line">            return &lt;span className=&quot;user-name&quot;&gt;&#123;user.name&#125;&lt;/span&gt;;</div><div class="line">          &#125;&#125;</div><div class="line">          data=&#123;data&#125;</div><div class="line">          max=&#123;3&#125;</div><div class="line">        /&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">      &lt;br /&gt;</div><div class="line">      &lt;br /&gt;</div><div class="line">      &lt;h1&gt;User List&lt;/h1&gt;</div><div class="line">      &lt;div className=&quot;user-list&quot;&gt;</div><div class="line">        &lt;div className=&quot;user-list-row user-list-row-head&quot;&gt;</div><div class="line">          &lt;span className=&quot;user-name-cell&quot;&gt;Name&lt;/span&gt;</div><div class="line">          &lt;span&gt;City&lt;/span&gt;</div><div class="line">          &lt;span&gt;Job Title&lt;/span&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">        &lt;ListWithMore</div><div class="line">          renderItem=&#123;(user) =&gt; &#123;</div><div class="line">            return (</div><div class="line">              &lt;div className=&quot;user-list-row&quot;&gt;</div><div class="line">                &lt;span className=&quot;user-name-cell&quot;&gt;&#123;user.name&#125;&lt;/span&gt;</div><div class="line">                &lt;span&gt;&#123;user.city&#125;&lt;/span&gt;</div><div class="line">                &lt;span&gt;&#123;user.job&#125;&lt;/span&gt;</div><div class="line">              &lt;/div&gt;</div><div class="line">            );</div><div class="line">          &#125;&#125;</div><div class="line">          data=&#123;data&#125;</div><div class="line">          max=&#123;5&#125;</div><div class="line">        /&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  );</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1123.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/react/hooks/1123.html" itemprop="url">
+                  从 Hooks 的角度去组织异步请求
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-23T16:20:02+08:00">
+                2021-11-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="要定义一个自己的-API-Client"><a href="#要定义一个自己的-API-Client" class="headerlink" title="要定义一个自己的 API Client"></a>要定义一个自己的 API Client</h1><p>封装整个应用中异步请求的一些通过设置，以及统一处理，方便在 Hooks 中使用。</p>
+<p>通常来说，会包括以下几个方面：</p>
+<ol>
+<li>一些通用的 Header。比如 Authorization Token。</li>
+<li>服务器地址的配置。前端在开发和运行时可能会连接不同的服务器，比如本地服务器或者测试服务器，此时这个 API Client 内部可以根据当前环境判断该连接哪个 URL。</li>
+<li>请求未认证的处理。比如如果 Token 过期了，需要有一个统一的地方进行处理，这时就会弹出对话框提示用户重新登录。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">import axios from &quot;axios&quot;;</div><div class="line"></div><div class="line">// 定义相关的 endpoint</div><div class="line">const endPoints = &#123;</div><div class="line">  test: &quot;https://60b2643d62ab150017ae21de.mockapi.io/&quot;,</div><div class="line">  prod: &quot;https://prod.myapi.io/&quot;,</div><div class="line">  staging: &quot;https://staging.myapi.io/&quot;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">// 创建 axios 的实例</div><div class="line">const instance = axios.create(&#123;</div><div class="line">  // 实际项目中根据当前环境设置 baseURL</div><div class="line">  baseURL: endPoints.test,</div><div class="line">  timeout: 30000,</div><div class="line">  // 为所有请求设置通用的 header</div><div class="line">  headers: &#123; Authorization: &quot;Bear mytoken&quot; &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">// 听过 axios 定义拦截器预处理所有请求</div><div class="line">instance.interceptors.response.use(</div><div class="line">  (res) =&gt; &#123;</div><div class="line">    // 可以假如请求成功的逻辑，比如 log</div><div class="line">    return res;</div><div class="line">  &#125;,</div><div class="line">  (err) =&gt; &#123;</div><div class="line">    if (err.response.status === 403) &#123;</div><div class="line">      // 统一处理未授权请求，跳转到登录界面</div><div class="line">      document.location = &apos;/login&apos;;</div><div class="line">    &#125;</div><div class="line">    return Promise.reject(err);</div><div class="line">  &#125;</div><div class="line">);</div><div class="line"></div><div class="line">export default instance;</div></pre></td></tr></table></figure>
+<h1 id="封装远程资源"><a href="#封装远程资源" class="headerlink" title="封装远程资源"></a>封装远程资源</h1><p>将通过get方法获取的数据其实就是远程数据源，UI依赖远程数据源渲染</p>
+<p>比起在组件内部直接发请求，只是把代码换了个地方，也就是写到了 Hook 里面</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">// useArticle</div><div class="line">import &#123; useState, useEffect &#125; from &quot;react&quot;;</div><div class="line">import apiClient from &quot;./apiClient&quot;;</div><div class="line"></div><div class="line">// 将获取文章的 API 封装成一个远程资源 Hook</div><div class="line">const useArticle = (id) =&gt; &#123;</div><div class="line">  // 设置三个状态分别存储 data, error, loading</div><div class="line">  const [data, setData] = useState(null);</div><div class="line">  const [loading, setLoading] = useState(false);</div><div class="line">  const [error, setError] = useState(null);</div><div class="line">  useEffect(() =&gt; &#123;</div><div class="line">    // 重新获取数据时重置三个状态</div><div class="line">    setLoading(true);</div><div class="line">    setData(null);</div><div class="line">    setError(null);</div><div class="line">    apiClient</div><div class="line">      .get(`/posts/$&#123;id&#125;`)</div><div class="line">      .then((res) =&gt; &#123;</div><div class="line">        // 请求成功时设置返回数据到状态</div><div class="line">        setLoading(false);</div><div class="line">        setData(res.data);</div><div class="line">      &#125;)</div><div class="line">      .catch((err) =&gt; &#123;</div><div class="line">        // 请求失败时设置错误状态</div><div class="line">        setLoading(false);</div><div class="line">        setError(err);</div><div class="line">      &#125;);</div><div class="line">  &#125;, [id]); // 当 id 变化时重新获取数据</div><div class="line"></div><div class="line">  // 将三个状态作为 Hook 的返回值</div><div class="line">  return &#123;</div><div class="line">    loading,</div><div class="line">    error,</div><div class="line">    data</div><div class="line">  &#125;;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">// 使用</div><div class="line"></div><div class="line"></div><div class="line">import useArticle from &quot;./useArticle&quot;;</div><div class="line"></div><div class="line">const ArticleView = (&#123; id &#125;) =&gt; &#123;</div><div class="line">  // 将 article 看成一个远程资源，有 data, loading, error 三个状态</div><div class="line">  const &#123; data, loading, error &#125; = useArticle(id);</div><div class="line">  if (error) return &quot;Failed.&quot;;</div><div class="line">  if (!data || loading) return &quot;Loading...&quot;;</div><div class="line">  return (</div><div class="line">    &lt;div className=&quot;exp-09-article-view&quot;&gt;</div><div class="line">      &lt;h1&gt;</div><div class="line">        &#123;id&#125;. &#123;data.title&#125;</div><div class="line">      &lt;/h1&gt;</div><div class="line">      &lt;p&gt;&#123;data.content&#125;&lt;/p&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  );</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>有了这样一个 Hook，React 的函数组件几乎不需要有任何业务的逻辑，而只是把数据映射到 JSX 并显示出来就可以了，在使用的时候非常方便。</p>
+<p>在项目中，可以把每一个 Get 请求都做成这样一个 Hook。<br>数据请求和处理逻辑都放到 Hooks 中，从而实现 Model 和 View 的隔离，<br>不仅代码更加模块化，而且更易于测试和维护。</p>
+<p>这样做是为了保证每个 Hook 自身足够简单。</p>
+<p>一般来说，为了让服务器的返回数据满足 UI 上的展现要求，通常需要进一步处理。<br>而这个对于每个请求的处理逻辑可能都不一样，通过一定的代码重复，能够避免产生太复杂的逻辑。</p>
+<p>同时呢，某个远程资源有可能是由多个请求组成的，那么 Hooks 中的逻辑就会不一样，因为要同时发出去多个请求，组成 UI 展现所需要的数据。<br>所以，将每个 Get 请求都封装成一个 Hook ，也是为了让逻辑更清楚。</p>
+<p>这个模式仅适用于 Get 请求的逻辑，对于其它类型，可以使用 useAsync 这样一个自定义的 Hook，<br>同样也是用 Hook 的思想，把请求的不同状态封装成了一个数据源供组件使用。</p>
+<h1 id="处理并发或串行请求"><a href="#处理并发或串行请求" class="headerlink" title="处理并发或串行请求"></a>处理并发或串行请求</h1><p>从状态变化的角度去组织异步调用。</p>
+<p>函数组件的每一次 render，其实都提供了我们根据状态变化执行不同操作的机会，<br>就是利用这个机制，通过不同的状态组合，来实现异步请求的逻辑</p>
+<p>利用状态的组合变化来实现并发和串行请求</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div></pre></td><td class="code"><pre><div class="line">// useArticle 同上</div><div class="line">// useUser </div><div class="line">import &#123; useState, useEffect &#125; from &quot;react&quot;;</div><div class="line">import apiClient from &quot;./apiClient&quot;;</div><div class="line"></div><div class="line">export default (id) =&gt; &#123;</div><div class="line">  const [data, setData] = useState(null);</div><div class="line">  const [loading, setLoading] = useState(false);</div><div class="line">  const [error, setError] = useState(null);</div><div class="line">  useEffect(() =&gt; &#123;</div><div class="line">    // 当 id 不存在，直接返回，不发送请求</div><div class="line">    if (!id) return;</div><div class="line">    setLoading(true);</div><div class="line">    setData(null);</div><div class="line">    setError(null);</div><div class="line">    apiClient</div><div class="line">      .get(`/users/$&#123;id&#125;`)</div><div class="line">      .then((res) =&gt; &#123;</div><div class="line">        setLoading(false);</div><div class="line">        setData(res.data);</div><div class="line">      &#125;)</div><div class="line">      .catch((err) =&gt; &#123;</div><div class="line">        setLoading(false);</div><div class="line">        setError(err);</div><div class="line">      &#125;);</div><div class="line">  &#125;, [id]);</div><div class="line">  return &#123;</div><div class="line">    loading,</div><div class="line">    error,</div><div class="line">    data</div><div class="line">  &#125;;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">// 应用</div><div class="line"></div><div class="line">import &#123; useState &#125; from &quot;react&quot;;</div><div class="line">import CommentList from &quot;./CommentList&quot;;</div><div class="line">import useArticle from &quot;./useArticle&quot;;</div><div class="line">import useUser from &quot;./useUser&quot;;</div><div class="line">import useComments from &quot;./useComments&quot;;</div><div class="line"></div><div class="line">const ArticleView = (&#123; id &#125;) =&gt; &#123; </div><div class="line">  const &#123; data: article, loading, error &#125; = useArticle(id);</div><div class="line">  const &#123; data: comments &#125; = useComments(id);</div><div class="line">  const &#123; data: user &#125; = useUser(article?.userId);</div><div class="line">  if (error) return &quot;Failed.&quot;;</div><div class="line">  if (!article || loading) return &quot;Loading...&quot;;</div><div class="line">  return (</div><div class="line">    &lt;div className=&quot;exp-09-article-view&quot;&gt;</div><div class="line">      &lt;h1&gt;</div><div class="line">        &#123;id&#125;. &#123;article.title&#125;</div><div class="line">      &lt;/h1&gt;</div><div class="line">      &#123;user &amp;&amp; (</div><div class="line">        &lt;div className=&quot;user-info&quot;&gt;</div><div class="line">          &lt;img src=&#123;user.avatar&#125; height=&quot;40px&quot; alt=&quot;user&quot; /&gt;</div><div class="line">          &lt;div&gt;&#123;user.name&#125;&lt;/div&gt;</div><div class="line">          &lt;div&gt;&#123;article.createdAt&#125;&lt;/div&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">      )&#125;</div><div class="line">      &lt;p&gt;&#123;article.content&#125;&lt;/p&gt;</div><div class="line">      &lt;CommentList data=&#123;comments || []&#125; /&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  );</div><div class="line">&#125;;</div><div class="line"></div><div class="line">export default () =&gt; &#123;</div><div class="line">  const [id, setId] = useState(1);</div><div class="line">  return (</div><div class="line">    &lt;div className=&quot;exp-09-article-view-wrapper&quot;&gt;</div><div class="line">      &lt;ul&gt;</div><div class="line">        &lt;li onClick=&#123;() =&gt; setId(1)&#125;&gt;Article 1&lt;/li&gt;</div><div class="line">        &lt;li onClick=&#123;() =&gt; setId(2)&#125;&gt;Article 2&lt;/li&gt;</div><div class="line">        &lt;li onClick=&#123;() =&gt; setId(3)&#125;&gt;Article 3&lt;/li&gt;</div><div class="line">        &lt;li onClick=&#123;() =&gt; setId(4)&#125;&gt;Article 4&lt;/li&gt;</div><div class="line">        &lt;li onClick=&#123;() =&gt; setId(5)&#125;&gt;Article 5&lt;/li&gt;</div><div class="line">      &lt;/ul&gt;</div><div class="line">      &lt;ArticleView id=&#123;id&#125; /&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  );</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>useArticle 和 useComments属于并发请求；useArticle 和 useUser属于串行请求，</p>
+<p>之所以useUser能在article数据变化时重新执行，是因为在useUser的hook里面用useEffect做了依赖</p>
+<p>或者换个角度想，把三个钩子的逻辑全部都写在应用代码里，不再封装起来，明显可以看到，<br>因为useEffect的原因，可以使获取user信息的请求，在拿到article数据后再执行。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1122.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/react/hooks/1122.html" itemprop="url">
+                  复杂状态管理
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-22T16:20:02+08:00">
+                2021-11-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>React 的开发其实就是复杂应用程序状态的管理和开发</p>
+<h1 id="复杂状态管理的两个原则"><a href="#复杂状态管理的两个原则" class="headerlink" title="复杂状态管理的两个原则"></a>复杂状态管理的两个原则</h1><p>原则一：保证状态最小化</p>
+<p>在定义一个新的状态之前，都要再三拷问自己：<br>这个状态是必须的吗？是否能通过计算得到呢？<br>在得到肯定的回答后，再去定义新的状态，<br>就能避免大部分多余的状态定义问题，也就能在简化状态管理的同时，保证状态的一致性</p>
+<p>比如根据关键字搜索的场景，搜索结果可以根据关键和原始数据计算得到，可以使用useMemo保存过滤结果，<br>而不是再为过滤结果声明一个state</p>
+<p>原则二：避免中间状态，确保唯一数据源</p>
+<p>比如在需要根据URL查询数据的场景，查询条件在url,同时页面有配置条件的交互<br>那么直接将 URL 作为唯一的数据来源，状态的读取和修改都是对 URL 直接进行操作，<br>而不是通过一个中间的状态保存条件<br>(URL 变化时，同步查询关键字到 State;State 变化时，同步查询关键字到输入框; 用户在输入框输入的时候，同步关键字到 URL 和 State),<br>这样就简化了状态的管理，保证了状态的一致性</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1117.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -643,1068 +1545,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1112.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks/1112.html" itemprop="url">
-                  react 自带的hooks
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-12T16:20:02+08:00">
-                2021-11-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="useCallback：缓存回调函数"><a href="#useCallback：缓存回调函数" class="headerlink" title="useCallback：缓存回调函数"></a>useCallback：缓存回调函数</h1><p>在 React 函数组件中，每一次 UI 的变化，都是通过重新执行整个函数来完成的</p>
-<p>如果组件中依赖的处理函数没有被useCallback做缓存处理，那么每次重新执行时都会被重新创建<br>那么依赖处理函数的组件就会因为处理函数更新进行重现渲染</p>
-<p>为避免频繁的重新渲染组件，useCallback的作用就是将函数缓存起来，<br>只有当函数逻辑中依赖的状态发生变化才会去重新生成，然后引起组件更新，<br>避免了依赖没有变化时的无效更新</p>
-<p>useCallback 可以减少不必要的渲染，主要体现在将回调函数作为属性传给某个组件。<br>如果每次都不一样就会造成组件的重新渲染。<br>但是如果确定子组件多次渲染也没有太大问题，特别是原生的组件，比如 button，<br>那么不用 useCallback 也问题不大。所以这和子组件的实现相关，和函数是否轻量无关。</p>
-<h1 id="useMemo：缓存计算的结果"><a href="#useMemo：缓存计算的结果" class="headerlink" title="useMemo：缓存计算的结果"></a>useMemo：缓存计算的结果</h1><p>同处理函数类似，如果组件中用到的数据A通过其他状态值计算得到，<br>在依赖值没有发生变化情况下，其实就不用重新计算，<br>即<br>如果某个数据是通过其它数据计算得到的，那么只有当用到的数据，也就是依赖的数据发生变化的时候，才应该需要重新计算<br>因此当组件因为其他原因刷新，进而重新执行函数，引起的重新计算是没有必要的</p>
-<p>可以实现这个功能的hooks就是useMemo,useMemo就是只有在依赖的状态值发生变化时才会去重新执行计算的过程<br>避免不必要的重新计算过程<br>同时，对于依赖数据A的组件来说，没有重新计算产生的新值，可以在一定程度上<b>避免子组件重复渲染</b>。</p>
-<p>如果将函数也看做一个状态值/变量的话，其实，useMemo可以实现useCallback的功能</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">const myEventHandler = useMemo(() =&gt; &#123;</div><div class="line">  // 返回一个函数作为缓存结果</div><div class="line">  return () =&gt; &#123;</div><div class="line">    // 在这里进行事件处理</div><div class="line">  &#125;</div><div class="line">&#125;, [dep1, dep2]);</div></pre></td></tr></table></figure>
-<p>二者的本质就是<br><b>建立了一个绑定某个结果到依赖数据的关系。只有当依赖变了，这个结果才需要被重新得到。</b></p>
-<h1 id="useRef：在多次渲染之间共享数据"><a href="#useRef：在多次渲染之间共享数据" class="headerlink" title="useRef：在多次渲染之间共享数据"></a>useRef：在多次渲染之间共享数据</h1><p>可以把 useRef 看作是在函数组件之外创建的一个容器空间<br>在这个容器上，我们可以通过唯一的 current 属设置一个值，从而在函数组件的多次渲染之间共享这个值</p>
-<p><b>使用 useRef 保存的数据一般是和 UI 的渲染无关的，因此当 ref 的值发生变化时，是不会触发组件的重新渲染的，</b><br>这也是 useRef 区别于 useState 的地方。<br>比如保存定时器句柄，在回调函数中关掉定时器，然后将ref.current 设置为null, 这个句柄没有在组件中被用到，所以不会引起重新渲染。<br>但如果用useState去保存句柄，将定时器关掉时，同时将state设置为null，即使没有被组件用到，也会引起重新组件渲染。</p>
-<p>useRef 还有一个重要的功能，就是保存某个 DOM 节点的引用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">function TextInputWithFocusButton() &#123;</div><div class="line">  const inputEl = useRef(null);</div><div class="line">  const onButtonClick = () =&gt; &#123;</div><div class="line">    // current 属性指向了真实的 input 这个 DOM 节点，从而可以调用 focus 方法</div><div class="line">    inputEl.current.focus();</div><div class="line">  &#125;;</div><div class="line">  return (</div><div class="line">    &lt;&gt;</div><div class="line">      &lt;input ref=&#123;inputEl&#125; type=&quot;text&quot; /&gt;</div><div class="line">      &lt;button onClick=&#123;onButtonClick&#125;&gt;Focus the input&lt;/button&gt;</div><div class="line">    &lt;/&gt;</div><div class="line">  );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>可以看到 ref 这个属性提供了获得 DOM 节点的能力，并利用 useRef 保存了这个节点的应用</p>
-<h1 id="useContext：定义全局状态"><a href="#useContext：定义全局状态" class="headerlink" title="useContext：定义全局状态"></a>useContext：定义全局状态</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">const MyContext = React.createContext(initialValue);</div><div class="line"></div><div class="line">const themes = &#123;</div><div class="line">  light: &#123;</div><div class="line">    foreground: &quot;#000000&quot;,</div><div class="line">    background: &quot;#eeeeee&quot;</div><div class="line">  &#125;,</div><div class="line">  dark: &#123;</div><div class="line">    foreground: &quot;#ffffff&quot;,</div><div class="line">    background: &quot;#222222&quot;</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line">// 创建一个 Theme 的 Context</div><div class="line"></div><div class="line">const ThemeContext = React.createContext(themes.light);</div><div class="line">function App() &#123;</div><div class="line">  // 整个应用使用 ThemeContext.Provider 作为根组件</div><div class="line">  return (</div><div class="line">    // 使用 themes.dark 作为当前 Context </div><div class="line">    &lt;ThemeContext.Provider value=&#123;themes.dark&#125;&gt;</div><div class="line">      &lt;Toolbar /&gt;</div><div class="line">    &lt;/ThemeContext.Provider&gt;</div><div class="line">  );</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 在 Toolbar 组件中使用一个会使用 Theme 的 Button</div><div class="line">function Toolbar(props) &#123;</div><div class="line">  return (</div><div class="line">    &lt;div&gt;</div><div class="line">      &lt;ThemedButton /&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  );</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 在 Theme Button 中使用 useContext 来获取当前的主题</div><div class="line">function ThemedButton() &#123;</div><div class="line">  const theme = useContext(ThemeContext);</div><div class="line">  return (</div><div class="line">    &lt;button style=&#123;&#123;</div><div class="line">      background: theme.background,</div><div class="line">      color: theme.foreground</div><div class="line">    &#125;&#125;&gt;</div><div class="line">      I am styled by theme context!</div><div class="line">    &lt;/button&gt;</div><div class="line">  );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>Context 提供了一个方便在多个组件之间共享数据的机制。<br>不过需要注意的是，它的灵活性也是一柄双刃剑。<br>你或许已经发现，Context 相当于提供了一个定义 React 世界中全局变量的机制，<br>而全局变量则意味着两点：</p>
-<ol>
-<li>会让调试变得困难，因为你很难跟踪某个 Context 的变化究竟是如何产生的。</li>
-<li>让组件的复用变得困难，因为一个组件如果使用了某个 Context，它就必须确保被用到的地方一定有这个 Context 的 Provider 在其父组件的路径上。</li>
-</ol>
-<p>需要再三强调的是，Context 更多的是提供了一个强大的机制，<b> 让 React 应用具备定义全局的响应式数据的能力。</b></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1111.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks/1111.html" itemprop="url">
-                  如何保存组件状态和使用生命周期
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-11T16:20:02+08:00">
-                2021-11-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="那么什么样的值应该保存在-state-中呢？"><a href="#那么什么样的值应该保存在-state-中呢？" class="headerlink" title="那么什么样的值应该保存在 state 中呢？"></a>那么什么样的值应该保存在 state 中呢？</h1><p>在一个函数组件的多次渲染之间，这个 state 是共享的。<br>这是日常开发中需要经常思考的问题。通常来说，我们要遵循的一个原则就是：state 中永远不要保存可以通过计算得到的值。<br>比如说：</p>
-<ol>
-<li>从 props 传递过来的值。有时候 props 传递过来的值无法直接使用，而是要通过一定的计算后再在 UI 上展示，比如说排序。<br>那么我们要做的就是每次用的时候，都重新排序一下，或者利用某些 cache 机制，而不是将结果直接放到 state 里。</li>
-<li>从 URL 中读到的值。比如有时需要读取 URL 中的参数，把它作为组件的一部分状态。那么我们可以在每次需要用的时候从 URL 中读取，而不是读出来直接放到 state 里。</li>
-<li>从 cookie、localStorage 中读取的值。通常来说，也是每次要用的时候直接去读取，而不是读出来后放到 state 里。</li>
-</ol>
-<h1 id="useEffect执行"><a href="#useEffect执行" class="headerlink" title="useEffect执行"></a>useEffect执行</h1><p>useEffect 让我们能够在下面四种时机去执行一个回调函数产生副作用：</p>
-<ol>
-<li>每次 render 后执行：不提供第二个依赖项参数。比如useEffect(() =&gt; {})。</li>
-<li>仅第一次 render 后执行：提供一个空数组作为依赖项。比如useEffect(() =&gt; {}, [])。</li>
-<li>第一次以及依赖项发生变化后执行：提供依赖项数组。比如useEffect(() =&gt; {}, [deps])。</li>
-<li>组件 unmount 后执行：返回一个回调函数。比如useEffect() =&gt; { return () =&gt; {} }, [])。</li>
-</ol>
-<h1 id="定义依赖项注意点"><a href="#定义依赖项注意点" class="headerlink" title="定义依赖项注意点"></a>定义依赖项注意点</h1><p>那么在定义依赖项时，我们需要注意以下三点：</p>
-<ol>
-<li>依赖项中定义的变量一定是会在回调函数中用到的，否则声明依赖项其实是没有意义的。</li>
-<li>依赖项一般是一个常量数组，而不是一个变量。因为一般在创建 callback 的时候，你其实非常清楚其中要用到哪些依赖项了。</li>
-<li>React 会使用浅比较来对比依赖项是否发生了变化，所以要特别注意数组或者对象类型。<br>如果你是每次创建一个新对象，即使和之前的值是等价的，也会被认为是依赖项发生了变化。这是一个刚开始使用 Hooks 时很容易导致 Bug 的地方。</li>
-</ol>
-<h1 id="Hooks-的使用规则"><a href="#Hooks-的使用规则" class="headerlink" title="Hooks 的使用规则"></a>Hooks 的使用规则</h1><h2 id="只能在函数组件的顶级作用域使用"><a href="#只能在函数组件的顶级作用域使用" class="headerlink" title="只能在函数组件的顶级作用域使用"></a>只能在函数组件的顶级作用域使用</h2><p>第一，所有 Hook 必须要被执行到。第二，必须按顺序执行。</p>
-<p>所谓顶层作用域，就是 Hooks 不能在循环、条件判断或者嵌套函数内执行，而必须是在顶层。<br>同时 Hooks 在组件的多次渲染之间，必须按顺序被执行。<br>因为在 React 组件内部，其实是维护了一个对应组件的固定 Hooks 执行列表的，以便在多次渲染之间保持 Hooks 的状态，并做对比。<br>也不能在return语句后执行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">function MyComp() &#123;</div><div class="line">  const [count, setCount] = useState(0);</div><div class="line">  if (count &gt; 10) &#123;</div><div class="line">    // 错误：不能将 Hook 用在条件判断里</div><div class="line">    useEffect(() =&gt; &#123;</div><div class="line">      // ...</div><div class="line">    &#125;, [count])</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  // 这里可能提前返回组件渲染结果，后面就不能再用 Hooks 了</div><div class="line">  if (count === 0) &#123;</div><div class="line">    return &apos;No content&apos;;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  // 错误：不能将 Hook 放在可能的 return 之后</div><div class="line">  const [loading, setLoading] = useState(false);</div><div class="line">  </div><div class="line">  //...</div><div class="line">  return &lt;div&gt;&#123;count&#125;&lt;/div&gt;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="Hooks-只能在函数组件或者其它-Hooks-中使用"><a href="#Hooks-只能在函数组件或者其它-Hooks-中使用" class="headerlink" title="Hooks 只能在函数组件或者其它 Hooks 中使用"></a>Hooks 只能在函数组件或者其它 Hooks 中使用</h2><p>如果一定要在 Class 组件中使用，那应该如何做呢？<br>其实有一个通用的机制，那就是利用高阶组件的模式，将 Hooks 封装成高阶组件，从而让类组件使用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">a.</div><div class="line">import React from &apos;react&apos;;</div><div class="line">import &#123; useWindowSize &#125; from &apos;../hooks/useWindowSize&apos;;</div><div class="line"></div><div class="line">export const withWindowSize = (Comp) =&gt; &#123;</div><div class="line">  return props =&gt; &#123;</div><div class="line">    const windowSize = useWindowSize();</div><div class="line">    return &lt;Comp windowSize=&#123;windowSize&#125; &#123;...props&#125; /&gt;;</div><div class="line">  &#125;;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">b.</div><div class="line">import React from &apos;react&apos;;</div><div class="line">import &#123; withWindowSize &#125; from &apos;./withWindowSize&apos;;</div><div class="line"></div><div class="line">class MyComp &#123;</div><div class="line">  render() &#123;</div><div class="line">    const &#123; windowSize &#125; = this.props;</div><div class="line">    // ...</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 通过 withWindowSize 高阶组件给 MyComp 添加 windowSize 属性</div><div class="line">export default withWindowSize(MyComp);</div></pre></td></tr></table></figure>
-<p>小结<br>hooks使用时应包括这么三点：</p>
-<ol>
-<li>在 useEffect 的回调函数中使用的变量，都必须在依赖项中声明；</li>
-<li>Hooks 不能出现在条件语句或者循环中，也不能出现在 return 之后；</li>
-<li>Hooks 只能在函数组件或者自定义 Hooks 中使用。</li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1110.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks/1110.html" itemprop="url">
-                  hook 产生原因
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-10T16:20:02+08:00">
-                2021-11-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="数据与视图间关系"><a href="#数据与视图间关系" class="headerlink" title="数据与视图间关系"></a>数据与视图间关系</h1><p>在过去，我们需要处理当 Model 变化时，DOM 节点应该如何变化的细节问题。<br>而现在，我们只需要通过 JSX，根据 Model 的数据用声明的方式去描述 UI 的最终展现就可以了，<br>因为 React 会帮助你处理所有 DOM 变化的细节。而且，当 Model 中的状态发生变化时，UI 会自动变化，即所谓的数据绑定。</p>
-<p>所以呢，我们可以把 UI 的展现看成一个函数的执行过程。<br>其中，Model 是输入参数，函数的执行结果是 DOM 树，也就是 View。<br>而 React 要保证的，就是每当 Model 发生变化时，函数会重新执行，并且生成新的 DOM 树，然后 React 再把新的 DOM 树以最优的方式更新到浏览器。</p>
-<h1 id="class组件不合适的原因"><a href="#class组件不合适的原因" class="headerlink" title="class组件不合适的原因"></a>class组件不合适的原因</h1><p>一方面，React 组件之间是不会互相继承的。比如说，你不会创建一个 Button 组件，然后再创建一个 DropdownButton 来继承 Button。<br>所以说，React 中其实是没有利用到 Class 的继承特性的。</p>
-<p>另一方面，因为所有 UI 都是由状态驱动的，因此很少会在外部去调用一个类实例（即组件）的方法。<br>要知道，组件的所有方法都是在内部调用，或者作为生命周期方法被自动调用的。</p>
-<p>所以你看，这两个 Class 最重要的特性其实都没有用到。</p>
-<h1 id="函数组件的缺陷-hooks产生的背景"><a href="#函数组件的缺陷-hooks产生的背景" class="headerlink" title="函数组件的缺陷/hooks产生的背景"></a>函数组件的缺陷/hooks产生的背景</h1><p>只是当时有一个局限是，函数组件无法存在内部状态，必须是纯函数，而且也无法提供完整的生命周期机制。这就极大限制了函数组件的大规模使用。<br>那么我们自然就知道了，Class 作为 React 组件的载体，也许并不是最适合，<br>反而函数是更适合去描述 State =&gt; View 这样的一个映射，但是函数组件又没有 State ，也没有生命周期方法。<br>以此来看，我们应该如何去改进呢？</p>
-<h1 id="hooks的产生"><a href="#hooks的产生" class="headerlink" title="hooks的产生"></a>hooks的产生</h1><p>简单想一下，函数和对象不同，并没有一个实例的对象能够在多次执行之间保存状态，那势必需要一个函数之外的空间来保存这个状态，而且要能够检测其变化，从而能够触发函数组件的重新渲染。<br>再进一步想，那我们是不是就是需要这样一个机制，能够把一个外部的数据绑定到函数的执行。当数据变化时，函数能够自动重新执行。<br>这样的话，任何会影响 UI 展现的外部数据，都可以通过这个机制绑定到 React 的函数组件。<br>在 React 中，这个机制就是 Hooks。<br>所以我们现在也能够理解这个机制为什么叫 Hooks 了。<br>顾名思义，Hook 就是“钩子”的意思。</p>
-<p>在 React 中，Hooks 就是<b>把某个目标结果钩到某个可能会变化的数据源或者事件源上，那么当被钩到的数据或事件发生变化时，产生这个目标结果的代码会重新执行，产生更新后的结果<b>。</b></b></p>
-<p>对于函数组件，这个结果是最终的 DOM 树；对于 useCallback、useMemo 这样与缓存相关的组件，则是在依赖项发生变化时去更新缓存。</p>
-<h1 id="hooks-好处一-逻辑复用"><a href="#hooks-好处一-逻辑复用" class="headerlink" title="hooks 好处一 逻辑复用"></a>hooks 好处一 逻辑复用</h1><p>Hooks 中被钩的对象，不仅可以是某个独立的数据源，也可以是另一个 Hook 执行的结果，这就带来了 Hooks 的最大好处：逻辑的复用</p>
-<h2 id="class高阶组件缺陷"><a href="#class高阶组件缺陷" class="headerlink" title="class高阶组件缺陷"></a>class高阶组件缺陷</h2><p>更为糟糕的是，高阶组件几乎是 Class 组件中实现代码逻辑复用的唯一方式，其缺点其实比较显然：<br>代码难理解，不直观，很多人甚至宁愿重复代码，也不愿用高阶组件；<br>会增加很多额外的组件节点。每一个高阶组件都会多一层节点，这就会给调试带来很大的负担。</p>
-<h2 id="使用hooks封装好处"><a href="#使用hooks封装好处" class="headerlink" title="使用hooks封装好处"></a>使用hooks封装好处</h2><p>通过 Hooks 的方式进行封装，从而将依赖变成一个可绑定的数据源。<br>这样当窗口大小发生变化时，使用这个 Hook 的组件就都会重新渲染。而且代码也更加简洁和直观，不会产生额外的组件节点。</p>
-<h1 id="hooks好处二-有助于关注分离"><a href="#hooks好处二-有助于关注分离" class="headerlink" title="hooks好处二 有助于关注分离"></a>hooks好处二 有助于关注分离</h1><p>在 Class 组件中，代码是从技术角度组织在一起的，例如在 componentDidMount 中都去做一些初始化的事情。<br>而在函数组件中，代码是从业务角度组织在一起的，相关代码能够出现在集中的地方，从而更容易理解和维护。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/jsNote.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/js/jsNote.html" itemprop="url">
-                  《js 语言精髓与编程实践》
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-10-18T08:22:37+08:00">
-                2021-10-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>整本书看下来，稍微有些晦涩，很多理论概念被换了一种说法阐释，开阔思路，故整理笔记。</p>
-<p>笔记按照篇章整理，没有固定逻辑。</p>
-<h1 id="第二章"><a href="#第二章" class="headerlink" title="第二章"></a>第二章</h1><p>1.语法关键字对语义逻辑的绑定结果，是对作用域的限定；<br>变量对位置性质的绑定结果，则是对变量生命周期的限定。</p>
-<p>2.函数的6种声明标识符的方法(var,const,let,fucntion,class,import),他们声明的标识符在语法分析阶段就可以被识别。</p>
-<p>3.关于值传递与引用传递</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">var str = &apos;abcded&apos;;</div><div class="line">var obj = new String(str);</div><div class="line"></div><div class="line">function newToString() &#123;</div><div class="line">  return &apos;hello world&apos;</div><div class="line">&#125;</div><div class="line"></div><div class="line">function func(val)&#123;</div><div class="line">  val.toString = newToString;</div><div class="line">&#125;</div><div class="line"></div><div class="line">func(str);</div><div class="line">console.log(str); // abcded</div><div class="line"></div><div class="line">func(obj);</div><div class="line">console.log(String(obj)) // hello world</div></pre></td></tr></table></figure>
-<p>func函数传入字符串时，是值传递，根据结果可知，不能直接修改其属性方法<br>传入obj对象时，是引用传递，传入后被修改了属性值，故打印出了hello world.</p>
-<p>所以，到底是值传递还是引用，会根据传递的数据类型决定。</p>
-<p>4.等值检测(==)运算规则</p>
-<p>值类型与引用类型比较，将引用转换成值类型数据相同的数据，进行数据等值比较</p>
-<p>两个值类型比较，将二者转换成相同数据类型，在进行数据等值比较</p>
-<p>两个引用类型比较，仅比较引用地址</p>
-<p>跟数字，布尔，字符串比较时<br>有任何一个是数字时，将另外一个转数字<br>有任何一个是布尔值时，转换成数字后比较<br>有任何一个是对象(或函数)，调用valueOf方法来将其转换成值数据进行比较<br>按特定规则返回比较结果，如，undefined和null会返回true</p>
-<p>等值检测一些特例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">1. NaN不等于自身</div><div class="line"></div><div class="line">NaN == (===/ != /!==) NaN  // true</div><div class="line"></div><div class="line">2. 符号可以转为true,但不等值于true</div><div class="line"></div><div class="line">Boolean(Symbol()) ,!Symbol(), Symbol() ==(===) true  // true false false</div><div class="line"></div><div class="line">3. 即使字面量相同的引用类型，也是不严格相等的</div><div class="line">&#123;&#125; === &#123;&#125;, /./ === /./, function() &#123;&#125; === function() &#123;&#125; // false false false</div></pre></td></tr></table></figure></p>
-<p>5.序列检测规则</p>
-<p>两个值类型比较<br>直接比较数据在序列中的大小</p>
-<p>值类型与引用类型进行比较<br>将引用类型转换成与值类型数据相同的的数据，再进行“序列大小”比较</p>
-<p>两个引用类型进行比较<br>无意义，总是返回false</p>
-<p>6.赋值<br>字符串赋值原理是复制地址，所以对于字符串的操作有了以下三种限制<br>a.不能直接修改字符串中的字符<br>b.字符串连接运算必然导致写复制，这将产生新的字符串<br>c.不能改变字符串的长度</p>
-<p>7.函数隐式调用的几种情况<br>a.es6之后的模板处理函数<br>b.将函数用作属性读取器时，属性存取操作将隐世调用该函数，==&gt;getter,setter<br>c.使用bind方法将原函数绑定为目标函数时，调用目标函数，就是隐世调用原函数<br>d.当使用Proxy() 创建原函数的代理对象时，调用代理对象也是隐式调用原函数<br>e.new运算符运算<br>f.当函数用作对象的符号属性，触发相应的行为时，就会隐式调用原函数</p>
-<p>8.模块导入</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">import * as mynames from &apos;module&apos;; // mynames.x是对象属性读取</div><div class="line"></div><div class="line">import &#123;x&#125; from &apos;module&apos;; // x是来自原模块的引用，得到的是引用值</div><div class="line"></div><div class="line">let &#123; x : x2 &#125;  = mynames // x2 是本地声明的变量可修改</div></pre></td></tr></table></figure>
-<ol>
-<li><p>new 调用普通函数<br>如果该普通函数返回对象，则返回该对象<br>如果该函数返回值类型数据，则返回值忽略，返回this 引用，也就是普通函数本身</p>
-</li>
-<li><p>arr[1,2,3] 会返回arr[3],中括号里面的1,2,3会形成逗号运算</p>
-</li>
-<li><p>delete<br>不能删除<br>用var/let/const声明的变量与常量<br>直接继承自原型的成员<br>本质上用于删除对象自有属性表属性</p>
-</li>
-<li><p>关于对象<br>所谓原型，就是构造器用于生成实例的模板</p>
-</li>
-</ol>
-<p>空白对象： 它的原型链上的所有自有属性表都为空<br>原型链：对象所有父类和祖先类的原型所形成的，可上溯访问的链表</p>
-<p>函数和构造器并没有明显的界限，唯一区别只在于原型prototype是不是一个有意义的值</p>
-<p>类是静态的声明，意味着类继承的构建过程也是静态的，是在语法分析期就决定了的</p>
-<p>当在函数f中使用super.xxx时，无论该函数被用来作为那个实际对象的方法，<br>super都绑定在Object.getPrototypeOf(obj)上，f为obj的属性方法</p>
-<p>在new 类的实例时，super()执行的目的就是回溯整个原型链，确保基类最先创建实例<br>没有在类中声明constructor()方法时，会默认添加并调用super()</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">function foo() &#123;</div><div class="line">    var showInArrow = () =&gt; &#123;</div><div class="line">        console.log(this.name);</div><div class="line">    &#125;</div><div class="line">    showInArrow();</div><div class="line">    var obj = &#123;</div><div class="line">        showInArrow,</div><div class="line">        name: &apos;aObject&apos;,</div><div class="line">        showThis: function() &#123;</div><div class="line">            console.log(this.name)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    with(obj) &#123;</div><div class="line">      var showThis2 = () =&gt; &#123; console.log(this.name)&#125;</div><div class="line">      showThis();</div><div class="line">      showThis2();</div><div class="line">      showInArrow();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">foo.call(&#123;name: &apos;outSide&apos;&#125;)</div><div class="line">==&gt;</div><div class="line">outSide</div><div class="line">aObject</div><div class="line">outSide</div><div class="line">outSide</div></pre></td></tr></table></figure>
-<p>继承方式的选择上，</p>
-<p>大型系统必须采用类继承的思路，继承关系的确定性和支持静态语法检测等特性<br>可以帮助开发者最终简化构建大型系统的开发和业务逻辑实现，并提供足够的系统稳定性</p>
-<p>小型系统或者体系的局部使用原型继承的思路，既可以有优美的实现和高校的性质，<br>也可以更深入理解js中混合不同语言特性的精髓</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">function MyFunction() &#123;&#125;</div><div class="line"></div><div class="line">MyFunction.prototype = new Function();</div><div class="line">var myFunc = new MyFunction();</div><div class="line"></div><div class="line">myFunc(); //触发异常无法执行</div></pre></td></tr></table></figure>
-<p>上面例子符合对象继承语义，但不能继承它的‘可执行’效果<br>内置对象的特殊效果不被对象系统继承<br>一方面这些效果被引擎绑定在特殊的构造器上，而不是他们的原型上<br>另一方面，系统只负责维护内部原型链，以确保instanceof运算能正确检测这种关系<br>而不负责这些特定效果的实现和传递</p>
-<p>如果一个属性使用的是存取描述符，那么无论读写性质是什么，都不会新建属性描述符<br>子类中如果是继承来的这样的属性，那么在子类中对该属性的读写也会忠实地调用继承来的读写器</p>
-<h1 id="第四章"><a href="#第四章" class="headerlink" title="第四章"></a>第四章</h1><ol>
-<li>信息是对状态集合的解释，该集合的解释成本即是编程所应付的复杂性</li>
-</ol>
-<p>编程的目的是使一个系统对外呈现可解释信息</p>
-<ol>
-<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">var x = &apos;outer&apos;, y = &apos;outer&apos;;</div><div class="line">function foo() &#123;</div><div class="line">    console.log(1, [x,y]) // [undefined, undefined]</div><div class="line">    if(true) &#123;</div><div class="line">        function x() &#123;&#125;</div><div class="line">    &#125; else &#123;</div><div class="line">        function y() &#123;&#125;</div><div class="line">    &#125;</div><div class="line">    console.log(2, [x,y]) // [f, undefined]</div><div class="line">&#125;</div><div class="line">foo()</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<h1 id="第五章"><a href="#第五章" class="headerlink" title="第五章"></a>第五章</h1><ol>
-<li>关于函数参数<br>默认参数都是有名字的形式参数，但是从第一个参数开始，后续所有参数不会载计入形参个数<br>剩余参数不计入形参个数<br>模板参数参与计数，但是无论一个模板参数被解构为多少标识符，都按一个计算<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">const ff = (a,b=1,c=2) =&gt; &#123;console.log(34)&#125;</div><div class="line">ff.length ==&gt;1</div><div class="line"></div><div class="line">const ff2 = (a=3,b,c) =&gt; &#123;console.log(34)&#125;</div><div class="line">ff2.length ==&gt;0</div><div class="line"></div><div class="line">const ff3 = (a, [b,c]) =&gt; &#123;console.log(34)&#125;</div><div class="line">ff3.length ==&gt;2</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">function foo(filename) &#123;</div><div class="line">    var [filename2, ...args] = arguments;</div><div class="line"></div><div class="line">    // filename 会影响arguments</div><div class="line">    filename = &apos;new file name&apos;;</div><div class="line">    console.log(arguments[0]); // new file name</div><div class="line">    console.log(filename2); //  test.txt</div><div class="line"></div><div class="line">    // arguments 也会影响filename</div><div class="line">    arguments[0] = filename2;</div><div class="line">    console.log(filename);//  test.txt</div><div class="line"></div><div class="line">    // 使用filenam2时，没有影响</div><div class="line">    filename2 = &apos;update again&apos;;</div><div class="line">    console.log(arguments[0]); //  test.txt</div><div class="line">    console.log(filename);//  test.txt</div><div class="line">&#125;</div><div class="line">foo(&apos;test.txt&apos;);</div></pre></td></tr></table></figure>
-<p>arguments 获取的参数，不被赋予初始默认值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">function foo(a=1,b,c=2,d) &#123;</div><div class="line">    console.log(...arguments); // undefined,100,200,300</div><div class="line">    console.log(a,b,c,d); // 1,100,200,300</div><div class="line">&#125;</div><div class="line">foo(undefined,100,200,300);</div></pre></td></tr></table></figure></p>
-<p>惰性求值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">function foo(msg) &#123;</div><div class="line">   console.log(msg)</div><div class="line">&#125;</div><div class="line">var i = 100;</div><div class="line">foo(i+=20, i*=2, &apos;value:&apos;+i); // 120</div><div class="line">foo(i); // 240</div></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">var f = function func2() &#123;</div><div class="line">    console.log(typeof func2);</div><div class="line">&#125;</div><div class="line"></div><div class="line">f() // function</div><div class="line"></div><div class="line">console.log(typeof func2); // undefined</div></pre></td></tr></table></figure>
-<p>16.<br>类可以赋予对象成员，但是不能进行函数调用，可以用new 来调用生成实例</p>
-<p>17.<br>绑定函数特殊性质</p>
-<ol>
-<li>内部原型被置为与targetFunc的原型一致</li>
-<li>没有自有的prototype属性</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">class MyFunc &#123;</div><div class="line">    static foo() &#123;</div><div class="line">        console.log(&apos;prototype method in myFunc&apos;);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class MyFuncEx extends MyFunc &#123;</div><div class="line">    static foo() &#123;</div><div class="line">        console.log(&apos;own method in MyFuncEX&apos;);</div><div class="line">    &#125;</div><div class="line">    callMe() &#123;</div><div class="line">        console.log(&apos;call me in MyFuncEx&apos;);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">var f = MyFuncEx.bind();</div><div class="line">MyFuncEx.foo(); // own method in MyFuncEX</div><div class="line">f.foo(); //  prototype method in myFunc</div><div class="line"></div><div class="line">console.log(&apos;prototype&apos; in Object.getPrototypeOf(MyFunc)) // false</div><div class="line"></div><div class="line">// MyFunc.bind()生成的函数没有prototype</div><div class="line">// class MyFuncEX2 extends MyFunc.bind() &#123;&#125; // 会报错</div><div class="line"></div><div class="line">//  MyFuncEx原型有继承自MyFunc的prototype,可以声明,但实例不会被继承</div><div class="line">class MyFuncEx3 extends MyFuncEx.bind() &#123;&#125;</div><div class="line"></div><div class="line">// 继续继承MyFuncEx原型的prototype属性，实例可继承</div><div class="line">class MyFuncEx4 extends MyFuncEx &#123;&#125;</div><div class="line">(new MyFuncEx4).callMe() //call me in MyFuncEx</div><div class="line"></div><div class="line">console.log(&apos;callMe&apos; in Object.getPrototypeOf(MyFuncEx4.prototype)); // true</div><div class="line">console.log(&apos;callMe&apos; in Object.getPrototypeOf(MyFuncEx3.prototype)); // false</div><div class="line">console.log(&apos;callMe&apos; in  new MyFuncEx3); // false</div></pre></td></tr></table></figure>
-<p>18.<br>函数与对象的区别在于，前者内部结构中初始化了[[call]] 和 [[contruct]] 这两个内部方法<br>绑定函数通过这两个内部方法实现绑定逻辑<br>重写这两个方法并使其分别指向一段特有的调用或构建逻辑（以处理暂存在内部槽中的thisArg和arg1…n参数）<br>代理类对象Proxy则侧重重写了对象的全部13个内部方法<br>借助代理类也可以实现与绑定函数完全相同的功能<br>需要在handlers上添加自己的陷阱，以处理[[call]] 和 [[construc]]行为</p>
-<p>19.<br>用属性来替代方法，并在递归中维护this引用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">var obj = &#123;</div><div class="line">    get fact() &#123;</div><div class="line">        const fact = x=&gt; x &amp;&amp; x*fact(x-1) || this.power || 1;</div><div class="line">        return fact</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">obj.power = 100;</div><div class="line">obj.fact(9) // 36288000</div></pre></td></tr></table></figure></p>
-<p>20.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">var obj = &#123;</div><div class="line">    [Symbol.iterator] : function*() &#123;</div><div class="line">        var obj = &#123;</div><div class="line">    [Symbol.iterator] : function*() &#123;</div><div class="line">        for(var i =0;i&lt; 10; i++) yield i;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">console.log(...obj) // 0 1 2 3 4 5 6 7 8 9</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">console.log(...obj) // 0 1 2 3 4 5 6 7 8 9</div><div class="line"></div><div class="line">var obj = &#123;</div><div class="line">    start: 3,</div><div class="line">    [Symbol.iterator] : function*(start = 5, end = 10) &#123;</div><div class="line">        var &#123;start, end&#125; = &#123;start, end, ...this&#125;;</div><div class="line">        for(var i=start;i&lt;end; i++) yield i;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">console.log(...obj) // 3 4 5 6 7 8 9</div><div class="line">obj.end = 6;</div><div class="line">console.log(...obj) // 3 4 5</div><div class="line"></div><div class="line">delete obj.end</div><div class="line">delete obj.start</div><div class="line">console.log(...obj) // 5 6 7 8 9</div></pre></td></tr></table></figure></p>
-<p>21.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var msg = (function myFunc(num) &#123;</div><div class="line">    return myFunc = typeof myFunc;</div><div class="line">&#125;)(10) + &quot;, and upvalue&apos;s type is: &quot; + typeof myFunc;</div><div class="line"></div><div class="line">console.log(msg); //  function, and upvalue&apos;s type is: undefined</div></pre></td></tr></table></figure>
-<h1 id="第六章"><a href="#第六章" class="headerlink" title="第六章"></a>第六章</h1><ol>
-<li>with语句传入的值如果是基础类型数据，会转换成相应类型对象再构建闭包</li>
-<li>null 作为对象总是转换为确定的三种值类型0，’null’和false</li>
-<li>对于值类型来说，包装类上的toString()和valueOf方法其实只会对显示方法调用有效<br>而并不影响原始值的运算</li>
-<li>类型转换分为两个阶段，其一是转换为原始值，其二是转换为尝试运算的值类型<br>这两个阶段，一个受上述”隐式转换逻辑”控制，另一个受具体的运算操作控制<br>会尽可能的转换成预期的类型<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">x = &#123;</div><div class="line">    toString: () =&gt; &apos;10&apos;,</div><div class="line">    valueOf: () =&gt; -1</div><div class="line">&#125;</div><div class="line"></div><div class="line">parseInt(x) ===&gt; 10 因为规定参数是字符串类型</div><div class="line"></div><div class="line">Math.abs(x) ===&gt; 1 </div><div class="line"></div><div class="line">1 + x ===&gt; 0</div><div class="line"></div><div class="line">&quot;1&quot; + x ===&gt; 1</div><div class="line"></div><div class="line">delete x.valueOf </div><div class="line"></div><div class="line">1+x ===&gt; &apos;1-1&apos;</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var x = new Boolean(false)</div><div class="line">console.log(x.valueOf())  ===&gt; false</div><div class="line">console.log(!!x) ===&gt; false x此时是对象</div></pre></td></tr></table></figure>
-<ol>
-<li>一旦对象中声明过Symbol.toPrimitive属性，那么valueOf()与toString() 在值运算的隐式转换中就无效了</li>
-<li><p>switch() 语句对表达式求值，并用该值与case分支中的值进行比较运算时，会采用===操作符进行运算，优先进行类型检测而不会发生类型转换过程</p>
-</li>
-<li><p>symbol只能转换成bool类型的true,尝试转换成其他值都会报错</p>
-</li>
-<li><p>补前缀并转大写</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">var x = 1234567</div><div class="line"></div><div class="line">x.toString(16).padStart(8, &apos;0&apos;).toUpperCase() // 0012D687</div></pre></td></tr></table></figure>
-</li>
-<li><p>数组当对象去结构时，只会保留有值的key</p>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var arr = [1,2,&apos;345&apos;,,12];</div><div class="line">var &#123; 0: x, 1:y, length&#125; = arr;</div><div class="line">console.log(x,y,length); // 1,2,5</div><div class="line">var x = &#123;length: 100, ...arr&#125;;</div><div class="line">console.log(x.length + &apos; =&gt; &apos; + Object.keys(x)); // 100 =&gt; 0,1,2,4,length</div></pre></td></tr></table></figure>
-<ol>
-<li>计算一个字符串中不同字符个数</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">console.log(new Set(&apos;abcadf134oaafshjafgoi&apos;).size) ==&gt; 14</div></pre></td></tr></table></figure>
-<ol>
-<li><p>是否可重写的限制主要是两个，可引用，可写</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[100][0]++ // 100</div></pre></td></tr></table></figure>
-</li>
-<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">// 检测成员是否是重写的</div><div class="line">var isRewrited = function(obj,key) &#123;</div><div class="line">    return obj.hasOwnProperty(key) &amp;&amp; (key in Object.getPrototypeOf(obj));</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 检测成员是否是继承来的</div><div class="line">var isInherited = function(obj,key) &#123;</div><div class="line">    return (key in obj) &amp;&amp; !obj.hasOwnProperty(key);</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 在对象及其原型链上查找属性的属主对象</div><div class="line">var getPropertyOwner = function f(obj,key) &#123;</div><div class="line">    return !obj ? null \</div><div class="line">    : obj.hasOwnProperty(key) ? obj</div><div class="line">    : f(Object.getPrototypeOf(obj),key)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>给Object.prototype添加成员，与添加全局变量名“效果相当”</p>
-</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Object.prototype.x = 100;</div><div class="line">console.log(x) // 100</div><div class="line">Object.getPrototypeOf(Object.getPrototypeOf(global)) === Object.prototype // true</div><div class="line">global.constructor === Object</div></pre></td></tr></table></figure>
-<ol>
-<li>try-catch-finally中的代码会在try最后return时，先被挂起，执行完finally再return<br>如果return的值是个值类型则对返回值没有影响<br>但如果是对象，return只保留引用，在finally中对return值进行了修改，那么将会影响返回值</li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/ts.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/js/ts.html" itemprop="url">
-                  TS 学习
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-10-06T16:23:15+08:00">
-                2020-10-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h1><p>元素为同一类型<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">let list:number[] = [1,2,3]</div><div class="line">或者</div><div class="line">let list Array&lt;number&gt; = [1,2,3]</div></pre></td></tr></table></figure></p>
-<p>声明不同类型的元素就要用元祖</p>
-<h1 id="元祖-Tuple"><a href="#元祖-Tuple" class="headerlink" title="元祖 Tuple"></a>元祖 Tuple</h1><p>已知数组个数和每个元素类型下进行声明的变量类型<br>如，我想定义一个变量是一个数组，第一项是字符串类型，第二项是数字<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">let x:[string,number]</div></pre></td></tr></table></figure></p>
-<p>后续对于相应位置的元素的使用基于该位置上元素的类型<br>新添加的元素类型可以为之前元素的任一类型，不能是其他类型</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">//结合解构</div><div class="line">function f([first, second]: [number, number]) &#123;</div><div class="line">    console.log(first);</div><div class="line">    console.log(second);</div><div class="line">&#125;</div><div class="line">f(input);</div><div class="line"></div><div class="line">type C = &#123; a: string, b?: number &#125;</div><div class="line">function f(&#123; a, b &#125;: C): void &#123;</div><div class="line">    // ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h1 id="枚举-enum"><a href="#枚举-enum" class="headerlink" title="枚举 enum"></a>枚举 enum</h1><p>对js数据类型补充,可以通过key值互相使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">enum Color &#123;Red, Green, Blue&#125; //默认从0开始给元素编号</div><div class="line">let c: Color = Color.Red; //访问元素返回值</div><div class="line">console.log(c) ===&gt;0</div><div class="line"></div><div class="line">enum Color &#123;Red = 1, Green, Blue=4,Yellow&#125; //未赋值的依据赋值的前一个，加1</div><div class="line">let c: Color = Color.Green;</div><div class="line">console.log(c) ===&gt;2 color.Yellow ===&gt;5</div><div class="line">let colorName: string = Color[2]; ===&gt;&apos;Green&apos;  Color[6]===&gt;undefined //没赋值的为undefined</div></pre></td></tr></table></figure></p>
-<h1 id="Any"><a href="#Any" class="headerlink" title="Any"></a>Any</h1><p>任何类型<br>用于不确定变量类型，仅知道部分元素类型的数组或者避免对这些变量进行校验<br>区别对象Object类型，Object类型只允许赋值，不允许调用值上面的方法，any可以</p>
-<h1 id="void"><a href="#void" class="headerlink" title="void"></a>void</h1><p>没有任何类型，通常用于函数没有返回值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">function warnUser(): void &#123;</div><div class="line">    console.log(&quot;This is my warning message&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h1 id="Null-和-Undefined"><a href="#Null-和-Undefined" class="headerlink" title="Null 和 Undefined"></a>Null 和 Undefined</h1><p>是所有类型的子类型，即该类型变量可以赋值给其他类型<br>但在指定了–strictNullChecks标记，null和undefined只能赋值给void和它们各自</p>
-<h1 id="Never"><a href="#Never" class="headerlink" title="Never"></a>Never</h1><p>表示永不存在的值的类型<br>会抛出异常或根本就不会有返回值的函数表达式或箭头函数表达式的返回值类型<br>变量也可能是 never类型，当它们被永不为真的类型保护所约束时</p>
-<p>never类型是任何类型的子类型，也可以赋值给任何类型<br>然而，没有类型是never的子类型或可以赋值给never类型（除了never本身之外<br>即使 any也不可以赋值给never</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// 返回never的函数必须存在无法达到的终点</div><div class="line">function error(message: string): never &#123;</div><div class="line">    throw new Error(message);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h1 id="Object"><a href="#Object" class="headerlink" title="Object"></a>Object</h1><p>除基本类型(number,string,boolean,symbol,null,undefined)之外的类型</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">declare function create(o: object | null): void;</div><div class="line"></div><div class="line">create(&#123; prop: 0 &#125;); // OK</div><div class="line">create(null); // OK</div><div class="line"></div><div class="line">create(42); // Error</div><div class="line">create(&quot;string&quot;); // Error</div><div class="line">create(false); // Error</div><div class="line">create(undefined); // Error</div></pre></td></tr></table></figure>
-<h1 id="类型断言"><a href="#类型断言" class="headerlink" title="类型断言"></a>类型断言</h1><p>防止ts编译时根据推断的变量类型进行判断<br>让ts根据设置的类型进行编译判断</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">const foo = &#123;&#125;;</div><div class="line">foo.bar = 123; // Error: &apos;bar&apos; 属性不存在于 ‘&#123;&#125;’</div><div class="line">foo.bas = &apos;hello&apos;; // Error: &apos;bas&apos; 属性不存在于 &apos;&#123;&#125;&apos;</div><div class="line"></div><div class="line">interface Foo &#123;</div><div class="line">  bar: number;</div><div class="line">  bas: string;</div><div class="line">&#125;</div><div class="line"></div><div class="line">const foo = &#123;&#125; as Foo;</div><div class="line">foo.bar = 123;</div><div class="line">foo.bas = &apos;hello&apos;;</div></pre></td></tr></table></figure>
-<h1 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h1><p>一个描述对象用来描述需要的数据类型</p>
-<h2 id="描述参数"><a href="#描述参数" class="headerlink" title="描述参数"></a>描述参数</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">interface LabelledValue &#123;</div><div class="line">  label: string;</div><div class="line">  color?: string;//在可选属性名字定义的后面加一个?符号,这个属性可传可不传</div><div class="line">  //可选属性的好处之一是可以对可能存在的属性进行预定义，好处之二是可以捕获引用了不存在的属性时的错误</div><div class="line">  readonly y: number;//属性名前用 readonly来指定只读属性</div><div class="line">  [propName: string]: any;//索引签名，表示LabelledValue可以有任意数量的属性，只要不是上面已经定义过的 ；结合as 可以避免额外属性检查</div><div class="line">&#125;</div><div class="line"></div><div class="line">function printLabel(labelledObj: LabelledValue) &#123;</div><div class="line">  console.log(labelledObj.label);</div><div class="line">&#125;</div><div class="line"></div><div class="line">let myObj = &#123;size: 10, label: &quot;Size 10 Object&quot;&#125;;</div><div class="line">printLabel(myObj);</div></pre></td></tr></table></figure>
-<p>LabelledValue接口就好比一个名字，用来描述上面例子里的要求。 它代表了有一个 label属性且类型为string的对象。</p>
-<h2 id="描述函数类型"><a href="#描述函数类型" class="headerlink" title="描述函数类型"></a>描述函数类型</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">interface SearchFunc &#123;</div><div class="line">  (source: string, subString: string): boolean; //输入参数名，类型和返回值类型</div><div class="line">&#125;</div><div class="line"></div><div class="line">let mySearch: SearchFunc;</div><div class="line">mySearch = function(source: string, subString: string) &#123; //参数名可以和SearchFunc定义的不同，因为只会检查对应位置类型</div><div class="line">  let result = source.search(subString);</div><div class="line">  return result &gt; -1;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="索引签名"><a href="#索引签名" class="headerlink" title="索引签名"></a>索引签名</h2><p>描述了对象索引的类型，还有相应的索引返回值类型<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">interface StringArray &#123;</div><div class="line">  [index: number]: string;</div><div class="line">&#125;</div><div class="line"></div><div class="line">let myArray: StringArray;</div><div class="line">myArray = [&quot;Bob&quot;, &quot;Fred&quot;];</div><div class="line"></div><div class="line">let myStr: string = myArray[0];</div></pre></td></tr></table></figure></p>
-<p>TypeScript支持两种索引签名：字符串和数字。<br>可以同时使用两种类型的索引，但是数字索引的返回值必须是字符串索引返回值类型的子类型。<br>这是因为当使用 number来索引时，JavaScript会将它转换成string然后再去索引对象。<br>也就是说用 100（一个number）去索引等同于使用”100”（一个string）去索引，因此两者需要保持一致。</p>
-<h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">interface Shape &#123;</div><div class="line">    color: string;</div><div class="line">&#125;</div><div class="line"></div><div class="line">interface PenStroke &#123;</div><div class="line">    penWidth: number;</div><div class="line">&#125;</div><div class="line"></div><div class="line">interface Square extends Shape, PenStroke &#123;</div><div class="line">    sideLength: number;</div><div class="line">&#125;</div><div class="line">let square = &lt;Square&gt;&#123;&#125;;</div><div class="line">square.color = &quot;blue&quot;;</div><div class="line">square.sideLength = 10;</div><div class="line">square.penWidth = 5.0;</div></pre></td></tr></table></figure>
-<h1 id="联合类型"><a href="#联合类型" class="headerlink" title="联合类型"></a>联合类型</h1><p>联合类型表示一个值可以是几种类型之一。<br>我们用竖线（ |）分隔每个类型，<br>所以 number | string | boolean表示一个值可以是 number， string，或 boolean。</p>
-<p><a href="https://juejin.im/post/6844903749501059085" target="_blank" rel="external">type 和 interface 区别</a><br><a href="https://juejin.im/post/6844903873912668173" target="_blank" rel="external">函数写法</a><br><a href="https://juejin.im/post/6844903878207799304" target="_blank" rel="external">implements 和 extends</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks.html" itemprop="url">
-                  hook API学习
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-10-06T16:20:02+08:00">
-                2020-10-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">import React,&#123;useState,useEffect&#125;from &apos;react&apos;;</div></pre></td></tr></table></figure>
-<h1 id="useState"><a href="#useState" class="headerlink" title="useState"></a>useState</h1><p>用于生成state数据和其对应的替换函数</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">const [state,setState] = useState(initialState)</div><div class="line">state 即为声明的变量</div><div class="line">setState 即更新函数</div><div class="line">initialState即state初始值，不传入时为undefined</div><div class="line">使用：</div><div class="line">const [count,setCount] = useState(0)</div><div class="line">const [obj,setObj] = useState(&#123;a:1&#125;)</div></pre></td></tr></table></figure>
-<h1 id="useEffect"><a href="#useEffect" class="headerlink" title="useEffect"></a>useEffect</h1><p>render执行结束之后执行effect</p>
-<p>配置多个effect时从上到下依次执行</p>
-<p>如果effect函数返回了一个函数，这个函数将会在组件卸载时执行，负责清除副作用</p>
-<p>如果想让effect仅在某些情况下执行，可以传入第二个参数，<br>第二参数内为effect依赖的值，当值变化时，才会执行，否则跳过不执行</p>
-<p>如果想执行只运行一次的 effect（仅在组件挂载和卸载时执行），可以传递一个空数组（[]）作为第二个参数。这就告诉 React 你的 effect 不依赖于 props 或 state 中的任何值，所以它永远都不需要重复执行。这并不属于特殊情况 —— 它依然遵循依赖数组的工作方式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">function App() &#123;</div><div class="line">  const [data,setData] = useState(3);</div><div class="line">  useEffect(()=&gt;&#123;</div><div class="line">    console.log(&apos;useEffect&apos;);</div><div class="line">    let id = setTimeout(()=&gt;&#123;</div><div class="line">      setData(&#123;a:1&#125;)</div><div class="line">      // clearTimeout(id)</div><div class="line">    &#125;,5000)</div><div class="line">    return ()=&gt;&#123; //卸载时执行</div><div class="line">      clearTimeout(id)</div><div class="line">    &#125;</div><div class="line">  &#125;,[]) //传入第二个参数，控制是否每次render完都执行</div><div class="line"></div><div class="line">  useEffect(()=&gt;&#123;</div><div class="line">    console.log(&apos;会从上到下执行&apos;)</div><div class="line">  &#125;)</div><div class="line">  return (</div><div class="line">    &lt;div&gt;</div><div class="line">      &#123;</div><div class="line">        (()=&gt;&#123;</div><div class="line">          console.log(&apos;render&apos;)</div><div class="line">          return null</div><div class="line">        &#125;)()</div><div class="line">      &#125;</div><div class="line">      &lt;p&gt;&#123;JSON.stringify(data)&#125;&lt;/p&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  )</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h1 id="useContext"><a href="#useContext" class="headerlink" title="useContext"></a>useContext</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">const MyContext = React.createContext();</div><div class="line">const value = useContext(MyContext);</div></pre></td></tr></table></figure>
-<p>接收一个 context 对象（React.createContext 的返回值）并返回该 context 的当前值。当前的 context 值由上层组件中距离当前组件最近的 <mycontext.provider> 的 value prop 决定</mycontext.provider></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">const themes = &#123;</div><div class="line">  light: &#123;</div><div class="line">    foreground: &quot;#000000&quot;,</div><div class="line">    background: &quot;#eeeeee&quot;</div><div class="line">  &#125;,</div><div class="line">  dark: &#123;</div><div class="line">    foreground: &quot;#ffffff&quot;,</div><div class="line">    background: &quot;#222222&quot;</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line">const ThemeContext = React.createContext(); //创建context 对象，可传入value初始值</div><div class="line"></div><div class="line">function App() &#123;</div><div class="line">  let [thems,setThems] = useState(themes.dark)</div><div class="line">  useEffect(()=&gt;&#123;</div><div class="line">    console.log(&apos;useEffect&apos;);</div><div class="line">    let id = setTimeout(()=&gt;&#123;</div><div class="line">      setThems(themes.light)</div><div class="line">    &#125;,5000)</div><div class="line">    return ()=&gt;&#123;</div><div class="line">      clearTimeout(id)</div><div class="line">    &#125;</div><div class="line">  &#125;,[])</div><div class="line">  return (</div><div class="line">    &lt;ThemeContext.Provider value=&#123;thems&#125;&gt;</div><div class="line">      &lt;Toolbar /&gt;</div><div class="line">      &lt;Child2 /&gt;</div><div class="line">    &lt;/ThemeContext.Provider&gt;</div><div class="line">  )</div><div class="line">&#125;</div><div class="line">function Toolbar(props) &#123;</div><div class="line">  return (</div><div class="line">    &lt;div&gt;</div><div class="line">      &lt;ThemedButton /&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  );</div><div class="line">&#125;</div><div class="line"></div><div class="line">function ThemedButton() &#123;</div><div class="line">  //获取最近的ThemeContext.Provider 标签上value的绑定值</div><div class="line">  const theme = useContext(ThemeContext); </div><div class="line">  return (</div><div class="line">    &lt;button style=&#123;&#123; background: theme.background, color: theme.foreground &#125;&#125;&gt;</div><div class="line">      I am styled by theme context!</div><div class="line">    &lt;/button&gt;</div><div class="line">  );</div><div class="line">&#125;</div><div class="line">//子组件不依赖constext的数据时，使用React.memo可以避免在context有变化时进行的更新</div><div class="line">const Child2 = React.memo((props)=&gt;&#123;</div><div class="line">  console.log(&apos;fire&apos;)</div><div class="line">  return &lt;div&gt;xxxxxx&lt;/div&gt;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<h1 id="useRef"><a href="#useRef" class="headerlink" title="useRef"></a>useRef</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">const refContainer = useRef(initialValue);</div></pre></td></tr></table></figure>
-<p>返回对象ref可以用于绑定dom对象<br>ref.current属性被初始化为传入的参数，绑到DOM对象后，指向绑定的dom<br>useRef会在每次渲染时返回同一个ref对象，在整个组件的生命周期内是唯一的</p>
-<p>ref.current 可以存储那些不需要引起页面重新渲染的数据<br>如果刻意地想要从某些异步回调中读取最新的state，可以用一个ref来保存，读取，修改</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">function TextInputWithFocusButton() &#123;</div><div class="line">  const inputEl = useRef(null);//生成绑定对象</div><div class="line">  const onButtonClick = () =&gt; &#123;</div><div class="line">    // `current` 指向已挂载到 DOM 上的文本输入元素</div><div class="line">    inputEl.current.focus();</div><div class="line">  &#125;;</div><div class="line">  return (</div><div class="line">    &lt;&gt;</div><div class="line">      &lt;input ref=&#123;inputEl&#125; type=&quot;text&quot; /&gt;</div><div class="line">      &lt;button onClick=&#123;onButtonClick&#125;&gt;Focus the input&lt;/button&gt;</div><div class="line">    &lt;/&gt;</div><div class="line">  );</div><div class="line">&#125;</div><div class="line">export default App;</div></pre></td></tr></table></figure>
-<p>当 ref 对象内容发生变化时，useRef 并不会通知你。<br>变更 .current 属性不会引发组件重新渲染。<br>如果想要在 React 绑定或解绑 DOM 节点的 ref 时运行某些代码，则需要使用回调 ref 来实现。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">function MeasureExample() &#123;</div><div class="line">  const [height, setHeight] = useState(0);</div><div class="line">  console.log(&apos;fire&apos;)</div><div class="line">  const measuredRef = useCallback(node =&gt; &#123;</div><div class="line">    if (node !== null) &#123;</div><div class="line">      setHeight(node.getBoundingClientRect().height);</div><div class="line">    &#125;</div><div class="line">  &#125;,[]);</div><div class="line">  return (</div><div class="line">    &lt;&gt;</div><div class="line">      &lt;h1 ref=&#123;measuredRef&#125;&gt;Hello, world&lt;/h1&gt;</div><div class="line">      &lt;h2&gt;The above header is &#123;Math.round(height)&#125;px tall&lt;/h2&gt;</div><div class="line">    &lt;/&gt;</div><div class="line">  );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>获取 DOM 节点的位置或是大小的基本方式是使用 callback ref<br>每当 ref 被附加到一个另一个节点，React 就会调用 callback</p>
-<p>当 ref 是一个对象时它并不会把当前 ref 的值的 变化 通知到我们。<br>使用 callback ref 可以确保 即便子组件<a href="https://codesandbox.io/s/818zzk8m78" target="_blank" rel="external">延迟显示</a>被测量的节点 (比如为了响应一次点击)，我们依然能够在父组件接收到相关的信息，以便更新测量结果</p>
-<h1 id="useCallback"><a href="#useCallback" class="headerlink" title="useCallback"></a>useCallback</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">const memoizedCallback = useCallback(</div><div class="line">  () =&gt; &#123;</div><div class="line">    doSomething(a, b);</div><div class="line">  &#125;,</div><div class="line">  [a, b],</div><div class="line">);</div></pre></td></tr></table></figure>
-<p>把内联回调函数及依赖项数组作为参数传入 useCallback，它将返回该回调函数的 memoized 版本，该回调函数仅在某个依赖项改变时才会更新。<br>当你把回调函数传递给经过优化的并使用引用相等性去避免非必要渲染（例如 shouldComponentUpdate）的子组件时，它将非常有用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">function Child(&#123;event,data&#125;)&#123;</div><div class="line">  console.log(&apos;child-render&apos;)</div><div class="line">  useEffect(()=&gt;&#123;</div><div class="line">    console.log(&apos;child-effect&apos;)</div><div class="line">    event()</div><div class="line">  &#125;,[event])</div><div class="line">return(</div><div class="line">  &lt;div&gt;</div><div class="line">    &lt;p&gt;child&lt;/p&gt;</div><div class="line">    &lt;button onClick = &#123;event&#125;&gt;调用父event&lt;/button&gt;</div><div class="line">  &lt;/div&gt;</div><div class="line">)</div><div class="line">&#125;</div><div class="line">const set = new Set()</div><div class="line">function Test()&#123;</div><div class="line">  const [count,setCount] = useState(0)</div><div class="line">  const [data,setData] = useState(&#123;&#125;)</div><div class="line">  const handle = useCallback(async ()=&gt;&#123;</div><div class="line">    function temp()&#123;</div><div class="line">      setTimeout(()=&gt;&#123;</div><div class="line">        return &apos;xxxx&apos;</div><div class="line">      &#125;,1000)</div><div class="line">    &#125;</div><div class="line">    const res = await temp()</div><div class="line">    setData(res)</div><div class="line">    console.log(&apos;paent-useCallback&apos;,data)</div><div class="line">  &#125;,[count]) //count变化才会生成新的handle,才会引起child组件的useEffect的执行</div><div class="line">  set.add(handle)</div><div class="line">  console.log(&apos;parent-render====&gt;&apos;,data)</div><div class="line">  return (</div><div class="line">    &lt;div&gt;</div><div class="line">      &lt;button </div><div class="line">        onClick=&#123;e=&gt;&#123;</div><div class="line">          setCount(count + 1)</div><div class="line">        &#125;&#125;</div><div class="line">      &gt;</div><div class="line">        count++</div><div class="line">      &lt;/button&gt;</div><div class="line">      &lt;p&gt;set size:&#123;set.size&#125;&lt;/p&gt;</div><div class="line">      &lt;p&gt;count:&#123;count&#125;&lt;/p&gt;</div><div class="line">      &lt;Child event=&#123;handle&#125; /&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  )</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>useCallback(fn, deps) 相当于 useMemo(() =&gt; fn, deps)。</p>
-<h1 id="useMemo"><a href="#useMemo" class="headerlink" title="useMemo"></a>useMemo</h1><p>const memoizedValue = useMemo(() =&gt; computeExpensiveValue(a, b), [a, b]);</p>
-<p>返回一个 memoized 值<br>会在render 前执行<br>把“创建”函数和依赖项数组作为参数传入 useMemo，它仅会在某个依赖项改变时才重新计算 memoized 值。这种优化有助于避免在每次渲染时都进行高开销的计算</p>
-<p>如果没有提供依赖项数组，useMemo 在每次渲染时都会计算新的值。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">function Test()&#123;</div><div class="line">  const [count,setCount] = useState(0)</div><div class="line">  const handle1 = useMemo(()=&gt;&#123;</div><div class="line">    console.log(&apos;handle1&apos;,count)</div><div class="line">    return count</div><div class="line">  &#125;,[])</div><div class="line">  console.log(&apos;render-parent&apos;)</div><div class="line">  return (</div><div class="line">    &lt;div&gt;</div><div class="line">      &lt;p&gt;</div><div class="line">        demo:&#123;count&#125;</div><div class="line">        &lt;button onClick=&#123;()=&gt;setCount(count+1)&#125;&gt;++COUNT&lt;/button&gt;</div><div class="line">      &lt;/p&gt;</div><div class="line">      &lt;Child handle = &#123;handle1&#125; /&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  )</div><div class="line">&#125;</div><div class="line">function Child(&#123;handle&#125;)&#123;</div><div class="line">  console.log(&apos;render-child&apos;)</div><div class="line">  return (</div><div class="line">    &lt;div&gt;</div><div class="line">      &lt;p&gt;child&lt;/p&gt;</div><div class="line">      &lt;p&gt;prop-data:&#123;handle&#125;&lt;/p&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  )</div><div class="line">&#125;</div><div class="line"></div><div class="line">打印结果：</div><div class="line">handle1 0</div><div class="line">render-parent</div><div class="line">render-child</div></pre></td></tr></table></figure></p>
-<h1 id="useReducer"><a href="#useReducer" class="headerlink" title="useReducer"></a>useReducer</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">const [state, dispatch] = useReducer(reducer, initialArg, init);</div></pre></td></tr></table></figure>
-<p>useState 的替代方案。<br>它接收一个形如 (state, action) =&gt; newState 的 reducer，<br>并返回当前的 state 以及与其配套的 dispatch 方法。</p>
-<p>适用场景<br> state 逻辑较复杂且包含多个子值；<br> 下一个 state 依赖于之前的 state<br> 给那些会触发深更新的组件做性能优化</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">const initialState = &#123;count: 0&#125;;</div><div class="line"></div><div class="line">function reducer(state, action) &#123;</div><div class="line">  switch (action.type) &#123;</div><div class="line">    case &apos;increment&apos;:</div><div class="line">      return &#123;count: state.count + 1&#125;;</div><div class="line">    case &apos;decrement&apos;:</div><div class="line">      return &#123;count: state.count - 1&#125;;</div><div class="line">    default:</div><div class="line">      throw new Error();</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">function Counter() &#123;</div><div class="line">  const [state, dispatch] = useReducer(reducer, initialState);</div><div class="line">  return (</div><div class="line">    &lt;&gt;</div><div class="line">      Count: &#123;state.count&#125;</div><div class="line">      &lt;button onClick=&#123;() =&gt; dispatch(&#123;type: &apos;decrement&apos;&#125;)&#125;&gt;-&lt;/button&gt;</div><div class="line">      &lt;button onClick=&#123;() =&gt; dispatch(&#123;type: &apos;increment&apos;&#125;)&#125;&gt;+&lt;/button&gt;</div><div class="line">    &lt;/&gt;</div><div class="line">  );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p> 初始化有两种方式<br> 1.传入第二个参数指定初始值<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">const [state, dispatch] = useReducer(</div><div class="line">    reducer,</div><div class="line">    &#123;count: initialCount&#125;</div><div class="line">  );</div></pre></td></tr></table></figure></p>
-<p> 2.惰性初始化<br> 将 init 函数作为 useReducer 的第三个参数传入，这样初始 state 将被设置为 init(initialArg)<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">function init(initialCount) &#123;</div><div class="line">  return &#123;count: initialCount&#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line">function reducer(state, action) &#123;</div><div class="line">  switch (action.type) &#123;</div><div class="line">    case &apos;increment&apos;:</div><div class="line">      return &#123;count: state.count + 1&#125;;</div><div class="line">    case &apos;decrement&apos;:</div><div class="line">      return &#123;count: state.count - 1&#125;;</div><div class="line">    case &apos;reset&apos;:</div><div class="line">      return init(action.payload);</div><div class="line">    default:</div><div class="line">      throw new Error();</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">function Counter(&#123;initialCount&#125;) &#123;</div><div class="line">  const [state, dispatch] = useReducer(reducer, initialCount, init);</div><div class="line">  return (</div><div class="line">    &lt;&gt;</div><div class="line">      Count: &#123;state.count&#125;</div><div class="line">      &lt;button</div><div class="line">        onClick=&#123;() =&gt; dispatch(&#123;type: &apos;reset&apos;, payload: initialCount&#125;)&#125;&gt;</div><div class="line">        Reset</div><div class="line">      &lt;/button&gt;</div><div class="line">      &lt;button onClick=&#123;() =&gt; dispatch(&#123;type: &apos;decrement&apos;&#125;)&#125;&gt;-&lt;/button&gt;</div><div class="line">      &lt;button onClick=&#123;() =&gt; dispatch(&#123;type: &apos;increment&apos;&#125;)&#125;&gt;+&lt;/button&gt;</div><div class="line">    &lt;/&gt;</div><div class="line">  );</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p> 以将用于计算 state 的逻辑提取到 reducer 外部，这也为将来对重置 state 的 action 做处理提供了便利</p>
-<p> 如果 Reducer Hook 的返回值与当前 state 相同，React 将跳过子组件的渲染及副作用的执行</p>
-<p> <a href="https://segmentfault.com/a/1190000021261588" target="_blank" rel="external">参考资料</a><br> <a href="https://react.docschina.org/docs/hooks-reference.html?#usereducer" target="_blank" rel="external">参考资料</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/mobile.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/knowledge/mobile.html" itemprop="url">
-                  一些移动端环境搭建
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-08-22T14:40:37+08:00">
-                2020-08-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="移动端项目引入rem单位"><a href="#移动端项目引入rem单位" class="headerlink" title="移动端项目引入rem单位"></a>移动端项目引入rem单位</h1><h2 id="最终解决方案"><a href="#最终解决方案" class="headerlink" title="最终解决方案"></a>最终解决方案</h2><h3 id="安装-amfe-flexible"><a href="#安装-amfe-flexible" class="headerlink" title="安装 amfe-flexible"></a>安装 amfe-flexible</h3><p>npm install –save-dev amfe-flexible<br>在main.js中引入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">import &apos;amfe-flexible&apos;</div></pre></td></tr></table></figure></p>
-<p>在index.html头部插入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no&quot;&gt;</div></pre></td></tr></table></figure></p>
-<h3 id="安装-postcss-px2rem-exclude"><a href="#安装-postcss-px2rem-exclude" class="headerlink" title="安装 postcss-px2rem-exclude"></a>安装 postcss-px2rem-exclude</h3><p>npm install –save-dev postcss-px2rem-exclude<br>修改 .postcssrc.js<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">module.exports = &#123;</div><div class="line">  &quot;plugins&quot;: &#123;</div><div class="line">    &quot;postcss-import&quot;: &#123;&#125;,</div><div class="line">    &quot;autoprefixer&quot;: &#123;&#125;,</div><div class="line">    &apos;postcss-px2rem-exclude&apos;:&#123;</div><div class="line">        //rootValue: remConfig.remUnit,</div><div class="line">        remUnit: 75,</div><div class="line">        exclude: /node_modules/i,</div><div class="line">        mediaQuery: false,</div><div class="line">        minPixelValue: 3</div><div class="line">      &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h2 id="弯路"><a href="#弯路" class="headerlink" title="弯路"></a>弯路</h2><p>引入了px2remLoader<br>引入amfe-flexible，然后安装px2remLoader，并配置如下后，<br>会造成vue文件内样式单位不会被转为rem,但会把第三方组件库里面的样式单位改成rem</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">exports.cssLoaders = function (options) &#123;</div><div class="line">  //新增</div><div class="line">  const px2remLoader = &#123;</div><div class="line">    loader:&apos;px2rem-loader&apos;,</div><div class="line">    options:&#123;</div><div class="line">      remUnit:remConfig.remUnit</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  //修改</div><div class="line">  function generateLoaders (loader, loaderOptions) &#123;</div><div class="line">    //const loaders = options.usePostCSS ? [cssLoader, postcssLoader] : [cssLoader]</div><div class="line">    const loaders = options.usePostCSS ? [cssLoader, postcssLoader, px2remLoader] : [cssLoader, px2remLoader]</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>如果想个别样式单位不参与转换<br>需要将样式写在普通style标签里面，后面加注释/<em> no </em>/<br>如果写在lang = ‘less’ 标签的style里面，<br>会因为less-loader 将注释去掉,从而避免不了被转换</p>
-<h1 id="将svg转成icon"><a href="#将svg转成icon" class="headerlink" title="将svg转成icon"></a>将svg转成icon</h1><p>在src/components中新增SvgIcon文件夹<br>新增index.js 文件,构建SvgIcon组件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">src/components/SvgIcon/index.js</div><div class="line">&lt;template&gt;</div><div class="line">  &lt;svg :class=&quot;svgClass&quot; aria-hidden=&quot;true&quot;&gt;</div><div class="line">    &lt;use :xlink:href=&quot;iconName&quot;/&gt;</div><div class="line">  &lt;/svg&gt;</div><div class="line">&lt;/template&gt;</div><div class="line"></div><div class="line">&lt;script&gt;</div><div class="line">export default &#123;</div><div class="line">  name: &apos;SvgIcon&apos;,</div><div class="line">  props: &#123;</div><div class="line">    iconClass: &#123;</div><div class="line">      type: String,</div><div class="line">      required: true</div><div class="line">    &#125;,</div><div class="line">    className: &#123;</div><div class="line">      type: String,</div><div class="line">      default: &apos;&apos;</div><div class="line">    &#125;</div><div class="line">  &#125;,</div><div class="line">  computed: &#123;</div><div class="line">    iconName() &#123;</div><div class="line">      return `#icon-$&#123;this.iconClass&#125;`</div><div class="line">    &#125;,</div><div class="line">    svgClass() &#123;</div><div class="line">      if (this.className) &#123;</div><div class="line">        return &apos;svg-icon &apos; + this.className</div><div class="line">      &#125; else &#123;</div><div class="line">        return &apos;svg-icon&apos;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">&lt;/script&gt;</div><div class="line"></div><div class="line">&lt;style scoped&gt;</div><div class="line">.svg-icon &#123;</div><div class="line">  width: 1em;</div><div class="line">  height: 1em;</div><div class="line">  vertical-align: -0.15em;</div><div class="line">  fill: currentColor;</div><div class="line">  overflow: hidden;</div><div class="line">&#125;</div><div class="line">&lt;/style&gt;</div></pre></td></tr></table></figure></p>
-<p>在src文件夹下新增icons文件夹<br>icons文件夹下<br>新增svg文件夹，存放svg文件，例如user.svg<br>新增index.js<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">import Vue from &apos;vue&apos;</div><div class="line">import SvgIcon from &apos;@/components/SvgIcon&apos;// svg组件</div><div class="line"></div><div class="line">// 全局注册</div><div class="line">Vue.component(&apos;svg-icon&apos;, SvgIcon)</div><div class="line"></div><div class="line">const req = require.context(&apos;./svg&apos;, false, /\.svg$/)</div><div class="line">const requireAll = requireContext =&gt; requireContext.keys().map(requireContext)</div><div class="line">requireAll(req)</div></pre></td></tr></table></figure></p>
-<p>在main.js中引入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">import &apos;./icons&apos;</div></pre></td></tr></table></figure></p>
-<p>安装loader<br>npm install svg-sprite-loader –save-dev</p>
-<p>更改webpack.base.conf.js文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">module: &#123;</div><div class="line">    rules: [</div><div class="line">      &#123; //在url-loader配置前面新增</div><div class="line">        test: /\.svg$/,</div><div class="line">        loader: &apos;svg-sprite-loader&apos;,</div><div class="line">        include: [resolve(&apos;src/icons&apos;)],</div><div class="line">        options: &#123;</div><div class="line">          symbolId: &apos;icon-[name]&apos;</div><div class="line">        &#125;</div><div class="line">      &#125;,</div><div class="line">      &#123;</div><div class="line">        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,</div><div class="line">        loader: &apos;url-loader&apos;,</div><div class="line">        options: &#123;</div><div class="line">          limit: 10000,</div><div class="line">          name: utils.assetsPath(&apos;img/[name].[hash:7].[ext]&apos;)</div><div class="line">        &#125;,</div><div class="line">        exclude: [resolve(&apos;src/icons&apos;)] //修改url-loader配置</div><div class="line">      &#125;,</div><div class="line">    ]</div></pre></td></tr></table></figure></p>
-<p>使用<br>icon-class 值为svg文件名<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;svg-icon icon-class=&quot;user&quot;/&gt;</div></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/">23</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1745,7 +1590,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">216</span>
+              <span class="site-state-item-count">223</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1809,7 +1654,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

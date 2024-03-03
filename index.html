@@ -259,6 +259,1401 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/compressMethod.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/knowledge/compressMethod.html" itemprop="url">
+                  关于报文压缩方法的探究
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-03T18:16:37+08:00">
+                2024-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="问题发现"><a href="#问题发现" class="headerlink" title="问题发现"></a>问题发现</h1><p>项目中需要对大数据量请求时间进行缩短优化的工作，优化过程中发现，浏览器响应报文压缩方法为br的情况会比gzip的时间要长11-13s，具体表现如下</p>
+<p>服务端响应用时45s</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YmZmZTIyZmEzZWRkZDQ2OGZmODc5YmM5ZmJkMGM0ZGRfUGF4OE1qUElncThDQXd6SkpqVWFNY3g1MDNTcXBTdUlfVG9rZW46TW5namJPWnZ1b2F2MWZ4VFRQUmNuVXRnbk9oXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>但是浏览器<strong>等</strong>服务端返回却花了58s</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=OWNkYzA0ODEyYTlmMmE3ZTQ4OGM2MTc3ZDAwZTY2MzZfS3VBYVlKNDcwWTgxSklXSTRqQVdkcW1UZHd6NWR4STJfVG9rZW46Tm80M2I4Smd2b0pmamV4QkhGdWMxU3JXbmxlXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NTBiZTE2NDk3ZDg1YWFmYTQ0OTM3ODYwNGZhZjIzODlfOEtIaGNvbXc4NXhDbWNHbG1oWmtXSXVaWTBKa2tRNmFfVG9rZW46RUhlV2J1UWRqb3JUN094WWRoMWNCaE5ibmJoXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>这样浏览器就会比服务器响应<strong>多等</strong>了58-45= <strong>13s</strong>，不是很正常</p>
+<p>现在直接拿浏览器请求的cUrl 发起请求</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ODcyYjM3NTk3MjMxYzRiNzUyYzY3MDI3ZGIyY2Y1MmFfaEJFVDNmUHFxUXlzckgxUTV5dXZ5cFZBZUhpN1Jpck5fVG9rZW46QkVpV2JrWVBlb05kYlh4R0NnNmNyQWtHbncyXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ZDU4ZDI1YjUzOWFmYTZkOWU0Y2U5NGJiOTJhZGMxODBfN3lDakIwSklNVnRMbmxCc2JaZkgzYzRLbzIwQW9RUThfVG9rZW46SzdCT2JVekpYb3VwcWd4VjM4SGNMcDBJbmZkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NmQ2NjE1NDk2M2NlNzMyNDkyNDgzNWE5ZDY4Yzk1YzFfWEZFVDVDZVpjSVVQMjkzbHRqZk96TFhpVDAxcGxYYktfVG9rZW46TXJiZGJCOG9zb1N4eFp4WUFlRmMwRjJobkpkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>可以看到非浏览器请求的响应使用了gzip压缩，总用时48s, 服务端用时46s, 耗时差2s</p>
+<p>可见使用gzip压缩算法耗时是远优于br压缩的</p>
+<h1 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h1><p>想办法禁用掉br压缩方法</p>
+<ol>
+<li>指定service Mesh压缩方法</li>
+</ol>
+<p>第一步，检查服务集群是否开启了service mesh，开启后指定才有效</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NDQ0OGQ2OWUxZDJlNGViNTJkMDMyY2I1M2Q0YjJkOWJfcms4d0dMb0ZSSnlJYk9Nb2pVWVl4a1dDMlJwellPNTVfVG9rZW46QWdNNmJXU1gzb2ljUGZ4S1ZzUWNJTUVhbjJyXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>第二步，直接在【通用流量平台-&gt;稳定性管理】指定压缩方法</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YmQwYjNiODQ2YTQ2MDM1Nzg5OGJjN2I1YzE3M2Y3NzNfM2pRbTJvOTRVblpFWDg1V3FTeUlyVkRBUWZkZ2NLT2NfVG9rZW46VlVvZWJ4NGU3bzFDd2d4blpab2M1OHdibjNkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>Service mesh 在指定压缩方法后，会对所有请求按指定的压缩算法进行压缩，不管content-length 大小，也不管上游是否已经指定了其他压缩方法，简单粗暴，适合快速解决问题</p>
+<ol>
+<li>TLB + 项目配置</li>
+</ol>
+<p>该方法是在探究原因过程中发现，过程比较曲折，需要排查修改两个地方，着急解决问题不适宜</p>
+<ol>
+<li>确认下自己的服务是否为node服务且有使用koa-compress插件(<strong>注意排查框架是否有默认注入</strong>)，需要将br 压缩算法关闭，具体关闭形式可能因框架不同配置姿势不同，但可以参考下插件<a href="https://github.com/koajs/compress" target="_blank" rel="external">官方配置</a></li>
+<li>关闭TLB 路由Ngnix默认br 压缩算法配置，禁止使用br算法</li>
+</ol>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MjE0NjZiZDAwOWViMmJmYjgwYjgzZmRhMWU5OGZmNzdfQUtKenJndjJZMmQySXdvdFlyRUFoeFVPNWZGSzRFSEtfVG9rZW46Q05TdmJMQml0b0NFQkd4aWx0bmNnYUZEbkZoXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>虽然复杂，但是方案会比方法一更合理一些</p>
+<h2 id="为什么不在发起请求时直接更改accept-encoding？"><a href="#为什么不在发起请求时直接更改accept-encoding？" class="headerlink" title="为什么不在发起请求时直接更改accept-encoding？"></a>为什么不在发起请求时直接更改accept-encoding？</h2><p>解决这个问题的另一条途径就是从源头，请求发起端就去掉相关br的设置，也就是更改accept-encoding, 让它不包含br，如果客户端不支持br 压缩，那请求响应自然是不能使用br 压缩的，但是天有不测风云，accept-encoding 是一个不能通过代码去修改的请求报文(<a href="https://developer.mozilla.org/zh-CN/docs/Glossary/Forbidden_header_name" target="_blank" rel="external">详见</a>)，所以这条路是行不通的。</p>
+<h1 id="这到底是怎么回事？"><a href="#这到底是怎么回事？" class="headerlink" title="这到底是怎么回事？"></a>这到底是怎么回事？</h1><p>虽然使用方法一可以快速彻底的解决掉问题，但是不应用方法一时，可以发现的一个明显问题就是不同请求的压缩方法不同，而且存在不使用压缩方法的情况，这就激起了作者尘封已久的好奇心，到底是谁在指定content-encoding呢？</p>
+<p>接下来就需要看一下从服务端到客户端，到底是哪个环节在决定content-encoding</p>
+<h2 id="Koa-compress"><a href="#Koa-compress" class="headerlink" title="Koa-compress"></a>Koa-compress</h2><p>鉴于本人node服务项目基于ACE1.X构建，在搜索代码进行排查时，并没有在配置文件中搜到相关的配置，重新查阅框架文档的时候，才注意到框架有进行<a href="https://iesfe.bytedance.net/ace-v1/fullstack/basic/middleware/#compress" target="_blank" rel="external">默认注入</a>，这就从服务端源头找到了一个会更改content-encoding的地方，俗话说，灯下黑，不过如此。</p>
+<p>既然有使用koa-compress, 而且<a href="https://github.com/koajs/compress/tree/master/lib" target="_blank" rel="external">源码</a>不是很复杂，那就简单探索下它的压缩原理</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YTgyZTg5MmY1NWUyMTYzNGQ1NzUxZTBiM2EzYjk4N2ZfdGRzZ3lxQW1iVTdER21JYUxzQm9iWGFGbjFlSnA4bERfVG9rZW46SUVBMGJmaWJKb2xGQkh4U0JXM2NVYmVBbkNMXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>查看源码可知，当content-length大于1024b时，会根据Accept-encoding进行压缩</p>
+<p>在Accept-Encoding值是’gzip, deflate, br’情况下</p>
+<p>压缩方法的选择逻辑就是accept-encoding有br 会优先使用br，如果br被禁用就使用gzip</p>
+<p>由于默认注入时，没有指定压缩阈值，所以当我们的请求数据过大, 大于1024b时，自然就会触发koa-compress进行br压缩，也就是说上面问题的出现，罪魁祸首就是koa-compress</p>
+<p>但是当数据量小于1024b时，又会出现br，甚至不进行压缩又是怎么回事呢？</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NTk5ZjMxMTIwOTgwMTc3YzY5MjRmMjRkYjMyNDdlOGRfMHA4SlJNbDdaalBzQ1dWSXhuQXNJcXZJQTFjV2U3b0NfVG9rZW46VHBDSGJDNWZ0b2VxUW14cnFJWWNXa0ZnbkdnXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ZDIyZTAwZjdkYmI1YTg1OWY3OGFlOTI4MzFhOWVmNzdfMmFlZGZ4S25DekNnUzhSZTB4Z2NDUVY3dVpZMWs5SFpfVG9rZW46VmV1V2JlNnZzb2hHald4M0RGTWNMYk1hbk1nXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<h3 id="whisle插曲"><a href="#whisle插曲" class="headerlink" title="whisle插曲"></a>whisle插曲</h3><p>在排查过程中，相同条件请求，在本地开启whistle代理，通过域名进行本地访问，出现了响应始终是gzip 的情况，这对于大于1024b的响应就不对了，按上面koa-compress逻辑，应该是br才对</p>
+<p>经过在http\://localhost:8899/#network 抓包，可以发现whistle给本地服务的请求报文accept-encoding是不带br的</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=OWVkMWNjYzMwZDE2N2ExMjNmNzFkOTk2NTgyM2U4YWJfZ1BYSnFNUGNZVkpvaGVRamZaenp0b2hKZHFqOEt2TU1fVG9rZW46UWxDRmIwT1Vqb3ViY2R4VFQwcGNDMDlwbnNiXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>经过与whistle开发者请教(<a href="https://github.com/avwo/whistle/issues/950" target="_blank" rel="external">issue</a>)，whistle确实会篡改我们的报文，把accept-encoding中的br 去掉，这样就实现了响应始终是gzip压缩的效果，因此，在本地的测试推荐大家直接使用localhost访问，避免代理的干扰</p>
+<p>以下在本地进行的测试也均是在关闭代理情况下进行</p>
+<h2 id="TLB"><a href="#TLB" class="headerlink" title="TLB"></a>TLB</h2><p>根据请求响应链路，响应从node服务返回后，会依次经过Mesh, TLB然后到浏览器</p>
+<p>由于mesh 在不指定压缩算法的情况下是<strong>不参与</strong>压缩的，所以对于小于1024的数据压缩，矛头指向了TLB</p>
+<p>在开始验证前，先来了解下TLB的压缩原理<a href="https://bytedance.feishu.cn/docx/CgO6dfGYOo86eYxILLPcMc2MnRc" target="_blank" rel="external">TLB压缩问题oncall排查手册</a></p>
+<p>文中对我们比较重要的信息是这部分</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YjZmMDE3ZmJjNzYxNThjZjk5Mzc2MDBlNmVkYjk4YzRfODVpZm9jSDFKUnUwUUJzZ2hVbnIyZEJoa3lZZWo4Z2ZfVG9rZW46QVFRTWJpRXJSb0dKTHF4d25qY2NaaHpTblJkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>文中配置与tlb同学确认后就是默认配置，这样对于我们验证就有了参照物</p>
+<p>在关掉koa-compress 的br 压缩后，我进行了如下实验</p>
+<ol>
+<li>构造响应不同content-length的接口</li>
+<li>分别通过本地localhost 访问，域名访问，以及关掉tlb 的br 压缩后再通过域名访问以上接口（保证经过tlb）</li>
+</ol>
+<p>得到如下结果（no表示不压缩）</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">content-length</th>
+<th style="text-align:left">localhost:3000</th>
+<th style="text-align:left">域名访问</th>
+<th style="text-align:left">tlb 设置 brotli = off</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">117</td>
+<td style="text-align:left">no</td>
+<td style="text-align:left">no</td>
+<td style="text-align:left">no</td>
+</tr>
+<tr>
+<td style="text-align:left">152</td>
+<td style="text-align:left">no</td>
+<td style="text-align:left">br</td>
+<td style="text-align:left">no</td>
+</tr>
+<tr>
+<td style="text-align:left">204</td>
+<td style="text-align:left">no</td>
+<td style="text-align:left">br</td>
+<td style="text-align:left">gzip</td>
+</tr>
+<tr>
+<td style="text-align:left">958</td>
+<td style="text-align:left">no</td>
+<td style="text-align:left">br</td>
+<td style="text-align:left">gzip</td>
+</tr>
+<tr>
+<td style="text-align:left">1208</td>
+<td style="text-align:left">gzip</td>
+<td style="text-align:left">gzip</td>
+<td style="text-align:left">gzip</td>
+</tr>
+</tbody>
+</table>
+<p>从koa-compress 压缩原理我们可以知道从服务端响应的数据，大于1024采用gzip，小于则不压缩</p>
+<p>所以本地访问是符合预期的</p>
+<p>经过域名访问，我们可以看到小于1024大于150的响应被用br进行压缩了, 符合br 大于150就压缩</p>
+<p>当把tlb 上nginx的br开启指令关掉，我们可以看到小于1024大于200的响应被用gzip压缩了，符合gzip 大于200就压缩的逻辑</p>
+<p>再看大于1024的最后一行，当服务端已经指定content-encoding的时候，tlb 是不会进行压缩的，会沿用上游指定压缩算法</p>
+<p>综上看来，<strong>TLB 会在上游响应未指定content-encoding的时候进行小于1M响应数据的压缩, 默认大于150b时会使用br压缩，大于200b且禁用br情况下才会使用gzip，如果上游指定了content-encoding, 就沿用上游压缩算法</strong></p>
+<p>至此，响应报文的content-encoding 来源我们搞清楚了，接下来回到解决办法一，验证下service mesh指定压缩方法后报文变化</p>
+<h3 id="集群插曲"><a href="#集群插曲" class="headerlink" title="集群插曲"></a>集群插曲</h3><p>虽然<a href="https://bytedance.feishu.cn/docx/CgO6dfGYOo86eYxILLPcMc2MnRc" target="_blank" rel="external">文档</a>中指令是默认指令，但不并是<strong>所有</strong>TLB集群的默认Ngnix 配置，如果出现了与上述结论异常的情况，需要邀请TLB 的同学帮忙查一下域名依赖的<strong>TLB 集群</strong>是否就是文档中的默认配置（因为只有TLB同学有权限可以查）</p>
+<p>比如，相同600B请求，Boe 环境是br压缩，但是线上则变成了gzip</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ZjFjMTkwMTg2NzkzNDA3MDZmOTZlNGEzMGYzOTc2OGVfdFY3ZUhMN0tIU2lFdTRuaDFDbzl6bWNOTEtDUEwyRWtfVG9rZW46RERKdmI0azFPbzJQdjd4TkpNQ2NDd2JobmVkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YzE1YWJjZTNjZWNhNDA4NDk0ODNjNjg0MTNlMGFlMTRfVmJ1VVA0M1pMZm5hQ0hqcDJQOVVwd3lwZUFlUm5rUHpfVG9rZW46VTVoeGJlNXhsb3g2SWN4SXBZbmNFakxGbmtBXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>按上面的结论，服务器不会对小于1024的请求进行压缩，经过tlb 默认配置会使用br，boe 环境是正常的，线上是不正常的，经过排查发现，线上tlb 依赖的<strong>集群默认</strong>配置没有开启br ，所以再走默认配置会进行gzip压缩</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MzQzNDk5NGQyMDc0YTE4NzA1MGU5YzJkN2ZlOGM2MDlfNGtDdVNGYTUxMTdBUUR2em9aS1lpcERXN3FsNFFqRkhfVG9rZW46R2VlZWJ0TTU0b2VxcWN4OXNtM2MyQ0hibmZkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YzUzZGYyNDkyOTE4YjQxZGVhMWU3ZDIyZmNlYWYwNjNfdzNvWUtFT0U4amcyeXdTT3U5TE51UlJoVFlPS1pFTDVfVG9rZW46SUZPY2JtamJ6b0RmQ014YWtjdmM2UWJSbjBlXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<h3 id="Cloud-IDE"><a href="#Cloud-IDE" class="headerlink" title="Cloud IDE"></a>Cloud IDE</h3><p>这里需要注意一点的是，上面我们在发现小于1024的压缩算法异常时，访问的是cloud IDE 上启动项目后帮我们生成的域名，我们在本地请求接口是没有进行压缩的，也就是说cloud IDE生成的域名是有经过TLB的，而且其集群默认开启了br压缩</p>
+<h2 id="Service-Mesh"><a href="#Service-Mesh" class="headerlink" title="Service Mesh"></a>Service Mesh</h2><p>实验条件(复现问题)：</p>
+<p>TLB nginx 不禁用br</p>
+<p>不禁用koa=compress的br压缩算法</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">content-length</th>
+<th style="text-align:left">localhost:3000</th>
+<th style="text-align:left">域名访问</th>
+<th style="text-align:left">域名访问</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">117</td>
+<td style="text-align:left">no</td>
+<td style="text-align:left">no</td>
+<td style="text-align:left">gzip</td>
+</tr>
+<tr>
+<td style="text-align:left">152</td>
+<td style="text-align:left">no</td>
+<td style="text-align:left">br</td>
+<td style="text-align:left">gzip</td>
+</tr>
+<tr>
+<td style="text-align:left">204</td>
+<td style="text-align:left">no</td>
+<td style="text-align:left">br</td>
+<td style="text-align:left">gzip</td>
+</tr>
+<tr>
+<td style="text-align:left">958</td>
+<td style="text-align:left">no</td>
+<td style="text-align:left">br</td>
+<td style="text-align:left">gzip</td>
+</tr>
+<tr>
+<td style="text-align:left">1208</td>
+<td style="text-align:left">br</td>
+<td style="text-align:left">br</td>
+<td style="text-align:left">gzip</td>
+</tr>
+</tbody>
+</table>
+<p>我们从浏览器发起请求</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=M2IyNDRhOTRhNDk3Yzg3ZWMxOWY2NWQ1NWQzYjYzZDNfWWVyY2toZjFxWDJqRlE4aGtOM25BRE5XQTU3cEpjVGNfVG9rZW46VlhJSmJDOUhtb01GREp4UzJHSmNzaTdzbkpiXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>在最后一个中间件打印响应头，说明服务器没有参与数据压缩 (可以通过设置priority让中间件在最后一个执行)</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YTJlNTA3NzA4ZTA2YjcxZjE1ZDNjMmE5ZjEzYWU1YTFfcFlUVGhlMHFyb2JwQ1JGNVRvTklaMWd1WDJoSGg2ektfVG9rZW46Wk4wMWIyUFhDb2Z6UXV4dGVUS2NqSXprbklkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>然后通过监听端口报文</p>
+<p>tcpdump -i eth0 port 3000 -nn</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MzAwZDkxZjUxNWQ1YWUwNGZkNzQyZmY3ZTA5MjgwNDhfYWM5TEZTZWZvQXpRTEpoT2xOdGZRU1FISmZZUFZwSFFfVG9rZW46WGdPdWJwdzZMb2ZTd1Z4NzRPRWNvOFdSbkVjXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>基本上通过上述表现我们基本上是可以判断是mesh 进行了压缩</p>
+<p>但是，我们现在监听的是3000配置端口(其他服务监听实例输出的端口)</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NjRjYTJiYTI1NzBmMWRlOGYzNDMxOTQ2Y2Q3MmNkYzBfMGtXMzc2c3NVQW9jUmVoNXZoV0RQVHhGOW5YZ2JqemFfVG9rZW46UGE2T2JqVjVJb2JnTDl4NXdJbGNZSG9sbjFjXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>如果3000端口吐出来的是经过了mesh的话，那通信的结构应该是这样</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NTc5NDRmMzRjOGY5MzkwZTQ3MTY0NGNhNjhlNzBiN2FfYjViaDYyRkNLVXdSZk9WeDkwS3ZYcnJGYVllZG0zOXJfVG9rZW46WHJjU2JVbHY0b2l1alJ4eVlZdWNrUzNHbkh6XzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p><strong>往深了想一下，上面的判断逻辑并不是非常精确</strong></p>
+<ol>
+<li>node 最后吐出来的数据的header 可能跟我们上面在最后一个中间件打印的header并不同，也就是说我们在最后一个中间件打印的header 并不是最终实例吐出数据的header，有一些 header 是会在最后吐数据的时候装的</li>
+<li>Gzip 的请求头真的是mesh 加上去的吗？实例和mesh 之间不会还有其他服务？</li>
+</ol>
+<p>要解决上面两个疑问，就要想办法去抓取一下mesh 接收的数据，也就是服务吐给mesh的数据</p>
+<h3 id="抓取mesh-socket"><a href="#抓取mesh-socket" class="headerlink" title="抓取mesh socket"></a>抓取mesh socket</h3><p>当给服务开启mesh 服务时，mesh 会给环境注入一些<a href="https://bytedance.feishu.cn/wiki/wikcnNBQTrQvvto4XpAtlgDtbvh" target="_blank" rel="external">环境变量</a></p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MGQyNDk2YzM4Y2ZkNTcyMTVhOGQ2ZGQ4NThlNzMyODNfaUlEV3htRTNEZVRCWEZxVXhZR0JMVEd3dTBLQ1dDUUxfVG9rZW46SWN4cWJWdHZib2JLaEN4STY4VmM1RnRObktjXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ZGNiZjlhY2U5NDkzZjI5NjYwN2NkNGRiZWY5MDIxNjVfRmNwb1VDVFRVRWZ6bjRKWksxZlEwd2lFb2w3SlVxREVfVG9rZW46WndZWGI0aGg3bzFJaUp4ZVBzUGNxWmtyblhnXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>其中SERVICE_MESH_HTTP_EGRESS_ADDR 这个变量对应的地址就是服务交给mesh 转发的数据</p>
+<p>即服务会往这个地址吐数据，然后再由mesh从这里转发再吐出去</p>
+<p>那我们接下来就要想办法去读这个socket</p>
+<p><a href="https://plantegg.github.io/2018/01/01/%E9%80%9A%E8%BF%87tcpdump%E5%AF%B9Unix%20Socket%20%E8%BF%9B%E8%A1%8C%E6%8A%93%E5%8C%85%E8%A7%A3%E6%9E%90/" target="_blank" rel="external">通过tcpdump对Unix Domain Socket 进行抓包解析</a></p>
+<p>当我打算用curl 命令去执行相关方法时，却发现没有相应地址的socket</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MTBlNWU4ZTVhNGUxZmFhNmY4NzBhMTRhMmQxYzk2ODZfVlgzRHdpZGVGbTllQnBXaVZZNVlyaTFyajRyOTBXYVdfVG9rZW46UGE3dmJIZGJlb25YVHJ4OUFaOWNaWFlGbmxUXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>ok，拉mesh 同学onCall 说这种情况是因为服务器和mesh之间不是用的uds通信，用的ip PORT通信</p>
+<p><a href="https://bytedance.feishu.cn/wiki/wikcn4bvZsBkZMpUVC2WQ0lUzPg#OqPeFE" target="_blank" rel="external">ByteMesh HTTP 出流量接入</a></p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YTk1YzA0YjJmNmYxODc4ZDcwMjcxMDY2MzY3MTg1OWJfcVVsa2M1WUFxN3dtelJnQzJTbHJZNTI3cVpjWGtya3JfVG9rZW46SHJUemJRV2xwbzFrdWx4QWRDSWN1NEVvblZoXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<h3 id="抓取PORT-9507"><a href="#抓取PORT-9507" class="headerlink" title="抓取PORT 9507"></a>抓取PORT 9507</h3><p>&#x20;那我现在需要找到MESH_EGRESS_PORT具体是什么</p>
+<p>无论是通过打印环境变量</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NTM3NTkyNGJhZmIxOWVhNTcyZmFkODhhMDJmZmFmNzlfcXk2dkRFZ3E3SUtKWVFVTkQ4ZkR2c3ZVNUw4VDBZS3dfVG9rZW46UmN3QWJ0Y0l2b1lqT2d4MWhnbGNScUJnbm1iXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>还是通过 cat /proc/\${pid}/environ 查看配置文件，以及通过查看监听端口</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ZTkxMWI0YTIxYzJkOWI4NzgxNjdlNzg1N2Q0MmU2MDdfSU1MRnNDRjFLdDNya0t6bWFoMzB0Yk5uREhlSjVZVkJfVG9rZW46SlpVZ2IwR0pVbzlSbnp4RkpoQ2NtbWVSbkJoXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>基本都确定lookback通信的port 是9507</p>
+<p>Ok 那我们再回到用tcpdump 抓包的方式,会发现什么也抓不到</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ZTA2ZGY0ZmY5MTA0YWRmZDUwM2Y4ZWRmYzllMmUxNTdfMW9zdGE2bVp0cWMyWnpJYnhnSUNyYXZwQW16VXRISW1fVG9rZW46TE5URmJFY0g1b3ZyYkx4SkRlVmNJWFJWbkdjXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>陷入死胡同, 那就是说没有数据包经过mesh 接收数据的端口</p>
+<h3 id="重新认识Service-Mesh"><a href="#重新认识Service-Mesh" class="headerlink" title="重新认识Service Mesh"></a>重新认识Service Mesh</h3><h4 id="入流量"><a href="#入流量" class="headerlink" title="入流量"></a>入流量</h4><p>我们之前是通过入流量开启压缩算法的</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ODJjMTdiYmU4MjExZmJiMGFmYjlkYzYyZDM5NTg1NTNfeDNjR2dwYm9neHR6OVNhOGs5eTVWMXhibkg5TWIzVE5fVG9rZW46UFFvdmJieDBtb2tiMUV4ZURmaWMxVGI1blhnXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>入流量在整个通信链路中的作用是这样的</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MzYwYjFhOTE5YWUyM2M1MjU0NGU1NTIwODQ0NTJlNTJfTVcxUFZTcHpGM2U2a1YyUHJ2cHZJdkZ0NUNkbm5nc3BfVG9rZW46STFERGJzY2dXb3dRVGV4WExWbWNLQXVvbnVEXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>&#x20;所以现在需要抓取的是入流量的端口<a href="https://bytedance.feishu.cn/wiki/wikcntxkGyIyWhfQ2ZZiqCmOj4c" target="_blank" rel="external">ByteMesh WebSocket &amp; HTTP/1.1 &amp; HTTP/2协议接入约定</a></p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NmY1NDM1ODcyNDZiNDJhMjk3YTIxMjEyODJlMTIzNDNfVnlvM1hRMEVwY0RzRW0xYXFXR3hjUTdlWUNBNkowclhfVG9rZW46R2d6T2I3ZURjb0l3NEd4VHNsYmNzMnpubmRkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>需要找到MESH_INGRESS_PORT 通过查看pid 下面 environ 文件可以看到port 为3000，也就是配置端口</p>
+<p>然后尝试监听 <a href="https://www.cnblogs.com/zgq123456/articles/10251860.html" target="_blank" rel="external">https://www.cnblogs.com/zgq123456/articles/10251860.html</a></p>
+<p>tcpdump -i any -A -s 0 ‘tcp port 3000 and (((ip[2:2] - ((ip[0]&amp;0xf)&lt;<2)) -="" ((tcp\[12]&0xf0)="">&gt;2)) != 0)’</2))></p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NTk1NjI5ZTgzMjBlZjQ0MmY3MjNkZTM2OWI0NzRmZTBfQ1ZJM3JCcFhvamFaOGhrZXNGT0w2MUd6cVFRcnY5d2RfVG9rZW46R2tKTGJQRmlob2JqSjh4dWFLYWM1QmtjbmdkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NGU2ZWI0MzMzN2MxYWIwNjU0NDgzMTc1NTc2MmEyNWZfTDdvSmpVNk9xbXFpQmJFTFBNbTdsV3ZLZXRQa29JcVpfVG9rZW46WGp2NmJCeUhJbzlGMUl4UDFEZWNjTlpzbnhiXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>这一次看到了报文的整个变化过程如上两图</p>
+<h4 id="出流量"><a href="#出流量" class="headerlink" title="出流量"></a>出流量</h4><p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MGQ3YjQ2NGZhZDU2NzY0MTRkNmRlZDAxN2FlNzRjODlfNVJIOW11d1cyWlFNZ1JYQWVMZ2t2WWw5dWg3VENlTDFfVG9rZW46WXlVa2J4R1Fsb1Jva0F4RktMZGNjWW5WbnNmXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MGQyOGI1OGFhNjlmNDlhZThkZWJjZWY1ZjVmMDNlMThfeUxHQ0w2anc5Zjc4MTU4RUlKOW1qS2NTYWJoUFlrRkNfVG9rZW46V2Y0S2JCVHZ1b2Nndml4TTB2a2NvSUtDbjhnXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>通过给服务开启出流量代理，可以看到两种通信地址</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YjIxMDQzZjNjNTE5ZTEyYTcxMjU4NTY1NTRkMWRmZDFfRmZBRWYwc2RnT0xMUkVrZ01DNmw1NmNhUjJ0QWxUNmVfVG9rZW46Vk5BbWJzVHR5b3JnUVh4SjYwS2NSREUwbkxnXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>SERVICE_MESH_EGRESS_ADDR 即如果node 跟下游服务通信会走dsl 通信</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=OTg1NmYwMDdmNTJjNjk2MTNkNTVkYWM4M2MwYmIzYTJfZVR5VFFxNXNGM2REaXppZkpwQ1BlOWpranA3S2RRWnlfVG9rZW46STl1Y2JUUEhjb2FwcjJ4VVA3c2M1U2JIbkllXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>MESH_EGRESS_PORT 即如果node 发起http 请求会通过这个端口与mesh 进行http 通信，过程同上面入流量过程</p>
+<h5 id="看一下UDS报文长啥样"><a href="#看一下UDS报文长啥样" class="headerlink" title="看一下UDS报文长啥样"></a>看一下UDS报文长啥样</h5><p>还是参考这篇<a href="https://plantegg.github.io/2018/01/01/%E9%80%9A%E8%BF%87tcpdump%E5%AF%B9Unix%20Socket%20%E8%BF%9B%E8%A1%8C%E6%8A%93%E5%8C%85%E8%A7%A3%E6%9E%90/" target="_blank" rel="external">文章</a>的方法</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=OTExN2NmOGE1ZDQ2MmU4ODllMzdmZWUxNzE0MjNlY2JfZ2hua29rcnN3WnFKSXY5SDZrWmViZ0t5U0RIdTBFZ1VfVG9rZW46QkhyWGJjZ2JRbzJDajN4V1ZtaGN6TXZYbmFiXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<ol>
+<li>为方便后续指令执行，切到rpc.egress.sock所在文件夹，</li>
+</ol>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ZTM0YTFmNTRkOTQwMzY2ZWUyMzdlODA4MGViYzlkNGNfWVQ2Y3FWRk5LVU93Y2xmWGEzeUU3V1pwYWd4aHlCOVpfVG9rZW46T252V2JVRGs3b29sSUh4dzRNN2NrSWNLbnFmXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MGE2ZDE0ZmYxMjA1ODU1MWQyN2RhNjc5YjUzZWJmYzFfQ2w0eGpCN3F4SHFDUTROdjFZWGtqeDkwb042YW5NbTZfVG9rZW46R3B3SWJQbm9Tb3lvN2V4T0kxOWNnWHozbk9nXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<ol>
+<li>将给到rpc.egress.sock 的数据转发到 8089</li>
+</ol>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YmY1YTlkYTI3ZWFhZGM0NDZlMWIzYzM1YzExN2NjMzdfa0NISWFuZDEyeHVqR281ZzJybWRzdE55V2lsb2FPUEdfVG9rZW46UmNtQ2JZeUdob3AwVWt4SEpJWWNWQ1c1blVlXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<ol>
+<li>用curl 发起请求，并用tcpdump 对8089进行抓包</li>
+</ol>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=OTljZjM4MjdmYjRhZmFmZmJlZmE4M2ZkNjU5NDYyYWFfcUQ5QXc1cEdwMGNpZmxTdngxVG5ZaUV2VVFoZW1rWXlfVG9rZW46QlZkbGJUR0tOb2ZCVnJ4bkdGM2NnVUlKbnpoXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>注意使用curl –-unix-socket /rpc.egress.sock 时 如果不支持–-unix-socket 参数，需要使用apt-get 升级curl 版本，如无法升级，可能是linux 版本不再维护，可尝试替换基础镜像(指定高版本linux 的)进行部署后再测试 虽然位于rpc.egress.sock 所在文件夹下执行，但是前面的/ 不能省</p>
+<p>先用tcpdump -i any -netvv port 8089 看看能不能</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ZDYzMGQxYTI3OWRjZTljYjZiMmE4ZjkxYjIzMWRkY2Ffd0lOelN3Sk9COFc0TjRhSWhxamxqNmZSTGVleFNEampfVG9rZW46SGo0U2I3MjBUb2hxRUt4SnZMVmM0aGJxbjRlXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<p>加上-A -s , ===&gt; tcpdump -i any -A -s 0 -netvv port 8089 看看具体报文</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=N2MxNTE1ZjliYTE4ZDNhYzUzNTVmMzk3NjBmODg4MGVfc0hxdFdkTjJJRU04QVMwbURUVWNzSGZ0a1BOaDZrZDZfVG9rZW46Wk15S2J3WTZqb2RMZmp4UVBFTGNmaDdhblRmXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt=""></p>
+<h1 id="知识收获"><a href="#知识收获" class="headerlink" title="知识收获"></a>知识收获</h1><h2 id="cUrl"><a href="#cUrl" class="headerlink" title="cUrl"></a>cUrl</h2><p>cUrl <a href="https://curl.se/docs/manual.html" target="_blank" rel="external">命令相关参数</a></p>
+<p>-v/–verbose 用于打印更多信息，包括发送的请求信息</p>
+<p>-o /dev/null 把输出写到该文件中，保留远程文件的文件名</p>
+<p>-w ‘%{size_download}\n’ 获取下载大小</p>
+<p>--unix-socket 测试socket 地址，注意要求curl 版本7.50+，如果webshell 不支持，需要考虑更换tce基础镜像</p>
+<h2 id="常用linux命令"><a href="#常用linux命令" class="headerlink" title="常用linux命令"></a>常用linux命令</h2><h3 id="tcpdump"><a href="#tcpdump" class="headerlink" title="tcpdump"></a>tcpdump</h3><p>tcpdump -i eth0 port 3000 -nn</p>
+<p>tcpdump -i eth0 -nn -vv</p>
+<p>tcpdump -i lo -nn -vv</p>
+<p><a href="https://www.cnblogs.com/zgq123456/articles/10251860.html" target="_blank" rel="external">https://www.cnblogs.com/zgq123456/articles/10251860.html</a></p>
+<h3 id="查看"><a href="#查看" class="headerlink" title="查看"></a>查看</h3><p>lsof -i | grep LISTEN</p>
+<p>ps -le</p>
+<p>ps -ef | grep node</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>apt/apt-get update</p>
+<p>apt/apt-get install 包名</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/historySearchDesign.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/knowledge/historySearchDesign.html" itemprop="url">
+                  历史记录功能设计
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-03T15:17:37+08:00">
+                2024-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>根据用户反馈，查询条件多个时，想要重新看一下上次的查询结果，操作比较繁琐，希望可以有历史查询的功能，将最近查询的n次记录可以找到，方便回溯问题</p>
+<h1 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h1><h2 id="前端"><a href="#前端" class="headerlink" title="前端"></a>前端</h2><p>在用户点击查询按钮的时候，将当前页面链接调接口保存起来，查询时链接会携带查询条件</p>
+<h1 id="后端"><a href="#后端" class="headerlink" title="后端"></a>后端</h1><h2 id="存储"><a href="#存储" class="headerlink" title="存储"></a>存储</h2><p>&#x20;历史记录需要跟用户身份做绑定，当前天级uv可达75人，不适宜用tcc或者wcc平台进行数据存储</p>
+<p>&#x20;所以需要申请资源进行数据存储</p>
+<p><strong>容量</strong></p>
+<p>&#x20;一个连接大小按照500Byte算，如果只保存最近10条记录，那么一个用户需要5000b ==&gt; 5kb</p>
+<p>目前平台用户数以1000为底计算,一开始平台会需要 5kb * 1000 ==&gt;5000kb ==&gt; 5mb</p>
+<p>(目前纯个人用户有530，加上以部门为单位申请的权限，各部门人数不确定)</p>
+<p>假设半年后用户量翻倍那么存储空间需要增加一倍也就是10MB</p>
+<p><strong>负载</strong></p>
+<p>目前平台日pv 350,日uv 50, 大致计算一个用户一天会访问页面7次，四舍五入假设1天会进行10次查询</p>
+<p>1个用户1天会进行10次数据库读写</p>
+<p>那整个平台1天平均会进行500次读写，高峰假设1000次读写(75四舍五入)</p>
+<p>平均 500 * 500 /(3600*24) ~~ 0.003kb/s 高峰1000*500/(3600*24) ~~~0.006kb/s</p>
+<p>很低</p>
+<h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><p>本来想如果数据库有数组的话，表结构就是用户id + 记录数组；</p>
+<p>没有的话，我现在想了两种方案，</p>
+<p>一个就是用字符串存这个数组，用户id + 记录数组字符串形式，相当于更新时要先获得这个字符串，转成数组后，看有没有10条，没有的话直接push,有的话，把时间最早的那条删除，push进数组，再转成字符串更新数据库，这样缺点就是展示的时候也得字符串转数组一下；</p>
+<p>另一种就是用户id只和一条记录存在一起，不用一个字符串存整个10条记录，更新的时候我去拿数据的时候拿整个用户id所有的，超过10条的话就用数据库删除方法把时间早的删除了，再存进去最新的</p>
+<p>看起来都挺麻烦</p>
+<p>而且在实际接入数据库的过程中，还要手动执行命令行产生model相关文件</p>
+<p>通过调研公司存储系统的各种方式，觉得redis可以更好的解决存储问题，redis支持List类型存储，</p>
+<p>而且LPUSH, LPOP,EXPIRE方法可以很好的帮助实现数据存取更新缓存等问题,省了数据库建表等过程</p>
+<h2 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h2><p>redis可以很好的支持数据删除，在更新数据的时候重新设置过期时间即可保证删除不活跃用户的记录</p>
+<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><p>申请redis服务，用户工号做redis的key值，key值的value即用户的查询历史记录list,</p>
+<p>写接口: 查记录，更新记录</p>
+<p>前端在点击查询的时候调接口更新记录</p>
+<h1 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h1><p><a href="https://bytedance.feishu.cn/wiki/wikcnfEUcTwW8A3bUUQNtqUlsUd" target="_blank" rel="external">存储系统对比 （草稿）Storage System Comparision（Draft）</a> #</p>
+<p><a href="https://bytedance.feishu.cn/wiki/wikcnKKISdh4ftbAj6FG24gAwCb" target="_blank" rel="external">数据结构与命令一览 List of data structure and commands</a> #</p>
+<p><a href="https://redis.io/commands" target="_blank" rel="external">https://redis.io/commands</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/mobxlearn.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/knowledge/mobxlearn.html" itemprop="url">
+                  Mobx 运行机制深入研究
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-03T15:17:37+08:00">
+                2024-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="追踪原理"><a href="#追踪原理" class="headerlink" title="追踪原理"></a><strong>追踪原理</strong></h1><p><a href="https://cn.mobx.js.org/best/react.html" target="_blank" rel="external">官方文档</a></p>
+<p>MobX 会对在执行 <strong>跟踪函数 期间</strong> 读取的任何现有的<strong>可观察属性</strong>做出反应</p>
+<p>“<strong>读取</strong>” 是对象属性的间接引用，可以用过 . (例如 user.name) 或者 [] (例如 user[‘name’]) 的形式完成。</p>
+<p>“<strong>追踪函数</strong>” 是 <strong>computed 表达式、observer 组件的 render() 方法和 when、reaction 和 autorun 的第一个入参函数。</strong></p>
+<p>“<strong>过程(during)</strong>” 意味着只追踪那些在函数执行时被读取的 observable 。这些值是否由追踪函数直接或间接使用并不重要。</p>
+<p>换句话说，MobX 不会对其作出反应:</p>
+<p>从 observable 获取的值，但是在追踪函数之外</p>
+<p>在异步调用的代码块中读取的 observable</p>
+<p>Mobx 5 以下 MobX 不会追踪还不存在的索引或者对象属性(当使用 observable 映射(map)时除外)。</p>
+<p>所以建议总是使用 .length 来检查保护基于数组索引的访问。</p>
+<p>所有数组的索引分配都可以检测到，但前提条件必须是提供的索引小于数组长度。</p>
+<h2 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a><strong>核心概念</strong></h2><p>追踪属性访问，而不是值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">let message = observable(&#123;</div><div class="line">    title: &quot;Foo&quot;,</div><div class="line">    author: &#123;</div><div class="line">        name: &quot;Michel&quot;</div><div class="line">    &#125;,</div><div class="line">    likes: [</div><div class="line">        &quot;John&quot;, &quot;Sara&quot;</div><div class="line">    ]</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YjI2YjAxNTdhOWZkMmM1ZjFkOThlOTRhM2RlMWJkYjdfcnliUm9PSXdJWFZseExRcFdxNDhNaHNUcEh4dURwQ0pfVG9rZW46Ym94Y250QmJzT2ZWZkh3QzZVd05mNjlWSExmXzE3MDcxOTA3Mzk6MTcwNzE5NDMzOV9WNA" alt=""></p>
+<p>mobx会追踪箭头有没有变化</p>
+<p>如果箭头发生变化，就会执行追踪函数</p>
+<h1 id="使用注意"><a href="#使用注意" class="headerlink" title="使用注意"></a><strong>使用注意</strong></h1><h2 id="处理数据时"><a href="#处理数据时" class="headerlink" title="处理数据时"></a><strong>处理数据时</strong></h2><p>1.更改没有被obserable的箭头，追踪函数不执行</p>
+<p>2.追踪函数里使用间接引用指向obserable属性，追踪函数不执行</p>
+<p>3.对新增的属性，可以使用set,get实现obserable</p>
+<p>4.在异步代码中访问的obserable属性，不会引起追踪函数执行</p>
+<pre><code>1.更改没有被obserable的箭头，追踪函数不执行
+autorun(() =&gt; {
+    console.log(message.title)
+})
+message = observable({ title: &quot;Bar&quot; }) //指向message的箭头没有被obervable
+autorun(() =&gt; {
+    message.likes;//箭头没变，又没有访问数组里面的属性
+})
+message.likes.push(&quot;Jennifer&quot;);
+
+2.追踪函数里使用间接引用指向obserable属性，追踪函数不执行
+var title = message.title;
+autorun(() =&gt; {
+    console.log(title) //访问箭头没有变，还是指向老值的位置
+})
+message.title = &quot;Bar&quot; //箭头改了，但autorun里没有用到
+const author = message.author;
+autorun(() =&gt; {
+    console.log(author.name) 
+})
+message.author.name = &quot;Sara&quot;;//会执行跟踪函数，autorun里有访问name属性，这里指向name值得箭头改了
+message.author = { name: &quot;John&quot; };//不会执行，没有访问author属性的箭头
+
+正确使用
+
+A:
+autorun(() =&gt; {
+    console.log(message.author.name)
+})
+message.author.name = &quot;Sara&quot;;
+message.author = { name: &quot;John&quot; };
+B:
+function upperCaseAuthorName(author) {
+    const baseName = author.name;
+    return baseName.toUpperCase();
+}
+autorun(() =&gt; {
+    console.log(upperCaseAuthorName(message.author))
+})
+message.author.name = &quot;Chesterton&quot;
+
+3.异步
+const message = observable({ title: &quot;hello&quot; })
+autorun(() =&gt; {
+    console.log(message) //会执行两次，因为console.log是异步的，请确保始终传递不变数据 ( immutable data ) 或防御副本给 console.log。
+})
+message.title = &quot;Hello world&quot;
+autorun(() =&gt; {
+    setTimeout(
+        () =&gt; console.log(message.likes.join(&quot;, &quot;)), //异步执行，访问原始数据打印一次
+        10
+    )
+})
+message.likes.push(&quot;Jennifer&quot;);//不会引起autorun执行
+
+4.MobX 5 可以追踪还不存在的属性
+autorun(() =&gt; {
+    console.log(message.postDate)
+})
+message.postDate = new Date()
+</code></pre><h2 id="组件使用时"><a href="#组件使用时" class="headerlink" title="组件使用时"></a><strong>组件使用时</strong></h2><h3 id="子组件问题"><a href="#子组件问题" class="headerlink" title="子组件问题"></a><strong>子组件问题</strong></h3><p><strong>MobX 只会为数据是直接通过 render 存取的 observer 组件进行数据追踪</strong></p>
+<p>所以当需要将数据传递给子组件时，要保证子组件也是一个obserable组件，可以做出反应</p>
+<p>解决办法：</p>
+<p>1.将子组件使用obserable函数处理</p>
+<p>它用 mobx.autorun 包装了组件的 render 函数以确保任何组件渲染中使用的数据变化时都可以强制刷新组件</p>
+<p>2.使用mobx-react的Obserable组件包裹子组件</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">方法一：将子组件使用obserable函数处理</div><div class="line"><span class="keyword">const</span> MyComponent = observer(<span class="function">(<span class="params">&#123; message &#125;</span>) =&gt;</span></div><div class="line">    &lt;SomeContainer</div><div class="line">        title = &#123;() =&gt; &lt;TitleRenderer message=&#123;message&#125; /&gt;&#125;</div><div class="line">    /&gt;</div><div class="line">)</div><div class="line">const TitleRenderer = observer((&#123; message &#125;) =&gt;</div><div class="line">    &lt;div&gt;&#123;message.title&#125;&lt;/div&gt;&#125;</div><div class="line">)</div><div class="line">message.title = "Bar"</div><div class="line">方法二：使用mobx-react的Obserable组件包裹子组件</div><div class="line">const MyComponent = (&#123; message &#125;) =&gt;</div><div class="line">    &lt;SomeContainer</div><div class="line">        title = &#123;() =&gt;</div><div class="line">            &lt;Observer&gt;</div><div class="line">                &#123;() =&gt; &lt;div&gt;&#123;message.title&#125;&lt;/div&gt;&#125;</div><div class="line">            &lt;/Observer&gt;</div><div class="line">        &#125;</div><div class="line">    /&gt;</div><div class="line">message.title = "Bar"</div></pre></td></tr></table></figure>
+<h3 id="避免在本地字段中缓存-observable"><a href="#避免在本地字段中缓存-observable" class="headerlink" title="避免在本地字段中缓存 observable"></a><strong>避免在本地字段中缓存 observable</strong></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">@observer class MyComponent extends React.component &#123;</div><div class="line">    author;</div><div class="line">    constructor(props) &#123;</div><div class="line">        super(props)</div><div class="line">        this.author = props.message.author;//message.author发生变化时不会引起render</div><div class="line">    &#125;</div><div class="line">    render() &#123;</div><div class="line">        return &lt;div&gt;&#123;this.author.name&#125;&lt;/div&gt; //.name可以引起render</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>优化，使用计算属性，或者在render函数中进行间接引用</p>
+<pre><code>@observer class MyComponent extends React.component {
+    @computed get author() {
+        return this.props.message.author
+    }
+</code></pre><h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>1.从性能上考虑，越晚进行间接引用越好</p>
+<p>2.数组里面的是对象而不是字符串，那么对于发生在某个具体的对象中发生的变化，渲染数组的父组件将不会重新渲染</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">const Message = observer((&#123; message &#125;) =&gt;</div><div class="line">    &lt;div&gt;</div><div class="line">        &#123;message.title&#125;</div><div class="line">        &lt;Author author=&#123; message.author &#125; /&gt;</div><div class="line">        &lt;Likes likes=&#123; message.likes &#125; /&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">)</div><div class="line">const Author = observer((&#123; author &#125;) =&gt;</div><div class="line">    &lt;span&gt;&#123;author.name&#125;&lt;/span&gt;</div><div class="line">)</div><div class="line">const Likes = observer((&#123; likes &#125;) =&gt;</div><div class="line">    &lt;ul&gt;</div><div class="line">        &#123;likes.map(like =&gt;</div><div class="line">            &lt;li&gt;&#123;like&#125;&lt;/li&gt;</div><div class="line">        )&#125;</div><div class="line">    &lt;/ul&gt;</div><div class="line">)</div></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">变化</th>
+<th style="text-align:left">重新渲染组件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">message.title = “Bar”</td>
+<td style="text-align:left">Message</td>
+</tr>
+<tr>
+<td style="text-align:left">message.author.name = “Susan”</td>
+<td style="text-align:left">Author (.author 在 Message 中进行间接引用, 但没有改变)*</td>
+</tr>
+<tr>
+<td style="text-align:left">message.author = { name: “Susan”}</td>
+<td style="text-align:left">Message, Author</td>
+</tr>
+<tr>
+<td style="text-align:left">message.likes[0] = “Michel”</td>
+<td style="text-align:left">Likes</td>
+</tr>
+</tbody>
+</table>
+<h1 id="一些-对比"><a href="#一些-对比" class="headerlink" title="一些 对比"></a>一些 对比</h1><h1 id="autorun-vs-compute"><a href="#autorun-vs-compute" class="headerlink" title="autorun vs compute"></a><strong>autorun vs compute</strong></h1><p>当使用 autorun 时，所提供的函数总是立即被触发一次，然后每次它的依赖关系改变时会再次被触发</p>
+<p>computed(function) 创建的函数只有当它有自己的观察者时才会重新计算，否则它的值会被认为是不相关的</p>
+<p>如果一个计算值不再被观察了，例如使用它的UI不复存在了，MobX 可以自动地将其垃圾回收。</p>
+<p>而 autorun 中的值必须要手动清理才行</p>
+<h1 id="autorun-vs-reaction"><a href="#autorun-vs-reaction" class="headerlink" title="autorun vs reaction"></a><strong>autorun vs reaction</strong></h1><p>reaction(() =&gt; data, (data, reaction) =&gt; { sideEffect }, options?)</p>
+<p>它接收两个函数参数，第一个(<strong>数据</strong>函数)是用来追踪并返回数据作为第二个函数(<strong>效果</strong>函数)的输入。</p>
+<p>传入 reaction 的第二个函数(副作用函数)当调用时会接收两个参数。</p>
+<p>第一个参数是由 data 函数返回的值。</p>
+<p>第二个参数是当前的 reaction，可以用来在执行期间清理 reaction</p>
+<p>reaction 返回一个清理函数。</p>
+<p>不同于 autorun 的是当创建时 **效果 **函数不会直接运行，只有在数据表达式首次返回一个新值后才会运行。</p>
+<p>在执行 <strong>效果</strong>函数时访问的任何 observable 都不会被追踪。</p>
+<p><strong>效果</strong>函数仅对<strong>数据</strong>函数中访问的数据作出反应，这可能会比实际在<strong>效果</strong>函数使用的数据要少。</p>
+<p>此外，<strong>效果</strong> 函数只会在表达式返回的数据发生更改时触发。 换句话说: reaction需要你生产 <strong>效果</strong>函数中</p>
+<p>所需要的东西。</p>
+<h1 id="useObserver-vs-Observer-vs-observer"><a href="#useObserver-vs-Observer-vs-observer" class="headerlink" title="useObserver vs Observer vs observer"></a><strong>useObserver vs Observer vs observer</strong></h1><p><a href="https://juejin.im/post/6844904137167994893" target="_blank" rel="external">相关文档</a></p>
+<p>1.虽然只是在返回DOM的地方使用 useObserver(), 但是，当dom中数据改变的时候，整个component都会重新render</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">function Person() &#123;</div><div class="line">  console.log(&apos;in useObserver&apos;);//点击按钮会触发执行</div><div class="line">  const person = useLocalStore(() =&gt; (&#123; name: &apos;John&apos; &#125;));</div><div class="line">  return useObserver(() =&gt; (</div><div class="line">    &lt;div&gt;</div><div class="line">      &#123;person.name&#125;</div><div class="line">      &lt;button onClick=&#123;() =&gt; (person.name = &apos;Mike&apos;)&#125;&gt;No! I am Mike&lt;/button&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  ));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>2.Observer 标签组件可以更精准的控制想要重新渲染的地方</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">export default function ObservePerson() &#123;</div><div class="line">    console.log(&apos;in Observer&apos;);//点击按钮不会执行</div><div class="line">    const person = useLocalStore(() =&gt; (&#123;name: &apos;John&apos;&#125;))</div><div class="line">    return (</div><div class="line">        &lt;div&gt;</div><div class="line">            The old name is: &#123;person.name&#125; //点击按钮不会更新</div><div class="line">            &lt;div&gt;</div><div class="line">                &lt;Observer&gt;&#123;() =&gt; &lt;div&gt;&#123;person.name&#125;&lt;/div&gt;&#125;&lt;/Observer&gt; //点击按钮会更新</div><div class="line">                &lt;button onClick=&#123;() =&gt; (person.name = &apos;Mike&apos;)&#125;&gt;</div><div class="line">                    I want to be Mike</div><div class="line">                &lt;/button&gt;</div><div class="line">            &lt;/div&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">    )</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>3.与useObserver相比，除了使用方法不同，目前不知道区别在哪，有时间需要探究一下</p>
+<pre><code>const ObserverLowercasePerson: React.FC&lt;any&gt; = observer(() =&gt; {
+    console.log(&apos;in Observer&apos;) //点击按钮也会执行
+    const person = useLocalStore(() =&gt; ({name: &apos;John&apos;}));
+    return (
+        &lt;div&gt;
+            &lt;div&gt;The name is: {person.name}&lt;/div&gt;
+            &lt;button onClick={() =&gt; (person.name = &apos;Mike&apos;)}&gt;
+                Change name
+            &lt;/button&gt;
+        &lt;/div&gt;
+    )
+})
+```
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/trendCard.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/knowledge/trendCard.html" itemprop="url">
+                  趋势图卡片实现原理
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-02T15:17:37+08:00">
+                2024-03-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>春节看板项目中有对数据进行趋势分析的展示，其中一种卡片的展示形式经过思考后可以提炼成组件向外提供服务，于是进行封装上传<a href="https://semi.bytedance.net/material/zh-CN/playground/219" target="_blank" rel="external">Semi物料市场</a></p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YmE3Y2ExN2NlYzhlNDI5NWMxODIxODEyZjhkMjVmMjJfMm5HZG1OSVF0aUx1b2NBWGUwUm1iN0txcDkzTWJWZ0RfVG9rZW46Ym94Y25LYkFuYkhSQ3ZUMDRMbzl4SUtJdmhlXzE3MDcyMDQ3MDk6MTcwNzIwODMwOV9WNA" alt=""></p>
+<h1 id="设计"><a href="#设计" class="headerlink" title="设计"></a>设计</h1><ol>
+<li>既要支持一个卡片的展现，也要支持多个卡片的展示，所以数据源应该是一个数组 list</li>
+<li>每个卡片的大小应该是一样的，所以应该给一个统一设置卡片大小的属性 size</li>
+<li>卡片可以静态展示，也可以有响应事件，这里先支持一个点击事件 onClick</li>
+<li>单个卡片的功能需要展示趋势折线图，标题，提示，数量，还要支持定制颜色</li>
+</ol>
+<p>所以单个卡片的数据结构应该是这样的</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">name</th>
+<th style="text-align:left">标题名</th>
+<th style="text-align:left">string 或者 ReactNode</th>
+<th style="text-align:left"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">tip</td>
+<td style="text-align:left">提示（可选）</td>
+<td style="text-align:left">string 或者 ReactNode</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">tipNormalShow</td>
+<td style="text-align:left">提示图标展示方式,默认值false,鼠标滑过才展示</td>
+<td style="text-align:left">boolean</td>
+<td style="text-align:left">FALSE</td>
+</tr>
+<tr>
+<td style="text-align:left">hoverLayer</td>
+<td style="text-align:left">鼠标hover是否展示蒙层效果,默认false,不展示</td>
+<td style="text-align:left">boolean</td>
+<td style="text-align:left">FALSE</td>
+</tr>
+<tr>
+<td style="text-align:left">lineColor</td>
+<td style="text-align:left">折线的颜色,涉及渐变色计算,配置成十六进制格式</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">#E91E63 或者 #00B3A1根据卡片位置奇偶情况切换默认颜色</td>
+</tr>
+<tr>
+<td style="text-align:left">value</td>
+<td style="text-align:left">标题下的数据</td>
+<td style="text-align:left">string 或者 ReactNode</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">xData</td>
+<td style="text-align:left">折线图x轴数据</td>
+<td style="text-align:left">Array[string或者number]</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">yData</td>
+<td style="text-align:left">折线图y轴数据</td>
+<td style="text-align:left">Array[string或者number]</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">loading</td>
+<td style="text-align:left">数据加载状态开启,默认false,不开启</td>
+<td style="text-align:left">boolean</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">noDataTip</td>
+<td style="text-align:left">没有数据时的提示</td>
+<td style="text-align:left">string 或者 ReactNode</td>
+<td style="text-align:left">抱歉，没有数据可展示</td>
+</tr>
+<tr>
+<td style="text-align:left">errorInfo</td>
+<td style="text-align:left">错误展示</td>
+<td style="text-align:left">{text: ‘xxx’, color: ‘xxxx’}</td>
+</tr>
+</tbody>
+</table>
+<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><p>将List 传进来的数据，循环成多个卡片，将单个卡片信息，onClick 和size都传递给卡片组件</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YWRmY2QyZWQxNmYwM2ZhZGM1N2QyYTcxODQyYzYxOWRfTlRJZ01PaGJSbDBKNlJlcld0Z0NMZ1Bma2ppYTJjQkFfVG9rZW46Ym94Y255U0dhcGU2N2JkT29WQ25YNjc4RFpkXzE3MDcyMDQ3MTA6MTcwNzIwODMxMF9WNA" alt=""></p>
+<p>卡片根据传递进来属性的不同状态，展示相关信息</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MGYzNGFmOGZiNTI0Yzg3YjRiMjg2ZmVjZGFjYTZlY2NfZ0hhdFc2SHNzQnRiUHpNTXF0NzFUQm1NUzU0M0xGOFZfVG9rZW46Ym94Y241allXOWUwOGVwVGs4a2x1Y3pPeTZiXzE3MDcyMDQ3MTA6MTcwNzIwODMxMF9WNA" alt=""></p>
+<p>另外折线图依靠echart来画，所以需要根据颜色和卡片位置生产曲线配置，这里依靠getChartOption</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NzA2YmRlODRkMjBhMjE3M2JjNGZhOTIwNjhjMDQ1ZjhfTk81QTQ0WExwQTQ2TWdaaGE5NHVnSWd6ZmdYdzVTRHFfVG9rZW46Ym94Y24wZUVYeDIzZExjWEVla3ZWd0FxcVRkXzE3MDcyMDQ3MTA6MTcwNzIwODMxMF9WNA" alt=""></p>
+<p>计算渐变颜色同转换成rgb格式，设置透明度来实现渐变</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MzU1YzI0YjVhMWExNWU4Nzk1MjFhOWI4M2E1ZWU2NmFfckFaNk41aURobmE2V1FOcGxuUm5pWWlVQjMydHZZT0FfVG9rZW46Ym94Y244djl1bkxXVjllaVlPWU1JMTFQR1JkXzE3MDcyMDQ3MTA6MTcwNzIwODMxMF9WNA" alt=""></p>
+<h1 id="体验"><a href="#体验" class="headerlink" title="体验"></a>体验</h1><p>在线体验地址：<a href="https://semi.bytedance.net/material/zh-CN/playground/219" target="_blank" rel="external">https://semi.bytedance.net/material/zh-CN/playground/219</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/dragthink.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/react/dragthink.html" itemprop="url">
+                  拖拽渲染问题的深入研究
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-01T15:17:37+08:00">
+                2024-03-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>使用拖拽组件进行拖拽排序<br>1.原展示模块内容需要进行缩略展示，具备收缩展开的能力<br>2.排序的内容复杂，需要异步获取数据，循环的时候传进去的关键值(如id)作为参数拉取数据，渲染图表</p>
+<h1 id="方案一"><a href="#方案一" class="headerlink" title="方案一"></a>方案一</h1><p>保留原组件渲染逻辑，同时将数据源传入排序组件（排序组件显示标题类信息代表原模块），<br>然后根据是否进入排序状态，保留二者其一，就是排序时展示排序组件，非排序时展示模块内容<br>问题</p>
+<p>从排序状态回到正常展示状态时，因为正常展示的组件DOM在进入排序状态时被销毁<br>这时再回来，相当于从无到有要重新创建，会引起数据重新请求</p>
+<h1 id="方案二"><a href="#方案二" class="headerlink" title="方案二"></a>方案二</h1><p>将原展示模块组件作为排序组件项进行渲染，在进入排序状态时将展示模块高度减小，仅保留标题部分充当缩略信息展示<br>因为展示模块DOM始终存在，所以可以解决掉方案一展示模块DOM消失再创建的数据拉取问题<br>原理</p>
+<p>DOM的新建跟更新流程不同，在这种情况下，新建过程会需要去请求接口拉数据，而如果仅仅是更新的话，可以依赖react的key的关键作用减少DOM 的重建过程，只是进行调换顺序即可<br>这里在将数据源列表渲染出来的时候，将数据的特征值赋值给key，即排序前后，展示模块key不变就不会被重新新建渲染， 只是进行排序处理<br>解决方案一产生的问题</p>
+<p>在进入排序状态时，将展示模块组件高度设置为0，overflow：hidden，就看不到展示组件，但DOM 依然存在<br>这时再使用排序组件展示缩略信息即可</p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>无论哪种方案，在结束排序后，都要更新数据源，但数据源里面的对象不能变，因为展示模块会依赖其中的具体对象里的信息进行数据拉取<br>即</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/product.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/knowledge/product.html" itemprop="url">
+                  学习关于产品的一些思维
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-09-03T17:57:25+08:00">
+                2022-09-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>产品经理决策力工具</p>
+<p>象限法：<br>把想做的事情拆成两个指标去做<br>让这个两个指标做xy轴<br>在xy轴包围的空间内，分成四个象限<br>把要做的事情按照xy轴的值分布在四个象限中<br>然后决定要在四个象限中寻找最优解</p>
+<p>假设思维: 把未来要做的事情一步一步的假设出来<br>用户思维： 用使用者的思维设计功能</p>
+<p>产品路线图roadmap4个核心要素</p>
+<ol>
+<li>里程碑是要有意义的</li>
+<li>跟各个方向的工作协同进行</li>
+<li>可能不是串行的而是并行的，需要准备多种方案</li>
+<li>基于产品框架</li>
+</ol>
+<p>五张图说明产品</p>
+<ol>
+<li>核心功能体验图，主要功能的流程图</li>
+<li>模块图，将功能具体的实现划分不同模块，即可以概览具备的的功能，也方便进行任务分配</li>
+<li>功能树，一个模块具体具备的功能内容，相当于再细分</li>
+<li>页面关系图，页面的操作流程，可以跟功能树对比查看是否有功能遗漏，上面提到的模块功能树都会最终落到页面上</li>
+<li>交互设计图，不是最重要的，但要有自解释性，每个人都能看懂</li>
+</ol>
+<p>用户留存率—-&gt; 指标之王<br>算法</p>
+<ol>
+<li>新增留存率 所有新用户中有多少比例下个时间周期会出现</li>
+<li>活跃留存率 所有用户中（活跃用户），包括新用户，有多少比例会在下个时间周期出现，即有多少人会成为下个周期的活跃用户<br>统计分析<br>用户活跃度<br>cohort， 横纵都是第1-n周<br>每一行代表当前周用户留存率再往后几周的留存率请款<br>每一列代表当前周中，阁用户留存率情况，可以看到每周留存率在这一周的变化情况<br>对角线从左上到右下，上面数据表示次周留存率，如果呈下降趋势，说明产品在新客中粘性在下降，留存率整体在下降<br>将对角线数据处理形成折线图可直观看到用户留存趋势</li>
+</ol>
+<p>RFM,用户贡献值（下了多少单，总消费金额…），根据用户贡献值可采取不同的营销策略</p>
+<p>DAU,WAU,MAU,日、周、月活跃用户，一般让DAY/MAU的值作为一个用户粘性的指标<br>以DAY/MAU为y轴，DAU为x轴，形成折线趋势图，让趋势保持稳定上升是一个产品的发展方向</p>
+<p>如何提升留存？<br>不要去想现有总用户如何去留存，去观察哪些用户值得留存，想办法让这些用户实现留存提升</p>
+<p>设计一套CRM系统<br>CRM系统： 维护公司与客户关系 ===&gt; 用户运营战略执行系统</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/redis.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/knowledge/redis.html" itemprop="url">
+                  redis 学习的一些笔记
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-08-09T21:30:15+08:00">
+                2022-08-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>基础常识<br>磁盘<br>寻址：ms<br>带宽： G/M<br>内存<br>寻址：ns(纳秒级)<br>带宽：byte/s<br>秒&gt;毫秒&gt;微秒&gt;纳秒<br>磁盘寻址上比内存少了10w倍</p>
+<p>I/O BUffer：成本问题<br>磁盘有磁道和扇区，一个扇区512byte<br>会造成索引成本增大<br>因此进行4K对齐，操作系统无论读多少都最少从磁盘里面拿4k出来</p>
+<p>数据库的表很大，性能会下降吗？<br>如果表有索引，<br>那么对于增删改的操作肯定会变慢<br>查询速度<br>如果是1个或者少量查询依然很快<br>但如果是并发大的时候会受到硬盘带宽的影响，从而影响速度</p>
+<p>数据在内存和磁盘中体积不一样</p>
+<p>redis出现原因：<br>内存 ==&gt;  贵<br>磁盘 ==&gt;  慢<br>两个基础设施限制：<br>冯诺依曼体系的硬件制约 ===&gt; 硬盘io带宽问题<br>以太网，tcp/ip的网络 ===&gt; 不稳定</p>
+<p><a href="https://db-engines.com/en/" target="_blank" rel="external">https://db-engines.com/en/</a></p>
+<p>Redis 是一个开源（BSD许可）的，内存中的数据结构存储系统，它可以用作数据库、缓存和消息中间件。 它支持多种类型的数据结构，如 字符串（strings）， 散列（hashes）， 列表（lists）， 集合（sets）， 有序集合（sorted sets） 与范围查询， bitmaps， hyperloglogs 和 地理空间（geospatial） 索引半径查询。 Redis 内置了 复制（replication），LUA脚本（Lua scripting）， LRU驱动事件（LRU eviction），事务（transactions） 和不同级别的 磁盘持久化（persistence）， 并通过 Redis哨兵（Sentinel）和自动 分区（Cluster）提供高可用性（high availability）。</p>
+<p>上述数据类型是指value的数据类型<br>memcache 和redis区别在于，memcache value没有类型<br>将返回value所有数据到client端，会受到server 网卡IO的限制，而且client要有解码的逻辑<br>redis因为value有类型，所以对于数据的请求根据不同情况直接调用相应类型方法返回少量数据即可<br>做到了计算向数据移动</p>
+<p>redis是单进程，单线程，单实例的，通过epoll快速处理并发请求<br>epoll是同步非阻塞的多路复用机制<br>jvm: 一个线程成本是1MB<br>线程多了会增加调度成本，从而使CPU浪费，也会增加内存成本<br>BIO—&gt;NIO（同步非阻塞）—&gt;多路复用—&gt;epoll(引入共享空间避免fd相关数据考来考去)</p>
+<p>redis 对不同数据类型不同encoding类型的数值具有不同的方法<br>key有两个属性：<br>type标识值的类型<br>encoding标识值的编码类型<br>二者决定对值的操作可以使用哪些方法，从而加速计算</p>
+<p>String 类型<br>字符串的相关操作：<br>set,get,append,setRange,getRange,strlen<br>适用场景：<br>使用内存存储的session，对象，小文件</p>
+<p>数值的相关操作：<br>incr,decr<br>适用场景：<br>限流，计数<br>秒杀一般会用数据库</p>
+<p>bitmap的相关操作：<br>setbit, bitcount,bitpos,bittop<br>使用场景：web, 离线数据<br>1.用户系统，统计用户登录天数，且窗口随机<br>key标识用户，每个用户准备365位，每一位表示当天是否登录，登录置一<br>setbit sean 1 1<br>setbit sean 7 1<br>setbit sean 364 1<br>STRLEN sean ===&gt;46 每个用户只需要46个字节来存储这些信息<br>BITCOUNT sean -2 -1 计算多少天范围内一共登录了几天</p>
+<ol>
+<li><p>电商做618活动，需要给活跃用户登录后送礼物，请问应该备货多少礼物<br>假设这里活跃用户统计规则为20220901-20220903三天内登录的用户，三天内只要登录一次就算活跃用户<br>key标识当天用户登录情况，将用户编号映射到二进制位的相应位置上，每一位二进制代表一位用户是否登录<br>setbit 20220901 1 1<br>setbit 20220902 1 1<br>setbit 20220902 7 1<br>bittop or destkey 20220901 20220902<br>bitcount destkey 0 -1</p>
+</li>
+<li><p>存储oa权限信息</p>
+</li>
+<li>布隆过滤器，模块调用</li>
+</ol>
+<p>List 类型相关操作<br>按不同放入顺序排列<br>栈：同向命令<br>队列：反向命令<br>数组<br>阻塞，单播队列<br>ltrim<br>使用场景：<br>数据共享，迁出<br>无状态</p>
+<p>Hash类型<br>对filed进行数值计算<br>场景：<br>点赞，收藏，详情页<br>聚合场景</p>
+<p>Set类型<br>无序去重集合<br>元素变多扩容，会触发rehash，造成原顺序颠倒不稳定<br>集合操作多<br>随机事件：<br>RANDMEMBER key count<br>正数：取出一个去重的结果集(不能超过已有集)<br>负数：取出一个带重复的结果集，一定满足你要的数量<br>如果是0，不返回<br>应用场景：<br>随机事件==&gt;抽奖：<br>10个精品，参与人数&gt; 10 时，传正数，得到10个随机不重复值<br>10个精品，参与人数&lt; 10 时，传负数，得到10个可重复的值<br>中奖是否重复<br>Spop 不重复取出一个<br>推荐系统：<br>共同好友：交集<br>推荐好友：差集</p>
+<p>Sorted set<br>排序<br>物理内存左小右大（根据分值从左到右从小到大）<br>不随命令发生变化<br>集合操作（并集，交集）权重、聚合指令<br>排序是怎么实现的。 ==&gt; skip List 跳跃表<br>增删改查的速度<br>场景：<br>排行榜，<br>有序事件<br>评论+分页</p>
+<p>redis持久化<br>持久化意味着性能会下降<br>两个指标<br>快照：rdb,恢复的速度快，但缺失的多<br>日志：aof, ，<br>满足完整性好，恢复速度变慢，===&gt;采用不同日志策略避免<br>指令追加造成冗余量比较大 ===&gt; 使用重写</p>
+<p>redis 分布式集群<br>可用性：<br>单点故障可通过主从主备一变多集群构建镜像，需要同步<br>强一致性，会破坏使用性<br>弱一致性，可用性强，但同步一致性低（默认）<br>最终一致性，使用黑盒可靠集群做中间缓存，保证主从数据最终一致性<br>数据存储压力问题(装不下)，采用分片式集群代理集群，也是一变多，但不需要同步</p>
+<p>AkF拆分原则<br>根据业务划分数据到不同redis实例</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/systemDesign.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -666,913 +2061,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1128.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks/1128.html" itemprop="url">
-                  重新认识路由
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-28T16:20:02+08:00">
-                2021-11-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>路由管理，就是让你的页面能够根据 URL 的变化进行页面的切换，这是前端应用中一个非常重要的机制</p>
-<p>路由的核心逻辑就是根据 URL 路径这个状态，来决定在主内容区域显示什么组件。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">// 自定义路由</div><div class="line">const MyRouter = (&#123; children &#125;) =&gt; &#123;</div><div class="line">  const routes = _.keyBy(</div><div class="line">    children.map((c) =&gt; c.props),</div><div class="line">    &quot;path&quot;,</div><div class="line">  );</div><div class="line">  const [hash] = useHash();</div><div class="line">  const Page = routes[hash.replace(&quot;#&quot;, &quot;&quot;)]?.component;</div><div class="line">  // 如果路由不存在就返回 Not found.</div><div class="line">  return Page ? &lt;Page /&gt; : &quot;Not found.&quot;;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"></div><div class="line">const Route = () =&gt; null;</div><div class="line"></div><div class="line">// 应用</div><div class="line">function SamplePages &#123;</div><div class="line">  return (</div><div class="line">    &lt;div className=&quot;sample-pages&quot;&gt;</div><div class="line">      &#123;/* 定义了侧边导航栏 */&#125;</div><div class="line">      &lt;div className=&quot;sider&quot;&gt;</div><div class="line">        &lt;a href=&quot;#page1&quot;&gt;Page 1&lt;/a&gt;</div><div class="line">        &lt;a href=&quot;#page2&quot;&gt;Page 2&lt;/a&gt;</div><div class="line">        &lt;a href=&quot;#page3&quot;&gt;Page 3&lt;/a&gt;</div><div class="line">        &lt;a href=&quot;#page4&quot;&gt;Page 4&lt;/a&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">      &lt;div className=&quot;exp-15-page-container&quot;&gt;</div><div class="line">        &#123;/* 定义路由配置 */&#125;</div><div class="line">        &lt;MyRouter&gt;</div><div class="line">          &lt;Route path=&quot;page1&quot; component=&#123;Page1&#125; /&gt;</div><div class="line">          &lt;Route path=&quot;page2&quot; component=&#123;Page2&#125; /&gt;</div><div class="line">          &lt;Route path=&quot;page3&quot; component=&#123;Page3&#125; /&gt;</div><div class="line">          &lt;Route path=&quot;page4&quot; component=&#123;Page4&#125; /&gt;</div><div class="line">        &lt;/MyRouter&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    &lt;/&gt;</div><div class="line">  );</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h1 id="使用React-Router"><a href="#使用React-Router" class="headerlink" title="使用React Router"></a>使用React Router</h1><h2 id="简单应用"><a href="#简单应用" class="headerlink" title="简单应用"></a>简单应用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">// 从 react-router-dom 引入路由框架提供的一些组件</div><div class="line">import &#123; BrowserRouter, Switch, Route, Link &#125; from &quot;react-router-dom&quot;;</div><div class="line">// 引入了两个课程示例页面</div><div class="line">import Counter from &quot;./01/Counter&quot;;</div><div class="line">import UserList from &quot;./01/UserList&quot;;</div><div class="line"></div><div class="line"></div><div class="line">// 使用数组定义了页面组件和导航的标题，从而方便下面的渲染逻辑</div><div class="line">const routes = [</div><div class="line">  [&quot;01 Counter&quot;, Counter],</div><div class="line">  [&quot;01 UserList&quot;, UserList],</div><div class="line">];</div><div class="line">function App() &#123;</div><div class="line">  return (</div><div class="line">    &lt;BrowserRouter&gt;</div><div class="line">      &lt;div className=&quot;app&quot;&gt;</div><div class="line">        &lt;ul className=&quot;sider&quot;&gt;</div><div class="line">          &#123;routes.map(([label]) =&gt; (</div><div class="line">            &lt;li&gt;</div><div class="line">              &lt;Link to=&#123;`/$&#123;label.replace(&quot; &quot;, &quot;/&quot;)&#125;`&#125;&gt;&#123;label&#125;&lt;/Link&gt;</div><div class="line">            &lt;/li&gt;</div><div class="line">          ))&#125;</div><div class="line">        &lt;/ul&gt;</div><div class="line">        &lt;div id=&quot;pageContainer&quot; className=&quot;page-container&quot;&gt;</div><div class="line">          &lt;Switch&gt;</div><div class="line">            &#123;routes.map(([label, Component]) =&gt; (</div><div class="line">              &lt;Route key=&#123;label&#125; path=&#123;`/$&#123;label.replace(&quot; &quot;, &quot;/&quot;)&#125;`&#125;&gt;</div><div class="line">                &lt;Component /&gt;</div><div class="line">              &lt;/Route&gt;</div><div class="line">            ))&#125;</div><div class="line">            &#123;/* 定义一个默认的路由 */&#125;</div><div class="line">            &lt;Route path=&quot;/&quot; exact&gt;</div><div class="line">              &lt;h1&gt;Welcome!&lt;/h1&gt;</div><div class="line">            &lt;/Route&gt;</div><div class="line">            &lt;Route path=&quot;*&quot;&gt;Page not found.&lt;/Route&gt;</div><div class="line">          &lt;/Switch&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    &lt;/BrowserRouter&gt;</div><div class="line">  );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>相关组件作用</p>
-<p>BrowserRouter：标识用标准的 URL 路径去管理路由，比如 /my-page1 这样的标准 URL 路径。<br>除此之外，还有 MemoryRouter，表示通过内存管理路由；<br>HashRouter，标识通过 hash 管理路由。<br>自己实现的例子其实就是用的 hash 来实现路由。</p>
-<p>Link：定义一个导航链接，点击时可以无刷新地改变页面 URL，从而实现 React Router 控制的导航。</p>
-<p>Route: 定义一条路由规则，可以指定匹配的路径、要渲染的内容等等。</p>
-<p>Switch：在默认情况下，所有匹配的 Route 节点都会被展示，但是 Switch 标记可以保证只有第一个匹配到的路由才会被渲染。</p>
-<p><a href="https://v5.reactrouter.com/web/guides/quick-start" target="_blank" rel="external">react router</a></p>
-<h2 id="使用嵌套路由：实现二级导航页面"><a href="#使用嵌套路由：实现二级导航页面" class="headerlink" title="使用嵌套路由：实现二级导航页面"></a>使用嵌套路由：实现二级导航页面</h2><p>需要路由框架具备两个能力：</p>
-<p>能够模糊匹配。比如 /page1/general 、/page1/profile 这样两个路由，需要都能匹配到 Page1 这样一个组件。<br>然后 Page1 内部呢，再根据 general 和 profile 这两个子路由决定展示哪个具体的页面。</p>
-<p>Route 能够嵌套使用。在我们自定义 Route 的例子中，Route 组件仅用于收集路由定义的信息，不渲染任何内容。<br>如果需要路由能嵌套使用，那就意味着需要在 Route 下还能嵌套使用 Route。而这在 React Router 是提供支持的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">import &#123; BrowserRouter, Route, Link &#125; from &quot;react-router-dom&quot;;</div><div class="line"></div><div class="line"></div><div class="line">const Page1 = () =&gt; &#123;</div><div class="line">  return (</div><div class="line">    &lt;div className=&quot;exp-15-page1&quot;&gt;</div><div class="line">      &lt;div className=&quot;exp-15-page1-header&quot;&gt;</div><div class="line">        &lt;Link to=&quot;/page1/general&quot;&gt;General&lt;/Link&gt;</div><div class="line">        &lt;Link to=&quot;/page1/profile&quot;&gt;Profile&lt;/Link&gt;</div><div class="line">        &lt;Link to=&quot;/page1/settings&quot;&gt;Settings&lt;/Link&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">      &lt;div className=&quot;exp-15-page1-content&quot;&gt;</div><div class="line">        &lt;Route path=&quot;/page1/general&quot;&gt;General Page&lt;/Route&gt;</div><div class="line">        &lt;Route path=&quot;/page1/profile&quot;&gt;Profile Page&lt;/Route&gt;</div><div class="line">        &lt;Route path=&quot;/page1/settings&quot;&gt;Settings Page&lt;/Route&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  );</div><div class="line">&#125;;</div><div class="line">const Page2 = () =&gt; &quot;Page 2&quot;;</div><div class="line">const Page3 = () =&gt; &quot;Page 3&quot;;</div><div class="line"></div><div class="line"></div><div class="line">function NestedRouting() &#123;</div><div class="line">  return (</div><div class="line">    &lt;BrowserRouter&gt;</div><div class="line">      &lt;h1&gt;Nested Routing&lt;/h1&gt;</div><div class="line">      &lt;div className=&quot;exp-15-nested-routing&quot;&gt;</div><div class="line">        &lt;div className=&quot;exp-15-sider&quot;&gt;</div><div class="line">          &lt;Link to=&quot;/page1&quot;&gt;Page 1&lt;/Link&gt;</div><div class="line">          &lt;Link to=&quot;/page2&quot;&gt;Page 2&lt;/Link&gt;</div><div class="line">          &lt;Link to=&quot;/page3&quot;&gt;Page 3&lt;/Link&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">        &lt;div className=&quot;exp-15-page-container&quot;&gt;</div><div class="line">          &lt;Route path=&quot;/page1&quot;&gt;&lt;Page1 /&gt;&lt;/Route&gt;</div><div class="line">          &lt;Route path=&quot;/page2&quot;&gt;&lt;Page2 /&gt;&lt;/Route&gt;</div><div class="line">          &lt;Route path=&quot;/page3&quot;&gt;&lt;Page3 /&gt;&lt;/Route&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    &lt;/BrowserRouter&gt;</div><div class="line">  );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="在-URL-中保存页面状态（页面参数）"><a href="#在-URL-中保存页面状态（页面参数）" class="headerlink" title="在 URL 中保存页面状态（页面参数）"></a>在 URL 中保存页面状态（页面参数）</h2><p>在url携带页面相关信息，将页面的一些状态存放到 URL 中，<br>一方面可以提升用户体验，另一方面也可以简化页面之间的交互。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;Route path=&quot;/tabs-page/:activeTab&quot; component=&#123;TabsPage&#125; /&gt;</div><div class="line"></div><div class="line">import &#123; useCallback &#125; from &quot;react&quot;;</div><div class="line">import &#123; Tabs, Table &#125; from &quot;antd&quot;;</div><div class="line">import &#123; useHistory, useParams &#125; from &quot;react-router-dom&quot;;</div><div class="line">import data from &quot;../10/data&quot;;</div><div class="line">import &#123; useSearchParam &#125; from &quot;react-use&quot;;</div><div class="line"></div><div class="line"></div><div class="line">const &#123; TabPane &#125; = Tabs;</div><div class="line"></div><div class="line"></div><div class="line">export default () =&gt; &#123;</div><div class="line">  // 通过 React Router 的 API 获取 activeTab 这个参数信息</div><div class="line">  const &#123; activeTab = &quot;users&quot; &#125; = useParams();</div><div class="line">  // 通过查询字符串获取当前的页码信息</div><div class="line">  const page = parseInt(useSearchParam(&quot;page&quot;), 10) || 1;</div><div class="line">  </div><div class="line">  // 通过 React Router 提供的 history 对象来操作 URL</div><div class="line">  const history = useHistory();</div><div class="line">  const handleTabChange = useCallback(</div><div class="line">    (tab) =&gt; history.push(`/15/TabsPage/$&#123;tab&#125;`),</div><div class="line">    [history],</div><div class="line">  );</div><div class="line">  // 定义表格的翻页功能</div><div class="line">  const pagination = &#123;</div><div class="line">    pageSize: 3,</div><div class="line">    current: page,</div><div class="line">    onChange: (p) =&gt; &#123;</div><div class="line">      history.push(`/15/TabsPage/$&#123;activeTab&#125;?page=$&#123;p&#125;`);</div><div class="line">    &#125;,</div><div class="line">  &#125;;</div><div class="line">  return (</div><div class="line">    &lt;div&gt;</div><div class="line">      &lt;h1&gt;Tabs Page&lt;/h1&gt;</div><div class="line">      &lt;Tabs activeKey=&#123;activeTab&#125; onChange=&#123;handleTabChange&#125;&gt;</div><div class="line">        &lt;TabPane tab=&quot;Users&quot; key=&quot;users&quot;&gt;</div><div class="line">          &lt;Table</div><div class="line">            dataSource=&#123;data&#125;</div><div class="line">            columns=&#123;[</div><div class="line">              &#123; dataIndex: &quot;name&quot;, title: &quot;User Name&quot; &#125;,</div><div class="line">              &#123; dataIndex: &quot;city&quot;, title: &quot;City&quot; &#125;,</div><div class="line">            ]&#125;</div><div class="line">            pagination=&#123;pagination&#125;</div><div class="line">          /&gt;</div><div class="line">        &lt;/TabPane&gt;</div><div class="line">        &lt;TabPane tab=&quot;Jobs&quot; key=&quot;jobs&quot;&gt;</div><div class="line">          &lt;Table</div><div class="line">            dataSource=&#123;data&#125;</div><div class="line">            columns=&#123;[&#123; dataIndex: &quot;job&quot;, title: &quot;Job Title&quot; &#125;]&#125;</div><div class="line">            pagination=&#123;pagination&#125;</div><div class="line">          /&gt;</div><div class="line">        &lt;/TabPane&gt;</div><div class="line">      &lt;/Tabs&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>注意</p>
-<p>这里遵循了唯一数据源的原则，避免定义中间状态去存储 tab 和页码的信息，而是直接去操作 URL，这样可以让代码逻辑更加清晰和直观。</p>
-<h2 id="路由层面实现权限控制"><a href="#路由层面实现权限控制" class="headerlink" title="路由层面实现权限控制"></a>路由层面实现权限控制</h2><p>利用前端路由的动态特性。路由是通过 JSX 以声明式的方式去定义的，这就意味着路由的定义规则是可以根据条件进行变化的，也就是所谓的动态路由。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">import &#123; useState &#125; from &quot;react&quot;;</div><div class="line">import &#123; Button &#125; from &quot;antd&quot;;</div><div class="line">import &#123; Route, Link &#125; from &quot;react-router-dom&quot;;</div><div class="line"></div><div class="line"></div><div class="line">// 定义了两个示例页面组件</div><div class="line">const Page1 = () =&gt; &quot;Page 1&quot;;</div><div class="line">const Page2 = () =&gt; &quot;Page 2&quot;;</div><div class="line"></div><div class="line"></div><div class="line">// 定义了一个组件用户展示未登录状态</div><div class="line">const UnauthedPage = () =&gt; (</div><div class="line">  &lt;span style=&#123;&#123; color: &quot;red&quot; &#125;&#125;&gt;Unauthorized, please log in first.&lt;/span&gt;</div><div class="line">);</div><div class="line">export default () =&gt; &#123;</div><div class="line">  // 模拟用户是否登录的状态，通过一个按钮进行切换</div><div class="line">  const [loggedIn, setLoggedIn] = useState(false);</div><div class="line">  </div><div class="line">  // 定义了两套路由，一套用于登录后，一套用于未登录状态</div><div class="line">  const routes = loggedIn</div><div class="line">    ? [</div><div class="line">        &#123;</div><div class="line">          path: &quot;/15/RouterAuth&quot;,</div><div class="line">          component: Page1,</div><div class="line">        &#125;,</div><div class="line">        &#123;</div><div class="line">          path: &quot;/15/RouterAuth/page1&quot;,</div><div class="line">          component: Page1,</div><div class="line">        &#125;,</div><div class="line">        &#123;</div><div class="line">          path: &quot;/15/RouterAuth/page2&quot;,</div><div class="line">          component: Page2,</div><div class="line">        &#125;,</div><div class="line">      ]</div><div class="line">      // 如果未登录，那么对于所有 /15/RouterAuth 开头的路径，显示未授权页面</div><div class="line">    : [&#123; path: &quot;/15/RouterAuth&quot;, component: UnauthedPage &#125;];</div><div class="line"></div><div class="line"></div><div class="line">  return (</div><div class="line">    &lt;div&gt;</div><div class="line">      &lt;h1&gt;Router Auth&lt;/h1&gt;</div><div class="line">      &lt;Button</div><div class="line">        type=&#123;loggedIn ? &quot;primary&quot; : &quot;&quot;&#125;</div><div class="line">        onClick=&#123;() =&gt; setLoggedIn((v) =&gt; !v)&#125;</div><div class="line">      &gt;</div><div class="line">        &#123;loggedIn ? &quot;Log Out&quot; : &quot;Log In&quot;&#125;</div><div class="line">      &lt;/Button&gt;</div><div class="line"></div><div class="line"></div><div class="line">      &lt;div className=&quot;exp-15-router-auth&quot;&gt;</div><div class="line">        &lt;div className=&quot;exp-15-sider&quot;&gt;</div><div class="line">          &lt;Link to=&quot;/15/RouterAuth/page1&quot;&gt;Page 1&lt;/Link&gt;</div><div class="line">          &lt;Link to=&quot;/15/RouterAuth/page2&quot;&gt;Page 2&lt;/Link&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">        &lt;div className=&quot;exp-15-page-container&quot;&gt;</div><div class="line">          &#123;/* */&#125;</div><div class="line">          &#123;routes.map((r) =&gt; (</div><div class="line">            &lt;Route path=&#123;r.path&#125; component=&#123;r.component&#125; /&gt;</div><div class="line">          ))&#125;</div><div class="line">        &lt;/div&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  );</div></pre></td></tr></table></figure>
-<p>代码中核心的机制就在于我们根据登录状态，创建了不同的路由规则，这样就能在源头上对权限进行集中控制，避免用户未经授权就访问某些受保护的页面。</p>
-<p>同时呢，因为在相同的 URL 下进行了信息提示，那么也就更容易实现用户登录后还能返回原页面的功能。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1127.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks/1127.html" itemprop="url">
-                  Hooks 在forms上的使用
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-27T16:20:02+08:00">
-                2021-11-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>应用思想就是在这个 Hook 去维护整个表单的状态，并提供根据名字去取值和设值的方法，从而方便表单在组件中的使用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div></pre></td><td class="code"><pre><div class="line">// 包含验证功能validators 的hooks, 处理表单状态管理</div><div class="line">const useForm = (initialValues = &#123;&#125;, validators) =&gt; &#123;</div><div class="line">  const [values, setValues] = useState(initialValues);</div><div class="line">  // 定义了 errors 状态</div><div class="line">  const [errors, setErrors] = useState(&#123;&#125;);</div><div class="line"></div><div class="line">  const setFieldValue = useCallback(</div><div class="line">    (name, value) =&gt; &#123;</div><div class="line">      setValues((values) =&gt; (&#123;</div><div class="line">        ...values,</div><div class="line">        [name]: value,</div><div class="line">      &#125;));</div><div class="line"></div><div class="line">      // 如果存在验证函数，则调用验证用户输入</div><div class="line">      if (validators[name]) &#123;</div><div class="line">        const errMsg = validators[name](value);</div><div class="line">        setErrors((errors) =&gt; (&#123;</div><div class="line">          ...errors,</div><div class="line">          // 如果返回错误信息，则将其设置到 errors 状态，否则清空错误状态</div><div class="line">          [name]: errMsg || null,</div><div class="line">        &#125;));</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">    [validators],</div><div class="line">  );</div><div class="line">  // 将 errors 状态也返回给调用者</div><div class="line">  return &#123; values, errors, setFieldValue &#125;;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">// 应用</div><div class="line"></div><div class="line">import &#123; useCallback &#125; from &quot;react&quot;;</div><div class="line">import useForm from &apos;./useForm&apos;;</div><div class="line"></div><div class="line">export default () =&gt; &#123;</div><div class="line">  const validators = useMemo(() =&gt; &#123;</div><div class="line">    return &#123;</div><div class="line">      name: (value) =&gt; &#123;</div><div class="line">        // 要求 name 的长度不得小于 2</div><div class="line">        if (value.length &lt; 2) return &quot;Name length should be no less than 2.&quot;;</div><div class="line">        return null;</div><div class="line">      &#125;,</div><div class="line">      email: (value) =&gt; &#123;</div><div class="line">        // 简单的实现一个 email 验证逻辑：必须包含 @ 符号。</div><div class="line">        if (!value.includes(&quot;@&quot;)) return &quot;Invalid email address&quot;;</div><div class="line">        return null;</div><div class="line">      &#125;,</div><div class="line">    &#125;;</div><div class="line">  &#125;, []);</div><div class="line">  // 使用 useForm 得到表单的状态管理逻辑</div><div class="line">  const &#123; values, errors, setFieldValue &#125; = useForm(&#123;&#125;, validators);</div><div class="line">  // 处理表单的提交事件</div><div class="line">  const handleSubmit = useCallback(</div><div class="line">    (evt) =&gt; &#123;</div><div class="line">      // 使用 preventDefault() 防止页面被刷新</div><div class="line">      evt.preventDefault();</div><div class="line">      console.log(values);</div><div class="line">    &#125;,</div><div class="line">    [values],</div><div class="line">  );</div><div class="line">  return (</div><div class="line">    &lt;form onSubmit=&#123;handleSubmit&#125;&gt;</div><div class="line">      &lt;div&gt;</div><div class="line">        &lt;label&gt;Name: &lt;/label&gt;</div><div class="line">        &lt;input</div><div class="line">          value=&#123;values.name || null&#125;</div><div class="line">          onChange=&#123;(evt) =&gt; setFieldValue(&quot;name&quot;, evt.target.value)&#125;</div><div class="line">        /&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line"></div><div class="line">      &lt;div&gt;</div><div class="line">        &lt;label&gt;Email:&lt;/label&gt;</div><div class="line">        &lt;input</div><div class="line">          value=&#123;values.email || null&#125;</div><div class="line">          onChange=&#123;(evt) =&gt; setFieldValue(&quot;email&quot;, evt.target.value)&#125;</div><div class="line">        /&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">      &lt;button type=&quot;submit&quot;&gt;Submit&lt;/button&gt;</div><div class="line">    &lt;/form&gt;</div><div class="line">  );</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p>把表单的状态管理单独提取出来，成为一个可重用的 Hook。<br>这样在表单的实现组件中，就只需要更多地去关心 UI 的渲染，而无需关心状态是如何存储和管理的，从而方便表单组件的开发。</p>
-<p>Form 最为核心的机制就是我们将表单元素的所有状态提取出来，<br>这样表单就可以分为状态逻辑和 UI 展现逻辑，从而实现数据层和表现层的分离。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1126.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks/1126.html" itemprop="url">
-                  合理组织项目文件结构
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-26T16:20:02+08:00">
-                2021-11-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>按领域组织文件夹结构</p>
-<p>每增加一个新的功能，整个应用程序的复杂度不应该明显上升。这样才能保证我们的应用程序始终可扩展，可维护。</p>
-<p>软件复杂度的根源完全来自复杂的依赖关系</p>
-<p>从业务功能去理解，依赖可以分为两种。<br>第一种是硬依赖。如果功能 A 的实现必须基于功能 B，也就是说没有功能 B，功能 A 就是不可运行的，那么我们可以说 A 硬依赖于 B。<br>比如对于博客系统，评论功能肯定是基于文章功能的，因为评论的对象就是文章，脱离了文章，评论功能就没有意义。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">import CommentList from &apos;./CommentList&apos;;</div><div class="line">function ArticleView() &#123;</div><div class="line">  return (</div><div class="line">    &lt;div className=&quot;article-view&quot;&gt;</div><div class="line">      &lt;MainContent /&gt;</div><div class="line">      &lt;CommentList /&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>第二种是软依赖。如果功能 B 扩展了功能 A，也就是说，没有功能 B，功能 A 自身也是可以独立工作的，只是缺少了某些能力。<br>同样对于博客应用，文章管理是主要的功能，而评论功能则可以认为是增强了文章的功能。<br>照此来看，即使没有评论功能，文章功能也是可以独立运行的。这样就可以认为文章功能软依赖于评论功能。<br>我们应该让文章功能相关的代码，不要硬依赖于评论功能的代码。</p>
-<p>在业务功能上是一个软依赖，但是在代码实现层面，却往往做成了硬依赖。<br>这就导致随着功能的不断增加，整个应用变得越来越复杂，最终降低了整体的开发效率</p>
-<p>让模块之间的交互不再通过硬依赖。<br>解决办法就是<br><b>扩展点机制</b>：在任何可能产生单点复杂度的模块中，通过扩展点的方式，允许其它模块为其增加功能。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">// 在需要扩展的地方定义扩展点</div><div class="line">function ArticleView(&#123; id &#125;) &#123;</div><div class="line">  const &#123; article &#125; = useArticle(id);</div><div class="line">  return (</div><div class="line">    &lt;div className=&quot;article-view&quot;&gt;</div><div class="line">      &lt;MainContent article=&#123;article&#125; /&gt;</div><div class="line">      &#123;/* 定义了一个名为 article.footer 的扩展点 */&#125;</div><div class="line">      &lt;Extension name=&quot;article.footer&quot; args=&#123;article&#125; /&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  );</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 在被扩展的组件里，将自己挂到扩展点上，这样就算被扩展组件直接删除，对需要扩展的功能组件来说也毫无影响</div><div class="line">extensionEngine.register(&apos;article.footer&apos;, article =&gt; &#123;</div><div class="line">  return &lt;CommentList article=&#123;article&#125; /&gt;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>软件复杂度产生的根源，来自复杂的依赖关系。<br>随着功能的增加，系统复杂度也在不断增加，那么整个项目就会到达一个不可维护的状态。<br>所以我们首先需要从项目结构层面，去对复杂度做物理上的隔离，确保业务模块相关的代码都能在独立的文件夹中。<br>其次，我们要妥善地处理业务模块之间的依赖关系。<br>不仅需要在业务上区分硬依赖和软依赖。<br>同时呢，在技术的实现层面也要能做到模块的松耦合。<br>当然，上面的所有介绍要落实到实际的项目，还有很多细节问题需要考虑，<br>比如如何避免在单点模块定义所有的路由，如何避免一个导航菜单组件包含了所有业务功能的导航逻辑，等等。<br>总结来说，这里是整个隔离复杂度的思路，可以根据实际场景进行有针对性的思考，进而解决复杂度的问题。<br>同时更为重要的是，在进行实际项目开发，尤其是大型项目的架构设计时，一定要时刻有管理系统复杂度的意识，<br>不能只考虑功能是否实现，而不管复杂度，那样终究会导致系统越来越复杂，不断降低开发和维护的效率，甚至导致项目失败。</p>
-<p><a href="https://github.com/rekit/js-plugin" target="_blank" rel="external">一个扩展点引擎</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1125.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks/1125.html" itemprop="url">
-                  使用hooks封装自定义事件
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-25T16:20:02+08:00">
-                2021-11-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>事件处理</p>
-<p>1.原生事件</p>
-<p>只要原生 DOM 有的事件，在 React 中基本都可以使用，只是写法上采用骆驼体就可以了</p>
-<p>2.是不是所有的回调函数都需要用 useCallback 进行封装呢？是不是简单的回调函数就可以不用封装了呢？</p>
-<p>其实是否需要 useCallback ，和函数的复杂度没有必然关系，而是和回调函数绑定到哪个组件有关。<br>这是为了避免因组件属性变化而导致不必要的重新渲染。<br>如果你的事件处理函数是传递给原生节点，那么不写 callback，也几乎不会有任何性能的影响。<br>但是如果你使用的是自定义组件，或者一些 UI 框架的组件，那么回调函数还都应该用 useCallback 进行封装。</p>
-<h1 id="React-原生事件的原理：合成事件（Synthetic-Events）"><a href="#React-原生事件的原理：合成事件（Synthetic-Events）" class="headerlink" title="React 原生事件的原理：合成事件（Synthetic Events）"></a>React 原生事件的原理：合成事件（Synthetic Events）</h1><p>由于虚拟 DOM 的存在，在 React 中即使绑定一个事件到原生的 DOM 节点，事件也并不是绑定在对应的节点上，而是所有的事件都是绑定在根节点上。<br>然后由 React 统一监听和管理，获取事件后再分发到具体的虚拟 DOM 节点上。</p>
-<p>在 React 17 之前，所有的事件都是绑定在 document 上的，<br>而从 React 17 开始，所有的事件都绑定在整个 App 上的根节点上，这主要是为了以后页面上可能存在多版本 React 的考虑。</p>
-<p>具体来说，React 这么做的原因主要有两个。</p>
-<p>第一，虚拟 DOM render 的时候， DOM 很可能还没有真实地 render 到页面上，所以无法绑定事件。<br>第二，React 可以屏蔽底层事件的细节，避免浏览器的兼容性问题。<br>同时呢，对于 React Native 这种不是通过浏览器 render 的运行时，也能提供一致的 API。</p>
-<p>浏览器原生事件机制是冒泡模型。<br>无论事件在哪个节点被触发， React 都可以通过事件的 srcElement 这个属性，知道它是从哪个节点开始发出的，<br>这样 React 就可以收集管理所有的事件，然后再以一致的 API 暴露出来。</p>
-<h1 id="自定义事件"><a href="#自定义事件" class="headerlink" title="自定义事件"></a>自定义事件</h1><p>虽然自定义事件和原生事件看上去类似，但是两者的机制是完全不一样的：</p>
-<p>原生事件是浏览器的机制；</p>
-<p>而自定义事件则是纯粹的组件自己的行为，本质是一种回调函数机制。</p>
-<p>Hooks 具备绑定任何数据源的能力, 通过分析事件中用到的数据，将数据进行抽离，从hooks角度去处理事件<br>可以实现定义一次，然后在任何组件中重复使用的效果<br>用hooks的思维去简化事件处理逻辑。</p>
-<p>比如封装键盘输入事件<br>只要把键盘按键看做是一个不断变化的数据源，这样，就可以去实时监听某个 DOM 节点上触发的键盘事件了。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">import &#123; useEffect, useState &#125; from &quot;react&quot;;</div><div class="line"></div><div class="line">// 使用 document.body 作为默认的监听节点</div><div class="line">const useKeyPress = (domNode = document.body) =&gt; &#123;</div><div class="line">  const [key, setKey] = useState(null);</div><div class="line">  useEffect(() =&gt; &#123;</div><div class="line">    const handleKeyPress = (evt) =&gt; &#123;</div><div class="line">      setKey(evt.keyCode);</div><div class="line">    &#125;;</div><div class="line">    // 监听按键事件</div><div class="line">    domNode.addEventListener(&quot;keypress&quot;, handleKeyPress);</div><div class="line">    return () =&gt; &#123;</div><div class="line">      // 接触监听按键事件</div><div class="line">      domNode.removeEventListener(&quot;keypress&quot;, handleKeyPress);</div><div class="line">    &#125;;</div><div class="line">  &#125;, [domNode]);</div><div class="line">  return key;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">// 使用</div><div class="line"></div><div class="line"></div><div class="line">import useKeyPress from &apos;./useKeyPress&apos;;</div><div class="line"></div><div class="line">function UseKeyPressExample() =&gt; &#123;</div><div class="line">  const key = useKeyPress();</div><div class="line">  return (</div><div class="line">    &lt;div&gt;</div><div class="line">      &lt;h1&gt;UseKeyPress&lt;/h1&gt;</div><div class="line">      &lt;label&gt;Key pressed: &#123;key || &quot;N/A&quot;&#125;&lt;/label&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  );</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1124.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks/1124.html" itemprop="url">
-                  应对复杂条件渲染场景
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-24T16:20:02+08:00">
-                2021-11-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="容器模式：实现按条件执行-Hooks"><a href="#容器模式：实现按条件执行-Hooks" class="headerlink" title="容器模式：实现按条件执行 Hooks"></a>容器模式：实现按条件执行 Hooks</h1><p>把条件判断的结果放到两个组件之中，确保真正 render UI 的组件收到的所有属性都是有值的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">// 定义一个容器组件用于封装真正的 UserInfoModal</div><div class="line">export default function UserInfoModalWrapper(&#123;</div><div class="line">  visible,</div><div class="line">  ...rest, // 使用 rest 获取除了 visible 之外的属性</div><div class="line">&#125;) &#123;</div><div class="line">  // 如果对话框不显示，则不 render 任何内容</div><div class="line">  if (!visible) return null; </div><div class="line">  // 否则真正执行对话框的组件逻辑</div><div class="line">  return &lt;UserInfoModal visible &#123;...rest&#125; /&gt;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>在容器模式中可以看到，条件的隔离对象是多个子组件，这就意味着它通常用于一些比较大块逻辑的隔离。<br>所以对于一些比较细节的控制，其实还有一种做法，就是把判断条件放到 Hooks 中去。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">function useUser(id) &#123;</div><div class="line">  const [data, setData] = useState(null);</div><div class="line">  const [loading, setLoading] = useState(false);</div><div class="line">  const [error, setError] = useState(null);</div><div class="line">  useEffect(() =&gt; &#123;</div><div class="line">    // 当 id 不存在，直接返回，不发送请求</div><div class="line">    if (!id) return</div><div class="line">    // 获取用户信息的逻辑</div><div class="line">  &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>通过这样一个容器模式，我们把原来需要条件运行的 Hooks 拆分成子组件，<br>然后通过一个容器组件来进行实际的条件判断，从而渲染不同的组件，实现按条件渲染的目的。<br>这在一些复杂的场景之下，也能达到拆分复杂度，让每个组件更加精简的目的.</p>
-<h1 id="使用-render-props-模式重用-UI-逻辑"><a href="#使用-render-props-模式重用-UI-逻辑" class="headerlink" title="使用 render props 模式重用 UI 逻辑"></a>使用 render props 模式重用 UI 逻辑</h1><p>render props 就是把一个 render 函数作为属性传递给某个组件，<br>由这个组件去执行这个函数从而 render 实际的内容</p>
-<p>Hooks 是逻辑重用的第一选择。<br>不过在如今的函数组件情况下，Hooks 有一个局限，那就是只能用作数据逻辑的重用，<br>而一旦涉及 UI 表现逻辑的重用，就有些力不从心了，<br>而这正是 render props 擅长的地方。<br>所以，即使有了 Hooks，我们也要掌握 render props 这个设计模式的用法</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">import &#123; Popover &#125; from &quot;antd&quot;;</div><div class="line"></div><div class="line">function ListWithMore(&#123; renderItem, data = [], max &#125;) &#123;</div><div class="line">  const elements = data.map((item, index) =&gt; renderItem(item, index, data));</div><div class="line">  const show = elements.slice(0, max);</div><div class="line">  const hide = elements.slice(max);</div><div class="line">  return (</div><div class="line">    &lt;span className=&quot;exp-10-list-with-more&quot;&gt;</div><div class="line">      &#123;show&#125;</div><div class="line">      &#123;hide.length &gt; 0 &amp;&amp; (</div><div class="line">        &lt;Popover content=&#123;&lt;div style=&#123;&#123; maxWidth: 500 &#125;&#125;&gt;&#123;hide&#125;&lt;/div&gt;&#125;&gt;</div><div class="line">          &lt;span className=&quot;more-items-wrapper&quot;&gt;</div><div class="line">            and&#123;&quot; &quot;&#125;</div><div class="line">            &lt;span className=&quot;more-items-trigger&quot;&gt; &#123;hide.length&#125; more...&lt;/span&gt;</div><div class="line">          &lt;/span&gt;</div><div class="line">        &lt;/Popover&gt;</div><div class="line">      )&#125;</div><div class="line">    &lt;/span&gt;</div><div class="line">  );</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 这里用一个示例数据</div><div class="line">import data from &apos;./data&apos;;</div><div class="line"></div><div class="line">function ListWithMoreExample () =&gt; &#123;</div><div class="line">  return (</div><div class="line">    &lt;div className=&quot;exp-10-list-with-more&quot;&gt;</div><div class="line">      &lt;h1&gt;User Names&lt;/h1&gt;</div><div class="line">      &lt;div className=&quot;user-names&quot;&gt;</div><div class="line">        Liked by:&#123;&quot; &quot;&#125;</div><div class="line">        &lt;ListWithMore</div><div class="line">          renderItem=&#123;(user) =&gt; &#123;</div><div class="line">            return &lt;span className=&quot;user-name&quot;&gt;&#123;user.name&#125;&lt;/span&gt;;</div><div class="line">          &#125;&#125;</div><div class="line">          data=&#123;data&#125;</div><div class="line">          max=&#123;3&#125;</div><div class="line">        /&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">      &lt;br /&gt;</div><div class="line">      &lt;br /&gt;</div><div class="line">      &lt;h1&gt;User List&lt;/h1&gt;</div><div class="line">      &lt;div className=&quot;user-list&quot;&gt;</div><div class="line">        &lt;div className=&quot;user-list-row user-list-row-head&quot;&gt;</div><div class="line">          &lt;span className=&quot;user-name-cell&quot;&gt;Name&lt;/span&gt;</div><div class="line">          &lt;span&gt;City&lt;/span&gt;</div><div class="line">          &lt;span&gt;Job Title&lt;/span&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">        &lt;ListWithMore</div><div class="line">          renderItem=&#123;(user) =&gt; &#123;</div><div class="line">            return (</div><div class="line">              &lt;div className=&quot;user-list-row&quot;&gt;</div><div class="line">                &lt;span className=&quot;user-name-cell&quot;&gt;&#123;user.name&#125;&lt;/span&gt;</div><div class="line">                &lt;span&gt;&#123;user.city&#125;&lt;/span&gt;</div><div class="line">                &lt;span&gt;&#123;user.job&#125;&lt;/span&gt;</div><div class="line">              &lt;/div&gt;</div><div class="line">            );</div><div class="line">          &#125;&#125;</div><div class="line">          data=&#123;data&#125;</div><div class="line">          max=&#123;5&#125;</div><div class="line">        /&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  );</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1123.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks/1123.html" itemprop="url">
-                  从 Hooks 的角度去组织异步请求
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-23T16:20:02+08:00">
-                2021-11-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="要定义一个自己的-API-Client"><a href="#要定义一个自己的-API-Client" class="headerlink" title="要定义一个自己的 API Client"></a>要定义一个自己的 API Client</h1><p>封装整个应用中异步请求的一些通过设置，以及统一处理，方便在 Hooks 中使用。</p>
-<p>通常来说，会包括以下几个方面：</p>
-<ol>
-<li>一些通用的 Header。比如 Authorization Token。</li>
-<li>服务器地址的配置。前端在开发和运行时可能会连接不同的服务器，比如本地服务器或者测试服务器，此时这个 API Client 内部可以根据当前环境判断该连接哪个 URL。</li>
-<li>请求未认证的处理。比如如果 Token 过期了，需要有一个统一的地方进行处理，这时就会弹出对话框提示用户重新登录。</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">import axios from &quot;axios&quot;;</div><div class="line"></div><div class="line">// 定义相关的 endpoint</div><div class="line">const endPoints = &#123;</div><div class="line">  test: &quot;https://60b2643d62ab150017ae21de.mockapi.io/&quot;,</div><div class="line">  prod: &quot;https://prod.myapi.io/&quot;,</div><div class="line">  staging: &quot;https://staging.myapi.io/&quot;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">// 创建 axios 的实例</div><div class="line">const instance = axios.create(&#123;</div><div class="line">  // 实际项目中根据当前环境设置 baseURL</div><div class="line">  baseURL: endPoints.test,</div><div class="line">  timeout: 30000,</div><div class="line">  // 为所有请求设置通用的 header</div><div class="line">  headers: &#123; Authorization: &quot;Bear mytoken&quot; &#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">// 听过 axios 定义拦截器预处理所有请求</div><div class="line">instance.interceptors.response.use(</div><div class="line">  (res) =&gt; &#123;</div><div class="line">    // 可以假如请求成功的逻辑，比如 log</div><div class="line">    return res;</div><div class="line">  &#125;,</div><div class="line">  (err) =&gt; &#123;</div><div class="line">    if (err.response.status === 403) &#123;</div><div class="line">      // 统一处理未授权请求，跳转到登录界面</div><div class="line">      document.location = &apos;/login&apos;;</div><div class="line">    &#125;</div><div class="line">    return Promise.reject(err);</div><div class="line">  &#125;</div><div class="line">);</div><div class="line"></div><div class="line">export default instance;</div></pre></td></tr></table></figure>
-<h1 id="封装远程资源"><a href="#封装远程资源" class="headerlink" title="封装远程资源"></a>封装远程资源</h1><p>将通过get方法获取的数据其实就是远程数据源，UI依赖远程数据源渲染</p>
-<p>比起在组件内部直接发请求，只是把代码换了个地方，也就是写到了 Hook 里面</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">// useArticle</div><div class="line">import &#123; useState, useEffect &#125; from &quot;react&quot;;</div><div class="line">import apiClient from &quot;./apiClient&quot;;</div><div class="line"></div><div class="line">// 将获取文章的 API 封装成一个远程资源 Hook</div><div class="line">const useArticle = (id) =&gt; &#123;</div><div class="line">  // 设置三个状态分别存储 data, error, loading</div><div class="line">  const [data, setData] = useState(null);</div><div class="line">  const [loading, setLoading] = useState(false);</div><div class="line">  const [error, setError] = useState(null);</div><div class="line">  useEffect(() =&gt; &#123;</div><div class="line">    // 重新获取数据时重置三个状态</div><div class="line">    setLoading(true);</div><div class="line">    setData(null);</div><div class="line">    setError(null);</div><div class="line">    apiClient</div><div class="line">      .get(`/posts/$&#123;id&#125;`)</div><div class="line">      .then((res) =&gt; &#123;</div><div class="line">        // 请求成功时设置返回数据到状态</div><div class="line">        setLoading(false);</div><div class="line">        setData(res.data);</div><div class="line">      &#125;)</div><div class="line">      .catch((err) =&gt; &#123;</div><div class="line">        // 请求失败时设置错误状态</div><div class="line">        setLoading(false);</div><div class="line">        setError(err);</div><div class="line">      &#125;);</div><div class="line">  &#125;, [id]); // 当 id 变化时重新获取数据</div><div class="line"></div><div class="line">  // 将三个状态作为 Hook 的返回值</div><div class="line">  return &#123;</div><div class="line">    loading,</div><div class="line">    error,</div><div class="line">    data</div><div class="line">  &#125;;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">// 使用</div><div class="line"></div><div class="line"></div><div class="line">import useArticle from &quot;./useArticle&quot;;</div><div class="line"></div><div class="line">const ArticleView = (&#123; id &#125;) =&gt; &#123;</div><div class="line">  // 将 article 看成一个远程资源，有 data, loading, error 三个状态</div><div class="line">  const &#123; data, loading, error &#125; = useArticle(id);</div><div class="line">  if (error) return &quot;Failed.&quot;;</div><div class="line">  if (!data || loading) return &quot;Loading...&quot;;</div><div class="line">  return (</div><div class="line">    &lt;div className=&quot;exp-09-article-view&quot;&gt;</div><div class="line">      &lt;h1&gt;</div><div class="line">        &#123;id&#125;. &#123;data.title&#125;</div><div class="line">      &lt;/h1&gt;</div><div class="line">      &lt;p&gt;&#123;data.content&#125;&lt;/p&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  );</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p>有了这样一个 Hook，React 的函数组件几乎不需要有任何业务的逻辑，而只是把数据映射到 JSX 并显示出来就可以了，在使用的时候非常方便。</p>
-<p>在项目中，可以把每一个 Get 请求都做成这样一个 Hook。<br>数据请求和处理逻辑都放到 Hooks 中，从而实现 Model 和 View 的隔离，<br>不仅代码更加模块化，而且更易于测试和维护。</p>
-<p>这样做是为了保证每个 Hook 自身足够简单。</p>
-<p>一般来说，为了让服务器的返回数据满足 UI 上的展现要求，通常需要进一步处理。<br>而这个对于每个请求的处理逻辑可能都不一样，通过一定的代码重复，能够避免产生太复杂的逻辑。</p>
-<p>同时呢，某个远程资源有可能是由多个请求组成的，那么 Hooks 中的逻辑就会不一样，因为要同时发出去多个请求，组成 UI 展现所需要的数据。<br>所以，将每个 Get 请求都封装成一个 Hook ，也是为了让逻辑更清楚。</p>
-<p>这个模式仅适用于 Get 请求的逻辑，对于其它类型，可以使用 useAsync 这样一个自定义的 Hook，<br>同样也是用 Hook 的思想，把请求的不同状态封装成了一个数据源供组件使用。</p>
-<h1 id="处理并发或串行请求"><a href="#处理并发或串行请求" class="headerlink" title="处理并发或串行请求"></a>处理并发或串行请求</h1><p>从状态变化的角度去组织异步调用。</p>
-<p>函数组件的每一次 render，其实都提供了我们根据状态变化执行不同操作的机会，<br>就是利用这个机制，通过不同的状态组合，来实现异步请求的逻辑</p>
-<p>利用状态的组合变化来实现并发和串行请求</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div></pre></td><td class="code"><pre><div class="line">// useArticle 同上</div><div class="line">// useUser </div><div class="line">import &#123; useState, useEffect &#125; from &quot;react&quot;;</div><div class="line">import apiClient from &quot;./apiClient&quot;;</div><div class="line"></div><div class="line">export default (id) =&gt; &#123;</div><div class="line">  const [data, setData] = useState(null);</div><div class="line">  const [loading, setLoading] = useState(false);</div><div class="line">  const [error, setError] = useState(null);</div><div class="line">  useEffect(() =&gt; &#123;</div><div class="line">    // 当 id 不存在，直接返回，不发送请求</div><div class="line">    if (!id) return;</div><div class="line">    setLoading(true);</div><div class="line">    setData(null);</div><div class="line">    setError(null);</div><div class="line">    apiClient</div><div class="line">      .get(`/users/$&#123;id&#125;`)</div><div class="line">      .then((res) =&gt; &#123;</div><div class="line">        setLoading(false);</div><div class="line">        setData(res.data);</div><div class="line">      &#125;)</div><div class="line">      .catch((err) =&gt; &#123;</div><div class="line">        setLoading(false);</div><div class="line">        setError(err);</div><div class="line">      &#125;);</div><div class="line">  &#125;, [id]);</div><div class="line">  return &#123;</div><div class="line">    loading,</div><div class="line">    error,</div><div class="line">    data</div><div class="line">  &#125;;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">// 应用</div><div class="line"></div><div class="line">import &#123; useState &#125; from &quot;react&quot;;</div><div class="line">import CommentList from &quot;./CommentList&quot;;</div><div class="line">import useArticle from &quot;./useArticle&quot;;</div><div class="line">import useUser from &quot;./useUser&quot;;</div><div class="line">import useComments from &quot;./useComments&quot;;</div><div class="line"></div><div class="line">const ArticleView = (&#123; id &#125;) =&gt; &#123; </div><div class="line">  const &#123; data: article, loading, error &#125; = useArticle(id);</div><div class="line">  const &#123; data: comments &#125; = useComments(id);</div><div class="line">  const &#123; data: user &#125; = useUser(article?.userId);</div><div class="line">  if (error) return &quot;Failed.&quot;;</div><div class="line">  if (!article || loading) return &quot;Loading...&quot;;</div><div class="line">  return (</div><div class="line">    &lt;div className=&quot;exp-09-article-view&quot;&gt;</div><div class="line">      &lt;h1&gt;</div><div class="line">        &#123;id&#125;. &#123;article.title&#125;</div><div class="line">      &lt;/h1&gt;</div><div class="line">      &#123;user &amp;&amp; (</div><div class="line">        &lt;div className=&quot;user-info&quot;&gt;</div><div class="line">          &lt;img src=&#123;user.avatar&#125; height=&quot;40px&quot; alt=&quot;user&quot; /&gt;</div><div class="line">          &lt;div&gt;&#123;user.name&#125;&lt;/div&gt;</div><div class="line">          &lt;div&gt;&#123;article.createdAt&#125;&lt;/div&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">      )&#125;</div><div class="line">      &lt;p&gt;&#123;article.content&#125;&lt;/p&gt;</div><div class="line">      &lt;CommentList data=&#123;comments || []&#125; /&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  );</div><div class="line">&#125;;</div><div class="line"></div><div class="line">export default () =&gt; &#123;</div><div class="line">  const [id, setId] = useState(1);</div><div class="line">  return (</div><div class="line">    &lt;div className=&quot;exp-09-article-view-wrapper&quot;&gt;</div><div class="line">      &lt;ul&gt;</div><div class="line">        &lt;li onClick=&#123;() =&gt; setId(1)&#125;&gt;Article 1&lt;/li&gt;</div><div class="line">        &lt;li onClick=&#123;() =&gt; setId(2)&#125;&gt;Article 2&lt;/li&gt;</div><div class="line">        &lt;li onClick=&#123;() =&gt; setId(3)&#125;&gt;Article 3&lt;/li&gt;</div><div class="line">        &lt;li onClick=&#123;() =&gt; setId(4)&#125;&gt;Article 4&lt;/li&gt;</div><div class="line">        &lt;li onClick=&#123;() =&gt; setId(5)&#125;&gt;Article 5&lt;/li&gt;</div><div class="line">      &lt;/ul&gt;</div><div class="line">      &lt;ArticleView id=&#123;id&#125; /&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">  );</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p>useArticle 和 useComments属于并发请求；useArticle 和 useUser属于串行请求，</p>
-<p>之所以useUser能在article数据变化时重新执行，是因为在useUser的hook里面用useEffect做了依赖</p>
-<p>或者换个角度想，把三个钩子的逻辑全部都写在应用代码里，不再封装起来，明显可以看到，<br>因为useEffect的原因，可以使获取user信息的请求，在拿到article数据后再执行。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1122.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content="">
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src="">
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks/1122.html" itemprop="url">
-                  复杂状态管理
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-22T16:20:02+08:00">
-                2021-11-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>React 的开发其实就是复杂应用程序状态的管理和开发</p>
-<h1 id="复杂状态管理的两个原则"><a href="#复杂状态管理的两个原则" class="headerlink" title="复杂状态管理的两个原则"></a>复杂状态管理的两个原则</h1><p>原则一：保证状态最小化</p>
-<p>在定义一个新的状态之前，都要再三拷问自己：<br>这个状态是必须的吗？是否能通过计算得到呢？<br>在得到肯定的回答后，再去定义新的状态，<br>就能避免大部分多余的状态定义问题，也就能在简化状态管理的同时，保证状态的一致性</p>
-<p>比如根据关键字搜索的场景，搜索结果可以根据关键和原始数据计算得到，可以使用useMemo保存过滤结果，<br>而不是再为过滤结果声明一个state</p>
-<p>原则二：避免中间状态，确保唯一数据源</p>
-<p>比如在需要根据URL查询数据的场景，查询条件在url,同时页面有配置条件的交互<br>那么直接将 URL 作为唯一的数据来源，状态的读取和修改都是对 URL 直接进行操作，<br>而不是通过一个中间的状态保存条件<br>(URL 变化时，同步查询关键字到 State;State 变化时，同步查询关键字到输入框; 用户在输入框输入的时候，同步关键字到 URL 和 State),<br>这样就简化了状态的管理，保证了状态的一致性</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/22/">22</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/23/">23</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1613,7 +2106,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">216</span>
+              <span class="site-state-item-count">223</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1677,7 +2170,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
