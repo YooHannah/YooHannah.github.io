@@ -1,0 +1,650 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="react,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="按领域组织文件夹结构 每增加一个新的功能，整个应用程序的复杂度不应该明显上升。这样才能保证我们的应用程序始终可扩展，可维护。 软件复杂度的根源完全来自复杂的依赖关系 从业务功能去理解，依赖可以分为两种。第一种是硬依赖。如果功能 A 的实现必须基于功能 B，也就是说没有功能 B，功能 A 就是不可运行的，那么我们可以说 A 硬依赖于 B。比如对于博客系统，评论功能肯定是基于文章功能的，因为评论的对象">
+<meta name="keywords" content="react">
+<meta property="og:type" content="article">
+<meta property="og:title" content="合理组织项目文件结构">
+<meta property="og:url" content="http://yoohannah.github.io/post/react/hooks/1126.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="按领域组织文件夹结构 每增加一个新的功能，整个应用程序的复杂度不应该明显上升。这样才能保证我们的应用程序始终可扩展，可维护。 软件复杂度的根源完全来自复杂的依赖关系 从业务功能去理解，依赖可以分为两种。第一种是硬依赖。如果功能 A 的实现必须基于功能 B，也就是说没有功能 B，功能 A 就是不可运行的，那么我们可以说 A 硬依赖于 B。比如对于博客系统，评论功能肯定是基于文章功能的，因为评论的对象">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-09-01T03:26:27.598Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="合理组织项目文件结构">
+<meta name="twitter:description" content="按领域组织文件夹结构 每增加一个新的功能，整个应用程序的复杂度不应该明显上升。这样才能保证我们的应用程序始终可扩展，可维护。 软件复杂度的根源完全来自复杂的依赖关系 从业务功能去理解，依赖可以分为两种。第一种是硬依赖。如果功能 A 的实现必须基于功能 B，也就是说没有功能 B，功能 A 就是不可运行的，那么我们可以说 A 硬依赖于 B。比如对于博客系统，评论功能肯定是基于文章功能的，因为评论的对象">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/react/hooks/1126.html">
+
+
+
+
+
+  <title> 合理组织项目文件结构 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1126.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                合理组织项目文件结构
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-26T16:20:02+08:00">
+                2021-11-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>按领域组织文件夹结构</p>
+<p>每增加一个新的功能，整个应用程序的复杂度不应该明显上升。这样才能保证我们的应用程序始终可扩展，可维护。</p>
+<p>软件复杂度的根源完全来自复杂的依赖关系</p>
+<p>从业务功能去理解，依赖可以分为两种。<br>第一种是硬依赖。如果功能 A 的实现必须基于功能 B，也就是说没有功能 B，功能 A 就是不可运行的，那么我们可以说 A 硬依赖于 B。<br>比如对于博客系统，评论功能肯定是基于文章功能的，因为评论的对象就是文章，脱离了文章，评论功能就没有意义。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import CommentList from &apos;./CommentList&apos;;</span><br><span class="line">function ArticleView() &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;div className=&quot;article-view&quot;&gt;</span><br><span class="line">      &lt;MainContent /&gt;</span><br><span class="line">      &lt;CommentList /&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第二种是软依赖。如果功能 B 扩展了功能 A，也就是说，没有功能 B，功能 A 自身也是可以独立工作的，只是缺少了某些能力。<br>同样对于博客应用，文章管理是主要的功能，而评论功能则可以认为是增强了文章的功能。<br>照此来看，即使没有评论功能，文章功能也是可以独立运行的。这样就可以认为文章功能软依赖于评论功能。<br>我们应该让文章功能相关的代码，不要硬依赖于评论功能的代码。</p>
+<p>在业务功能上是一个软依赖，但是在代码实现层面，却往往做成了硬依赖。<br>这就导致随着功能的不断增加，整个应用变得越来越复杂，最终降低了整体的开发效率</p>
+<p>让模块之间的交互不再通过硬依赖。<br>解决办法就是<br><b>扩展点机制</b>：在任何可能产生单点复杂度的模块中，通过扩展点的方式，允许其它模块为其增加功能。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">// 在需要扩展的地方定义扩展点</span><br><span class="line">function ArticleView(&#123; id &#125;) &#123;</span><br><span class="line">  const &#123; article &#125; = useArticle(id);</span><br><span class="line">  return (</span><br><span class="line">    &lt;div className=&quot;article-view&quot;&gt;</span><br><span class="line">      &lt;MainContent article=&#123;article&#125; /&gt;</span><br><span class="line">      &#123;/* 定义了一个名为 article.footer 的扩展点 */&#125;</span><br><span class="line">      &lt;Extension name=&quot;article.footer&quot; args=&#123;article&#125; /&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 在被扩展的组件里，将自己挂到扩展点上，这样就算被扩展组件直接删除，对需要扩展的功能组件来说也毫无影响</span><br><span class="line">extensionEngine.register(&apos;article.footer&apos;, article =&gt; &#123;</span><br><span class="line">  return &lt;CommentList article=&#123;article&#125; /&gt;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>软件复杂度产生的根源，来自复杂的依赖关系。<br>随着功能的增加，系统复杂度也在不断增加，那么整个项目就会到达一个不可维护的状态。<br>所以我们首先需要从项目结构层面，去对复杂度做物理上的隔离，确保业务模块相关的代码都能在独立的文件夹中。<br>其次，我们要妥善地处理业务模块之间的依赖关系。<br>不仅需要在业务上区分硬依赖和软依赖。<br>同时呢，在技术的实现层面也要能做到模块的松耦合。<br>当然，上面的所有介绍要落实到实际的项目，还有很多细节问题需要考虑，<br>比如如何避免在单点模块定义所有的路由，如何避免一个导航菜单组件包含了所有业务功能的导航逻辑，等等。<br>总结来说，这里是整个隔离复杂度的思路，可以根据实际场景进行有针对性的思考，进而解决复杂度的问题。<br>同时更为重要的是，在进行实际项目开发，尤其是大型项目的架构设计时，一定要时刻有管理系统复杂度的意识，<br>不能只考虑功能是否实现，而不管复杂度，那样终究会导致系统越来越复杂，不断降低开发和维护的效率，甚至导致项目失败。</p>
+<p><a href="https://github.com/rekit/js-plugin" target="_blank" rel="noopener">一个扩展点引擎</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/react/" rel="tag"># react</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/react/hooks/1125.html" rel="next" title="使用hooks封装自定义事件">
+                <i class="fa fa-chevron-left"></i> 使用hooks封装自定义事件
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/react/hooks/1127.html" rel="prev" title="Hooks 在forms上的使用">
+                Hooks 在forms上的使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">232</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

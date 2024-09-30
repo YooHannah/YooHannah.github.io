@@ -1,0 +1,682 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="react,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="Redux 的三个基本概念Redux 引入的概念其实并不多，主要就是三个：State、Action 和 Reducer。 其中 State 即 Store，一般就是一个纯 JavaScript Object。Action 也是一个 Object，用于描述发生的动作。而 Reducer 则是一个函数，接收 Action 和 State 并作为参数，通过计算得到新的 Store。 如何在 React">
+<meta name="keywords" content="react">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redux的基本使用">
+<meta property="og:url" content="http://yoohannah.github.io/post/react/hooks/1117.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="Redux 的三个基本概念Redux 引入的概念其实并不多，主要就是三个：State、Action 和 Reducer。 其中 State 即 Store，一般就是一个纯 JavaScript Object。Action 也是一个 Object，用于描述发生的动作。而 Reducer 则是一个函数，接收 Action 和 State 并作为参数，通过计算得到新的 Store。 如何在 React">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-09-01T03:26:27.597Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="redux的基本使用">
+<meta name="twitter:description" content="Redux 的三个基本概念Redux 引入的概念其实并不多，主要就是三个：State、Action 和 Reducer。 其中 State 即 Store，一般就是一个纯 JavaScript Object。Action 也是一个 Object，用于描述发生的动作。而 Reducer 则是一个函数，接收 Action 和 State 并作为参数，通过计算得到新的 Store。 如何在 React">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/react/hooks/1117.html">
+
+
+
+
+
+  <title> redux的基本使用 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1117.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                redux的基本使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-17T16:20:02+08:00">
+                2021-11-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Redux-的三个基本概念"><a href="#Redux-的三个基本概念" class="headerlink" title="Redux 的三个基本概念"></a>Redux 的三个基本概念</h1><p>Redux 引入的概念其实并不多，主要就是三个：State、Action 和 Reducer。</p>
+<p>其中 State 即 Store，一般就是一个纯 JavaScript Object。<br>Action 也是一个 Object，用于描述发生的动作。<br>而 Reducer 则是一个函数，接收 Action 和 State 并作为参数，通过计算得到新的 Store。</p>
+<h1 id="如何在-React-中使用-Redux"><a href="#如何在-React-中使用-Redux" class="headerlink" title="如何在 React 中使用 Redux"></a>如何在 React 中使用 Redux</h1><h2 id="如何建立-Redux-和-React-的联系"><a href="#如何建立-Redux-和-React-的联系" class="headerlink" title="如何建立 Redux 和 React 的联系"></a>如何建立 Redux 和 React 的联系</h2><p>主要是两点：</p>
+<ol>
+<li>React 组件能够在依赖的 Store 的数据发生变化时，重新 Render；</li>
+<li>在 React 组件中，能够在某些时机去 dispatch 一个 action，从而触发 Store 的更新</li>
+</ol>
+<p>答案：<br>借助<b>react-redux</b> 这样一个工具库，工具库的作用就是建立一个桥梁，让 React 和 Redux 实现互通。</p>
+<p>在 react-redux 的实现中，为了确保需要绑定的组件能够访问到全局唯一的 Redux Store，<br>利用了 React 的 Context 机制去存放 Store 的信息。<br>通常我们会将这个 Context 作为整个 React 应用程序的根节点。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import React from &apos;react&apos;</span><br><span class="line">import ReactDOM from &apos;react-dom&apos;</span><br><span class="line"></span><br><span class="line">import &#123; Provider &#125; from &apos;react-redux&apos;</span><br><span class="line">import store from &apos;./store&apos;</span><br><span class="line"></span><br><span class="line">import App from &apos;./App&apos;</span><br><span class="line"></span><br><span class="line">const rootElement = document.getElementById(&apos;root&apos;)</span><br><span class="line">ReactDOM.render(</span><br><span class="line">  &lt;Provider store=&#123;store&#125;&gt;</span><br><span class="line">    &lt;App /&gt;</span><br><span class="line">  &lt;/Provider&gt;,</span><br><span class="line">  rootElement</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>Hooks 的本质就是提供了让 React 组件能够绑定到某个可变的数据源的能力。<br>在这里，当 Hooks 用到 Redux 时可变的对象就是 Store，而 useSelector 则让一个组件能够在 Store 的某些数据发生变化时重新 render.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">import React from &apos;react&apos;</span><br><span class="line">import &#123; useSelector, useDispatch &#125; from &apos;react-redux&apos;</span><br><span class="line"></span><br><span class="line">export function Counter() &#123;</span><br><span class="line">  // 从 state 中获取当前的计数值</span><br><span class="line">  const count = useSelector(state =&gt; state.value)</span><br><span class="line"></span><br><span class="line">  // 获得当前 store 的 dispatch 方法</span><br><span class="line">  const dispatch = useDispatch()</span><br><span class="line"></span><br><span class="line">  // 在按钮的 click 时间中去分发 action 来修改 store</span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;button</span><br><span class="line">        onClick=&#123;() =&gt; dispatch(&#123; type: &apos;counter/incremented&apos; &#125;)&#125;</span><br><span class="line">      &gt;+&lt;/button&gt;</span><br><span class="line">      &lt;span&gt;&#123;count&#125;&lt;/span&gt;</span><br><span class="line">      &lt;button</span><br><span class="line">        onClick=&#123;() =&gt; dispatch(&#123; type: &apos;counter/decremented&apos; &#125;)&#125;</span><br><span class="line">      &gt;-&lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="使用-Redux-处理异步逻辑"><a href="#使用-Redux-处理异步逻辑" class="headerlink" title="使用 Redux 处理异步逻辑"></a>使用 Redux 处理异步逻辑</h2><p>借助中间件机制</p>
+<p>middleware 可以让你提供一个拦截器在 reducer 处理 action 之前被调用。<br>在这个拦截器中，你可以自由处理获得的 action。<br>无论是把这个 action 直接传递到 reducer，或者构建新的 action 发送到 reducer，都是可以的</p>
+<p>Middleware 正是在 Action 真正到达 Reducer 之前提供的一个额外处理 Action 的机会</p>
+<p>Redux 提供了 <b>redux-thunk</b> 这样一个中间件，它如果发现接受到的 action 是一个函数，那么就不会传递给 Reducer，<br>而是执行这个函数，并把 dispatch 作为参数传给这个函数，从而在这个函数中你可以自由决定何时，如何发送 Action。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">// 在创建 Redux Store 时指定了 redux-thunk 这个中间件</span><br><span class="line">import &#123; createStore, applyMiddleware &#125; from &apos;redux&apos;</span><br><span class="line">import thunkMiddleware from &apos;redux-thunk&apos;</span><br><span class="line">import rootReducer from &apos;./reducer&apos;</span><br><span class="line"></span><br><span class="line">const composedEnhancer = applyMiddleware(thunkMiddleware)</span><br><span class="line">const store = createStore(rootReducer, composedEnhancer)</span><br><span class="line"></span><br><span class="line">//dispatch action 时就可以 dispatch 一个函数用于来发送请求</span><br><span class="line"></span><br><span class="line">function fetchData() &#123;</span><br><span class="line">  return dispatch =&gt; &#123;</span><br><span class="line">    dispatch(&#123; type: &apos;FETCH_DATA_BEGIN&apos; &#125;);</span><br><span class="line">    fetch(&apos;/some-url&apos;).then(res =&gt; &#123;</span><br><span class="line">      dispatch(&#123; type: &apos;FETCH_DATA_SUCCESS&apos;, data: res &#125;);</span><br><span class="line">    &#125;).catch(err =&gt; &#123;</span><br><span class="line">      dispatch(&#123; type: &apos;FETCH_DATA_FAILURE&apos;, error: err &#125;);</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// dispatch action 时就可以 dispatch 一个函数用于来发送请求</span><br><span class="line">import fetchData from &apos;./fetchData&apos;;</span><br><span class="line"></span><br><span class="line">function DataList() &#123;</span><br><span class="line">  const dispatch = useDispatch();</span><br><span class="line">  // dispatch 了一个函数由 redux-thunk 中间件去执行</span><br><span class="line">  dispatch(fetchData());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>通过这种方式，我们就实现了异步请求逻辑的重用。那么这一套结合 redux-thunk 中间件的机制，我们就称之为异步 Action.</p>
+<h2 id="dispatch时可以传入其他参数"><a href="#dispatch时可以传入其他参数" class="headerlink" title="dispatch时可以传入其他参数"></a>dispatch时可以传入其他参数</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">function counterReducer(state = initialState, action) &#123;</span><br><span class="line">    switch (action.type) &#123;</span><br><span class="line">        case &apos;counter/incremented&apos;: return &#123;value: state.value + action.payload&#125;</span><br><span class="line">        case &apos;counter/decremented&apos;: return &#123;value: state.value - action.payload&#125;</span><br><span class="line">        default: return state</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">const incrementAction = &#123; type: &apos;counter/incremented&apos;, payload: 10 &#125;;</span><br><span class="line">store.dispatch(incrementAction); // 计数器加 10</span><br><span class="line">const decrementAction = &#123; type: &apos;counter/decremented&apos;, payload: 10 &#125;;</span><br><span class="line">store.dispatch(decrementAction); // 计数器减 10</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/react/" rel="tag"># react</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/react/hooks/1116.html" rel="next" title="hooks 的典型应用场景">
+                <i class="fa fa-chevron-left"></i> hooks 的典型应用场景
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/react/hooks/1122.html" rel="prev" title="复杂状态管理">
+                复杂状态管理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">232</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redux-的三个基本概念"><span class="nav-number">1.</span> <span class="nav-text">Redux 的三个基本概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何在-React-中使用-Redux"><span class="nav-number">2.</span> <span class="nav-text">如何在 React 中使用 Redux</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#如何建立-Redux-和-React-的联系"><span class="nav-number">2.1.</span> <span class="nav-text">如何建立 Redux 和 React 的联系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-Redux-处理异步逻辑"><span class="nav-number">2.2.</span> <span class="nav-text">使用 Redux 处理异步逻辑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dispatch时可以传入其他参数"><span class="nav-number">2.3.</span> <span class="nav-text">dispatch时可以传入其他参数</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

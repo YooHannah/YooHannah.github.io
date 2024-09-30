@@ -1,0 +1,666 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="js,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="基础常识磁盘寻址：ms带宽： G/M内存寻址：ns(纳秒级)带宽：byte/s秒&amp;gt;毫秒&amp;gt;微秒&amp;gt;纳秒磁盘寻址上比内存少了10w倍 I/O BUffer：成本问题磁盘有磁道和扇区，一个扇区512byte会造成索引成本增大因此进行4K对齐，操作系统无论读多少都最少从磁盘里面拿4k出来 数据库的表很大，性能会下降吗？如果表有索引，那么对于增删改的操作肯定会变慢查询速度如果是1个或者少量查">
+<meta name="keywords" content="js">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis 学习的一些笔记">
+<meta property="og:url" content="http://yoohannah.github.io/post/knowledge/redis.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="基础常识磁盘寻址：ms带宽： G/M内存寻址：ns(纳秒级)带宽：byte/s秒&amp;gt;毫秒&amp;gt;微秒&amp;gt;纳秒磁盘寻址上比内存少了10w倍 I/O BUffer：成本问题磁盘有磁道和扇区，一个扇区512byte会造成索引成本增大因此进行4K对齐，操作系统无论读多少都最少从磁盘里面拿4k出来 数据库的表很大，性能会下降吗？如果表有索引，那么对于增删改的操作肯定会变慢查询速度如果是1个或者少量查">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-09-01T03:26:27.574Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="redis 学习的一些笔记">
+<meta name="twitter:description" content="基础常识磁盘寻址：ms带宽： G/M内存寻址：ns(纳秒级)带宽：byte/s秒&amp;gt;毫秒&amp;gt;微秒&amp;gt;纳秒磁盘寻址上比内存少了10w倍 I/O BUffer：成本问题磁盘有磁道和扇区，一个扇区512byte会造成索引成本增大因此进行4K对齐，操作系统无论读多少都最少从磁盘里面拿4k出来 数据库的表很大，性能会下降吗？如果表有索引，那么对于增删改的操作肯定会变慢查询速度如果是1个或者少量查">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/knowledge/redis.html">
+
+
+
+
+
+  <title> redis 学习的一些笔记 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/redis.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                redis 学习的一些笔记
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-08-09T21:30:15+08:00">
+                2022-08-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>基础常识<br>磁盘<br>寻址：ms<br>带宽： G/M<br>内存<br>寻址：ns(纳秒级)<br>带宽：byte/s<br>秒&gt;毫秒&gt;微秒&gt;纳秒<br>磁盘寻址上比内存少了10w倍</p>
+<p>I/O BUffer：成本问题<br>磁盘有磁道和扇区，一个扇区512byte<br>会造成索引成本增大<br>因此进行4K对齐，操作系统无论读多少都最少从磁盘里面拿4k出来</p>
+<p>数据库的表很大，性能会下降吗？<br>如果表有索引，<br>那么对于增删改的操作肯定会变慢<br>查询速度<br>如果是1个或者少量查询依然很快<br>但如果是并发大的时候会受到硬盘带宽的影响，从而影响速度</p>
+<p>数据在内存和磁盘中体积不一样</p>
+<p>redis出现原因：<br>内存 ==&gt;  贵<br>磁盘 ==&gt;  慢<br>两个基础设施限制：<br>冯诺依曼体系的硬件制约 ===&gt; 硬盘io带宽问题<br>以太网，tcp/ip的网络 ===&gt; 不稳定</p>
+<p><a href="https://db-engines.com/en/" target="_blank" rel="noopener">https://db-engines.com/en/</a></p>
+<p>Redis 是一个开源（BSD许可）的，内存中的数据结构存储系统，它可以用作数据库、缓存和消息中间件。 它支持多种类型的数据结构，如 字符串（strings）， 散列（hashes）， 列表（lists）， 集合（sets）， 有序集合（sorted sets） 与范围查询， bitmaps， hyperloglogs 和 地理空间（geospatial） 索引半径查询。 Redis 内置了 复制（replication），LUA脚本（Lua scripting）， LRU驱动事件（LRU eviction），事务（transactions） 和不同级别的 磁盘持久化（persistence）， 并通过 Redis哨兵（Sentinel）和自动 分区（Cluster）提供高可用性（high availability）。</p>
+<p>上述数据类型是指value的数据类型<br>memcache 和redis区别在于，memcache value没有类型<br>将返回value所有数据到client端，会受到server 网卡IO的限制，而且client要有解码的逻辑<br>redis因为value有类型，所以对于数据的请求根据不同情况直接调用相应类型方法返回少量数据即可<br>做到了计算向数据移动</p>
+<p>redis是单进程，单线程，单实例的，通过epoll快速处理并发请求<br>epoll是同步非阻塞的多路复用机制<br>jvm: 一个线程成本是1MB<br>线程多了会增加调度成本，从而使CPU浪费，也会增加内存成本<br>BIO—&gt;NIO（同步非阻塞）—&gt;多路复用—&gt;epoll(引入共享空间避免fd相关数据考来考去)</p>
+<p>redis 对不同数据类型不同encoding类型的数值具有不同的方法<br>key有两个属性：<br>type标识值的类型<br>encoding标识值的编码类型<br>二者决定对值的操作可以使用哪些方法，从而加速计算</p>
+<p>String 类型<br>字符串的相关操作：<br>set,get,append,setRange,getRange,strlen<br>适用场景：<br>使用内存存储的session，对象，小文件</p>
+<p>数值的相关操作：<br>incr,decr<br>适用场景：<br>限流，计数<br>秒杀一般会用数据库</p>
+<p>bitmap的相关操作：<br>setbit, bitcount,bitpos,bittop<br>使用场景：web, 离线数据<br>1.用户系统，统计用户登录天数，且窗口随机<br>key标识用户，每个用户准备365位，每一位表示当天是否登录，登录置一<br>setbit sean 1 1<br>setbit sean 7 1<br>setbit sean 364 1<br>STRLEN sean ===&gt;46 每个用户只需要46个字节来存储这些信息<br>BITCOUNT sean -2 -1 计算多少天范围内一共登录了几天</p>
+<ol start="2">
+<li><p>电商做618活动，需要给活跃用户登录后送礼物，请问应该备货多少礼物<br>假设这里活跃用户统计规则为20220901-20220903三天内登录的用户，三天内只要登录一次就算活跃用户<br>key标识当天用户登录情况，将用户编号映射到二进制位的相应位置上，每一位二进制代表一位用户是否登录<br>setbit 20220901 1 1<br>setbit 20220902 1 1<br>setbit 20220902 7 1<br>bittop or destkey 20220901 20220902<br>bitcount destkey 0 -1</p>
+</li>
+<li><p>存储oa权限信息</p>
+</li>
+<li>布隆过滤器，模块调用</li>
+</ol>
+<p>List 类型相关操作<br>按不同放入顺序排列<br>栈：同向命令<br>队列：反向命令<br>数组<br>阻塞，单播队列<br>ltrim<br>使用场景：<br>数据共享，迁出<br>无状态</p>
+<p>Hash类型<br>对filed进行数值计算<br>场景：<br>点赞，收藏，详情页<br>聚合场景</p>
+<p>Set类型<br>无序去重集合<br>元素变多扩容，会触发rehash，造成原顺序颠倒不稳定<br>集合操作多<br>随机事件：<br>RANDMEMBER key count<br>正数：取出一个去重的结果集(不能超过已有集)<br>负数：取出一个带重复的结果集，一定满足你要的数量<br>如果是0，不返回<br>应用场景：<br>随机事件==&gt;抽奖：<br>10个精品，参与人数&gt; 10 时，传正数，得到10个随机不重复值<br>10个精品，参与人数&lt; 10 时，传负数，得到10个可重复的值<br>中奖是否重复<br>Spop 不重复取出一个<br>推荐系统：<br>共同好友：交集<br>推荐好友：差集</p>
+<p>Sorted set<br>排序<br>物理内存左小右大（根据分值从左到右从小到大）<br>不随命令发生变化<br>集合操作（并集，交集）权重、聚合指令<br>排序是怎么实现的。 ==&gt; skip List 跳跃表<br>增删改查的速度<br>场景：<br>排行榜，<br>有序事件<br>评论+分页</p>
+<p>redis持久化<br>持久化意味着性能会下降<br>两个指标<br>快照：rdb,恢复的速度快，但缺失的多<br>日志：aof, ，<br>满足完整性好，恢复速度变慢，===&gt;采用不同日志策略避免<br>指令追加造成冗余量比较大 ===&gt; 使用重写</p>
+<p>redis 分布式集群<br>可用性：<br>单点故障可通过主从主备一变多集群构建镜像，需要同步<br>强一致性，会破坏使用性<br>弱一致性，可用性强，但同步一致性低（默认）<br>最终一致性，使用黑盒可靠集群做中间缓存，保证主从数据最终一致性<br>数据存储压力问题(装不下)，采用分片式集群代理集群，也是一变多，但不需要同步</p>
+<p>AkF拆分原则<br>根据业务划分数据到不同redis实例</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/js/" rel="tag"># js</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/knowledge/systemDesign.html" rel="next" title="系统设计案例">
+                <i class="fa fa-chevron-left"></i> 系统设计案例
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/knowledge/product.html" rel="prev" title="学习关于产品的一些思维">
+                学习关于产品的一些思维 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">232</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

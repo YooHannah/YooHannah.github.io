@@ -1,0 +1,691 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="nodejs,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="搭建如果全局安装express 使用npm install -g express 语句安装后，无法使用express命令则先执行npm install express-generator -gexpress在4.0之后，需要安装the executable（执行器express-generator）才能执行express命令express –view=ejs microblog //在当前文件夹创">
+<meta name="keywords" content="nodejs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建博客步骤">
+<meta property="og:url" content="http://yoohannah.github.io/post/nodejs/step.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="搭建如果全局安装express 使用npm install -g express 语句安装后，无法使用express命令则先执行npm install express-generator -gexpress在4.0之后，需要安装the executable（执行器express-generator）才能执行express命令express –view=ejs microblog //在当前文件夹创">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoohannah.github.io/image/node1.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/mongodb.png">
+<meta property="og:updated_time" content="2024-09-01T03:26:27.580Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="搭建博客步骤">
+<meta name="twitter:description" content="搭建如果全局安装express 使用npm install -g express 语句安装后，无法使用express命令则先执行npm install express-generator -gexpress在4.0之后，需要安装the executable（执行器express-generator）才能执行express命令express –view=ejs microblog //在当前文件夹创">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/node1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/nodejs/step.html">
+
+
+
+
+
+  <title> 搭建博客步骤 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/step.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                搭建博客步骤
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-12T21:33:37+08:00">
+                2017-03-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="搭建"><a href="#搭建" class="headerlink" title="搭建"></a>搭建</h1><p>如果全局安装express 使用npm install -g express 语句安装后，无法使用express命令<br>则先执行npm install express-generator -g<br>express在4.0之后，需要安装the executable（执行器express-generator）才能执行express命令<br>express –view=ejs microblog //在当前文件夹创建文件夹microblog，并在里面部署express<br>cd microblog //进入microblog<br>npm install //安装nodejs包<br>DEBUG=microblog:* npm start //运行<br>npm install -g supervisor //安装supervisor，监视代码改动<br>supervisor ./bin/www //运行，会提示输入rs重新开始，输入’rs’回车即可，<br>//这里就不用每次改完都去手动中断进程再重新开始</p>
+<h1 id="路由初步配置"><a href="#路由初步配置" class="headerlink" title="路由初步配置"></a>路由初步配置</h1><h2 id="匹配"><a href="#匹配" class="headerlink" title="匹配"></a>匹配</h2><p>打开app.js文件<br>var index = require(‘./routes/index’); //引入不同访问路径的回调函数所在文件<br>app.use(‘/‘, index); //为回调函数配置访问路径</p>
+<p>如果要建立分支路径，可以在回调函数文件中配置相应分支路径的回调函数<br>假如我想访问<a href="http://localhost:3000/users/111" target="_blank" rel="noopener">http://localhost:3000/users/111</a> 和 <a href="http://localhost:3000/users/id/111" target="_blank" rel="noopener">http://localhost:3000/users/id/111</a><br>首先在app.js中配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var users = require(&apos;./routes/users&apos;);</span><br><span class="line">app.use(&apos;/users&apos;, users);</span><br></pre></td></tr></table></figure></p>
+<p>然后配置routes路径下的users.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> router = express.Router();</span><br><span class="line"></span><br><span class="line"><span class="comment">/* GET users listing. */</span></span><br><span class="line">router.get(<span class="string">'/:id'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">  res.send(<span class="string">'USER:'</span>+req.params.id);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">router.get(<span class="string">'/id/:id'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">  res.send(<span class="string">'USERID:'</span>+req.params.id);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = router;</span><br></pre></td></tr></table></figure></p>
+<p>注意路径参数id的获取，在app.js配置时是访问路径的共有前缀，在users.js中获取的是分支前缀<br><a href="http://www.expressjs.com.cn/guide/using-middleware.html" target="_blank" rel="noopener">深入链接</a></p>
+<h2 id="控制权转移"><a href="#控制权转移" class="headerlink" title="控制权转移"></a>控制权转移</h2><p>express 处理路由规则时，会优先匹配先定义的陆游规则，后面的规则被屏蔽<br>通过调用回调函数的第三个参数next,可以将控制权转移到后面的规则<br>即执行完先定义的规则后会继续执行后面定义的规则<br><img src="/image/node1.png" alt="node1"></p>
+<h1 id="手动安装片段视图"><a href="#手动安装片段视图" class="headerlink" title="手动安装片段视图"></a>手动安装片段视图</h1><p>由于网站中多页面head和footer相同,所以要建立模板文件，然后让其他页面文件来来填充基于这种处理方法<br>express 4.x需要手动安装partials<br>npm install express-partials<br>在app.js中注册<br>var partials = require(‘express-partials’);<br>app.use(partials());</p>
+<h1 id="引入bootstrap-和-JQuery"><a href="#引入bootstrap-和-JQuery" class="headerlink" title="引入bootstrap 和 JQuery"></a>引入bootstrap 和 JQuery</h1><p>从<a href="http://twitter.github.com/bootstrap/下载bootstrap.zip" target="_blank" rel="noopener">http://twitter.github.com/bootstrap/下载bootstrap.zip</a>,<br>将 img 目录复制到工程 public 目录下，<br>将 bootstrap.css、bootstrap-responsive.css 复制到 public/stylesheets 中，<br>将 bootstrap.js 复制到 public/javascripts 目录中，<br>然后从<a href="http://jquery.com/下载一份最新版的" target="_blank" rel="noopener">http://jquery.com/下载一份最新版的</a> jquery.js 也放入 public/javascripts 目录中。</p>
+<h1 id="界面"><a href="#界面" class="headerlink" title="界面"></a>界面</h1><p>用.ejs文件当html文件,<br>ejs 的标签系统只有以下3种标签。<br> &lt;% code %&gt;： JavaScript 代码。<br> &lt;%= code %&gt;：显示替换过 HTML 特殊字符的内容。<br> &lt;%- code %&gt;：显示原始 HTML 内容。<br>新建layout.ejs 做模板文件 ，调整index.ejs内容做首页填充内容，访问 <a href="http://localhost:3000/" target="_blank" rel="noopener">http://localhost:3000/</a> 查看效果</p>
+<h1 id="MongoDB-数据库"><a href="#MongoDB-数据库" class="headerlink" title="MongoDB 数据库"></a>MongoDB 数据库</h1><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>选用 MongoDB 作为网站的数据库系统<br>在<a href="http://dl.mongodb.org/dl/win32/x86_64" target="_blank" rel="noopener">http://dl.mongodb.org/dl/win32/x86_64</a> 可下载安装包<br>遇到该步骤时，<br><img src="/image/mongodb.png" alt="mongodb.png"><br>选择custom可以自定义安装路径<br>安装完成后，在bin所在的文件夹，与bin同级建立data文件夹，然后cmd到bin文件夹，执行<br>mongod –dbpath data文件夹路径（例：D:\MongoDB\data）<br>执行完最后一行出现：<br>2017-03-12T13:16:29.286+0800 I NETWORK  [thread1] waiting for connections on por<br>t 27017<br>浏览器输入 <a href="http://localhost:27017/" target="_blank" rel="noopener">http://localhost:27017/</a> 可以看到显示信息为<br>It looks like you are trying to access MongoDB over HTTP on the native driver port.<br>说明安装完成</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>修改package.json,dependencies中增加  “mongodb”: “&gt;= 0.9.9”<br>npm install  //更新依赖模块<br>在与app.js同级目录下新建settings.js,内容如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  cookieSecret: <span class="string">'microblogYooHannah'</span>,</span><br><span class="line">  db: <span class="string">'microblog'</span>,</span><br><span class="line">  host: <span class="string">'localhost'</span>,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>新建models文件夹，并在里面新建文件db.js,内容如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> settings = <span class="built_in">require</span>(<span class="string">'../settings'</span>),</span><br><span class="line">    Db = <span class="built_in">require</span>(<span class="string">'mongodb'</span>).Db,</span><br><span class="line">    Connection = <span class="built_in">require</span>(<span class="string">'mongodb'</span>).Connection,</span><br><span class="line">    Server = <span class="built_in">require</span>(<span class="string">'mongodb'</span>).Server;</span><br><span class="line">    <span class="built_in">module</span>.exports = <span class="keyword">new</span> Db(settings.db, <span class="keyword">new</span> Server(settings.host, Connection.DEFAULT_PORT, &#123;&#125;), &#123;<span class="attr">safe</span>: <span class="literal">true</span>&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>修改package.json,dependencies中增加  “connect-mongo”: “&gt;= 0.1.7”<br>npm install更新依赖模块<br>修改app.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> MongoStore = <span class="built_in">require</span>(<span class="string">'connect-mongo'</span>);</span><br><span class="line"><span class="keyword">var</span> settings = <span class="built_in">require</span>(<span class="string">'./settings'</span>);</span><br><span class="line"></span><br><span class="line">app.use(express.session(&#123;</span><br><span class="line">  secret: settings.cookieSecret,</span><br><span class="line">  store: <span class="keyword">new</span> MongoStore(&#123;</span><br><span class="line">  db: settings.db</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;));</span><br></pre></td></tr></table></figure></p>
+<p>由于session不再绑定在express上，这里会报错，所以要单独安装session<br>npm install express-session<br>修改app.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> session    = <span class="built_in">require</span>(<span class="string">'express-session'</span>);</span><br><span class="line"><span class="keyword">var</span> MongoStore = <span class="built_in">require</span>(<span class="string">'connect-mongo'</span>)(session);</span><br><span class="line"><span class="keyword">var</span> settings = <span class="built_in">require</span>(<span class="string">'./settings'</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">app.use(session(&#123;</span><br><span class="line">  secret: settings.cookieSecret,</span><br><span class="line">  store: <span class="keyword">new</span> MongoStore(&#123;</span><br><span class="line">    url: <span class="string">'mongodb://localhost/db'</span><span class="comment">//链接数据库地址  </span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;));</span><br></pre></td></tr></table></figure></p>
+<p>如出现错误：<br>MongoError: failed to connect to server [localhost:27017] on first connect<br>可能是没有运行刚才安装的MongoDB,这时要回到cmd,执行<br>mongod –dbpath data文件夹路径（例：D:\MongoDB\data）<br>如出现以下提醒：<br>express-session deprecated undefined resave option;<br>express-session deprecated undefined saveUninitialized option;<br>则补充上这两个配置参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">app.use(session(&#123;</span><br><span class="line">  resave: false, //添加 resave 选项  </span><br><span class="line">  saveUninitialized: true, //添加 saveUninitialized 选项  </span><br><span class="line">&#125;));</span><br></pre></td></tr></table></figure></p>
+<h1 id="注册页面"><a href="#注册页面" class="headerlink" title="注册页面"></a>注册页面</h1><p>在view中新建reg.ejs,内容如下；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;form class=&quot;form-horizontal&quot; method=&quot;post&quot;&gt;</span><br><span class="line">  &lt;fieldset&gt;</span><br><span class="line">    &lt;legend&gt;用户注册&lt;/legend&gt;</span><br><span class="line">    &lt;div class=&quot;control-group&quot;&gt;</span><br><span class="line">      &lt;label class=&quot;control-label&quot; for=&quot;username&quot;&gt;用户名&lt;/label&gt;</span><br><span class="line">      &lt;div class=&quot;controls&quot;&gt;</span><br><span class="line">        &lt;input type=&quot;text&quot; class=&quot;input-xlarge&quot; id=&quot;username&quot; name=&quot;username&quot;&gt;</span><br><span class="line">        &lt;p class=&quot;help-block&quot;&gt;你的账户名称，用于登录和显示。 &lt;/p&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;control-group&quot;&gt;</span><br><span class="line">      &lt;label class=&quot;control-label&quot; for=&quot;password&quot;&gt;口令&lt;/label&gt;</span><br><span class="line">      &lt;div class=&quot;controls&quot;&gt;</span><br><span class="line">        &lt;input type=&quot;password&quot; class=&quot;input-xlarge&quot; id=&quot;password&quot; name=&quot;password&quot;&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;control-group&quot;&gt;</span><br><span class="line">      &lt;label class=&quot;control-label&quot; for=&quot;password-repeat&quot;&gt;重复输入口令&lt;/label&gt;</span><br><span class="line">      &lt;div class=&quot;controls&quot;&gt;</span><br><span class="line">        &lt;input type=&quot;password&quot; class=&quot;input-xlarge&quot; id=&quot;password-repeat&quot; name=&quot;password-repeat&quot;&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;form-actions&quot;&gt;</span><br><span class="line">      &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot;&gt;注册&lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/fieldset&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在app.js和routes/index中增加访问路径和响应函数<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//app.js</span></span><br><span class="line"><span class="keyword">var</span> router = <span class="built_in">require</span>(<span class="string">'./routes/index'</span>);<span class="comment">//路由</span></span><br><span class="line"><span class="keyword">var</span> app = express();</span><br><span class="line">app.use(<span class="string">'/'</span>, router);</span><br><span class="line">app.use(<span class="string">'/reg'</span>,router );</span><br><span class="line"></span><br><span class="line"><span class="comment">//routes/index.js</span></span><br><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> router = express.Router();</span><br><span class="line"></span><br><span class="line"><span class="comment">/* GET home page. */</span></span><br><span class="line">router.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">  res.render(<span class="string">'index'</span>, &#123; <span class="attr">title</span>: <span class="string">'首页'</span> &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">router.get(<span class="string">'/reg'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">  res.render(<span class="string">'reg'</span>, &#123; <span class="attr">title</span>: <span class="string">'用户注册'</span> &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">router.post(<span class="string">'/reg'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line"><span class="comment">//检验用户两次输入的口令是否一致</span></span><br><span class="line">  <span class="keyword">if</span> (req.body[<span class="string">'password-repeat'</span>] != req.body[<span class="string">'password'</span>]) &#123;</span><br><span class="line">    req.flash(<span class="string">'error'</span>, <span class="string">'两次输入的口令不一致'</span>);</span><br><span class="line">    <span class="keyword">return</span> res.redirect(<span class="string">'/reg'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//生成口令的散列值</span></span><br><span class="line">  <span class="keyword">var</span> md5 = crypto.createHash(<span class="string">'md5'</span>);</span><br><span class="line">  <span class="keyword">var</span> password = md5.update(req.body.password).digest(<span class="string">'base64'</span>);</span><br><span class="line">  <span class="keyword">var</span> newUser = <span class="keyword">new</span> User(&#123;</span><br><span class="line">    name: req.body.username,</span><br><span class="line">    password: password,</span><br><span class="line">  &#125;);</span><br><span class="line"><span class="comment">//检查用户名是否已经存在</span></span><br><span class="line">  User.get(newUser.name, <span class="function"><span class="keyword">function</span>(<span class="params">err, user</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (user)</span><br><span class="line">      err = <span class="string">'Username already exists.'</span>;</span><br><span class="line">    <span class="keyword">if</span> (err) &#123;</span><br><span class="line">      req.flash(<span class="string">'error'</span>, err);</span><br><span class="line">      <span class="keyword">return</span> res.redirect(<span class="string">'/reg'</span>);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//如果不存在则新增用户</span></span><br><span class="line">    newUser.save(<span class="function"><span class="keyword">function</span>(<span class="params">err</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (err) &#123;</span><br><span class="line">        req.flash(<span class="string">'error'</span>, err);</span><br><span class="line">        <span class="keyword">return</span> res.redirect(<span class="string">'/reg'</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      req.session.user = newUser;</span><br><span class="line">      req.flash(<span class="string">'success'</span>, <span class="string">'注册成功'</span>);</span><br><span class="line">      res.redirect(<span class="string">'/'</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">module</span>.exports = router;</span><br></pre></td></tr></table></figure></p>
+<p>响应函数中的User是用户模型,在models中创建user.js，再引入到routes/index<br>响应函数会出现<br>1.title is not defined的问题<br>解决办法就是将views/layout.ejs的title换成locals.title<br>2.req.flash会报错说req.flash is not a function，则<br>npm install connect-flash<br>app.js修改：<br>var flash = require(‘connect-flash’);<br>app.use(flash());<br>这样所有的req就可以使用flash()函数<br>3.crypto没有被定义<br>npm install crypto<br>routes/index.js引入<br>var crypto = require(‘crypto’);</p>
+<h1 id="视图交互"><a href="#视图交互" class="headerlink" title="视图交互"></a>视图交互</h1><p>实现不同登录状态下页面呈现不同内容的功能，创建动态视图助手<br>app.js<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">app.use(function(req,res,next)&#123;</span><br><span class="line">  res.locals.user=req.session.user;</span><br><span class="line"></span><br><span class="line">  var err = req.flash(&apos;error&apos;);</span><br><span class="line">  var success = req.flash(&apos;success&apos;);</span><br><span class="line"></span><br><span class="line">  res.locals.error = err.length ? err : null;</span><br><span class="line">  res.locals.success = success.length ? success : null;</span><br><span class="line"></span><br><span class="line">  next();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>放在路由配置前面<br>接下来，修改 layout.ejs中的导航栏部分,为已登入用户和未登入用户显示不同的信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;ul class=&quot;nav&quot;&gt;</span><br><span class="line">&lt;li class=&quot;active&quot;&gt;&lt;a href=&quot;/&quot;&gt;首页&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">&lt;% if (!user) &#123; %&gt;</span><br><span class="line">&lt;li&gt;&lt;a href=&quot;/login&quot;&gt;登入&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">&lt;li&gt;&lt;a href=&quot;/reg&quot;&gt;注册&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">&lt;% &#125; else &#123; %&gt;</span><br><span class="line">&lt;li&gt;&lt;a href=&quot;/logout&quot;&gt;登出&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">&lt;% &#125; %&gt;</span><br><span class="line">&lt;/ul&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在 container 中，&lt;%- body %&gt;之前加入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;% if (success) &#123; %&gt;</span><br><span class="line">&lt;div class=&quot;alert alert-success&quot;&gt;</span><br><span class="line">&lt;%= success %&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;% &#125; %&gt;</span><br><span class="line">&lt;% if (error) &#123; %&gt;</span><br><span class="line">&lt;div class=&quot;alert alert-error&quot;&gt;</span><br><span class="line">&lt;%= error %&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;% &#125; %&gt;</span><br></pre></td></tr></table></figure></p>
+<p>它的功能是页面通知。</p>
+<h1 id="登录登出操作-状态判断-建立微博模型，处理微博发表操作"><a href="#登录登出操作-状态判断-建立微博模型，处理微博发表操作" class="headerlink" title="登录登出操作,状态判断;建立微博模型，处理微博发表操作"></a>登录登出操作,状态判断;建立微博模型，处理微博发表操作</h1><p>同样建立连接路由，写响应函数</p>
+<h1 id="处理首页登录前后状态"><a href="#处理首页登录前后状态" class="headerlink" title="处理首页登录前后状态"></a>处理首页登录前后状态</h1><p>省略步骤可参考书籍<br><a href="https://github.com/YooHannah/NodejsofMicroblog" target="_blank" rel="noopener">代码详见</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nodejs/" rel="tag"># nodejs</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/nodejs/sync.html" rel="next" title="同步/异步和使用">
+                <i class="fa fa-chevron-left"></i> 同步/异步和使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/nodejs/Middleware.html" rel="prev" title="对于一些模块的探究">
+                对于一些模块的探究 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">232</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#搭建"><span class="nav-number">1.</span> <span class="nav-text">搭建</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#路由初步配置"><span class="nav-number">2.</span> <span class="nav-text">路由初步配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#匹配"><span class="nav-number">2.1.</span> <span class="nav-text">匹配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#控制权转移"><span class="nav-number">2.2.</span> <span class="nav-text">控制权转移</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#手动安装片段视图"><span class="nav-number">3.</span> <span class="nav-text">手动安装片段视图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#引入bootstrap-和-JQuery"><span class="nav-number">4.</span> <span class="nav-text">引入bootstrap 和 JQuery</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#界面"><span class="nav-number">5.</span> <span class="nav-text">界面</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MongoDB-数据库"><span class="nav-number">6.</span> <span class="nav-text">MongoDB 数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">6.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">6.2.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#注册页面"><span class="nav-number">7.</span> <span class="nav-text">注册页面</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#视图交互"><span class="nav-number">8.</span> <span class="nav-text">视图交互</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#登录登出操作-状态判断-建立微博模型，处理微博发表操作"><span class="nav-number">9.</span> <span class="nav-text">登录登出操作,状态判断;建立微博模型，处理微博发表操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#处理首页登录前后状态"><span class="nav-number">10.</span> <span class="nav-text">处理首页登录前后状态</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

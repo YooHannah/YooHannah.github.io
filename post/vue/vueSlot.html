@@ -1,0 +1,676 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="vue,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="背景项目列表组件需要实现点击自动增加一行,可展示自定义内容的可扩展内容列表table组件被应用在page组件，page组件被应用在具体业务页面，slot的具体内容在业务页面传递进去问题难点1.多层组件slot传递2.同一个slot在table组件中循环使用在多处时，不会被渲染 原理1.slot 只能一层一层传递，所以解决多层传递，就是在page层应用table时，增加slot接收业务页面传递进来的">
+<meta name="keywords" content="vue">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Slot复用">
+<meta property="og:url" content="http://yoohannah.github.io/post/vue/vueSlot.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="背景项目列表组件需要实现点击自动增加一行,可展示自定义内容的可扩展内容列表table组件被应用在page组件，page组件被应用在具体业务页面，slot的具体内容在业务页面传递进去问题难点1.多层组件slot传递2.同一个slot在table组件中循环使用在多处时，不会被渲染 原理1.slot 只能一层一层传递，所以解决多层传递，就是在page层应用table时，增加slot接收业务页面传递进来的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoohannah.github.io/image/tableextend1.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/tableextend2.png">
+<meta property="og:updated_time" content="2024-09-01T03:26:27.610Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Slot复用">
+<meta name="twitter:description" content="背景项目列表组件需要实现点击自动增加一行,可展示自定义内容的可扩展内容列表table组件被应用在page组件，page组件被应用在具体业务页面，slot的具体内容在业务页面传递进去问题难点1.多层组件slot传递2.同一个slot在table组件中循环使用在多处时，不会被渲染 原理1.slot 只能一层一层传递，所以解决多层传递，就是在page层应用table时，增加slot接收业务页面传递进来的">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/tableextend1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/vue/vueSlot.html">
+
+
+
+
+
+  <title> Slot复用 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/vue/vueSlot.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Slot复用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-13T16:38:15+08:00">
+                2019-01-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>项目列表组件需要实现点击自动增加一行,可展示自定义内容的可扩展内容<br>列表table组件被应用在page组件，page组件被应用在具体业务页面，slot的具体内容在业务页面传递进去<br><img src="/image/tableextend1.png" alt="tableextend1"><br>问题难点<br>1.多层组件slot传递<br>2.同一个slot在table组件中循环使用在多处时，不会被渲染</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>1.slot 只能一层一层传递，所以解决多层传递，就是在page层应用table时，增加slot接收业务页面传递进来的slot具体内容<br>2.同名slot不能在同一组件被重复渲染，即不允许有重名slot<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">重名的 Slots 移除</span><br><span class="line">同一模板中的重名 &lt;slot&gt; 已经弃用。当一个 slot 已经被渲染过了，那么就不能在同一模板其它地方被再次渲染了。如果要在不同位置渲染同一内容，可一用 prop 来传递。</span><br></pre></td></tr></table></figure></p>
+<h1 id="回归问题"><a href="#回归问题" class="headerlink" title="回归问题"></a>回归问题</h1><h2 id="多层组件slot传递"><a href="#多层组件slot传递" class="headerlink" title="多层组件slot传递"></a>多层组件slot传递</h2><p>在page层使用table组件时将&lt;slot&gt;&lt;/slot&gt;放在table组件中，将slot内容当作table的slot传递给table<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">1.业务页面具体自定义内容传入</span><br><span class="line">&lt;PageComponent :pageConfig=&quot;pageConfig&quot; ref=&quot;child&quot;&gt;</span><br><span class="line">    &lt;div slot=&apos;tableExtend&apos;&gt;</span><br><span class="line">    &lt;extendTable :detailConfig=&quot;pageConfig.table.isExtend.detailConfig&quot;</span><br><span class="line">        v-if=&quot;pageConfig.table.isExtend.detailConfig[0].data.length&gt;0&quot;&gt;</span><br><span class="line">    &lt;/extendTable&gt;</span><br><span class="line">    &lt;div style=&quot;padding: 10px;&quot; v-if=&quot;pageConfig.table.isExtend.detailConfig[0].data.length === 0&quot;&gt;暂无数据&lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/PageComponent&gt;</span><br><span class="line"></span><br><span class="line">2.page组件table部分</span><br><span class="line">&lt;section class=&quot;page-table&quot;&gt;</span><br><span class="line">    &lt;tableTemp :table=&quot;pageConfig.table&quot; :pageConfig=&quot;pageConfig&quot; @sendIds=&quot;receiveIds&quot; ref=&quot;refTest&quot;&gt;</span><br><span class="line">        &lt;slot :name=&apos;pageConfig.table.isExtend.slot&apos; v-if=&quot;pageConfig.table.isExtend&quot;&gt;&lt;/slot&gt; //将slot放在这里</span><br><span class="line">    &lt;/tableTemp&gt;</span><br><span class="line">&lt;/section&gt;</span><br><span class="line">3.table部分</span><br><span class="line"> 利用template实现列表行和扩展行一对一</span><br><span class="line"> &lt;template v-for=&quot;(value,index) in table.tableData&quot;&gt; </span><br><span class="line">    &lt;tr :key=&quot;index&quot;&gt;</span><br><span class="line">        &lt;td v-for=&quot;(val,i) in table.tableEle&quot; v-if=&quot;val.display&quot; :key=&quot;i&quot;&gt;</span><br><span class="line">            &lt;div class=&quot;extendStyle&quot; v-if=&apos;table.isExtend &amp;&amp; i==firstShow&apos;&gt;</span><br><span class="line">                &lt;a v-show=&quot;index != currentActive&quot; @click=&quot;loadDetail(value,index)&quot;&gt;&lt;i class=&quot;ivu-icon ivu-icon-ios-arrow-forward&quot;&gt;&lt;/i&gt;&lt;/a&gt; //loadDetail去调父组件函数获取详情数据</span><br><span class="line">                &lt;a v-show=&quot;index === currentActive&quot; @click=&quot;loadDetail(value,index)&quot; class=&quot;active&quot;&gt;&lt;i class=&quot;ivu-icon ivu-icon-ios-arrow-forward&quot;&gt;&lt;/i&gt;&lt;/a&gt;</span><br><span class="line">            &lt;/div&gt;</span><br><span class="line">            &lt;div v-if=&apos;!table.isExtend&apos;&gt;</span><br><span class="line">            ...</span><br><span class="line">            &lt;/div&gt;</span><br><span class="line">        &lt;/td&gt;</span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line">    //在组装行的时候增加备用扩展行，利用第三方变量控制扩展行显示隐藏</span><br><span class="line">    &lt;tr v-if=&quot;index === currentActive&quot; :key=&quot;index+0.5&quot; class=&apos;bgc&apos;&gt;  </span><br><span class="line">        &lt;td :colspan=&apos;tdNumber&apos; id=&apos;extend1&apos;&gt;//合并单元格</span><br><span class="line">            &lt;slot :name=&apos;table.isExtend.slot&apos;&gt;&lt;/slot&gt;//直接这样是不能渲染的，因为这样通过循环会出现多个同名slot</span><br><span class="line">        &lt;/td&gt;</span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line">&lt;/template&gt; </span><br><span class="line">//去调父组件函数获取详情数据</span><br><span class="line">loadDetail(item, index) &#123;</span><br><span class="line">    this.currentActive = this.currentActive === index ? -1 : index</span><br><span class="line">    this.$store.commit(&apos;changeTableExtendActive&apos;,this.currentActive)</span><br><span class="line">    if(this.currentActive === -1)&#123;</span><br><span class="line">        return</span><br><span class="line">    &#125;</span><br><span class="line">    let func = this.pageConfig.table.isExtend.func</span><br><span class="line">    this.$parent.$parent[func](item,index)</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure></p>
+<h2 id="slot重用"><a href="#slot重用" class="headerlink" title="slot重用"></a>slot重用</h2><h3 id="方法一-作用域插槽"><a href="#方法一-作用域插槽" class="headerlink" title="方法一 作用域插槽"></a>方法一 作用域插槽</h3><p>在子组件中将slot中用到的数据传递给slot标签的data属性,<br>父组件借助slot-scope属性,获取子组件中slot标签的data属性传递的数据<br>即可应用在slot模板中，另外slot模板中如果用到点击事件回调函数，可以直接在父组件中定义，直接调用</p>
+<p>注意slot-scope绑定的变量在使用时,子组件传递的实际值被包含在一个data属性中，所以需要通过slotscope.data.xxxxx去获取<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">爷爷组件</span><br><span class="line">&lt;PageComponent :pageConfig=&quot;pageConfig&quot; ref=&quot;child&quot;&gt;</span><br><span class="line">    &lt;template slot-scope=&quot;isExtend&quot;&gt;</span><br><span class="line">        &lt;extendTable :detailConfig=&quot;isExtend.data.detailConfig&quot; //包含的data中</span><br><span class="line">            v-if=&quot;isExtend.data.detailConfig[0].data.length&gt;0&quot;&gt;</span><br><span class="line">        &lt;/extendTable&gt;</span><br><span class="line">        &lt;div style=&quot;padding: 10px;&quot; v-if=&quot;isExtend.data.detailConfig[0].data.length === 0&quot;&gt;暂无数据&lt;/div&gt;</span><br><span class="line">    &lt;/template&gt;</span><br><span class="line">&lt;/PageComponent&gt;</span><br><span class="line">父组件</span><br><span class="line">&lt;section class=&quot;page-table&quot;&gt;</span><br><span class="line">    &lt;tableTemp :table=&quot;pageConfig.table&quot; :pageConfig=&quot;pageConfig&quot; @sendIds=&quot;receiveIds&quot; ref=&quot;refTest&quot;&gt;</span><br><span class="line">        &lt;slot :data=&apos;pageConfig.table.isExtend&apos; v-if=&quot;pageConfig.table.isExtend&quot;&gt;&lt;/slot&gt;</span><br><span class="line">    &lt;/tableTemp&gt;</span><br><span class="line">&lt;/section&gt;</span><br><span class="line">子组件</span><br><span class="line">&lt;tr v-if=&quot;index === currentActive&quot; :key=&quot;index+0.5&quot; class=&apos;bgc&apos;&gt; </span><br><span class="line">    &lt;td :colspan=&apos;tdNumber&apos; id=&apos;extend1&apos;&gt;</span><br><span class="line">        &lt;slot :data=&apos;table.isExtend&apos;&gt;&lt;/slot&gt; //直接使用</span><br><span class="line">    &lt;/td&gt;</span><br><span class="line">&lt;/tr&gt;</span><br></pre></td></tr></table></figure></p>
+<h3 id="插曲"><a href="#插曲" class="headerlink" title="插曲"></a>插曲</h3><p>一个业务场景需要同时渲染多个table,即通过一次配置，可渲染多个table的组件，<br>一个同事将循环table的逻辑放在了table组件本身里面，造成table本身是一个可循环输出多个table的组件<br>这样如果一开始在爷爷组件放入多个具名slot,因为不能在子组件slot标签添加name属性（会循环出同名slot），<br>那所有的slot都会出现在每一个table组件中<br>因此有了方法二<br><img src="/image/tableextend2.png" alt="tableextend2"></p>
+<h3 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h3><p>利用page层传递slot到table组件思想，在table中使用slot时，将其包裹在一个新组件中，<br>利用新组件复用，实现slot组件复用，(相当于将slot传递到新组件——-&gt;待查原理)<br>而新组件通过render函数依据slot节点生成<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">子组件</span><br><span class="line"> &lt;tr v-if=&quot;(indexx+&apos;-&apos;+index) === currentActive&quot; :key=&quot;index+0.5&quot; class=&apos;bgc&apos;&gt;</span><br><span class="line">    &lt;td :colspan=&apos;itemConfig.config.length&apos;&gt;</span><br><span class="line">        &lt;!-- slot标签要放在tdslot标签充当slot,否则详情数据拉回来之后不会进行更新组件 --&gt;</span><br><span class="line">        &lt;tdSlot :name=&apos;itemConfig.isExtend.slot&apos;&gt; &lt;slot :name=&apos;itemConfig.isExtend.slot&apos;&gt;&lt;/slot&gt; &lt;/tdSlot&gt;</span><br><span class="line">        &lt;!-- tdslot在main.js中定义 --&gt;</span><br><span class="line">    &lt;/td&gt;</span><br><span class="line">&lt;/tr&gt;</span><br><span class="line">loadDetail(item, indexx, index) &#123;</span><br><span class="line">    this.currentActive = this.currentActive === indexx+&apos;-&apos;+index ? -1 : indexx+&apos;-&apos;+index //通过多层key判断展开</span><br><span class="line">    if(this.currentActive === -1)&#123;</span><br><span class="line">        return</span><br><span class="line">    &#125;</span><br><span class="line">    let func = this.detailConfig[indexx].isExtend.func</span><br><span class="line">    this.$parent.$parent[func](item,indexx, index)</span><br><span class="line">&#125;</span><br><span class="line">新组件带着slot生成</span><br><span class="line">Vue.component(&apos;tdSlot&apos;, &#123;</span><br><span class="line"></span><br><span class="line">  render(createElement) &#123;</span><br><span class="line">    function deepClone(vnodes, createElement) &#123;</span><br><span class="line">      function cloneVNode (vnode) &#123;对slot节点进行深度复制</span><br><span class="line">        const clonedChildren = vnode.children &amp;&amp; vnode.children.map(vnode =&gt; cloneVNode(vnode))</span><br><span class="line">        const cloned = createElement(vnode.tag, vnode.data, clonedChildren)</span><br><span class="line">        cloned.text = vnode.text</span><br><span class="line">        cloned.isComment = vnode.isComment</span><br><span class="line">        cloned.componentOptions = vnode.componentOptions</span><br><span class="line">        cloned.elm = vnode.elm</span><br><span class="line">        cloned.context = vnode.context</span><br><span class="line">        cloned.ns = vnode.ns</span><br><span class="line">        cloned.isStatic = vnode.isStatic</span><br><span class="line">        cloned.key = vnode.key</span><br><span class="line"></span><br><span class="line">        return cloned</span><br><span class="line">      &#125;</span><br><span class="line">      const clonedVNodes = vnodes.map(vnode =&gt; cloneVNode(vnode))</span><br><span class="line">      return clonedVNodes</span><br><span class="line">    &#125;</span><br><span class="line">    var slots = this.$parent.$slots.default //从父组件拿到slot</span><br><span class="line">    var slot = null</span><br><span class="line">    for(let i=0;i&lt;slots.length;i++)&#123;</span><br><span class="line">      if(slots[i].data &amp;&amp; this.name === slots[i].data.slot)&#123; //多个slot，拿到自己table.isExtend配置的那一个</span><br><span class="line">        slot = slots[i]</span><br><span class="line">        break</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return createElement(&apos;div&apos;,&#123;class:&apos;tdslot&apos;&#125;,deepClone([slot], createElement)) //做一下深度复制</span><br><span class="line">    &lt;!-- return createElement(&apos;div&apos;,&#123;class:&apos;tdslot&apos;&#125;,[slot]) --&gt; 这样也可以</span><br><span class="line">  &#125;,</span><br><span class="line">  props:&#123;</span><br><span class="line">    name:&#123;</span><br><span class="line">      type:String,</span><br><span class="line">      default:&apos;&apos;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">父组件</span><br><span class="line">&lt;detailsTable v-if=&quot;detailPageConfig.detailConfig&quot; :detailConfig=&quot;detailPageConfig.detailConfig&quot;&gt;</span><br><span class="line">    &lt;slot v-for=&apos;(item,index) in detailPageConfig.detailConfig&apos; v-if=&apos;item.isExtend&apos; :name=&apos;detailPageConfig.detailConfig[index].isExtend.slot&apos; &gt;&lt;/slot&gt;</span><br><span class="line">&lt;/detailsTable&gt;</span><br><span class="line">爷爷组件</span><br><span class="line">&lt;detailsPage :detailPageConfig=&quot;detailPageConfig&quot;&gt;</span><br><span class="line">    &lt;div slot=&apos;tableExtend-1&apos;&gt; //多个slot 并列写即可</span><br><span class="line">    &lt;detailsTable :detailConfig=&quot;detailPageConfig.detailConfig[1].isExtend.detailConfig&quot;</span><br><span class="line">        v-if=&quot;this.detailPageConfig.detailConfig[1].isExtend.detailConfig[0].data.length&gt;0&quot;&gt;</span><br><span class="line">    &lt;/detailsTable&gt;</span><br><span class="line">    &lt;div v-if=&quot;this.detailPageConfig.detailConfig[1].isExtend.detailConfig[0].data.length&lt;1&quot;&gt;暂无数据&lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/detailsPage&gt;</span><br></pre></td></tr></table></figure></p>
+<h3 id="方法三"><a href="#方法三" class="headerlink" title="方法三"></a>方法三</h3><p>其实之所以会出现重名slot是因为table的大循环逻辑放在了自己组件内，<br>其实输出多个table的逻辑放在page层即可，table还是独立的table，<br>这样插入slot时就不是同名slot，各自slot,插入各自table<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">父组件</span><br><span class="line">&lt;template v-for=&apos;(item,index) in detailPageConfig.detailConfig&apos;&gt;</span><br><span class="line">    &lt;detailsTable :detailConfig=&quot;item&quot; :key=&apos;index&apos;&gt;</span><br><span class="line">    &lt;slot v-if=&apos;item.isExtend&apos; :name=&apos;item.isExtend.slot&apos; &gt;&lt;/slot&gt;</span><br><span class="line">    &lt;/detailsTable&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">子组件</span><br><span class="line">&lt;tr v-if=&quot;index === currentActive&quot; :key=&quot;index+0.5&quot; class=&apos;bgc&apos;&gt;</span><br><span class="line">    &lt;td :colspan=&apos;detailConfig.config.length&apos;&gt;</span><br><span class="line">        &lt;slot&gt;&lt;/slot&gt;//只要将自己的slot放进来即可</span><br><span class="line">    &lt;/td&gt;</span><br><span class="line">&lt;/tr&gt;</span><br></pre></td></tr></table></figure></p>
+<p><a href="https://www.jianshu.com/p/c735cc612e63" target="_blank" rel="noopener">参考资料</a><br><a href="https://cnodejs.org/topic/58c0ad17d282728c0ec4029a" target="_blank" rel="noopener">参考资料</a><br><a href="https://segmentfault.com/a/1190000010913794" target="_blank" rel="noopener">参考资料</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/vue/" rel="tag"># vue</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/react/SyntheticEvent.html" rel="next" title="react 合成事件原理">
+                <i class="fa fa-chevron-left"></i> react 合成事件原理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/knowledge/css3flex.html" rel="prev" title="探索flex布局">
+                探索flex布局 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">232</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#原理"><span class="nav-number">2.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#回归问题"><span class="nav-number">3.</span> <span class="nav-text">回归问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#多层组件slot传递"><span class="nav-number">3.1.</span> <span class="nav-text">多层组件slot传递</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#slot重用"><span class="nav-number">3.2.</span> <span class="nav-text">slot重用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方法一-作用域插槽"><span class="nav-number">3.2.1.</span> <span class="nav-text">方法一 作用域插槽</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插曲"><span class="nav-number">3.2.2.</span> <span class="nav-text">插曲</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法二"><span class="nav-number">3.2.3.</span> <span class="nav-text">方法二</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法三"><span class="nav-number">3.2.4.</span> <span class="nav-text">方法三</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

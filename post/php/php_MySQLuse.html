@@ -1,0 +1,692 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="php,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="php连接数据库查看数据库主机，用户名use myaql；select Host from user;select user from user; 连接数据库服务器mysql_connect函数$con = mysql_connect(“localhost”,”peter”,”abc123”);参数1    主机参数2    数据库服务器登陆名参数3    密码参数4    数据库的名称参数5">
+<meta name="keywords" content="php">
+<meta property="og:type" content="article">
+<meta property="og:title" content="php中MySQL的使用">
+<meta property="og:url" content="http://yoohannah.github.io/post/php/php_MySQLuse.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="php连接数据库查看数据库主机，用户名use myaql；select Host from user;select user from user; 连接数据库服务器mysql_connect函数$con = mysql_connect(“localhost”,”peter”,”abc123”);参数1    主机参数2    数据库服务器登陆名参数3    密码参数4    数据库的名称参数5">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-09-01T03:26:27.587Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="php中MySQL的使用">
+<meta name="twitter:description" content="php连接数据库查看数据库主机，用户名use myaql；select Host from user;select user from user; 连接数据库服务器mysql_connect函数$con = mysql_connect(“localhost”,”peter”,”abc123”);参数1    主机参数2    数据库服务器登陆名参数3    密码参数4    数据库的名称参数5">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/php/php_MySQLuse.html">
+
+
+
+
+
+  <title> php中MySQL的使用 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/php/php_MySQLuse.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                php中MySQL的使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-26T21:37:37+08:00">
+                2017-05-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="php连接数据库"><a href="#php连接数据库" class="headerlink" title="php连接数据库"></a>php连接数据库</h1><p>查看数据库主机，用户名<br>use myaql；<br>select Host from user;<br>select user from user;</p>
+<h2 id="连接数据库服务器"><a href="#连接数据库服务器" class="headerlink" title="连接数据库服务器"></a>连接数据库服务器</h2><p>mysql_connect函数<br>$con = mysql_connect(“localhost”,”peter”,”abc123”);<br>参数1    主机<br>参数2    数据库服务器登陆名<br>参数3    密码<br>参数4    数据库的名称<br>参数5    数据库服务器端口不填默认3306</p>
+<p>若参数4，数据库名称在此步已填并择，不需要执行第三步</p>
+<h2 id="判断链接是否正常"><a href="#判断链接是否正常" class="headerlink" title="判断链接是否正常"></a>判断链接是否正常</h2><p>如果有错误，存在错误号<br>if (mysql_errno($conn)) {<br>   echo mysql_error($conn);<br>   exit;<br>}</p>
+<p>mysql_errno 返回连接错误号，无错误返回0<br>参数1    传入mysql_connect返回的资源</p>
+<p>mysql_error 返回连接错误字符串<br>参数1    传入mysql_connect返回的资源</p>
+<h2 id="选择数据库"><a href="#选择数据库" class="headerlink" title="选择数据库"></a>选择数据库</h2><p>mysql_select_db函数<br>mysql_select_db(‘user’,$conn);<br>参数1    传入mysql_connect返回的资源<br>参数2    需要连接的数据库名</p>
+<h2 id="设置字符集"><a href="#设置字符集" class="headerlink" title="设置字符集"></a>设置字符集</h2><p>mysql_set_charset<br>mysql_set_charset(‘utf8’,$conn);<br>参数1    字符集类型<br>参数2    传入mysql_connect返回的资源</p>
+<h2 id="准备SQL语句"><a href="#准备SQL语句" class="headerlink" title="准备SQL语句"></a>准备SQL语句</h2><p>要传入数据库的操作语句<br>注意参数如何拼接</p>
+<p>如果是int类型的就使用<br>$sql=”insert into user(mycon) values(“.$my_con.”)”;<br>//或者<br>$sql=’insert into user(mycon) values(‘.$my_con.’)’;</p>
+<p>如果是字符型的就要使用单引号或者双引号括起来<br>$sql=”insert into user(mycon) values(‘“.$my_con.”‘)”;<br>//或者这样写<br>$sql=’insert into user(mycon) values(“‘.$my_con.’”)’;</p>
+<p>多个<br>$sql = “INSERT INTO user (username,password,createtime,createip)<br>values<br>(‘“ . $username . “‘,’” . $password . “‘,” . $time . “,’” . $ip . “‘)”;</p>
+<h2 id="发送SQL语句"><a href="#发送SQL语句" class="headerlink" title="发送SQL语句"></a>发送SQL语句</h2><p>$result = mysql_query($sql,$conn);</p>
+<h2 id="根据不同操作，判断执行是否正常或者遍历数据"><a href="#根据不同操作，判断执行是否正常或者遍历数据" class="headerlink" title="根据不同操作，判断执行是否正常或者遍历数据"></a>根据不同操作，判断执行是否正常或者遍历数据</h2><p>发送的是select类别的语句，通常需要将结果输出显示出来。就需要用到遍历显示数据的函数<br>函数    mysql_fetch_array<br>功能    得到result结果集中的数据，返回数组进行便利<br>参数1    传入查询出来的结果变量<br>参数2    传入MYSQLI_NUM返回索引数组，MYSQLI_ASSOC返回关联数组，MYSQLI_BOTH返回索引和关联</p>
+<p>函数    mysql_fetch_assoc<br>功能    得到result结果集中的数据，返回关联数组进行便利<br>参数1    传入查询出来的结果变量</p>
+<p>函数    mysql_fetch_row<br>功能    得到result结果集中的数据，返回索引数组进行便利<br>参数1    传入查询出来的结果变量</p>
+<p>函数    mysql_fetch_object<br>功能    得到result结果集中的数据，返回对象进行遍历<br>参数1    传入查询出来的结果变量</p>
+<p>函数    mysql_num_rows<br>功能    返回查询出来的结果总数<br>参数1    传入查询出来的结果变量</p>
+<p>函数    sql_num_rows<br>功能    返回查询出来的结果总数<br>参数1    传入查询出来的结果变量</p>
+<p>如果发送的是insert的语句，通常需要得到是否执行成功，或者同时拿到自增的ID。<br>函数    mysqli_fetch_field<br>功能    遍历数据行<br>参数1    传入查询出来的结果变量</p>
+<p>如果发送的是update和delete类别的语句。只需要判断是否执行成功即可。</p>
+<p>if ($result) {<br>   echo ‘成功’;<br>} else {<br>    echo $sql;//查看是否是SQL语句拼接有问题<br>  echo ‘失败’;<br>}</p>
+<h2 id="关闭数据库"><a href="#关闭数据库" class="headerlink" title="关闭数据库"></a>关闭数据库</h2><p>函数    mysqli_close<br>功能    关闭数据库连接<br>参数1    传入mysqli_connect返回的资源</p>
+<p>mysql_close($conn);//关闭数据库</p>
+<h1 id="显示服务器信息函数"><a href="#显示服务器信息函数" class="headerlink" title="显示服务器信息函数"></a>显示服务器信息函数</h1><p>函数    mysqli_get_server_info<br>功能    返回服务器信息<br>参数1    传入mysqli_connect返回的资源</p>
+<p>函数    mysqli_get_server_version<br>功能    返回服务器版本<br>参数1    传入mysqli_connect返回的资源</p>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/php/registration/connect.php" target="_blank" rel="noopener">一个用户注册的代码链接</a></p>
+<h2 id="数据显示乱码终极解决办法"><a href="#数据显示乱码终极解决办法" class="headerlink" title="数据显示乱码终极解决办法"></a>数据显示乱码终极解决办法</h2><p>多个不同的文件系统中一定要统一编码。<br>9个要点分别是：<br>    1.html编码与MySQL编码一致<br>    2.PHP编码与MySQL编码一致<br>    3.若有header头发送字符集，请与数据库一样<br>      如果php中有header头，一定要是utf-8的<br>      header(‘content-type:text/html;charset=utf-8’);<br>    4.&lt;meta http-equiv=“Content-Type”content=“text/html; charset=utf-8” /&gt;要和页面的文字编码一致<br>    5.数据库建库的字符集要统一<br>    6.表的字符集要统一<br>    7.列的字符集要统一(表设了,列就默认写表的)<br>    8.连接,校验的字符集要统一<br>      通过mysqli_set_charset(‘utf8’)来MySQL连接、结果和校验的字符集设置。<br>      注：数据库的字符集声明和文件中的略有不同。utf8为mysql数据库的，utf-8为文件中使用的<br>    9.结果集的字符集要统一</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/php/" rel="tag"># php</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/php/php_imge.html" rel="next" title="图片上传">
+                <i class="fa fa-chevron-left"></i> 图片上传
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/php/php_MySQL.html" rel="prev" title="MySQL的基本知识">
+                MySQL的基本知识 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">232</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#php连接数据库"><span class="nav-number">1.</span> <span class="nav-text">php连接数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#连接数据库服务器"><span class="nav-number">1.1.</span> <span class="nav-text">连接数据库服务器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#判断链接是否正常"><span class="nav-number">1.2.</span> <span class="nav-text">判断链接是否正常</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选择数据库"><span class="nav-number">1.3.</span> <span class="nav-text">选择数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置字符集"><span class="nav-number">1.4.</span> <span class="nav-text">设置字符集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#准备SQL语句"><span class="nav-number">1.5.</span> <span class="nav-text">准备SQL语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发送SQL语句"><span class="nav-number">1.6.</span> <span class="nav-text">发送SQL语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#根据不同操作，判断执行是否正常或者遍历数据"><span class="nav-number">1.7.</span> <span class="nav-text">根据不同操作，判断执行是否正常或者遍历数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关闭数据库"><span class="nav-number">1.8.</span> <span class="nav-text">关闭数据库</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#显示服务器信息函数"><span class="nav-number">2.</span> <span class="nav-text">显示服务器信息函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据显示乱码终极解决办法"><span class="nav-number">2.1.</span> <span class="nav-text">数据显示乱码终极解决办法</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

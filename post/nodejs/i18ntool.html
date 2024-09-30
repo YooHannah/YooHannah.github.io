@@ -1,0 +1,682 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="nodejs,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="背景项目想要添加语言切换功能，负责该任务的同事由于待翻译的文本提取工作量巨大原因产生进度问题项目领导委派我帮忙进行辅助提取的工作 原理  i18n原理就是在全局挂载自己的具有翻译功能的方法，然后将需要翻译的文本作为参数传入，  然后函数根据当前语言环境，调用相应语言的翻译文件，通过key-value形式将对应语言的翻译结果返回给页面显示  项目中以简体中文作为key,翻译结果作为value形成翻译">
+<meta name="keywords" content="nodejs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="多语言切换文字提取工具">
+<meta property="og:url" content="http://yoohannah.github.io/post/nodejs/i18ntool.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="背景项目想要添加语言切换功能，负责该任务的同事由于待翻译的文本提取工作量巨大原因产生进度问题项目领导委派我帮忙进行辅助提取的工作 原理  i18n原理就是在全局挂载自己的具有翻译功能的方法，然后将需要翻译的文本作为参数传入，  然后函数根据当前语言环境，调用相应语言的翻译文件，通过key-value形式将对应语言的翻译结果返回给页面显示  项目中以简体中文作为key,翻译结果作为value形成翻译">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-09-01T03:26:27.578Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="多语言切换文字提取工具">
+<meta name="twitter:description" content="背景项目想要添加语言切换功能，负责该任务的同事由于待翻译的文本提取工作量巨大原因产生进度问题项目领导委派我帮忙进行辅助提取的工作 原理  i18n原理就是在全局挂载自己的具有翻译功能的方法，然后将需要翻译的文本作为参数传入，  然后函数根据当前语言环境，调用相应语言的翻译文件，通过key-value形式将对应语言的翻译结果返回给页面显示  项目中以简体中文作为key,翻译结果作为value形成翻译">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/nodejs/i18ntool.html">
+
+
+
+
+
+  <title> 多语言切换文字提取工具 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/i18ntool.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                多语言切换文字提取工具
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-24T18:15:15+08:00">
+                2020-06-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>项目想要添加语言切换功能，负责该任务的同事由于待翻译的文本提取工作量巨大原因产生进度问题<br>项目领导委派我帮忙进行辅助提取的工作</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>  i18n原理就是在全局挂载自己的具有翻译功能的方法，然后将需要翻译的文本作为参数传入，<br>  然后函数根据当前语言环境，调用相应语言的翻译文件，通过key-value形式将对应语言的翻译结果返回给页面显示<br>  项目中以简体中文作为key,翻译结果作为value形成翻译文件<br>  如<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">zh-CN.js 简体中文</span><br><span class="line">&apos;开始日期&apos;: &apos;开始日期&apos;,</span><br><span class="line">&apos;结束日期&apos;: &apos;结束日期&apos;,</span><br><span class="line"></span><br><span class="line">zh-TW.js 繁体中文</span><br><span class="line">&apos;开始日期&apos;: &apos;開始日期&apos;,</span><br><span class="line">&apos;结束日期&apos;: &apos;結束日期&apos;,</span><br></pre></td></tr></table></figure></p>
+<p>  需要做的大量工作就是将项目中前端写的会展示在页面上的文本全部提取出来，形成文件，<br>  并给相应的简体中文地方用i18n全局函数括起来，通过调用函数返回翻译结果</p>
+<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><p>因为同事使用纯手工作业，所以进度缓慢，按照这种做法，与其说自己比较懒，一个一个手动改，不如说自己觉得这种方式很low<br>一点都不酷，所以想起之前学习过的nodejs的知识，通过读取文件然后处理文件，最后生成新文件，用新文件替换老文件<br>处理文件过程会将简体中文提取出来形成文本提取文件，新文件中的简体中文会被i18n的全局函数包裹</p>
+<h2 id="读取"><a href="#读取" class="headerlink" title="读取"></a>读取</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">var fs = require(&apos;fs&apos;); //引入文件处理模块</span><br><span class="line">function read_file_sync(file_path) &#123;</span><br><span class="line">  var data = fs.readFileSync(file_path, &apos;utf-8&apos;); //读取文件</span><br><span class="line">  let arr = file_path.split(&apos;/&apos;)</span><br><span class="line">  let len = arr.length</span><br><span class="line">  let temp = arr[len-1].split(&apos;.&apos;)[0] </span><br><span class="line">  //获取文件名，如果待处理文件是子目录下的，保持生成的文本提取文件和新文件与原来文件保持相同目录结构</span><br><span class="line">  let fileName = arr[len-2] === &apos;console&apos;?temp:arr.slice(4,arr.length-1).join(&apos;/&apos;)+&apos;/&apos;+temp //子目录情况</span><br><span class="line">  GetChinese(data,fileName)</span><br><span class="line">&#125;</span><br><span class="line">read_file_sync(&apos;./src/components/console/san-manage.vue&apos;)</span><br></pre></td></tr></table></figure>
+<p>提取生成文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">function GetChinese(strValue,fileName) &#123; </span><br><span class="line">  if(strValue=== null || strValue === &quot;&quot;)&#123; </span><br><span class="line">    return []</span><br><span class="line">   &#125;</span><br><span class="line">  let originData = strValue</span><br><span class="line">  let arr = getWords(originData) //提取简体中文</span><br><span class="line">  let obj = &#123;&#125;</span><br><span class="line">  arr.map(item=&gt;&#123;obj[item]=&apos;&apos;&#125;)</span><br><span class="line">  let str = JSON.stringify(obj,&apos;&apos;,&quot;  &quot;)</span><br><span class="line">  str = &apos;export default &apos;+ str</span><br><span class="line">  //生成文本文件</span><br><span class="line">  fs.writeFile(&apos;./words/js/&apos;+fileName+&apos;.js&apos;, str,function(err)&#123; </span><br><span class="line">    if(err) console.log(&apos;提取操作失败&apos;);</span><br><span class="line">    else console.log(&apos;提取操作成功&apos;);</span><br><span class="line">  &#125;);</span><br><span class="line">  //添加i18n全局函数，替换老文件，生成新文件</span><br><span class="line">  let index = originData.indexOf(&apos;&lt;script&gt;&apos;)</span><br><span class="line">  let template = originData.substring(0,index)//这里仅替换VUE文件的template模板部分，因为js部分有时涉及到拼接处理，单独处理</span><br><span class="line">  let templateResult = partTransfor(template) //得到替换结果</span><br><span class="line">  let other = originData.substring(index)//获取vue文件里面的js部分</span><br><span class="line">  //二者拼接写入新文件</span><br><span class="line">  fs.writeFile(&apos;./words/vue/&apos;+fileName+&apos;.vue&apos;, templateResult+other, function(err)&#123; </span><br><span class="line">    if(err) console.log(&apos;重写文件操作失败&apos;);</span><br><span class="line">    else console.log(&apos;重写文件操作成功&apos;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="提取"><a href="#提取" class="headerlink" title="提取"></a>提取</h2><p>利用正则提取简体中文<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">function getWords(strValue,flag)&#123;</span><br><span class="line"> //flag为true的时候，提取template部分简体中文，供替换使用</span><br><span class="line"> //flag为false的时候，提取全部简体中文，二者正则不同</span><br><span class="line">  var reg = flag? /\&quot;?([0-9a-zA-Z\u4e00-\u9fa5|\-|\s|\(|\)\:\：\、\，\,\！\!\。])+/g : /(([0-9a-zA-Z]+)?[\u4e00-\u9fa5|\-|\s|\(|\)\、\，\,\:\：\！\!\。\~]([0-9a-zA-Z]+)?)+/g</span><br><span class="line">  //匹配注释的正则，注释不用提取翻译，故提取前先移除</span><br><span class="line">  let regCommon = /(\/\/[\w\s\,\，\‘\(\)\—\:\：\=\&gt;\、\？\。a-zA-Z\.\u4e00-\u9fa5|\[|\]|-]*\n)|(\&lt;\!\-\-[\w\s\‘\-\、a-zA-Z\u4e00-\u9fa5|\[|\]|-]*\-\-\&gt;)|(\/\*[\w\‘\s\r\n\*\u4e00-\u9fa5|\-]*\*\/)/g</span><br><span class="line">  strValue = strValue.replace(regCommon, function(word) &#123; // 去除注释后的文本</span><br><span class="line">    return &apos;&apos;</span><br><span class="line">  &#125;);</span><br><span class="line">  //优化提取结果，去重，过滤，排序</span><br><span class="line">  let res = [...new Set(strValue.match(reg))].filter(item=&gt;&#123;return /([\u4e00-\u9fa5])+/g.test(item)&#125;).map(item=&gt;&#123;return item.trim()&#125;)</span><br><span class="line">  res = res.sort((a,b)=&gt;&#123;</span><br><span class="line">    return b.length-a.length</span><br><span class="line">  &#125;)</span><br><span class="line">  return res</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="去掉注释"><a href="#去掉注释" class="headerlink" title="去掉注释"></a>去掉注释</h3><p>本来想参考<a href="https://www.cnblogs.com/tugenhua0707/p/11332463.html" target="_blank" rel="noopener">webpack打包时去除注释的正则</a>，发现webpack去除注释，用的分词<br>直接通过判断astnode类型去判断是否为注释，然后根据配置决定保留去除<br>后来想起在阅读vue源码的时候有看到过在解析html的时候有形成注释类型的节点<br>所以从vue 源码中试图寻找注释的正则，发现vue也是只通过注释开头标志//，/** 或者&lt;!–<br>来判断注释开始，所以我在此基础上自己编写了解析注释的正则并将他们去除</p>
+<h2 id="替换"><a href="#替换" class="headerlink" title="替换"></a>替换</h2><p>替换文本，用括号括起来<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">function partTransfor(strValue)&#123;</span><br><span class="line">  let originData = strValue</span><br><span class="line">  let res = getWords(strValue,true) //拿到template部分简体中文</span><br><span class="line">  for(let str of res)&#123;</span><br><span class="line">    let placeholder = str.charAt(0) ===&apos;\&quot;&apos; </span><br><span class="line">    let temp = placeholder?str.substring(1):str</span><br><span class="line">    let reg1 = new RegExp(str,&apos;ig&apos;)</span><br><span class="line">    let reg2 = new RegExp(&quot;placeholder=\&quot;(&quot;+temp+&quot;)\&quot;&quot;,&apos;ig&apos;)</span><br><span class="line">    let reg = placeholder?reg2:reg1</span><br><span class="line">    originData = originData.replace(reg,function(word,str)&#123;</span><br><span class="line">      if(placeholder)&#123; //如果是placeholder部分的简体中文</span><br><span class="line">        return &apos;:placeholder=&quot;i18nTitle(\&apos;&apos;+str+&apos;\&apos;)&quot;&apos;</span><br><span class="line">      &#125;else&#123;</span><br><span class="line">        if(/[\u4e00-\u9fa5\:\&apos;]/.test(originData[str-1]) || /[\u4e00-\u9fa5\:\&apos;]/.test(originData[str+word]))&#123; //对于一些包含特殊字符连接的手动处理</span><br><span class="line">          return word</span><br><span class="line">        &#125;</span><br><span class="line">        return &apos;&#123;&#123;i18nTitle(\&apos;&apos;+word+&apos;\&apos;)&#125;&#125;&apos; //对于纯简体中文用函数包裹进行替换</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  return originData</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>其实需要处理的情况分三种<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.js里面用this.i18nTitle(&apos;xxx&apos;)</span><br><span class="line">2.placeholder=&apos;xxx&apos;改成:placehoder=&quot;i18nTitle(&apos;xxxx&apos;)&quot;</span><br><span class="line">3.单纯标签的这种，&lt;label&gt;xxxx&lt;/label&gt;改成&lt;label&gt;&#123;&#123;i18nTitle(xxxx)&#125;&#125;&lt;/label&gt;</span><br></pre></td></tr></table></figure></p>
+<p>另外涉及到组件里面的就直接在组件里需要展示的配置的中文简体字段变量外加全局函数</p>
+<h2 id="合并"><a href="#合并" class="headerlink" title="合并"></a>合并</h2><p>每个文件提取处理好后，将所有字段合成一个文件，做去重处理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">var fs = require(&apos;fs&apos;);</span><br><span class="line">var path = require(&apos;path&apos;);//解析需要遍历的文件夹</span><br><span class="line">var filePath = path.resolve(&apos;./words/js&apos;);</span><br><span class="line">var words = []</span><br><span class="line">const getFileOfDirSync = (dir) =&gt; &#123;</span><br><span class="line">  let files = fs.readdirSync(dir);</span><br><span class="line">  let result;</span><br><span class="line">  if (files) &#123;</span><br><span class="line">    result = files.map((file) =&gt; &#123;</span><br><span class="line">      let filePath = path.join(dir, file);</span><br><span class="line">      if (fs.statSync(filePath).isDirectory()) &#123;</span><br><span class="line">        return getFileOfDirSync(filePath); //递归</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">        let content = fs.readFileSync(filePath, &apos;utf-8&apos;);</span><br><span class="line">        content = content.replace(&apos;export default&apos;,&apos;module.exports =&apos;) //更改模块编写方法</span><br><span class="line">        fs.writeFileSync(filePath,content);//方便读取</span><br><span class="line">        let data = require(filePath)</span><br><span class="line">        let keys = Object.keys(data)</span><br><span class="line">        let comment = content.substring(0,content.indexOf(&apos;module&apos;))</span><br><span class="line">        return keys;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">  return [... new Set(result.flat(Infinity))]; //数组摊平去重</span><br><span class="line">&#125;</span><br><span class="line">let res = getFileOfDirSync(filePath)</span><br><span class="line">res = res.sort((a,b)=&gt;&#123;</span><br><span class="line">  return b.length-a.length</span><br><span class="line">&#125;)</span><br><span class="line">let obj = &#123;&#125;</span><br><span class="line">res.map(item=&gt;&#123;obj[item]=&apos;&apos;&#125;)</span><br><span class="line">//res.map(item=&gt;&#123;obj[item]=item&#125;) //直接生成简体中文翻译文件</span><br><span class="line">let str = JSON.stringify(obj,&apos;&apos;,&quot;  &quot;)</span><br><span class="line">str = &apos;export default &apos;+ str</span><br><span class="line">fs.writeFile(&apos;./words/cnAll1.js&apos;, str,function(err)&#123;</span><br><span class="line">  if(err) console.log(&apos;提取操作失败&apos;);</span><br><span class="line">  else console.log(&apos;提取操作成功&apos;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<h2 id="翻译"><a href="#翻译" class="headerlink" title="翻译"></a>翻译</h2><p>根据简体中文和翻译结果形成翻译文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">let obj = &#123;&#125;</span><br><span class="line">let ll = &#123;&#125;</span><br><span class="line">let llkeys  = Object.keys(&#123; //翻译结果</span><br><span class="line">  &apos;建議選擇購買當前雲裸機已掛載使用的存儲類型和磁盤類型&apos;:&apos;&apos;,</span><br><span class="line">  &apos;超高端存儲：穩定性和安全性最好，適用於核心業務系統&apos;:&apos;&apos;,</span><br><span class="line">  &apos;高端存儲：穩定性和安全性較好，適用於重要業務系統&apos;:&apos;&apos;,</span><br><span class="line">  &apos;中端存儲：穩定性和安全性壹般，適用於壹般業務系統&apos;:&apos;&apos;,</span><br><span class="line">  &apos;普通存儲：穩定性和安全性較差，適用於邊緣業務系統&apos;:&apos;&apos;,</span><br><span class="line">  &apos;NVME：新壹代固態磁盤，性能最好、延時最低，適用於核心業務系統&apos;:&apos;&apos;,</span><br><span class="line">  &apos;SSD：固態磁盤，性能較好、延時較低，適用於重要業務系統&apos;:&apos;&apos;,</span><br><span class="line">  &apos;SAS：機械磁盤，性能壹般、延時壹般，適用於壹般業務系統&apos;:&apos;&apos;,</span><br><span class="line">  &apos;SATA：機械磁盤，性能較差、延時較高，適用於邊緣業務系統和歸檔數據&apos;:&apos;&apos;,</span><br><span class="line">&#125;)</span><br><span class="line">let objkeys = Object.keys(&#123; //简体中文</span><br><span class="line">  &apos;建议选择购买当前云裸机已挂载使用的存储类型和磁盘类型&apos;:&apos;&apos;,</span><br><span class="line">  &apos;超高端存储：稳定性和安全性最好，适用于核心业务系统&apos;:&apos;&apos;,</span><br><span class="line">  &apos;高端存储：稳定性和安全性较好，适用于重要业务系统&apos;:&apos;&apos;,</span><br><span class="line">  &apos;中端存储：稳定性和安全性一般，适用于一般业务系统&apos;:&apos;&apos;,</span><br><span class="line">  &apos;普通存储：稳定性和安全性较差，适用于边缘业务系统&apos;:&apos;&apos;,</span><br><span class="line">  &apos;NVME：新一代固态磁盘，性能最好、延时最低，适用于核心业务系统&apos;:&apos;&apos;,</span><br><span class="line">  &apos;SSD：固态磁盘，性能较好、延时较低，适用于重要业务系统&apos;:&apos;&apos;,</span><br><span class="line">  &apos;SAS：机械磁盘，性能一般、延时一般，适用于一般业务系统&apos;:&apos;&apos;,</span><br><span class="line">  &apos;SATA：机械磁盘，性能较差、延时较高，适用于边缘业务系统和归档数据&apos;:&apos;&apos;,</span><br><span class="line">&#125;)</span><br><span class="line">let tw = &#123;&#125;</span><br><span class="line">objkeys.map((item,i)=&gt;&#123;</span><br><span class="line">  tw[item] = llkeys[i] //生成繁体翻译文件</span><br><span class="line">  obj[item] = item //生成简体中文</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">let str = JSON.stringify(tw,&apos;&apos;,&quot;  &quot;)</span><br><span class="line">str = &apos;export default &apos;+ str</span><br><span class="line">fs.writeFile(&apos;zh-TW.js&apos;, str,function(err)&#123;</span><br><span class="line">  if(err) console.log(&apos;提取操作失败&apos;);</span><br><span class="line">  else console.log(&apos;提取操作成功&apos;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">str = JSON.stringify(obj,&apos;&apos;,&quot;  &quot;)</span><br><span class="line">str = &apos;export default &apos;+ str</span><br><span class="line">fs.writeFile(&apos;zh-CN.js&apos;, str,function(err)&#123;</span><br><span class="line">  if(err) console.log(&apos;提取操作失败&apos;);</span><br><span class="line">  else console.log(&apos;提取操作成功&apos;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<h2 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h2><p>有新页面上新需要对新老字段进行差值处理，仅新增原来没有的字段<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">let data = require(&apos;./words/zh-CN&apos;)</span><br><span class="line">let keys = Object.keys(data) //老数据</span><br><span class="line">let dataNew = require(&apos;./words/cnAll1&apos;) </span><br><span class="line">let keysNew = Object.keys(dataNew)//新页面数据</span><br><span class="line">let obj = &#123;&#125;</span><br><span class="line">let newWords = keysNew.filter(newkey=&gt;&#123;</span><br><span class="line">   return !keys.includes(newkey)</span><br><span class="line">&#125;).map(item=&gt;&#123;</span><br><span class="line">  obj[item]=item</span><br><span class="line">  return item</span><br><span class="line">&#125;)//得到新增的文本</span><br><span class="line">let ll = &#123;&#125; //新增文本翻译结果</span><br><span class="line">let llkeys  = Object.keys(ll)</span><br><span class="line">let objkeys = Object.keys(obj)</span><br><span class="line">let tw = &#123;&#125;</span><br><span class="line">objkeys.map((item,i)=&gt;&#123;</span><br><span class="line">  tw[item] = llkeys[i]</span><br><span class="line">&#125;)</span><br><span class="line">//生成简体和繁体翻译文件，再复制粘贴到老文件中</span><br><span class="line">// let str = JSON.stringify(obj,&apos;&apos;,&quot;  &quot;)</span><br><span class="line">let str = JSON.stringify(tw,&apos;&apos;,&quot;  &quot;)</span><br><span class="line">str = &apos;export default &apos;+ str</span><br><span class="line">fs.writeFile(&apos;./words/compareResult3.js&apos;, str,function(err)&#123;</span><br><span class="line">  if(err) console.log(&apos;提取操作失败&apos;);</span><br><span class="line">  else console.log(&apos;提取操作成功&apos;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><h2 id="其他云多语言切换"><a href="#其他云多语言切换" class="headerlink" title="其他云多语言切换"></a>其他云多语言切换</h2><p>阿里云：首先会根据不同域名产生对应不同语言的站点，站点画面风格可能不同，如日本<br>另外根据语言切换，还会在同一域名下通过切换URI产生不同语言广告页面（切换时，请求cookie中会携带语言类型，aliyun_lang）<br>广告页面和站点页面可能相同，如香港，台湾的繁体页面，<br>可能不同，如简体中文和日文的时候</p>
+<p>腾讯云：站点只有两种：中国站和国际站，两种站点风格不同<br>多语言切换在国际站点里面进行，同样通过切换URI，切换不同语言<br>切换时直接在query里面携带语言信息（<a href="https://intl.cloud.tencent.com/jp/?lang=jp&amp;pg=）" target="_blank" rel="noopener">https://intl.cloud.tencent.com/jp/?lang=jp&amp;pg=）</a></p>
+<p>平安云：只有两种语言切换，中文和英文，使用同一站点，<br>切换时通过在cookie里面携带需要的语言类型字段language，<br>获取相应语言的html和图片</p>
+<h2 id="i18n大致原理"><a href="#i18n大致原理" class="headerlink" title="i18n大致原理"></a>i18n大致原理</h2><p>i18n 的翻译原理就是在vue.use挂载i18n后,在install阶段会挂载上$t全局函数<br>我们在使用$t的时候只是单纯传入待翻译的简体中文，<br>$t会再调用VUEI18N对象上的内部方法，将当前语言环境和语言库传入，<br>然后通过message[key]的形式找到对应的翻译值，返回<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br></pre></td><td class="code"><pre><span class="line">Vue.prototype.$t = function (key) &#123;</span><br><span class="line">  var values = [], len = arguments.length - 1;</span><br><span class="line">  while ( len-- &gt; 0 ) values[ len ] = arguments[ len + 1 ];</span><br><span class="line"></span><br><span class="line">  var i18n = this.$i18n;</span><br><span class="line">  return i18n._t.apply(i18n, [ key, i18n.locale, i18n._getMessages(), this ].concat( values ))</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">VueI18n.prototype._getMessages = function _getMessages () &#123; return this._vm.messages &#125;;</span><br><span class="line"></span><br><span class="line">//this._vm.messages 值生成</span><br><span class="line">VueI18n.prototype.setLocaleMessage = function setLocaleMessage (locale, message) &#123;</span><br><span class="line">  if (this._warnHtmlInMessage === &apos;warn&apos; || this._warnHtmlInMessage === &apos;error&apos;) &#123;</span><br><span class="line">    this._checkLocaleMessage(locale, this._warnHtmlInMessage, message);</span><br><span class="line">  &#125;</span><br><span class="line">  this._vm.$set(this._vm.messages, locale, message);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">VueI18n.prototype.mergeLocaleMessage = function mergeLocaleMessage (locale, message) &#123;</span><br><span class="line">  if (this._warnHtmlInMessage === &apos;warn&apos; || this._warnHtmlInMessage === &apos;error&apos;) &#123;</span><br><span class="line">    this._checkLocaleMessage(locale, this._warnHtmlInMessage, message);</span><br><span class="line">  &#125;</span><br><span class="line">  this._vm.$set(this._vm.messages, locale, merge(&#123;&#125;, this._vm.messages[locale] || &#123;&#125;, message));</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">VueI18n.prototype._t = function _t (key, _locale, messages, host) &#123;</span><br><span class="line">    var ref;</span><br><span class="line"></span><br><span class="line">    var values = [], len = arguments.length - 4;</span><br><span class="line">    while ( len-- &gt; 0 ) values[ len ] = arguments[ len + 4 ];</span><br><span class="line">  if (!key) &#123; return &apos;&apos; &#125;</span><br><span class="line"></span><br><span class="line">  var parsedArgs = parseArgs.apply(void 0, values);</span><br><span class="line">  var locale = parsedArgs.locale || _locale;</span><br><span class="line"></span><br><span class="line">  var ret = this._translate(</span><br><span class="line">    messages, locale, this.fallbackLocale, key,</span><br><span class="line">    host, &apos;string&apos;, parsedArgs.params</span><br><span class="line">  );</span><br><span class="line">  if (this._isFallbackRoot(ret)) &#123;</span><br><span class="line">    if (!this._isSilentTranslationWarn(key) &amp;&amp; !this._isSilentFallbackWarn(key)) &#123;</span><br><span class="line">      warn((&quot;Fall back to translate the keypath &apos;&quot; + key + &quot;&apos; with root locale.&quot;));</span><br><span class="line">    &#125;</span><br><span class="line">    /* istanbul ignore if */</span><br><span class="line">    if (!this._root) &#123; throw Error(&apos;unexpected error&apos;) &#125;</span><br><span class="line">    return (ref = this._root).$t.apply(ref, [ key ].concat( values ))</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    ret = this._warnDefault(locale, key, ret, host, values, &apos;string&apos;);</span><br><span class="line">    if (this._postTranslation) &#123;</span><br><span class="line">      ret = this._postTranslation(ret);</span><br><span class="line">    &#125;</span><br><span class="line">    return ret</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">VueI18n.prototype._translate = function _translate (</span><br><span class="line">  messages,</span><br><span class="line">  locale,</span><br><span class="line">  fallback,</span><br><span class="line">  key,</span><br><span class="line">  host,</span><br><span class="line">  interpolateMode,</span><br><span class="line">  args</span><br><span class="line">) &#123; </span><br><span class="line">  //messages[locale] 拿到语言库</span><br><span class="line">  var res =</span><br><span class="line">    this._interpolate(locale, messages[locale], key, host, interpolateMode, args, [key]);</span><br><span class="line">  if (!isNull(res)) &#123; return res &#125;</span><br><span class="line"></span><br><span class="line">  res = this._interpolate(fallback, messages[fallback], key, host, interpolateMode, args, [key]);</span><br><span class="line">  if (!isNull(res)) &#123;</span><br><span class="line">    if (!this._isSilentTranslationWarn(key) &amp;&amp; !this._isSilentFallbackWarn(key)) &#123;</span><br><span class="line">      warn((&quot;Fall back to translate the keypath &apos;&quot; + key + &quot;&apos; with &apos;&quot; + fallback + &quot;&apos; locale.&quot;));</span><br><span class="line">    &#125;</span><br><span class="line">    return res</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    return null</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">VueI18n.prototype._interpolate = function _interpolate (</span><br><span class="line">  locale,</span><br><span class="line">  message,</span><br><span class="line">  key,</span><br><span class="line">  host,</span><br><span class="line">  interpolateMode,</span><br><span class="line">  values,</span><br><span class="line">  visitedLinkStack</span><br><span class="line">) &#123;</span><br><span class="line">  if (!message) &#123; return null &#125;</span><br><span class="line"></span><br><span class="line">  var pathRet = this._path.getPathValue(message, key);</span><br><span class="line">  if (Array.isArray(pathRet) || isPlainObject(pathRet)) &#123; return pathRet &#125;</span><br><span class="line"></span><br><span class="line">  var ret;</span><br><span class="line">  if (isNull(pathRet)) &#123;</span><br><span class="line">    /* istanbul ignore else */</span><br><span class="line">    if (isPlainObject(message)) &#123;</span><br><span class="line">      ret = message[key]; //从语言库里面拿到对应翻译值</span><br><span class="line">      if (typeof ret !== &apos;string&apos;) &#123;</span><br><span class="line">        if (!this._isSilentTranslationWarn(key) &amp;&amp; !this._isSilentFallback(locale, key)) &#123;</span><br><span class="line">          warn((&quot;Value of key &apos;&quot; + key + &quot;&apos; is not a string!&quot;));</span><br><span class="line">        &#125;</span><br><span class="line">        return null</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      return null</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    /* istanbul ignore else */</span><br><span class="line">    if (typeof pathRet === &apos;string&apos;) &#123;</span><br><span class="line">      ret = pathRet;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      if (!this._isSilentTranslationWarn(key) &amp;&amp; !this._isSilentFallback(locale, key)) &#123;</span><br><span class="line">        warn((&quot;Value of key &apos;&quot; + key + &quot;&apos; is not a string!&quot;));</span><br><span class="line">      &#125;</span><br><span class="line">      return null</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // Check for the existence of links within the translated string</span><br><span class="line">  if (ret.indexOf(&apos;@:&apos;) &gt;= 0 || ret.indexOf(&apos;@.&apos;) &gt;= 0) &#123;</span><br><span class="line">    ret = this._link(locale, message, ret, host, &apos;raw&apos;, values, visitedLinkStack);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return this._render(ret, interpolateMode, values, key)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">VueI18n.prototype._render = function _render (message, interpolateMode, values, path) &#123;</span><br><span class="line">  var ret = this._formatter.interpolate(message, values, path);</span><br><span class="line">  // If the custom formatter refuses to work - apply the default one</span><br><span class="line">  if (!ret) &#123;</span><br><span class="line">    ret = defaultFormatter.interpolate(message, values, path);</span><br><span class="line">  &#125;</span><br><span class="line">  // if interpolateMode is **not** &apos;string&apos; (&apos;row&apos;),</span><br><span class="line">  // return the compiled data (e.g. [&apos;foo&apos;, VNode, &apos;bar&apos;]) with formatter</span><br><span class="line">  return interpolateMode === &apos;string&apos; &amp;&amp; typeof ret !== &apos;string&apos; ? ret.join(&apos;&apos;) : ret</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nodejs/" rel="tag"># nodejs</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/nodejs/middlwareSrc.html" rel="next" title="KOA框架剥洋葱原理">
+                <i class="fa fa-chevron-left"></i> KOA框架剥洋葱原理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/vue/vueAddRoutes.html" rel="prev" title="动态添加路由">
+                动态添加路由 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">232</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#原理"><span class="nav-number">2.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现"><span class="nav-number">3.</span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#读取"><span class="nav-number">3.1.</span> <span class="nav-text">读取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提取"><span class="nav-number">3.2.</span> <span class="nav-text">提取</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#去掉注释"><span class="nav-number">3.2.1.</span> <span class="nav-text">去掉注释</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#替换"><span class="nav-number">3.3.</span> <span class="nav-text">替换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#合并"><span class="nav-number">3.4.</span> <span class="nav-text">合并</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#翻译"><span class="nav-number">3.5.</span> <span class="nav-text">翻译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#后续"><span class="nav-number">3.6.</span> <span class="nav-text">后续</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#其他云多语言切换"><span class="nav-number">4.1.</span> <span class="nav-text">其他云多语言切换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#i18n大致原理"><span class="nav-number">4.2.</span> <span class="nav-text">i18n大致原理</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

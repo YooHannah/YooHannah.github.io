@@ -1,0 +1,688 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="js,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="什么是模块化  模块化就是把系统分离成独立功能的方法，从而实现需要什么功能，就加载什么功能  当一个项目开发得越来越复杂时，会出现问题：命名冲突；文件依赖  使用模块化开发，可以避免以上问题，并且提高开发效率：可维护性；可复用性   模块化开发演变  1.使用全局函数      ===&amp;gt;早期开发就是将重复得代码封装到函数中，再将一系列的函数放到一个文件中    存在的问题就是：污染全局变量；">
+<meta name="keywords" content="js">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于模块化">
+<meta property="og:url" content="http://yoohannah.github.io/post/js/module.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="什么是模块化  模块化就是把系统分离成独立功能的方法，从而实现需要什么功能，就加载什么功能  当一个项目开发得越来越复杂时，会出现问题：命名冲突；文件依赖  使用模块化开发，可以避免以上问题，并且提高开发效率：可维护性；可复用性   模块化开发演变  1.使用全局函数      ===&amp;gt;早期开发就是将重复得代码封装到函数中，再将一系列的函数放到一个文件中    存在的问题就是：污染全局变量；">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoohannah.github.io/image/module1.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/module2.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/module3.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/module4.png">
+<meta property="og:updated_time" content="2024-09-01T03:26:27.562Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于模块化">
+<meta name="twitter:description" content="什么是模块化  模块化就是把系统分离成独立功能的方法，从而实现需要什么功能，就加载什么功能  当一个项目开发得越来越复杂时，会出现问题：命名冲突；文件依赖  使用模块化开发，可以避免以上问题，并且提高开发效率：可维护性；可复用性   模块化开发演变  1.使用全局函数      ===&amp;gt;早期开发就是将重复得代码封装到函数中，再将一系列的函数放到一个文件中    存在的问题就是：污染全局变量；">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/module1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/js/module.html">
+
+
+
+
+
+  <title> 关于模块化 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/module.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                关于模块化
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-27T11:08:15+08:00">
+                2020-01-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="什么是模块化"><a href="#什么是模块化" class="headerlink" title="什么是模块化"></a>什么是模块化</h1><p>  模块化就是把系统分离成独立功能的方法，从而实现需要什么功能，就加载什么功能<br>  当一个项目开发得越来越复杂时，会出现问题：命名冲突；文件依赖<br>  使用模块化开发，可以避免以上问题，并且提高开发效率：可维护性；可复用性</p>
+<p>  模块化开发演变<br>  1.使用全局函数      ===&gt;早期开发就是将重复得代码封装到函数中，再将一系列的函数放到一个文件中<br>    存在的问题就是：污染全局变量；看不出相互的直接关系<br>  2.使用对象命名空间  ===&gt;通过对象命名空间的形式，从某种程度上解决了变量命名冲突的问题，但是并不能从根本上解决命名冲突<br>    存在的问题是：内部状态可被外部改写；命名空间越来越来长<br>  3.私有共有成员分离  ===&gt;利用此种方式将函数包装成一个独立的作用域，私有空间的变量和函数不会影响全局作用域<br>    存在问题：解决了变量命名冲突问题，但是没有解决降低开发复杂度的问题</p>
+<h1 id="Commonjs"><a href="#Commonjs" class="headerlink" title="Commonjs"></a>Commonjs</h1><p>  commomJS规范加载模块是【同步】的，也就是说，加载完成才执行后面的操作<br>  Node.js主要用于服务器编程，模块都是存在本地硬盘中加载比较快，所以Node.js采用CommonJS<br>  三个部分：<br>  module变量在每个模块内部，就代表当前模块<br>  exports属性是对外的接口，用于导出当前模块的方法或变量<br>  require()用来加载外部模块，读取并执行js文件，返回该模块的exports对象<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">加载时执行：</span><br><span class="line">a.js</span><br><span class="line">exports.done = ture</span><br><span class="line">var b = require(&apos;b.js&apos;)</span><br><span class="line">console.log(&apos;a.js-done&apos;)</span><br><span class="line"></span><br><span class="line">b.js</span><br><span class="line">exports.done = false</span><br><span class="line">var a = require(&apos;a.js&apos;)</span><br><span class="line">console.log(a.done)</span><br><span class="line">console.log(&apos;b.js-done&apos;)</span><br><span class="line"></span><br><span class="line">App.js   执行App.js</span><br><span class="line">var a = require(&apos;a.js&apos;) // 因为引用b.js，执行b.js代码故打印出true b.js-done，引用完毕后接着执行打印出 a.js-done</span><br><span class="line">var b = require(&apos;b.js&apos;)// 已经被a引用过，不再执行 直接在缓存中找出 exports &#123;done：false&#125; 返回</span><br><span class="line">console.log(a.done)</span><br><span class="line">console.log(b.done) </span><br><span class="line"></span><br><span class="line">如果a.js改成如下</span><br><span class="line">var b = require(&apos;b.js&apos;)</span><br><span class="line">exports.done = ture</span><br><span class="line">console.log(&apos;a.js-done&apos;)</span><br><span class="line">执行App.js</span><br><span class="line">打印结果为undefined b.js-done a.js-done true false </span><br><span class="line">因为a依赖b时，执行b，b再依赖a时，exports.done = ture语句还未执行，故a 的 exports 为&#123;&#125; exports.done自然为undefined</span><br></pre></td></tr></table></figure></p>
+<p>  只有commonjs因为同步加载，加载时执行可实现循环依赖，其他模式均不可以处理循环依赖的用法</p>
+<h1 id="AMD-requirejs"><a href="#AMD-requirejs" class="headerlink" title="AMD(requirejs)"></a>AMD(requirejs)</h1><p>  AMD也就是【异步】模块定义，它采用异步方式加载模块，通过define方法去定义模块，require方法去加载模块<br>  定义：<br>  define([tools],function(){return {}}) //第一个参数为数组时，说明该模块还依赖其他模块,提前声明依赖，没有依赖时，只传入function即可<br>  加载：<br>  require([‘module’],callback) //第一个参数数组内成员即要加载的模块，callback是前面所有某块都加载成功之后的回调函数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">/** a.js */</span><br><span class="line"></span><br><span class="line">define([&apos;b&apos;], function(b) &#123;</span><br><span class="line">  console.log(b)</span><br><span class="line">  var hello = function()&#123;</span><br><span class="line">    console.log(&apos;hello work&apos;)</span><br><span class="line">  &#125;</span><br><span class="line">  return &#123;</span><br><span class="line">    Hello:Hello</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">/** b.js */</span><br><span class="line"></span><br><span class="line">define(function()&#123;</span><br><span class="line">  var name = &apos;max&apos;</span><br><span class="line">  return&#123;</span><br><span class="line">    name:name</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">/** 使用a.js,b.js */</span><br><span class="line"></span><br><span class="line">/*</span><br><span class="line"> &lt;script type=&apos;text/javascript&apos; src=&apos;require.js&apos;&gt;&lt;/script&gt;</span><br><span class="line"> &lt;script type=&apos;text/javascript&apos;&gt;</span><br><span class="line">  require.config(&#123;</span><br><span class="line">    paths:&#123;</span><br><span class="line">      &apos;a&apos;:&apos;./a&apos;,</span><br><span class="line">      &apos;b&apos;:&apos;./b&apos;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">  require([&apos;a&apos;,&apos;b&apos;],function(a,b)&#123; //启用模块加载器</span><br><span class="line">    console.log(a)</span><br><span class="line">    console.log(b)</span><br><span class="line">  &#125;)</span><br><span class="line"> &lt;/script&gt;</span><br><span class="line"> */</span><br></pre></td></tr></table></figure></p>
+<h1 id="CMD-seajs"><a href="#CMD-seajs" class="headerlink" title="CMD(seajs)"></a>CMD(seajs)</h1><p>  与AMD一样，只是定义和模块加载方式上不同<br>  一个模块一个文件<br>  define(function(require,exports,module){<br>   //require 是可以把其他模块导入进来的一个参数<br>   //exports可以把模块内的一些属性和方法导出<br>   //module是一个对象，上面存储了与当前模块相关联的一些属性和方法<br>  })<br>  CMD推崇依赖就近，延迟执行，文件是提前加载好的，只有在require的时候才去执行文件<br>  define(function(require,exports,module){<br>     var math = require(‘./math’)<br>     math.add()<br>  })<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">/** a.js */</span><br><span class="line"></span><br><span class="line">define(function(require,exports,module) &#123;</span><br><span class="line">  var b = require(&apos;b&apos;)</span><br><span class="line">  console.log(b)</span><br><span class="line">  exports.hello = function()&#123;</span><br><span class="line">    console.log(&apos;hello work&apos;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"> &lt;script type=&apos;text/javascript&apos; src=&apos;sea.js&apos;&gt;&lt;/script&gt;</span><br><span class="line"> &lt;script type=&apos;text/javascript&apos;&gt;</span><br><span class="line">  seajs.config(&#123;</span><br><span class="line">    alias:&#123;</span><br><span class="line">      &apos;a&apos;:&apos;./a&apos;,</span><br><span class="line">      &apos;b&apos;:&apos;./b&apos;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">  seajs.use([&apos;a&apos;,&apos;b&apos;],function(a,b)&#123; //启用模块加载器</span><br><span class="line">    console.log(a)</span><br><span class="line">    console.log(b)</span><br><span class="line">  &#125;)</span><br><span class="line"> &lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<h1 id="ES6模块化"><a href="#ES6模块化" class="headerlink" title="ES6模块化"></a>ES6模块化</h1><p>  汲取CommonJS和AMD优点，支持异步加载，未来可以成为浏览器和服务器通用的模块化解决方案<br>  export:用于把模块里的内容暴露出来， export default 为模块指定默认输出，一个模块只能有一个默认输出，所以export default 只能使用一次<br>  import： 用于引入模块提供的功能===&gt; import {x1,x2} form ‘./lib’; x1()</p>
+<p>  ES6模块运行机制：<br>  ES6模块是动态引用，如果使用import从一个模块加载变量，变量不会被缓存，<br>  而是成为一个指向被加载模块的引用。等脚本执行时，根据只读引用到被加载的那个模块中去取值</p>
+<p>  ES6与CommonJS模块差异<br>  CommonJS模块输出的是一个值的拷贝，ES6模块输出的是值得引用<br>  CommonJS模块运行时加载，ES6模块编译时输出接口</p>
+<h1 id="加载器结构"><a href="#加载器结构" class="headerlink" title="加载器结构"></a>加载器结构</h1><h2 id="模块部分"><a href="#模块部分" class="headerlink" title="模块部分"></a>模块部分</h2><p>   每个模块创建都先初始化数据，存储在缓存对象中<br>   <img src="/image/module1.png" alt="module1"></p>
+<h3 id="数据初始化"><a href="#数据初始化" class="headerlink" title="数据初始化"></a>数据初始化</h3><p>  <img src="/image/module2.png" alt="module2"><br>  加载器中设计了一个名为Module的构造函数，【每个模块都是此构造函数的实例对象】<br>  构造函数中给实例对象扩展了’未来’所需要用到的属性（uri:当前模块绝对路径地址，deps:模块的依赖列表….)及方法(load,resolve:获取当前模块绝对路径…)</p>
+<h3 id="模块存储"><a href="#模块存储" class="headerlink" title="模块存储"></a>模块存储</h3><p>  加载器中设计了一个名为cache的缓存对象，每个文件(模块)都会存储在cache对象中<br>  具体存储方式:{‘当前模块绝对路径’: new Module()} 注意：当前模块的绝对路径是通过资源部分，资源定位方法实现的</p>
+<h2 id="资源部分"><a href="#资源部分" class="headerlink" title="资源部分"></a>资源部分</h2><p>   资源定位和依赖管理是加载器涉及的两大核心</p>
+<h3 id="资源定位"><a href="#资源定位" class="headerlink" title="资源定位"></a>资源定位</h3><p>  <img src="/image/module3.png" alt="module3"><br>  加载器中设计了一个resolve()方法把模块名解析成绝对路径格式<br>  检测当前模块名称是否有路径短名称配置，是否有模块短名称配置，是否有后缀<br>  在加载器启动方法中会去调用传入数组列表中的模块，获取模块名称<br>  然后根据当前项目绝对路径和模块名称进行拼接</p>
+<h4 id="动态加载script文件"><a href="#动态加载script文件" class="headerlink" title="动态加载script文件"></a>动态加载script文件</h4><p>  动态创建script标签： document.create(‘script’)； src指向当前模块绝对路径地址<br>  加载文件同时，模块加载器解析当前模块所依赖的模块，以数组形式存储，更新到deps属性中</p>
+<h3 id="依赖管理"><a href="#依赖管理" class="headerlink" title="依赖管理"></a>依赖管理</h3><p>  已知当前模块在cache中的形态，{‘当前模块绝对路径’: new Module()}<br>  换算成：{‘当前模块绝对路径’: {uri:’当前模块绝对路径’,deps:[]}}<br>  <img src="/image/module4.png" alt="module4"><br>    deps存储当前模块的依赖列表，依赖列表通过动态加载script文件正则解析获取<br>    重点：解析依赖—&gt;获取依赖模块绝对路径地址—-&gt;动态加载—-&gt;提取依赖—-&gt;解析依赖<br>        递归方式加载所有模块，直至模块全部加载完毕（模块的deps属性集合中没有依赖的绝对路径，即长度为0）</p>
+<h2 id="如何实现一个文件一个作用域？"><a href="#如何实现一个文件一个作用域？" class="headerlink" title="如何实现一个文件一个作用域？"></a>如何实现一个文件一个作用域？</h2><p>  保证模块拥有独立作用域，采用对象命名空间的思想，即每个模块返回一个接口对象，这个独立作用域就是一个对象</p>
+<h2 id="如何拿到依赖模块的接口对象？"><a href="#如何拿到依赖模块的接口对象？" class="headerlink" title="如何拿到依赖模块的接口对象？"></a>如何拿到依赖模块的接口对象？</h2><p>  参数即define传入的函数，执行函数，返回函数返回的结果即对象</p>
+<h2 id="如何让寻找依赖？"><a href="#如何让寻找依赖？" class="headerlink" title="如何让寻找依赖？"></a>如何让寻找依赖？</h2><p>  拼接地址，缓存，然后递归<br>  图片：依赖加载策略 模块数据初始化 资源定位-动态加载 依赖管理解决方案</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br></pre></td><td class="code"><pre><span class="line">(function(global) &#123;</span><br><span class="line">  var startUp = global.startUp = &#123;</span><br><span class="line">    version:&apos;1.0.1&apos;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">  var data = &#123;&#125; //配置信息</span><br><span class="line">  var cache = &#123;&#125;</span><br><span class="line">  var anonymousMeta = &#123;&#125;</span><br><span class="line">  //模块生命周期</span><br><span class="line"></span><br><span class="line">  var status = &#123;</span><br><span class="line">    FETCHED: 1,</span><br><span class="line">    SAVED:2,</span><br><span class="line">    LOADING:3,</span><br><span class="line">    LOADED:4,</span><br><span class="line">    EXECTING:5,</span><br><span class="line">    EXECTED:6</span><br><span class="line">  &#125;</span><br><span class="line">  var isArray = function (obj) &#123;</span><br><span class="line">    return toString.call(obj) === &quot;[object Array]&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  var isFunction = function (obj) &#123;</span><br><span class="line">    return toString.call(obj) === &quot;[object Function]&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  var isString = function (obj) &#123;</span><br><span class="line">    return toString.call(obj) === &quot;[object String]&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  function scripts()&#123;</span><br><span class="line">    return document.getElementsByTagName(&apos;script&apos;)</span><br><span class="line">  &#125;</span><br><span class="line">  function getInteractiveScript()&#123; //支持data-main属性添加默认路径: &lt;script data-main = &apos;common/js&apos; src=&apos;module.js&apos;&gt;&lt;/script&gt;</span><br><span class="line">    var arrS = scripts()</span><br><span class="line">    var dataMain,src</span><br><span class="line">    var exp = /^.*\.js$/</span><br><span class="line">    arrS = [].slice.call(arrS)</span><br><span class="line">    arrS.forEach(function(script)&#123;</span><br><span class="line">      dataMain = script.getAttribute(&apos;data-main&apos;)</span><br><span class="line">      if(dataMain &amp;&amp; !data.baseUrl &amp;&amp; !(exp.test(dataMain)))&#123;</span><br><span class="line">        if(dataMain.substring(dataMain.length-1) !== &apos;/&apos;)&#123;</span><br><span class="line">          dataMain = (dataMain+&apos;/&apos;)</span><br><span class="line">        &#125;</span><br><span class="line">        data.baseUrl = dataMain</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  getInteractiveScript()</span><br><span class="line">  //是否使用了别名</span><br><span class="line">  function parseAlias(id)&#123;</span><br><span class="line">    var alias = data.alias //是否配置别名</span><br><span class="line">    return alias &amp;&amp; isString(alias[id]) ? alias[id] :id //没有配置别名，返回原来值，有配置别名，返回别名对应值</span><br><span class="line">  &#125;</span><br><span class="line">  //不能以&apos;/&apos;&apos;:&apos;开头，必须是一个&apos;/&apos;后面跟随任意字符至少一个</span><br><span class="line">  var PATH_RE = /^([^\/:]+)(\/.+)$/ //([^\/:]+) 路径的短名称配置</span><br><span class="line"></span><br><span class="line">  //检测是否 书写路径短名称</span><br><span class="line">  function parsePaths(id) &#123;</span><br><span class="line">    var paths = data.paths; //是否配置短路径</span><br><span class="line">    if(paths &amp;&amp; (m=id.match(PATH_RE)) &amp;&amp; isString(paths[m[1]]))&#123;</span><br><span class="line">      id = paths[m[1]]+m[2]</span><br><span class="line">    &#125;</span><br><span class="line">    return id</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  //检测是否添加后缀</span><br><span class="line">  function normalize(path)&#123;</span><br><span class="line">    var last = path.length-1</span><br><span class="line">    var lastC = path.charAt(last)</span><br><span class="line">    return (lastC === &apos;/&apos; || path.substring(last-2) === &apos;.js&apos;) ? path :path+&apos;.js&apos;</span><br><span class="line">  &#125;</span><br><span class="line">  //添加根目录</span><br><span class="line">  function addBase(id,uri)&#123;</span><br><span class="line">    // var result;</span><br><span class="line">    // //相对路径</span><br><span class="line">    // if(id.charAt(0) === &apos;.&apos;)&#123;</span><br><span class="line">    //   result = realpath( (uri ? uri.match(/[^?]*\//)[0] : data.cwd ) + id)</span><br><span class="line">    // &#125;else&#123;</span><br><span class="line">    //   result = data.cwd+id</span><br><span class="line">    // &#125;</span><br><span class="line">    var result = data.baseUrl ?data.cwd + data.baseUrl +id : data.cwd + id //支持data-main属性添加默认路径</span><br><span class="line">    return result</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  var DOT_RE = /\/.\//g //   /a/b/./c/./d ==&gt;/a/b/c/d     /./ ==&gt;/</span><br><span class="line">  var DOUBLE_DOT_RE = /\/[^/]+\/\.\.\//; // a/b/c/../../d ===&gt;a/b/../d ==&gt; a/d    /xxxxx/../==&gt; /</span><br><span class="line">  //规范路径</span><br><span class="line">  function realpath(path)&#123;</span><br><span class="line">    path = path.replace(DOT_RE,&apos;/&apos;)</span><br><span class="line">    while(path.match(DOUBLE_DOT_RE))&#123;</span><br><span class="line">      path= path.replace(DOUBLE_DOT_RE,&apos;/&apos;)</span><br><span class="line">    &#125;</span><br><span class="line">    return path</span><br><span class="line">  &#125;</span><br><span class="line">  //生成绝对路径 资源路径解析</span><br><span class="line">  startUp.resolve = function (child,parent) &#123;</span><br><span class="line">    if(!child) return &apos;&apos;</span><br><span class="line">    child = parseAlias(child) //检测是否有别名</span><br><span class="line">    child = parsePaths(child) //检测是否有路径别名，依赖模块中引包的模块路径地址 require(&apos;app/c)</span><br><span class="line">    child = normalize(child) //检测是否添加后缀</span><br><span class="line">    return addBase(child,parent) //添加根目录</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  startUp.request = function(url,callback)&#123;</span><br><span class="line">    var node = document.createElement(&apos;script&apos;)</span><br><span class="line">    node.src = url</span><br><span class="line">    document.body.appendChild(node)</span><br><span class="line">    node.onload = function()&#123;</span><br><span class="line">      node.onload = null</span><br><span class="line">      document.body.removeChild(node) //加载依赖结束后移除加载时的script标签</span><br><span class="line">      callback()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  //模块加载器启用</span><br><span class="line">  startUp.use = function(list,callback)&#123;</span><br><span class="line">    //检阅有没有预先加载的模块</span><br><span class="line">    Module.preload(function()&#123;</span><br><span class="line">      Module.use(list,callback,data.cwd+&quot;_use_&quot;+cid()) //虚拟的根目录</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">  //模块加载器配置</span><br><span class="line">  /**</span><br><span class="line">   * </span><br><span class="line">   * startUp.config(&#123;</span><br><span class="line">   *   alias:&#123;</span><br><span class="line">   *    a:&apos;common/js/a&apos;</span><br><span class="line">   *   &#125;,</span><br><span class="line">   *   preload:[c.js]</span><br><span class="line">   * &#125;)</span><br><span class="line">   */</span><br><span class="line">  startUp.config = function (options) &#123;</span><br><span class="line">    var key,curr</span><br><span class="line">    for(key in options)&#123;</span><br><span class="line">      curr = Option[key]</span><br><span class="line">      data[key] = curr</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  //构造函数 模块初始化数据</span><br><span class="line">  function Module(uri,deps)&#123;</span><br><span class="line">    this.uri = uri;</span><br><span class="line">    this.deps = deps || [] //依赖项</span><br><span class="line">    this.exports = null</span><br><span class="line">    this.status = 0</span><br><span class="line">    this._waitings = &#123;&#125;</span><br><span class="line">    this._remain = 0</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  //分析主干(左子树 | 右子树)上的依赖项</span><br><span class="line">  Module.prototype.load = function()&#123;</span><br><span class="line">    var m = this</span><br><span class="line">    m.status = status.LOADING//LOADING == 3 正在加载模块依赖项</span><br><span class="line">    var uris = m.resolve()//获取主干上的依赖项</span><br><span class="line">    var len = m.remain = uris.length</span><br><span class="line"></span><br><span class="line">    //加载主干上的依赖项(模块)</span><br><span class="line">    var seed</span><br><span class="line">    for(var i=0;i&lt;len;i++)&#123;</span><br><span class="line">      seed = Module.get(uris[i]) //创建缓存信息</span><br><span class="line">      if(seed.status &lt;status.LOADED)&#123; //LOADED == 4 准备加载执行当前模块</span><br><span class="line">        seed._waitings[m.uri] = seed._waitings[m.uri] || 1 //多少模块依赖于我，_waitings是依赖我的模块的路径集合</span><br><span class="line">      &#125;else&#123;</span><br><span class="line">        seed._remain--</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    //如果依赖列表模块全部加载完毕</span><br><span class="line">    if(m._remain == 0)&#123; //递归过程到此结束</span><br><span class="line">      //获取模块的接口对象</span><br><span class="line">      m.onload()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //准备执行根目录下的依赖列表中的模块</span><br><span class="line">    var requestCache = &#123;&#125;</span><br><span class="line">    for(var i=0;i&lt;len;i++)&#123;</span><br><span class="line">      seed = Module.get(uris[i])</span><br><span class="line">      if(seed.status &lt; status.FETCHED)&#123;</span><br><span class="line">        seed.fetch(requestCache)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    for(uri in requestCache)&#123;</span><br><span class="line">      requestCache[uri]()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  Module.prototype.fetch = function(requestCache)&#123;</span><br><span class="line">    var m =this</span><br><span class="line">    m.status = status.FETCHED</span><br><span class="line">    var uri = m.uri</span><br><span class="line">    requestCache[uri] = sendRequest; //Document.createElement(&apos;script)</span><br><span class="line">    </span><br><span class="line">    function sendRequest()&#123;</span><br><span class="line">      startUp.request(uri,onRequest) //动态加载script</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    function onRequest()&#123; //事件函数 script标签加载模块结束后，onload 函数中会被调用</span><br><span class="line">      if(anonymousMeta)&#123; //模块的数据更新</span><br><span class="line">        m.save(uri,anonymousMeta)</span><br><span class="line">      &#125;</span><br><span class="line">      m.load() //递归 模块加载策略</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  Module.prototype.onload = function()&#123;</span><br><span class="line">    var mod = this</span><br><span class="line">    mod.status = LOADED //4</span><br><span class="line">    if(mod.callback)&#123;//获取模块接口对象</span><br><span class="line">      mod.callback()</span><br><span class="line">    &#125;</span><br><span class="line">    var waitings = mod._waitings //依赖加载完，递归回调 被依赖模块(父)的callback</span><br><span class="line">    var key,m;</span><br><span class="line">    for(key in waitings)&#123;</span><br><span class="line">      var m = cache[key]</span><br><span class="line">      m._remain -= waitings[key]</span><br><span class="line">      if(m._remain == 0)&#123; //判断父模块依赖是否全部加载完</span><br><span class="line">        m.onload()</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"> </span><br><span class="line">  //资源定位 解析依赖项生成绝对路径</span><br><span class="line">  Module.prototype.resolve = function()&#123;</span><br><span class="line">    var mod = this</span><br><span class="line">    var ids = mod.deps</span><br><span class="line">    var uris = []</span><br><span class="line">    for(var i =0;i&lt;ids.length;i++)&#123;</span><br><span class="line">      uris[i] = startUp.resolve(ids[i],mod.uri) //依赖项（主干 | 子树）</span><br><span class="line">    &#125;</span><br><span class="line">    return uris;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">   //更改初始化数据</span><br><span class="line">  Module.prototype.save = function(uri,meta)&#123;</span><br><span class="line">    var mod = Module.get(uri)</span><br><span class="line">    mod.uri = uri</span><br><span class="line">    mod.deps = meta.deps || []</span><br><span class="line">    mod.factory = meta.factory</span><br><span class="line">    mod.status = status.SAVED</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  //获取接口对象</span><br><span class="line">  Module.prototype.exec = function()&#123;</span><br><span class="line">    var module = this</span><br><span class="line">    //防止重复执行</span><br><span class="line">    if(module.status &gt;= status.EXECTING)&#123;</span><br><span class="line">      return module.exports</span><br><span class="line">    &#125;</span><br><span class="line">    module.status = status.EXECTING;</span><br><span class="line">    var uri = module.uri</span><br><span class="line">    function require(id)&#123; //作为参数传递到define参数的函数中</span><br><span class="line">      return Module.get(require.resolve(id)).exec() //获取接口对象</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    require.resolve = function(id)&#123;</span><br><span class="line">      return startUp.resolve(id,uri)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    var factory = module.factory //define传入的函数</span><br><span class="line">    var exports = isFunction(factory) ? factory(require,module.exports= &#123;&#125;,module) :factory;</span><br><span class="line">    if(exports === undefined) &#123;</span><br><span class="line">      exports = module.exports</span><br><span class="line">    &#125;</span><br><span class="line">    module.exports = exports</span><br><span class="line">    module.status = status.EXECTED //6</span><br><span class="line">    return exports</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  //定义一个模块</span><br><span class="line">  Module.define = function(factory)&#123;</span><br><span class="line">    var deps</span><br><span class="line">    if(isFunction(factory))&#123;</span><br><span class="line">      //正则解析依赖项</span><br><span class="line">      deps = parseDependencies(factory.toString())</span><br><span class="line">    &#125;</span><br><span class="line">    //存储当前模块信息</span><br><span class="line">    var meta = &#123;</span><br><span class="line">      id:&apos;&apos;,</span><br><span class="line">      uri:&apos;&apos;,</span><br><span class="line">      deps:deps,</span><br><span class="line">      factory:factory</span><br><span class="line">    &#125;</span><br><span class="line">    anonymousMeta = meta</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  //检测缓存对象上是否有当前模块信息</span><br><span class="line">  Module.get = function(uri,deps)&#123;</span><br><span class="line">    //cache[&apos;xxxxx.js&apos;] = &#123;uri:&apos;xxxxx.js&apos;,deps:[]&#125; //module 实例对象</span><br><span class="line">    return cache[uri] || (cache[uri] = new Module(uri,deps))</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  Module.use = function(deps,callback,uri)&#123;</span><br><span class="line">    var m = Module.get(uri,isArray(deps)?dep:[deps])</span><br><span class="line">    console.log(module)</span><br><span class="line">    //所有模块都加载完毕</span><br><span class="line">    m.callback= function()&#123;</span><br><span class="line">      var exports = [] //所有依赖项模块的接口对象</span><br><span class="line">      var uris = m.resolve()</span><br><span class="line">      for(var i = 0;i&lt;uris.length;i++)&#123;</span><br><span class="line">        exports[i] = cache[uris[i]].exec() //获取模块对外定义的接口对象</span><br><span class="line">      &#125;</span><br><span class="line">      if(callback)&#123;</span><br><span class="line">        callback.apply(global,exports)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    m.load()</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  var _cid = 0</span><br><span class="line"></span><br><span class="line">  function cid()&#123;</span><br><span class="line">    return _cid++</span><br><span class="line">  &#125;</span><br><span class="line">  // data.preload = []</span><br><span class="line">  //取消当前项目文档的URL</span><br><span class="line">  data.cwd = document.URL.match(/[^?]*\//)[0]</span><br><span class="line">  Module.preload = function(callback)&#123;</span><br><span class="line">    var preload = data.preload ||[]</span><br><span class="line">    var length = data.preload.length</span><br><span class="line">    if(length)&#123; //length !== 0 先加载预先设定模块</span><br><span class="line">      Module.use(preload,function () &#123;</span><br><span class="line">        preload.splice(0,length)</span><br><span class="line">        callback()</span><br><span class="line">      &#125;,data.cwd+&apos;_use_&apos;+cid())</span><br><span class="line">    &#125; else&#123;</span><br><span class="line">      callback() </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  var REQUIRE_RE = /\brequire\s*\(\s*([&quot;&apos;])(.+?)\1\s*\)/g</span><br><span class="line">  function parseDependencies(code)&#123;</span><br><span class="line">    var ret = []</span><br><span class="line">    code.replace(REQUIRE_RE,function(m,m1,m2)&#123;</span><br><span class="line">      if(m2) ret.push(m2)</span><br><span class="line">    &#125;)</span><br><span class="line">    return ret</span><br><span class="line">  &#125;</span><br><span class="line">  global.define = module.define</span><br><span class="line">&#125;)(this)</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/js/" rel="tag"># js</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/vue/src1.html" rel="next" title="vue 源码学习一【new vue】">
+                <i class="fa fa-chevron-left"></i> vue 源码学习一【new vue】
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/vue/vue-router.html" rel="prev" title="vuerouter源码初步学习">
+                vuerouter源码初步学习 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">232</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是模块化"><span class="nav-number">1.</span> <span class="nav-text">什么是模块化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Commonjs"><span class="nav-number">2.</span> <span class="nav-text">Commonjs</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AMD-requirejs"><span class="nav-number">3.</span> <span class="nav-text">AMD(requirejs)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CMD-seajs"><span class="nav-number">4.</span> <span class="nav-text">CMD(seajs)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ES6模块化"><span class="nav-number">5.</span> <span class="nav-text">ES6模块化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#加载器结构"><span class="nav-number">6.</span> <span class="nav-text">加载器结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#模块部分"><span class="nav-number">6.1.</span> <span class="nav-text">模块部分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据初始化"><span class="nav-number">6.1.1.</span> <span class="nav-text">数据初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模块存储"><span class="nav-number">6.1.2.</span> <span class="nav-text">模块存储</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#资源部分"><span class="nav-number">6.2.</span> <span class="nav-text">资源部分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#资源定位"><span class="nav-number">6.2.1.</span> <span class="nav-text">资源定位</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#动态加载script文件"><span class="nav-number">6.2.1.1.</span> <span class="nav-text">动态加载script文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#依赖管理"><span class="nav-number">6.2.2.</span> <span class="nav-text">依赖管理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何实现一个文件一个作用域？"><span class="nav-number">6.3.</span> <span class="nav-text">如何实现一个文件一个作用域？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何拿到依赖模块的接口对象？"><span class="nav-number">6.4.</span> <span class="nav-text">如何拿到依赖模块的接口对象？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何让寻找依赖？"><span class="nav-number">6.5.</span> <span class="nav-text">如何让寻找依赖？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现"><span class="nav-number">6.6.</span> <span class="nav-text">实现</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

@@ -1,0 +1,746 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="machineLearing,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="一些专业术语表达x–&amp;gt; 训练数据入参，特征值，这里仅有一个，这个模型也被叫做 单变量线性回归模型 x(i) 第i个训练数据的xy–&amp;gt; 训练数据入参，标记值， example 的lable ,y(i) 第i个训练数据的yy-hat –&amp;gt; 出参，推测值, 模型（f（x）= wx + b） 的 结果值 成本函数平方误差成本函数在f(x) = wx+ b 的模型中w: 斜率b: 截距，i">
+<meta name="keywords" content="machineLearing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线性回归模型">
+<meta property="og:url" content="http://yoohannah.github.io/post/machineLearning/lineregression.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="一些专业术语表达x–&amp;gt; 训练数据入参，特征值，这里仅有一个，这个模型也被叫做 单变量线性回归模型 x(i) 第i个训练数据的xy–&amp;gt; 训练数据入参，标记值， example 的lable ,y(i) 第i个训练数据的yy-hat –&amp;gt; 出参，推测值, 模型（f（x）= wx + b） 的 结果值 成本函数平方误差成本函数在f(x) = wx+ b 的模型中w: 斜率b: 截距，i">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/1.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/2.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/3.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/4.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/5.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/6.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/7.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/8.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/9.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/10.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/11.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/12.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/13.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/14.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/15.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/16.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/17.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/18.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/19.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/20.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/21.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/22.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/23.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/24.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/25.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/26.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/27.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/28.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/29.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/30.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/31.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/32.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/33.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/34.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/35.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/36.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/37.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/38.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/39.png">
+<meta property="og:updated_time" content="2024-09-15T03:04:16.530Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="线性回归模型">
+<meta name="twitter:description" content="一些专业术语表达x–&amp;gt; 训练数据入参，特征值，这里仅有一个，这个模型也被叫做 单变量线性回归模型 x(i) 第i个训练数据的xy–&amp;gt; 训练数据入参，标记值， example 的lable ,y(i) 第i个训练数据的yy-hat –&amp;gt; 出参，推测值, 模型（f（x）= wx + b） 的 结果值 成本函数平方误差成本函数在f(x) = wx+ b 的模型中w: 斜率b: 截距，i">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/LLM/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/machineLearning/lineregression.html">
+
+
+
+
+
+  <title> 线性回归模型 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/lineregression.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                线性回归模型
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-09-07T19:31:37+08:00">
+                2024-09-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="一些专业术语表达"><a href="#一些专业术语表达" class="headerlink" title="一些专业术语表达"></a>一些专业术语表达</h1><p><img src="/image/LLM/1.png" alt><br><img src="/image/LLM/2.png" alt><br>x–&gt; 训练数据入参，特征值，这里仅有一个，这个模型也被叫做 单变量线性回归模型 x(i) 第i个训练数据的x<br>y–&gt; 训练数据入参，标记值， example 的lable ,y(i) 第i个训练数据的y<br>y-hat –&gt; 出参，推测值, 模型（f（x）= wx + b） 的 结果值</p>
+<h1 id="成本函数"><a href="#成本函数" class="headerlink" title="成本函数"></a>成本函数</h1><h2 id="平方误差成本函数"><a href="#平方误差成本函数" class="headerlink" title="平方误差成本函数"></a>平方误差成本函数</h2><p><img src="/image/LLM/3.png" alt><br>在f(x) = wx+ b 的模型中<br>w: 斜率<br>b: 截距，intercepter 直接与Y轴交点距离远点距离</p>
+<p>用J(w,b)表示成本函数，找到能够使J(w,b) 的值最小的w和b，就可以找到使f(x)最接近所有测试集的模型，最拟合训练数据的模型<br>先讨论在b = 0 的情况下，j（w） 随w 变化的趋势<br><img src="/image/LLM/4.png" alt><br>找到使j(w) 最小的w,即U形线做凹的地方<br><img src="/image/LLM/5.png" alt><br>现在把b的变化趋势也加入讨论，j(w,b) 随w，b 变化的趋势，将变成3d 的碗状<br><img src="/image/LLM/6.png" alt><br>最凹的地方就是J(w,b)值最小的地方<br><img src="/image/LLM/7.png" alt><br>利用等高线的表达方式，换一种视角找J(w,b)的最小值，就是将3D 图进行水平切割，得到关于w,b 的二维椭圆视图<br>不同(w,b) 组合可能会落在在同一条线上的，相同线上的J(w,b)值一样大<br>所以使J(w,b)最小的值，就是同心园里面最里面那个圆上的多对(w,b), 当圆极限到一个点时，那就是只用一对(w,b)使J(w,b)最小<br><img src="/image/LLM/8.png" alt><br><img src="/image/LLM/9.png" alt></p>
+<h1 id="GradientDescentAlgorithm-梯度下降算法"><a href="#GradientDescentAlgorithm-梯度下降算法" class="headerlink" title="GradientDescentAlgorithm 梯度下降算法"></a>GradientDescentAlgorithm 梯度下降算法</h1><p>是一种寻找使成本函数达到最小值参数的通用算法，现在不再局限与于f(x) = wx+b 单变量线性模型<br>对于多变量模型，也就意味着多个w, 这样J(w,b) 就会变成J(w0,…wi,b), J(w0, …wi) 的趋势不再是U形<br><img src="/image/LLM/10.png" alt><br>梯度下降指的是，从一个点出发，环顾四周，找到能够下降的谷底的最快的方向，即梯度最陡的方向，下降一步，每走一步都按最陡方案下降，从而实现最快到达谷底的目的<br>达到谷底即意味着找到J(w0,…wi,b)最小值<br>但是梯度下降有一个特性，就是，虽然从同一点出发，如果第一步选择反向不同，或者走的方式不同，肯定会到达不同谷底<br>不同谷底意味着不同的J(w0,…wi,b)最小值，这些最小值，都叫做局部最小值<br><img src="/image/LLM/11.png" alt></p>
+<h3 id="算法实现与理解"><a href="#算法实现与理解" class="headerlink" title="算法实现与理解"></a>算法实现与理解</h3><p>J(w,b)关于w 导数 表征 U形趋势线上随w 变化的梯度值，也就是斜率<br>前面的系数α表征 下坡的步伐大小 是一个0-1 的正小数值，称为学习率<br>w,b 同时变化，同时更新<br><img src="/image/LLM/12.png" alt><br>当梯度大于0时，temp_w 逐渐变小，J(w,b) 的值也逐渐变小<br>当梯度小于0 时，temp_w 逐渐变大（负斜率，绝对值在变小）， J(w,b)的值逐渐变小<br>说明J(w,b) 的值随梯度的变化符合随w的变化趋势，当斜率绝对值逐渐变小时，就是都朝J(w,b) 最小值聚拢<br><img src="/image/LLM/13.png" alt><br><a href="https://colab.research.google.com/github/kaieye/2022-Machine-Learning-Specialization/blob/main/Supervised%20Machine%20Learning%20Regression%20and%20Classification/week1/work/C1_W1_Lab05_Gradient_Descent_Soln.ipynb" target="_blank" rel="noopener">实验</a></p>
+<h4 id="关于学习率"><a href="#关于学习率" class="headerlink" title="关于学习率"></a>关于学习率</h4><p>太小会增加计算步骤，从而使梯度算法变慢<br>太大可能导致过冲，永远无法到达最小值;甚至无法实现聚拢趋势，导致发散<br><img src="/image/LLM/14.png" alt></p>
+<h3 id="局部最小值"><a href="#局部最小值" class="headerlink" title="局部最小值"></a>局部最小值</h3><p>如果当前参数已经似的成本函数到达一个局部最小值，那么J(w,b) 关于w 导致值将会是0，那么temp_w 会始终停留在一个固定的值，不再变化<br>梯度下降算法将不会再进行下一步的计算，保持当前参数在当前的这个一个局部最小值的状态</p>
+<p>随这个梯度下降，我们可以知道我们正在朝成本函数最小值靠近，在学习率固定情况下，更新步骤也在下降，说明没有学习率的变化，也能到达局部最小值<br>但如果同时将学习率调小，降低下降的步伐，可以更小幅度的一点点接近最小值，最终找到成本函数最小值<br><img src="/image/LLM/15.png" alt></p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>线性回归模型，成本函数，和梯度下降算法<br><img src="/image/LLM/16.png" alt><br><img src="/image/LLM/17.png" alt><br>上述梯度下降算法具体来说是批量梯度下降，因为每一步都用到了所有训练数据<br><img src="/image/LLM/18.png" alt></p>
+<h1 id="多元线性回归"><a href="#多元线性回归" class="headerlink" title="多元线性回归"></a>多元线性回归</h1><p>以上讨论的是只有一个特征值x 作为输入的情况，下面要讨论的是同时有n个特征值做输入的模型，被称为多远线性回归模型</p>
+<p>一些符号的表示方法<br><img src="/image/LLM/19.png" alt></p>
+<h2 id="模型表达式"><a href="#模型表达式" class="headerlink" title="模型表达式"></a>模型表达式</h2><p><img src="/image/LLM/20.png" alt><br><img src="/image/LLM/21.png" alt></p>
+<h2 id="向量化"><a href="#向量化" class="headerlink" title="向量化"></a>向量化</h2><p>好处</p>
+<ol>
+<li>代码实现简洁</li>
+<li>运算速度快</li>
+</ol>
+<p><img src="/image/LLM/22.png" alt><br><img src="/image/LLM/23.png" alt><br><img src="/image/LLM/24.png" alt></p>
+<h2 id="对于多元线性回归-的-梯度下降算法"><a href="#对于多元线性回归-的-梯度下降算法" class="headerlink" title="对于多元线性回归 的 梯度下降算法"></a>对于多元线性回归 的 梯度下降算法</h2><p>w 相关的计算转成向量计算，不同权重值，取对应特征值进行计算<br><img src="/image/LLM/25.png" alt><br><img src="/image/LLM/26.png" alt></p>
+<p><a href="https://colab.research.google.com/github/kaieye/2022-Machine-Learning-Specialization/blob/main/Supervised%20Machine%20Learning%20Regression%20and%20Classification/week2/1.Multiple%20linear%20regression/C1_W2_Lab02_Multiple_Variable_Soln.ipynb" target="_blank" rel="noopener">实验</a></p>
+<h1 id="实践技巧"><a href="#实践技巧" class="headerlink" title="实践技巧"></a>实践技巧</h1><p>如何更快的找到合适的参数去拟合训练集</p>
+<h2 id="特征缩放"><a href="#特征缩放" class="headerlink" title="特征缩放"></a>特征缩放</h2><h3 id="参数大小与特征值大小关系"><a href="#参数大小与特征值大小关系" class="headerlink" title="参数大小与特征值大小关系"></a>参数大小与特征值大小关系</h3><p>如果某一特征值(x1 属于[1000,5000]范围)相对其他特征值(x2,x3,..xn,属于[1,10]范围),数值范围较大，其对应参数w1 则相对其他较小<br>反之，如果特征值较小，则参数较大，这样的规律可以更快的找到适合的参数<br><img src="/image/LLM/27.png" alt><br><img src="/image/LLM/28.png" alt><br>如果特征值的取值范围非常不同时，会导致梯度下降速度变慢<br>但如果将所有特征值想办法归一到相同的范围内，就可以加快梯度下降过程，降低计算步骤<br><img src="/image/LLM/29.png" alt></p>
+<h3 id="缩放计算方式"><a href="#缩放计算方式" class="headerlink" title="缩放计算方式"></a>缩放计算方式</h3><h4 id="除以最大值"><a href="#除以最大值" class="headerlink" title="除以最大值"></a>除以最大值</h4><p>特征值除以各自范围的最大值<br><img src="/image/LLM/30.png" alt></p>
+<h4 id="均值归一化"><a href="#均值归一化" class="headerlink" title="均值归一化"></a>均值归一化</h4><p>特征值 减去平均值，再除以极差值(范围最大值减去范围最小值)<br><img src="/image/LLM/31.png" alt></p>
+<h4 id="Z-SCORE归一化"><a href="#Z-SCORE归一化" class="headerlink" title="Z-SCORE归一化"></a>Z-SCORE归一化</h4><p>特征值 减去 标准差，除以 平均值<br><img src="/image/LLM/32.png" alt></p>
+<h4 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h4><p>并不一定非要落在-1 到1 之间，落在相同的数量级之间就可接受<br><img src="/image/LLM/33.png" alt></p>
+<h2 id="如何找到成本函数最小值"><a href="#如何找到成本函数最小值" class="headerlink" title="如何找到成本函数最小值"></a>如何找到成本函数最小值</h2><h3 id="学习曲线"><a href="#学习曲线" class="headerlink" title="学习曲线"></a>学习曲线</h3><p>绘制成本函数随迭代次数变化的趋势图，称为学习曲线，主要是根据曲线走势判断梯度是否在收敛<br>如果随迭代次数增加，成本函数一直呈下降趋势，说明梯度正在下降，是正常的<br>当下降到一定程度，随迭代次数成本函数不再有明显下降，说明梯度收敛到了极限，也就是找到了成本函数的最低点<br>但如果随次数增加，成本函数出现上升，这是不正常的，则说明学习率选取过大，需要重新选取，或者代码出现错误</p>
+<h3 id="自动收敛测试"><a href="#自动收敛测试" class="headerlink" title="自动收敛测试"></a>自动收敛测试</h3><p>自行定义一个极小的值，当某次迭代后成本函数值小于该值时，就认为梯度下降关闭，成本函数达到最小值，停止迭代，取当前迭代wb做模型参数<br>缺点就是极小值难以估计，且结果不太可靠<br><img src="/image/LLM/34.png" alt></p>
+<h2 id="如何选择合适学习率"><a href="#如何选择合适学习率" class="headerlink" title="如何选择合适学习率"></a>如何选择合适学习率</h2><p>根据学习曲线调整学习率<br>学习率太大会导致学习曲线出现上升趋势<br>太小会导致迭代次数增加<br><img src="/image/LLM/35.png" alt><br>可以先对不同量级的学习率进行测试，观察学习曲线变化快慢<br>然后进行N倍测试，再比较，通过多组测试观察学习曲线变化快慢进行选取<br><img src="/image/LLM/36.png" alt></p>
+<h2 id="特征工程"><a href="#特征工程" class="headerlink" title="特征工程"></a>特征工程</h2><p>通过转换或者合并直接(原始)的特征值，生成新的特征值进行模型训练<br><img src="/image/LLM/37.png" alt></p>
+<h2 id="多项式回归"><a href="#多项式回归" class="headerlink" title="多项式回归"></a>多项式回归</h2><p>如果特征值只有一个的情况下，不希望得到线性回归的直线模型，希望用曲线去拟合训练集<br>可以采用下面两种方法去拟合</p>
+<ol>
+<li>通乘方构建新特征值，但是在进行训练时要进行归一话处理，因为乘方处理后，各个特质值范围的数量级会变得不同</li>
+<li>通过开方进行新特征值构建<br><img src="/image/LLM/38.png" alt></li>
+</ol>
+<h1 id="如何在colab中运行github-上的jupiter文件"><a href="#如何在colab中运行github-上的jupiter文件" class="headerlink" title="如何在colab中运行github 上的jupiter文件"></a>如何在colab中运行github 上的jupiter文件</h1><p>下面这个链接时梯度下降实现的.ipynb 文件</p>
+<p><a href="https://github.com/kaieye/2022-Machine-Learning-Specialization/blob/main/Supervised%20Machine%20Learning%20Regression%20and%20Classification/week1/work/C1_W1_Lab05_Gradient_Descent_Soln.ipynb" target="_blank" rel="noopener">https://github.com/kaieye/2022-Machine-Learning-Specialization/blob/main/Supervised%20Machine%20Learning%20Regression%20and%20Classification/week1/work/C1_W1_Lab05_Gradient_Descent_Soln.ipynb</a></p>
+<p>复制域名之后的path<br>kaieye/2022-Machine-Learning-Specialization/blob/main/Supervised%20Machine%20Learning%20Regression%20and%20Classification/week1/work/C1_W1_Lab05_Gradient_Descent_Soln.ipynb<br>拼接到 <a href="https://colab.research.google.com/github/" target="_blank" rel="noopener">https://colab.research.google.com/github/</a> 后面</p>
+<p>得到访问链接</p>
+<p><a href="https://colab.research.google.com/github/kaieye/2022-Machine-Learning-Specialization/blob/main/Supervised%20Machine%20Learning%20Regression%20and%20Classification/week1/work/C1_W1_Lab05_Gradient_Descent_Soln.ipynb" target="_blank" rel="noopener">https://colab.research.google.com/github/kaieye/2022-Machine-Learning-Specialization/blob/main/Supervised%20Machine%20Learning%20Regression%20and%20Classification/week1/work/C1_W1_Lab05_Gradient_Descent_Soln.ipynb</a></p>
+<p>如果.ipynb有依赖其他py 文件，可以点击上传图标直接上传<br><img src="/image/LLM/39.png" alt></p>
+<p>但是要注意这里上传的文件都是运行时的状态，页面关闭即销毁，<br>如果想要保存自己修改后的.ipynb文件可以通过添加副本到goole/drive 来实现</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/machineLearing/" rel="tag"># machineLearing</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/machineLearning/definition.html" rel="next" title="机器学习定义">
+                <i class="fa fa-chevron-left"></i> 机器学习定义
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/machineLearning/logicRegression.html" rel="prev" title="逻辑回归模型">
+                逻辑回归模型 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">232</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一些专业术语表达"><span class="nav-number">1.</span> <span class="nav-text">一些专业术语表达</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#成本函数"><span class="nav-number">2.</span> <span class="nav-text">成本函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#平方误差成本函数"><span class="nav-number">2.1.</span> <span class="nav-text">平方误差成本函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GradientDescentAlgorithm-梯度下降算法"><span class="nav-number">3.</span> <span class="nav-text">GradientDescentAlgorithm 梯度下降算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#算法实现与理解"><span class="nav-number">3.0.1.</span> <span class="nav-text">算法实现与理解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#关于学习率"><span class="nav-number">3.0.1.1.</span> <span class="nav-text">关于学习率</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#局部最小值"><span class="nav-number">3.0.2.</span> <span class="nav-text">局部最小值</span></a></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#多元线性回归"><span class="nav-number">5.</span> <span class="nav-text">多元线性回归</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#模型表达式"><span class="nav-number">5.1.</span> <span class="nav-text">模型表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#向量化"><span class="nav-number">5.2.</span> <span class="nav-text">向量化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对于多元线性回归-的-梯度下降算法"><span class="nav-number">5.3.</span> <span class="nav-text">对于多元线性回归 的 梯度下降算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实践技巧"><span class="nav-number">6.</span> <span class="nav-text">实践技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特征缩放"><span class="nav-number">6.1.</span> <span class="nav-text">特征缩放</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参数大小与特征值大小关系"><span class="nav-number">6.1.1.</span> <span class="nav-text">参数大小与特征值大小关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缩放计算方式"><span class="nav-number">6.1.2.</span> <span class="nav-text">缩放计算方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#除以最大值"><span class="nav-number">6.1.2.1.</span> <span class="nav-text">除以最大值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#均值归一化"><span class="nav-number">6.1.2.2.</span> <span class="nav-text">均值归一化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Z-SCORE归一化"><span class="nav-number">6.1.2.3.</span> <span class="nav-text">Z-SCORE归一化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#说明"><span class="nav-number">6.1.2.4.</span> <span class="nav-text">说明</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何找到成本函数最小值"><span class="nav-number">6.2.</span> <span class="nav-text">如何找到成本函数最小值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#学习曲线"><span class="nav-number">6.2.1.</span> <span class="nav-text">学习曲线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自动收敛测试"><span class="nav-number">6.2.2.</span> <span class="nav-text">自动收敛测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何选择合适学习率"><span class="nav-number">6.3.</span> <span class="nav-text">如何选择合适学习率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特征工程"><span class="nav-number">6.4.</span> <span class="nav-text">特征工程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多项式回归"><span class="nav-number">6.5.</span> <span class="nav-text">多项式回归</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何在colab中运行github-上的jupiter文件"><span class="nav-number">7.</span> <span class="nav-text">如何在colab中运行github 上的jupiter文件</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

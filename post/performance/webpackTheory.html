@@ -1,0 +1,722 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="performance,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="bundle.js能直接运行在浏览器中的原因是：在输出文件中通过webpack_require函数，定义了一个可以在浏览器中执行的加载函数，来模拟Nodejs中的require语句 webpack_require 函数将所有模块挂载一个对象上，通过判断该对象是否存在该模块实现模块缓存，防止二次加载 原来一个个独立的模块文件被合并到了一个单独的bundle.js的原因是浏览器不能像Nodejs那样快">
+<meta name="keywords" content="performance">
+<meta property="og:type" content="article">
+<meta property="og:title" content="webpack原理">
+<meta property="og:url" content="http://yoohannah.github.io/post/performance/webpackTheory.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="bundle.js能直接运行在浏览器中的原因是：在输出文件中通过webpack_require函数，定义了一个可以在浏览器中执行的加载函数，来模拟Nodejs中的require语句 webpack_require 函数将所有模块挂载一个对象上，通过判断该对象是否存在该模块实现模块缓存，防止二次加载 原来一个个独立的模块文件被合并到了一个单独的bundle.js的原因是浏览器不能像Nodejs那样快">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-09-01T03:26:27.585Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="webpack原理">
+<meta name="twitter:description" content="bundle.js能直接运行在浏览器中的原因是：在输出文件中通过webpack_require函数，定义了一个可以在浏览器中执行的加载函数，来模拟Nodejs中的require语句 webpack_require 函数将所有模块挂载一个对象上，通过判断该对象是否存在该模块实现模块缓存，防止二次加载 原来一个个独立的模块文件被合并到了一个单独的bundle.js的原因是浏览器不能像Nodejs那样快">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/performance/webpackTheory.html">
+
+
+
+
+
+  <title> webpack原理 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/performance/webpackTheory.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                webpack原理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-14T17:17:02+08:00">
+                2019-07-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>bundle.js能直接运行在浏览器中的原因是：<br>在输出文件中通过<strong>webpack_require</strong>函数，定义了一个可以在浏览器中执行的加载函数，来模拟Nodejs中的require语句</p>
+<p><strong>webpack_require</strong> 函数将所有模块挂载一个对象上，通过判断该对象是否存在该模块实现模块缓存，防止二次加载</p>
+<p>原来一个个独立的模块文件被合并到了一个单独的bundle.js的原因是<br>浏览器不能像Nodejs那样快速的在本地加载一个个模块文件，而必须通过网络请求去加载还未得到的文件，<br>如果模块的数量很多，则加载时间会很长，因此将所有模块都存放在了数组中，执行一次网络加载<br><a href="https://github.com/YooHannah/algorithm/blob/master/webpack/outputFile.js" target="_blank" rel="noopener">输出文件分析</a></p>
+<h1 id="编写loader"><a href="#编写loader" class="headerlink" title="编写loader"></a>编写loader</h1><h2 id="常用API"><a href="#常用API" class="headerlink" title="常用API"></a>常用API</h2><h3 id="获取loader配置的options"><a href="#获取loader配置的options" class="headerlink" title="获取loader配置的options"></a>获取loader配置的options</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const loaderUtils = require(&apos;loader-utils&apos;)</span><br><span class="line">module.exports = function(source)&#123;</span><br><span class="line">	//获取用户为当前loader传入的options</span><br><span class="line">	const options = loaderUtils.getOptions(this)</span><br><span class="line">	return source</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="返回除了内容之外的东西"><a href="#返回除了内容之外的东西" class="headerlink" title="返回除了内容之外的东西"></a>返回除了内容之外的东西</h3><p>this.callback 是 Webpack 给 Loader 注入的 API，以方便 Loader 和 Webpack 之间通信。 this.callback 的详细使用方法如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">this.callback( </span><br><span class="line">    // 当无法转换原内容时，给 Webpack 返回一个 Error </span><br><span class="line">    err: Error | null, </span><br><span class="line">    // 原内容转换后的内容 </span><br><span class="line">    content: string | Buffer, </span><br><span class="line">    // 用于把转换后的内容得出原内容的 Source Map，方便调试 </span><br><span class="line">    sourceMap?: SourceMap, </span><br><span class="line">    // 如果本次转换为原内容生成了 AST 语法树，可以把这个 AST 返回， </span><br><span class="line">    // 以方便之后需要 AST 的 Loader 复用该 AST，以避免重复生成 AST，提升性能 </span><br><span class="line">    abstractSyntaxTree?: AST </span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
+<p>实例：用 babel-loader 转换 ES6 代码为例，它还需要输出转换后的 ES5 代码对应的 Source Map，以方便调试源码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">module.exports = function(source) &#123; </span><br><span class="line">  // 通过 this.callback 告诉 Webpack 返回的结果 </span><br><span class="line">  this.callback(null, source, sourceMaps); </span><br><span class="line">  // 当你使用 this.callback 返回内容时，该 Loader 必须返回 undefined， </span><br><span class="line">  // 以让 Webpack 知道该 Loader 返回的结果在 this.callback 中，而不是 return 中  </span><br><span class="line">  return; </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>Source Map 的生成很耗时，通常在开发环境下才会生成 Source Map，其它环境下不用生成，以加速构建。 为此 Webpack 为 Loader 提供了 this.sourceMap API 去告诉 Loader 当前构建环境下用户是否需要 Source Map。</p>
+<h3 id="处理异步流程"><a href="#处理异步流程" class="headerlink" title="处理异步流程"></a>处理异步流程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">module.exports = function(source) &#123; </span><br><span class="line">    // 告诉 Webpack 本次转换是异步的，Loader 会在 callback 中回调结果 </span><br><span class="line">    var callback = this.async(); </span><br><span class="line">    someAsyncOperation(source, function(err, result, sourceMaps, ast) &#123; </span><br><span class="line">        // 通过 callback 返回异步执行后的结果 </span><br><span class="line">        callback(err, result, sourceMaps, ast); </span><br><span class="line">    &#125;); </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="处理二进制数据"><a href="#处理二进制数据" class="headerlink" title="处理二进制数据"></a>处理二进制数据</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">module.exports = function(source) &#123; </span><br><span class="line">    // 在 exports.raw === true 时，Webpack 传给 Loader 的 source 是 Buffer 类型的 </span><br><span class="line">    source instanceof Buffer === true; </span><br><span class="line">    // Loader 返回的类型也可以是 Buffer 类型的 </span><br><span class="line">    // 在 exports.raw !== true 时，Loader 也可以返回 Buffer 类型的结果 </span><br><span class="line">    return source; </span><br><span class="line">&#125;; </span><br><span class="line">// 通过 exports.raw 属性告诉 Webpack 该 Loader 是否需要二进制数据  </span><br><span class="line">module.exports.raw = true; //没有该行 Loader 只能拿到字符串。</span><br></pre></td></tr></table></figure>
+<h3 id="缓存加速"><a href="#缓存加速" class="headerlink" title="缓存加速"></a>缓存加速</h3><p>在有些情况下，有些转换操作需要大量计算非常耗时，如果每次构建都重新执行重复的转换操作，构建将会变得非常缓慢。 为此，Webpack 会默认缓存所有 Loader 的处理结果，也就是说在需要被处理的文件或者其依赖的文件没有发生变化时， 是不会重新调用对应的 Loader 去执行转换操作的。<br>如果想让Webpack 不缓存该 Loader 的处理结果，可以这样<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">module.exports = function(source) &#123; </span><br><span class="line">  // 关闭该 Loader 的缓存功能 </span><br><span class="line">  this.cacheable(false); </span><br><span class="line">  return source; </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<h3 id="其他API"><a href="#其他API" class="headerlink" title="其他API"></a>其他API</h3><p>this.context：当前处理文件的所在目录，假如当前 Loader 处理的文件是 /src/main.js，则 this.context 就等于 /src。</p>
+<p>this.resource：当前处理文件的完整请求路径，包括 querystring，例如 /src/main.js?name=1。</p>
+<p>this.resourcePath：当前处理文件的路径，例如 /src/main.js。</p>
+<p>this.resourceQuery：当前处理文件的 querystring。</p>
+<p>this.target：等于 Webpack 配置中的 Target。</p>
+<p>this.loadModule：当 Loader 在处理一个文件时，如果依赖其它文件的处理结果才能得出当前文件的结果时， 就可以通过 this.loadModule(request: string, callback: function(err, source, sourceMap, module)) 去获得 request 对应文件的处理结果。</p>
+<p>this.resolve：像 require 语句一样获得指定文件的完整路径，使用方法为 resolve(context: string, request: string, callback: function(err, result: string))。</p>
+<p>this.addDependency：给当前处理文件添加其依赖的文件，以便再其依赖的文件发生变化时，会重新调用 Loader 处理该文件。使用方法为 addDependency(file: string)。</p>
+<p>this.addContextDependency：和 addDependency 类似，但 addContextDependency 是把整个目录加入到当前正在处理文件的依赖中。使用方法为 addContextDependency(directory: string)。</p>
+<p>this.clearDependencies：清除当前正在处理文件的所有依赖，使用方法为 clearDependencies()。</p>
+<p>this.emitFile：输出一个文件，使用方法为 emitFile(name: string, content: Buffer|string, sourceMap: {…})。</p>
+<h2 id="加载本地loader"><a href="#加载本地loader" class="headerlink" title="加载本地loader"></a>加载本地loader</h2><h3 id="方法一-Npm-link"><a href="#方法一-Npm-link" class="headerlink" title="方法一 Npm link"></a>方法一 Npm link</h3><p>Npm link 专门用于开发和调试本地 Npm 模块，能做到在不发布模块的情况下，把本地的一个正在开发的模块的源码链接到项目的 node_modules 目录下，让项目可以直接使用本地的 Npm 模块。 由于是通过软链接的方式实现的，编辑了本地的 Npm 模块代码，在项目中也能使用到编辑后的代码。</p>
+<p>完成 Npm link 的步骤如下：</p>
+<p>1.确保正在开发的本地 Npm 模块（也就是正在开发的 Loader）的 package.json 已经正确配置好；<br>2.在本地 Npm 模块根目录下执行 npm link，把本地模块注册到全局；<br>3.在项目根目录下执行 npm link loader-name，把第2步注册到全局的本地 Npm 模块链接到项目的 node_moduels 下，其中的 loader-name 是指在第1步中的 package.json 文件中配置的模块名称。</p>
+<p>链接好 Loader 到项目后就可以像使用一个真正的 Npm 模块一样使用本地的 Loader 了。</p>
+<h3 id="方法二-ResolveLoader"><a href="#方法二-ResolveLoader" class="headerlink" title="方法二 ResolveLoader"></a>方法二 ResolveLoader</h3><p>ResolveLoader用于配置 Webpack 如何寻找 Loader,默认情况下只会去 node_modules 目录下寻找，为了让 Webpack 加载放在本地项目中的 Loader 需要修改 resolveLoader.modules。<br>假如本地的 Loader 在项目目录中的 ./loaders/loader-name 中，则需要如下配置：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">module.exports = &#123; </span><br><span class="line">  resolveLoader:&#123; </span><br><span class="line">    // 去哪些目录下寻找 Loader，有先后顺序之分 </span><br><span class="line">    modules: [&apos;node_modules&apos;,&apos;./loaders/&apos;], </span><br><span class="line">  &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="编写plugin"><a href="#编写plugin" class="headerlink" title="编写plugin"></a>编写plugin</h1><h2 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h2><p>plugin内容<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">class BasicPlugin&#123; </span><br><span class="line">  // 在构造函数中获取用户给该插件传入的配置 </span><br><span class="line">  constructor(options)&#123; </span><br><span class="line">  &#125; </span><br><span class="line"> </span><br><span class="line">  // Webpack 会调用 BasicPlugin 实例的 apply 方法给插件实例传入 compiler 对象 </span><br><span class="line">  apply(compiler)&#123; </span><br><span class="line">    compiler.plugin(&apos;compilation&apos;,function(compilation) &#123; </span><br><span class="line">    &#125;) </span><br><span class="line">  &#125; </span><br><span class="line">&#125; </span><br><span class="line"> </span><br><span class="line">// 导出 Plugin </span><br><span class="line">module.exports = BasicPlugin;</span><br></pre></td></tr></table></figure></p>
+<p>使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const BasicPlugin = require(&apos;./BasicPlugin.js&apos;); </span><br><span class="line">module.export = &#123; </span><br><span class="line">  plugins:[ </span><br><span class="line">    new BasicPlugin(options), </span><br><span class="line">  ] </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Webpack 启动后，在读取配置的过程中会先执行 new BasicPlugin(options) 初始化一个 BasicPlugin 获得其实例。 在初始化 compiler 对象后，再调用 basicPlugin.apply(compiler) 给插件实例传入 compiler 对象。 插件实例在获取到 compiler 对象后，就可以通过 compiler.plugin(事件名称, 回调函数) 监听到 Webpack 广播出来的事件。 并且可以通过 compiler 对象去操作 Webpack。</p>
+<h2 id="Compiler-和-Compilation"><a href="#Compiler-和-Compilation" class="headerlink" title="Compiler 和 Compilation"></a>Compiler 和 Compilation</h2><p>Compiler 和 Compilation 的含义如下：</p>
+<p>1.Compiler 对象包含了 Webpack 环境所有的的配置信息，包含 options，loaders，plugins 这些信息，这个对象在 Webpack 启动时候被实例化，它是全局唯一的，可以简单地把它理解为 Webpack 实例；</p>
+<p>2.Compilation 对象包含了当前的模块资源、编译生成资源、变化的文件等。当 Webpack 以开发模式运行时，每当检测到一个文件变化，一次新的 Compilation 将被创建。Compilation 对象也提供了很多事件回调供插件做扩展。通过 Compilation 也能读取到 Compiler 对象。</p>
+<p>Compiler 代表了整个 Webpack 从启动到关闭的生命周期，而 Compilation 只是代表了一次新的编译。</p>
+<h2 id="事件流"><a href="#事件流" class="headerlink" title="事件流"></a>事件流</h2><p>Webpack 就像一条生产线，要经过一系列处理流程后才能将源文件转换成输出结果。 这条生产线上的每个处理流程的职责都是单一的，多个流程之间有存在依赖关系，只有完成当前处理后才能交给下一个流程去处理。 插件就像是一个插入到生产线中的一个功能，在特定的时机对生产线上的资源做处理。<br>Webpack 通过 Tapable 来组织这条复杂的生产线。 Webpack 在运行过程中会广播事件，插件只需要监听它所关心的事件，就能加入到这条生产线中，去改变生产线的运作。 Webpack 的事件流机制保证了插件的有序性，使得整个系统扩展性很好。</p>
+<p>Webpack 的事件流机制应用了观察者模式，和 Node.js 中的 EventEmitter 非常相似。 Compiler 和 Compilation 都继承自 Tapable，可以直接在 Compiler 和 Compilation 对象上广播和监听事件，方法如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">/ </span><br><span class="line"> 广播出事件 </span><br><span class="line"> event-name 为事件名称，注意不要和现有的事件重名 </span><br><span class="line"> params 为附带的参数 </span><br><span class="line">/ </span><br><span class="line">compiler.apply(&apos;event-name&apos;,params); </span><br><span class="line"> </span><br><span class="line">/ </span><br><span class="line"> 监听名称为 event-name 的事件，当 event-name 事件发生时，函数就会被执行。 </span><br><span class="line"> 同时函数中的 params 参数为广播事件时附带的参数。 </span><br><span class="line">*/ </span><br><span class="line">compiler.plugin(&apos;event-name&apos;,function(params) &#123; </span><br><span class="line"> </span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>compilation.apply 和 compilation.plugin 使用方法和上面一致。</p>
+<p>在开发插件时，还需要注意以下两点：</p>
+<p>1.只要能拿到 Compiler 或 Compilation 对象，就能广播出新的事件，所以在新开发的插件中也能广播出事件，给其它插件监听使用。<br>2.传给每个插件的 Compiler 和 Compilation 对象都是同一个引用。也就是说在一个插件中修改了 Compiler 或 Compilation 对象上的属性，会影响到后面的插件。<br>3.有些事件是异步的，这些异步的事件会附带两个参数，第二个参数为回调函数，在插件处理完任务时需要调用回调函数通知 Webpack，才会进入下一处理流程。例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">compiler.plugin(&apos;emit&apos;,function(compilation, callback) &#123; </span><br><span class="line">    // 支持处理逻辑 </span><br><span class="line"> </span><br><span class="line">    // 处理完毕后执行 callback 以通知 Webpack  </span><br><span class="line">    // 如果不执行 callback，运行流程将会一直卡在这不往下执行  </span><br><span class="line">    callback(); </span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure></p>
+<h2 id="常用API-1"><a href="#常用API-1" class="headerlink" title="常用API"></a>常用API</h2><h3 id="监听文件变化"><a href="#监听文件变化" class="headerlink" title="监听文件变化"></a>监听文件变化</h3><p> Webpack 会从配置的入口模块出发，依次找出所有的依赖模块，当入口模块或者其依赖的模块发生变化时， 就会触发一次新的 Compilation。<br> 通过【watch-run】 事件可以知道是哪个文件发生变化导致了新的 Compilation<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">/ 当依赖的文件发生变化时会触发 watch-run 事件 </span><br><span class="line">compiler.plugin(&apos;watch-run&apos;, (watching, callback) =&gt; &#123; </span><br><span class="line">    // 获取发生变化的文件列表 </span><br><span class="line">    const changedFiles = watching.compiler.watchFileSystem.watcher.mtimes; </span><br><span class="line">    // changedFiles 格式为键值对，键为发生变化的文件路径。 </span><br><span class="line">    if (changedFiles[filePath] !== undefined) &#123; </span><br><span class="line">      // filePath 对应的文件发生了变化 </span><br><span class="line">    &#125; </span><br><span class="line">    callback(); </span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>默认情况下 Webpack 只会监视入口和其依赖的模块是否发生变化，在有些情况下项目可能需要引入新的文件，例如引入一个 HTML 文件。 由于 JavaScript 文件不会去导入 HTML 文件，Webpack 就不会监听 HTML 文件的变化，编辑 HTML 文件时就不会重新触发新的 Compilation。 为了监听 HTML 文件的变化，我们需要把 HTML 文件加入到依赖列表中，为此可以使用如下代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">compiler.plugin(&apos;after-compile&apos;, (compilation, callback) =&gt; &#123; </span><br><span class="line">  // 把 HTML 文件添加到文件依赖列表，好让 Webpack 去监听 HTML 模块文件，在 HTML 模版文件发生变化时重新启动一次编译 </span><br><span class="line">    compilation.fileDependencies.push(filePath); </span><br><span class="line">    callback(); </span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<h3 id="读取输出资源、代码块、模块及其依赖"><a href="#读取输出资源、代码块、模块及其依赖" class="headerlink" title="读取输出资源、代码块、模块及其依赖"></a>读取输出资源、代码块、模块及其依赖</h3><p>在 【emit】 事件发生时，代表源文件的转换和组装已经完成，在这里可以读取到最终将输出的资源、代码块、模块及其依赖，并且可以修改输出资源的内容。 插件代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">class Plugin &#123; </span><br><span class="line">  apply(compiler) &#123; </span><br><span class="line">    compiler.plugin(&apos;emit&apos;, function (compilation, callback) &#123; </span><br><span class="line">      // compilation.chunks 存放所有代码块，是一个数组 </span><br><span class="line">      compilation.chunks.forEach(function (chunk) &#123; </span><br><span class="line">        // chunk 代表一个代码块 </span><br><span class="line">        // 代码块由多个模块组成，通过 chunk.forEachModule 能读取组成代码块的每个模块 </span><br><span class="line">        chunk.forEachModule(function (module) &#123; </span><br><span class="line">          // module 代表一个模块 </span><br><span class="line">          // module.fileDependencies 存放当前模块的所有依赖的文件路径，是一个数组 </span><br><span class="line">          module.fileDependencies.forEach(function (filepath) &#123; </span><br><span class="line">          &#125;); </span><br><span class="line">        &#125;); </span><br><span class="line"> </span><br><span class="line">        // Webpack 会根据 Chunk 去生成输出的文件资源，每个 Chunk 都对应一个及其以上的输出文件 </span><br><span class="line">        // 例如在 Chunk 中包含了 CSS 模块并且使用了 ExtractTextPlugin 时， </span><br><span class="line">        // 该 Chunk 就会生成 .js 和 .css 两个文件 </span><br><span class="line">        chunk.files.forEach(function (filename) &#123; </span><br><span class="line">          // compilation.assets 存放当前所有即将输出的资源 </span><br><span class="line">          // 调用一个输出资源的 source() 方法能获取到输出资源的内容 </span><br><span class="line">          let source = compilation.assets[filename].source(); </span><br><span class="line">        &#125;); </span><br><span class="line">      &#125;); </span><br><span class="line"> </span><br><span class="line">      // 这是一个异步事件，要记得调用 callback 通知 Webpack 本次事件监听处理结束。 </span><br><span class="line">      // 如果忘记了调用 callback，Webpack 将一直卡在这里而不会往后执行。 </span><br><span class="line">      callback(); </span><br><span class="line">    &#125;) </span><br><span class="line">  &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="修改输出资源"><a href="#修改输出资源" class="headerlink" title="修改输出资源"></a>修改输出资源</h3><p>有些场景下插件需要修改、增加、删除输出的资源，要做到这点需要监听 emit 事件，因为发生 emit 事件时所有模块的转换和代码块对应的文件已经生成好， 需要输出的资源即将输出，因此 emit 事件是修改 Webpack 输出资源的最后时机。</p>
+<p>所有需要输出的资源会存放在 compilation.assets 中，compilation.assets 是一个键值对，键为需要输出的文件名称，值为文件对应的内容。</p>
+<p>设置 compilation.assets 的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">compiler.plugin(&apos;emit&apos;, (compilation, callback) =&gt; &#123; </span><br><span class="line">  // 设置名称为 fileName 的输出资源 </span><br><span class="line">  compilation.assets[fileName] = &#123; </span><br><span class="line">    // 返回文件内容 </span><br><span class="line">    source: () =&gt; &#123; </span><br><span class="line">      // fileContent 既可以是代表文本文件的字符串，也可以是代表二进制文件的 Buffer </span><br><span class="line">      return fileContent; </span><br><span class="line">      &#125;, </span><br><span class="line">    // 返回文件大小 </span><br><span class="line">      size: () =&gt; &#123; </span><br><span class="line">      return Buffer.byteLength(fileContent, &apos;utf8&apos;); </span><br><span class="line">    &#125; </span><br><span class="line">  &#125;; </span><br><span class="line">  callback(); </span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>读取 compilation.assets 的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">compiler.plugin(&apos;emit&apos;, (compilation, callback) =&gt; &#123; </span><br><span class="line">  // 读取名称为 fileName 的输出资源 </span><br><span class="line">  const asset = compilation.assets[fileName]; </span><br><span class="line">  // 获取输出资源的内容 </span><br><span class="line">  asset.source(); </span><br><span class="line">  // 获取输出资源的文件大小 </span><br><span class="line">  asset.size(); </span><br><span class="line">  callback(); </span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<h3 id="判断-Webpack-使用了哪些插件"><a href="#判断-Webpack-使用了哪些插件" class="headerlink" title="判断 Webpack 使用了哪些插件"></a>判断 Webpack 使用了哪些插件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 判断当前配置是否使用了 ExtractTextPlugin， </span><br><span class="line">// compiler 参数即为 Webpack 在 apply(compiler) 中传入的参数 </span><br><span class="line">function hasExtractTextPlugin(compiler) &#123; </span><br><span class="line">  // 当前配置所有使用的插件列表 </span><br><span class="line">  const plugins = compiler.options.plugins; </span><br><span class="line">  // 去 plugins 中寻找有没有 ExtractTextPlugin 的实例 </span><br><span class="line">  return plugins.find(plugin=&gt;plugin.proto.constructor === ExtractTextPlugin) != null; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">class EndWebpackPlugin &#123; </span><br><span class="line"> </span><br><span class="line">  constructor(doneCallback, failCallback) &#123; </span><br><span class="line">    // 存下在构造函数中传入的回调函数 </span><br><span class="line">    this.doneCallback = doneCallback; </span><br><span class="line">    this.failCallback = failCallback; </span><br><span class="line">  &#125; </span><br><span class="line"> </span><br><span class="line">  apply(compiler) &#123; </span><br><span class="line">    //done：在成功构建并且输出了文件后，Webpack 即将退出时发生；</span><br><span class="line">    compiler.plugin(&apos;done&apos;, (stats) =&gt; &#123; </span><br><span class="line">        // 在 done 事件中回调 doneCallback </span><br><span class="line">        this.doneCallback(stats); </span><br><span class="line">    &#125;); </span><br><span class="line">    //failed：在构建出现异常导致构建失败，Webpack 即将退出时发生；</span><br><span class="line">    compiler.plugin(&apos;failed&apos;, (err) =&gt; &#123; </span><br><span class="line">        // 在 failed 事件中回调 failCallback </span><br><span class="line">        this.failCallback(err); </span><br><span class="line">    &#125;); </span><br><span class="line">  &#125; </span><br><span class="line">&#125; </span><br><span class="line">// 导出插件  </span><br><span class="line">module.exports = EndWebpackPlugin; </span><br><span class="line"></span><br><span class="line">//使用</span><br><span class="line">module.exports = &#123; </span><br><span class="line">  plugins:[ </span><br><span class="line">    // 在初始化 EndWebpackPlugin 时传入了两个参数，分别是在成功时的回调函数和失败时的回调函数； </span><br><span class="line">    new EndWebpackPlugin(() =&gt; &#123; </span><br><span class="line">      // Webpack 构建成功，并且文件输出了后会执行到这里，在这里可以做发布文件操作 </span><br><span class="line">    &#125;, (err) =&gt; &#123; </span><br><span class="line">      // Webpack 构建失败，err 是导致错误的原因 </span><br><span class="line">      console.error(err);    &#125;) </span><br><span class="line">  ] </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><h2 id="流程概括"><a href="#流程概括" class="headerlink" title="流程概括"></a>流程概括</h2><p>Webpack 的运行流程是一个串行的过程，从启动到结束会依次执行以下流程：</p>
+<p>1.初始化参数：从配置文件和 Shell 语句中读取与合并参数，得出最终的参数；<br>（启动构建，读取与合并配置参数，加载 Plugin，实例化 Compiler。）<br>2.开始编译：用上一步得到的参数初始化 Compiler 对象，加载所有配置的插件，执行对象的 run 方法开始执行编译；<br>3.确定入口：根据配置中的 entry 找出所有的入口文件；<br>4.编译模块：从入口文件出发，调用所有配置的 Loader 对模块进行翻译，再找出该模块依赖的模块，再递归本步骤直到所有入口依赖的文件都经过了本步骤的处理；<br>5.完成模块编译：在经过第4步使用 Loader 翻译完所有模块后，得到了每个模块被翻译后的最终内容以及它们之间的依赖关系；<br>6.输出资源：根据入口和模块之间的依赖关系，组装成一个个包含多个模块的 Chunk，再把每个 Chunk 转换成一个单独的文件加入到输出列表，这步是可以修改输出内容的最后机会；<br>7.输出完成：在确定好输出内容后，根据配置确定输出的路径和文件名，把文件内容写入到文件系统。</p>
+<p>在以上过程中，Webpack 会在特定的时间点广播出特定的事件，插件在监听到感兴趣的事件后会执行特定的逻辑，并且插件可以调用 Webpack 提供的 API 改变 Webpack 的运行结果。</p>
+<h2 id="流程细节"><a href="#流程细节" class="headerlink" title="流程细节"></a>流程细节</h2><p>1.初始化：启动构建，读取与合并配置参数，加载 Plugin，实例化 Compiler。<br>2.编译：从 Entry 发出，针对每个 Module 串行调用对应的 Loader 去翻译文件内容，再找到该 Module 依赖的 Module，递归地进行编译处理。<br>3.输出：对编译后的 Module 组合成 Chunk，把 Chunk 转换成文件，输出到文件系统。</p>
+<h2 id="初始化阶段事"><a href="#初始化阶段事" class="headerlink" title="初始化阶段事"></a>初始化阶段事</h2><table><thead><tr><th>事件名</th><th>解释</th></tr></thead><tbody><tr><td>初始化参数</td><td>从配置文件和 Shell 语句中读取与合并参数，得出最终的参数。 这个过程中还会执行配置文件中的插件实例化语句 <code>new Plugin()</code>。</td></tr><tr><td>实例化 Compiler</td><td>用上一步得到的参数初始化 Compiler 实例，Compiler 负责文件监听和启动编译。Compiler 实例中包含了完整的 Webpack 配置，全局只有一个 Compiler 实例。</td></tr><tr><td>加载插件</td><td>依次调用插件的 apply 方法，让插件可以监听后续的所有事件节点。同时给插件传入 compiler 实例的引用，以方便插件通过 compiler 调用 Webpack 提供的 API。</td></tr><tr><td>environment</td><td>开始应用 Node.js 风格的文件系统到 compiler 对象，以方便后续的文件寻找和读取。</td></tr><tr><td>entry-option</td><td>读取配置的 Entrys，为每个 Entry 实例化一个对应的 EntryPlugin，为后面该 Entry 的递归解析工作做准备。</td></tr><tr><td>after-plugins</td><td>调用完所有内置的和配置的插件的 apply 方法。</td></tr><tr><td>after-resolvers</td><td>根据配置初始化完 resolver，resolver 负责在文件系统中寻找指定路径的文件。</td></tr></tbody></table>
+
+<h2 id="编译阶段事件"><a href="#编译阶段事件" class="headerlink" title="编译阶段事件"></a>编译阶段事件</h2><table><thead><tr><th>事件名</th><th>解释</th></tr></thead><tbody><tr><td>build-module</td><td>使用对应的 Loader 去转换一个模块。</td></tr><tr><td>normal-module-loader</td><td>在用 Loader 对一个模块转换完后，使用 acorn 解析转换后的内容，输出对应的抽象语法树（AST），以方便 Webpack 后面对代码的分析。</td></tr><tr><td>program</td><td>从配置的入口模块开始，分析其 AST，当遇到 <code>require</code> 等导入其它模块语句时，便将其加入到依赖的模块列表，同时对新找出的依赖模块递归分析，最终搞清所有模块的依赖关系</td></tr><tr><td>seal</td><td>所有模块及其依赖的模块都通过 Loader 转换完成后，根据依赖关系开始生成 Chunk</td></tr></tbody></table>
+
+<h2 id="输出阶段事件"><a href="#输出阶段事件" class="headerlink" title="输出阶段事件"></a>输出阶段事件</h2><table><thead><tr><th>事件名</th><th>解释</th></tr></thead><tbody><tr><td>should-emit</td><td>所有需要输出的文件已经生成好，询问插件哪些文件需要输出，哪些不需要。</td></tr><tr><td>emit</td><td>确定好要输出哪些文件后，执行文件输出，可以在这里获取和修改输出内容。</td></tr><tr><td>after-emit</td><td>文件输出完毕。</td></tr><tr><td>done</td><td>成功完成一次完成的编译和输出流程。</td></tr><tr><td>failed</td><td>如果在编译和输出流程中遇到异常导致 Webpack 退出时，就会直接跳转到本步骤，插件可以在本事件中获取到具体的错误原因。</td></tr></tbody></table>
+
+<p>在输出阶段已经得到了各个模块经过转换后的结果和其依赖关系，并且把相关模块组合在一起形成一个个 Chunk。 在输出阶段会根据 Chunk 的类型，使用对应的模版生成最终要要输出的文件内容</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/performance/" rel="tag"># performance</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/performance/webpackOptimization.html" rel="next" title="webpack优化">
+                <i class="fa fa-chevron-left"></i> webpack优化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/knowledge/cssPosition.html" rel="prev" title="absolute应用">
+                absolute应用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">232</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#编写loader"><span class="nav-number">1.</span> <span class="nav-text">编写loader</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#常用API"><span class="nav-number">1.1.</span> <span class="nav-text">常用API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#获取loader配置的options"><span class="nav-number">1.1.1.</span> <span class="nav-text">获取loader配置的options</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#返回除了内容之外的东西"><span class="nav-number">1.1.2.</span> <span class="nav-text">返回除了内容之外的东西</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#处理异步流程"><span class="nav-number">1.1.3.</span> <span class="nav-text">处理异步流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#处理二进制数据"><span class="nav-number">1.1.4.</span> <span class="nav-text">处理二进制数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存加速"><span class="nav-number">1.1.5.</span> <span class="nav-text">缓存加速</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他API"><span class="nav-number">1.1.6.</span> <span class="nav-text">其他API</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#加载本地loader"><span class="nav-number">1.2.</span> <span class="nav-text">加载本地loader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方法一-Npm-link"><span class="nav-number">1.2.1.</span> <span class="nav-text">方法一 Npm link</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法二-ResolveLoader"><span class="nav-number">1.2.2.</span> <span class="nav-text">方法二 ResolveLoader</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编写plugin"><span class="nav-number">2.</span> <span class="nav-text">编写plugin</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#工作原理"><span class="nav-number">2.1.</span> <span class="nav-text">工作原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Compiler-和-Compilation"><span class="nav-number">2.2.</span> <span class="nav-text">Compiler 和 Compilation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事件流"><span class="nav-number">2.3.</span> <span class="nav-text">事件流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用API-1"><span class="nav-number">2.4.</span> <span class="nav-text">常用API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#监听文件变化"><span class="nav-number">2.4.1.</span> <span class="nav-text">监听文件变化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#读取输出资源、代码块、模块及其依赖"><span class="nav-number">2.4.2.</span> <span class="nav-text">读取输出资源、代码块、模块及其依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改输出资源"><span class="nav-number">2.4.3.</span> <span class="nav-text">修改输出资源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#判断-Webpack-使用了哪些插件"><span class="nav-number">2.4.4.</span> <span class="nav-text">判断 Webpack 使用了哪些插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一个例子"><span class="nav-number">2.4.5.</span> <span class="nav-text">一个例子</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#小结"><span class="nav-number">3.</span> <span class="nav-text">小结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#流程概括"><span class="nav-number">3.1.</span> <span class="nav-text">流程概括</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流程细节"><span class="nav-number">3.2.</span> <span class="nav-text">流程细节</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化阶段事"><span class="nav-number">3.3.</span> <span class="nav-text">初始化阶段事</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译阶段事件"><span class="nav-number">3.4.</span> <span class="nav-text">编译阶段事件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#输出阶段事件"><span class="nav-number">3.5.</span> <span class="nav-text">输出阶段事件</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

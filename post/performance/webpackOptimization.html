@@ -1,0 +1,711 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="performance,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="优化开发体验目的是提升开发效率 优化构建速度解决项目庞大时构建的耗时加长的问题 缩小文件查找范围1.由于Loader对文件转换很耗时，所以应该让尽可能少的文件被处理，适当调整项目目录结构，在配置loader时通过【include】属性缩小处理命中文件范围2.当安装第三方模块都放在项目根目录的./node_module目录下时，通过指明【resolve.modules】为存放第三方模块的绝对路径，减">
+<meta name="keywords" content="performance">
+<meta property="og:type" content="article">
+<meta property="og:title" content="webpack优化">
+<meta property="og:url" content="http://yoohannah.github.io/post/performance/webpackOptimization.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="优化开发体验目的是提升开发效率 优化构建速度解决项目庞大时构建的耗时加长的问题 缩小文件查找范围1.由于Loader对文件转换很耗时，所以应该让尽可能少的文件被处理，适当调整项目目录结构，在配置loader时通过【include】属性缩小处理命中文件范围2.当安装第三方模块都放在项目根目录的./node_module目录下时，通过指明【resolve.modules】为存放第三方模块的绝对路径，减">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-09-01T03:26:27.585Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="webpack优化">
+<meta name="twitter:description" content="优化开发体验目的是提升开发效率 优化构建速度解决项目庞大时构建的耗时加长的问题 缩小文件查找范围1.由于Loader对文件转换很耗时，所以应该让尽可能少的文件被处理，适当调整项目目录结构，在配置loader时通过【include】属性缩小处理命中文件范围2.当安装第三方模块都放在项目根目录的./node_module目录下时，通过指明【resolve.modules】为存放第三方模块的绝对路径，减">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/performance/webpackOptimization.html">
+
+
+
+
+
+  <title> webpack优化 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/performance/webpackOptimization.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                webpack优化
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-06-29T16:21:02+08:00">
+                2019-06-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="优化开发体验"><a href="#优化开发体验" class="headerlink" title="优化开发体验"></a>优化开发体验</h1><p>目的是提升开发效率</p>
+<h2 id="优化构建速度"><a href="#优化构建速度" class="headerlink" title="优化构建速度"></a>优化构建速度</h2><p>解决项目庞大时构建的耗时加长的问题</p>
+<h3 id="缩小文件查找范围"><a href="#缩小文件查找范围" class="headerlink" title="缩小文件查找范围"></a>缩小文件查找范围</h3><p>1.由于Loader对文件转换很耗时，所以应该让尽可能少的文件被处理，适当调整项目目录结构，在配置loader时通过【include】属性缩小处理命中文件范围<br>2.当安装第三方模块都放在项目根目录的./node_module目录下时，通过指明【resolve.modules】为存放第三方模块的绝对路径，减少寻找第三方模块的递归查找<br>3.在项目中所有第三方模块都采用main字段去描述入口文件时，只给【resolve.mainFileds】配置main字段，不使用默认值，减少搜索步骤<br>4.使用【resolve.alias】进行路径映射时，将导入模块的语句，替换成直接使用模块中完整文件的语句，减少耗时的对于lib中文件的解析工作<br>5.优化【resolve.extension】配置，减少尝试次数<br>a.后缀列表尽可能小，不要将项目中不可能存在的情况写到后缀列表中<br>b.频率出现最高的文件后缀要优先放在最前面，以做到尽快退出寻找过程<br>c.在源码中写导入语句时，尽可能带上后缀，从而避免寻找过程<br>6.合理使用【module.noparse】属性，排除不需要进行模块解析处理的文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">1.</span><br><span class="line">rules:&#123;</span><br><span class="line">	//只对项目根目录下src目录中文件采用配置的loader</span><br><span class="line">	include:path.resolve(__dirname,&apos;src&apos;)</span><br><span class="line">&#125;</span><br><span class="line">2.</span><br><span class="line">resolve:&#123;</span><br><span class="line">	//使用绝对路径指明第三方模块存放的位置，减少搜索步骤</span><br><span class="line">	modules:[path.resolve(__dirname,&apos;node_module&apos;)]</span><br><span class="line">&#125;</span><br><span class="line">3.</span><br><span class="line">resolve:&#123;</span><br><span class="line">	//减少入口查找</span><br><span class="line">	mainFilds:[&apos;main&apos;]</span><br><span class="line">&#125;</span><br><span class="line">4.</span><br><span class="line">resolve:&#123;</span><br><span class="line">	//减少第三方模块递归解析</span><br><span class="line">	alias:&#123; </span><br><span class="line">		&apos;react&apos;:path.resolve(__dirname,&apos;./node_module/react/dist/react.min.js&apos;)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="使用DLLPlugin"><a href="#使用DLLPlugin" class="headerlink" title="使用DLLPlugin"></a>使用DLLPlugin</h3><p>一个动态链接库文件可以包含为其他模块调用的函数和数据<br>提升构建速度的原理：<br>包含大量复用模块的动态链接库只需被编译一次，在之后的构建过程中被动态链接库包含的模块将不会重新编译，而是直接使用动态链接库的代码，<br>由于动态链接库中大多数包含的是常用的第三方模块，例如react,react-dom,所以只要不升级这些模块的版本，动态连接库就不用重新编译</p>
+<p>DllPlugin:打包出一个个单独的动态链接库文件<br>DllReferencePlugin:用于在主要的配置文件中引入DllPlugin打包好的动态连接库文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line">//webpack_dll.config.js</span><br><span class="line">const path = require(&apos;path&apos;);</span><br><span class="line">const DllPlugin = require(&apos;webpack/lib/DllPlugin&apos;);</span><br><span class="line"></span><br><span class="line">module.exports = &#123;</span><br><span class="line">  // JS 执行入口文件</span><br><span class="line">  entry: &#123;</span><br><span class="line">    // 把 React 相关的放到一个单独的动态链接库</span><br><span class="line">    react: [&apos;react&apos;, &apos;react-dom&apos;],</span><br><span class="line">    // 把项目需要所有的 polyfill 放到一个单独的动态链接库</span><br><span class="line">    polyfill: [&apos;core-js/fn/object/assign&apos;, &apos;core-js/fn/promise&apos;, &apos;whatwg-fetch&apos;],</span><br><span class="line">  &#125;,</span><br><span class="line">  output: &#123;</span><br><span class="line">    // 输出的动态链接库的文件名称，[name] 代表当前动态链接库的名称，也就是 entry 中配置的 react 和 polyfill</span><br><span class="line">    filename: &apos;[name].dll.js&apos;,</span><br><span class="line">    // 输出的文件都放到 dist 目录下</span><br><span class="line">    path: path.resolve(__dirname, &apos;dist&apos;),</span><br><span class="line">    // 存放动态链接库的全局变量名称，例如对应 react 来说就是 _dll_react</span><br><span class="line">    // 之所以在前面加上 _dll_ 是为了防止全局变量冲突</span><br><span class="line">    library: &apos;_dll_[name]&apos;,</span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    // 接入 DllPlugin</span><br><span class="line">    new DllPlugin(&#123;</span><br><span class="line">      // 动态链接库的全局变量名称，需要和 output.library 中保持一致</span><br><span class="line">      // 该字段的值也就是输出的 manifest.json 文件 中 name 字段的值</span><br><span class="line">      // 例如 react.manifest.json 中就有 &quot;name&quot;: &quot;_dll_react&quot;</span><br><span class="line">      name: &apos;_dll_[name]&apos;,</span><br><span class="line">      // 描述动态链接库的 manifest.json 文件输出时的文件名称</span><br><span class="line">      path: path.join(__dirname, &apos;dist&apos;, &apos;[name].manifest.json&apos;),</span><br><span class="line">    &#125;),</span><br><span class="line">  ],</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">webpack_dll.config.js文件中，DllPlugin中的name参数必须和output</span><br><span class="line"></span><br><span class="line">//webpack.config.js</span><br><span class="line">const path = require(&apos;path&apos;);</span><br><span class="line">const DllReferencePlugin = require(&apos;webpack/lib/DllReferencePlugin&apos;);</span><br><span class="line"></span><br><span class="line">module.exports = &#123;</span><br><span class="line">  entry: &#123;</span><br><span class="line">    // 定义 入口 Chunk</span><br><span class="line">    main: &apos;./main.js&apos;</span><br><span class="line">  &#125;,</span><br><span class="line">  output: &#123;</span><br><span class="line">    // 输出文件的名称</span><br><span class="line">    filename: &apos;[name].js&apos;,</span><br><span class="line">    // 输出文件都放到 dist 目录下</span><br><span class="line">    path: path.resolve(__dirname, &apos;dist&apos;),</span><br><span class="line">  &#125;,</span><br><span class="line">  module: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        // 项目源码使用了 ES6 和 JSX 语法，需要使用 babel-loader 转换</span><br><span class="line">        test: /\.js$/,</span><br><span class="line">        use: [&apos;babel-loader&apos;],</span><br><span class="line">        exclude: path.resolve(__dirname, &apos;node_modules&apos;),</span><br><span class="line">      &#125;,</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    // 告诉 Webpack 使用了哪些动态链接库</span><br><span class="line">    new DllReferencePlugin(&#123;</span><br><span class="line">      // 描述 react 动态链接库的文件内容</span><br><span class="line">      manifest: require(&apos;./dist/react.manifest.json&apos;),</span><br><span class="line">    &#125;),</span><br><span class="line">    new DllReferencePlugin(&#123;</span><br><span class="line">      // 描述 polyfill 动态链接库的文件内容</span><br><span class="line">      manifest: require(&apos;./dist/polyfill.manifest.json&apos;),</span><br><span class="line">    &#125;),</span><br><span class="line">  ],</span><br><span class="line">  devtool: &apos;source-map&apos;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>执行构建流程：<br>先编译出动态链接库相关的文件，执行webpack –config webpack_dll.config.js<br>在确保动态链接库存在时才能正常编译入口文件，webpack.config.js中的DllReferencePlugin会依赖动态链接库相关文件，执行webpack命令</p>
+<h3 id="使用HappyPack"><a href="#使用HappyPack" class="headerlink" title="使用HappyPack"></a>使用HappyPack</h3><p>提升构建速度原理：<br>将任务分解给多个子进程去并发执行，子进程处理完后再将结果发送给主进程，从而让webpack在同一时刻处理多个任务<br>实际表现就是<br>所有通过Loader处理的文件都先交给happypack/loader去处理，在收集到这些文件的处理权后，HappyPack就可以统一分配了<br>每通过new HappyPack() 去实例化一个HappyPack,其实就是告诉HappyPack核心调度器如何通过一系列Loader去转换一类文件，<br>并且可以指定如何为这类转换操作分配子进程<br>核心调度器的逻辑代码在主进程中，也就是运行着webpack的进程中，核心调度器会将一个个任务分配给当前空闲的子进程，<br>子进程处理完毕后将结果发送给核心调度，他们之间的数据交换是通过进程间的通信API实现的<br>核心调度器收到来自子进程处理完毕的结果后，会通知WebPack该文件已处理完毕</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">const path = require(&apos;path&apos;);</span><br><span class="line">const ExtractTextPlugin = require(&apos;extract-text-webpack-plugin&apos;);</span><br><span class="line">const HappyPack = require(&apos;happypack&apos;);</span><br><span class="line"></span><br><span class="line">module.exports = &#123;</span><br><span class="line">  // JS 执行入口文件</span><br><span class="line">  entry: &#123;</span><br><span class="line">    main: &apos;./main.js&apos;,</span><br><span class="line">  &#125;,</span><br><span class="line">  output: &#123;</span><br><span class="line">    // 把所有依赖的模块合并输出到一个 bundle.js 文件</span><br><span class="line">    filename: &apos;[name].js&apos;,</span><br><span class="line">    // 输出文件都放到 dist 目录下</span><br><span class="line">    path: path.resolve(__dirname, &apos;./dist&apos;),</span><br><span class="line">  &#125;,</span><br><span class="line">  module: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        test: /\.js$/,</span><br><span class="line">        // 把对 .js 文件的处理转交给 id 为 babel 的 HappyPack 实例</span><br><span class="line">        use: [&apos;happypack/loader?id=babel&apos;],</span><br><span class="line">        // 排除 node_modules 目录下的文件，node_modules 目录下的文件都是采用的 ES5 语法，没必要再通过 Babel 去转换</span><br><span class="line">        exclude: path.resolve(__dirname, &apos;node_modules&apos;),</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        // 把对 .css 文件的处理转交给 id 为 css 的 HappyPack 实例</span><br><span class="line">        test: /\.css$/,</span><br><span class="line">        use: ExtractTextPlugin.extract(&#123;</span><br><span class="line">          use: [&apos;happypack/loader?id=css&apos;],</span><br><span class="line">        &#125;),</span><br><span class="line">      &#125;,</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    new HappyPack(&#123;</span><br><span class="line">      // 用唯一的标识符 id 来代表当前的 HappyPack 是用来处理一类特定的文件</span><br><span class="line">      id: &apos;babel&apos;,</span><br><span class="line">      // 如何处理 .js 文件，用法和 Loader 配置中一样</span><br><span class="line">      loaders: [&apos;babel-loader?cacheDirectory&apos;],</span><br><span class="line">    &#125;),</span><br><span class="line">    new HappyPack(&#123;</span><br><span class="line">      id: &apos;css&apos;,</span><br><span class="line">      // 如何处理 .css 文件，用法和 Loader 配置中一样</span><br><span class="line">      loaders: [&apos;css-loader&apos;],</span><br><span class="line">    &#125;),</span><br><span class="line">    new ExtractTextPlugin(&#123;</span><br><span class="line">      filename: `[name].css`,</span><br><span class="line">    &#125;),</span><br><span class="line">  ],</span><br><span class="line">  devtool: &apos;source-map&apos; // 输出 source-map 方便直接调试 ES6 源码</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>在实例化 HappyPack 插件的时候，除了可以传入 id 和 loaders 两个参数外，HappyPack 还支持如下参数：<br>threads: 代表开启几个子进程去处理这一类型的文件，默认是3个，类型必须是整数。<br>verbose: 是否允许 HappyPack 输出日志，默认是 true。<br>threadPool :代表共享进程池，即多个 HappyPack 实例都使用同一个共享进程池中的子进程去处理任务，以防止资源占用过多<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">const HappyPack = require(&apos;happypack&apos;);</span><br><span class="line">// 构造出共享进程池，进程池中包含5个子进程</span><br><span class="line">const happyThreadPool = HappyPack.ThreadPool(&#123; size: 5 &#125;);</span><br><span class="line"></span><br><span class="line">module.exports = &#123;</span><br><span class="line">  plugins: [</span><br><span class="line">    new HappyPack(&#123;</span><br><span class="line">      // 用唯一的标识符 id 来代表当前的 HappyPack 是用来处理一类特定的文件</span><br><span class="line">      id: &apos;babel&apos;,</span><br><span class="line">      // 如何处理 .js 文件，用法和 Loader 配置中一样</span><br><span class="line">      loaders: [&apos;babel-loader?cacheDirectory&apos;],</span><br><span class="line">      // 使用共享进程池中的子进程去处理任务</span><br><span class="line">      threadPool: happyThreadPool,</span><br><span class="line">    &#125;),</span><br><span class="line">    new HappyPack(&#123;</span><br><span class="line">      id: &apos;css&apos;,</span><br><span class="line">      // 如何处理 .css 文件，用法和 Loader 配置中一样</span><br><span class="line">      loaders: [&apos;css-loader&apos;],</span><br><span class="line">      // 使用共享进程池中的子进程去处理任务</span><br><span class="line">      threadPool: happyThreadPool,</span><br><span class="line">     &#125;),</span><br><span class="line">    new ExtractTextPlugin(&#123;</span><br><span class="line">      filename: `[name].css`,</span><br><span class="line">    &#125;),</span><br><span class="line">  ],</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<h3 id="使用ParallelUglifyPlugin"><a href="#使用ParallelUglifyPlugin" class="headerlink" title="使用ParallelUglifyPlugin"></a>使用ParallelUglifyPlugin</h3><p>提升构建速度原理：<br>当webpack有多个JS文件需要输出和压缩时，原本会使用UglifyJS去一个一个压缩再输出，但是ParallelUglifyPlugin会开启多个子进程，<br>将对多个文件的压缩工作分配给多个子进程完成，每个子进程其实还是通过UglifyJS去压缩代码，单变成了并行执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">const path = require(‘path’);</span><br><span class="line">const DefinePlugin = require(‘webpack/lib/DefinePlugin’);</span><br><span class="line">const ParallelUglifyPlugin = require(‘webpack-parallel-uglify-plugin’);</span><br><span class="line"></span><br><span class="line">module.exports = &#123;</span><br><span class="line">  plugins: [</span><br><span class="line">    // 使用 ParallelUglifyPlugin 并行压缩输出的 JS 代码</span><br><span class="line">    new ParallelUglifyPlugin(&#123;</span><br><span class="line">      // 传递给 UglifyJS 的参数</span><br><span class="line">      uglifyJS: &#123;</span><br><span class="line">        output: &#123;</span><br><span class="line">          // 最紧凑的输出</span><br><span class="line">          beautify: false,</span><br><span class="line">          // 删除所有的注释</span><br><span class="line">          comments: false,</span><br><span class="line">        &#125;,</span><br><span class="line">        compress: &#123;</span><br><span class="line">          // 在UglifyJs删除没有用到的代码时不输出警告</span><br><span class="line">          warnings: false,</span><br><span class="line">          // 删除所有的 console 语句，可以兼容ie浏览器</span><br><span class="line">          drop_console: true,</span><br><span class="line">          // 内嵌定义了但是只用到一次的变量</span><br><span class="line">          collapse_vars: true,</span><br><span class="line">          // 提取出出现多次但是没有定义成变量去引用的静态值</span><br><span class="line">          reduce_vars: true,</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;),</span><br><span class="line">  ],</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>在通过 new ParallelUglifyPlugin() 实例化时，支持以下参数：<br>test：使用正则去匹配哪些文件需要被 ParallelUglifyPlugin 压缩，默认是 /.js$/，也就是默认压缩所有的 .js 文件。<br>include：使用正则去命中需要被 ParallelUglifyPlugin 压缩的文件。默认为 []。<br>exclude：使用正则去命中不需要被 ParallelUglifyPlugin 压缩的文件。默认为 []。<br>cacheDir：缓存压缩后的结果，下次遇到一样的输入时直接从缓存中获取压缩后的结果并返回。cacheDir 用于配置缓存存放的目录路径。默认不会缓存，想开启缓存请设置一个目录路径。<br>workerCount：开启几个子进程去并发的执行压缩。默认是当前运行电脑的 CPU 核数减去1。<br>sourceMap：是否输出 Source Map，这会导致压缩过程变慢。<br>uglifyJS：用于压缩 ES5 代码时的配置，Object 类型，直接透传给 UglifyJS 的参数。</p>
+<p>其中的 test、include、exclude 与配置 Loader 时的思想和用法一样<br>UglifyES 是 UglifyJS 的变种，专门用于压缩 ES6 代码，它们两都出自于同一个项目，并且它们两不能同时使用。<br>UglifyES 一般用于给比较新的 JavaScript 运行环境压缩代码，例如用于 ReactNative 的代码运行在兼容性较好的 JavaScriptCore 引擎中，为了得到更好的性能和尺寸，采用 UglifyES 压缩效果会更好。<br>ParallelUglifyPlugin 同时内置了 UglifyJS 和 UglifyES，也就是说 ParallelUglifyPlugin 支持并行压缩 ES6 代码。<br>如果设置 cacheDir 开启了缓存，在之后的构建中会变的更快。</p>
+<h2 id="优化使用体验"><a href="#优化使用体验" class="headerlink" title="优化使用体验"></a>优化使用体验</h2><p>通过自动化手段完成一些重复工作，让我们专注于解决问题本身</p>
+<h3 id="优化文件监听"><a href="#优化文件监听" class="headerlink" title="优化文件监听"></a>优化文件监听</h3><p>通过配置watchOption进行优化<br>ignored:/node_module/ 不监听node_module下文件 监听更少文件<br>agregatetionTimeout:值越大，降低构建频率<br>poll:值越小，降低检查频率<br>后面两项的配置会使监听模式的反应和灵敏度降低</p>
+<h3 id="优化自动刷新性能"><a href="#优化自动刷新性能" class="headerlink" title="优化自动刷新性能"></a>优化自动刷新性能</h3><p>1.使用devserver开启inline时，devserver因为不知道某个网页依赖哪几个Chunk,所以会向每个输出的chunk中注入代理客户端代码<br>当项目输出多个chunk时，就会导致构建缓慢，因此关闭inline进行优化<br>如果不想以iframe方式去访问，但同时想让网页保持自动刷新功能，则需要手动向网页中注入代理客户端的脚本，<br>向index.html中注入webpack-dev-server.js,但要注意发布到线上时要删掉这段用于开发的代码</p>
+<p>2.开启热替换时，控制台打印信息不能标明模块信息，可以使用NameModulesPlugin插件解决，从而在控制台打印出被修改的模块名称<br>注意关闭默认inline模式并手动注入客户端的方法，不能用于模块热替换的情况，原因在于模块热替换的运行依赖每个chunk中都包含代理客户端的代码</p>
+<h1 id="优化输出质量"><a href="#优化输出质量" class="headerlink" title="优化输出质量"></a>优化输出质量</h1><p>目的是为用户呈现体验更好的网页</p>
+<h2 id="减少用户能够感知到的加载时间-首屏时间"><a href="#减少用户能够感知到的加载时间-首屏时间" class="headerlink" title="减少用户能够感知到的加载时间(首屏时间)"></a>减少用户能够感知到的加载时间(首屏时间)</h2><h3 id="区分环境"><a href="#区分环境" class="headerlink" title="区分环境"></a>区分环境</h3><p>问题：<br>开发过程会涉及到调试的代码,没必要发到线上给到用户<br>开发环境和线上接口地址不同，使用不同环境数据<br>线上代码会进行压缩，开发代码不需要、</p>
+<p>解决：<br>当代码中使用了process模块的语句时，webpack会自动打包加入process模块代码来支持非nodejs运行环境<br>当代码中没有使用时，就不会打包加入<br>可以在源码中使用process.env.NODE_ENV环境变量去判断执行开发/线上环境的代码<br>环境变量的设置通过DefinePlugin设置<br>设置后，环境变量的值在webpack处理过程中会被代入源码中，替换掉process.env.NODE_ENV<br>访问proces的语句被替换，webpack也就不会在打包时加入process模块了</p>
+<p>注意：DefinedPlugin定义的环境变量只对Webpack需要处理的代码有效，而不会影响Nodejs运行时的环境变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">const DefinePlugin = require(&apos;webpack/lib/DefinePlugin&apos;);</span><br><span class="line"></span><br><span class="line">module.exports = &#123;</span><br><span class="line">  plugins: [</span><br><span class="line">    new DefinePlugin(&#123;</span><br><span class="line">      // 定义 NODE_ENV 环境变量为 production </span><br><span class="line">      &apos;process.env&apos;: &#123;</span><br><span class="line">        NODE_ENV: JSON.stringify(&apos;production&apos;)//环境变量的值需要一个由双引号包裹的字符串&apos;&quot;production&quot;&apos;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;),</span><br><span class="line">  ],</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="压缩代码"><a href="#压缩代码" class="headerlink" title="压缩代码"></a>压缩代码</h3><p>提升网页加载速度，减少网络传输流量，混淆代码以防有人下载代码进行代码分析和改造<br>通过插件形式引入UglifyJs，利用UglifyJs分析JS代码语法树，理解代码含义，<br>从而去掉无效代码，去掉日志输出代码，缩短变量名等优化,仅用于es5<br>UglifyJsPlugin:封装UglifyJs实现压缩<br>ParallelUglifyPlugin：多进行并行处理压缩<br>uglifyjsWebpackPlugin:引入UglifyES，压缩es6，要去掉.babelrc文件中的babel-preset-env，否则会将es6转es5<br>css-loader?minimize:压缩CSS<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line">1.UglifyJsPlugin</span><br><span class="line">const UglifyJSPlugin = require(&apos;webpack/lib/optimize/UglifyJsPlugin&apos;);//使用内置插件</span><br><span class="line">module.exports = &#123;</span><br><span class="line">  plugins: [</span><br><span class="line">     new UglifyJSPlugin(&#123;</span><br><span class="line">      compress: &#123;</span><br><span class="line">        // 在 UglifyES 删除没有用到的代码时不输出警告</span><br><span class="line">        warnings: false,</span><br><span class="line">        // 删除所有的 `console` 语句，可以兼容ie浏览器</span><br><span class="line">        drop_console: true,</span><br><span class="line">        // 内嵌定义了但是只用到一次的变量</span><br><span class="line">        collapse_vars: true,</span><br><span class="line">        // 提取出出现多次但是没有定义成变量去引用的静态值</span><br><span class="line">        reduce_vars: true,</span><br><span class="line">      &#125;,</span><br><span class="line">      output: &#123;</span><br><span class="line">        // 最紧凑的输出，默认会保留空格</span><br><span class="line">        beautify: false,</span><br><span class="line">        // 删除所有的注释</span><br><span class="line">        comments: false,</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;),</span><br><span class="line">  ],</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">2.uglifyjs-webpack-plugin</span><br><span class="line">const UglifyESPlugin = require(&apos;uglifyjs-webpack-plugin&apos;);</span><br><span class="line">module.exports = &#123;</span><br><span class="line">  plugins: [</span><br><span class="line">     new UglifyESPlugin(&#123;</span><br><span class="line">      uglifyOptions: &#123;//相比UglifyJSPlugin 多了一层</span><br><span class="line">        compress: &#123;</span><br><span class="line">          // 在 UglifyES 删除没有用到的代码时不输出警告</span><br><span class="line">          warnings: false,</span><br><span class="line">          // 删除所有的 `console` 语句，可以兼容ie浏览器</span><br><span class="line">          drop_console: true,</span><br><span class="line">          // 内嵌定义了但是只用到一次的变量</span><br><span class="line">          collapse_vars: true,</span><br><span class="line">          // 提取出出现多次但是没有定义成变量去引用的静态值</span><br><span class="line">          reduce_vars: true,</span><br><span class="line">        &#125;,</span><br><span class="line">        output: &#123;</span><br><span class="line">          // 最紧凑的输出</span><br><span class="line">          beautify: false,</span><br><span class="line">          // 删除所有的注释</span><br><span class="line">          comments: false,</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;),</span><br><span class="line">  ],</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">3.压缩CSS</span><br><span class="line">const path = require(&apos;path&apos;);</span><br><span class="line">const &#123;WebPlugin&#125; = require(&apos;web-webpack-plugin&apos;);</span><br><span class="line">const ExtractTextPlugin = require(&apos;extract-text-webpack-plugin&apos;);</span><br><span class="line"></span><br><span class="line">module.exports = &#123;</span><br><span class="line">  module: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        test: /\.css/,// 增加对 CSS 文件的支持</span><br><span class="line">        // 提取出 Chunk 中的 CSS 代码到单独的文件中</span><br><span class="line">        use: ExtractTextPlugin.extract(&#123;</span><br><span class="line">          use: [&apos;css-loader?minimize&apos;] // 压缩 CSS 代码</span><br><span class="line">        &#125;),</span><br><span class="line">      &#125;,</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    // 用 WebPlugin 生成对应的 HTML 文件</span><br><span class="line">    new WebPlugin(&#123;</span><br><span class="line">      template: &apos;./template.html&apos;, // HTML 模版文件所在的文件路径</span><br><span class="line">      filename: &apos;index.html&apos; // 输出的 HTML 的文件名称</span><br><span class="line">    &#125;),</span><br><span class="line">    new ExtractTextPlugin(&#123;</span><br><span class="line">      filename: `[name]_[contenthash:8].css`,// 给输出的 CSS 文件名称加上 hash 值</span><br><span class="line">    &#125;),</span><br><span class="line">  ],</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<h3 id="使用CDN加速"><a href="#使用CDN加速" class="headerlink" title="使用CDN加速"></a>使用CDN加速</h3><p>webpack接入CDN需要满足：<br>1.静态资源的导入URL需要变成指向CDN服务的绝对路径URL，而不是相对于HTML文件的URL<br>2.静态资源的文件名需要带上由文件内容算出来的Hash值，以防止被缓存<br>3.将不同类型资源放到不同域名CDN服务上，以防止资源的并行加载阻塞<br>实现主要依赖publicPath设置存放静态资源的CDN目录URL<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line">const path = require(&apos;path&apos;);</span><br><span class="line">const UglifyJsPlugin = require(&apos;webpack/lib/optimize/UglifyJsPlugin&apos;);</span><br><span class="line">const ExtractTextPlugin = require(&apos;extract-text-webpack-plugin&apos;);</span><br><span class="line">const DefinePlugin = require(&apos;webpack/lib/DefinePlugin&apos;);</span><br><span class="line">const &#123;WebPlugin&#125; = require(&apos;web-webpack-plugin&apos;);</span><br><span class="line"></span><br><span class="line">module.exports = &#123;</span><br><span class="line">  entry: &#123;</span><br><span class="line">    // Chunk app 的 JS 执行入口文件</span><br><span class="line">    app: &apos;./main.js&apos;</span><br><span class="line">  &#125;,</span><br><span class="line">  output: &#123;</span><br><span class="line">    // 给输出的 JavaScript 文件名称加上 Hash 值</span><br><span class="line">    filename: &apos;[name]_[chunkhash:8].js&apos;,</span><br><span class="line">    path: path.resolve(__dirname, &apos;./dist&apos;),</span><br><span class="line">    // 指定存放 JavaScript 文件的线上目录</span><br><span class="line">    publicPath: &apos;//js.cdn.com/id/&apos;,</span><br><span class="line">  &#125;,</span><br><span class="line">  module: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        test: /\.js$/,</span><br><span class="line">        use: [&apos;babel-loader&apos;],</span><br><span class="line">        // 排除 node_modules 目录下的文件，node_modules 目录下的文件都是采用的 ES5 语法，没必要再通过 Babel 去转换</span><br><span class="line">        exclude: path.resolve(__dirname, &apos;node_modules&apos;),</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        // 增加对 CSS 文件的支持</span><br><span class="line">        test: /\.css/,</span><br><span class="line">        // 提取出 Chunk 中的 CSS 代码到单独的文件中</span><br><span class="line">        use: ExtractTextPlugin.extract(&#123;</span><br><span class="line">          // 压缩 CSS 代码</span><br><span class="line">          use: [&apos;css-loader?minimize&apos;],</span><br><span class="line">          // 指定存放 CSS 中导入的资源（例如图片）的线上目录</span><br><span class="line">          publicPath: &apos;//img.cdn.com/id/&apos;</span><br><span class="line">        &#125;),</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        // 增加对 PNG 文件的支持</span><br><span class="line">        test: /\.png/,</span><br><span class="line">        // 给输出的 PNG 文件名称加上 Hash 值</span><br><span class="line">        use: [&apos;file-loader?name=[name]_[hash:8].[ext]&apos;],</span><br><span class="line">      &#125;,</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    // 使用 WebPlugin 自动生成 HTML，会根据publicPath用线上地址替换原来相对地址</span><br><span class="line">    new WebPlugin(&#123;</span><br><span class="line">      // HTML 模版文件所在的文件路径</span><br><span class="line">      template: &apos;./template.html&apos;,</span><br><span class="line">      // 输出的 HTML 的文件名称</span><br><span class="line">      filename: &apos;index.html&apos;,</span><br><span class="line">      // 指定存放 CSS 文件的线上目录</span><br><span class="line">      stylePublicPath: &apos;//css.cdn.com/id/&apos;,</span><br><span class="line">    &#125;),</span><br><span class="line">    new ExtractTextPlugin(&#123;</span><br><span class="line">      // 给输出的 CSS 文件名称加上 Hash 值</span><br><span class="line">      filename: `[name]_[contenthash:8].css`,</span><br><span class="line">    &#125;),</span><br><span class="line">    new DefinePlugin(&#123;</span><br><span class="line">      // 定义 NODE_ENV 环境变量为 production 去除开发时才需要的部分</span><br><span class="line">      &apos;process.env&apos;: &#123;</span><br><span class="line">        NODE_ENV: JSON.stringify(&apos;production&apos;)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;),</span><br><span class="line">    // 压缩输出的 JS 代码</span><br><span class="line">  ],</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<h2 id="使用tree-Shaking剔除用不上的代码"><a href="#使用tree-Shaking剔除用不上的代码" class="headerlink" title="使用tree Shaking剔除用不上的代码"></a>使用tree Shaking剔除用不上的代码</h2><p>Tree Shaking可以分析出那些代码被用上了，哪些没有<br>Tree Shaking正常工作的前提是，提交给webpack的js代码必须采用了ES6的模块化语法，因为es6模块化语法是静态的<br>（在导入，导出语句中的路径必须是静态字符串，而且不能放入其他代码块中），这让webpack可以简单地分析出那些export被import了。<br>实现：<br>1.修改.babelrc文件，保留ES6语法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;presets&quot;:[</span><br><span class="line">    [</span><br><span class="line">      &quot;env&quot;,</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;module&quot;:false//关闭模块转换功能，保留ES6语法</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以使用webpack –display-used-exports查看分析结果<br>2.使用uglifyJS剔除用不上的代码<br>可以在直接在配置文件中配置<br>也可以使用命令行执行<br>webpack –display-used-exports –optimize-minimize</p>
+<p>处理但第三方库时，利用mainField告诉webpack采用那份入口文件，<br>当指定入口于文件采用es6模块化语法时，从而可以使用treeShaking进行代码优化</p>
+<h3 id="提取公共代码"><a href="#提取公共代码" class="headerlink" title="提取公共代码"></a>提取公共代码</h3><p>问题：<br>相同资源被重复加载，浪费用户的流量和服务器成本<br>每个页面需要加载的资源太大，导致网页首屏加载缓慢，影响用户体验</p>
+<p>解决：<br>将多个页面公共代码部分抽离成单独文件，用户在第一次访问后，公共文件代码被浏览器缓存<br>在用户切换其他页面时，则不会再重新加载存放公共代码的文件，而是直接从缓存中获取<br>从而<br>减少网络传输流量，降低服务器成本<br>虽然用户第一次打开网站的速度得不到优化，但之后访问其他页面的速度将提高</p>
+<p>实现：<br>–根据网站所使用的技术栈，找出网站所有页面都需要用到的基础库(第三方库)，将他们提取到一个单独的文件base.js中<br>该文件包含了所有网页的基础运行环境，用于长期缓存，提高响应速度</p>
+<p>–剔除了各个页面中被base.js包含的部分代码后，再找出所有页面都依赖的公共部分的代码，将他们提取到commom.js</p>
+<p>–再为每个网页都生成一个单独的文件，不包含base.js和common.js中包含的部分，只包含各页面单独需要的部分代码</p>
+<p>– 依赖CommonsChunkPlugin插件<br>CommonsChunkPlugin实例会生成一个新的Chunk，这个chunk中包含了被提取的代码<br>通过name属性告诉插件新生成的chunk的名称，chunks属性指明从哪些已有chunk中提取公共部分</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">const path = require(&apos;path&apos;);</span><br><span class="line">const UglifyJsPlugin = require(&apos;webpack/lib/optimize/UglifyJsPlugin&apos;);</span><br><span class="line">const ExtractTextPlugin = require(&apos;extract-text-webpack-plugin&apos;);</span><br><span class="line">const DefinePlugin = require(&apos;webpack/lib/DefinePlugin&apos;);</span><br><span class="line">const CommonsChunkPlugin = require(&apos;webpack/lib/optimize/CommonsChunkPlugin&apos;);</span><br><span class="line">const &#123;AutoWebPlugin&#125; = require(&apos;web-webpack-plugin&apos;);</span><br><span class="line"></span><br><span class="line">// 使用 AutoWebPlugin，自动寻找 pages 目录下的所有目录，把每一个目录看成一个单页应用</span><br><span class="line">const autoWebPlugin = new AutoWebPlugin(&apos;pages&apos;, &#123;</span><br><span class="line">  template: &apos;./template.html&apos;, // HTML 模版文件所在的文件路径</span><br><span class="line">  // 提取出所有页面公共的代码</span><br><span class="line">  commonsChunk: &#123;</span><br><span class="line">    name: &apos;common&apos;,// 提取出公共代码 Chunk 的名称</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">module.exports = &#123;</span><br><span class="line">  // AutoWebPlugin 会找为寻找到的所有单页应用，生成对应的入口配置，</span><br><span class="line">  // autoWebPlugin.entry 方法可以获取到生成入口配置</span><br><span class="line">  entry: autoWebPlugin.entry(&#123;</span><br><span class="line">    // 这里可以加入你额外需要的 Chunk 入口</span><br><span class="line">    base: &apos;./base.js&apos;</span><br><span class="line">  &#125;),</span><br><span class="line">  output: &#123;</span><br><span class="line">    filename: &apos;[name]_[chunkhash:8].js&apos;,// 给输出的文件名称加上 hash 值</span><br><span class="line">    path: path.resolve(__dirname, &apos;./dist&apos;),</span><br><span class="line">  &#125;,</span><br><span class="line">  module: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        test: /\.js$/,</span><br><span class="line">        use: [&apos;babel-loader&apos;],</span><br><span class="line">        // 排除 node_modules 目录下的文件，node_modules 目录下的文件都是采用的 ES5 语法，没必要再通过 Babel 去转换</span><br><span class="line">        exclude: path.resolve(__dirname, &apos;node_modules&apos;),</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        test: /\.css/,// 增加对 CSS 文件的支持</span><br><span class="line">        // 提取出 Chunk 中的 CSS 代码到单独的文件中</span><br><span class="line">        use: ExtractTextPlugin.extract(&#123;</span><br><span class="line">          use: [&apos;css-loader?minimize&apos;] // 压缩 CSS 代码</span><br><span class="line">        &#125;),</span><br><span class="line">      &#125;,</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    autoWebPlugin,</span><br><span class="line">    // 为了从 common 中提取出 base 也包含的部分,减小common体积</span><br><span class="line">    new CommonsChunkPlugin(&#123;</span><br><span class="line">      // 从 common 和 base 两个现成的 Chunk 中提取公共的部分</span><br><span class="line">      chunks: [&apos;common&apos;, &apos;base&apos;],</span><br><span class="line">      // 把公共的部分放到 base 中</span><br><span class="line">      name: &apos;base&apos;</span><br><span class="line">    &#125;),</span><br><span class="line">    new ExtractTextPlugin(&#123;</span><br><span class="line">      filename: `[name]_[contenthash:8].css`,// 给输出的 CSS 文件名称加上 hash 值</span><br><span class="line">    &#125;),</span><br><span class="line">    new DefinePlugin(&#123;</span><br><span class="line">      // 定义 NODE_ENV 环境变量为 production 去除 react 代码中的开发时才需要的部分</span><br><span class="line">      &apos;process.env&apos;: &#123;</span><br><span class="line">        NODE_ENV: JSON.stringify(&apos;production&apos;)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;),</span><br><span class="line">    // 压缩输出的 JS 代码</span><br><span class="line">  ],</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>common.js没有内容的时候解决<br>1.CommonsChunkPlugin的minChunks属性表示文件要被提取出来时需要在指定的Chunks中出现的最小次数，值越小，被提到common中的文件越多<br>2.根据各个页面之间的相关性选取其中的部分页面时，可用CommonChunkPlugin提取这部分被选出的页面的公共部分，<br>而不是提取所有页面的公共部分，而且这样的操作可以叠加多次，缺点是配置复杂，需要根据页面之间关系去思考如何配置<br>但该方法不通用</p>
+<h3 id="分割代码按需加载"><a href="#分割代码按需加载" class="headerlink" title="分割代码按需加载"></a>分割代码按需加载</h3><p>问题<br>单页面应用一次性加载所有功能代码，实际在每个阶段只可能使用其中一部分</p>
+<p>解决<br>将整个网站划分成一个个小功能，再按照每个功能的相关程度将他们分成几类<br>将每一类合并成一个Chunk,按需加载对应的Chunk<br>不要按需加载用户首次打开网站时需要看到的画面所对应的功能，将其放到执行入口所在的chunk中，<br>以减少用户能感知的网页加载时间<br>对于不依赖大量代码的功能点，可对其进行按需加载</p>
+<p>实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//oneName.js</span><br><span class="line">module.exports= function()&#123;&#125;</span><br><span class="line"></span><br><span class="line">//加载语句</span><br><span class="line">import(/* webpackChunkName:&quot;oneName&quot; */ &apos;./oneName&apos;).then((oneName)=&gt;&#123;</span><br><span class="line">  oneName()</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>webpack内置了对import(*)语句的支持，当webpack遇到类似的语句时会这样处理<br>以oneName.js为入口重新生成一个Chunk<br>当代码执行到import所在的语句时才去加载由Chunk对应生成的文件<br>import返回一个Promise,当文件加载成功时可以在Promise的then方法中获取oneName.js导出的内容</p>
+<p>/* webpackChunkName:”oneName” */ 含义是为动态生成的Chunk赋予一个名称，以方便我们追踪和调试代码<br>如果不指定，则其默认的名称将会是[id].js<br>同样需要在webpack中配置chunkFilename属性，来指定动态生成的Chunk在输出时文件名称<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line">const path = require(&apos;path&apos;);</span><br><span class="line"></span><br><span class="line">module.exports = &#123;</span><br><span class="line">  // JS 执行入口文件</span><br><span class="line">  entry: &#123;</span><br><span class="line">    main: &apos;./main.js&apos;,</span><br><span class="line">  &#125;,</span><br><span class="line">  output: &#123;</span><br><span class="line">    // 为从 entry 中配置生成的 Chunk 配置输出文件的名称</span><br><span class="line">    filename: &apos;[name].js&apos;,</span><br><span class="line">    // 为动态加载的 Chunk 配置输出文件的名称</span><br><span class="line">    chunkFilename: &apos;[name].js&apos;,</span><br><span class="line">    path: path.resolve(__dirname, &apos;./dist&apos;),</span><br><span class="line">  &#125;,</span><br><span class="line">  module: &#123;</span><br><span class="line">    rules: [</span><br><span class="line">      &#123;</span><br><span class="line">        test: /\.js$/,</span><br><span class="line">        use: [&apos;babel-loader&apos;],</span><br><span class="line">        exclude: path.resolve(__dirname, &apos;node_modules&apos;),</span><br><span class="line">      &#125;,</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  devtool: &apos;source-map&apos; // 输出 source-map 方便直接调试 ES6 源码</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">//在.babellrc中需要引入组件来识别import(*)语法</span><br><span class="line">&#123;</span><br><span class="line">  &quot;presets&quot;:[</span><br><span class="line">    &quot;env&quot;,</span><br><span class="line">    &quot;react&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;plugins&quot;:[</span><br><span class="line">    &quot;syntax-dynamic-import&quot;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">//实际应用</span><br><span class="line">import React, &#123;PureComponent, createElement&#125; from &apos;react&apos;;</span><br><span class="line">import &#123;render&#125; from &apos;react-dom&apos;;</span><br><span class="line">import &#123;HashRouter, Route, Link&#125; from &apos;react-router-dom&apos;;</span><br><span class="line">import PageHome from &apos;./pages/home&apos;;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 异步加载组件</span><br><span class="line"> * @param load 组件加载函数，load 函数会返回一个 Promise，在文件加载完成时 resolve</span><br><span class="line"> * @returns &#123;AsyncComponent&#125; 返回一个高阶组件用于封装需要异步加载的组件</span><br><span class="line"> */</span><br><span class="line">function getAsyncComponent(load) &#123;</span><br><span class="line">  return class AsyncComponent extends PureComponent &#123;</span><br><span class="line"></span><br><span class="line">    componentDidMount() &#123;</span><br><span class="line">      // 在高阶组件 DidMount 时才去执行网络加载步骤</span><br><span class="line">      load().then((&#123;default: component&#125;) =&gt; &#123;</span><br><span class="line">        // 代码加载成功，获取到了代码导出的值，调用 setState 通知高阶组件重新渲染子组件</span><br><span class="line">        this.setState(&#123;</span><br><span class="line">          component,</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    render() &#123;</span><br><span class="line">      const &#123;component&#125; = this.state || &#123;&#125;;</span><br><span class="line">      // component 是 React.Component 类型，需要通过 React.createElement 生产一个组件实例</span><br><span class="line">      return component ? createElement(component) : null;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 根组件</span><br><span class="line">function App() &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;HashRouter&gt;</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;nav&gt;</span><br><span class="line">          &lt;Link to=&apos;/&apos;&gt;Home&lt;/Link&gt; | &lt;Link to=&apos;/about&apos;&gt;About&lt;/Link&gt; | &lt;Link to=&apos;/login&apos;&gt;Login&lt;/Link&gt;</span><br><span class="line">        &lt;/nav&gt;</span><br><span class="line">        &lt;hr/&gt;</span><br><span class="line">        &lt;Route exact path=&apos;/&apos; component=&#123;PageHome&#125;/&gt;</span><br><span class="line">        &lt;Route path=&apos;/about&apos; component=&#123;getAsyncComponent(</span><br><span class="line">          // 异步加载函数，异步地加载 PageAbout 组件</span><br><span class="line">          () =&gt; import(/* webpackChunkName: &apos;page-about&apos; */&apos;./pages/about&apos;)</span><br><span class="line">        )&#125;</span><br><span class="line">        /&gt;</span><br><span class="line">        &lt;Route path=&apos;/login&apos; component=&#123;getAsyncComponent(</span><br><span class="line">          // 异步加载函数，异步地加载 PageAbout 组件</span><br><span class="line">          () =&gt; import(/* webpackChunkName: &apos;page-login&apos; */&apos;./pages/login&apos;)</span><br><span class="line">        )&#125;</span><br><span class="line">        /&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/HashRouter&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 渲染根组件</span><br><span class="line">render(&lt;App/&gt;, window.document.getElementById(&apos;app&apos;));</span><br></pre></td></tr></table></figure></p>
+<h2 id="提升流畅度"><a href="#提升流畅度" class="headerlink" title="提升流畅度"></a>提升流畅度</h2><p>提升代码性能<br>1.使用prepack优化代码运行时效率<br>通过在编译阶段预先执行源码来得到执行结果，再直接将运行结果放到编译后的代码中，而不是在代码运行时才去求值</p>
+<p>prepack工作原理和流程大致如下：<br>通过Babel将JS源码解析成抽象语法树(AST)，以更细粒度地分析源码<br>PrePack实现了一个JS解释器，用于执行源码，借助这个解释器，Prepack才能理解源码具体是如何执行的<br>并将执行过程中的结果返回到输出中</p>
+<p>因为还处于开发阶段，不能识别DOM api和部分nodejs API 代码，优化后文件尺寸可能大大增加，性能可能更差所以目前还不适合用于处理线上代码</p>
+<p>2.开启Scope Hoisting<br>分析模块之间的依赖关系，尽可能将被打散的模块合并到一个函数中，大前提是不能造成代码冗余，<br>因此只有那些被引用了一次的模块才能被合并<br>由于Scope Hosting需要分析模块之间的依赖关系，因此源码必须采用ES6语句，不然它将无法生效<br>对于非ES6模块化语法的代码，webpack会降级处理且不使用Scope Hoisting优化。<br>为了知道webpack对哪些代码做了降级处理，可以在启动webpack时带上–display-optimization-bailout参数<br>这样输出的日志就会告知是什么原因导致了降级处理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">const path = require(&apos;path&apos;);</span><br><span class="line">const ModuleConcatenationPlugin = require(&apos;webpack/lib/optimize/ModuleConcatenationPlugin&apos;);</span><br><span class="line"></span><br><span class="line">module.exports = &#123;</span><br><span class="line">  // JS 执行入口文件</span><br><span class="line">  entry: &apos;./main.js&apos;,</span><br><span class="line">  output: &#123;</span><br><span class="line">    // 把所有依赖的模块合并输出到一个 bundle.js 文件</span><br><span class="line">    filename: &apos;bundle.js&apos;,</span><br><span class="line">    // 输出文件都放到 dist 目录下</span><br><span class="line">    path: path.resolve(__dirname, &apos;./dist&apos;),</span><br><span class="line">  &#125;,</span><br><span class="line">  resolve: &#123;</span><br><span class="line">    // 针对 Npm 中的第三方模块优先采用 jsnext:main 中指向的 ES6 模块化语法的文件</span><br><span class="line">    mainFields: [&apos;jsnext:main&apos;, &apos;browser&apos;, &apos;main&apos;]</span><br><span class="line">  &#125;,</span><br><span class="line">  plugins: [</span><br><span class="line">    // 开启 Scope Hoisting</span><br><span class="line">    new ModuleConcatenationPlugin(),</span><br><span class="line">  ],</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>好处：<br>代码体积更小，因为函数申明语句会产生大量代码<br>代码在运行时因为创建的函数作用域变少，所以内存开销也变小了</p>
+<h1 id="输出分析"><a href="#输出分析" class="headerlink" title="输出分析"></a>输出分析</h1><p>执行命令<br>webpack –profile –json &gt;stats.json<br>可以将构建相关的信息输出到stats.json文件中<br>1.打开http:\//webpack.github.io/analyse/ 上传stats文件，使用官方Webpack Analyse分析输出结果<br>2.使用webpack-bundle-analyzer进行分析<br>安装webpack-bundle-analyzer到全局<br>在项目根目录中执行webpack-bundle-analyzer，浏览器会打开对应网页并展现打包结果</p>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/webpack-dist.config.js" target="_blank" rel="noopener">侧重优化输出质量的配置</a><br><a href="https://github.com/YooHannah/algorithm/blob/master/webpack.config.js" target="_blank" rel="noopener">侧重优化开发体验的配置</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/performance/" rel="tag"># performance</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/vue/vueCompile.html" rel="next" title="Vue编译初探">
+                <i class="fa fa-chevron-left"></i> Vue编译初探
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/performance/webpackTheory.html" rel="prev" title="webpack原理">
+                webpack原理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">232</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#优化开发体验"><span class="nav-number">1.</span> <span class="nav-text">优化开发体验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#优化构建速度"><span class="nav-number">1.1.</span> <span class="nav-text">优化构建速度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缩小文件查找范围"><span class="nav-number">1.1.1.</span> <span class="nav-text">缩小文件查找范围</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用DLLPlugin"><span class="nav-number">1.1.2.</span> <span class="nav-text">使用DLLPlugin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用HappyPack"><span class="nav-number">1.1.3.</span> <span class="nav-text">使用HappyPack</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用ParallelUglifyPlugin"><span class="nav-number">1.1.4.</span> <span class="nav-text">使用ParallelUglifyPlugin</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优化使用体验"><span class="nav-number">1.2.</span> <span class="nav-text">优化使用体验</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#优化文件监听"><span class="nav-number">1.2.1.</span> <span class="nav-text">优化文件监听</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优化自动刷新性能"><span class="nav-number">1.2.2.</span> <span class="nav-text">优化自动刷新性能</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#优化输出质量"><span class="nav-number">2.</span> <span class="nav-text">优化输出质量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#减少用户能够感知到的加载时间-首屏时间"><span class="nav-number">2.1.</span> <span class="nav-text">减少用户能够感知到的加载时间(首屏时间)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#区分环境"><span class="nav-number">2.1.1.</span> <span class="nav-text">区分环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#压缩代码"><span class="nav-number">2.1.2.</span> <span class="nav-text">压缩代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用CDN加速"><span class="nav-number">2.1.3.</span> <span class="nav-text">使用CDN加速</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用tree-Shaking剔除用不上的代码"><span class="nav-number">2.2.</span> <span class="nav-text">使用tree Shaking剔除用不上的代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#提取公共代码"><span class="nav-number">2.2.1.</span> <span class="nav-text">提取公共代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分割代码按需加载"><span class="nav-number">2.2.2.</span> <span class="nav-text">分割代码按需加载</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提升流畅度"><span class="nav-number">2.3.</span> <span class="nav-text">提升流畅度</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#输出分析"><span class="nav-number">3.</span> <span class="nav-text">输出分析</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

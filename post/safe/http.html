@@ -1,0 +1,727 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="safe,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="在浏览器的地址栏输入url后发生了什么 粗略的回答的话，就是浏览器向服务器发送该url,浏览器根据该url找到相应的资源，再把资源返回给浏览器，即使我们看到的页面内容 细致的回答的话，浏览器会在应用层利用DNS协议解析域名生成ip地址，利用http协议生成一个http请求然后传递给传输层，传输层将根据TCP协议将这个http请求报文进行分割并打上序号标记、端口号和三次握手标志后转发给网络层，网络层">
+<meta name="keywords" content="safe">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于HTTP">
+<meta property="og:url" content="http://yoohannah.github.io/post/safe/http.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="在浏览器的地址栏输入url后发生了什么 粗略的回答的话，就是浏览器向服务器发送该url,浏览器根据该url找到相应的资源，再把资源返回给浏览器，即使我们看到的页面内容 细致的回答的话，浏览器会在应用层利用DNS协议解析域名生成ip地址，利用http协议生成一个http请求然后传递给传输层，传输层将根据TCP协议将这个http请求报文进行分割并打上序号标记、端口号和三次握手标志后转发给网络层，网络层">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoohannah.github.io/image/browerurl.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/header1.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/header2.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/header3.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/header4.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/header5.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/header6.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/header7.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/header8.png">
+<meta property="og:updated_time" content="2024-09-01T03:26:27.602Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于HTTP">
+<meta name="twitter:description" content="在浏览器的地址栏输入url后发生了什么 粗略的回答的话，就是浏览器向服务器发送该url,浏览器根据该url找到相应的资源，再把资源返回给浏览器，即使我们看到的页面内容 细致的回答的话，浏览器会在应用层利用DNS协议解析域名生成ip地址，利用http协议生成一个http请求然后传递给传输层，传输层将根据TCP协议将这个http请求报文进行分割并打上序号标记、端口号和三次握手标志后转发给网络层，网络层">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/browerurl.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/safe/http.html">
+
+
+
+
+
+  <title> 关于HTTP | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/safe/http.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                关于HTTP
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-05T22:53:37+08:00">
+                2017-10-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="在浏览器的地址栏输入url后发生了什么"><a href="#在浏览器的地址栏输入url后发生了什么" class="headerlink" title="在浏览器的地址栏输入url后发生了什么"></a>在浏览器的地址栏输入url后发生了什么</h1><p> 粗略的回答的话，就是浏览器向服务器发送该url,浏览器根据该url找到相应的资源，再把资源返回给浏览器，即使我们看到的页面内容<br> 细致的回答的话，浏览器会在应用层利用DNS协议解析域名生成ip地址，利用http协议生成一个http请求然后传递给传输层，传输层将根据TCP协议将这个http请求报文进行分割并打上序号标记、端口号和三次握手标志后转发给网络层，网络层会利用ARP协议根据ip地址查到MAC地址,IP协议对数据封装MAC地址等信息，将打包好的数据包发送给链路层再封装然后发送出去，经过一系列转发，忽略路由、CDN的缓存策略，中转到达服务器后,服务器再按链路层，网路层，传输层，应用层的顺序，从下到上依次解封数据信息，找到资源后，同样分割，封装打包再传给客户端浏览器。</p>
+<h2 id="重新看待这个问题"><a href="#重新看待这个问题" class="headerlink" title="重新看待这个问题"></a>重新看待这个问题</h2><p> <a href="https://www.processon.com/view/link/5f14489ce401fd06f3e2fd4b" target="_blank" rel="noopener">流程图1</a><br> <a href="https://www.processon.com/view/link/5f1448cee0b34d44f052743c" target="_blank" rel="noopener">流程图2</a><br> <img src="/image/browerurl.png" alt="browerurl"></p>
+<h3 id="浏览器渲染过程"><a href="#浏览器渲染过程" class="headerlink" title="浏览器渲染过程"></a>浏览器渲染过程</h3><p> 解析HTML构建DOM树时，渲染引擎会先将HTML元素标签解析成<br> 由多个DOM元素对象节点组成且具有节点父子关系的DOM树结构，<br> 然后根据DOM树结构的每个节点顺序提取计算使用的CSS规则<br> 并重新计算DOM树结构的样式数据，<br> 生成一个带有样式描述的dom渲染树对象<br> DOM渲染树生成结束后进入渲染树的布局阶段<br> 即根据每个渲染树节点在页面中的大小和位置，将节点固定到页面对应位置上<br> 这个阶段主要是元素的布局属性（position，float,margin等属性）<br> 即在浏览器中绘制页面上元素节点的位置<br> 绘制阶段将渲染树节点的背景，颜色，文本等样式信息应用到每个节点上<br> 这个阶段主要是元素的内部显示样式（color,background,text-shadow等属性）生效<br> 最终完成整个DOM在页面上的绘制显示</p>
+<p> 不同浏览器内核渲染过程有区别<br> Webkit内核(google,safari)中HTML和css解析可以认为是并行的，生成的渲染对象被叫做渲染树（render tree）<br> Geoko内核（firefox）则是先解析html生成sink后再开始解析CSS，生成的渲染对象称为Frame树(Frame tree)</p>
+<p> 在渲染树生成阶段，DOM树中的结点会在CSS分析树中根据元素，类，id选择器来提取与之对应元素的一条或多条CSSRule,进行CSS规则的层叠和权重计算，<br> 得到最终生成的样式CSSRule并添加到DOM渲染树上，<br> 当每个Dom节点提取CSS样式完成时，用于页面布局和绘制的DOM渲染树便形成了<br> 在一个已经形成的DOM渲染树中，节点的CSS规则可通过<br> document.defaultView.getComputedStyle(element,null)<br> 方法获取</p>
+<h1 id="关于-TCP-IP-协议"><a href="#关于-TCP-IP-协议" class="headerlink" title="关于 TCP/IP 协议"></a>关于 TCP/IP 协议</h1><p>1.不同的硬件、操作系统之间的通信，所有这一切都需要一种规则，这种规则即协议<br>2.与互联网相关联的协议集合起来就是TCP/IP<br>3.http协议是TCP/IP协议的一个子集<br>4.URI(统一资源标识符)，用字符串标识某一互联网资源，而url表示资源的地点</p>
+<h2 id="分层管理"><a href="#分层管理" class="headerlink" title="分层管理"></a>分层管理</h2><p>好处:局部改变设计，只需把变动的层替换，无需整体替换<br>应用层：应用服务间通信，如FTP,DNS服务，应用http协议<br>传输层：网络连接中两台计算机之间数据传输，应用TCP和UDP协议<br>网络层：处理网络上流动的数据包，应用IP协议<br>链路层：处理连接网络的硬件之间通信，包括操作系统，硬件的设备驱动，光纤等。</p>
+<h2 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h2><p>目的在于确保准确无误的将数据送达目的地<br>TCP协议在封装数据时会封装SYN和ACK作为握手标识<br>发送端首先发送一个带SYN标识的数据包给对方，接收端收到后，回传一个带有SYN/ACK标识的数据包以示传达确认信息，最后，发送端再回传一个带ACK标识的数据包，代表‘握手’结束<br>若在握手过程中某个阶段莫名中断，TCP协议会再次以相同的顺序发送相同的数据包</p>
+<h1 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h1><p>1.请求报文由请求方法、请求URI、协议版本、可选的请求首部字段和内容实体构成<br>2.响应报文基本上由协议版本、状态码(表示请求成功或失败的数字代码)、用以解释状态码的原因短语、可选的响应首部字段以及实体主体构成<br>3.http是无状态协议，即不保存之前发送过的请求或响应<br>4.持久链接的特点：只要任意一端没有明确提出断开连接，则保持TCP连接状态，<br>旨在建立1次TCP连接后进行多次请求和响应的交互<br>5.管线化技术：在持久链接状态下，不用等待响应亦可直接发送下一个请求，实现并行发送多个请求<br>6.请求方法<br>GET:访问已被URI识别的资源,获取响应内容<br>POST：传输实体的主体<br>PUT：在请求报文主体中包含文件内容，然后保存到请求URI指定的位置，自身不带验证机制<br>HEAD:用于确认URI的有效性及资源更新的日期时间等<br>DELETE：按请求URI删除指定的资源，不带验证机制<br>OPTION：查询针对请求URI指定的资源支持的方法<br>TRACE: 将之前的请求通信环回给客户端,可以查询发送出去的请求是怎样被加工修改/篡改的，但容易引发XST攻击<br>CONNECT：在与代理服务器通信时建立隧道，实现用隧道协议进行TCP通信。主要使用SSL和TLS协议把通信内容加密后经网络隧道传输</p>
+<h2 id="COOKIE状态管理"><a href="#COOKIE状态管理" class="headerlink" title="COOKIE状态管理"></a>COOKIE状态管理</h2><p>客户端在未携带cookie信息状态下请求服务器时，服务器会生成cookie，并记住是向谁发送的，然后在响应报文头中添加一个叫Set-Cookie的字段信息，通知客户端保存Cookie。<br>当下次客户端再往该服务器发送请求时，客户端会自动在请求报文中加入Cookie值后发送出去<br>服务器端发现客户端发送过来的Cookie后，会去检查究竟是从哪一个客户端发来的连接请求，然后对比服务器上的记录，最后得到之前的状态信息.<br>7.报文由报文首部、空格和报文主体构成</p>
+<p>请求报文的报文首部分为：请求行(请求方法,URI,HTTP版本)、请求首部字段、通用首部字段、实体首部字段、其他<br>响应报文的报文首部分为：状态行(状态码,原因短语,HTTP版本)、响应首部字段、通用首部字段、实体首部字段、其他</p>
+<p>报文主体即传输请求或响应的实体主体</p>
+<p>提升传输效率采取的方法：传输编码，对实体进行‘内容编码’，压缩传输内容，分块传输编码</p>
+<p>发送不同类型数据时，需要首部字段Content-Type<br>请求报文的Content-Type赋值mulitipart/form-data,<br>响应报文的Content-Type赋值mulitipart/byteranges,</p>
+<p>请求指定范围数据时，可以用首部字段Range指定资源的byte范围<br>例：请求开始到3000，和5000到7000字节的多重范围<br>Range:bytes=-3000,5000-7000<br>响应状态码会返回206，多重范围会在首部添加Content-Type：mulitipart/byteranges<br>如果服务器无法响应范围请求，则会返回状态码200OK和完整的实体内容</p>
+<p>内容协商机制：客户端和服务端就响应的资源内容进行交涉，然后提供给客户端最为适合的资源。<br>内容协商会以响应资源的语言、字符集、编码方式等作为判断的基准<br>对应首部字段有：Accept,Accept-Charset,Accept-Encoding,Accept-Language,Content-Language<br>内容协商技术有三类：<br>服务器驱动协商：以请求首部字段为参考，在服务器端自动处理<br>客户端驱动协商：用户在浏览器可选列表中手动选择<br>透明协商：前两者的结合体，由服务端和客户端各自进行内容协商的一种方法</p>
+<p>8.状态码</p>
+<p>1XX:请求正在处理<br>2XX:请求正常那个处理完毕<br>3XX：重定向，需要进行附加操作以完成请求，<br>4XX：服务器无法处理请求,客户端有错误发生<br>5XX：服务器处理请求出错</p>
+<p>200 OK 客户端的请求在服务器被正常处理了<br>204 No Content ，正常处理，但响应不含实体<br>206 Partial Content  成功处理了范围请求，响应只含指定范围实体</p>
+<p>301 Moved Permanently 永久重定向<br>302 Found 临时重定向<br>303 See Other 临时重定向，但只能使用get方法访问该资源<br>304 Not Modified 服务器没有找到符合客户端附带条件(If-Match,If-Range等报文首部)的资源，响应不含主体，与重定向无关,服务器告诉客户，原来缓冲的文档还可以继续使用<br>307 Temporary Redirect 临时重定向，按照浏览器标准不会从post变成GET。但浏览器不同，出现情况也可能不同</p>
+<p>400 Bad Request 请求报文存在语法错误<br>401 Unauthorized 携带信息未通过HTTP认证，没有权限访问资源<br>403 Forbidden 请求的资源被服务器拒绝访问<br>404 Not Found 无法找到请求资源</p>
+<p>500 Internal Server Error 服务器在执行请求时发生了错误，也可能是web应用存在bug或临时故障<br>502 bad gateway 网关错误<br>503 Service Unavailable 服务器暂时处于超负载或正在进行停机维护</p>
+<p>9.通信数据转发程序<br>代理：接收客户端请求并转发给源服务器，不改变URI,但在转发时会添加via首部<br>好处：利用缓存技术减少网络带宽的流量，组织内部针对特定网站的访问控制，以获取访问日志为主要目的等等<br>使用方法分两类：<br>1.是否使用缓存,例,缓存代理(预先将资源副本存在代理服务器上);<br>2.是否会修改报文,例,透明代理(对报文不做任何加工，反之非透明代理)</p>
+<p>网关：转发其他服务器数据的服务器，接收从客户端发来的请求并对请求进行处理<br>好处：能使通信线路上服务器提供非HTTP协议服务，能提高通信安全性</p>
+<p>隧道：在相隔甚远的客户端和服务器之间进行中转，并保持双方通信连接的应用程序<br>目的：确保客户端能与服务器进行安全的通信，通信双发断开连接时结束</p>
+<p>缓存：代理服务器或客户端本地磁盘内保存的资源副本 ，其实相当于是一种代理服务器<br>目的：减少对源服务器的访问，从而节省通信流量和通信时间<br>机制：超过有效期之后，会向源服务器确认资源有效性，若判断缓存失效，则再次从源服务器上获取‘新’资源</p>
+<p>10.首部字段<br>分两类：缓存代理和非缓存代理<br>缓存代理，即端到端首部，这类首部会被带到客户端或服务端，且会保存在缓存中<br>非缓存代理，即逐跳首部，只对单词转发有效，会因通过缓存或代理而不再转发</p>
+<p>通用首部：客户端和服务端都会用的首部<br><img src="/image/header1.png" alt="header1"><br>请求首部<br><img src="/image/header2.png" alt="header2"><br>响应首部<br><img src="/image/header3.png" alt="header3"><br>实体首部<br><img src="/image/header4.png" alt="header4"><br>cookie 相关首部<br><img src="/image/header5.png" alt="header5"><br>一些需要注意的字段<br>connection:close 完成本次响应后，无需等待后续请求，断开链接<br>connection:keep-alive 完成本次响应后保持链接等待后续请求</p>
+<p>connection:upgrade<br>upgrade:websocket<br>这两者组合在一起时，表示客户端申请的更换协议，<br>服务端允许切换，此时报头为101，表示还需要等待完成切换的过程</p>
+<p>content-Encoding 表示服务端压缩方法<br>Transfer-Encoding 表示服务端编码方法</p>
+<h1 id="https"><a href="#https" class="headerlink" title="https"></a>https</h1><p>http缺点</p>
+<p>1.通信使用明文(不加密)，内容可能会被窃听<br>造成原因：通信线路上的网络设备、光纤等不可能是个人私有物，不排除某个环节会遭到恶意窥视或窃听<br>解决办法：加密处理防止被窃听<br>方式一：通信加密，使用SSL和TLS建立安全通信线路，再在这条线路上进行HTTP通信<br>方式二：内容加密，对HTTP协议传输的内容本身加密，前提要求服务端和客户端都具备加密解密机制</p>
+<p>2.不验证通信方的身份，因此可能遭遇伪装<br>造成原因：服务器不管谁发来的请求都会给一个响应，客户端不管是谁的响应都接收<br>解决办法：查明对方证书，证书由第三发颁发，通信前先确认对方证书,验证时要通信的双方后，再继续通信</p>
+<p>3.无法证明报文完整性，所以有可能已遭篡改<br>中间人攻击：请求或响应在传输途中，遭攻击者拦截并篡改内容的攻击<br>造成原因：中间人攻击<br>解决办法：MD5和SHA-1等散列值校验的方法,以及用来确认文件的数字签名方法,但以上方法都需要用户本人自己验证</p>
+<h2 id="HTTP-加密-认证-完整性保护-HTTPS"><a href="#HTTP-加密-认证-完整性保护-HTTPS" class="headerlink" title="HTTP+加密+认证+完整性保护 = HTTPS"></a>HTTP+加密+认证+完整性保护 = HTTPS</h2><p>HTTP通信接口部分用SSL和TLS协议代替，即不再是http与TCP通信，而是http和SSL再和TCP通信<br>共享/对称密钥加密：加密和解密用同一个密钥<br>公开密钥加密：<br>使用一对非对称的密钥,一把叫做私有密钥，另一把叫做公开密钥,<br>使用公开密钥进行加密发送密文，收信方收到信息后用私有密钥进行解密<br>公开密钥加密方式比共享密钥加密方式处理起来更麻烦</p>
+<p>HTTPS混合加密：在交换密钥环节使用公开密钥加密方式，之后的建立通信交换报文阶段则使用共享密钥加密方式<br>缺点：无法保证公开密钥本身是真正的公开密钥<br>解决办法：使用数字证书进行验证，客户端根据数字证书机构的公开密钥验证数字签名，从而验证服务器公开密钥<br><img src="/image/header6.png" alt="header6"><br>关于证书：<br>客户端证书一般由银行等特殊业务颁发，因为客户端证书需要费用支出<br>自签名证书无法保证通信真实性<br>中级认证机构的证书可能变成自认证证书<br>HTTPS的安全通信机制<br><img src="/image/header7.png" alt="header7"><br><img src="/image/header8.png" alt="header8"><br>步骤12结束之后，客户端再发送TCP FIN报文来关闭与TCP的通信<br>缺点：<br>1.由于加密解密过程消耗大量CPU以及内存等资源，导致处理速度变慢<br>2.由于SSL通信部分消耗网络资源，处理通信部分又会消耗一定时间，因此相比http又会变慢<br>解决办法：使用SSL加速器以分担负载</p>
+<p>不使用https原因：<br>1.客户端要考虑消耗cpu,内存资源，服务器端要考虑负载<br>2.购买证书需要开销</p>
+<h1 id="用户认证"><a href="#用户认证" class="headerlink" title="用户认证"></a>用户认证</h1><p>方法有BASIC认证，DIGEST认证，SSL客户端认证，FormBase认证</p>
+<h1 id="HTTP-2-O"><a href="#HTTP-2-O" class="headerlink" title="HTTP/2.O"></a>HTTP/2.O</h1><p>http2.0协议优点<br>1.采用二进制进行流式传输，使用HPACK压缩消息头，节省宽带<br>2.使用tcp多路复用，降低网络请求链接时建立关闭的开销<br>这里要与区别keep-alive作区分<br>keep-alive发生在应用层，而tcp复用发生在传输层<br>keep-alive多文件只能串行传输，一个传完再传一个，而TCP多文件可以并行同时传输<br>3.可以控制传输流优先级和流量<br>4.支持服务端推送</p>
+<h2 id="多路复用"><a href="#多路复用" class="headerlink" title="多路复用"></a>多路复用</h2><h3 id="解决的问题"><a href="#解决的问题" class="headerlink" title="解决的问题"></a>解决的问题</h3><p>在http/1.x下,浏览器客户端在同一时间，针对同一域名下的请求有一定数量限制。超过限制数目的请求会被阻塞<br>突发性和短时性的 HTTP 连接因为三次握手和慢启动的存在，非常浪费时间(–&gt;单一长连接)<br>(慢启动:TCP连接在一开始会限制连接最大速度，确认数据能够成功传输后，随时间推移才会慢慢提高传输速度)</p>
+<h3 id="实现–二进制分帧"><a href="#实现–二进制分帧" class="headerlink" title="实现–二进制分帧"></a>实现–二进制分帧</h3><p>在应用层和传输层之间增加二进制分帧层,应用层生成的报文会分割封装为更小的消息和帧，并进行二进制编码<br>其中首部header和请求主体request body分别被封装为header frame 和data frame<br>同一请求或响应的帧会有相同标志，会按照一定先后顺序被发送，<br>所以不同的请求或者响应可以互相穿插着给到对方<br>最终实现就是<br>一个包含上百个资源的页面，在http1.x协议下会创建多条TCP链接来进行串行请求<br>在http/2.0下只会创建一个长TCP链接，所有的资源请求在压缩处理后一次性发出去,并行地在一个TCP连接上双向交换信息<br>（同一链接上有多个不同方向的数据流在传输。客户端可以一边乱序发送stream，也可以一边接收服务器的响应，而服务器那端同理。）</p>
+<p>而且可以对资源设置优先级，优先级能动态的被改变，优先级高的资源能够被更快的下载下来并得到执行</p>
+<h3 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h3><p>由于 TCP 连接的减少而使网络拥塞状况得以改善,使拥塞和丢包恢复速度更快<br>单一长连接多资源的方式，减少服务端的链接压力,避免网络开销，内存占用更少,提高连接吞吐量</p>
+<h2 id="压缩头部"><a href="#压缩头部" class="headerlink" title="压缩头部"></a>压缩头部</h2><p>通信连接建立之后，由于cookie和user agent很容易膨胀，<br>每次请求的头部如果有相同的部分，还要以纯文本传输重复发送的话，就会造成流量浪费<br>因此在客户端和服务端都存放一个首部表，来跟踪和存储之前发送的键值对，对于相同的头部，不必再通过请求发送，只需发送一次<br>如果首部发生变化，就在压缩时只将变化的数据放在header帧里面进行发送，<br>无论是客户端还是服务器端收到首部帧后，就对首部表进行更新</p>
+<h2 id="服务器推送"><a href="#服务器推送" class="headerlink" title="服务器推送"></a>服务器推送</h2><p>就是客户端请求一次资源，服务器给多个响应，这些多个响应很有可能是浏览器解析Html后继续要请求的资源，即主动将资源推送给客户端<br>而客户端可以做的就是可以将他们缓存起来做备用</p>
+<h2 id="延伸问题"><a href="#延伸问题" class="headerlink" title="延伸问题"></a>延伸问题</h2><p>1.如何解决推送资源重复或不需要的问题？<br>客户端使用一个简洁的 Cache Digest 来告诉服务器，哪些东西已经在缓存，因此服务器也就会知道哪些是客户端所需要的。<br><a href="https://www.zhihu.com/question/24774343/answer/96586977" target="_blank" rel="noopener">相关链接</a></p>
+<p>2.为什么HTTP2能去掉SSL在HTTP1.x上的开销<br>单一的长连接，减少了SSL握手的开销<br>头部被压缩，减少了数据传输量<br>多路复用能大幅提高传输效率，不用等待上一个请求的响应<br>不用像http1.x那样把多个文件或者资源弄成一个文件或者资源（http1.x常见的优化手段），<br>这时候，缓存就能更容易命中啊（http1.x里面你揉成一团的东西怎么命中缓存？）<br><a href="https://www.qcloud.com/community/article/541321?fromSource=gwzcw.93399.93399.93399" target="_blank" rel="noopener">相关链接</a></p>
+<p><a href="https://www.zhihu.com/question/34074946" target="_blank" rel="noopener">相关链接</a></p>
+<h2 id="遗留疑问"><a href="#遗留疑问" class="headerlink" title="遗留疑问"></a>遗留疑问</h2><p>二进制分帧和TCP切割分包是如何具体实现的，二进制分帧优势具体在哪里？<br>http/2.0各层协议具体工作<br><a href="https://github.com/zqjflash/http2-protocol" target="_blank" rel="noopener">待读</a></p>
+<h1 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h1><p>从输入 URL 到页面展现中间发生了什么？&lt;另外的角度看问题&gt;</p>
+<p>DNS 查询 DNS 缓存<br>建立 TCP 连接（三次握手）连接复用<br>发送 HTTP 请求（请求的四部分）<br>后台处理请求<br>监听 80 端口<br>路由<br>渲染 HTML 模板<br>生成响应<br>发送 HTTP 响应<br>关闭 TCP 连接（四次挥手）<br>解析 HTML<br>下载 CSS（缓存<br>解析 CSS<br>下载 JS（缓存<br>解析 JS<br>下载图片<br>解析图片<br>渲染 DOM 树<br>渲染样式树<br>执行 JS</p>
+<p>七层协议<br>应用层<br>表示层<br>会话层<br>传输层<br>网络层<br>数据链路层<br>物理层</p>
+<h1 id="实时通信协议"><a href="#实时通信协议" class="headerlink" title="实时通信协议"></a>实时通信协议</h1><p>webSocket<br>Poll轮询<br>Long-poll 长轮询 （二维码登录）<br>DDP(分布式数据协议)[使用json数据格式在客户端与服务端进行数据传输，但存在兼容问题]</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/safe/" rel="tag"># safe</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/js/promise.html" rel="next" title="关于promise">
+                <i class="fa fa-chevron-left"></i> 关于promise
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/performance/webpack.html" rel="prev" title="关于webpack">
+                关于webpack <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">232</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#在浏览器的地址栏输入url后发生了什么"><span class="nav-number">1.</span> <span class="nav-text">在浏览器的地址栏输入url后发生了什么</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#重新看待这个问题"><span class="nav-number">1.1.</span> <span class="nav-text">重新看待这个问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#浏览器渲染过程"><span class="nav-number">1.1.1.</span> <span class="nav-text">浏览器渲染过程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于-TCP-IP-协议"><span class="nav-number">2.</span> <span class="nav-text">关于 TCP/IP 协议</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#分层管理"><span class="nav-number">2.1.</span> <span class="nav-text">分层管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三次握手"><span class="nav-number">2.2.</span> <span class="nav-text">三次握手</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP协议"><span class="nav-number">3.</span> <span class="nav-text">HTTP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#COOKIE状态管理"><span class="nav-number">3.1.</span> <span class="nav-text">COOKIE状态管理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#https"><span class="nav-number">4.</span> <span class="nav-text">https</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-加密-认证-完整性保护-HTTPS"><span class="nav-number">4.1.</span> <span class="nav-text">HTTP+加密+认证+完整性保护 = HTTPS</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用户认证"><span class="nav-number">5.</span> <span class="nav-text">用户认证</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP-2-O"><span class="nav-number">6.</span> <span class="nav-text">HTTP/2.O</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#多路复用"><span class="nav-number">6.1.</span> <span class="nav-text">多路复用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#解决的问题"><span class="nav-number">6.1.1.</span> <span class="nav-text">解决的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现–二进制分帧"><span class="nav-number">6.1.2.</span> <span class="nav-text">实现–二进制分帧</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#效果"><span class="nav-number">6.1.3.</span> <span class="nav-text">效果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#压缩头部"><span class="nav-number">6.2.</span> <span class="nav-text">压缩头部</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器推送"><span class="nav-number">6.3.</span> <span class="nav-text">服务器推送</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#延伸问题"><span class="nav-number">6.4.</span> <span class="nav-text">延伸问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遗留疑问"><span class="nav-number">6.5.</span> <span class="nav-text">遗留疑问</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#补充"><span class="nav-number">7.</span> <span class="nav-text">补充</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实时通信协议"><span class="nav-number">8.</span> <span class="nav-text">实时通信协议</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

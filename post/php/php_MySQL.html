@@ -1,0 +1,704 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="php,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="五个基本单位数据库服务器:指用来运行数据库服务的一台电脑数据库:一个数据库服务器里面有可以有多个数据库。主要用来分类使用。数据表:专门用来区分一个数据库中的不同数据数据字段:也叫数据列,日常所见表格里面的列数据行:真正的数据存在每一个表的行里面 语句类别1.数据定义语言(DDL ，Data Defintion Language)语句：数据定义语句，用于定义不同的数据段、数据库、表、列、索引等。常用">
+<meta name="keywords" content="php">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL的基本知识">
+<meta property="og:url" content="http://yoohannah.github.io/post/php/php_MySQL.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="五个基本单位数据库服务器:指用来运行数据库服务的一台电脑数据库:一个数据库服务器里面有可以有多个数据库。主要用来分类使用。数据表:专门用来区分一个数据库中的不同数据数据字段:也叫数据列,日常所见表格里面的列数据行:真正的数据存在每一个表的行里面 语句类别1.数据定义语言(DDL ，Data Defintion Language)语句：数据定义语句，用于定义不同的数据段、数据库、表、列、索引等。常用">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-09-01T03:26:27.587Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL的基本知识">
+<meta name="twitter:description" content="五个基本单位数据库服务器:指用来运行数据库服务的一台电脑数据库:一个数据库服务器里面有可以有多个数据库。主要用来分类使用。数据表:专门用来区分一个数据库中的不同数据数据字段:也叫数据列,日常所见表格里面的列数据行:真正的数据存在每一个表的行里面 语句类别1.数据定义语言(DDL ，Data Defintion Language)语句：数据定义语句，用于定义不同的数据段、数据库、表、列、索引等。常用">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/php/php_MySQL.html">
+
+
+
+
+
+  <title> MySQL的基本知识 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/php/php_MySQL.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                MySQL的基本知识
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-26T21:37:37+08:00">
+                2017-05-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="五个基本单位"><a href="#五个基本单位" class="headerlink" title="五个基本单位"></a>五个基本单位</h1><p>数据库服务器:指用来运行数据库服务的一台电脑<br>数据库:一个数据库服务器里面有可以有多个数据库。主要用来分类使用。<br>数据表:专门用来区分一个数据库中的不同数据<br>数据字段:也叫数据列,日常所见表格里面的列<br>数据行:真正的数据存在每一个表的行里面</p>
+<h1 id="语句类别"><a href="#语句类别" class="headerlink" title="语句类别"></a>语句类别</h1><p>1.数据定义语言(DDL ，Data Defintion Language)语句：数据定义语句，用于定义不同的数据段、数据库、表、列、索引等。常用的语句关键字包括create、drop、alter等。<br>2.数据操作语言(DML ， Data Manipulation Language)语句：数据操纵语句，用于添加、删除、更新和查询数据库记录，并检查数据的完整性。常用的语句关键字主要包括insert、delete、update和select等。<br>3.数据控制语言(DCL， Data Control Language)<br>语句：数据控制语句，用于控制不同数据段直接的许可和访问级别的语句。<br>这些语句定义了数据库、表、字段、用户的访问权限和安全级别。主要的语句关键字包括grant、revoke等。</p>
+<h1 id="操作语句"><a href="#操作语句" class="headerlink" title="操作语句"></a>操作语句</h1><p>create database 数据库名;      创建数据库<br>show databases;                查看当前服务器有哪些数据库，显示所有数据库名<br>use 数据库名;                  选中数据库，进入到相应的数据库中<br>show tables;                   显示当前数据库下的所有表<br>drop database 数据库名;        删除数据库<br>create table 表名(字段名1 字段类型,….字段名n 字段类型n); 建表<br>desc 表名;                     查看表结构，显示表中属性</p>
+<p>show create table 表名 \G;<br>查看表的创建语句，“\G”选项的含义是使得记录能够按照字段竖着排列，对于内 容比较长的记录更易于显示。<br>可以看到表的 engine（存储引擎) 和 charset(字符集)等信息<br>在创建表的时候能够制定引擎<br>例<br>CREATE TABLE emp (<br>     useraname varchar(10) DEFAULT NULL,<br>     password date DEFAULT NULL,<br> )ENGINE=InnoDB DEFAULT CHARSET=utf8;</p>
+<p>drop table 表名;                删除表<br>alter table 表名 modify 字段名 类型字段; 修改表字段类型<br>alter table 表名 add column 字段名 类型;  增加表字段<br>alter table 表名 add 字段名2 字段类型 after 字段名1; 在字段名1后面增加字段名1<br>alter table 表名 add 字段名2 字段类型 first; 在最开始的位置增加字段<br>alter table 表名 drop column 字段名;                 删除表字段<br>alter table 表名 change 字段原名 字段新名 字段类型;  表字段改名</p>
+<p>alter table 旧表名 rename 新的表名; 修改表名</p>
+<p>修改表字段排列顺序<br>在前的字段增加和修改语句（add/change/modify）中，最后都可以加一个可选项 first|after。</p>
+<h1 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h1><h2 id="整型"><a href="#整型" class="headerlink" title="整型"></a>整型</h2><p>MySQL数据类型    所占字节    值范围<br>tinyint    1字节    -128~127<br>smallint    2字节    -32768~32767<br>mediumint    3字节    -8388608~8388607<br>int    4字节    范围-2147483648~2147483647<br>bigint    8字节    +-9.22*10的18次方<br>1.在创建表字段时，性别我们可以使用无符号的微小整型（tinyint）来表示。用0表示女、用1表示男。用2表示未知。<br>2.同样人类年龄也是，在创建表字段时可用用无符号的整型。因为人类的年龄还没有负数<br>3.在实际使用过程中。我们业务中最大需要存储多大的数值。我们创建表时，就选择什么样的类型来存储这样的值。</p>
+<h2 id="浮点类型"><a href="#浮点类型" class="headerlink" title="浮点类型"></a>浮点类型</h2><p>MySQL数据类型    所占字节    值范围<br>float(m, d)    4字节    单精度浮点型，m总个数，d小数位<br>double(m, d)    8字节    双精度浮点型，m总个数，d小数位<br>decimal(m, d)  decimal是存储为字符串的浮点数<br>浮点是非精确值，会存在不太准确的情况,而decimal叫做定点数。<br>在MySQL内部，本质上是用字符串存储的。实际使用过程中如果存在金额、钱精度要求比较高的浮点数存储，建议使用decimal（定点数）这个类型</p>
+<h2 id="字符类型"><a href="#字符类型" class="headerlink" title="字符类型"></a>字符类型</h2><p>MySQL数据类型    所占字节    值范围<br>CHAR    0-255字节    定长字符串<br>VARCHAR    0-255字节    变长字符串<br>TINYBLOB    0-255字节    不超过255个字符的二进制字符串<br>TINYTEXT    0-255字节    短文本字符串<br>BLOB    0-65535字节    二进制形式的长文本数据<br>TEXT    0-65535字节    长文本数据<br>MEDIUMBLOB    0-16 777 215字节    二进制形式的中等长度文本数据<br>MEDIUMTEXT    0-16 777 215字节    中等长度文本数据<br>LOGNGBLOB    0-4 294 967 295字节    二进制形式的极大文本数据<br>LONGTEXT    0-4 294 967 295字节    极大文本数据<br>VARBINARY(M)    允许长度0-M个字节的定长字节符串    值的长度+1个字节<br>BINARY(M)    M    允许长度0-M个字节的定长字节符串</p>
+<h2 id="时间类型"><a href="#时间类型" class="headerlink" title="时间类型"></a>时间类型</h2><p>MySQL数据类型    所占字节    值范围<br>date    3字节    日期，格式：2014-09-18<br>time    3字节    时间，格式：08:42:30<br>datetime    8字节    日期时间，格式：2014-09-18 08:42:30<br>timestamp    4字节    自动存储记录修改的时间<br>year    1字节    年份</p>
+<h2 id="复合类型"><a href="#复合类型" class="headerlink" title="复合类型"></a>复合类型</h2><p>MySQL数据类型    说明    举例<br>set    集合类型    set(“member”, “member2″, … “member64″)<br>enum    枚举类型    enum(“member1″, “member2″, … “member65535″)<br>一个 ENUM 类型只允许从一个集合中取得一个值；而 SET 类型允许从一个集合中取得任意多个值。</p>
+<h2 id="常用中文字符集"><a href="#常用中文字符集" class="headerlink" title="常用中文字符集"></a>常用中文字符集</h2><p>gbk_chinese_ci    简体中文, 不区分大小写<br>utf8_general_ci    Unicode (多语言), 不区分大小写<br>mysql在写utf-8的时候写的是utf8。不加中间的中横线</p>
+<h1 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h1><p>使用show engines命令可显示当前服务器支持的所有引擎<br>引擎名称<br>MyISAM    常用。读取效率很高的引擎<br>InnoDB    常用。写入，支持事处等都支持<br>Archive    不常用。归档引擎，压缩比高达1:10，用于数据归档<br>NDB    不常用。主要在MySQL 集群服务器中使用，</p>
+<p>行锁：写入、更新操作的时候将这一行锁起来，不让其他人再操作了。<br>表锁：写入、更新操作时，将表给锁起来不让其他人再操作了。<br>事务：同时操作多个数据，若其中的一个数据操作失败。可回滚到操作之前。常用于银行、电商、金融等系统中</p>
+<p>MyISAM<br>不支持事务，表锁(表级锁，加锁会锁住整个表)，支持全文索引,操作速度快。常用于读取多的业务。<br>myisam存储引擎表由myd和myi组成。.myd用来存放数据文件，.myi用来存放索引文件。<br>对于myisam存储引擎表，mysql数据库只缓存其索引文件，数据文件的缓存由操作系统本身来完成。</p>
+<p>InnoDB<br>支持事务，主要面向在线事务处理(OLTP)方面的应用。<br>行锁设计，支持外键，即默认情况下读取操作不加锁。</p>
+<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><p>1.普通索引    最基本的索引，它没有任何限制<br>alter table 表  add index(字段)</p>
+<p>2.唯一索引    某一行企用了唯一索引则不准许这一列的行数据中有重复的值。针对这一列的每一行数据都要求是唯一的<br>alter table 表  add UNIQUE(字段)</p>
+<p>3.主键索引    它是一种特殊的唯一索引，不允许有空值。一般是在建表的时候同时创建主键索引，常用于用户ID。类似于书中的页码<br>alter table 表  add PRIMARY KEY(字段)</p>
+<p>4.全文索引    对于需要全局搜索的数据，进行全文索引<br>alter table 表  add FULLTEXT(字段)</p>
+<p>创建表时可在创建表语句后加上对应的类型即可声明索引：<br>CREATE TABLE test (<br>     id INT NOT NULL ,<br>     username VARCHAR(20) NOT NULL ,<br>     password INT NOT NULL ,<br>     content INT NOT NULL ,<br>     PRIMARY KEY (id),<br>     INDEX pw (password),<br>     UNIQUE (username),<br>     FULLTEXT (content)<br> ) ENGINE = InnoDB;</p>
+<h1 id="插入记录"><a href="#插入记录" class="headerlink" title="插入记录"></a>插入记录</h1><p>  方法一：<br>    insert into 表 values(值1,值2,值n);<br>  表中有多少个字段就必须要插入多少个值。一个不能多，一个也不能少。若有默认值，不想传，可以写上null。<br>  顺序应该和表字段的排序一致。<br>  方法二：<br>  insert into 表(字段1,字段2,字段n) values(值1,值2,值n);<br>  除非有必填字段必须要写入值外。如果有默认值的不想写可以忽略不写。mysql会自动补主默认值。<br>  以表(字段1,字段2,字段n)字段顺序为值的顺序。<br>  基本语法变形：一次插入多条记录<br>  INSERT INTO user(username,password,sex)<br>     values(‘ll’, ‘abcdef’, 1),<br>     ( ‘loe’, ‘bcdeef’, 0),<br>     ( ‘key’, ‘123456’, 1),<br>     (‘tom’, ‘987654’, 1);</p>
+<h1 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h1><p>select <em> from 表;                             查询表中所有字段中的所有结果,”</em>“ 是一种正则表达式的写法，表示匹配所有<br>select 字段1[,字段2,字段n] from 表;           指定字段查询<br>select distinct 字段 from 表;                 查询单个字段不重复记录 distinct<br>select  字段 from 表 where 条件;              条件查询 where,条件可以是逻辑比较运算符的比较式</p>
+<p>select 字段 from 表 order  by 字段 排序关键词; 查询结果按照字段排序关键词排序<br>排序关键词:<br>asc    升序排列，从小到大（默认）<br>desc    降序排列，从大到小</p>
+<p>select 字段 from 表 order  by 字段1 排序关键词,… …字段n desc|asc;<br>order by 后面可以跟多个不同的字段排序，并且排序字段的不同结果集的顺序也不同，<br>如果排序字段的值一样，则值相同的字段按照第二个排序字段进行排序。</p>
+<p>select 字段 from 表  limit 数量; 对于查询或者排序后的结果集，如果希望只显示一部分而不是全部，使用 limit 关键字结果集数量限制。<br>select 字段 from 表 order by 字段 关键词 limit 数量; 限制结果集并排序<br>select 字段 from 表  limit 偏移量,数量; 结果集区间选择，偏移量从0开始，0是第一条数据<br>select 函数(字段) from 表; 从表中将按字段查询的结果进行函数处理<br>函数<br>sum    求和<br>count    统计总数<br>max    最大值<br>min    最小值<br>avg    平均值</p>
+<p>select <em> from 表 group by 字段;    将表中数据按字段分组<br>select </em> from 表 group by 字段 having 条件; 分组结果再过滤。having 是筛选组 而where是筛选记录<br>例：统计省份数量后再进行分组显示： select count(province),province  from money group by province;</p>
+<p>整体的SQL语句配合使用的语法结构如下：<br>SELECT<br>     [字段1 [as 别名1],[函数(字段2) ,]……字段n]<br> FROM 表名<br> [WHERE where条件]<br> [GROUP BY 字段]<br> [HAVING where_contition]<br> [order 条件]<br> [limit 条件]<br> 例<br> 查询money表字段：id,username,balance,province 要求id&gt;1 余额大于50，使用地区进行分组。我们使用用户id进行降序，要求只准显示3条。<br> select id,username,balance,province from money where id &gt; 1 and balance &gt; 50 group by province order by id desc limit 3;</p>
+<h1 id="多表联合查询"><a href="#多表联合查询" class="headerlink" title="多表联合查询"></a>多表联合查询</h1><h2 id="内连接"><a href="#内连接" class="headerlink" title="内连接"></a>内连接</h2><p>将两个表中存在联结关系的字段符合联结关系的那些记录形成记录集的联结。<br>基本语法1：<br>select 表1.字段 [as 别名],表n.字段  from 表1 [别名],表n where 条件;<br>取满足条件的数据的在各表中的各字段<br>例<br>select user.uid ,user.username as username,order_goods.oid,order_goods.uid,order_goods.name as shopname from user,order_goods  where user.uid = order_goods.uid;<br>若表user中某条数据x的uid与表order_goods中的某条数据y的uid相同,则取出user表中数据x的 uid、username，取出order_goods中数据y的uid,name,其中order_goods的name的值以shopname的值显示<br>基本语法2：<br>select 表1.字段 [as 别名],表n.字段  from 表1 INNER JOIN 表n on  条件;<br>例<br>select user.uid ,user.username as username,order_goods.oid,order_goods.uid,order_goods.name as shopname from user inner join order_goods  on  user.uid = order_goods.uid;<br>效果同基本语法1</p>
+<p>##　外连接<br>会选出其他不匹配的记录，分为外左联结和外右联结。<br>左连接：包含所有的左边表中的记录甚至是右边表中没有和它匹配的记录<br>select 表1.字段 [as 别名],表n.字段  from 表1 LEFT JOIN 表n on  条件;<br>例<br>select *  from user left join order_goods  on  user.uid = order_goods.uid;<br>以左边ｕｓｅｒ为主，查询哪些用户未购买过商品，并将用户信息显示出来，ｕｓｅｒ表全部显示</p>
+<p>右连接：包含所有的右边表中的记录甚至是右边表中没有和它匹配的记录<br>select 表1.字段 [as 别名],表n.字段  from 表1 right JOIN 表n on  条件;<br>例<br>select *  from user right join order_goods  on  user.uid = order_goods.uid;<br>查询商品表中哪些用户购买过商品，并将用户信息显示出来，order_goods全部显示</p>
+<h2 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h2><p>需要的条件是另外一个select语句的结果，即使用子查询<br>用于子查询的关键字包括in、not in、=、!=、exists、not exists等。<br>select 字段  from 表 where 字段 in(条件)<br>例<br>select *  from user where uid in (select uid from order_goods);<br>从order_goods取出uid这一列，将uid在user中对应的数据取出来</p>
+<h2 id="记录联合"><a href="#记录联合" class="headerlink" title="记录联合"></a>记录联合</h2><p>使用 union 和 union all 关键字，将两个表的数据按照一定的查询条件查询出来后，将结果合并到一起显示。<br>union all 把结果直接合并在一起<br>union 是将 union all 后的结果进行一次distinct，去除重复记录后的结果。</p>
+<h1 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h1><p>使用update<br>update 表名 set 字段1=值1,字段2=值2,字段n=值n where 条件；<br>例<br>update emp set  balance=balance-500 where userid = 15;<br>将emp表中userid为15的数据的balance减15<br>同时对两个表进行更新<br>update 表1,表2 set 字段1=值1,字段2=值2,字段n=值n where 条件<br>例<br>update money m,user u m.balance=m.balance<em>u.age where m.userid=u.id;<br>修改money，将money表的别名设置为m；user表的别名设置为u；将m表的余额改为m表的balance</em>用户表的age。执行条件是：m.userid = u.id</p>
+<h1 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h1><p>用delete<br>DELETE FROM 表 [where 条件];<br>删除时如果不加where条件，会清空掉整个表的记录，返回被删除的记录数</p>
+<p>清空表 如果使用，<br>truncate table 表名;<br>表中若有自增字段，这个自增字段会将起始值恢复成1</p>
+<h1 id="权限"><a href="#权限" class="headerlink" title="权限"></a>权限</h1><h2 id="添加权限"><a href="#添加权限" class="headerlink" title="添加权限"></a>添加权限</h2><p>grant 权限 on 库.表 to ‘用户‘@’主机’ identified by ‘密码’;<br>grant select, insert on test.* to ‘liwenkai‘@’localhost’ identified by ‘4311’;<br>给予liwenkai用户，在本机连接test库所有表的权限。操作的这些表具有查询和写入权限</p>
+<h2 id="删除权限"><a href="#删除权限" class="headerlink" title="删除权限"></a>删除权限</h2><p>revoke 权限 on 库.表 from ‘用户‘@’主机’;<br>revoke select, insert on test.* to ‘liwenkai‘@’localhost’ identified by ‘4311’;<br>给予liwenkai用户，在本机连接test库所有表的权限。操作的这些表具有查询和写入权限</p>
+<h2 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h2><p>grant all        在grant后接all说明给予所有权限<br>revoke all       在revoke后接all说明删除所有权限<br>权限 on .        . 所明给予所有库所有表的操作权限<br>‘用户‘@’主机’    主机里面若为%。任意来源的主机均可以使用这个用户来访问</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/php/" rel="tag"># php</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/php/php_MySQLuse.html" rel="next" title="php中MySQL的使用">
+                <i class="fa fa-chevron-left"></i> php中MySQL的使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/php/CookieAndSession.html" rel="prev" title="cookie和session">
+                cookie和session <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">232</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#五个基本单位"><span class="nav-number">1.</span> <span class="nav-text">五个基本单位</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#语句类别"><span class="nav-number">2.</span> <span class="nav-text">语句类别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#操作语句"><span class="nav-number">3.</span> <span class="nav-text">操作语句</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据类型"><span class="nav-number">4.</span> <span class="nav-text">数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#整型"><span class="nav-number">4.1.</span> <span class="nav-text">整型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#浮点类型"><span class="nav-number">4.2.</span> <span class="nav-text">浮点类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符类型"><span class="nav-number">4.3.</span> <span class="nav-text">字符类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#时间类型"><span class="nav-number">4.4.</span> <span class="nav-text">时间类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#复合类型"><span class="nav-number">4.5.</span> <span class="nav-text">复合类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用中文字符集"><span class="nav-number">4.6.</span> <span class="nav-text">常用中文字符集</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#存储引擎"><span class="nav-number">5.</span> <span class="nav-text">存储引擎</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#索引"><span class="nav-number">6.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#插入记录"><span class="nav-number">7.</span> <span class="nav-text">插入记录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查询"><span class="nav-number">8.</span> <span class="nav-text">查询</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#多表联合查询"><span class="nav-number">9.</span> <span class="nav-text">多表联合查询</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#内连接"><span class="nav-number">9.1.</span> <span class="nav-text">内连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#子查询"><span class="nav-number">9.2.</span> <span class="nav-text">子查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#记录联合"><span class="nav-number">9.3.</span> <span class="nav-text">记录联合</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#修改"><span class="nav-number">10.</span> <span class="nav-text">修改</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#删除"><span class="nav-number">11.</span> <span class="nav-text">删除</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#权限"><span class="nav-number">12.</span> <span class="nav-text">权限</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#添加权限"><span class="nav-number">12.1.</span> <span class="nav-text">添加权限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除权限"><span class="nav-number">12.2.</span> <span class="nav-text">删除权限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数说明"><span class="nav-number">12.3.</span> <span class="nav-text">参数说明</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

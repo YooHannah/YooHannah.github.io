@@ -1,0 +1,513 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+  
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="1.基础概念2.线性表基本概念3.线性表顺序存储结构4.线性表链式存储结构5.单链表6.静态链表7.单循环链表8.约瑟夫问题9.判断单链表是否有环10.魔术师发牌问题11.拉丁方阵问题12.双向循环链表13.凯撒密码14.维吉尼亚加密15.栈16.逆波兰表达式/后缀表达式17.队列18.循环队列19.递归20.1.八皇后问题C20.2.八皇后问题js待修21.字符串22.KMP算法23.树24.二">
+<meta property="og:type" content="website">
+<meta property="og:title" content="数据结构与算法">
+<meta property="og:url" content="http://yoohannah.github.io/categories/algorithm.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="1.基础概念2.线性表基本概念3.线性表顺序存储结构4.线性表链式存储结构5.单链表6.静态链表7.单循环链表8.约瑟夫问题9.判断单链表是否有环10.魔术师发牌问题11.拉丁方阵问题12.双向循环链表13.凯撒密码14.维吉尼亚加密15.栈16.逆波兰表达式/后缀表达式17.队列18.循环队列19.递归20.1.八皇后问题C20.2.八皇后问题js待修21.字符串22.KMP算法23.树24.二">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-09-01T03:26:27.613Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据结构与算法">
+<meta name="twitter:description" content="1.基础概念2.线性表基本概念3.线性表顺序存储结构4.线性表链式存储结构5.单链表6.静态链表7.单循环链表8.约瑟夫问题9.判断单链表是否有环10.魔术师发牌问题11.拉丁方阵问题12.双向循环链表13.凯撒密码14.维吉尼亚加密15.栈16.逆波兰表达式/后缀表达式17.队列18.循环队列19.递归20.1.八皇后问题C20.2.八皇后问题js待修21.字符串22.KMP算法23.树24.二">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/categories/algorithm.html">
+
+
+
+
+
+  <title>
+  
+
+  
+    数据结构与算法 | My Little World
+  
+</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left  ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+  <header class="post-header">
+
+	<h2 class="post-title" itemprop="name headline">数据结构与算法</h2>
+
+
+
+</header>
+
+    
+    
+      <p>1.<a href="/post/algorithm/basicconcept.html">基础概念</a><br>2.<a href="/post/algorithm/lineartable.html">线性表基本概念</a><br>3.<a href="/post/algorithm/lineartable-sequence.html">线性表顺序存储结构</a><br>4.<a href="/post/algorithm/lineartable-chain.html">线性表链式存储结构</a><br>5.<a href="/post/algorithm/Singlelinkedlist.html">单链表</a><br>6.<a href="/post/algorithm/Staticlinkedlist.html">静态链表</a><br>7.<a href="/post/algorithm/singlelooplinklist.html">单循环链表</a><br>8.<a href="https://github.com/YooHannah/algorithm/blob/master/js/%E7%BA%A6%E7%91%9F%E5%A4%AB%E9%97%AE%E9%A2%98%EF%BC%88%E5%8D%95%E5%BE%AA%E7%8E%AF%E9%93%BE%E8%A1%A8%EF%BC%89.js" target="_blank" rel="noopener">约瑟夫问题</a><br>9.<a href="/post/algorithm/hascirclesinglelinkedlist.html">判断单链表是否有环</a><br>10.<a href="https://github.com/YooHannah/algorithm/blob/master/js/%E9%AD%94%E6%9C%AF%E5%B8%88%E5%8F%91%E7%89%8C%E9%97%AE%E9%A2%98(%E5%8D%95%E5%BE%AA%E7%8E%AF%E9%93%BE%E8%A1%A8%EF%BC%89.js" target="_blank" rel="noopener">魔术师发牌问题</a><br>11.<a href="https://github.com/YooHannah/algorithm/blob/master/js/%E6%8B%89%E4%B8%81%E6%96%B9%E9%98%B5%EF%BC%88%E5%BE%AA%E7%8E%AF%E9%93%BE%E8%A1%A8%EF%BC%89.js" target="_blank" rel="noopener">拉丁方阵问题</a><br>12.<a href="/post/algorithm/Doublylinkedlist.html">双向循环链表</a><br>13.<a href="https://github.com/YooHannah/algorithm/blob/master/js/%E5%87%AF%E6%92%92%E5%AF%86%E7%A0%81(%E5%8F%8C%E5%90%91%E5%BE%AA%E7%8E%AF%E9%93%BE%E8%A1%A8%EF%BC%89.js" target="_blank" rel="noopener">凯撒密码</a><br>14.<a href="https://github.com/YooHannah/algorithm/blob/master/js/%E7%BB%B4%E5%90%89%E5%B0%BC%E4%BA%9A%E5%8A%A0%E5%AF%86%EF%BC%88%E5%8F%8C%E5%90%91%E5%BE%AA%E7%8E%AF%E9%93%BE%E8%A1%A8%EF%BC%89.js" target="_blank" rel="noopener">维吉尼亚加密</a><br>15.<a href="/post/algorithm/stack.html">栈</a><br>16.<a href="/post/algorithm/stacklinked.html">逆波兰表达式/后缀表达式</a><br>17.<a href="/post/algorithm/queue.html">队列</a><br>18.<a href="/post/algorithm/loopqueue.html">循环队列</a><br>19.<a href="/post/algorithm/Recursion.html">递归</a><br>20.1.<a href="https://github.com/YooHannah/algorithm/blob/master/C/eightqueen.c" target="_blank" rel="noopener">八皇后问题C</a><br>20.2.<a href="https://github.com/YooHannah/algorithm/blob/master/js/Recurision_EightQueen.js" target="_blank" rel="noopener">八皇后问题js待修</a><br>21.<a href="/post/algorithm/string.html">字符串</a><br>22.<a href="/post/algorithm/kmp.html">KMP算法</a><br>23.<a href="/post/algorithm/tree.html">树</a><br>24.<a href="/post/algorithm/Binarytree.html">二叉树</a><br>25.<a href="/post/algorithm/Cluebinarytree.html">线索二叉树</a><br>26.<a href="/post/algorithm/treetransform.html">树、森林和二叉树的转换与遍历</a><br>27.<a href="/post/algorithm/Huffman.html">赫夫曼编码</a><br>28.<a href="/post/algorithm/graph.html">图</a><br>29.<a href="/post/algorithm/graphstruct.html">图的存储结构</a><br>30.<a href="/post/algorithm/MapTraversal.html">深度广度优先遍历+马踏棋盘算法</a><br>31.<a href="/post/algorithm/MinimumTree.html">最小生成树</a><br>32.<a href="/post/algorithm/shortestpath.html">最短路径</a><br>33.<a href="/post/algorithm/TopologySorting.html">拓扑排序</a><br>34.<a href="/post/algorithm/keypath.html">关键路径</a><br>35.<a href="/post/algorithm/search.html">查找</a><br>36.<a href="/post/algorithm/indexsearch.html">线性索引查找</a><br>37.<a href="/post/algorithm/sortbtree.html">二叉排序树</a><br>38.<a href="/post/algorithm/balancesortbtree.html">平衡二叉树</a><br>39.<a href="/post/algorithm/multliwaysearchtree.html">多路查找树</a><br>40.<a href="/post/algorithm/hash.html">散列表(哈希表)</a><br>41.<a href="/post/algorithm/sort.html">排序</a></p>
+
+    
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">232</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

@@ -1,0 +1,705 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="git,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="git pull 更新代码出现问题123456789There is no tracking information for the current branch.Please specify which branch you want to merge with.See git-pull(1) for details    git pull &amp;lt;remote&amp;gt; &amp;lt;branch&amp;g">
+<meta name="keywords" content="git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git问题处理">
+<meta property="og:url" content="http://yoohannah.github.io/post/git/gittrouble.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="git pull 更新代码出现问题123456789There is no tracking information for the current branch.Please specify which branch you want to merge with.See git-pull(1) for details    git pull &amp;lt;remote&amp;gt; &amp;lt;branch&amp;g">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2024-09-01T03:26:27.557Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="git问题处理">
+<meta name="twitter:description" content="git pull 更新代码出现问题123456789There is no tracking information for the current branch.Please specify which branch you want to merge with.See git-pull(1) for details    git pull &amp;lt;remote&amp;gt; &amp;lt;branch&amp;g">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/git/gittrouble.html">
+
+
+
+
+
+  <title> git问题处理 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/git/gittrouble.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                git问题处理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-18T09:50:30+08:00">
+                2017-02-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/categories/" itemprop="url" rel="index">
+                    <span itemprop="name">categories</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="git-pull-更新代码出现问题"><a href="#git-pull-更新代码出现问题" class="headerlink" title="git pull 更新代码出现问题"></a>git pull 更新代码出现问题</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">There is no tracking information for the current branch.</span><br><span class="line">Please specify which branch you want to merge with.</span><br><span class="line">See git-pull(1) for details</span><br><span class="line"></span><br><span class="line">    git pull &lt;remote&gt; &lt;branch&gt;</span><br><span class="line"></span><br><span class="line">If you wish to set tracking information for this branch you can do so with:</span><br><span class="line"></span><br><span class="line">    git branch --set-upstream-to=origin/&lt;branch&gt; develop_hotfix</span><br></pre></td></tr></table></figure>
+<p>解决办法<br>git branch -D 分支名  ##删除本地待更新分支<br>git checkout 分支名 ##将待更新分支切回来<br>Git pull 再更新</p>
+<h1 id="git-remote-add-origin-遇到远程分支已存在的情况"><a href="#git-remote-add-origin-遇到远程分支已存在的情况" class="headerlink" title="git remote add origin 遇到远程分支已存在的情况"></a>git remote add origin 遇到远程分支已存在的情况</h1><p>解决办法<br>git remote rm origin ##先删除远程分支<br>git remote add origin 地址 ## 再修改远程仓库地址</p>
+<h1 id="git-push-遇到问题"><a href="#git-push-遇到问题" class="headerlink" title="git push 遇到问题"></a>git push 遇到问题</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fatal: unable to access &apos;https://github.com/YooHannah/WeiXindemo.git/&apos;: Failed to connect to github.com port 443: Timed out</span><br></pre></td></tr></table></figure>
+<p>解决办法<br>先删除远程分支 git remote rm origin<br>再将本地分支的上游分支设置为远程分支同时push<br>git push –set-upstream origin master<br>以后再执行git push 就不会出现报以上错误或一直没反应的状况</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">error:src refspec master does not match any</span><br></pre></td></tr></table></figure>
+<p>只进行了init,没有add和commit,本地版本库为空, 空只进行了init,目录不能提交 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">If no other git process is currently running, this probably means a</span><br><span class="line">git process crashed in this repository earlier. Make sure no other git</span><br><span class="line">process is running and remove the file manually to continue.</span><br></pre></td></tr></table></figure>
+<p>解决方法：<br>rm -f ./.git/index.lock </p>
+<h1 id="npm-运行项目错误"><a href="#npm-运行项目错误" class="headerlink" title="npm 运行项目错误"></a>npm 运行项目错误</h1><p>npm run dev error [npm ERR! code ELIFECYCLE]<br>node_modules安装问题，执行以下：<br>rm -rf node_modules rm package-lock.json npm cache clear –force npm install</p>
+<h1 id="git-merge-之后，git-commit-出现问题"><a href="#git-merge-之后，git-commit-出现问题" class="headerlink" title="git merge 之后，git commit 出现问题"></a>git merge 之后，git commit 出现问题</h1><p>husky &gt; pre-commit hook failed (add –no-verify to bypass)<br>git merge 之后，git commit 出现问题，解决：<br>出现这样的原因在于楼主使用了husky，并且配置了”precommit”: “npm run lint”<br>因此会在你git commit的时候执行npm run lint 也就是eslint –ext .js src test<br>如果报错的话，会返回非0，从而组织代码commit。<br>因此有两种方式解决：</p>
+<ol>
+<li>执行npm run lint， 根据提示修改错误，如果是其他人的报错，请求别人协助（推荐）</li>
+<li>git commit -m ‘’ -n 强制推送<br>3.更新远程分支列表<br>git remote update origin –prune</li>
+</ol>
+<h1 id="IE报vuex-requires-a-Promise-polyfill-in-this-browser问题解决"><a href="#IE报vuex-requires-a-Promise-polyfill-in-this-browser问题解决" class="headerlink" title="IE报vuex requires a Promise polyfill in this browser问题解决"></a>IE报vuex requires a Promise polyfill in this browser问题解决</h1><p>第一步： 安装 babel-polyfill 。 babel-polyfill可以模拟ES6使用的环境，可以使用ES6的所有新方法<br>npm install –save babel-polyfill<br>第二步： 在 Webpack/Browserify/Node中使用<br>在webpack.config.js文件中，使用<br>module.exports = {<br>entry: {<br>app: [“babel-polyfill”, “./src/main.js”]<br>}<br>};</p>
+<h1 id="git-分支处理"><a href="#git-分支处理" class="headerlink" title="git 分支处理"></a>git 分支处理</h1><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>A同学提交了两次代码，但在第二次提交代码前，B同学有提交自己的代码，并且在合并代码时，<br>将A同学第一次提交的代码merge丢弃了，导致A同学第一次代码无法合并到主分支</p>
+<h2 id="原理知识"><a href="#原理知识" class="headerlink" title="原理知识"></a>原理知识</h2><p>git reset 可以撤销commit命令的提交<br>git rebase 把分叉提交历史’整理’成一条直线<br>git stash 可以把工作现场’储藏起来’，等以后恢复现场后可以继续工作</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>在分支代码处理时，A同学本地有主分支host(公共分支)和自己的本地分支local，<br>工作流程是<br>在自己本地分支local分支开发完毕后，<br>切换host分支，git pull 拉取远端分支更新后，<br>将本地分支local合并merge到host分支<br>然后git push到远端</p>
+<p>而B同学直接在本地的主分支(公共分支)开发，git push时冲突，<br>git pull 拉取远端A同学第一次的代码时，直接将代码变更进行了丢弃<br>然后push了自己的代码到远端分支</p>
+<p>A同学第二次提交时，并不知道B同学丢弃了自己第一次提交的代码，<br>在进行第二次提交时，在host上拉取远程更新之后，<br>继续合并推送最终结果就是自己的第一次代码丢失了</p>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>利用A同学本地分支local没有合并远程分支的间隙,将A同学的两次提交保存下来，回到两次提交前的状态<br>然后拉取B同学的提交，再将A同学的两次提交拿出来进行合并，这样就可以实现三次提交都保存下来，再提交到远端</p>
+<p>在A同学的本地分支进行操作<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">1.在主分支host上取消第二次提交</span><br><span class="line">git reset --hard HEAD~1</span><br><span class="line"></span><br><span class="line">2.将远端第二次提交撤销掉,让分支保留在B同学提交的状态</span><br><span class="line">git push --force</span><br><span class="line"></span><br><span class="line">3.切换本地分支local,回滚版本到两次提交前</span><br><span class="line">git reset HEAD^^ </span><br><span class="line"></span><br><span class="line">4.保存两次提交 可以通过git stash list查看保存状态</span><br><span class="line">git stash </span><br><span class="line">git stash list</span><br><span class="line"></span><br><span class="line">5. 合并主分的B同学的提交到本地分支local,这时本地分支就有B同学的代码变更了</span><br><span class="line">6. 取出A同学的两次提交,与B同学代码进行提交</span><br><span class="line">git stash pop</span><br><span class="line">7. 切换主分支host,合并本地分支local,推送到远端</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/git/" rel="tag"># git</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/git/gituse.html" rel="next" title="git使用">
+                <i class="fa fa-chevron-left"></i> git使用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/knowledge/iconfont.html" rel="prev" title="阿里巴巴iconfont使用">
+                阿里巴巴iconfont使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">232</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#git-pull-更新代码出现问题"><span class="nav-number">1.</span> <span class="nav-text">git pull 更新代码出现问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git-remote-add-origin-遇到远程分支已存在的情况"><span class="nav-number">2.</span> <span class="nav-text">git remote add origin 遇到远程分支已存在的情况</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git-push-遇到问题"><span class="nav-number">3.</span> <span class="nav-text">git push 遇到问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#npm-运行项目错误"><span class="nav-number">4.</span> <span class="nav-text">npm 运行项目错误</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git-merge-之后，git-commit-出现问题"><span class="nav-number">5.</span> <span class="nav-text">git merge 之后，git commit 出现问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IE报vuex-requires-a-Promise-polyfill-in-this-browser问题解决"><span class="nav-number">6.</span> <span class="nav-text">IE报vuex requires a Promise polyfill in this browser问题解决</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git-分支处理"><span class="nav-number">7.</span> <span class="nav-text">git 分支处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">7.1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原理知识"><span class="nav-number">7.2.</span> <span class="nav-text">原理知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析"><span class="nav-number">7.3.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决"><span class="nav-number">7.4.</span> <span class="nav-text">解决</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
