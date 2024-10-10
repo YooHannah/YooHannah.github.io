@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoohannah.github.io/"/>
-  <updated>2024-09-30T09:32:39.027Z</updated>
+  <updated>2024-10-10T11:43:17.176Z</updated>
   <id>http://yoohannah.github.io/</id>
   
   <author>
@@ -17,13 +17,86 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>强化学习</title>
+    <link href="http://yoohannah.github.io/post/machineLearning/ReinforcementLearning.html"/>
+    <id>http://yoohannah.github.io/post/machineLearning/ReinforcementLearning.html</id>
+    <published>2024-10-07T06:34:37.000Z</published>
+    <updated>2024-10-10T11:43:17.176Z</updated>
+    
+    <content type="html"><![CDATA[<p>强化学习的主要思想不是告诉算法每个输入的正确输出是什么<br>而是指定一个奖励函数，告诉它什么时候做的好，什么时候做的不好<br>算法的工作是自动找出如何选择好的动作</p><p><img src="/image/LLM/202.png" alt></p><h1 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h1><p>以火星探测器为例，在其决定路线的过程中产生的几个概念</p><ol><li>S ： 当前状态</li><li>a : 动作</li><li>S’ : 下一个状态</li><li>R : 奖励函数</li><li><p>teminal state : 终止状态<br><img src="/image/LLM/203.png" alt><br>每种路线回报通过计算路上每一步奖励乘以折现系数加和得到<br><img src="/image/LLM/204.png" alt></p></li><li><p>policy : 策略函数，根据当前的状态选择可以获得最大收益的动作</p></li></ol><p>A policy is a function π（s）= a  mapping from states to actions, that tells you what action a to take in a given state s.</p><p>The goal of reinforcement learning ===&gt;<br>Find a policy 5 that tells you what action (a = 5(s)) to take in every state (s) so as to maximize the return.</p><p><img src="/image/LLM/205.png" alt></p><h1 id="马尔科夫决策过程"><a href="#马尔科夫决策过程" class="headerlink" title="马尔科夫决策过程"></a>马尔科夫决策过程</h1><p>未来只取决于当前的名称，而不是到达当前状态之前可能发生的任何事情</p><p><img src="/image/LLM/206.png" alt></p><h1 id="状态动作回报函数-Q"><a href="#状态动作回报函数-Q" class="headerlink" title="状态动作回报函数 Q"></a>状态动作回报函数 Q</h1><p>当前状态下执行一次函数能够得到的最大回报值<br>如果能够找到最大回报值也就能知道接下来应该用什么动作</p><p><img src="/image/LLM/207.png" alt></p><p><img src="/image/LLM/208.png" alt></p><h1 id="贝尔曼公式"><a href="#贝尔曼公式" class="headerlink" title="贝尔曼公式"></a>贝尔曼公式</h1><p><img src="/image/LLM/209.png" alt><br><img src="/image/LLM/210.png" alt><br><img src="/image/LLM/211.png" alt></p><h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><p>面对环境随机的情况，动作实际执行过程可能存在多个可能路线，导致每次得到的最大回报值不同，因此计算当前状态最大收益时取所有路线情况的平均值进行计算<br>即使用期望回报值进行计算<br><img src="/image/LLM/212.png" alt><br><img src="/image/LLM/213.png" alt></p><h1 id="DQN-算法"><a href="#DQN-算法" class="headerlink" title="DQN 算法"></a>DQN 算法</h1><p>D: deep learning<br>Q: Q function<br>N: Network</p><p>对于连续状态值的情况，使用神经网络训练Q函数进行深度强化学习<br><img src="/image/LLM/214.png" alt><br><img src="/image/LLM/215.png" alt><br><img src="/image/LLM/216.png" alt></p><h2 id="优化-1"><a href="#优化-1" class="headerlink" title="优化"></a>优化</h2><h3 id="优化神经网络结构"><a href="#优化神经网络结构" class="headerlink" title="优化神经网络结构"></a>优化神经网络结构</h3><p>上面将s和a作为X 同时参与训练，最终只会得到一个动作a最大回报函数值,需要进行多次运算<br>如果仅将s作为输入，输出层产生多个a的回报值，就可以根据回报值大小选择相应的动作</p><p><img src="/image/LLM/217.png" alt><br><img src="/image/LLM/218.png" alt></p><h3 id="epsilon-greedy-policy"><a href="#epsilon-greedy-policy" class="headerlink" title="epsilon-greedy policy"></a>epsilon-greedy policy</h3><p>选择action 过程中，如果一直按Q值最大原则选择action,万一初始值特别小无法开启我们想要的第一步程序，就会导致无法进行后续的action<br>epsilon-greedy policy 方案就是找一个合适的阈值epsilon，比如说0.05,<br>95%的时间选择最大Q值action (贪婪剥削策略)<br>5%的时间选择随机选择action（探索策略）<br>这样就可以避免选到固定不符合预期的action,开放一定的窗口有可能选到其他的action<br>epsilon 大小 类似于梯度，随训练过程进行会逐渐变小，变小的过程，模型也就学会了如何选择更有可能选择符合预期的action</p><p><img src="/image/LLM/219.png" alt></p><h3 id="小批量"><a href="#小批量" class="headerlink" title="小批量"></a>小批量</h3><p>训练数据如果非常庞大，在训练过程中可能会造成时间消耗，为了提高训练速度，可以采用小批量的方式进行<br>将训练数据分成多个批次，每次迭代用不同批次数据，虽然梯度会比较嘈杂，但还是会朝着梯度下降的方向进行<br><img src="/image/LLM/220.png" alt><br><img src="/image/LLM/221.png" alt><br><img src="/image/LLM/222.png" alt><br><img src="/image/LLM/223.png" alt></p><h3 id="软更新"><a href="#软更新" class="headerlink" title="软更新"></a>软更新</h3><p>在更新参数过程中，每次按比例更新参数，每次仅更新部分比例的参数，可以使强化学习更好的收敛<br><img src="/image/LLM/224.png" alt></p><h1 id="强化学习的一些限制"><a href="#强化学习的一些限制" class="headerlink" title="强化学习的一些限制"></a>强化学习的一些限制</h1><p><img src="/image/LLM/225.png" alt></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;强化学习的主要思想不是告诉算法每个输入的正确输出是什么&lt;br&gt;而是指定一个奖励函数，告诉它什么时候做的好，什么时候做的不好&lt;br&gt;算法的工作是自动找出如何选择好的动作&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/image/LLM/202.png&quot; alt&gt;&lt;/p&gt;
+&lt;h1 id=
+      
+    
+    </summary>
+    
+    
+      <category term="machineLearing" scheme="http://yoohannah.github.io/tags/machineLearing/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>异常检测</title>
+    <link href="http://yoohannah.github.io/post/machineLearning/abnormalTest.html"/>
+    <id>http://yoohannah.github.io/post/machineLearning/abnormalTest.html</id>
+    <published>2024-10-05T10:50:37.000Z</published>
+    <updated>2024-10-10T07:21:11.008Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="异常检测"><a href="#异常检测" class="headerlink" title="异常检测"></a>异常检测</h1><p>异常检测是机器学习中一个重要的概念，它是指在数据中检测出不符合预期的数据点，以便及时发现和处理异常情况。</p><h2 id="检测方法：密度估计"><a href="#检测方法：密度估计" class="headerlink" title="检测方法：密度估计"></a>检测方法：密度估计</h2><p>密度估计是异常检测中的一种方法，它通过计算数据的密度分布来识别异常数据点。<br>通过将特征值的可能性进行乘积计算，得到数据的密度，然后跟阈值进行比较，判断当前数据是否正常。<br><img src="/image/LLM/164.png" alt><br><img src="/image/LLM/169.png" alt><br><img src="/image/LLM/165.png" alt></p><h1 id="高斯分布"><a href="#高斯分布" class="headerlink" title="高斯分布"></a>高斯分布</h1><p>高斯分布的位置受数据集的平均值𝜇和方差𝜎^2 决定<br><img src="/image/LLM/166.png" alt><br>𝜇 决定钟形最高点在x轴上的位置<br>𝜎^2 决定钟形的宽度，因为整个钟形面积为1，所以，如果𝜎^2 变小，那个整个钟形会变得很高<br><img src="/image/LLM/167.png" alt></p><p><img src="/image/LLM/168.png" alt></p><h1 id="异常检测算法步骤"><a href="#异常检测算法步骤" class="headerlink" title="异常检测算法步骤"></a>异常检测算法步骤</h1><ol><li>在训练数据中选择你认为可能会引起异常的数据的n个特征值</li><li>计算各个特征值的平均值𝜇和方差𝜎^2</li><li>计算每个特征值的密度，如果密度小于阈值，则认为是异常数据</li></ol><p><img src="/image/LLM/170.png" alt></p><h1 id="开发过程中如何评估异常检测系统"><a href="#开发过程中如何评估异常检测系统" class="headerlink" title="开发过程中如何评估异常检测系统"></a>开发过程中如何评估异常检测系统</h1><p>通常采用实数评估方案，就是可以用一个具体的数值小小来衡量算法的好坏<br>假设训练数据中的数据都是正常的，存在标签0<br>在交叉验证和测试数据中，存在少量异常数据，标签为1<br>测试算法好坏的标准就是能否将异常数据识别出来<br>如果是特别少量的异常数据，可以仅通过交叉验证来评估测试好坏<br>从而决定合适的阈值大小<br><img src="/image/LLM/171.png" alt><br><img src="/image/LLM/172.png" alt><br>另外的评估方法可参考<a href>二分类错误度量</a><br>相关的衡量指标，真假值，精确率，召回率，F1 score等<br><img src="/image/LLM/173.png" alt></p><h1 id="如何选择异常检测算法和监督学习"><a href="#如何选择异常检测算法和监督学习" class="headerlink" title="如何选择异常检测算法和监督学习"></a>如何选择异常检测算法和监督学习</h1><p>异常检测算法适用于</p><ol><li>正常数据少量但是有大量异常数据</li><li>异常的特征值是未知的，且是多样的</li></ol><p>监督学习算法适用于</p><ol><li>存在大量异常和正常数据</li><li>有足够数据告诉算法什么是正常的数据，什么是异常的数据<br>将来出现的异常数据很可能是之前训练集中出现过的异常数据</li></ol><p><img src="/image/LLM/174.png" alt></p><p><img src="/image/LLM/175.png" alt></p><h1 id="如何选择要使用的特征"><a href="#如何选择要使用的特征" class="headerlink" title="如何选择要使用的特征"></a>如何选择要使用的特征</h1><ol><li><p>选择符合高斯分布的特征，如果不能拟合高斯分布，可以通过取对数，开方等方式进行特殊处理后进行拟合<br>但要注意，训练数据如果有对特征值进行特殊处理，那么交叉验证集合测试集也要进行相同的处理<br><img src="/image/LLM/176.png" alt></p></li><li><p>对于误判的异常数据，可以通过增加特征值来进行弥补，保证数据在新加的特征值上存在异常大或者异常小的数据</p></li></ol><p><img src="/image/LLM/177.png" alt></p><ol start="3"><li>可以在已有的原始特征值基础上创造新的特征值参与运算<br><img src="/image/LLM/178.png" alt></li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;异常检测&quot;&gt;&lt;a href=&quot;#异常检测&quot; class=&quot;headerlink&quot; title=&quot;异常检测&quot;&gt;&lt;/a&gt;异常检测&lt;/h1&gt;&lt;p&gt;异常检测是机器学习中一个重要的概念，它是指在数据中检测出不符合预期的数据点，以便及时发现和处理异常情况。&lt;/p&gt;
+&lt;h2 i
+      
+    
+    </summary>
+    
+    
+      <category term="machineLearing" scheme="http://yoohannah.github.io/tags/machineLearing/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Kmeans 聚类算法</title>
+    <link href="http://yoohannah.github.io/post/machineLearning/Kmeans.html"/>
+    <id>http://yoohannah.github.io/post/machineLearning/Kmeans.html</id>
+    <published>2024-10-02T16:37:37.000Z</published>
+    <updated>2024-10-10T07:21:11.006Z</updated>
+    
+    <content type="html"><![CDATA[<p>无监督学习算法一</p><h1 id="什么是聚类"><a href="#什么是聚类" class="headerlink" title="什么是聚类"></a>什么是聚类</h1><p>将输入数据分成多个类别，每个类别包含一组相似的数据点的过程就是聚类，分好的类被称为cluster</p><h1 id="聚类算法k-means处理过程"><a href="#聚类算法k-means处理过程" class="headerlink" title="聚类算法k-means处理过程"></a>聚类算法k-means处理过程</h1><ol><li>随机选择k个点作为初始的中心点, 计算每个点到中心点的距离，将每个点分配到距离最近的中心点所属的类别中</li><li>计算每个类别的中心点(平均值)，并更新中心点，重复步骤1</li><li>直到中心点不再变化，或者达到最大迭代次数</li></ol><h2 id="具体实现-伪代码"><a href="#具体实现-伪代码" class="headerlink" title="具体实现(伪代码)"></a>具体实现(伪代码)</h2><p><img src="/image/LLM/157.png" alt><br><img src="/image/LLM/158.png" alt></p><h2 id="成本函数"><a href="#成本函数" class="headerlink" title="成本函数"></a>成本函数</h2><p><img src="/image/LLM/159.png" alt><br><img src="/image/LLM/160.png" alt></p><h2 id="如何初始化中心点"><a href="#如何初始化中心点" class="headerlink" title="如何初始化中心点"></a>如何初始化中心点</h2><p>随机选择k个点作为初始的中心点（k小于m），计算最终中心点和损失函数<br>重复N次，选择损失函数最小的中心点作为最终的中心点<br><img src="/image/LLM/161.png" alt></p><h2 id="如何选择K的数量"><a href="#如何选择K的数量" class="headerlink" title="如何选择K的数量"></a>如何选择K的数量</h2><p>取决后续如何使用分类好的集群数据<br><img src="/image/LLM/163.png" alt><br><img src="/image/LLM/162.png" alt></p><p><a href="https://github.com/kaieye/2022-Machine-Learning-Specialization/blob/main/Unsupervised%20learning%20recommenders%20reinforcement%20learning/week1/2%20Practice%20Lab1/C3_W1_KMeans_Assignment.ipynb" target="_blank" rel="noopener">压缩图像应用</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;无监督学习算法一&lt;/p&gt;
+&lt;h1 id=&quot;什么是聚类&quot;&gt;&lt;a href=&quot;#什么是聚类&quot; class=&quot;headerlink&quot; title=&quot;什么是聚类&quot;&gt;&lt;/a&gt;什么是聚类&lt;/h1&gt;&lt;p&gt;将输入数据分成多个类别，每个类别包含一组相似的数据点的过程就是聚类，分好的类被称为c
+      
+    
+    </summary>
+    
+    
+      <category term="machineLearing" scheme="http://yoohannah.github.io/tags/machineLearing/"/>
+    
+  </entry>
+  
+  <entry>
     <title>决策树模型</title>
     <link href="http://yoohannah.github.io/post/machineLearning/decisionTreeModel.html"/>
     <id>http://yoohannah.github.io/post/machineLearning/decisionTreeModel.html</id>
     <published>2024-09-30T07:31:37.000Z</published>
-    <updated>2024-09-30T09:32:39.027Z</updated>
+    <updated>2024-10-10T07:21:11.008Z</updated>
     
-    <content type="html"><![CDATA[<p>决策树模型是通过计算特征纯度后，选取最大纯度值的特征作为决策节点，<br>将数据根据是否符合当前特征节点一份为二，再根据特征纯度，继续划分，<br>最后根据停止划分规则进行数据分类或推测的模型</p><p><img src="/image/LLM/136.png" alt></p><h1 id="创建过程"><a href="#创建过程" class="headerlink" title="创建过程"></a>创建过程</h1><p>决策树创建过程需要考虑两件事</p><ol><li><p>在每个节点上如果选择根据什么特征进行数据分类<br>Maximize purity<br>如果一个特征在把数据分成两组之后，使分组后的数据能够最大程度的趋于同一类，那么这个特征就是纯度高的特征,<br>即 如果这个特征能够直接决定数据属于哪个分类的程度越高，纯度就越高<br>比如用DNA特征判断猫狗分类比用耳朵是尖的还是软的更直接，DNA特征就是最大纯度的特征<br><img src="/image/LLM/137.png" alt></p></li><li><p>什么时候停止数据分类<br>a. 当一个节点里面的数据都属于同一类的时候<br>b. 到达树的深度最大值的时候，树越深，过拟合越有可能，计算成本越高<br>c. 当特征纯度(熵)低于某个阈值的时候<br>d. 当节点里的数据个数低于某个阈值的时候</p></li></ol><p><img src="/image/LLM/138.png" alt></p><h2 id="熵"><a href="#熵" class="headerlink" title="熵"></a>熵</h2><p>可以理解为数据的混乱程度，如果数据特别混乱，则值越大，返回数据如果种类单一，则值越小，趋近0<br>这里用熵来计算特征的非纯度或者较杂质程度，<br>如果根据某个特征分类后的数据的熵 越小，说数据越干净，杂质越少<br>反之，如果得到的熵越大，说数据越混乱，不同类的数据越多<br>如下面判断是否是猫的问题<br>p1 代表是每组数据中猫的比例，都是猫或狗的话熵 是0，5:5 的时候熵 最大值为1，数据最混乱<br><img src="/image/LLM/139.png" alt><br>具体熵 的计算公式如下<br><img src="/image/LLM/140.png" alt></p><h2 id="信息增益"><a href="#信息增益" class="headerlink" title="信息增益"></a>信息增益</h2><p>在了解熵的含义后，用下面的计算过程选择节点的判断特征<br>根节点的熵减去分类后两个节点熵的加权平均值，值越大说明分类后数据越纯了<br><img src="/image/LLM/141.png" alt><br>这个计算方式得到的值就叫信息增益<br>即特征信息增益越大，在分类过程中，能够把数据分的越纯<br><img src="/image/LLM/142.png" alt></p><h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>决策树学习过程<br><img src="/image/LLM/143.png" alt><br>对于每个节点，都要像对待根节点一样<br>根据拿到的数据先找到最大信息增益的特征然后进行分类<br>整个过程就是一个递归的过程，直到满足停止分类的规则为止<br><img src="/image/LLM/144.png" alt></p><h1 id="多特征值处理办法"><a href="#多特征值处理办法" class="headerlink" title="多特征值处理办法"></a>多特征值处理办法</h1><h2 id="one-hot"><a href="#one-hot" class="headerlink" title="one-hot"></a>one-hot</h2><p>If a categorical feature can take on 𝑘 values, create 𝑘 binary features (0 or 1 valued).<br>如果一个特征有大于2个以上的N可枚举值，那么将当前特征拆分成N个新的代表相应枚举值的特征即可<br><img src="/image/LLM/145.png" alt></p><h2 id="连续值"><a href="#连续值" class="headerlink" title="连续值"></a>连续值</h2><p>如果一个特质的值是连续值，不可枚举，那么需要设定一个阈值，大于该阈值一类，小于则是另一类，从而实现对该特征的二分类<br>阈值的选取还是通过计算信息增益，选取能够使信息增益值最大的阈值参与分类<br><img src="/image/LLM/146.png" alt></p><h1 id="回归树"><a href="#回归树" class="headerlink" title="回归树"></a>回归树</h1><p>上面是使用决策树进行分类计算<br>接下来使用方差对连续数据进行推测，就是回归树<br>如下图，根据前三个特征，推测weight 的值，weight 是个连续的值，不能枚举的<br><img src="/image/LLM/147.png" alt></p><p><img src="/image/LLM/148.png" alt></p>]]></content>
+    <content type="html"><![CDATA[<p>决策树模型是通过计算特征纯度后，选取最大纯度值的特征作为决策节点，<br>将数据根据是否符合当前特征节点一份为二，再根据特征纯度，继续划分，<br>最后根据停止划分规则进行数据分类或推测的模型</p><p><img src="/image/LLM/136.png" alt></p><h1 id="创建过程"><a href="#创建过程" class="headerlink" title="创建过程"></a>创建过程</h1><p>决策树创建过程需要考虑两件事</p><ol><li><p>在每个节点上如果选择根据什么特征进行数据分类<br>Maximize purity<br>如果一个特征在把数据分成两组之后，使分组后的数据能够最大程度的趋于同一类，那么这个特征就是纯度高的特征,<br>即 如果这个特征能够直接决定数据属于哪个分类的程度越高，纯度就越高<br>比如用DNA特征判断猫狗分类比用耳朵是尖的还是软的更直接，DNA特征就是最大纯度的特征<br><img src="/image/LLM/137.png" alt></p></li><li><p>什么时候停止数据分类<br>a. 当一个节点里面的数据都属于同一类的时候<br>b. 到达树的深度最大值的时候，树越深，过拟合越有可能，计算成本越高<br>c. 当特征纯度(熵)低于某个阈值的时候<br>d. 当节点里的数据个数低于某个阈值的时候</p></li></ol><p><img src="/image/LLM/138.png" alt></p><h2 id="熵"><a href="#熵" class="headerlink" title="熵"></a>熵</h2><p>可以理解为数据的混乱程度，如果数据特别混乱，则值越大，返回数据如果种类单一，则值越小，趋近0<br>这里用熵来计算特征的非纯度或者较杂质程度，<br>如果根据某个特征分类后的数据的熵 越小，说数据越干净，杂质越少<br>反之，如果得到的熵越大，说数据越混乱，不同类的数据越多<br>如下面判断是否是猫的问题<br>p1 代表是每组数据中猫的比例，都是猫或狗的话熵 是0，5:5 的时候熵 最大值为1，数据最混乱<br><img src="/image/LLM/139.png" alt><br>具体熵 的计算公式如下<br><img src="/image/LLM/140.png" alt></p><h2 id="信息增益"><a href="#信息增益" class="headerlink" title="信息增益"></a>信息增益</h2><p>在了解熵的含义后，用下面的计算过程选择节点的判断特征<br>根节点的熵减去分类后两个节点熵的加权平均值，值越大说明分类后数据越纯了<br><img src="/image/LLM/141.png" alt><br>这个计算方式得到的值就叫信息增益<br>即特征信息增益越大，在分类过程中，能够把数据分的越纯<br><img src="/image/LLM/142.png" alt></p><h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>决策树学习过程<br><img src="/image/LLM/143.png" alt><br>对于每个节点，都要像对待根节点一样<br>根据拿到的数据先找到最大信息增益的特征然后进行分类<br>整个过程就是一个递归的过程，直到满足停止分类的规则为止<br><img src="/image/LLM/144.png" alt></p><h1 id="多特征值处理办法"><a href="#多特征值处理办法" class="headerlink" title="多特征值处理办法"></a>多特征值处理办法</h1><h2 id="one-hot"><a href="#one-hot" class="headerlink" title="one-hot"></a>one-hot</h2><p>If a categorical feature can take on 𝑘 values, create 𝑘 binary features (0 or 1 valued).<br>如果一个特征有大于2个以上的N可枚举值，那么将当前特征拆分成N个新的代表相应枚举值的特征即可<br><img src="/image/LLM/145.png" alt></p><h2 id="连续值"><a href="#连续值" class="headerlink" title="连续值"></a>连续值</h2><p>如果一个特质的值是连续值，不可枚举，那么需要设定一个阈值，大于该阈值一类，小于则是另一类，从而实现对该特征的二分类<br>阈值的选取还是通过计算信息增益，选取能够使信息增益值最大的阈值参与分类<br>一般情况下先对所有数据按这个特征值排序，然后选取排序列表中两个数据间的中点做阈值进行信息增益计算，<br>多轮计算后再从中选取信息增益最大的阈值<br><img src="/image/LLM/146.png" alt></p><h1 id="回归树"><a href="#回归树" class="headerlink" title="回归树"></a>回归树</h1><p>上面是使用决策树进行分类计算<br>接下来使用方差对连续数据进行推测，就是回归树<br>如下图，根据前三个特征，推测weight 的值，weight 是个连续的值，不能枚举的<br><img src="/image/LLM/147.png" alt></p><p><img src="/image/LLM/148.png" alt></p><p><a href="https://colab.research.google.com/github/kaieye/2022-Machine-Learning-Specialization/blob/main/Advanced%20Learning%20Algorithms/week4/7.Practice%20lab%20decision%20trees/C2_W4_Decision_Tree_with_Markdown.ipynb#scrollTo=5MIhOlYfSm26" target="_blank" rel="noopener">决策树练习</a></p><h1 id="多个决策树"><a href="#多个决策树" class="headerlink" title="多个决策树"></a>多个决策树</h1><p>单个决策树对训练数据非常敏感，只要更改一个训练数据，就有可能更改信息增益排序，<br>从而影响节点特征选择，进而导致整棵树发生变化，使得算法失去健壮性<br>解决办法就是构建多个树，让他们投票最终的预测结果，使整体的算法对任何单个树可能在做什么不那么敏感<br><img src="/image/LLM/149.png" alt></p><h2 id="放回抽样"><a href="#放回抽样" class="headerlink" title="放回抽样"></a>放回抽样</h2><p>一共有m个训练数据，每次从m个数据中随机抽取1个数据，直到抽取到m个数据，抽取到的数据可能是重复的<br><img src="/image/LLM/150.png" alt></p><h2 id="随机森林算法"><a href="#随机森林算法" class="headerlink" title="随机森林算法"></a>随机森林算法</h2><p>使用放回抽样的数据选取方法，每次拿到m个训练数据，用这个m个训练数据训练决策树，重复 B(小于100)次,<br>得到B棵决策树，从而形成决策树森林对预测结果进行投票，这种算法就是随机森林算法<br><img src="/image/LLM/151.png" alt><br>B 如果大于100 一个是训练效果会下降，推测准确性降低，另外一个就是会增加计算成本，使算法变得复杂，得不偿失</p><h3 id="随机特征选取"><a href="#随机特征选取" class="headerlink" title="随机特征选取"></a>随机特征选取</h3><p>对于具备N个特征的数据，通常选择N的K个特征子集进行训练，如果N特别大，K一般等于N的平方根<br><img src="/image/LLM/152.png" alt></p><h2 id="XGBoost-随机森林增强算法"><a href="#XGBoost-随机森林增强算法" class="headerlink" title="XGBoost 随机森林增强算法"></a>XGBoost 随机森林增强算法</h2><p>除了第一次等概率的从m个训练数据中抽样new dataSet 外，后续的每一轮抽样，都将前一轮推测失败的训练数据的权重加大，<br>使被抽取到的概率变高，尽可能的将推测失败的数据参与到后续的训练中，从而推动算法更快的学习，并学习的更好，提高算法的准确性<br><img src="/image/LLM/153.png" alt></p><p>这种算法又称为XGBoost 算法，是随机森林算法的改进版，优点如下<br><img src="/image/LLM/154.png" alt><br><img src="/image/LLM/155.png" alt></p><h1 id="决策树-VS-神经网络"><a href="#决策树-VS-神经网络" class="headerlink" title="决策树 VS 神经网络"></a>决策树 VS 神经网络</h1><p><img src="/image/LLM/156.png" alt></p><h2 id="决策树-amp-决策森林"><a href="#决策树-amp-决策森林" class="headerlink" title="决策树&amp; 决策森林"></a>决策树&amp; 决策森林</h2><p>适合结构化数据(可以用表格表示的数据)<br>不适合非结构化数据（音视频，图像）<br>小的决策树可以被人类解释推测过程<br>训练速度快，缩短算法迭代循环周期，更快的提高算法性能</p><h2 id="神经网络"><a href="#神经网络" class="headerlink" title="神经网络"></a>神经网络</h2><p>对于所有数据类型都很友好，包括结构化和非结构化<br>训练速度比决策树要慢<br>但可以轻松实现迁移学习，但是决策树每次训练只能特定的特征，得到特定的决策树<br>方便构建多模型系统，神经网络间串联方便</p>]]></content>
     
     <summary type="html">
     
@@ -45,9 +118,9 @@
     <link href="http://yoohannah.github.io/post/machineLearning/MachineLearningDevelopmentProcess.html"/>
     <id>http://yoohannah.github.io/post/machineLearning/MachineLearningDevelopmentProcess.html</id>
     <published>2024-09-29T08:39:37.000Z</published>
-    <updated>2024-09-30T07:35:43.314Z</updated>
+    <updated>2024-10-10T07:21:11.007Z</updated>
     
-    <content type="html"><![CDATA[<p><img src="/image/LLM/123.png" alt></p><p>整个开发过程是一个选择框架，训练模型，诊断模型循环的过程</p><h1 id="错误分析"><a href="#错误分析" class="headerlink" title="错误分析"></a>错误分析</h1><p>除了从高偏差高误差角度对模型进行分析外，还可以对mcv 产生错误分类的角度对模型进行分析<br><img src="/image/LLM/125.png" alt></p><p>可以从交叉验证集测试产生的错误中进行分析<br>通过将错误进行归类统计，找出对模型影响比例较大的错误和比例较小的错误<br>从而调整模型训练的方向，已解决上面遇到的问题<br><img src="/image/LLM/124.png" alt></p><p>如果交叉验证集产生错误的数据比较庞大，可以选择进行随机抽取一定小批量的数据进行错误分类，以节省人力</p><h1 id="添加数据"><a href="#添加数据" class="headerlink" title="添加数据"></a>添加数据</h1><p>通过引入更多数据完善模型的判断，更关注通过注入的数据引发的对模型的训练结果的影响</p><h2 id="数据增强"><a href="#数据增强" class="headerlink" title="数据增强"></a>数据增强</h2><p>Augmentation: modifying an existing training example to create a new training example.<br>在原有数据基础上，通过添加特定种类的噪声，形成新的测试数据，从而完善特定种类的错误判断<br>对于图片和音频数据都适用<br><img src="/image/LLM/126.png" alt><br>但是对添加随机或者无意义噪声产生的数据进行训练，对于模型训练不会有多大帮助</p><h2 id="数据合成"><a href="#数据合成" class="headerlink" title="数据合成"></a>数据合成</h2><p>Synthesis: using artificial data inputs to create a new training example.<br>直接由计算机合成训练过程中使用的数据，通常用于计算机视觉训练的场景<br><img src="/image/LLM/127.png" alt></p><h1 id="迁移学习"><a href="#迁移学习" class="headerlink" title="迁移学习"></a>迁移学习</h1><p>在已有大模型训练结果基础上，通过修改输出层结果使之符合自己使用场景的训练方法<br>好处是，在数据有限的情况下，可以直接使用输出层之前的参数开始训练，减少自己从头开始训练的工作</p><p>例如下面这个使用1000+分类的训练识别数字0-9的模型，只是在输出层将1000+ 输出改成10种输出，在此基础上开始训练<br><img src="/image/LLM/128.png" alt><br>一般训练步骤为下载相同输入(文本的下载文本的，音视频的下载音视频的)的预训练模型，然后用自己的数据进行训练(fine tuning)<br><img src="/image/LLM/129.png" alt></p><h1 id="完整开发流程"><a href="#完整开发流程" class="headerlink" title="完整开发流程"></a>完整开发流程</h1><p><img src="/image/LLM/130.png" alt></p><h2 id="部署阶段"><a href="#部署阶段" class="headerlink" title="部署阶段"></a>部署阶段</h2><p>通常应用层跟模型通过Api 进行通信，用户输入x， 模型返回预测值y^<br>软件工程师需要注意</p><ol><li>尽可能的保障低成本的计算出具有可靠性和有效性的预测结果</li><li>可以进行大规模用户扩展使用</li><li>在用户隐私允许同意的情况下进行日志记录输入和输出</li><li>对模型进行系统监控，比如根据上面日志的记录，计算出因为当前数据变化导致计算结果不准时，判断是否让模型进行进一步优化</li><li>保障模型更新，在上一步进行模型优化后要保证能够将老的模型替换成新模型</li></ol><p><img src="/image/LLM/131.png" alt></p><h1 id="避免道德偏见伦理问题"><a href="#避免道德偏见伦理问题" class="headerlink" title="避免道德偏见伦理问题"></a>避免道德偏见伦理问题</h1><ol><li>建议多元化(多背景，多种族)团队，上线前进行头脑风暴，探索可能对弱势群体造成伤害的可能</li><li>参考行业标准</li><li>上线前通过技术诊断产生的伤害可能性，从而决策是否可以上线</li><li>制定延缓计划，上线后观测可能产生的伤害，及时进行回滚处理<br><img src="/image/LLM/132.png" alt></li></ol><h1 id="二分类错误度量"><a href="#二分类错误度量" class="headerlink" title="二分类错误度量"></a>二分类错误度量</h1><p>在对倾斜数据集(y=1 和y = 0 所占比例不是5:5)进行训练时，<br>判断模型预测结果好坏通常交叉验证集的数据计算精确率和召回率两个指标衡量<br><img src="/image/LLM/133.png" alt><br>如果二者都趋近0或1时，说明当前的模型不是一个有用的模型，一直在打印0或1<br>只有二者值都很大时，才说明算法是有用的</p><p>精确率表示实际上y = 1的可能性<br>召回率表示模型计算出y = 1 的可能性</p><h2 id="对于精确率和召回率的衡量"><a href="#对于精确率和召回率的衡量" class="headerlink" title="对于精确率和召回率的衡量"></a>对于精确率和召回率的衡量</h2><p>一种是通过设置阈值大小去权衡二者，从而进行取舍<br>提高阈值，会增加精度，降低召回率<br>降低阈值，会降低精度，提高召回率<br><img src="/image/LLM/134.png" alt><br>另外一种是使用F1 score分数，自动计算出最佳的精度和召回率，从而选择对应的算法<br><img src="/image/LLM/135.png" alt></p>]]></content>
+    <content type="html"><![CDATA[<p><img src="/image/LLM/123.png" alt></p><p>整个开发过程是一个选择框架，训练模型，诊断模型循环的过程</p><h1 id="错误分析"><a href="#错误分析" class="headerlink" title="错误分析"></a>错误分析</h1><p>除了从高偏差高误差角度对模型进行分析外，还可以对mcv 产生错误分类的角度对模型进行分析<br><img src="/image/LLM/125.png" alt></p><p>可以从交叉验证集测试产生的错误中进行分析<br>通过将错误进行归类统计，找出对模型影响比例较大的错误和比例较小的错误<br>从而调整模型训练的方向，已解决上面遇到的问题<br><img src="/image/LLM/124.png" alt></p><p>如果交叉验证集产生错误的数据比较庞大，可以选择进行随机抽取一定小批量的数据进行错误分类，以节省人力</p><h1 id="添加数据"><a href="#添加数据" class="headerlink" title="添加数据"></a>添加数据</h1><p>通过引入更多数据完善模型的判断，更关注通过注入的数据引发的对模型的训练结果的影响</p><h2 id="数据增强"><a href="#数据增强" class="headerlink" title="数据增强"></a>数据增强</h2><p>Augmentation: modifying an existing training example to create a new training example.<br>在原有数据基础上，通过添加特定种类的噪声，形成新的测试数据，从而完善特定种类的错误判断<br>对于图片和音频数据都适用<br><img src="/image/LLM/126.png" alt><br>但是对添加随机或者无意义噪声产生的数据进行训练，对于模型训练不会有多大帮助</p><h2 id="数据合成"><a href="#数据合成" class="headerlink" title="数据合成"></a>数据合成</h2><p>Synthesis: using artificial data inputs to create a new training example.<br>直接由计算机合成训练过程中使用的数据，通常用于计算机视觉训练的场景<br><img src="/image/LLM/127.png" alt></p><h1 id="迁移学习"><a href="#迁移学习" class="headerlink" title="迁移学习"></a>迁移学习</h1><p>在已有大模型训练结果基础上，通过修改输出层结果使之符合自己使用场景的训练方法<br>好处是，在数据有限的情况下，可以直接使用输出层之前的参数开始训练，减少自己从头开始训练的工作</p><p>例如下面这个使用1000+分类的训练识别数字0-9的模型，只是在输出层将1000+ 输出改成10种输出，在此基础上开始训练<br><img src="/image/LLM/128.png" alt><br>一般训练步骤为下载相同输入(文本的下载文本的，音视频的下载音视频的)的预训练模型，然后用自己的数据进行训练(fine tuning)<br><img src="/image/LLM/129.png" alt></p><h1 id="完整开发流程"><a href="#完整开发流程" class="headerlink" title="完整开发流程"></a>完整开发流程</h1><p><img src="/image/LLM/130.png" alt></p><h2 id="部署阶段"><a href="#部署阶段" class="headerlink" title="部署阶段"></a>部署阶段</h2><p>通常应用层跟模型通过Api 进行通信，用户输入x， 模型返回预测值y^<br>软件工程师需要注意</p><ol><li>尽可能的保障低成本的计算出具有可靠性和有效性的预测结果</li><li>可以进行大规模用户扩展使用</li><li>在用户隐私允许同意的情况下进行日志记录输入和输出</li><li>对模型进行系统监控，比如根据上面日志的记录，计算出因为当前数据变化导致计算结果不准时，判断是否让模型进行进一步优化</li><li>保障模型更新，在上一步进行模型优化后要保证能够将老的模型替换成新模型</li></ol><p><img src="/image/LLM/131.png" alt></p><h1 id="避免道德偏见伦理问题"><a href="#避免道德偏见伦理问题" class="headerlink" title="避免道德偏见伦理问题"></a>避免道德偏见伦理问题</h1><ol><li>建议多元化(多背景，多种族)团队，上线前进行头脑风暴，探索可能对弱势群体造成伤害的可能</li><li>参考行业标准</li><li>上线前通过技术诊断产生的伤害可能性，从而决策是否可以上线</li><li>制定延缓计划，上线后观测可能产生的伤害，及时进行回滚处理<br><img src="/image/LLM/132.png" alt></li></ol><h1 id="二分类错误度量"><a href="#二分类错误度量" class="headerlink" title="二分类错误度量"></a>二分类错误度量</h1><p>在对倾斜数据集(y=1 和y = 0 所占比例不是5:5)进行训练时，<br>判断模型预测结果好坏通常交叉验证集的数据计算精确率和召回率两个指标衡量<br><img src="/image/LLM/133.png" alt><br>如果二者都趋近0或1时，说明当前的模型不是一个有用的模型，一直在打印0或1<br>只有二者值都很大时，才说明算法是有用的</p><p>精确率表示实际上y = 1的可能性<br>召回率表示模型计算出y = 1 的可能性</p><h2 id="对于精确率和召回率的衡量"><a href="#对于精确率和召回率的衡量" class="headerlink" title="对于精确率和召回率的衡量"></a>对于精确率和召回率的衡量</h2><p>一种是通过设置阈值大小去权衡二者，从而进行取舍<br>提高阈值，会增加精度，降低召回率<br>降低阈值，会降低精度，提高召回率<br><img src="/image/LLM/134.png" alt><br>另外一种是使用F1 score分数(调和平均数)，自动计算出最佳的精度和召回率，从而选择对应的算法<br><img src="/image/LLM/135.png" alt></p>]]></content>
     
     <summary type="html">
     
@@ -228,6 +301,30 @@
   </entry>
   
   <entry>
+    <title>推荐系统</title>
+    <link href="http://yoohannah.github.io/post/machineLearning/RecommenderSystem.html"/>
+    <id>http://yoohannah.github.io/post/machineLearning/RecommenderSystem.html</id>
+    <published>2024-09-05T23:10:37.000Z</published>
+    <updated>2024-10-10T07:21:11.007Z</updated>
+    
+    <content type="html"><![CDATA[<p>下面以根据电影评分推荐电影为例，介绍推荐系统的开发过程</p><h1 id="思路整理"><a href="#思路整理" class="headerlink" title="思路整理"></a>思路整理</h1><p>根据电影的特征，用户对每个电影都会有一个评分(0-5分)，比如电影A的评分是5分，电影B的评分是4分，电影C的评分是3分<br>一般情况下，用户对某电影评分越高，说明后续对该类型电影的青睐度越高，对于系统来说越值得推荐给用户<br>即系统需要预测用户对某个电影X的评分，从而决定是否推荐给用户<br>系统需要依赖的数据是电影的特征数据（X）和以往用户对电影的评分数据(Y)<br>根据二者的关系，计算出相关的算法参数<br>当有需要预测一个电影评分的时候，输入待评分电影特征即可得到评分，然后根据阈值判断是否推荐给用户<br>下面是对一个观众的电影评分预测过程<br><img src="/image/LLM/179.png" alt><br>对应的成本函数<br><img src="/image/LLM/180.png" alt><br>如果训练集有多个用户的评分数据，拿到所有用户的参数后加合，就可以预测大众用户对某个电影的整体评分情况<br><img src="/image/LLM/181.png" alt></p><h1 id="协同过滤算法"><a href="#协同过滤算法" class="headerlink" title="协同过滤算法"></a>协同过滤算法</h1><p>对于电影的评分，一开始不能确定使用电影的哪些特征，协同过滤算法将输入，电影的特征X， 也看做是一个参数参与成本函数的计算<br>从而利用梯度下降过程找到合适的参数和特征值</p><h2 id="推导过程"><a href="#推导过程" class="headerlink" title="推导过程"></a>推导过程</h2><ol><li>已知多个人对一部电影的评分和相关参数，可以反推出X 的 情况<br><img src="/image/LLM/182.png" alt></li><li>如果现在已知多个人对一部电影的评分和相关参数，可以对电影特征X进行成本函数计算<br>加和之后可以对多个电影的特征进行预测<br><img src="/image/LLM/183.png" alt></li><li>观察成本函数的公式，现在加和参数和特征的成本函数，<br><img src="/image/LLM/185.png" alt><br><img src="/image/LLM/184.png" alt></li><li>可以发现， 梯度下降过程，可以同时找出多个人对电影评分参数和对多部电影的特征值推测<br><img src="/image/LLM/186.png" alt></li></ol><p>协同在这里的体现在于多个用户对一部电影进行了评价，通过合作得到了对电影的整体评价，同时可以预测出能够代表这部电影的特征值<br>反过来，可以预测尚未对同一部电影进行评分的其他用户的评分<br>即从多个用户收集数据，然后预测其他用户的评分</p><h1 id="线性回归转向二进制分类"><a href="#线性回归转向二进制分类" class="headerlink" title="线性回归转向二进制分类"></a>线性回归转向二进制分类</h1><p>基于线性回归的推荐系统适合于上面评分有连续值的推测，基于上述思路，将评分结果通过逻辑函数转成二进制结果<br>即可实现二进制分类问题的预测<br><img src="/image/LLM/187.png" alt><br><img src="/image/LLM/188.png" alt><br><img src="/image/LLM/189.png" alt></p><h1 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h1><h2 id="均值归一化"><a href="#均值归一化" class="headerlink" title="均值归一化"></a>均值归一化</h2><p>对于尚未对电影作为任何评价的用户，如果参数为0，那么预测的评分结果为0，会极大影响推荐的准确性<br>因此，先对多用户评分计算均值，然后对所有用户的评分减去均值，得到新的评分，在新的评分上进行参数获取<br>进行评分预测的时候再把均值加回来，这样即使参数为0，预测的评分值也是之前评分的均值，对整体评分meian值不会有影响<br><img src="/image/LLM/190.png" alt></p><h2 id="如何找到相似的推荐"><a href="#如何找到相似的推荐" class="headerlink" title="如何找到相似的推荐"></a>如何找到相似的推荐</h2><p>找到与当前item 距离最近的其他item<br><img src="/image/LLM/191.png" alt></p><h2 id="协同过滤的限制"><a href="#协同过滤的限制" class="headerlink" title="协同过滤的限制"></a>协同过滤的限制</h2><ol><li>对冷启动问题不友好</li><li>不能直接获取到有价值的特征数据，可能是关于观众或者电影的片面的信息，只能从这些信息上推测用户的爱好<br><img src="/image/LLM/192.png" alt></li></ol><h1 id="基于内容的推荐算法"><a href="#基于内容的推荐算法" class="headerlink" title="基于内容的推荐算法"></a>基于内容的推荐算法</h1><p>对比基于协同过滤的推荐算法(根据用户对相似item的评分进行推荐)<br>基于内容的推荐算法同时基于用户和item的特征，通过计算item 和用户的匹配度，来判断用户是否对该item感兴趣<br><img src="/image/LLM/193.png" alt></p><h2 id="主要思路"><a href="#主要思路" class="headerlink" title="主要思路"></a>主要思路</h2><p>利用神经网络从用户特征和item 特征中提取n 个特征，计算二者的点积从而判断用户是否对item感兴趣，是否要推荐给用户<br><img src="/image/LLM/194.png" alt><br><img src="/image/LLM/195.png" alt><br><img src="/image/LLM/196.png" alt><br><img src="/image/LLM/197.png" alt><br><img src="/image/LLM/198.png" alt></p><h1 id="从大目录中进行推荐"><a href="#从大目录中进行推荐" class="headerlink" title="从大目录中进行推荐"></a>从大目录中进行推荐</h1><ol><li><p>进行检索，找出候选列表<br>但是检索过程需要注意，通过对更多的项目进行检索可以得到更好的结果但是检索的速度回变慢，<br>为了分析优化权衡二者，可以实施离线实验观察新增的检索项是否增加了检索结果的相关性</p></li><li><p>对候选列表进行fine-tune排序找出得分最高的item给用户</p></li></ol><p><img src="/image/LLM/199.png" alt><br><img src="/image/LLM/200.png" alt><br><img src="/image/LLM/201.png" alt></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;下面以根据电影评分推荐电影为例，介绍推荐系统的开发过程&lt;/p&gt;
+&lt;h1 id=&quot;思路整理&quot;&gt;&lt;a href=&quot;#思路整理&quot; class=&quot;headerlink&quot; title=&quot;思路整理&quot;&gt;&lt;/a&gt;思路整理&lt;/h1&gt;&lt;p&gt;根据电影的特征，用户对每个电影都会有一个评分(0-5分
+      
+    
+    </summary>
+    
+    
+      <category term="machineLearing" scheme="http://yoohannah.github.io/tags/machineLearing/"/>
+    
+  </entry>
+  
+  <entry>
     <title>机器学习定义</title>
     <link href="http://yoohannah.github.io/post/machineLearning/definition.html"/>
     <id>http://yoohannah.github.io/post/machineLearning/definition.html</id>
@@ -387,103 +484,6 @@
     
     
       <category term="js" scheme="http://yoohannah.github.io/tags/js/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>redis 学习的一些笔记</title>
-    <link href="http://yoohannah.github.io/post/knowledge/redis.html"/>
-    <id>http://yoohannah.github.io/post/knowledge/redis.html</id>
-    <published>2022-08-09T13:30:15.000Z</published>
-    <updated>2024-09-01T03:26:27.574Z</updated>
-    
-    <content type="html"><![CDATA[<p>基础常识<br>磁盘<br>寻址：ms<br>带宽： G/M<br>内存<br>寻址：ns(纳秒级)<br>带宽：byte/s<br>秒&gt;毫秒&gt;微秒&gt;纳秒<br>磁盘寻址上比内存少了10w倍</p><p>I/O BUffer：成本问题<br>磁盘有磁道和扇区，一个扇区512byte<br>会造成索引成本增大<br>因此进行4K对齐，操作系统无论读多少都最少从磁盘里面拿4k出来</p><p>数据库的表很大，性能会下降吗？<br>如果表有索引，<br>那么对于增删改的操作肯定会变慢<br>查询速度<br>如果是1个或者少量查询依然很快<br>但如果是并发大的时候会受到硬盘带宽的影响，从而影响速度</p><p>数据在内存和磁盘中体积不一样</p><p>redis出现原因：<br>内存 ==&gt;  贵<br>磁盘 ==&gt;  慢<br>两个基础设施限制：<br>冯诺依曼体系的硬件制约 ===&gt; 硬盘io带宽问题<br>以太网，tcp/ip的网络 ===&gt; 不稳定</p><p><a href="https://db-engines.com/en/" target="_blank" rel="noopener">https://db-engines.com/en/</a></p><p>Redis 是一个开源（BSD许可）的，内存中的数据结构存储系统，它可以用作数据库、缓存和消息中间件。 它支持多种类型的数据结构，如 字符串（strings）， 散列（hashes）， 列表（lists）， 集合（sets）， 有序集合（sorted sets） 与范围查询， bitmaps， hyperloglogs 和 地理空间（geospatial） 索引半径查询。 Redis 内置了 复制（replication），LUA脚本（Lua scripting）， LRU驱动事件（LRU eviction），事务（transactions） 和不同级别的 磁盘持久化（persistence）， 并通过 Redis哨兵（Sentinel）和自动 分区（Cluster）提供高可用性（high availability）。</p><p>上述数据类型是指value的数据类型<br>memcache 和redis区别在于，memcache value没有类型<br>将返回value所有数据到client端，会受到server 网卡IO的限制，而且client要有解码的逻辑<br>redis因为value有类型，所以对于数据的请求根据不同情况直接调用相应类型方法返回少量数据即可<br>做到了计算向数据移动</p><p>redis是单进程，单线程，单实例的，通过epoll快速处理并发请求<br>epoll是同步非阻塞的多路复用机制<br>jvm: 一个线程成本是1MB<br>线程多了会增加调度成本，从而使CPU浪费，也会增加内存成本<br>BIO—&gt;NIO（同步非阻塞）—&gt;多路复用—&gt;epoll(引入共享空间避免fd相关数据考来考去)</p><p>redis 对不同数据类型不同encoding类型的数值具有不同的方法<br>key有两个属性：<br>type标识值的类型<br>encoding标识值的编码类型<br>二者决定对值的操作可以使用哪些方法，从而加速计算</p><p>String 类型<br>字符串的相关操作：<br>set,get,append,setRange,getRange,strlen<br>适用场景：<br>使用内存存储的session，对象，小文件</p><p>数值的相关操作：<br>incr,decr<br>适用场景：<br>限流，计数<br>秒杀一般会用数据库</p><p>bitmap的相关操作：<br>setbit, bitcount,bitpos,bittop<br>使用场景：web, 离线数据<br>1.用户系统，统计用户登录天数，且窗口随机<br>key标识用户，每个用户准备365位，每一位表示当天是否登录，登录置一<br>setbit sean 1 1<br>setbit sean 7 1<br>setbit sean 364 1<br>STRLEN sean ===&gt;46 每个用户只需要46个字节来存储这些信息<br>BITCOUNT sean -2 -1 计算多少天范围内一共登录了几天</p><ol start="2"><li><p>电商做618活动，需要给活跃用户登录后送礼物，请问应该备货多少礼物<br>假设这里活跃用户统计规则为20220901-20220903三天内登录的用户，三天内只要登录一次就算活跃用户<br>key标识当天用户登录情况，将用户编号映射到二进制位的相应位置上，每一位二进制代表一位用户是否登录<br>setbit 20220901 1 1<br>setbit 20220902 1 1<br>setbit 20220902 7 1<br>bittop or destkey 20220901 20220902<br>bitcount destkey 0 -1</p></li><li><p>存储oa权限信息</p></li><li>布隆过滤器，模块调用</li></ol><p>List 类型相关操作<br>按不同放入顺序排列<br>栈：同向命令<br>队列：反向命令<br>数组<br>阻塞，单播队列<br>ltrim<br>使用场景：<br>数据共享，迁出<br>无状态</p><p>Hash类型<br>对filed进行数值计算<br>场景：<br>点赞，收藏，详情页<br>聚合场景</p><p>Set类型<br>无序去重集合<br>元素变多扩容，会触发rehash，造成原顺序颠倒不稳定<br>集合操作多<br>随机事件：<br>RANDMEMBER key count<br>正数：取出一个去重的结果集(不能超过已有集)<br>负数：取出一个带重复的结果集，一定满足你要的数量<br>如果是0，不返回<br>应用场景：<br>随机事件==&gt;抽奖：<br>10个精品，参与人数&gt; 10 时，传正数，得到10个随机不重复值<br>10个精品，参与人数&lt; 10 时，传负数，得到10个可重复的值<br>中奖是否重复<br>Spop 不重复取出一个<br>推荐系统：<br>共同好友：交集<br>推荐好友：差集</p><p>Sorted set<br>排序<br>物理内存左小右大（根据分值从左到右从小到大）<br>不随命令发生变化<br>集合操作（并集，交集）权重、聚合指令<br>排序是怎么实现的。 ==&gt; skip List 跳跃表<br>增删改查的速度<br>场景：<br>排行榜，<br>有序事件<br>评论+分页</p><p>redis持久化<br>持久化意味着性能会下降<br>两个指标<br>快照：rdb,恢复的速度快，但缺失的多<br>日志：aof, ，<br>满足完整性好，恢复速度变慢，===&gt;采用不同日志策略避免<br>指令追加造成冗余量比较大 ===&gt; 使用重写</p><p>redis 分布式集群<br>可用性：<br>单点故障可通过主从主备一变多集群构建镜像，需要同步<br>强一致性，会破坏使用性<br>弱一致性，可用性强，但同步一致性低（默认）<br>最终一致性，使用黑盒可靠集群做中间缓存，保证主从数据最终一致性<br>数据存储压力问题(装不下)，采用分片式集群代理集群，也是一变多，但不需要同步</p><p>AkF拆分原则<br>根据业务划分数据到不同redis实例</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;基础常识&lt;br&gt;磁盘&lt;br&gt;寻址：ms&lt;br&gt;带宽： G/M&lt;br&gt;内存&lt;br&gt;寻址：ns(纳秒级)&lt;br&gt;带宽：byte/s&lt;br&gt;秒&amp;gt;毫秒&amp;gt;微秒&amp;gt;纳秒&lt;br&gt;磁盘寻址上比内存少了10w倍&lt;/p&gt;
-&lt;p&gt;I/O BUffer：成本问题&lt;br&gt;磁盘有磁道和
-      
-    
-    </summary>
-    
-    
-      <category term="js" scheme="http://yoohannah.github.io/tags/js/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>系统设计案例</title>
-    <link href="http://yoohannah.github.io/post/knowledge/systemDesign.html"/>
-    <id>http://yoohannah.github.io/post/knowledge/systemDesign.html</id>
-    <published>2022-02-02T01:31:06.000Z</published>
-    <updated>2024-09-01T03:26:27.576Z</updated>
-    
-    <content type="html"><![CDATA[<p>案例：用户将存储内容粘贴到站点，站点给用户返回一个短地址，用户通过短地址，可以访问之前粘贴的内容或者跳转之前的原始站点</p><h1 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h1><ol><li><p>对于用户来说操作要简单，生成的短地址要简单，而且要唯一，不同用户即使内容一样也要生成唯一的短地址</p></li><li><p>时间有效性，从存储角度来说，不可能一直帮用户存储所有生成的短地址，不然存储会越来越大，所以通过设置短地址有效的访问时间，可以减少存储成本</p></li></ol><h1 id="技术"><a href="#技术" class="headerlink" title="技术"></a>技术</h1><ol><li>可用性(high Availability)， 保障用户功能可用</li><li>低延时(low latency)，用户拿到短地址或者通过短地址跳转其他网站时，重定向时间不宜过长</li><li>安全性（non guessable），不能被猜出来，用户在生成一定短地址时如果携带一些个人信息，不应体现在短地址中，否则会造成用户信息泄露</li><li>对于ins/微博/小红书之类的社交功能还要保障一致性，博主发的照片，follower看到的内容应该是一样的</li></ol><h1 id="容量负载能力假设"><a href="#容量负载能力假设" class="headerlink" title="容量负载能力假设"></a>容量负载能力假设</h1><p>对一个用户来说，可以抽象出两个主要请求</p><ol><li>请求生成短url，我们要把请求参数或者原始信息存储起来 inbound</li><li>请求访问url，把生成的url返回给用户使用，进行重定向 outbound</li></ol><p>假设一个短地址按500byte大小存储</p><h2 id="容量"><a href="#容量" class="headerlink" title="容量"></a>容量</h2><p>假设一个月会有100万个新短地址生成，<br>那么5年会产生</p><p>100万<em>5年</em>12个月 ==&gt; 约等于60亿个短地址</p><p>60亿*500byte ==&gt; 3TB 会有需要3TB大小的容量存储</p><h2 id="负载能力"><a href="#负载能力" class="headerlink" title="负载能力"></a>负载能力</h2><p>假设一个月有100个用户，每个用户会进行100万次访问短地址进行重定向的操作</p><p>那么每秒钟会有<br>（100 <em> 100万）/（30D </em> 24H * 3600s） ==&gt; 约等于4000个短url 要给到用户<br>同时会有<br>4000/ 100 ==&gt; 大概40个短url 需要被生成</p><p>那么服务所需要的带宽就可以计算出来</p><p>inbound : 40<em> 500 byte 约等于 20kb/s<br>outbound: 4000</em> 500 byte 约等于 20MB/s</p><h1 id="API-数据库设计"><a href="#API-数据库设计" class="headerlink" title="API 数据库设计"></a>API 数据库设计</h1><h2 id="api"><a href="#api" class="headerlink" title="api"></a>api</h2><p>假设会用到简单的增删<br>生成短url createURL(api-key, originUrl, expired-Date, userId)<br>删除url  deleteURL(api-key,shortUrl)</p><h2 id="DataBase"><a href="#DataBase" class="headerlink" title="DataBase"></a>DataBase</h2><p>对于shortUrl</p><p>pk: hash<br>originUrl,<br>expired-date,<br>userId<br>…</p><p>对于user<br>pk: userId<br>name<br>…</p><h2 id="生成shortUrl"><a href="#生成shortUrl" class="headerlink" title="生成shortUrl"></a>生成shortUrl</h2><p>假如计划生成一个6个字符的短url，使用base64的加密算法的话可以生成64 ^ 6 大约640个短url,</p><p>满足之前5年会产生60个亿的唯一性需求</p><h1 id="整体逻辑"><a href="#整体逻辑" class="headerlink" title="整体逻辑"></a>整体逻辑</h1><p>用户 —&gt;request shortUrl generation —&gt; app</p><p>app —&gt; base64 encoding + 从key generation DB中拿一个nonUse 的key —&gt; 得到shortUrl —&gt;DB</p><p>DB —&gt; app –&gt;用户</p><h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="Cache"><a href="#Cache" class="headerlink" title="Cache"></a>Cache</h2><p>2-8原则</p><p>用存储的20% 的url做cache内容，可以满足80% 的访问需求</p><h2 id="load-balance"><a href="#load-balance" class="headerlink" title="load balance"></a>load balance</h2><p>均衡流量</p><h2 id="过期后的url处理，key的处理"><a href="#过期后的url处理，key的处理" class="headerlink" title="过期后的url处理，key的处理"></a>过期后的url处理，key的处理</h2><h2 id="分布式存储，分片"><a href="#分布式存储，分片" class="headerlink" title="分布式存储，分片"></a>分布式存储，分片</h2><h2 id="对于社交功能的newFeed的推送"><a href="#对于社交功能的newFeed的推送" class="headerlink" title="对于社交功能的newFeed的推送"></a>对于社交功能的newFeed的推送</h2><p>pull / push / pull + push hybrid</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;案例：用户将存储内容粘贴到站点，站点给用户返回一个短地址，用户通过短地址，可以访问之前粘贴的内容或者跳转之前的原始站点&lt;/p&gt;
-&lt;h1 id=&quot;功能&quot;&gt;&lt;a href=&quot;#功能&quot; class=&quot;headerlink&quot; title=&quot;功能&quot;&gt;&lt;/a&gt;功能&lt;/h1&gt;&lt;ol&gt;
-&lt;
-      
-    
-    </summary>
-    
-    
-      <category term="systemDesign" scheme="http://yoohannah.github.io/tags/systemDesign/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>如何提升应用打开速度</title>
-    <link href="http://yoohannah.github.io/post/react/hooks/1129.html"/>
-    <id>http://yoohannah.github.io/post/react/hooks/1129.html</id>
-    <published>2021-11-29T08:20:02.000Z</published>
-    <updated>2024-09-01T03:26:27.599Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="使用-import-语句，定义按需加载的起始模块"><a href="#使用-import-语句，定义按需加载的起始模块" class="headerlink" title="使用 import 语句，定义按需加载的起始模块"></a>使用 import 语句，定义按需加载的起始模块</h1><p>对于这个需求，ECMA Script 标准有一个提案，专门用于动态加载模块，语法是 import(someModule)。<br>注意，这里的 import 和我们一般用于引入模块的静态声明方式不同，比如 import something from ‘somemodule’ 。<br>但这里的 import 是作为一个函数动态运行的，这个 import() 函数会返回一个 Promise。<br>这样，在模块加载成功后，就可以在 Promise 的 then 回调函数中去使用这个模块了。</p><p>虽然这只是一个提案，并没有成为标准，但是 Webpack 等打包工具利用了这样的语法去定义代码的分包。</p><p>也就是说，Webpack 实现了这样的语法。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">function ProfilePage() &#123;</span><br><span class="line">  // 定义一个 state 用于存放需要加载的组件</span><br><span class="line">  const [RealPage, setRealPage] = useState(null);</span><br><span class="line">  </span><br><span class="line">  // 根据路径动态加载真正的组件实现</span><br><span class="line">  import(&apos;./RealProfilePage&apos;).then((comp) =&gt; &#123;</span><br><span class="line">    setRealPage(Comp);</span><br><span class="line">  &#125;);</span><br><span class="line">  // 如果组件未加载则显示 Loading 状态</span><br><span class="line">  if (!RealPage) return &apos;Loading....&apos;;</span><br><span class="line">  </span><br><span class="line">  // 组件加载成功后则将其渲染到界面</span><br><span class="line">  return &lt;RealPage /&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>import() 这个语句完全是由 Webpack 进行处理的。</p><p>按需加载的实现原理：Webpack 利用了动态 import 语句，自动实现了整个应用的拆包。<br>而在实际开发中，其实并不需要关心 Webpack 是如何做到的，<br>而只需要考虑：该在哪个位置使用 import 语句去定义动态加载的拆分点。</p><p>总体需要采用的策略是：按业务模块为目标去做隔离，尽量在每个模块的起始页面去定义这个拆分点。</p><p><b>react-loadable</b>，专门用于 React 组件的按需加载。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import Loadable from &quot;react-loadable&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 创建一个显示加载状态的组件</span><br><span class="line">function Loading(&#123; error &#125;) &#123;</span><br><span class="line">  return error ? &apos;Failed&apos; : &apos;Loading&apos;;</span><br><span class="line">&#125;</span><br><span class="line">// 创建加载器组件</span><br><span class="line">const HelloLazyLoad = Loadable(&#123;</span><br><span class="line">  loader: () =&gt; import(&quot;./RealHelloLazyLoad&quot;),</span><br><span class="line">  loading: Loading,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure><p>可以看到 Loadable 这个高阶组件主要就是两个 API。</p><p>loader：用于传入一个加载器回调，在组件渲染到页面时被执行。<br>在这个回调函数中，我们只需要直接使用 import 语句去加载需要的模块就可以了。</p><p>loading：表示用于显示加载状态的组件。在模块加载完成之前，加载器就会渲染这个组件。<br>如果模块加载失败，那么 react-loadable 会将 errors 属性传递给 Loading 组件，方便你根据错误状态来显示不同的信息给用户。</p><p>按需加载可以说是减少首屏加载时间最为有效的手段，它可以让用户在打开应用时，无需加载所有代码就能开始使用，从而提升用户体验。</p><h1 id="使用-service-worker-缓存前端资源"><a href="#使用-service-worker-缓存前端资源" class="headerlink" title="使用 service worker 缓存前端资源"></a>使用 service worker 缓存前端资源</h1><p>和浏览器自动的资源缓存机制相比，Service Worker 加上 Cache Storage 这个缓存机制，具有更高的准确性和可靠性。</p><p>因为它可以确保两点：<br>缓存永远不过期。你只要下载过一次，就永远不需要再重新下载，除非主动删除。<br>永远不会访问过期的资源。换句话说，如果发布了一个新版本，那么你可以通过版本化的一些机制，来确保用户访问到的一定是最新的资源。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;使用-import-语句，定义按需加载的起始模块&quot;&gt;&lt;a href=&quot;#使用-import-语句，定义按需加载的起始模块&quot; class=&quot;headerlink&quot; title=&quot;使用 import 语句，定义按需加载的起始模块&quot;&gt;&lt;/a&gt;使用 import 语句，定
-      
-    
-    </summary>
-    
-    
-      <category term="react" scheme="http://yoohannah.github.io/tags/react/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>一些其他小问题</title>
-    <link href="http://yoohannah.github.io/post/react/hooks/question.html"/>
-    <id>http://yoohannah.github.io/post/react/hooks/question.html</id>
-    <published>2021-11-29T08:20:02.000Z</published>
-    <updated>2024-09-01T03:26:27.599Z</updated>
-    
-    <content type="html"><![CDATA[<p>1.<br>在 useEffect 中如果使用了某些变量，却没有在依赖项中指定，会发生什么呢？</p><p>依赖那里没有传任何参数的话，会每次render都执行。<br>依赖项有传值但是，有部分依赖没有传，那么没有传的那部分，数据即使变化也不会执行副作用。</p><p>对于这节课中显示的 Blog 文章的例子，我们在 useEffect 中使用了 setBlogContent 这样一个函数，本质上它也是一个局部变量，那么这个函数需要被作为依赖项吗？为什么？</p><p>函数应该是不会变化的，所以不需要监听。</p><p>2.<br>useState 其实也是能够在组件的多次渲染之间共享数据的，那么在 useRef 的计时器例子中，能否用 state 去保存 window.setInterval() 返回的 timer 呢？</p><p>可以，只是没有 useRef 更优，因为在更新 state 值后会导致重新渲染，而 ref 值发生变化时，是不会触发组件的重新渲染的，这也是 useRef 区别于 useState 的地方。</p><p>3.<br>componentWillUnmount 近似的实现：组件销毁和文章 id 变化时执行。那么在函数组件中如果要实现严格的 componentWillUnmount，也就是只在组件销毁时执行，应该如何实现？\</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">useEffect(() =&gt; &#123;</span><br><span class="line">  return () =&gt; &#123;</span><br><span class="line">    // 这里只会在组件销毁前（componentWillUnmount）执行一次</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, [])</span><br></pre></td></tr></table></figure><p>4.<br>每次调用 useArticle 这个 Hook 的时候都会触发副作用去获取数据。<br>但是有时候，我们希望在有些组件自动获取，但有的组件中需要点击某个按钮才去获取数据，那么你会如何设计这个 Hook？（可能这道题有一点难度。）</p><p>useArticle Hook 可以提供一个参数，用来标记本地调用是否默认触发副作用去获取数据；对于点击按钮才触发请求的功能，可以在 Hook 中将获取数据的方法 retrn 出去，供外部自由调用。</p><ol start="5"><li>Hook 一般都是使用的 useState 保存了状态数据，也就意味着状态的范围限定在组件内部，组件销毁后，数据就没了。那么如果希望数据直接缓存到全局状态，应该如何做呢？</li></ol><p>可以借助 redux，配合 useContext 等 api ，将状态数据存储至全局中。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;1.&lt;br&gt;在 useEffect 中如果使用了某些变量，却没有在依赖项中指定，会发生什么呢？&lt;/p&gt;
-&lt;p&gt;依赖那里没有传任何参数的话，会每次render都执行。&lt;br&gt;依赖项有传值但是，有部分依赖没有传，那么没有传的那部分，数据即使变化也不会执行副作用。&lt;/p&gt;
-&lt;p&gt;
-      
-    
-    </summary>
-    
-    
-      <category term="react" scheme="http://yoohannah.github.io/tags/react/"/>
     
   </entry>
   

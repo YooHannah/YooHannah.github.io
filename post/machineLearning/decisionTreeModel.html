@@ -107,7 +107,15 @@
 <meta property="og:image" content="http://yoohannah.github.io/image/LLM/146.png">
 <meta property="og:image" content="http://yoohannah.github.io/image/LLM/147.png">
 <meta property="og:image" content="http://yoohannah.github.io/image/LLM/148.png">
-<meta property="og:updated_time" content="2024-09-30T09:32:39.027Z">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/149.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/150.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/151.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/152.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/153.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/154.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/155.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/156.png">
+<meta property="og:updated_time" content="2024-10-10T07:21:11.008Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="决策树模型">
 <meta name="twitter:description" content="决策树模型是通过计算特征纯度后，选取最大纯度值的特征作为决策节点，将数据根据是否符合当前特征节点一份为二，再根据特征纯度，继续划分，最后根据停止划分规则进行数据分类或推测的模型  创建过程决策树创建过程需要考虑两件事  在每个节点上如果选择根据什么特征进行数据分类Maximize purity如果一个特征在把数据分成两组之后，使分组后的数据能够最大程度的趋于同一类，那么这个特征就是纯度高的特征,即">
@@ -363,9 +371,19 @@
 <h2 id="信息增益"><a href="#信息增益" class="headerlink" title="信息增益"></a>信息增益</h2><p>在了解熵的含义后，用下面的计算过程选择节点的判断特征<br>根节点的熵减去分类后两个节点熵的加权平均值，值越大说明分类后数据越纯了<br><img src="/image/LLM/141.png" alt><br>这个计算方式得到的值就叫信息增益<br>即特征信息增益越大，在分类过程中，能够把数据分的越纯<br><img src="/image/LLM/142.png" alt></p>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>决策树学习过程<br><img src="/image/LLM/143.png" alt><br>对于每个节点，都要像对待根节点一样<br>根据拿到的数据先找到最大信息增益的特征然后进行分类<br>整个过程就是一个递归的过程，直到满足停止分类的规则为止<br><img src="/image/LLM/144.png" alt></p>
 <h1 id="多特征值处理办法"><a href="#多特征值处理办法" class="headerlink" title="多特征值处理办法"></a>多特征值处理办法</h1><h2 id="one-hot"><a href="#one-hot" class="headerlink" title="one-hot"></a>one-hot</h2><p>If a categorical feature can take on 𝑘 values, create 𝑘 binary features (0 or 1 valued).<br>如果一个特征有大于2个以上的N可枚举值，那么将当前特征拆分成N个新的代表相应枚举值的特征即可<br><img src="/image/LLM/145.png" alt></p>
-<h2 id="连续值"><a href="#连续值" class="headerlink" title="连续值"></a>连续值</h2><p>如果一个特质的值是连续值，不可枚举，那么需要设定一个阈值，大于该阈值一类，小于则是另一类，从而实现对该特征的二分类<br>阈值的选取还是通过计算信息增益，选取能够使信息增益值最大的阈值参与分类<br><img src="/image/LLM/146.png" alt></p>
+<h2 id="连续值"><a href="#连续值" class="headerlink" title="连续值"></a>连续值</h2><p>如果一个特质的值是连续值，不可枚举，那么需要设定一个阈值，大于该阈值一类，小于则是另一类，从而实现对该特征的二分类<br>阈值的选取还是通过计算信息增益，选取能够使信息增益值最大的阈值参与分类<br>一般情况下先对所有数据按这个特征值排序，然后选取排序列表中两个数据间的中点做阈值进行信息增益计算，<br>多轮计算后再从中选取信息增益最大的阈值<br><img src="/image/LLM/146.png" alt></p>
 <h1 id="回归树"><a href="#回归树" class="headerlink" title="回归树"></a>回归树</h1><p>上面是使用决策树进行分类计算<br>接下来使用方差对连续数据进行推测，就是回归树<br>如下图，根据前三个特征，推测weight 的值，weight 是个连续的值，不能枚举的<br><img src="/image/LLM/147.png" alt></p>
 <p><img src="/image/LLM/148.png" alt></p>
+<p><a href="https://colab.research.google.com/github/kaieye/2022-Machine-Learning-Specialization/blob/main/Advanced%20Learning%20Algorithms/week4/7.Practice%20lab%20decision%20trees/C2_W4_Decision_Tree_with_Markdown.ipynb#scrollTo=5MIhOlYfSm26" target="_blank" rel="noopener">决策树练习</a></p>
+<h1 id="多个决策树"><a href="#多个决策树" class="headerlink" title="多个决策树"></a>多个决策树</h1><p>单个决策树对训练数据非常敏感，只要更改一个训练数据，就有可能更改信息增益排序，<br>从而影响节点特征选择，进而导致整棵树发生变化，使得算法失去健壮性<br>解决办法就是构建多个树，让他们投票最终的预测结果，使整体的算法对任何单个树可能在做什么不那么敏感<br><img src="/image/LLM/149.png" alt></p>
+<h2 id="放回抽样"><a href="#放回抽样" class="headerlink" title="放回抽样"></a>放回抽样</h2><p>一共有m个训练数据，每次从m个数据中随机抽取1个数据，直到抽取到m个数据，抽取到的数据可能是重复的<br><img src="/image/LLM/150.png" alt></p>
+<h2 id="随机森林算法"><a href="#随机森林算法" class="headerlink" title="随机森林算法"></a>随机森林算法</h2><p>使用放回抽样的数据选取方法，每次拿到m个训练数据，用这个m个训练数据训练决策树，重复 B(小于100)次,<br>得到B棵决策树，从而形成决策树森林对预测结果进行投票，这种算法就是随机森林算法<br><img src="/image/LLM/151.png" alt><br>B 如果大于100 一个是训练效果会下降，推测准确性降低，另外一个就是会增加计算成本，使算法变得复杂，得不偿失</p>
+<h3 id="随机特征选取"><a href="#随机特征选取" class="headerlink" title="随机特征选取"></a>随机特征选取</h3><p>对于具备N个特征的数据，通常选择N的K个特征子集进行训练，如果N特别大，K一般等于N的平方根<br><img src="/image/LLM/152.png" alt></p>
+<h2 id="XGBoost-随机森林增强算法"><a href="#XGBoost-随机森林增强算法" class="headerlink" title="XGBoost 随机森林增强算法"></a>XGBoost 随机森林增强算法</h2><p>除了第一次等概率的从m个训练数据中抽样new dataSet 外，后续的每一轮抽样，都将前一轮推测失败的训练数据的权重加大，<br>使被抽取到的概率变高，尽可能的将推测失败的数据参与到后续的训练中，从而推动算法更快的学习，并学习的更好，提高算法的准确性<br><img src="/image/LLM/153.png" alt></p>
+<p>这种算法又称为XGBoost 算法，是随机森林算法的改进版，优点如下<br><img src="/image/LLM/154.png" alt><br><img src="/image/LLM/155.png" alt></p>
+<h1 id="决策树-VS-神经网络"><a href="#决策树-VS-神经网络" class="headerlink" title="决策树 VS 神经网络"></a>决策树 VS 神经网络</h1><p><img src="/image/LLM/156.png" alt></p>
+<h2 id="决策树-amp-决策森林"><a href="#决策树-amp-决策森林" class="headerlink" title="决策树&amp; 决策森林"></a>决策树&amp; 决策森林</h2><p>适合结构化数据(可以用表格表示的数据)<br>不适合非结构化数据（音视频，图像）<br>小的决策树可以被人类解释推测过程<br>训练速度快，缩短算法迭代循环周期，更快的提高算法性能</p>
+<h2 id="神经网络"><a href="#神经网络" class="headerlink" title="神经网络"></a>神经网络</h2><p>对于所有数据类型都很友好，包括结构化和非结构化<br>训练速度比决策树要慢<br>但可以轻松实现迁移学习，但是决策树每次训练只能特定的特征，得到特定的决策树<br>方便构建多模型系统，神经网络间串联方便</p>
 
       
     </div>
@@ -407,6 +425,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/machineLearning/Kmeans.html" rel="prev" title="Kmeans 聚类算法">
+                Kmeans 聚类算法 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -472,7 +494,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">232</span>
+              <span class="site-state-item-count">236</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -531,7 +553,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#创建过程"><span class="nav-number">1.</span> <span class="nav-text">创建过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#熵"><span class="nav-number">1.1.</span> <span class="nav-text">熵</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#信息增益"><span class="nav-number">1.2.</span> <span class="nav-text">信息增益</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">1.3.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#多特征值处理办法"><span class="nav-number">2.</span> <span class="nav-text">多特征值处理办法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#one-hot"><span class="nav-number">2.1.</span> <span class="nav-text">one-hot</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#连续值"><span class="nav-number">2.2.</span> <span class="nav-text">连续值</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#回归树"><span class="nav-number">3.</span> <span class="nav-text">回归树</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#创建过程"><span class="nav-number">1.</span> <span class="nav-text">创建过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#熵"><span class="nav-number">1.1.</span> <span class="nav-text">熵</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#信息增益"><span class="nav-number">1.2.</span> <span class="nav-text">信息增益</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">1.3.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#多特征值处理办法"><span class="nav-number">2.</span> <span class="nav-text">多特征值处理办法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#one-hot"><span class="nav-number">2.1.</span> <span class="nav-text">one-hot</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#连续值"><span class="nav-number">2.2.</span> <span class="nav-text">连续值</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#回归树"><span class="nav-number">3.</span> <span class="nav-text">回归树</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#多个决策树"><span class="nav-number">4.</span> <span class="nav-text">多个决策树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#放回抽样"><span class="nav-number">4.1.</span> <span class="nav-text">放回抽样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#随机森林算法"><span class="nav-number">4.2.</span> <span class="nav-text">随机森林算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#随机特征选取"><span class="nav-number">4.2.1.</span> <span class="nav-text">随机特征选取</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XGBoost-随机森林增强算法"><span class="nav-number">4.3.</span> <span class="nav-text">XGBoost 随机森林增强算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#决策树-VS-神经网络"><span class="nav-number">5.</span> <span class="nav-text">决策树 VS 神经网络</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#决策树-amp-决策森林"><span class="nav-number">5.1.</span> <span class="nav-text">决策树&amp; 决策森林</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#神经网络"><span class="nav-number">5.2.</span> <span class="nav-text">神经网络</span></a></li></ol></li></ol></div>
             
 
           </div>

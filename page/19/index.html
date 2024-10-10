@@ -259,6 +259,518 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/step.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/nodejs/step.html" itemprop="url">
+                  搭建博客步骤
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-12T21:33:37+08:00">
+                2017-03-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="搭建"><a href="#搭建" class="headerlink" title="搭建"></a>搭建</h1><p>如果全局安装express 使用npm install -g express 语句安装后，无法使用express命令<br>则先执行npm install express-generator -g<br>express在4.0之后，需要安装the executable（执行器express-generator）才能执行express命令<br>express –view=ejs microblog //在当前文件夹创建文件夹microblog，并在里面部署express<br>cd microblog //进入microblog<br>npm install //安装nodejs包<br>DEBUG=microblog:* npm start //运行<br>npm install -g supervisor //安装supervisor，监视代码改动<br>supervisor ./bin/www //运行，会提示输入rs重新开始，输入’rs’回车即可，<br>//这里就不用每次改完都去手动中断进程再重新开始</p>
+<h1 id="路由初步配置"><a href="#路由初步配置" class="headerlink" title="路由初步配置"></a>路由初步配置</h1><h2 id="匹配"><a href="#匹配" class="headerlink" title="匹配"></a>匹配</h2><p>打开app.js文件<br>var index = require(‘./routes/index’); //引入不同访问路径的回调函数所在文件<br>app.use(‘/‘, index); //为回调函数配置访问路径</p>
+<p>如果要建立分支路径，可以在回调函数文件中配置相应分支路径的回调函数<br>假如我想访问<a href="http://localhost:3000/users/111" target="_blank" rel="noopener">http://localhost:3000/users/111</a> 和 <a href="http://localhost:3000/users/id/111" target="_blank" rel="noopener">http://localhost:3000/users/id/111</a><br>首先在app.js中配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var users = require(&apos;./routes/users&apos;);</span><br><span class="line">app.use(&apos;/users&apos;, users);</span><br></pre></td></tr></table></figure></p>
+<p>然后配置routes路径下的users.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> router = express.Router();</span><br><span class="line"></span><br><span class="line"><span class="comment">/* GET users listing. */</span></span><br><span class="line">router.get(<span class="string">'/:id'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">  res.send(<span class="string">'USER:'</span>+req.params.id);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">router.get(<span class="string">'/id/:id'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">  res.send(<span class="string">'USERID:'</span>+req.params.id);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = router;</span><br></pre></td></tr></table></figure></p>
+<p>注意路径参数id的获取，在app.js配置时是访问路径的共有前缀，在users.js中获取的是分支前缀<br><a href="http://www.expressjs.com.cn/guide/using-middleware.html" target="_blank" rel="noopener">深入链接</a></p>
+<h2 id="控制权转移"><a href="#控制权转移" class="headerlink" title="控制权转移"></a>控制权转移</h2><p>express 处理路由规则时，会优先匹配先定义的陆游规则，后面的规则被屏蔽<br>通过调用回调函数的第三个参数next,可以将控制权转移到后面的规则<br>即执行完先定义的规则后会继续执行后面定义的规则<br><img src="/image/node1.png" alt="node1"></p>
+<h1 id="手动安装片段视图"><a href="#手动安装片段视图" class="headerlink" title="手动安装片段视图"></a>手动安装片段视图</h1><p>由于网站中多页面head和footer相同,所以要建立模板文件，然后让其他页面文件来来填充基于这种处理方法<br>express 4.x需要手动安装partials<br>npm install express-partials<br>在app.js中注册<br>var partials = require(‘express-partials’);<br>app.use(partials());</p>
+<h1 id="引入bootstrap-和-JQuery"><a href="#引入bootstrap-和-JQuery" class="headerlink" title="引入bootstrap 和 JQuery"></a>引入bootstrap 和 JQuery</h1><p>从<a href="http://twitter.github.com/bootstrap/下载bootstrap.zip" target="_blank" rel="noopener">http://twitter.github.com/bootstrap/下载bootstrap.zip</a>,<br>将 img 目录复制到工程 public 目录下，<br>将 bootstrap.css、bootstrap-responsive.css 复制到 public/stylesheets 中，<br>将 bootstrap.js 复制到 public/javascripts 目录中，<br>然后从<a href="http://jquery.com/下载一份最新版的" target="_blank" rel="noopener">http://jquery.com/下载一份最新版的</a> jquery.js 也放入 public/javascripts 目录中。</p>
+<h1 id="界面"><a href="#界面" class="headerlink" title="界面"></a>界面</h1><p>用.ejs文件当html文件,<br>ejs 的标签系统只有以下3种标签。<br> &lt;% code %&gt;： JavaScript 代码。<br> &lt;%= code %&gt;：显示替换过 HTML 特殊字符的内容。<br> &lt;%- code %&gt;：显示原始 HTML 内容。<br>新建layout.ejs 做模板文件 ，调整index.ejs内容做首页填充内容，访问 <a href="http://localhost:3000/" target="_blank" rel="noopener">http://localhost:3000/</a> 查看效果</p>
+<h1 id="MongoDB-数据库"><a href="#MongoDB-数据库" class="headerlink" title="MongoDB 数据库"></a>MongoDB 数据库</h1><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>选用 MongoDB 作为网站的数据库系统<br>在<a href="http://dl.mongodb.org/dl/win32/x86_64" target="_blank" rel="noopener">http://dl.mongodb.org/dl/win32/x86_64</a> 可下载安装包<br>遇到该步骤时，<br><img src="/image/mongodb.png" alt="mongodb.png"><br>选择custom可以自定义安装路径<br>安装完成后，在bin所在的文件夹，与bin同级建立data文件夹，然后cmd到bin文件夹，执行<br>mongod –dbpath data文件夹路径（例：D:\MongoDB\data）<br>执行完最后一行出现：<br>2017-03-12T13:16:29.286+0800 I NETWORK  [thread1] waiting for connections on por<br>t 27017<br>浏览器输入 <a href="http://localhost:27017/" target="_blank" rel="noopener">http://localhost:27017/</a> 可以看到显示信息为<br>It looks like you are trying to access MongoDB over HTTP on the native driver port.<br>说明安装完成</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>修改package.json,dependencies中增加  “mongodb”: “&gt;= 0.9.9”<br>npm install  //更新依赖模块<br>在与app.js同级目录下新建settings.js,内容如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  cookieSecret: <span class="string">'microblogYooHannah'</span>,</span><br><span class="line">  db: <span class="string">'microblog'</span>,</span><br><span class="line">  host: <span class="string">'localhost'</span>,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>新建models文件夹，并在里面新建文件db.js,内容如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> settings = <span class="built_in">require</span>(<span class="string">'../settings'</span>),</span><br><span class="line">    Db = <span class="built_in">require</span>(<span class="string">'mongodb'</span>).Db,</span><br><span class="line">    Connection = <span class="built_in">require</span>(<span class="string">'mongodb'</span>).Connection,</span><br><span class="line">    Server = <span class="built_in">require</span>(<span class="string">'mongodb'</span>).Server;</span><br><span class="line">    <span class="built_in">module</span>.exports = <span class="keyword">new</span> Db(settings.db, <span class="keyword">new</span> Server(settings.host, Connection.DEFAULT_PORT, &#123;&#125;), &#123;<span class="attr">safe</span>: <span class="literal">true</span>&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>修改package.json,dependencies中增加  “connect-mongo”: “&gt;= 0.1.7”<br>npm install更新依赖模块<br>修改app.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> MongoStore = <span class="built_in">require</span>(<span class="string">'connect-mongo'</span>);</span><br><span class="line"><span class="keyword">var</span> settings = <span class="built_in">require</span>(<span class="string">'./settings'</span>);</span><br><span class="line"></span><br><span class="line">app.use(express.session(&#123;</span><br><span class="line">  secret: settings.cookieSecret,</span><br><span class="line">  store: <span class="keyword">new</span> MongoStore(&#123;</span><br><span class="line">  db: settings.db</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;));</span><br></pre></td></tr></table></figure></p>
+<p>由于session不再绑定在express上，这里会报错，所以要单独安装session<br>npm install express-session<br>修改app.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> session    = <span class="built_in">require</span>(<span class="string">'express-session'</span>);</span><br><span class="line"><span class="keyword">var</span> MongoStore = <span class="built_in">require</span>(<span class="string">'connect-mongo'</span>)(session);</span><br><span class="line"><span class="keyword">var</span> settings = <span class="built_in">require</span>(<span class="string">'./settings'</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">app.use(session(&#123;</span><br><span class="line">  secret: settings.cookieSecret,</span><br><span class="line">  store: <span class="keyword">new</span> MongoStore(&#123;</span><br><span class="line">    url: <span class="string">'mongodb://localhost/db'</span><span class="comment">//链接数据库地址  </span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;));</span><br></pre></td></tr></table></figure></p>
+<p>如出现错误：<br>MongoError: failed to connect to server [localhost:27017] on first connect<br>可能是没有运行刚才安装的MongoDB,这时要回到cmd,执行<br>mongod –dbpath data文件夹路径（例：D:\MongoDB\data）<br>如出现以下提醒：<br>express-session deprecated undefined resave option;<br>express-session deprecated undefined saveUninitialized option;<br>则补充上这两个配置参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">app.use(session(&#123;</span><br><span class="line">  resave: false, //添加 resave 选项  </span><br><span class="line">  saveUninitialized: true, //添加 saveUninitialized 选项  </span><br><span class="line">&#125;));</span><br></pre></td></tr></table></figure></p>
+<h1 id="注册页面"><a href="#注册页面" class="headerlink" title="注册页面"></a>注册页面</h1><p>在view中新建reg.ejs,内容如下；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;form class=&quot;form-horizontal&quot; method=&quot;post&quot;&gt;</span><br><span class="line">  &lt;fieldset&gt;</span><br><span class="line">    &lt;legend&gt;用户注册&lt;/legend&gt;</span><br><span class="line">    &lt;div class=&quot;control-group&quot;&gt;</span><br><span class="line">      &lt;label class=&quot;control-label&quot; for=&quot;username&quot;&gt;用户名&lt;/label&gt;</span><br><span class="line">      &lt;div class=&quot;controls&quot;&gt;</span><br><span class="line">        &lt;input type=&quot;text&quot; class=&quot;input-xlarge&quot; id=&quot;username&quot; name=&quot;username&quot;&gt;</span><br><span class="line">        &lt;p class=&quot;help-block&quot;&gt;你的账户名称，用于登录和显示。 &lt;/p&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;control-group&quot;&gt;</span><br><span class="line">      &lt;label class=&quot;control-label&quot; for=&quot;password&quot;&gt;口令&lt;/label&gt;</span><br><span class="line">      &lt;div class=&quot;controls&quot;&gt;</span><br><span class="line">        &lt;input type=&quot;password&quot; class=&quot;input-xlarge&quot; id=&quot;password&quot; name=&quot;password&quot;&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;control-group&quot;&gt;</span><br><span class="line">      &lt;label class=&quot;control-label&quot; for=&quot;password-repeat&quot;&gt;重复输入口令&lt;/label&gt;</span><br><span class="line">      &lt;div class=&quot;controls&quot;&gt;</span><br><span class="line">        &lt;input type=&quot;password&quot; class=&quot;input-xlarge&quot; id=&quot;password-repeat&quot; name=&quot;password-repeat&quot;&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;form-actions&quot;&gt;</span><br><span class="line">      &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot;&gt;注册&lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/fieldset&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在app.js和routes/index中增加访问路径和响应函数<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//app.js</span></span><br><span class="line"><span class="keyword">var</span> router = <span class="built_in">require</span>(<span class="string">'./routes/index'</span>);<span class="comment">//路由</span></span><br><span class="line"><span class="keyword">var</span> app = express();</span><br><span class="line">app.use(<span class="string">'/'</span>, router);</span><br><span class="line">app.use(<span class="string">'/reg'</span>,router );</span><br><span class="line"></span><br><span class="line"><span class="comment">//routes/index.js</span></span><br><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> router = express.Router();</span><br><span class="line"></span><br><span class="line"><span class="comment">/* GET home page. */</span></span><br><span class="line">router.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">  res.render(<span class="string">'index'</span>, &#123; <span class="attr">title</span>: <span class="string">'首页'</span> &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">router.get(<span class="string">'/reg'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">  res.render(<span class="string">'reg'</span>, &#123; <span class="attr">title</span>: <span class="string">'用户注册'</span> &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">router.post(<span class="string">'/reg'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line"><span class="comment">//检验用户两次输入的口令是否一致</span></span><br><span class="line">  <span class="keyword">if</span> (req.body[<span class="string">'password-repeat'</span>] != req.body[<span class="string">'password'</span>]) &#123;</span><br><span class="line">    req.flash(<span class="string">'error'</span>, <span class="string">'两次输入的口令不一致'</span>);</span><br><span class="line">    <span class="keyword">return</span> res.redirect(<span class="string">'/reg'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//生成口令的散列值</span></span><br><span class="line">  <span class="keyword">var</span> md5 = crypto.createHash(<span class="string">'md5'</span>);</span><br><span class="line">  <span class="keyword">var</span> password = md5.update(req.body.password).digest(<span class="string">'base64'</span>);</span><br><span class="line">  <span class="keyword">var</span> newUser = <span class="keyword">new</span> User(&#123;</span><br><span class="line">    name: req.body.username,</span><br><span class="line">    password: password,</span><br><span class="line">  &#125;);</span><br><span class="line"><span class="comment">//检查用户名是否已经存在</span></span><br><span class="line">  User.get(newUser.name, <span class="function"><span class="keyword">function</span>(<span class="params">err, user</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (user)</span><br><span class="line">      err = <span class="string">'Username already exists.'</span>;</span><br><span class="line">    <span class="keyword">if</span> (err) &#123;</span><br><span class="line">      req.flash(<span class="string">'error'</span>, err);</span><br><span class="line">      <span class="keyword">return</span> res.redirect(<span class="string">'/reg'</span>);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//如果不存在则新增用户</span></span><br><span class="line">    newUser.save(<span class="function"><span class="keyword">function</span>(<span class="params">err</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (err) &#123;</span><br><span class="line">        req.flash(<span class="string">'error'</span>, err);</span><br><span class="line">        <span class="keyword">return</span> res.redirect(<span class="string">'/reg'</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      req.session.user = newUser;</span><br><span class="line">      req.flash(<span class="string">'success'</span>, <span class="string">'注册成功'</span>);</span><br><span class="line">      res.redirect(<span class="string">'/'</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">module</span>.exports = router;</span><br></pre></td></tr></table></figure></p>
+<p>响应函数中的User是用户模型,在models中创建user.js，再引入到routes/index<br>响应函数会出现<br>1.title is not defined的问题<br>解决办法就是将views/layout.ejs的title换成locals.title<br>2.req.flash会报错说req.flash is not a function，则<br>npm install connect-flash<br>app.js修改：<br>var flash = require(‘connect-flash’);<br>app.use(flash());<br>这样所有的req就可以使用flash()函数<br>3.crypto没有被定义<br>npm install crypto<br>routes/index.js引入<br>var crypto = require(‘crypto’);</p>
+<h1 id="视图交互"><a href="#视图交互" class="headerlink" title="视图交互"></a>视图交互</h1><p>实现不同登录状态下页面呈现不同内容的功能，创建动态视图助手<br>app.js<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">app.use(function(req,res,next)&#123;</span><br><span class="line">  res.locals.user=req.session.user;</span><br><span class="line"></span><br><span class="line">  var err = req.flash(&apos;error&apos;);</span><br><span class="line">  var success = req.flash(&apos;success&apos;);</span><br><span class="line"></span><br><span class="line">  res.locals.error = err.length ? err : null;</span><br><span class="line">  res.locals.success = success.length ? success : null;</span><br><span class="line"></span><br><span class="line">  next();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>放在路由配置前面<br>接下来，修改 layout.ejs中的导航栏部分,为已登入用户和未登入用户显示不同的信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;ul class=&quot;nav&quot;&gt;</span><br><span class="line">&lt;li class=&quot;active&quot;&gt;&lt;a href=&quot;/&quot;&gt;首页&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">&lt;% if (!user) &#123; %&gt;</span><br><span class="line">&lt;li&gt;&lt;a href=&quot;/login&quot;&gt;登入&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">&lt;li&gt;&lt;a href=&quot;/reg&quot;&gt;注册&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">&lt;% &#125; else &#123; %&gt;</span><br><span class="line">&lt;li&gt;&lt;a href=&quot;/logout&quot;&gt;登出&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">&lt;% &#125; %&gt;</span><br><span class="line">&lt;/ul&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在 container 中，&lt;%- body %&gt;之前加入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;% if (success) &#123; %&gt;</span><br><span class="line">&lt;div class=&quot;alert alert-success&quot;&gt;</span><br><span class="line">&lt;%= success %&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;% &#125; %&gt;</span><br><span class="line">&lt;% if (error) &#123; %&gt;</span><br><span class="line">&lt;div class=&quot;alert alert-error&quot;&gt;</span><br><span class="line">&lt;%= error %&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;% &#125; %&gt;</span><br></pre></td></tr></table></figure></p>
+<p>它的功能是页面通知。</p>
+<h1 id="登录登出操作-状态判断-建立微博模型，处理微博发表操作"><a href="#登录登出操作-状态判断-建立微博模型，处理微博发表操作" class="headerlink" title="登录登出操作,状态判断;建立微博模型，处理微博发表操作"></a>登录登出操作,状态判断;建立微博模型，处理微博发表操作</h1><p>同样建立连接路由，写响应函数</p>
+<h1 id="处理首页登录前后状态"><a href="#处理首页登录前后状态" class="headerlink" title="处理首页登录前后状态"></a>处理首页登录前后状态</h1><p>省略步骤可参考书籍<br><a href="https://github.com/YooHannah/NodejsofMicroblog" target="_blank" rel="noopener">代码详见</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/sync.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/nodejs/sync.html" itemprop="url">
+                  同步/异步和使用
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-11T09:31:15+08:00">
+                2017-03-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="同步-异步"><a href="#同步-异步" class="headerlink" title="同步/异步"></a>同步/异步</h1><p>同步读取一个文件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//readfile.js</span></span><br><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line"><span class="keyword">var</span> data = fs.readFileSync(<span class="string">'file.txt'</span>,<span class="string">'utf-8'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(data);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'end.'</span>);</span><br><span class="line"><span class="comment">//执行</span></span><br><span class="line">$node readfile.js</span><br><span class="line">contents <span class="keyword">of</span> the file.</span><br><span class="line">end.</span><br></pre></td></tr></table></figure></p>
+<p>异步读取一个文件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//readfile.js</span></span><br><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line">fs.readFile(<span class="string">'file.txt'</span>,<span class="string">'utf-8'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">err,data</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (err) &#123;</span><br><span class="line">	  <span class="built_in">console</span>.log(err);</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">	  <span class="built_in">console</span>.log(data);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'end.'</span>);</span><br><span class="line"><span class="comment">//执行</span></span><br><span class="line">$node readfile.js</span><br><span class="line">end.</span><br><span class="line">contents <span class="keyword">of</span> the file.</span><br></pre></td></tr></table></figure></p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="node的REPL模式"><a href="#node的REPL模式" class="headerlink" title="node的REPL模式"></a>node的REPL模式</h2><p>即输入代码回车立即执行的模式<br>在command prompt中直接输入node进入该模式，连续两次Ctrl+C可退出</p>
+<h2 id="监视代码改动"><a href="#监视代码改动" class="headerlink" title="监视代码改动"></a>监视代码改动</h2><p>npm install -g supervisor //安装supervisor<br>supervisor app.js //代替node app.js，修改代码后自动终止进程并重启</p>
+<h2 id="包"><a href="#包" class="headerlink" title="包"></a>包</h2><p>把文件夹封装为一个模块，即所谓的包，包通常是一些模块的集合，在模块的基础上提供了更高层的抽象，相当于一些固定接口的函数库<br>包安装：作为工程运行，通过本地安装;如果要在命令行下使用,则使用全局模式安装</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/jssummary.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/nodejs/jssummary.html" itemprop="url">
+                  js理解
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-11T08:23:09+08:00">
+                2017-03-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h1><p>不通过花括号来界定，通过函数来定义，<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">	<span class="keyword">var</span> somevar = <span class="string">"value"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(somevar);<span class="comment">//value</span></span><br></pre></td></tr></table></figure></p>
+<p>在访问未定义的变量或定义了但没有初始化的变量时都会获得undefined<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> scope = <span class="string">"1111"</span>;</span><br><span class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(scope); <span class="comment">//undefined</span></span><br><span class="line">	<span class="keyword">var</span> scope = <span class="string">'f'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>作用域的嵌套关系在定义时确定，不在调用时确定<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> scope = <span class="string">"top"</span>;</span><br><span class="line"><span class="keyword">var</span> f1 = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(scope);</span><br><span class="line">&#125;;</span><br><span class="line">f1();<span class="comment">//top</span></span><br><span class="line"><span class="keyword">var</span> f2 = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> scope = <span class="string">'f2'</span>;</span><br><span class="line">	f1();</span><br><span class="line">&#125;;</span><br><span class="line">f2(); <span class="comment">//top</span></span><br></pre></td></tr></table></figure></p>
+<p>全局作用域是个对象，这个对象叫全局对象，nodejs是global对象，浏览器是window对象，包括<br>在最外层定义的变量<br>全局对象的属性<br>未用var定义直接赋值的变量</p>
+<h1 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h1><p>由函数(环境)及其封闭的自由变量组成的集合体，<br>可以想象成一个容器，里面包括一个函数和它用到的变量，每当想使用一次这个容器里的函数，就将这个容器复制一次给调用者：<br>1.不通调用者得到的容器相互隔离，没有关系，<br>2.被复制到调用者的函数，会自己形成一个独立的运行环境，每次调用完会根据变量性质，更新变量值,不会释放变量<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> generateClosuer = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> count = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">var</span> <span class="keyword">get</span> = function()&#123;</span><br><span class="line">    count++;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">get</span>;</span><br><span class="line">&#125;</span><br><span class="line">var counter1 = generateClosuer();</span><br><span class="line">var counter2 = generateClosuer();</span><br><span class="line">console.log(counter1()); //1</span><br><span class="line">console.log(counter1()); //2</span><br><span class="line">console.log(counter2()); //1</span><br><span class="line">console.log(counter1()); //3</span><br></pre></td></tr></table></figure></p>
+<h1 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h1><p>上下文对象即this指针，即被调用函数所处的环境，<br>上下文对象的作用是在一个函数内部引用调用它的对象本身。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">User</span>(<span class="params">name,url</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.name = name;</span><br><span class="line">	<span class="keyword">this</span>.url = url;</span><br><span class="line">	<span class="keyword">this</span>.diaplay = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> someuser = <span class="keyword">new</span> User(<span class="string">'byvoid'</span>,<span class="string">'http://www.byvoid.com'</span>);</span><br></pre></td></tr></table></figure></p>
+<p>创建someuser对象时，构造函数的this指调用它的someuser<br>函数类型的变量指向这个函数实体的一个引用，在引用之间赋值不会对对象产生复制行为。<br>我们可以通过函数的任何一个引用调用这个函数，但该函数的上下文即this不同<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> someuser = &#123;</span><br><span class="line">	name:<span class="string">'byvoid'</span>,</span><br><span class="line">	func: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> foo = &#123;</span><br><span class="line">	name:<span class="string">'foobar'</span></span><br><span class="line">&#125;;</span><br><span class="line">someuser.func();<span class="comment">//byvoid</span></span><br><span class="line">foo.func = someuser.func; <span class="comment">//引用someuser.func这个函数实体，其实就是someuser.func的代码内容</span></span><br><span class="line">foo.func();<span class="comment">//foobar this是foo</span></span><br><span class="line"></span><br><span class="line">name = <span class="string">'global'</span>;</span><br><span class="line">func = someuser.func;</span><br><span class="line">func();<span class="comment">//global</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="call-apply"><a href="#call-apply" class="headerlink" title="call/apply"></a>call/apply</h2><p>让其他对象调用本对象的方法<br>A对象名.函数属性名.call(B对象名,函数参数表(逗号隔开)); //B调用A的方法<br>A对象名.函数属性名.apply(B对象名,函数参数数组);//B调用A的方法</p>
+<h2 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h2><p>永久绑定函数的上下文，使其无论被谁调用，上下文都是固定的<br>A对象名.函数属性名.bind(B对象名,函数参数表(逗号隔开));<br>bind方法返回上下文为B对象的A对象的函数<br>如果在使用bind时，绑定了参数表，则在调用返回函数时，只需要传入未绑定的参数即可<br>注意不能重复绑定<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> someuser = &#123;</span><br><span class="line">	name:<span class="string">'byvoid'</span>,</span><br><span class="line">	func:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line"> &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> foo = &#123;</span><br><span class="line">	name:<span class="string">'foobar'</span></span><br><span class="line">&#125;;</span><br><span class="line">func = someuser.func.bind(foo);</span><br><span class="line">func();<span class="comment">//foobar</span></span><br><span class="line"></span><br><span class="line">func2 = func.bind(someuser);</span><br><span class="line">func2();<span class="comment">//foobar;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="原型"><a href="#原型" class="headerlink" title="原型"></a>原型</h2><p>构造函数创建属性<br>除非必须用构造函数闭包，否则尽量用原型定义成员函数<br>原型定义的成员是多个实例共享的，因此尽量在构造函数内定义一般成员尤其是对象或数组<br>原型链<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">function Foo()&#123;</span><br><span class="line">&#125;</span><br><span class="line">object.prototype.name = &apos;my object&apos;;</span><br><span class="line">Foo.prototype.name = &apos;Bar&apos;;</span><br><span class="line">var obj = new object();</span><br><span class="line">var foo = new Foo();</span><br><span class="line">console.log(obj.name);//my object</span><br><span class="line">console.log(foo.name);//Bar</span><br><span class="line">console.log(foo.__proto__.name);//Bar</span><br><span class="line">console.log(foo.__proto__.__proto__.name);//my object</span><br><span class="line">console.log(foo.__proto__.constructor.prototype.name);//Bar</span><br></pre></td></tr></table></figure></p>
+<p><img src="/image/typeof.png" alt="typeof"></p>
+<p>【广发证券nodejs应用](<a href="http://slides.com/loskael/node#/" target="_blank" rel="noopener">http://slides.com/loskael/node#/</a>)</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/MapTraversal.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/algorithm/MapTraversal.html" itemprop="url">
+                  深度广度优先遍历+马踏棋盘算法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-07T21:06:37+08:00">
+                2017-03-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="深度优先遍历-深度优化搜索DFS"><a href="#深度优先遍历-深度优化搜索DFS" class="headerlink" title="深度优先遍历/深度优化搜索DFS"></a>深度优先遍历/深度优化搜索DFS</h1><p><img src="/image/Traversal1.png" alt="Traversal1"><br>右手原则：在没有碰到重复顶点的1情况下，分叉路口始终是向右手边走，没路过一个顶点就做一个记号</p>
+<p>主要思路是右手原则，把自己想象成从一个顶点出发的小人,每次选择下一步要走的路径时，就选择右手方向的路径，并给自己即将离开的顶点做一个已经遍历过的标记，直到碰到右手选择的路径将要到达的顶点是已经遍历过的顶点，这时则判断从右手方向开始的路径的终点顶点是否已遍历，若没有遍历，则选择该路径继续往下，若碰到所有路径终点顶点都是已经遍历过的，则沿到达该顶点的路径返回上一个顶点，检查上一顶点的其他路径顶点是否已经遍历，未遍历的话，则沿该路径走下去，即碰到所有路径顶点都遍历过则返回上一顶点，以此类推，直到返回起点顶点</p>
+<p>整个图的遍历过程算法上是一个递归的过程，遍历方式上类似于树的前序遍历<br><img src="/image/Traversal2.png" alt="Traversal2"><br>看蓝色的路径即顶点遍历过程<br>A-&gt;B-&gt;C-&gt;D-&gt;E-&gt;F-&gt;G-&gt;H (往回走，看红色路径顶点都已遍历过)-&gt;G-&gt;F-&gt;E-&gt;D-&gt;I-&gt;D-&gt;C-&gt;B-&gt;A</p>
+<p>编程思路：<br>遍历图的邻接矩阵，邻接矩阵建立时注意选择是使用右手原则还是左手原则，从起点开始遍历该顶点所在行，便利到非0值且对应的列顶点未访问过就开始遍历该列顶点对应顶点所在的行，同样遍历非0未遍历过的顶点，如果该行所有顶点都遍历过则返回上一顶点继续重复遍历找未遍历的顶点，直到返回起点位置<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/MapDeepTraversal.js" target="_blank" rel="noopener">代码链接</a></p>
+<h1 id="马踏棋盘问题"><a href="#马踏棋盘问题" class="headerlink" title="马踏棋盘问题"></a>马踏棋盘问题</h1><p>国际象棋的棋盘为8*8的方格棋盘，现将“马”放在任意指定的方格中，按照“马”走棋的规则将“马”进行移动<br>要求每个方格只能进入一次，最终使得“马”走遍棋盘64个方格</p>
+<p>一个位置最多有八种选择，如下<br><img src="/image/chess.png" alt="chess"><br><a href="https://github.com/YooHannah/algorithm/blob/master/C/checkerboard.c" target="_blank" rel="noopener">代码链接</a></p>
+<h1 id="图的广度优先遍历"><a href="#图的广度优先遍历" class="headerlink" title="图的广度优先遍历"></a>图的广度优先遍历</h1><p>主要思路：树的层序遍历<br>结构：队列<br>原则：右手原则<br>将复杂的图调整结构为层的形状，从最上一层结点唯一结点出发，入队列<br>遍历第二层，从与上一层结点相连的右手边的结点开始遍历，先将上一层相连的结点出队列，然后第二层结点入队列<br>以此类推，即在本层遍历时，先将与将要遍历的结点的上层结点出队列，然后将本层结点入队列，<br>遍历完一个上层结点的本层连接点，先将上层下一个结点出队列，在将上层下一个节点的本层链接点入队列<br>出队列顺序即遍历顺序<br><img src="/image/tug1.png" alt="tug1"><br>选定一个起点结点(A)，依次遍历与该结点相连结点(B、F)，每个结点遍历完后添加遍历标记，<br>再依次遍历刚刚遍历过的结点(先B后F)的相连结点(CIG、E),同样遍历完要加标记<br>以此类推，再遍历C的连接点D，G的连接点H<br><img src="/image/BreadthMaptraversal2.png" alt="BreadthMaptraversal2"><br>编程思路：<br>将每次遍历的结点入队列，每遍历完一层，出一次队列，出队列顺序即遍历顺序<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/BreadthMaptraversal.js" target="_blank" rel="noopener">代码链接</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/es6.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1546,553 +2058,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/graph.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/algorithm/graph.html" itemprop="url">
-                  图
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-22T21:59:30+08:00">
-                2017-02-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="图的定义"><a href="#图的定义" class="headerlink" title="图的定义"></a>图的定义</h1><p>图:由顶点的有穷非空集合和顶点之间边的集合组成，通常表示为：G(V,E),<br>     —-G表示一个图，V是图G中顶点的集合，E是图G中边的集合<br>|                | 线性表           | 树                |           图           |<br>| ————-  |:—————-:| —————–:|<br>| 数据元素       | 元素             | 结点              |           顶点         |<br>| 没有数据元素   | 空表             | 空树              | 不能没有顶点，有穷非空 |<br>| 数据元素间关系 | 相邻之间:线性关系| 相邻两层:层次关系 | 任意两个顶点之间都可能有关系顶点之间逻辑关系用边表示，边集可以是空的|<br>无向边：顶点Vi到Vj之间的边没有方向,用无序偶(Vi,Vj)表示<br>有向边/弧：顶点Vi到Vj之间的边有方向,用有序偶&lt;Vi,Vj&gt;表示,Vi称为弧尾，Vj称为弧头<br>简单图：在该类图结构中，不存在顶点到其自身的边(自己指向自己)且同一条边不重复出现<br>无向完全图:在该类图结构中，任意两个顶点之间都存在边，含n个顶点的无向完全图有n<em>(n-1)/2条边<br>有向完全图:在该类图结构中，任意两个顶点之间都存在方向互为相反的两条弧，含n个顶点的有向完全图有n</em>(n-1)条边<br>稀疏图：边或弧数小于n<em>logn(n是顶点的个数)<br>稠密图：边或弧数大于n</em>logn(n是顶点的个数)<br>权：图的边或弧带有的与它相关的数字<br>网：带权的图<br>子图：图G1(V1,E1),和G2(V2,E2),如果V2 \subseteq V1，E2 \subseteq E1 ,V2 属于 V1，E2 属于 E1则称G2为G1的子图<br><a href="http://blog.csdn.net/sanqima/article/details/48576361" target="_blank" rel="noopener">http://blog.csdn.net/sanqima/article/details/48576361</a><br>邻接点：无向图G=(V,E),如果边(V1,V2)属于E，则称顶点V1和V2互为邻接点，即V1和V2相邻接<br>——-边(V1,V2)依附于顶点V1和V2，或者说边(V1,V2)与顶点V1和V2相关联<br>顶点V的度：和顶点V相关联的边的数目，记为TD(V)<br>邻接：有向图G=(V,E),如果边&lt;V1,V2&gt;属于E，则称顶点V1邻接到顶点V2,顶点V2邻接自顶点V1<br>顶点V的入度:以顶点V为头的弧的数目，记为    ID(V)<br>顶点V的出度:以顶点V为尾的弧的数目，记为    OD(V)<br>TD(V) = ID(V) + OD(V);<br>路径:图G=(V,E)中从顶点V1到顶点V2的路线叫从顶点V1到顶点V2的路径，注意有向图和无向图的区别<br>路径的长度：路径上边/弧的数目<br>回路/环：第一个顶点和最后一个顶点相同的路径<br>简单路径：序列中顶点不重复出现的路径<br>简单回路/简单环:除了第一个顶点和最后一个顶点之外，其余顶点不重复出现的回路<br>连通：在无向图G中，如果顶点V1到顶点V2有路径则称V1和V2是连通的<br>连通图：图中任意两个顶点Vi和Vj都是连通的，则称G是连通图<br>连通分量：无向图中的极大连通子图<br>—-连通的子图<br>—-连通子图含有极大顶点数<br>—-具有极大顶点数的连通子图包含依附于这些顶点的所有边<br>强连通图：在该类有向图G中，每一对Vi到Vj都存在路径<br>强连通分量：有向图中的极大强连通子图<br>非强连通图有强连通分量，强连通分量不止属于强连通图<br>连通图的生成树：极小的连通子图，它含有图中全部n个顶点，但只有足以构成一棵树的n-1条边<br>有向树：如果一个有向图恰有一个顶点入度为0，其余顶点入度为1，则该图将生成有向树，从而构成森林</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/reading/Poordaddyrichdaddy.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/reading/Poordaddyrichdaddy.html" itemprop="url">
-                  《穷爸爸富爸爸》摘抄
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-18T21:14:37+08:00">
-                2017-02-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <ol>
-<li>富人买入资产，穷人只有支出，中产阶级购买自以为是资产的负债</li>
-<li>资产是能把钱放进你口袋里的东西，负债是把钱从你口袋里取走的东西</li>
-<li>为了财务安全，人们需要关注自己的事业，你的事业的重心是你的资产项，而不是你的的收入项。要知道资产与负债的区别，并且去买入资产。富人关心的焦点是资产而其他人关注的是收入。</li>
-<li>资产分类：<br>a.不需要我到场就可以正常运作的业务。我拥有他们，但由别人经营和管理。如果我必须在那里，那它就不是我的事业而是我的职业了<br>b.股票<br>c.债券<br>d.共同基金<br>e.能够产生收入的房地产<br>f.票据(收据)<br>g.版税，如音乐，手稿，专利<br>h.其他任何有价值，可产生收入或有增值潜力，并且有良好的销路的东西<br>5.</li>
-</ol>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">拥有公司的富人</th>
-<th style="text-align:center">为公司工作的人</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">挣钱</td>
-<td style="text-align:center">挣钱</td>
-</tr>
-<tr>
-<td style="text-align:center">支出</td>
-<td style="text-align:center">缴税</td>
-</tr>
-<tr>
-<td style="text-align:center">缴税</td>
-<td style="text-align:center">支出</td>
-</tr>
-</tbody>
-</table>
-<p>=&gt;拥有由资产组成的公司</p>
-<ol start="6">
-<li>财商：<br>a.财务知识，会计，阅读理解数字的能力<br>b.投资策略<br>c.市场，供给，与需求<br>d.法律规章</li>
-<li>理财能手：<br>a.如何寻找其他人都忽视的机会<br>b.如何增加资金<br>c.怎样把精明的人组织起来</li>
-<li>管理技能：<br>a.对现金流的管理<br>b.对系统(你本人，时间及家庭)的管理<br>c.对人员的管理</li>
-<li>克服困难：恐惧心理、愤世嫉俗、懒惰、不良习惯、自负</li>
-<li>开发<br>我需要一个超现实的理由—-精神的力量<br>每天做出自己的选择—-选择的力量<br>慎重的选择朋友—-关系的力量<br>掌握一种模式，然后在学习一种模式—-快速学习的力量<br>首先支付自己—-自律的力量<br>给你的经纪人以优厚的报酬—-好建议的力量<br>用资产来购买奢侈品—-专注的力量<br>对英雄的崇拜—-神话的力量<br>先予后取—-给予的力量</li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/iconfont.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/knowledge/iconfont.html" itemprop="url">
-                  阿里巴巴iconfont使用
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-18T10:41:51+08:00">
-                2017-02-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>1.登录<a href="http://iconfont.cn/plus/home/index?spm=a313x.7781069.1998910419.2.QImsN2" target="_blank" rel="noopener">http://iconfont.cn/plus/home/index?spm=a313x.7781069.1998910419.2.QImsN2</a> 进入搜索界面<br>2.通过输入关键字搜索自己想要的图标<br>3.将鼠标放到自己想要的图标会出现选择层，点击第一个购物车图标，添加入库<br>4.将所有想要的图标添加完后，点击右上角购物车图标打开项目添加页，点击“加入项目”右侧图标，为选择的图标新建项目,点确定<br><img src="/image/iconfont1.png" alt="iconfont1"><br><img src="/image/iconfont2.png" alt="iconfont2"><br>5.关闭项目添加页，点击导航栏的“图标管理”，进入“我的项目”栏目</p>
-<p><div><br> <img src="/image/iconfont3.png" style="width: 250px;height: 50px;margin-left: 20px" alt="图片名称" align="left"><br> <img src="/image/iconfont4.png" alt="图片名称" align="right" style="width: 150px;height: 60px;margin-top: -30px;margin-right: 80px"><br></div><br>6.使用图标到我们的HTML代码中，可以通过线上链接使用，也可以通过下载至本地使用</p>
-<h2 id="通过线上链接使用"><a href="#通过线上链接使用" class="headerlink" title="通过线上链接使用"></a>通过线上链接使用</h2><p>1.点击查看在线链接,复制代码到项目的静态资源的css文件中一般在src/assets/css路径下的文件<br>2.设置一个类icon，通过这个类的属性改变图标样式，同时在HTML中引用这个类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">.icon &#123;</span><br><span class="line">  font-family: &quot;iconfont&quot; !important;</span><br><span class="line">  font-style: normal;</span><br><span class="line">  display: inline-block;</span><br><span class="line">  vertical-align: middle;</span><br><span class="line">  background-size: 100% auto;</span><br><span class="line">  background-position: center;</span><br><span class="line">  -webkit-font-smoothing: asntialiased;</span><br><span class="line">  -webkit-text-stroke-width: 0.2px;</span><br><span class="line">  -moz-osx-font-smoothing: grayscale;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>3.在标签中添加icon类,在标签中间加入图标代码，例如：<i class="icon"> &#xe6ac; </i></p>
-<h2 id="下载至本地"><a href="#下载至本地" class="headerlink" title="下载至本地"></a>下载至本地</h2><p>1.点击下载至本地<br>2.将在线链接代码中用到的文件放到项目静态文件夹中，<br>3.将在线链接代码中文件的路径更改为项目中的文件路径，<br>4.其他步骤同线上路径<br>5.也可直接打开下载文件的IconFontDemo/assets/iconfont/的demo.html代码，看如何使用</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/git/gittrouble.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/git/gittrouble.html" itemprop="url">
-                  git问题处理
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-18T09:50:30+08:00">
-                2017-02-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/categories/" itemprop="url" rel="index">
-                    <span itemprop="name">categories</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="git-pull-更新代码出现问题"><a href="#git-pull-更新代码出现问题" class="headerlink" title="git pull 更新代码出现问题"></a>git pull 更新代码出现问题</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">There is no tracking information for the current branch.</span><br><span class="line">Please specify which branch you want to merge with.</span><br><span class="line">See git-pull(1) for details</span><br><span class="line"></span><br><span class="line">    git pull &lt;remote&gt; &lt;branch&gt;</span><br><span class="line"></span><br><span class="line">If you wish to set tracking information for this branch you can do so with:</span><br><span class="line"></span><br><span class="line">    git branch --set-upstream-to=origin/&lt;branch&gt; develop_hotfix</span><br></pre></td></tr></table></figure>
-<p>解决办法<br>git branch -D 分支名  ##删除本地待更新分支<br>git checkout 分支名 ##将待更新分支切回来<br>Git pull 再更新</p>
-<h1 id="git-remote-add-origin-遇到远程分支已存在的情况"><a href="#git-remote-add-origin-遇到远程分支已存在的情况" class="headerlink" title="git remote add origin 遇到远程分支已存在的情况"></a>git remote add origin 遇到远程分支已存在的情况</h1><p>解决办法<br>git remote rm origin ##先删除远程分支<br>git remote add origin 地址 ## 再修改远程仓库地址</p>
-<h1 id="git-push-遇到问题"><a href="#git-push-遇到问题" class="headerlink" title="git push 遇到问题"></a>git push 遇到问题</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fatal: unable to access &apos;https://github.com/YooHannah/WeiXindemo.git/&apos;: Failed to connect to github.com port 443: Timed out</span><br></pre></td></tr></table></figure>
-<p>解决办法<br>先删除远程分支 git remote rm origin<br>再将本地分支的上游分支设置为远程分支同时push<br>git push –set-upstream origin master<br>以后再执行git push 就不会出现报以上错误或一直没反应的状况</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">error:src refspec master does not match any</span><br></pre></td></tr></table></figure>
-<p>只进行了init,没有add和commit,本地版本库为空, 空只进行了init,目录不能提交 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">If no other git process is currently running, this probably means a</span><br><span class="line">git process crashed in this repository earlier. Make sure no other git</span><br><span class="line">process is running and remove the file manually to continue.</span><br></pre></td></tr></table></figure>
-<p>解决方法：<br>rm -f ./.git/index.lock </p>
-<h1 id="npm-运行项目错误"><a href="#npm-运行项目错误" class="headerlink" title="npm 运行项目错误"></a>npm 运行项目错误</h1><p>npm run dev error [npm ERR! code ELIFECYCLE]<br>node_modules安装问题，执行以下：<br>rm -rf node_modules rm package-lock.json npm cache clear –force npm install</p>
-<h1 id="git-merge-之后，git-commit-出现问题"><a href="#git-merge-之后，git-commit-出现问题" class="headerlink" title="git merge 之后，git commit 出现问题"></a>git merge 之后，git commit 出现问题</h1><p>husky &gt; pre-commit hook failed (add –no-verify to bypass)<br>git merge 之后，git commit 出现问题，解决：<br>出现这样的原因在于楼主使用了husky，并且配置了”precommit”: “npm run lint”<br>因此会在你git commit的时候执行npm run lint 也就是eslint –ext .js src test<br>如果报错的话，会返回非0，从而组织代码commit。<br>因此有两种方式解决：</p>
-<ol>
-<li>执行npm run lint， 根据提示修改错误，如果是其他人的报错，请求别人协助（推荐）</li>
-<li>git commit -m ‘’ -n 强制推送<br>3.更新远程分支列表<br>git remote update origin –prune</li>
-</ol>
-<h1 id="IE报vuex-requires-a-Promise-polyfill-in-this-browser问题解决"><a href="#IE报vuex-requires-a-Promise-polyfill-in-this-browser问题解决" class="headerlink" title="IE报vuex requires a Promise polyfill in this browser问题解决"></a>IE报vuex requires a Promise polyfill in this browser问题解决</h1><p>第一步： 安装 babel-polyfill 。 babel-polyfill可以模拟ES6使用的环境，可以使用ES6的所有新方法<br>npm install –save babel-polyfill<br>第二步： 在 Webpack/Browserify/Node中使用<br>在webpack.config.js文件中，使用<br>module.exports = {<br>entry: {<br>app: [“babel-polyfill”, “./src/main.js”]<br>}<br>};</p>
-<h1 id="git-分支处理"><a href="#git-分支处理" class="headerlink" title="git 分支处理"></a>git 分支处理</h1><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>A同学提交了两次代码，但在第二次提交代码前，B同学有提交自己的代码，并且在合并代码时，<br>将A同学第一次提交的代码merge丢弃了，导致A同学第一次代码无法合并到主分支</p>
-<h2 id="原理知识"><a href="#原理知识" class="headerlink" title="原理知识"></a>原理知识</h2><p>git reset 可以撤销commit命令的提交<br>git rebase 把分叉提交历史’整理’成一条直线<br>git stash 可以把工作现场’储藏起来’，等以后恢复现场后可以继续工作</p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>在分支代码处理时，A同学本地有主分支host(公共分支)和自己的本地分支local，<br>工作流程是<br>在自己本地分支local分支开发完毕后，<br>切换host分支，git pull 拉取远端分支更新后，<br>将本地分支local合并merge到host分支<br>然后git push到远端</p>
-<p>而B同学直接在本地的主分支(公共分支)开发，git push时冲突，<br>git pull 拉取远端A同学第一次的代码时，直接将代码变更进行了丢弃<br>然后push了自己的代码到远端分支</p>
-<p>A同学第二次提交时，并不知道B同学丢弃了自己第一次提交的代码，<br>在进行第二次提交时，在host上拉取远程更新之后，<br>继续合并推送最终结果就是自己的第一次代码丢失了</p>
-<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>利用A同学本地分支local没有合并远程分支的间隙,将A同学的两次提交保存下来，回到两次提交前的状态<br>然后拉取B同学的提交，再将A同学的两次提交拿出来进行合并，这样就可以实现三次提交都保存下来，再提交到远端</p>
-<p>在A同学的本地分支进行操作<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">1.在主分支host上取消第二次提交</span><br><span class="line">git reset --hard HEAD~1</span><br><span class="line"></span><br><span class="line">2.将远端第二次提交撤销掉,让分支保留在B同学提交的状态</span><br><span class="line">git push --force</span><br><span class="line"></span><br><span class="line">3.切换本地分支local,回滚版本到两次提交前</span><br><span class="line">git reset HEAD^^ </span><br><span class="line"></span><br><span class="line">4.保存两次提交 可以通过git stash list查看保存状态</span><br><span class="line">git stash </span><br><span class="line">git stash list</span><br><span class="line"></span><br><span class="line">5. 合并主分的B同学的提交到本地分支local,这时本地分支就有B同学的代码变更了</span><br><span class="line">6. 取出A同学的两次提交,与B同学代码进行提交</span><br><span class="line">git stash pop</span><br><span class="line">7. 切换主分支host,合并本地分支local,推送到远端</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2136,7 +2101,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">232</span>
+              <span class="site-state-item-count">236</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

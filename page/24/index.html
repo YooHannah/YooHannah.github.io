@@ -259,6 +259,494 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/angular/angularforeach.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/angular/angularforeach.html" itemprop="url">
+                  angular.forEach
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-17T16:56:09+08:00">
+                2016-12-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>对于多层嵌套的数据结构，使用for循环无法循环到里层数据，这时改用foreach行得通<br>angular.forEach($scope.data, function(data){<br>    angular.forEach(data.purchase, function(item){<br>    item.price = item.price.replace(/[^\d.]/g, ‘’);<br>    });<br>});</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/transform.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/js/transform.html" itemprop="url">
+                  转换
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-17T16:56:09+08:00">
+                2016-12-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="日期-时间戳"><a href="#日期-时间戳" class="headerlink" title="日期/时间戳"></a>日期/时间戳</h1><h2 id="时间戳转换日期"><a href="#时间戳转换日期" class="headerlink" title="时间戳转换日期"></a>时间戳转换日期</h2><p>日期 = new Date(时间戳<em>1000);<br>再根据需求转换不同形式<br>例：<br>var timestamp = ‘1425553097‘;<br>var d = new Date(timestamp </em> 1000);    //根据时间戳生成的时间对象<br>var date = (d.getFullYear()) + “-“ +<br>           (d.getMonth() + 1) + “-“ +<br>           (d.getDate()) + “ “ +<br>           (d.getHours()) + “:” +<br>           (d.getMinutes()) + “:” +<br>           (d.getSeconds());<br>date就是”年-月-日 时:分:秒”形式</p>
+<h2 id="日期转换时间戳"><a href="#日期转换时间戳" class="headerlink" title="日期转换时间戳"></a>日期转换时间戳</h2><p>var val1 = 日期变量.replace(/-/g,’/‘);<br>var val2 = new Date(val1);<br>var val3 = date.getTime().toString();<br>var 时间戳1 = String(val3.substr(0,10));     ###转换成字符串形式</p>
+<p>相当于 时间戳 = (new Date(日期.replace(/-/g,’/‘)).getTime().toString()).substr(0, 10);   ###数字形式</p>
+<p>时间戳1的分秒转换时为00:00:00,如果时分秒取 23:59:59,则</p>
+<p>var 时间戳2 = String(parseInt(时间戳1)+86399);</p>
+<h2 id="日期增加1天"><a href="#日期增加1天" class="headerlink" title="日期增加1天"></a>日期增加1天</h2><p>经常会遇到将现在日期增加1天的需求，解决办法就是<br>1.将当前时间转化时间戳数字形式<br>2.将时间戳加一天的秒数86400<br>3.再将时间戳转化成”年-月-日”日期形式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">//转换时间戳</span><br><span class="line">$scope.timestamp = function(val)&#123;</span><br><span class="line">  var temp = &quot;&quot;;</span><br><span class="line">  if(val != &quot;&quot;)&#123;</span><br><span class="line">   temp = (new Date(val.replace(/-/g,&apos;/&apos;)).getTime().toString()).substr(0, 10);</span><br><span class="line"> &#125;</span><br><span class="line"> if(val ==&quot;&quot;)&#123;</span><br><span class="line">   temp = &quot;&quot;;</span><br><span class="line"> &#125;</span><br><span class="line"> return temp;</span><br><span class="line">&#125;</span><br><span class="line">//增加1天</span><br><span class="line">var temp = String(parseInt($scope.timestamp(待增加日期变量))+86400); </span><br><span class="line">//再转换成日期</span><br><span class="line">var d=new Date(temp * 1000);</span><br><span class="line">var date = (d.getFullYear()) + &quot;-&quot; +</span><br><span class="line">(d.getMonth() + 1) + &quot;-&quot; +</span><br><span class="line">(d.getDate());</span><br><span class="line">console.log(date);</span><br><span class="line"></span><br><span class="line">//计算时间间隔</span><br><span class="line">var begintime = Date.parse(new Date($scope.detaildata.start_time + &quot; 00:00:00&quot;));</span><br><span class="line">var endtime = Date.parse(new Date($scope.detaildata.end_time+&quot; 23:59:59&quot;));</span><br><span class="line">var day = Math.floor(Math.abs(endtime - begintime) / 1000 / 60 / 60 /24 + 0.5);//间隔天数</span><br></pre></td></tr></table></figure></p>
+<h2 id="获取当天年月日-星期"><a href="#获取当天年月日-星期" class="headerlink" title="获取当天年月日,星期"></a>获取当天年月日,星期</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">var date = new Date();</span><br><span class="line">var month = date.getMonth() + 1;</span><br><span class="line">var day = date.getDate();</span><br><span class="line">if (month &gt;= 1 &amp;&amp; month &lt;= 9) &#123;</span><br><span class="line">    month = &quot;0&quot; + month;</span><br><span class="line">&#125;</span><br><span class="line">if(day&lt;10)&#123;</span><br><span class="line">  day=&apos;0&apos;+day;</span><br><span class="line">&#125;</span><br><span class="line">var daytime = date.getFullYear()+&apos;-&apos;+month+&apos;-&apos;+day;</span><br><span class="line"></span><br><span class="line">//根据日期获取星期，星期天是0，其他正常</span><br><span class="line">var week = new Date(daytime).getDay();</span><br></pre></td></tr></table></figure>
+<h2 id="比较日期和时间先后"><a href="#比较日期和时间先后" class="headerlink" title="比较日期和时间先后"></a>比较日期和时间先后</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">var</span> date1 = start_date.replace(<span class="regexp">/\-/gi</span>,<span class="string">"/"</span>);</span><br><span class="line"><span class="keyword">var</span> date2 = end_date.replace(<span class="regexp">/\-/gi</span>,<span class="string">"/"</span>);</span><br><span class="line"><span class="keyword">var</span> time1 = <span class="keyword">new</span> <span class="built_in">Date</span>(date1).getTime();</span><br><span class="line"><span class="keyword">var</span> time2 = <span class="keyword">new</span> <span class="built_in">Date</span>(date2).getTime();</span><br><span class="line"><span class="keyword">if</span>(time1 &gt; time2)&#123;</span><br><span class="line">   <span class="built_in">console</span>.log(<span class="string">'开始日期大于结束日期,请先修改!'</span>);</span><br><span class="line">   <span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"> <span class="keyword">var</span> a = <span class="string">'01/10/2007 '</span> + start_time;</span><br><span class="line"> <span class="keyword">var</span> b = <span class="string">'01/10/2007 '</span> + end_time;</span><br><span class="line"> <span class="keyword">var</span> d = <span class="keyword">new</span> <span class="built_in">Date</span>(a);</span><br><span class="line"> <span class="keyword">var</span> e = <span class="keyword">new</span> <span class="built_in">Date</span>(b);</span><br><span class="line"> <span class="keyword">if</span>(d&gt;=e)&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'开始时间大于等于结束时间,请先修改!'</span>);</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/html/calendar.html" target="_blank" rel="noopener">一个利用js生成的日历页面</a></p>
+<h1 id="json-字符串"><a href="#json-字符串" class="headerlink" title="json/字符串"></a>json/字符串</h1><p>json数据转换成字符串  JSON.stringify(val);<br>字符串转换成json数据  JSON.parse(val);</p>
+<h1 id="数组-字符串"><a href="#数组-字符串" class="headerlink" title="数组/字符串"></a>数组/字符串</h1><h2 id="数组转字符串"><a href="#数组转字符串" class="headerlink" title="数组转字符串"></a>数组转字符串</h2><p>需要将数组元素用某个字符连接成字符串，示例代码如下：<br>var a, b;<br>a = new Array(0,1,2,3,4);<br>b = a.join(“-“);</p>
+<h2 id="字符串转数组"><a href="#字符串转数组" class="headerlink" title="字符串转数组"></a>字符串转数组</h2><p>实现方法为将字符串按某个字符切割成若干个字符串，并以数组形式返回，示例代码如下：<br>var s = “abc,abcd,aaa”;<br>ss = s.split(“,”);// 在每个逗号(,)处进行分解。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//获取字符串中数字包括小数点</span></span><br><span class="line">str = str.replace(<span class="regexp">/[^\d\.]/g</span>, <span class="string">''</span>);</span><br></pre></td></tr></table></figure>
+<h1 id="js取整"><a href="#js取整" class="headerlink" title="js取整"></a>js取整</h1><p>Math.ceil(val)向上取整<br>Math.floor(val)向下取整<br>Math.round(val)四舍五入</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/git/gitcommand.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/git/gitcommand.html" itemprop="url">
+                  常用命令
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-17T16:31:06+08:00">
+                2016-12-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="git"><a href="#git" class="headerlink" title="git"></a>git</h1><p>下载项目 git clone + 地址<br>进入环境 ssh + 地址<br>切换根目录/返回上一级 cd ..<br>仅查看本地分支：cd branch<br>查看远程分支 git branch -a<br>重新获取远程分支状态（有哪些远程分支）：git fetch -p origin<br>拉取远端分支更新服务器分支 git pull<br>切换分支 git checkout + 分支名<br>删除本地分支 Git branch -d 分支名<br>删除远程分支 git push –delete origin 远程分支名</p>
+<h1 id="cmd"><a href="#cmd" class="headerlink" title="cmd"></a>cmd</h1><p>切换目录 盘，直接“盘名：”，回车<br>进入文件夹，用 cd  路径。</p>
+<h1 id="hexo"><a href="#hexo" class="headerlink" title="hexo"></a>hexo</h1><p>hexo server     开启预览访问端口（默认端口4000，’ctrl + c’关闭server）<br>hexo clean      清除PUBLIC和编译文件<br>hexo generate   生成静态页面至public目录<br>hexo deploy     同步到GITHUB<br>hexo new ”postName” 新建文章 存放在主目录的source下的POST目录下<br>hexo new page”pageName”  新建页面<br>hexo help  查看帮助<br>hexo version 查看Hexo的版本</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/performance/cache/data-localStorage.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/performance/cache/data-localStorage.html" itemprop="url">
+                  数据暂存(localStorage)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-12-17T16:31:06+08:00">
+                2016-12-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="使用loacalStorage"><a href="#使用loacalStorage" class="headerlink" title="使用loacalStorage"></a>使用loacalStorage</h1><h2 id="适用于保存的数据被多个页面公用"><a href="#适用于保存的数据被多个页面公用" class="headerlink" title="适用于保存的数据被多个页面公用"></a>适用于保存的数据被多个页面公用</h2><p>保存: localStorage.setItem(“name”,val);<br>获取: localStorage.getItem(“name”);</p>
+<p>例：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">localStorage.setItem(<span class="string">"tokken"</span>,usertokken);</span><br><span class="line"><span class="keyword">var</span> utokken = localStorage.getItem(<span class="string">"tokken"</span>);</span><br></pre></td></tr></table></figure></p>
+<p>如果需要保存json数据，可以在保存时将json数据转换成字符串，获取后再转回json</p>
+<p>例：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">localStorage.setItem(<span class="string">"name"</span>,<span class="built_in">JSON</span>.stringify(&#123;<span class="string">"id"</span>:someval.id,<span class="string">"name"</span>:someval.name&#125;));</span><br><span class="line"><span class="keyword">var</span> suppid = localStorage.getItem(<span class="string">"name"</span>); </span><br><span class="line"> suppid = <span class="built_in">JSON</span>.parse(suppid);</span><br></pre></td></tr></table></figure></p>
+<p>json数据转换成字符串:  JSON.stringify(val);<br>字符串转换成json数据:  JSON.parse(val);</p>
+<h1 id="定义临时变量专门用来存放"><a href="#定义临时变量专门用来存放" class="headerlink" title="定义临时变量专门用来存放"></a>定义临时变量专门用来存放</h1><h2 id="适用于单页面应用交互较多"><a href="#适用于单页面应用交互较多" class="headerlink" title="适用于单页面应用交互较多"></a>适用于单页面应用交互较多</h2><p>步骤N操作得到的数据在步骤N+2/3/4/…中用到，在步骤N时将数据赋值给定义的临时变量，<br>在进行步骤N+2/3/4/…时，直接从临时变量中取值。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/reading/mob.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -542,7 +1030,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">232</span>
+              <span class="site-state-item-count">236</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

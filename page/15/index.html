@@ -259,6 +259,548 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/safe/ajax.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/safe/ajax.html" itemprop="url">
+                  Ajax和跨域
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-19T09:56:37+08:00">
+                2017-08-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="ajax"><a href="#ajax" class="headerlink" title="ajax"></a>ajax</h1><p>ajax全称Asynchronous JavaScript and XML（异步的JavaScript与XML），是网页无需刷新页面、使用js与服务器进行交互的一种技术。</p>
+<p>ajax的基本流程可以概括为：页面上js脚本实例化一个XMLHttpRequest对象，设置好服务器端的url、必要的查询参数、回调函数之后，向服务器发出请求，<br>服务器在处理请求之后将处理结果返回给页面，触发事先绑定的回调函数。<br>这样，页面脚本如果想要改变一个区域的内容，只需要通过ajax向服务器获取与该区域有关的少量数据，在回调函数中将该区域的内容替换掉即可，不需要刷新整个页面。</p>
+<p>XMLHttpRequest在发送请求的时候，有两种方式：同步与异步。<br>同步方式是请求发出后，一直到收到服务器返回的数据为止，浏览器进程被阻塞，页面上什么事也做不了。<br>而异步方式则不会阻塞浏览器进程，在服务端返回数据并触发回调函数之前，用户依然可以在该页面上进行其他操作。<br>ajax的核心是异步方式，而同步方式只有在极其特殊的情况下才会被用到。</p>
+<p>XMLHttpRequest 对象是一个接口，用于创建一个http请求对象实例,打开一个URL，然后发送这个请求,<br>当传输完毕后，结果的HTTP状态以及返回的响应内容也可以从请求对象中获取<br>五种状态<br>0：未打开<br>1：未发送<br>2：以获取响应头<br>3：正在下载响应体<br>4：请求完成<br><a href="https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest" target="_blank" rel="noopener">XMLHttpRequest API</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">const xhr = new XMLHttpRequest()</span><br><span class="line"></span><br><span class="line">xhr.onreadystatechange = function () &#123;</span><br><span class="line">  switch (xhr.readyState) &#123;</span><br><span class="line">    case 0:</span><br><span class="line">      // UNSENT (未打开)</span><br><span class="line">      debugger</span><br><span class="line">      break</span><br><span class="line">    case 1:</span><br><span class="line">      // OPENED  (未发送)</span><br><span class="line">      debugger</span><br><span class="line">      break</span><br><span class="line">    case 2:</span><br><span class="line">      // HEADERS_RECEIVED (已获取响应头)</span><br><span class="line">      debugger</span><br><span class="line">      break</span><br><span class="line">    case 3:</span><br><span class="line">      // LOADING (正在下载响应体)</span><br><span class="line">      debugger</span><br><span class="line">      break</span><br><span class="line">    case 4:</span><br><span class="line">      // DONE (请求完成)</span><br><span class="line">      if (xhr.status === 200) &#123;</span><br><span class="line">        console.log(xhr.responseType)</span><br><span class="line">        console.log(xhr.responseText)</span><br><span class="line">        console.log(xhr.response)</span><br><span class="line">      &#125;</span><br><span class="line">      break</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">xhr.open(&apos;GET&apos;, &apos;http://y.com:7001/json&apos;, true)</span><br><span class="line">xhr.send(null)</span><br></pre></td></tr></table></figure>
+<p>使用ajax 封装POST,GET请求<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">function Ajax(method,url,callback,data,async)&#123;</span><br><span class="line">  method = method.toUpperCase()</span><br><span class="line">  async = async || true</span><br><span class="line">  let xmlHttp = null;</span><br><span class="line">  if (XMLHttpRequest) &#123;</span><br><span class="line">      xmlHttp = new XMLHttpRequest();//服务器请求对象</span><br><span class="line">  &#125;</span><br><span class="line">  else &#123;</span><br><span class="line">      xmlHttp = new ActiveXObject(&apos;Microsoft.XMLHTTP&apos;);//兼容微软请求对象</span><br><span class="line">  &#125;</span><br><span class="line">  let params = [];</span><br><span class="line">  for (var key in data)&#123;</span><br><span class="line">      params.push(key + &apos;=&apos; + opt.data[key]);</span><br><span class="line">  &#125;</span><br><span class="line">  params = params.join(&apos;&amp;&apos;);</span><br><span class="line">  if (method === &apos;POST&apos;) &#123;//请求方法为POST,则执行如下操作</span><br><span class="line">    xmlHttp.open(method, url, async);</span><br><span class="line">    xmlHttp.setRequestHeader(&apos;Content-Type&apos;, &apos;application/x-www-form-urlencoded;charset=utf-8&apos;);</span><br><span class="line">    xmlHttp.send(params);</span><br><span class="line">  &#125;</span><br><span class="line">  else if (method === &apos;GET&apos;) &#123;//请求方法为GET,则执行如下操作</span><br><span class="line">    xmlHttp.open(opt.method, opt.url + &apos;?&apos; + params, async);</span><br><span class="line">    xmlHttp.send(null);</span><br><span class="line">  &#125; </span><br><span class="line">  xmlHttp.onreadystatechange = function () &#123;</span><br><span class="line">    if (xmlHttp.readyState == 4 &amp;&amp; xmlHttp.status == 200) &#123;//响应是否成功</span><br><span class="line">      var data = JSON.parse(xmlHttp.responseText);</span><br><span class="line">      callback(data);</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">      throw  xmlHttp.responseText</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="同源策略"><a href="#同源策略" class="headerlink" title="同源策略"></a>同源策略</h1><p>为了保证用户信息的安全，防止恶意的网站窃取数据<br>解决办法：同源策略<br>同源策略是指三个相同：协议相同,域名相同,端口相同<br>以上三个不相同则是非同源，非同源之间相互访问即跨域访问</p>
+<p>跨域和ip没有关系</p>
+<h1 id="跨域"><a href="#跨域" class="headerlink" title="跨域"></a>跨域</h1><p>浏览器在阻止跨域,阻止方式可能是在一开始就限制了发起跨站的请求，也可能是跨站请求可以正常发起，但返回结果被浏览器拦截了</p>
+<h2 id="为什么要防止跨域"><a href="#为什么要防止跨域" class="headerlink" title="为什么要防止跨域"></a>为什么要防止跨域</h2><p>跨域访问时会受到同源策略的三个限制<br>1、Cookie、LocalStorage 和 IndexDB 无法读取。<br>通过浏览器document.cookie我们可以获取用户登录态,如果cookie可以读取的话，<br>就会出现在A公司网站里可以去B公司网站获取登录信息的事情,这样就容易将用户信息泄露<br>2、DOM 无法获得<br>如果DOM可以获得,现在我是一个假网站，利用iframe套嵌一个目前线上运营的电商网站,那么<br>消费者在输入支付密码时,那我就可以获取input的值,从而获取用户支付密码<br>3、AJAX 请求不能发送<br>如果AJAx可以发送的话，那我们就能将内网东西下载下来发送到外网服务器，从而造成内网信息泄露</p>
+<h2 id="如何实现跨域"><a href="#如何实现跨域" class="headerlink" title="如何实现跨域"></a>如何实现跨域</h2><h3 id="jsonp"><a href="#jsonp" class="headerlink" title="jsonp"></a>jsonp</h3><p>原理是利用&lt;script&gt;标签可以在任何域下获取资源的原理，将要跨域获取的接口url放在&lt;script&gt;标签的src里面，<br>然后js将标签放到body里面，其中url包含一个callback参数，用于指向处理response的函数，这个函数我们挂载的window上,<br>即我们在js中定义的的函数</p>
+<p>如果在浏览器直接访问接口’<a href="http://x.com:7001/json?callback=xxx&#39;" target="_blank" rel="noopener">http://x.com:7001/json?callback=xxx&#39;</a><br>页面会显示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**/ typeof xxx === &apos;function&apos; &amp;&amp; xxx(&#123;&quot;msg&quot;:&quot;hello world&quot;&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>就是说,在请求这个接口时,会去window上找xxx这个对象，看它是不是函数，如果是函数，<br>就将接口定义的response（{“msg”:”hello world”}）作为参数传递给xxx函数,并执行xxx函数</p>
+<p>现在在<a href="http://y.com/x.html页面中进行跨域" target="_blank" rel="noopener">http://y.com/x.html页面中进行跨域</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">//json 接口  服务端</span><br><span class="line"></span><br><span class="line">module.exports = app =&gt; &#123;</span><br><span class="line">  class MsgController extends app.Controller &#123;</span><br><span class="line">    * index(req) &#123;</span><br><span class="line">      this.ctx.body = &#123; msg: &apos;hello world&apos; &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  return MsgController</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// js 客户端请求</span><br><span class="line">//方法一：</span><br><span class="line"></span><br><span class="line">//定义相应处理函数</span><br><span class="line">window.xxx = function (value) &#123;</span><br><span class="line">  console.log(value)</span><br><span class="line">&#125;</span><br><span class="line">//添加script标签</span><br><span class="line">var script = document.createElement(&apos;script&apos;)</span><br><span class="line">script.src = &apos;http://x.com:7001/json?callback=xxx&apos;</span><br><span class="line">document.body.appendChild(script)</span><br><span class="line"></span><br><span class="line">//方法二：</span><br><span class="line">require([&apos;http://x.com:7001/json?callback=define&apos;], function (value) &#123;</span><br><span class="line">  console.log(value)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>现在访问<a href="http://y.com/x.html,在浏览器console就会打印{&quot;msg&quot;:&quot;hello" target="_blank" rel="noopener">http://y.com/x.html,在浏览器console就会打印{&quot;msg&quot;:&quot;hello</a> world”}</p>
+<h3 id="CORS"><a href="#CORS" class="headerlink" title="CORS"></a>CORS</h3><p>XMLHttpRequest 2.0以后可以使用cors方法进行跨域<br>CORS需要浏览器和服务器同时支持<br>整个CORS通信过程，都是浏览器自动完成，不需要用户参与。<br>对于开发者来说，CORS通信与同源的AJAX通信没有差别，代码完全一样。<br>浏览器一旦发现AJAX请求跨源，就会自动添加一些附加的头信息，有时还会多出一次附加的请求，但用户不会有感觉。<br>实现CORS通信的关键是服务器。只要服务器实现了CORS接口，就可以跨源通信。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">//cors接口 服务端</span><br><span class="line">module.exports = app =&gt; &#123;</span><br><span class="line">  class CrosController extends app.Controller &#123;</span><br><span class="line">    * index(req) &#123;</span><br><span class="line">      this.ctx.set(&apos;Access-Control-Allow-Origin&apos;, &apos;*&apos;)//如果不添加则会禁止访问</span><br><span class="line">      // this.ctx.set(&apos;Access-Control-Allow-Origin&apos;, &apos;http://xx.com&apos;)</span><br><span class="line">      // 如果我们要 http://*.qq.com 都支持跨域怎么办？</span><br><span class="line">      this.ctx.body = &#123; msg: &apos;hello world&apos; &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  return CrosController</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//js应用 客户端</span><br><span class="line">var xhr = new XMLHttpRequest()</span><br><span class="line">xhr.onreadystatechange = function () &#123;</span><br><span class="line">  if (xhr.readyState === 4 &amp;&amp; xhr.status === 200) &#123;</span><br><span class="line">    console.log(JSON.parse(xhr.responseText).msg)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">xhr.withCredentials = true//在头部添加cookie带到y.stuq,如果不设置，则不带</span><br><span class="line">xhr.open(&apos;GET&apos;, &apos;http://x.com:7001/cros&apos;)</span><br><span class="line">xhr.send(null)</span><br></pre></td></tr></table></figure>
+<p><a href="http://www.ruanyifeng.com/blog/2016/04/cors.html" target="_blank" rel="noopener">跨域资源共享 CORS 详解</a><br><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS" target="_blank" rel="noopener">HTTP访问控制（CORS）</a></p>
+<p>Access-Control-Allow-Origin 的属性值只允许设置为单个确定域名字符串或者 (<em>),设置</em>的话，最不安全，允许所有域可以访问</p>
+<p>在服务器端设置CORS跨域请求中的多域名白名单，可以实现Access-Control-Allow-Origin 允许对某一个或几个网站开放跨域请求权限</p>
+<p>原理就是在服务器端判断请求的Header中Origin属性值（req.header.origin）是否在我们的域名白名单列表内。<br>如果在白名单列表内，那么我们就把 Access-Control-Allow-Origin 设置成当前的Origin值，这样就满足了Access-Control-Allow-Origin 的单一域名要求，也能确保当前请求通过访问；如果不在白名单列表内，则返回错误信息。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">// 判断origin是否在域名白名单列表中</span><br><span class="line">function isOriginAllowed(origin, allowedOrigin) &#123;</span><br><span class="line">    if (_.isArray(allowedOrigin)) &#123;</span><br><span class="line">        for(let i = 0; i &lt; allowedOrigin.length; i++) &#123;</span><br><span class="line">            if(isOriginAllowed(origin, allowedOrigin[i])) &#123;</span><br><span class="line">                return true;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return false;</span><br><span class="line">    &#125; else if (_.isString(allowedOrigin)) &#123;</span><br><span class="line">        return origin === allowedOrigin;</span><br><span class="line">    &#125; else if (allowedOrigin instanceof RegExp) &#123;</span><br><span class="line">        return allowedOrigin.test(origin);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        return !!allowedOrigin;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">const ALLOW_ORIGIN = [  // 域名白名单</span><br><span class="line">    &apos;*.233.666.com&apos;,</span><br><span class="line">    &apos;hello.world.com&apos;,</span><br><span class="line">    &apos;hello..*.com&apos;</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line">app.post(&apos;a/b&apos;, function (req, res, next) &#123;</span><br><span class="line">    let reqOrigin = req.headers.origin;  // request响应头的origin属性</span><br><span class="line"></span><br><span class="line">    // 判断请求是否在域名白名单内</span><br><span class="line">    if(isOriginAllowed(reqOrigin, ALLOW_ORIGIN)) &#123;</span><br><span class="line">        // 设置CORS为请求的Origin值</span><br><span class="line">        res.header(&quot;Access-Control-Allow-Origin&quot;, reqOrigin);</span><br><span class="line">        res.header(&apos;Access-Control-Allow-Credentials&apos;, &apos;true&apos;);</span><br><span class="line"></span><br><span class="line">        // 业务代码逻辑代码 ...</span><br><span class="line">        // ...</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        res.send(&#123; code: -2, msg: &apos;非法请求&apos; &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>与JSONP的比较:<br>CORS与JSONP的使用目的相同，但是比JSONP更强大。<br>JSONP只支持GET请求，CORS支持所有类型的HTTP请求。JSONP的优势在于支持老式浏览器，以及可以向不支持CORS的网站请求数据。</p>
+<h3 id="iframe-Hash"><a href="#iframe-Hash" class="headerlink" title="iframe-Hash"></a>iframe-Hash</h3><p>Location 对象是 Window 对象的一个部分，可通过 window.location 属性来访问<br>hash是location对象的的一个属性，可以设置或返回从井号 (#) 开始的 URL（锚）</p>
+<p>iframe是HTML标签，作用是文档中的文档，或者浮动的框架(FRAME)。iframe元素会创建包含另外一个文档的内联框架（即行内框架）。</p>
+<p>原理是在原域页面包装 跨域src的iframe标签，在跨域src的文件里请求跨域的资源(此时二者同域),<br>跨域src文件是可以获取到iframe父类,即我们原域的window对象,<br>通过改变原域的hash值，引发原域onhashchange,从而将资源带回到原域</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">//原域js</span><br><span class="line">//包装iframe</span><br><span class="line">var iframe = document.createElement(&apos;iframe&apos;)</span><br><span class="line">iframe.src = &apos;http://x.com:7001/public/hash.html&apos;</span><br><span class="line">document.body.appendChild(iframe)</span><br><span class="line">//处理请求资源</span><br><span class="line">window.onhashchange = function () &#123;</span><br><span class="line">  // 小练习，做个工具方法，取出query的值</span><br><span class="line">  console.log(location.hash)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//跨域的hash.html文件</span><br><span class="line"></span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">var xhr = new XMLHttpRequest()</span><br><span class="line">xhr.onreadystatechange = function () &#123;</span><br><span class="line">    if (xhr.readyState === 4 &amp;&amp; xhr.status === 200) &#123;</span><br><span class="line">        var res = JSON.parse(xhr.responseText)</span><br><span class="line">        parent.location.href = `http://y.stuq.com:7001/public/3.html#msg=$&#123;res.msg&#125;` //引起原域onhashchange，同时将response带回</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">xhr.open(&apos;GET&apos;, &apos;http://x.com:7001/json&apos;, true) //请求同域资源</span><br><span class="line">xhr.send(null)</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="iframe-window-name"><a href="#iframe-window-name" class="headerlink" title="iframe-window.name"></a>iframe-window.name</h3><p>原理是利用iframe的window.name,name 值在不同的页面（甚至不同域名）加载后依旧存在（如果没修改则值不会变化），并且可以支持非常长的 name 值（2MB）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">//原域js</span><br><span class="line">var iframe = document.createElement(&apos;iframe&apos;)</span><br><span class="line">iframe.src = &apos;http://x.com:7001/public/name.html&apos;</span><br><span class="line">document.body.appendChild(iframe)</span><br><span class="line"></span><br><span class="line">var times = 0</span><br><span class="line">iframe.onload = function () &#123;</span><br><span class="line">    if (++times === 2) &#123;//第一次打开跨域页面name,第二次加载通知原域iframe改变值</span><br><span class="line">        console.log(JSON.parse(iframe.contentWindow.name))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//name.html</span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">var xhr = new XMLHttpRequest()</span><br><span class="line">xhr.onreadystatechange = function () &#123;</span><br><span class="line">    if (xhr.readyState === 4 &amp;&amp; xhr.status === 200) &#123;</span><br><span class="line">        window.name = xhr.responseText //这里是原域iframe的window,iframe不能跨域读取对象,所以</span><br><span class="line">        location.href = &apos;http://y.com:7001/public/index.html&apos; //再次加载iframe，通知原域parent，iframe的contentWindow.name需要做更改</span><br><span class="line">        //href的值,依然是跨域的也可以，这里是加载回原域的一个文件</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">xhr.open(&apos;GET&apos;, &apos;http://x.com:7001/json&apos;, true)</span><br><span class="line">xhr.send(null)</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="iframe-postMessage"><a href="#iframe-postMessage" class="headerlink" title="iframe-postMessage"></a>iframe-postMessage</h3><p>利用HTML5的postMessage方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">//原域js</span><br><span class="line">var iframe = document.createElement(&apos;iframe&apos;)</span><br><span class="line">iframe.src = &apos;http://x.stuq.com:7001/public/post.html&apos;</span><br><span class="line">document.body.appendChild(iframe)</span><br><span class="line"></span><br><span class="line">window.addEventListener(&apos;message&apos;, function(e) &#123;</span><br><span class="line">  console.log(JSON.parse(e.data))</span><br><span class="line">&#125;, false);</span><br><span class="line"></span><br><span class="line">//post.html</span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">var xhr = new XMLHttpRequest()</span><br><span class="line">xhr.onreadystatechange = function () &#123;</span><br><span class="line">    if (xhr.readyState === 4 &amp;&amp; xhr.status === 200) &#123;</span><br><span class="line">        parent.postMessage(xhr.responseText, &apos;*&apos;) //拿到父级页面parent,执行postmessage的一个操作，从而引发父级页面的message事件</span><br><span class="line">        //*代表targetOrigin可以是任何域</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">xhr.open(&apos;GET&apos;, &apos;http://x.stuq.com:7001/json&apos;, true)</span><br><span class="line">xhr.send(null)</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage" target="_blank" rel="noopener">Window.postMessage() API</a></p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>跨域方法很多<br>选择如何使用可以考虑以下几方面<br>1.场景，选择简单的<br>2.安全，解决问题是否足够安全<br>3.数据来源,如果跨域接口可以传资源给原域，则可以使用iframe代理<br>4.承接第三种情景，如果接口不允许传资源，则只能寄希望于后台，使用反向代理的方法获取</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/Karmatest.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/knowledge/Karmatest.html" itemprop="url">
+                  Karma test
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-12T23:54:02+08:00">
+                2017-08-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Karma-test"><a href="#Karma-test" class="headerlink" title="Karma test"></a>Karma test</h1><p>Karma是由Google团队开发的一套前端测试运行框架。它不同于测试框架（例如jasmine，mocha等），运行在这些测试框架之上。主要完成以下工作：<br>Karma启动一个web服务器，生成包含js源代码和js测试脚本的页面；<br>运行浏览器加载页面，并显示测试的结果；<br>如果开启检测，则当文件有修改时，执行继续执行以上过程。</p>
+<h1 id="搭建测试环境"><a href="#搭建测试环境" class="headerlink" title="搭建测试环境"></a>搭建测试环境</h1><p>npm install -g karma-cli //让全局都可以运行karma的命令行,命令行工具<br>npm i karma –save-dev //只在当前项目中使用karma<br>npm install //安装项目的依赖 package.json<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&quot;devDependencies&quot;: &#123;</span><br><span class="line">    &quot;karma&quot;: &quot;^1.7.0&quot;,</span><br><span class="line">    &quot;karma-chrome-launcher&quot;: &quot;^2.2.0&quot;,</span><br><span class="line">    &quot;karma-mocha&quot;: &quot;^1.3.0&quot;,</span><br><span class="line">    &quot;mocha&quot;: &quot;^3.5.0&quot;,</span><br><span class="line">    &quot;should&quot;: &quot;^11.2.1&quot;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>karma init //在cmd中运行该命令,构建karma.conf.js文件,运行后会询问相关问题然后生成karma.conf.js文件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">Which testing framework <span class="keyword">do</span> you want to use ?</span><br><span class="line">Press tab to list possible options. Enter to move to the next question.</span><br><span class="line">&gt; mocha <span class="comment">//选择要使用的框架,不能直接输入,是选择题,点击键盘箭头可更改选项</span></span><br><span class="line"></span><br><span class="line">Do you want to use Require.js ?</span><br><span class="line">This will add Require.js plugin.</span><br><span class="line">Press tab to list possible options. Enter to move to the next question.</span><br><span class="line">&gt; no  <span class="comment">//是否add Require.js plugin</span></span><br><span class="line"></span><br><span class="line">Do you want to capture any browsers automatically ?</span><br><span class="line">Press tab to list possible options. Enter empty string to move to the next quest</span><br><span class="line">ion.</span><br><span class="line">&gt; Chrome <span class="comment">//选择用哪个浏览器打开测试页，也是选择题，不能输入</span></span><br><span class="line">&gt;</span><br><span class="line"></span><br><span class="line">What is the location <span class="keyword">of</span> your source and test files ?</span><br><span class="line">You can use glob patterns, eg. <span class="string">"js/*.js"</span> or <span class="string">"test/**/*Spec.js"</span>.</span><br><span class="line">Enter empty string to move to the next question.</span><br><span class="line">&gt; src<span class="comment">/*.js  //添加要测试的代码的路径，不是测试用例代码的路径，同时，代码中用到的其他文件也在这里同时添加，</span></span><br><span class="line"><span class="comment">11 08 2017 15:03:13.822:WARN [init]: There is no file matching this pattern.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">&gt; //	回车可以切换下一行继续添加，连续回车进入下一个问题</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Should any of the files included by the previous patterns be excluded ?</span></span><br><span class="line"><span class="comment">You can use glob patterns, eg. "**/</span>*.swp<span class="string">".</span></span><br><span class="line"><span class="string">Enter empty string to move to the next question.</span></span><br><span class="line"><span class="string">&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Do you want Karma to watch all the files and run the tests on change ?</span></span><br><span class="line"><span class="string">Press tab to list possible options.</span></span><br><span class="line"><span class="string">&gt; yes //是否跟所有文件自动开启测试</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Config file generated at "</span>G:\css\homework1\karma.conf.js<span class="string">".</span></span><br></pre></td></tr></table></figure></p>
+<p>karma.conf.js文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">module.exports = function(config) &#123;</span><br><span class="line">  config.set(&#123;</span><br><span class="line"></span><br><span class="line">    // base path that will be used to resolve all patterns (eg. files, exclude)</span><br><span class="line">    basePath: &apos;&apos;,//根路径，后面配置的基本所有相对路径都会根据这个路径来构造。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // frameworks to use 使用到的框架</span><br><span class="line">    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter</span><br><span class="line">    frameworks: [&apos;mocha&apos;],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // list of files / patterns to load in the browser  将会在浏览器里面执行的代码</span><br><span class="line">    files: [</span><br><span class="line">      &apos;node_modules/should/should.js&apos;,</span><br><span class="line">      &apos;js/*.js&apos;,</span><br><span class="line">      &apos;quz/*.js&apos;,</span><br><span class="line">      &apos;test/*.js&apos;</span><br><span class="line">    ],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // list of files to exclude 需要从 files 中排除掉的文件</span><br><span class="line">    exclude: [</span><br><span class="line">    ],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // preprocess matching files before serving them to the browser需要做预处理的文件，以及这些文件对应的预处理器。</span><br><span class="line">    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor</span><br><span class="line">    preprocessors: &#123;////此处就可以将 coffee 、 ES6 等代码转换一下。</span><br><span class="line">        &apos;js/*.js&apos;: [&apos;coverage&apos;],//测试覆盖率</span><br><span class="line">        &apos;quz/*.js&apos;: [&apos;coverage&apos;]//测试覆盖率</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // test results reporter to use 测试结果报告器</span><br><span class="line">    // possible values: &apos;dots&apos;, &apos;progress&apos;</span><br><span class="line">    // available reporters: https://npmjs.org/browse/keyword/karma-reporter</span><br><span class="line">    reporters: [&apos;progress&apos;, &apos;coverage&apos;],</span><br><span class="line"></span><br><span class="line">     // 覆盖率报告器配置</span><br><span class="line">    coverageReporter: &#123;</span><br><span class="line">      type : &apos;lcov&apos;, //html格式会生成html文件，lcov格式可以和coveralls结合生成coveralls徽章</span><br><span class="line">      dir : &apos;coverage/&apos;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    // web server port 服务器端口号</span><br><span class="line">    port: 9876,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // enable / disable colors in the output (reporters and logs)</span><br><span class="line">    colors: true,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // level of logging 日志级别</span><br><span class="line">    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG</span><br><span class="line">    logLevel: config.LOG_INFO,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // enable / disable watching file and executing tests whenever any file changes 启用/禁用监视文件变化重新执行测试的功能</span><br><span class="line">    autoWatch: true,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // start these browsers 使用的浏览器</span><br><span class="line">    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher</span><br><span class="line">    browsers: [&apos;Chrome&apos;],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // Continuous Integration mode true测试一次就结束,false测试完一直处于测试状态</span><br><span class="line">    // if true, Karma captures browsers, runs the tests and exits</span><br><span class="line">    singleRun: true,</span><br><span class="line"></span><br><span class="line">    // Concurrency level</span><br><span class="line">    // how many browser should be started simultaneous</span><br><span class="line">    concurrency: Infinity</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="集成测试Travis-CI"><a href="#集成测试Travis-CI" class="headerlink" title="集成测试Travis CI"></a>集成测试Travis CI</h1><p><a href="/post/knowledge/TravishCI.html">Travish CI使用</a><br>通过Travis CI测试我们可以获得一个测试通过的标志<a href="https://travis-ci.org/YooHannah/homework1" target="_blank" rel="noopener"><img src="https://travis-ci.org/YooHannah/homework1.svg?branch=develop" alt="Build Status"></a>，可以将它放在github仓库readme.md文件里面<br><img src="/image/coverage1.png" alt="coverage1"><br>更改链接中branch的值可以获得对应分支的测试结果</p>
+<h1 id="测试代码覆盖率-Coverage"><a href="#测试代码覆盖率-Coverage" class="headerlink" title="测试代码覆盖率 Coverage"></a>测试代码覆盖率 Coverage</h1><p>衡量测试脚本的质量–代码覆盖率:测试中运行到的代码占所有代码的比率</p>
+<p>安装测试覆盖率工具<br>npm i –save-dev karma-coverage</p>
+<p>修改配置文件karma.conf.js<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// modified</span><br><span class="line">preprocessors: &#123;</span><br><span class="line">    &apos;src/**/*.js&apos;: [&apos;coverage&apos;], //要测试的功能代码路径：[&apos;coverage&apos;]   多个文件夹就逗号隔开，按格式写下去</span><br><span class="line">    &apos;js/*.js&apos;: [&apos;coverage&apos;],</span><br><span class="line">    &apos;quz/*.js&apos;: [&apos;coverage&apos;]</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line">//modified</span><br><span class="line">reporters: [&apos;progress&apos;, &apos;coverage&apos;],</span><br><span class="line"></span><br><span class="line">// add</span><br><span class="line">coverageReporter: &#123;</span><br><span class="line">  type : &apos;html&apos;,</span><br><span class="line">  dir : &apos;coverage/&apos;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure></p>
+<p>运行karma start,会新增coverage文件夹,里面只有一个浏览器名的文件夹，里面是根据preprocessors添加的路径生成对应的文件夹和其他文件，<br>其他文件里面有index.html文件，是整个测试的测试报告，文件夹里是每个文件的覆盖测试结果和代码具体的覆盖情况</p>
+<p>注意：如果不想将测试结果上传github,记得更改.gitignore文件，将coverage文件夹忽略掉</p>
+<h1 id="获取覆盖率标志"><a href="#获取覆盖率标志" class="headerlink" title="获取覆盖率标志"></a>获取覆盖率标志</h1><p>github 仓库经常会看到这个标志<br><img src="/image/coverage2.png" alt="coverage2"><br>就是说项目的测试覆盖率是91%，要获取这个标志我们需要将测试覆盖率放到<a href="https://coveralls.io" target="_blank" rel="noopener">Coveralls</a>上</p>
+<p>安装 coveralls方便我们在Travis CI上测试完之后将结果上传<br>npm i coveralls –save-dev</p>
+<p>更改karma.conf.js<br>coverageReporter: {<br>  type : ‘lcov’, //将html改为lcov<br>  dir : ‘coverage/‘<br>},<br>接下来操作步骤可以有两种<br>方法一：<br>仅更改 package.json文件,不保留测试命令karma start<br>更改package.json的scripts<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123;</span><br><span class="line">    &quot;test&quot;: &quot;./node_modules/karma/bin/karma start --browsers Firefox --single-run &amp;&amp; find coverage -name lcov.info -print0 | xargs -0 cat | ./node_modules/coveralls/bin/coveralls.js &amp;&amp; rm -rf ./coverage&quot;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>方法二：<br>更改package.json文件,保留测试命令karma start<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123;</span><br><span class="line">		&quot;test&quot;: &quot;karma start&quot;,</span><br><span class="line">    &quot;report&quot;: &quot;find coverage -name lcov.info -print0 | xargs -0 cat | ./node_modules/coveralls/bin/coveralls.js &amp;&amp; rm -rf ./coverage&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>也要更改.travis.yml文件，添加以下语句<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">after_success:</span><br><span class="line">  - &quot;npm run report&quot;</span><br></pre></td></tr></table></figure></p>
+<p>然后push代码，等Travi CI 完成测试后，我们可以在<a href="https://coveralls.io" target="_blank" rel="noopener">Coveralls</a>上获取标志,<br>在总的测试结果那个页面不是具体某次提交的页面获取<br><img src="/image/coverage3.png" alt="coverage3"><br>点击EMBED可以获取不同格式的标志代码，<br>复制粘贴MARKDOWN 格式可以放在readme.md文件中直接使用</p>
+<p>相关链接：<br><a href="https://csbun.github.io/blog/2015/11/karma/" target="_blank" rel="noopener">使用 Karma 在真实浏览器上测试</a><br><a href="https://segmentfault.com/a/1190000006895064" target="_blank" rel="noopener">前端单元测试之Karma环境搭建</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/test/Karmatest.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/test/Karmatest.html" itemprop="url">
+                  Karma test
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-12T23:54:02+08:00">
+                2017-08-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Karma-test"><a href="#Karma-test" class="headerlink" title="Karma test"></a>Karma test</h1><p>Karma是由Google团队开发的一套前端测试运行框架。它不同于测试框架（例如jasmine，mocha等），运行在这些测试框架之上。主要完成以下工作：<br>Karma启动一个web服务器，生成包含js源代码和js测试脚本的页面；<br>运行浏览器加载页面，并显示测试的结果；<br>如果开启检测，则当文件有修改时，执行继续执行以上过程。</p>
+<h1 id="搭建测试环境"><a href="#搭建测试环境" class="headerlink" title="搭建测试环境"></a>搭建测试环境</h1><p>npm install -g karma-cli //让全局都可以运行karma的命令行,命令行工具<br>npm i karma –save-dev //只在当前项目中使用karma<br>npm install //安装项目的依赖 package.json<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&quot;devDependencies&quot;: &#123;</span><br><span class="line">    &quot;karma&quot;: &quot;^1.7.0&quot;,</span><br><span class="line">    &quot;karma-chrome-launcher&quot;: &quot;^2.2.0&quot;,</span><br><span class="line">    &quot;karma-mocha&quot;: &quot;^1.3.0&quot;,</span><br><span class="line">    &quot;mocha&quot;: &quot;^3.5.0&quot;,</span><br><span class="line">    &quot;should&quot;: &quot;^11.2.1&quot;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>karma init //在cmd中运行该命令,构建karma.conf.js文件,运行后会询问相关问题然后生成karma.conf.js文件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">Which testing framework <span class="keyword">do</span> you want to use ?</span><br><span class="line">Press tab to list possible options. Enter to move to the next question.</span><br><span class="line">&gt; mocha <span class="comment">//选择要使用的框架,不能直接输入,是选择题,点击键盘箭头可更改选项</span></span><br><span class="line"></span><br><span class="line">Do you want to use Require.js ?</span><br><span class="line">This will add Require.js plugin.</span><br><span class="line">Press tab to list possible options. Enter to move to the next question.</span><br><span class="line">&gt; no  <span class="comment">//是否add Require.js plugin</span></span><br><span class="line"></span><br><span class="line">Do you want to capture any browsers automatically ?</span><br><span class="line">Press tab to list possible options. Enter empty string to move to the next quest</span><br><span class="line">ion.</span><br><span class="line">&gt; Chrome <span class="comment">//选择用哪个浏览器打开测试页，也是选择题，不能输入</span></span><br><span class="line">&gt;</span><br><span class="line"></span><br><span class="line">What is the location <span class="keyword">of</span> your source and test files ?</span><br><span class="line">You can use glob patterns, eg. <span class="string">"js/*.js"</span> or <span class="string">"test/**/*Spec.js"</span>.</span><br><span class="line">Enter empty string to move to the next question.</span><br><span class="line">&gt; src<span class="comment">/*.js  //添加要测试的代码的路径，不是测试用例代码的路径，同时，代码中用到的其他文件也在这里同时添加，</span></span><br><span class="line"><span class="comment">11 08 2017 15:03:13.822:WARN [init]: There is no file matching this pattern.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">&gt; //	回车可以切换下一行继续添加，连续回车进入下一个问题</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Should any of the files included by the previous patterns be excluded ?</span></span><br><span class="line"><span class="comment">You can use glob patterns, eg. "**/</span>*.swp<span class="string">".</span></span><br><span class="line"><span class="string">Enter empty string to move to the next question.</span></span><br><span class="line"><span class="string">&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Do you want Karma to watch all the files and run the tests on change ?</span></span><br><span class="line"><span class="string">Press tab to list possible options.</span></span><br><span class="line"><span class="string">&gt; yes //是否跟所有文件自动开启测试</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Config file generated at "</span>G:\css\homework1\karma.conf.js<span class="string">".</span></span><br></pre></td></tr></table></figure></p>
+<p>karma.conf.js文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">module.exports = function(config) &#123;</span><br><span class="line">  config.set(&#123;</span><br><span class="line"></span><br><span class="line">    // base path that will be used to resolve all patterns (eg. files, exclude)</span><br><span class="line">    basePath: &apos;&apos;,//根路径，后面配置的基本所有相对路径都会根据这个路径来构造。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // frameworks to use 使用到的框架</span><br><span class="line">    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter</span><br><span class="line">    frameworks: [&apos;mocha&apos;],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // list of files / patterns to load in the browser  将会在浏览器里面执行的代码</span><br><span class="line">    files: [</span><br><span class="line">      &apos;node_modules/should/should.js&apos;,</span><br><span class="line">      &apos;js/*.js&apos;,</span><br><span class="line">      &apos;quz/*.js&apos;,</span><br><span class="line">      &apos;test/*.js&apos;</span><br><span class="line">    ],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // list of files to exclude 需要从 files 中排除掉的文件</span><br><span class="line">    exclude: [</span><br><span class="line">    ],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // preprocess matching files before serving them to the browser需要做预处理的文件，以及这些文件对应的预处理器。</span><br><span class="line">    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor</span><br><span class="line">    preprocessors: &#123;////此处就可以将 coffee 、 ES6 等代码转换一下。</span><br><span class="line">        &apos;js/*.js&apos;: [&apos;coverage&apos;],//测试覆盖率</span><br><span class="line">        &apos;quz/*.js&apos;: [&apos;coverage&apos;]//测试覆盖率</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // test results reporter to use 测试结果报告器</span><br><span class="line">    // possible values: &apos;dots&apos;, &apos;progress&apos;</span><br><span class="line">    // available reporters: https://npmjs.org/browse/keyword/karma-reporter</span><br><span class="line">    reporters: [&apos;progress&apos;, &apos;coverage&apos;],</span><br><span class="line"></span><br><span class="line">     // 覆盖率报告器配置</span><br><span class="line">    coverageReporter: &#123;</span><br><span class="line">      type : &apos;lcov&apos;, //html格式会生成html文件，lcov格式可以和coveralls结合生成coveralls徽章</span><br><span class="line">      dir : &apos;coverage/&apos;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    // web server port 服务器端口号</span><br><span class="line">    port: 9876,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // enable / disable colors in the output (reporters and logs)</span><br><span class="line">    colors: true,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // level of logging 日志级别</span><br><span class="line">    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG</span><br><span class="line">    logLevel: config.LOG_INFO,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // enable / disable watching file and executing tests whenever any file changes 启用/禁用监视文件变化重新执行测试的功能</span><br><span class="line">    autoWatch: true,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // start these browsers 使用的浏览器</span><br><span class="line">    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher</span><br><span class="line">    browsers: [&apos;Chrome&apos;],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // Continuous Integration mode true测试一次就结束,false测试完一直处于测试状态</span><br><span class="line">    // if true, Karma captures browsers, runs the tests and exits</span><br><span class="line">    singleRun: true,</span><br><span class="line"></span><br><span class="line">    // Concurrency level</span><br><span class="line">    // how many browser should be started simultaneous</span><br><span class="line">    concurrency: Infinity</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="集成测试Travis-CI"><a href="#集成测试Travis-CI" class="headerlink" title="集成测试Travis CI"></a>集成测试Travis CI</h1><p><a href="/post/knowledge/TravishCI.html">Travish CI使用</a><br>通过Travis CI测试我们可以获得一个测试通过的标志<a href="https://travis-ci.org/YooHannah/homework1" target="_blank" rel="noopener"><img src="https://travis-ci.org/YooHannah/homework1.svg?branch=develop" alt="Build Status"></a>，可以将它放在github仓库readme.md文件里面<br><img src="/image/coverage1.png" alt="coverage1"><br>更改链接中branch的值可以获得对应分支的测试结果</p>
+<h1 id="测试代码覆盖率-Coverage"><a href="#测试代码覆盖率-Coverage" class="headerlink" title="测试代码覆盖率 Coverage"></a>测试代码覆盖率 Coverage</h1><p>衡量测试脚本的质量–代码覆盖率:测试中运行到的代码占所有代码的比率</p>
+<p>安装测试覆盖率工具<br>npm i –save-dev karma-coverage</p>
+<p>修改配置文件karma.conf.js<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// modified</span><br><span class="line">preprocessors: &#123;</span><br><span class="line">    &apos;src/**/*.js&apos;: [&apos;coverage&apos;], //要测试的功能代码路径：[&apos;coverage&apos;]   多个文件夹就逗号隔开，按格式写下去</span><br><span class="line">    &apos;js/*.js&apos;: [&apos;coverage&apos;],</span><br><span class="line">    &apos;quz/*.js&apos;: [&apos;coverage&apos;]</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line">//modified</span><br><span class="line">reporters: [&apos;progress&apos;, &apos;coverage&apos;],</span><br><span class="line"></span><br><span class="line">// add</span><br><span class="line">coverageReporter: &#123;</span><br><span class="line">  type : &apos;html&apos;,</span><br><span class="line">  dir : &apos;coverage/&apos;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure></p>
+<p>运行karma start,会新增coverage文件夹,里面只有一个浏览器名的文件夹，里面是根据preprocessors添加的路径生成对应的文件夹和其他文件，<br>其他文件里面有index.html文件，是整个测试的测试报告，文件夹里是每个文件的覆盖测试结果和代码具体的覆盖情况</p>
+<p>注意：如果不想将测试结果上传github,记得更改.gitignore文件，将coverage文件夹忽略掉</p>
+<h1 id="获取覆盖率标志"><a href="#获取覆盖率标志" class="headerlink" title="获取覆盖率标志"></a>获取覆盖率标志</h1><p>github 仓库经常会看到这个标志<br><img src="/image/coverage2.png" alt="coverage2"><br>就是说项目的测试覆盖率是91%，要获取这个标志我们需要将测试覆盖率放到<a href="https://coveralls.io" target="_blank" rel="noopener">Coveralls</a>上</p>
+<p>安装 coveralls方便我们在Travis CI上测试完之后将结果上传<br>npm i coveralls –save-dev</p>
+<p>更改karma.conf.js<br>coverageReporter: {<br>  type : ‘lcov’, //将html改为lcov<br>  dir : ‘coverage/‘<br>},<br>接下来操作步骤可以有两种<br>方法一：<br>仅更改 package.json文件,不保留测试命令karma start<br>更改package.json的scripts<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123;</span><br><span class="line">    &quot;test&quot;: &quot;./node_modules/karma/bin/karma start --browsers Firefox --single-run &amp;&amp; find coverage -name lcov.info -print0 | xargs -0 cat | ./node_modules/coveralls/bin/coveralls.js &amp;&amp; rm -rf ./coverage&quot;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>方法二：<br>更改package.json文件,保留测试命令karma start<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123;</span><br><span class="line">		&quot;test&quot;: &quot;karma start&quot;,</span><br><span class="line">    &quot;report&quot;: &quot;find coverage -name lcov.info -print0 | xargs -0 cat | ./node_modules/coveralls/bin/coveralls.js &amp;&amp; rm -rf ./coverage&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>也要更改.travis.yml文件，添加以下语句<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">after_success:</span><br><span class="line">  - &quot;npm run report&quot;</span><br></pre></td></tr></table></figure></p>
+<p>然后push代码，等Travi CI 完成测试后，我们可以在<a href="https://coveralls.io" target="_blank" rel="noopener">Coveralls</a>上获取标志,<br>在总的测试结果那个页面不是具体某次提交的页面获取<br><img src="/image/coverage3.png" alt="coverage3"><br>点击EMBED可以获取不同格式的标志代码，<br>复制粘贴MARKDOWN 格式可以放在readme.md文件中直接使用</p>
+<p>相关链接：<br><a href="https://csbun.github.io/blog/2015/11/karma/" target="_blank" rel="noopener">使用 Karma 在真实浏览器上测试</a><br><a href="https://segmentfault.com/a/1190000006895064" target="_blank" rel="noopener">前端单元测试之Karma环境搭建</a><br><a href="https://imweb.io/topic/5833d14cf8a1d5546059a301" target="_blank" rel="noopener">前端自动化测试解决方案探析</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/test/assert.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/test/assert.html" itemprop="url">
+                  断言语句assert
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-12T23:54:02+08:00">
+                2017-08-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>测试用例里面的一种判断语句</p>
+<p>在mocha中需要require<br>var assert = require(‘assert’)</p>
+<p>参数一般有三个<br>value 待判断的值<br>expected 要和value进行比较的值，看二者是否相等或者不相等,如果没有expected，则是在判断value的值是否为真<br>message 判断结果为错误时,抛出来的错误提醒语句，如果 message 参数为 undefined，则赋予默认的错误信息。</p>
+<p>assert(value[, message]) 同assert.ok()<br>assert.ok(value[, message]) value如果不为真值,抛出一个带有 message 属性的 AssertionError</p>
+<p>assert.fail(message) 抛出错误信息message</p>
+<p>assert.fail(actual, expected, message, operator) 根据参数抛出相应错误信息<br>如果 message 不存在，则错误信息会被设为 actual 的值加分隔符 operator 再加 expected 的值。 否则，错误信息为 message 的值,operator没有的话，默认为!=</p>
+<p>assert.ifError(value) 如果 value 为真，则抛出 value,如果为假，则测试通过</p>
+<p>assert.equal(actual, expected[, message])      使用相等运算符（==）测试 actual 参数与 expected 参数是否相等。<br>assert.deepEqual(actual, expected[, message])  测试 actual 参数与 expected 参数是否深度相等。 原始值使用 相等运算符（==）比较，只比较可枚举的自身属性。<br>深度相等意味着子对象的可枚举的自身属性也会被比较<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">const obj1 = &#123;</span><br><span class="line">  a: &#123;</span><br><span class="line">    b: 1</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">const obj3 = &#123;</span><br><span class="line">  a: &#123;</span><br><span class="line">    b: 1</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">const obj4 = Object.create(obj1);</span><br><span class="line">assert.deepEqual(obj1, obj4);</span><br><span class="line">// 抛出 AssertionError: &#123; a: &#123; b: 1 &#125; &#125; deepEqual &#123;&#125;</span><br><span class="line">// 原型会被忽略</span><br><span class="line">assert.deepEqual(obj1, obj3);</span><br><span class="line">// 通过，两个对象相等</span><br></pre></td></tr></table></figure></p>
+<p>assert.deepStrictEqual(actual, expected[, message])<br>大多数情况下与 assert.deepEqual() 一样，但有三个例外：</p>
+<p>原始值使用 全等运算符（===）比较。使用SameValueZero比较法来比较设置的值及映射的键（也就意味不用考虑caveats）。<br>对象的 原型 也使用 全等运算符 比较。<br>对象的类型标签应该相同。</p>
+<p>assert.notEqual(actual, expected[, message])              使用 不等运算符（!=）测试是否不相等。<br>assert.notDeepEqual(actual, expected[, message])          测试是否不深度相等。 与 assert.deepEqual() 相反。<br>assert.notStrictEqual(actual, expected[, message])        使用 不全等运算符（!==）测试是否不全等。<br>assert.notDeepStrictEqual(actual, expected[, message])    测试是否不深度全等。 与 assert.deepStrictEqual() 相反。</p>
+<p>assert.throws(block[, error][, message])   期望 block 函数抛出错误error，如果block(function)抛出error的错误，则测试通过<br>error 可以是构造函数、正则表达式、或自定义的验证函数。</p>
+<p>assert.doesNotThrow(block[, error][, message])  断言 block 函数不会抛出错误<br>当 assert.doesNotThrow() 被调用时，它会立即调用 block 函数。<br>如果抛出错误且错误类型与 error 参数指定的相同，则抛出 AssertionError。 如果错误类型不相同，或 error 参数是 undefined，则错误会被抛回给调用者。<br>如果block不抛出错误，则测试通过</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/var.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1076,485 +1618,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/performance/cache/cdn.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/performance/cache/cdn.html" itemprop="url">
-                  关于CDN
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-03T06:37:02+08:00">
-                2017-08-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>cdn 是一种从网络层面优化页面访问速度的手段<br>CDN服务商提供一项智能域名解析服务，这种智能DNS服务在浏览器发起域名查询时，会根据用户IP计算并返回离它最近的同网络CDN节点IP，引导浏览器与此节点建立连接以获取资源。<br>不同地区的用户访问同一个域名，依赖CDN服务商提供的智能域名解析服务得到不同CDN节点的IP地址<br>不同地区的用户会访问到离自己最近的相同网络线路上的CDN节点，当请求达到CDN节点后，节点会判断自己的内容缓存是否有效，如果有效，则立即响应缓存内容给用户，从而加快响应速度。如果CDN节点的缓存失效，它会根据服务配置去我们的内容源服务器获取最新的资源响应给用户，并将内容缓存下来以便响应给后续访问的用户。因此，一个地区内只要有一个用户先加载资源，在CDN中建立了缓存，该地区的其他后续用户都能因此而受益。<br>通过将静态资源缓存到离用户很近的相同网络运营商的CDN节点上，不但能提升用户的访问速度，还能节省服务器的带宽消耗，降低负载。<br>好的cdn服务到源服务器获取文件会通过专用的线路，这样就会比用户直接从源服务器获取资源快<br><img src="/image/cdn.png" alt="cdn缓存技术原理"></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/layouts.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/knowledge/layouts.html" itemprop="url">
-                  常见页面布局小结
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-03T06:30:02+08:00">
-                2017-08-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="圣杯布局"><a href="#圣杯布局" class="headerlink" title="圣杯布局"></a>圣杯布局</h1><p>三栏布局,左右两栏宽度固定,中间一栏宽度随屏幕宽度自适应<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">&lt;div id=&quot;header&quot;&gt;#header&lt;/div&gt;</span><br><span class="line">&lt;div id=&quot;container&quot;&gt;</span><br><span class="line">  &lt;div id=&quot;center&quot; class=&quot;column&quot;&gt;#center&lt;/div&gt;</span><br><span class="line">  &lt;div id=&quot;left&quot; class=&quot;column&quot;&gt;#left&lt;/div&gt;</span><br><span class="line">  &lt;div id=&quot;right&quot; class=&quot;column&quot;&gt;#right&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;div id=&quot;footer&quot;&gt;#footer&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line"></span><br><span class="line">&lt;style type=&quot;text/css&quot;&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">  min-width: 550px;      /* 2x LC width + RC width */</span><br><span class="line">&#125;</span><br><span class="line">#container &#123;</span><br><span class="line">  padding-left: 200px;   /* LC width */</span><br><span class="line">  padding-right: 150px;  /* RC width */</span><br><span class="line">&#125;</span><br><span class="line">#container .column &#123;</span><br><span class="line">  position: relative;/* 让左右两栏进行相对位移，位移到container的内边距位置 */</span><br><span class="line">  min-height: 200px;/* 高度自适应*/</span><br><span class="line">  float: left;</span><br><span class="line">&#125;</span><br><span class="line">#center &#123;</span><br><span class="line">  width: 100%;</span><br><span class="line">  background-color: #e9e9e9;</span><br><span class="line">&#125;</span><br><span class="line">#left &#123;</span><br><span class="line">  width: 200px;          /* LC width */</span><br><span class="line">  right: 200px;           /*LC width *//*相对于 container 的右边线向左偏移 200px 将自己位移到container内边距 */</span><br><span class="line">  margin-left: -100%;/*浮动到与中间平行 */</span><br><span class="line">  background-color: red;</span><br><span class="line">&#125;</span><br><span class="line">#right &#123;</span><br><span class="line">  width: 150px;          /* RC width */</span><br><span class="line">  margin-right: -150px;  /* RC width */</span><br><span class="line">  background-color: blue;</span><br><span class="line">&#125;</span><br><span class="line">#footer &#123;</span><br><span class="line">  clear: both;/*清除 footer 的上下环境，以免遭跟上面三栏一起浮动*/</span><br><span class="line">&#125;</span><br><span class="line">#header, </span><br><span class="line">#footer &#123;</span><br><span class="line">  background-color: #c9c9c9;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure></p>
-<p><img src="/image/holy1.png" alt="圣杯1"><br><img src="/image/holy2.png" alt="圣杯2"></p>
-<p>flex 实现 圣杯布局<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">&lt;!doctype html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;header&gt;header&lt;/header&gt;</span><br><span class="line">    &lt;section&gt;</span><br><span class="line">      &lt;nav&gt;nav&lt;/nav&gt;</span><br><span class="line">      &lt;article&gt;article&lt;/article&gt;</span><br><span class="line">      &lt;aside&gt;aside&lt;/aside&gt;</span><br><span class="line">    &lt;/section&gt;</span><br><span class="line">    &lt;footer&gt;footer&lt;/footer&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line"> body&#123;</span><br><span class="line">   display: flex;</span><br><span class="line">   flex-flow: column wrap;</span><br><span class="line">   justify-content:flex-start;</span><br><span class="line"> &#125;</span><br><span class="line"> header,section,nav,aside,footer&#123;</span><br><span class="line">   display: block;</span><br><span class="line"> &#125;</span><br><span class="line"> header&#123;</span><br><span class="line">   order: 1;</span><br><span class="line">   width: 100%;</span><br><span class="line">   min-height: 100px;</span><br><span class="line">   padding: 10px 20px;</span><br><span class="line">   background-color: antiquewhite;</span><br><span class="line"> &#125;</span><br><span class="line"> section&#123;</span><br><span class="line">   flex: 1; </span><br><span class="line">   order: 2;</span><br><span class="line">   min-width: 100%;</span><br><span class="line">   margin: 20px 0;</span><br><span class="line">   display: flex;</span><br><span class="line"> &#125;</span><br><span class="line"> footer&#123;</span><br><span class="line">   order: 3;</span><br><span class="line">   min-height: 60px;</span><br><span class="line">   min-width: 100%;</span><br><span class="line">   padding: 1%;</span><br><span class="line">   background-color: burlywood;</span><br><span class="line"> &#125;</span><br><span class="line"> nav&#123;</span><br><span class="line">   order:1;</span><br><span class="line">   width: 220px;</span><br><span class="line">   padding: 1%;</span><br><span class="line">   background-color: aquamarine;</span><br><span class="line"> &#125;</span><br><span class="line"> article&#123;</span><br><span class="line">   flex: 1;/* 可伸缩 */</span><br><span class="line">   order:2;</span><br><span class="line">   padding: 1%;</span><br><span class="line">   margin:0 2%;</span><br><span class="line">   background-color: blue;</span><br><span class="line">   word-break: break-all;</span><br><span class="line"> &#125;</span><br><span class="line"> aside&#123;</span><br><span class="line">   order:3;</span><br><span class="line">   width:220px;</span><br><span class="line">   padding: 1%;</span><br><span class="line">   background-color: aqua;</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
-<h1 id="双飞翼布局"><a href="#双飞翼布局" class="headerlink" title="双飞翼布局"></a>双飞翼布局</h1><p>效果同圣杯布局，只是写法上DOM在center里面新增加了div,css不再使用relative定位，只是用float和外边距<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id=&quot;header&quot;&gt;header&lt;/div&gt;</span><br><span class="line">&lt;div id=&quot;container&quot;&gt;</span><br><span class="line">  &lt;div id=&quot;center&quot; class=&quot;column&quot;&gt;</span><br><span class="line">    &lt;div id=&quot;innerCenter&quot;&gt;center&lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  &lt;div id=&quot;left&quot; class=&quot;column&quot;&gt;left&lt;/div&gt;</span><br><span class="line">  &lt;div id=&quot;right&quot; class=&quot;column&quot;&gt;right&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;div id=&quot;footer&quot;&gt;footer&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;style type=&quot;text/css&quot;&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    min-width: 351px; /* LC width + RC width +1*/</span><br><span class="line">  &#125;</span><br><span class="line">  #container .column &#123;</span><br><span class="line">    min-height: 200px;</span><br><span class="line">    float: left;</span><br><span class="line">  &#125;</span><br><span class="line">  #innerCenter &#123; /*代替圣杯container的padding处理*/</span><br><span class="line">    margin-left: 200px;</span><br><span class="line">    margin-right: 150px;</span><br><span class="line">  &#125;</span><br><span class="line">  #center &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    background-color: #e9e9e9;</span><br><span class="line">  &#125;</span><br><span class="line">  #left &#123;</span><br><span class="line">    width: 200px;</span><br><span class="line">    margin-left: -100%;</span><br><span class="line">    background-color: red;</span><br><span class="line">  &#125;</span><br><span class="line">  #right &#123;</span><br><span class="line">    width: 150px;</span><br><span class="line">    margin-left: -150px;</span><br><span class="line">    background-color: blue;</span><br><span class="line">  &#125;</span><br><span class="line">  #footer &#123;</span><br><span class="line">    clear: both;</span><br><span class="line">  &#125;</span><br><span class="line">  #header, #footer &#123;</span><br><span class="line">    background-color: #c9c9c9;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure></p>
-<p><img src="/image/holy3.png" alt="圣杯3"><br><img src="/image/holy4.png" alt="圣杯4"></p>
-<h1 id="7种垂直居中"><a href="#7种垂直居中" class="headerlink" title="7种垂直居中"></a>7种垂直居中</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br></pre></td><td class="code"><pre><span class="line">1.tabel自带</span><br><span class="line">&lt;body&gt;</span><br><span class="line">  &lt;table class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;tr&gt;</span><br><span class="line">      &lt;td class=&quot;child&quot;&gt;</span><br><span class="line">      一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字</span><br><span class="line">      &lt;/td&gt;</span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line">  &lt;/table&gt;</span><br><span class="line">  .parent&#123;</span><br><span class="line">  border: 1px solid red;</span><br><span class="line">  height: 600px;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.child&#123;</span><br><span class="line">  border: 1px solid green;</span><br><span class="line">&#125;</span><br><span class="line">2.在水平居中部分的前后添加inline-block元素，高度100%，三个子元素，vertical-align:middle</span><br><span class="line">&lt;body&gt;</span><br><span class="line">  &lt;div class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;child&quot;&gt;</span><br><span class="line">      一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">.parent&#123;</span><br><span class="line">  border: 3px solid red;</span><br><span class="line">  height: 600px;</span><br><span class="line">  text-align: center;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.child&#123;</span><br><span class="line">  border: 3px solid black;</span><br><span class="line">  display: inline-block;</span><br><span class="line">  width: 300px;</span><br><span class="line">  vertical-align: middle;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.parent:before&#123;</span><br><span class="line">  content:&apos;&apos;;</span><br><span class="line">  outline: 3px solid red;</span><br><span class="line">  display: inline-block;</span><br><span class="line">  height: 100%;</span><br><span class="line">  vertical-align: middle;</span><br><span class="line">&#125;</span><br><span class="line">.parent:after&#123;</span><br><span class="line">  content:&apos;&apos;;</span><br><span class="line">  outline: 3px solid red;</span><br><span class="line">  display: inline-block;</span><br><span class="line">  height: 100%;</span><br><span class="line">  vertical-align: middle;</span><br><span class="line">&#125;</span><br><span class="line">如果用标签元素，则前后元素类设置为.parent .after&#123;&#125;,.parent .before&#123;&#125;</span><br><span class="line"></span><br><span class="line">3.父元素position设置为相对定位relative,子元素位置相对父元素，设置为absolute,通过设置top和left 50%决定距离父元素上边和左边的距离，</span><br><span class="line">再通过margin-top,margin-left为子元素高和宽的一半将子元素和父元素中心重合</span><br><span class="line">&lt;div class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;child&quot;&gt;</span><br><span class="line">      一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">.parent&#123;</span><br><span class="line">  height: 600px;</span><br><span class="line">  border: 1px solid red;</span><br><span class="line">  position: relative;</span><br><span class="line">&#125;</span><br><span class="line">.child&#123;</span><br><span class="line">  border: 1px solid green;</span><br><span class="line">  width: 300px;</span><br><span class="line">  height: 100px;</span><br><span class="line">  position: absolute;</span><br><span class="line">  top: 50%;</span><br><span class="line">  left: 50%;</span><br><span class="line">  margin:-50px 0 0 -150px;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">4.父元素relative,子元素absolute，top和left均为 50%，transform:translate(-50%,-50%)</span><br><span class="line">&lt;div class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;child&quot;&gt;</span><br><span class="line">      一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">.parent&#123;</span><br><span class="line">  height: 600px;</span><br><span class="line">  border: 1px solid red;</span><br><span class="line">  position: relative;</span><br><span class="line">&#125;</span><br><span class="line">.child&#123;</span><br><span class="line">  border: 1px solid green;</span><br><span class="line">  position: absolute;</span><br><span class="line">  top: 50%;</span><br><span class="line">  left: 50%;</span><br><span class="line">  transform: translate(-50%,-50%);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">5.父元素relative,子元素absolute，子元素，上下左右都是0，margin:auto</span><br><span class="line">&lt;div class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;child&quot;&gt;</span><br><span class="line">      一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">.parent&#123;</span><br><span class="line">  height: 600px;</span><br><span class="line">  border: 1px solid red;</span><br><span class="line">  position: relative;</span><br><span class="line">&#125;</span><br><span class="line">.child&#123;</span><br><span class="line">  border: 1px solid green;</span><br><span class="line">  width: 300px;</span><br><span class="line">  position: absolute;</span><br><span class="line">  margin: auto;</span><br><span class="line">  top: 0;</span><br><span class="line">  bottom: 0;</span><br><span class="line">  left: 0;</span><br><span class="line">  right: 0;</span><br><span class="line">&#125;</span><br><span class="line">6.felx布局，父元素display:flex,justify-content:center;align-items:center</span><br><span class="line">&lt;div class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;child&quot;&gt;</span><br><span class="line">      一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  .parent&#123;</span><br><span class="line">  height: 600px;</span><br><span class="line">  border: 3px solid red;</span><br><span class="line"></span><br><span class="line">  display: flex;</span><br><span class="line">  justify-content: center;</span><br><span class="line">  align-items: center;</span><br><span class="line">&#125;</span><br><span class="line">.child&#123;</span><br><span class="line">  border: 3px solid green;</span><br><span class="line">  width: 300px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="清除浮动"><a href="#清除浮动" class="headerlink" title="清除浮动"></a>清除浮动</h1><p>1.在父元素上添加样式overflow:hidden/auto<br>2.给父元素设置高度或者添加float属性（使之成为浮动元素）<br>3.在子元素结尾添加空div标签或者br标签，或者给父元素添加:after伪类，设置属性clear：both<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">.clearfix::after&#123;</span><br><span class="line">    content: &apos;&apos;; display: block; clear:both;</span><br><span class="line">&#125;</span><br><span class="line">.clearfix&#123;</span><br><span class="line">    zoom: 1; /* IE 兼容 */</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h1 id="多列布局"><a href="#多列布局" class="headerlink" title="多列布局"></a>多列布局</h1><p>column-width —— 列宽,不设置时由其他属性决定<br>column-count —— 列数,不设置时由其他属性决定<br>columns —— column-width column-count</p>
-<p>column-gap —— 列间距<br>column-rule —— 间距线，位于列间距中间，介于background和content之间，宽度大于列间距时消失<br>宽度 样式 颜色</p>
-<p>column-fill —— 各列宽度<br>auto 随内容自动调整 |balance 以内容最多一列统一高度<br>column-span —— 子元素是否合并列<br>none/all</p>
-<p>静态布局：尺寸不变，布局不变<br>自适应布局：为不同尺寸屏幕设计不同静态布局<br>流式布局：通过更改模块大小，保证整体布局<br>响应式布局：针对不同尺寸屏幕，设计不同流式布局<br>弹性布局：可以设置模块大小放缩保证布局，也可以固定模块大小，更改布局<br><a href="https://www.cnblogs.com/yanayana/p/7066948.html" target="_blank" rel="noopener">各种布局概念区分</a><br><a href="/post/react/course/layout.html">react涉及布局</a><br><a href="http://www.imooc.com/article/2235" target="_blank" rel="noopener">相关资料</a><br><a href="http://www.cnblogs.com/dolphinX/archive/2012/10/13/2722501.html" target="_blank" rel="noopener">CSS布局 ——从display，position， float属性谈起</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/qrcode.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/knowledge/qrcode.html" itemprop="url">
-                  使用QRcode.js生成二维码
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-01T07:26:37+08:00">
-                2017-08-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在页面中引入QRcode.js文件，再js部分进行定义<br>var qrcode = new QRCode(document.getElementById(“qrcode0”), { //qrcode0放置二维码容器的id<br>        width : 150,//二维码大小<br>        height : 150<br>});<br>qrcode.makeCode(url);//url,生成二维码的依据</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/angular/angularjsfilterEmoji.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/angular/angularjsfilterEmoji.html" itemprop="url">
-                  Angularjs 利用图片更换emoji表情
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-01T06:46:02+08:00">
-                2017-08-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在某些浏览器中,emoji表情不能正常显示,只能显示原始状态如下<br><img src="/image/emoji1.png" alt="erroremoji"><br>为使表情正常显示，这里利用转码方法将emoji符号用图片替换<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//对数据$scope.data.remark做表情替换处理,$scope.data.remark是包含emoji符号的字符串</span></span><br><span class="line">    <span class="keyword">var</span> str=$scope.data.remark;</span><br><span class="line">    str=str.replace(rep,<span class="function"><span class="keyword">function</span>(<span class="params">code</span>) </span>&#123; <span class="comment">//code即匹配到的emoji符号,对该符号通过_escapeToUtf32(code)转码,得到对应图片名,然后图片替换</span></span><br><span class="line">     <span class="keyword">return</span> <span class="string">'&lt;img class="emoji" style="vertical-align:middle" src="assets/img/emoji/'</span>+_escapeToUtf32(code) + <span class="string">'.png"&gt;'</span>;</span><br><span class="line">    &#125;)</span><br><span class="line">    $scope.data.remark = str;</span><br><span class="line"></span><br><span class="line"><span class="comment">//用emoji符号的unicode码匹配emoji符号,例如270c匹配 victory hand符号</span></span><br><span class="line"> <span class="keyword">var</span> rep =<span class="regexp">/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]|\u270c|\u261d/g</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//emoji 表情转码</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span>  <span class="title">_escapeToUtf32</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> escaped = [],</span><br><span class="line">      unicodeCodes = _convertStringToUnicodeCodePoints(str),</span><br><span class="line">      i = <span class="number">0</span>,</span><br><span class="line">      l = unicodeCodes.length,</span><br><span class="line">      hex;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (; i &lt; l; i++) &#123;</span><br><span class="line">      hex = unicodeCodes[i].toString(<span class="number">16</span>);</span><br><span class="line">      escaped.push(<span class="string">'0000'</span>.substr(hex.length) + hex);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> escaped.join(<span class="string">'-'</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">function</span> <span class="title">_convertStringToUnicodeCodePoints</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> surrogate1st = <span class="number">0</span>,</span><br><span class="line">      unicodeCodes = [],</span><br><span class="line">      i = <span class="number">0</span>,</span><br><span class="line">      l = str.length;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (; i &lt; l; i++) &#123;</span><br><span class="line">      <span class="keyword">var</span> utf16Code = str.charCodeAt(i);</span><br><span class="line">      <span class="keyword">if</span> (surrogate1st != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (utf16Code &gt;= <span class="number">0xDC00</span> &amp;&amp; utf16Code &lt;= <span class="number">0xDFFF</span>) &#123;</span><br><span class="line">          <span class="keyword">var</span> surrogate2nd = utf16Code,</span><br><span class="line">            unicodeCode = (surrogate1st - <span class="number">0xD800</span>) * (<span class="number">1</span> &lt;&lt; <span class="number">10</span>) + (<span class="number">1</span> &lt;&lt; <span class="number">16</span>) + (surrogate2nd - <span class="number">0xDC00</span>);</span><br><span class="line">          unicodeCodes.push(unicodeCode);</span><br><span class="line">        &#125;</span><br><span class="line">        surrogate1st = <span class="number">0</span>;</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (utf16Code &gt;= <span class="number">0xD800</span> &amp;&amp; utf16Code &lt;= <span class="number">0xDBFF</span>) &#123;</span><br><span class="line">        surrogate1st = utf16Code;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        unicodeCodes.push(utf16Code);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> unicodeCodes;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Angularjs对字符串里面的html标签不会按照HTML去解析,会当做字符串显示,</span></span><br><span class="line"><span class="comment">//所以这里需要对字符串进行过滤，使字符串里面的标签能按照html解析</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//新建过滤器trust2Html,这里使用$sce方法</span></span><br><span class="line">app.filter(<span class="string">'trust2Html'</span>, [<span class="string">'$sce'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">$sce</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">val</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> $sce.trustAsHtml(val);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;])</span><br><span class="line"></span><br><span class="line"><span class="comment">//在页面里面显示经过图片替换的含emoji符号的字符串</span></span><br><span class="line">&lt;label ng-bind-html=<span class="string">"data.remark|trust2Html"</span>&gt;&lt;<span class="regexp">/label&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>替换后结果<br><img src="/image/emoji2.png" alt="exactemoji"><br><a href="https://apps.timwhitlock.info/emoji/tables/unicode#block-6a-additional-emoticons" target="_blank" rel="noopener">Emoji Unicode Tables</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1598,7 +1661,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">232</span>
+              <span class="site-state-item-count">236</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
