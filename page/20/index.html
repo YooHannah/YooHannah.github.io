@@ -259,6 +259,602 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/graphstruct.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/algorithm/graphstruct.html" itemprop="url">
+                  图的存储结构
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-01T21:59:30+08:00">
+                2017-03-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="1-邻接矩阵"><a href="#1-邻接矩阵" class="headerlink" title="1.邻接矩阵"></a>1.邻接矩阵</h1><h2 id="1-无向图"><a href="#1-无向图" class="headerlink" title="1.无向图"></a>1.无向图</h2><p><img src="/image/graph1.png" alt="graph1"><br>一个一维数组存储图中顶点信息，</p>
+<table>
+<thead>
+<tr>
+<th>顶点数组</th>
+<th>v0</th>
+<th>v1</th>
+<th>v2</th>
+<th>v3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>一个二维数组(邻接矩阵)存储图中边或弧的信息<br>0表示不存在顶点间的边，1表示顶点间存在边</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>v0</th>
+<th>v1</th>
+<th>v2</th>
+<th>v3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>v1</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>v2</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>v3</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>无向图构成的邻接矩阵为对称矩阵，对角线值为0<br>—–顶点Vi在邻接矩阵中第i行(或第i列)的元素之和为该顶点的度<br>—–扫描矩阵中第i行元素，元素为1的列为顶点Vi的邻接点</p>
+<h2 id="2-有向图"><a href="#2-有向图" class="headerlink" title="2.有向图"></a>2.有向图</h2><p><img src="/image/graph2.png" alt="graph2"><br>一个一维数组存储图中顶点信息，</p>
+<table>
+<thead>
+<tr>
+<th>顶点数组</th>
+<th>v0</th>
+<th>v1</th>
+<th>v2</th>
+<th>v3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>坐标[Vi][Vj]的值，1表示Vi指向Vj的弧存在，0表示不存在</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>v0</th>
+<th>v1</th>
+<th>v2</th>
+<th>v3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>v1</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>v2</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>v3</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>第Vi列的元素之和为顶点Vi的入度<br>第Vi行的元素之和为顶点Vi的出度</p>
+<h2 id="3-网"><a href="#3-网" class="headerlink" title="3.网"></a>3.网</h2><p><img src="/image/tu3.png" alt="tu3"><br>邻接矩阵各元素的值不再用0/1表示，而是用权表示<br>顶点间若不存在弧，则用\infty无穷表示,顶点自己到自己的权为0</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>v0</th>
+<th>v1</th>
+<th>v2</th>
+<th>v3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v0</td>
+<td>0</td>
+<td>\infty</td>
+<td>\infty</td>
+<td>18</td>
+</tr>
+<tr>
+<td>v1</td>
+<td>8</td>
+<td>0</td>
+<td>2</td>
+<td>\infty</td>
+</tr>
+<tr>
+<td>v2</td>
+<td>4</td>
+<td>\infty</td>
+<td>0</td>
+<td>\infty</td>
+</tr>
+<tr>
+<td>v3</td>
+<td>\infty</td>
+<td>\infty</td>
+<td>\infty</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<h1 id="2-邻接表"><a href="#2-邻接表" class="headerlink" title="2.邻接表"></a>2.邻接表</h1><h2 id="无向图"><a href="#无向图" class="headerlink" title="无向图"></a>无向图</h2><p>顶点用一个一维数组存储<br>每个顶点Vi的所有邻接点构成一个线性表，由于个数不确定，用单链表来表示<br><img src="/image/tu4.png" alt="tu4"><br><img src="/image/tu5.png" alt="tu5"></p>
+<h2 id="有向图"><a href="#有向图" class="headerlink" title="有向图"></a>有向图</h2><p>把顶点当弧尾建立邻接表，邻接表长度就是该顶点出度<br><img src="/image/tu6.png" alt="tu6"><br>把顶点当弧头建的表叫逆邻接表，邻接表长度就是该顶点入度<br><img src="/image/tu7.png" alt="tu7"></p>
+<h2 id="网"><a href="#网" class="headerlink" title="网"></a>网</h2><p>在边表结点定义中再增加一个数据域来存储权值<br><img src="/image/tu8.png" alt="tu8"></p>
+<h1 id="3-十字链表-有向图"><a href="#3-十字链表-有向图" class="headerlink" title="3.十字链表(有向图)"></a>3.十字链表(有向图)</h1><p>顶点表结构</p>
+<p>|data|firstIn|firstOut|<br>data：顶点数据<br>firstIn:第一个入边表的指针<br>firstOut:第一个出边表的指针</p>
+<p>边表结点结构 表示以条边</p>
+<table>
+<thead>
+<tr>
+<th>tailVex</th>
+<th>headVex</th>
+<th>headLink</th>
+<th>tailLink</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>tailVex:该弧起点的顶点在顶点表的下标<br>headVex:该弧终点的顶点在顶点表的下标<br>headLink:指向headVex的弧的指针<br>tailLink: 从tailVex出发的弧的指针<br><img src="/image/graph2.png" alt="graph2"><br><img src="/image/tu9.png" alt="tu9"></p>
+<h1 id="4-邻接多重表-无向表"><a href="#4-邻接多重表-无向表" class="headerlink" title="4.邻接多重表(无向表)"></a>4.邻接多重表(无向表)</h1><p>关注对象是图中的表不是顶点<br>|iVex|iLink|jVex|jLink|<br>iVex和jVex是与某条边依附的两个顶点在顶点表中的下标<br>iLink：指向依附顶点iVex的下一条边，<br>jLink：指向依附顶点jVex的下一条边，<br><img src="/image/tu10.png" alt="tu10"></p>
+<h1 id="5-边集数组"><a href="#5-边集数组" class="headerlink" title="5.边集数组"></a>5.边集数组</h1><p>由两个一维数组构成<br>一个是存储顶点的信息<br>另一个存储边的信息<br>边数组的每个数据元素由一条边的起点下标(begin)、终点下标(end)和权(weight)组成</p>
+<p><img src="/image/tu11.png" alt="tu11"></p>
+<table>
+<thead>
+<tr>
+<th>顶点数组</th>
+<th>v0</th>
+<th>v1</th>
+<th>v2</th>
+<th>v3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>边数组</th>
+<th>begin</th>
+<th>end</th>
+<th>weight</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>edges[0]</td>
+<td>0</td>
+<td>3</td>
+<td>5</td>
+</tr>
+<tr>
+<td>edges[1]</td>
+<td>1</td>
+<td>0</td>
+<td>4</td>
+</tr>
+<tr>
+<td>edges[2]</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>edges[3]</td>
+<td>2</td>
+<td>0</td>
+<td>8</td>
+</tr>
+</tbody>
+</table>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/performance/compatible_date.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/performance/compatible_date.html" itemprop="url">
+                  日期格式兼容
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-26T21:14:37+08:00">
+                2017-02-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="IE11-chrome-360-火狐兼容日期格式兼容"><a href="#IE11-chrome-360-火狐兼容日期格式兼容" class="headerlink" title="IE11/chrome/360/火狐兼容日期格式兼容"></a>IE11/chrome/360/火狐兼容日期格式兼容</h1><p> $scope.date= new Date().toLocaleDateString().replace(/\//g,’-‘);<br> 获取到的”year-month-day”格式支持/chrome/360/火狐，但到了IE11就变成”year年month月day”</p>
+<p> var date = new Date();<br> var y = date.getFullYear();<br> var m = date.getMonth()+1;<br> var d = date.getDate();<br> var day = date.getDay();<br> var dateString=y+”-“+m+”-“+d;<br> $scope.date= dateString;</p>
+<p> 这样获取的”year-month-day”格式支持以上四种浏览器</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/angular/imgupload.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/angular/imgupload.html" itemprop="url">
+                  AngularJs自定义指令实现图片上传
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-22T22:14:30+08:00">
+                2017-02-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>//定义file-Model指令的代码<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">MetronicApp.directive(<span class="string">'fileModel'</span>, [<span class="string">'$parse'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">$parse</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    restrict: <span class="string">'A'</span>,</span><br><span class="line">    link: <span class="function"><span class="keyword">function</span>(<span class="params">scope, element, attrs, ngModel</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">var</span> model = $parse(attrs.fileModel);</span><br><span class="line">      <span class="keyword">var</span> modelSetter = model.assign;</span><br><span class="line">      element.bind(<span class="string">'change'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>&#123;</span><br><span class="line">        scope.$apply(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">          modelSetter(scope, element[<span class="number">0</span>].files[<span class="number">0</span>]);</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">//附件预览</span></span><br><span class="line">           scope.file = (event.srcElement || event.target).files[<span class="number">0</span>];</span><br><span class="line">            scope.getFile();</span><br><span class="line">            <span class="keyword">this</span>.value = <span class="string">''</span>; <span class="comment">//清除已上传的文件，否则无法连续上传相同文件</span></span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line">])</span><br></pre></td></tr></table></figure></p>
+<p>//在HTML使用时的代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> &lt;div class=&quot;form-group&quot;&gt;</span><br><span class="line">    &lt;label class=&quot;control-label col-md-3&quot;&gt;图片上传&lt;/label&gt;</span><br><span class="line">     &lt;div class=&quot;col-md-9 fileinput&quot;&gt;</span><br><span class="line">         &lt;img src=&quot;&#123;&#123;detaildata.banner&#125;&#125;&quot; name=&quot;img&quot; style=&quot;width:40px;height: 40px;&quot;&gt;</span><br><span class="line">        &lt;span class=&quot;btn red btn-outline btn-file&quot; style=&quot;margin-left: 10px;margin-top:0px;&quot;&gt;</span><br><span class="line">        &lt;span class=&quot;fileinput-new&quot;&gt; 重新上传 &lt;/span&gt;</span><br><span class="line">        &lt;input type=&quot;hidden&quot;&gt;&lt;input id=&quot;upload&quot; type=&quot;file&quot; file-model=&quot;myFile&quot; name=&quot;...&quot; accept=&quot;image/*&quot; &gt;</span><br><span class="line">        &lt;/span&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<p>//Controller中上传图片时的js函数<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$scope.getFile = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">   <span class="keyword">var</span> postData = &#123;</span><br><span class="line">            fileName: $scope.file</span><br><span class="line">          &#125;;</span><br><span class="line">       fileReader.readAsDataUrl($rootScope.settings.url + <span class="string">""</span>, postData).success( <span class="function"><span class="keyword">function</span>(<span class="params">response</span>) </span>&#123;</span><br><span class="line">                $scope.detaildata.banner = response;</span><br><span class="line">        &#125;);</span><br><span class="line"> &#125;;</span><br></pre></td></tr></table></figure></p>
+<p> //定义fileReader服务的代码<br> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">angular.module(<span class="string">'MetronicApp'</span>)</span><br><span class="line">.factory(<span class="string">'fileReader'</span>, [<span class="string">"$http"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">$http</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> readAsDataURL = <span class="function"><span class="keyword">function</span> (<span class="params">url, data</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> fd = <span class="keyword">new</span> FormData();</span><br><span class="line">          angular.forEach(data, <span class="function"><span class="keyword">function</span>(<span class="params">val, key</span>) </span>&#123;</span><br><span class="line">            fd.append(key, val);</span><br><span class="line">          &#125;);</span><br><span class="line">          <span class="keyword">var</span> args = &#123;</span><br><span class="line">            method: <span class="string">'POST'</span>,</span><br><span class="line">            url: url,</span><br><span class="line">            data: fd,</span><br><span class="line">            headers: &#123;<span class="string">'Content-Type'</span>: <span class="literal">undefined</span>&#125;,</span><br><span class="line">            transformRequest: angular.identity</span><br><span class="line">          &#125;;</span><br><span class="line">          <span class="keyword">return</span> $http(args);</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    readAsDataUrl: readAsDataURL</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;])</span><br></pre></td></tr></table></figure></p>
+<p>整个上传的过程，点击“重新上传”按钮，file-model指令绑定的change事件会检测本次选择的图片与上次是否为一致，不一致则会执行file-model定义时的代码<br> element.bind(‘change’, function(event){<br>        scope.$apply(function(){<br>          modelSetter(scope, element[0].files[0]);<br>        });<br>        //附件预览<br>           scope.file = (event.srcElement || event.target).files[0];      //给Controller 中$scope.file赋值<br>            scope.getFile();    //调用Controller 中 $scope.getFile();<br>          this.value = ‘’; //清除已上传的文件，否则无法连续上传相同文件<br>      });<br>控制器中的$scope.getFile()函数用到fileReader.readAsDataUrl函数上传图片给后台，这个函数在定义fileReader时被定义</p>
+<p>定义指令时，若没有清除已上传文件，连续多次上传时，将导致无法连续上传相同图片的bug.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/graph.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1162,368 +1758,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/treetransform.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/algorithm/treetransform.html" itemprop="url">
-                  树、森林和二叉树的转换与遍历
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-12T14:38:37+08:00">
-                2017-02-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="树转化为二叉树"><a href="#树转化为二叉树" class="headerlink" title="树转化为二叉树"></a>树转化为二叉树</h1><div style="margin-bottom: 125px"><br> <img src="/image/tree3.png" style="width: 300px;height: 180px;" alt="图片名称" align="left"><br> <img src="/image/tree4.png" alt="图片名称" align="right" style="width: 300px;height: 180px;margin-top: -30px"><br></div>
-
-<p>1.在树中所有的兄弟结点之间加一连线<br>2.对每个结点，除了保留与其长子的连线外，去掉该结点与其他孩子的连线<br>3.调整位置结构（顺时针旋转一定角度），变成只有左子树的二叉树</p>
-<h1 id="森林转化为二叉树"><a href="#森林转化为二叉树" class="headerlink" title="森林转化为二叉树"></a>森林转化为二叉树</h1><p><div style="margin-bottom: 125px"><br><img src="/image/tree5.png" width="300" height="200" alt="图片名称" align="left"><br> <img src="/image/tree6.png" alt="图片名称" align="right" style="width: 300px;height: 180px;margin-top: -30px"><br> </div><br>1.先将森林中的每颗树变为二叉树<br>2.再将各二叉树的根结点视为兄弟从左至右连在一起<br>3调整位置结构，形成拥有左右子树的二叉树</p>
-<h1 id="二叉树转化树、森林"><a href="#二叉树转化树、森林" class="headerlink" title="二叉树转化树、森林"></a>二叉树转化树、森林</h1><p>1.若结点x是其双亲y的左孩子，则把x的右孩子，右孩子的右孩子，……，都与y用连线连起来<br>2.去掉所有双亲到右孩子之间的连线<br>注意：如二叉树有右孩子则将转化为森林，反之转化为普通树</p>
-<h1 id="树的遍历"><a href="#树的遍历" class="headerlink" title="树的遍历"></a>树的遍历</h1><p><img src="/image/tree3.png" alt="tree3"><br>1.先根遍历<br>先访问树的根结点，然后再依次先跟遍历每颗子树<br>ABEFCGDHIJ<br>2.后根遍历<br>先依次遍历每颗子树，然后再访问根结点<br>EFBGCHIJDA</p>
-<h1 id="森林遍历"><a href="#森林遍历" class="headerlink" title="森林遍历"></a>森林遍历</h1><p>1.前序遍历：按树的先根遍历<br>2.后续遍历：按树的后跟遍历</p>
-<p>小结：<br>树、森林的前根遍历和二叉树前序遍历结果相同，<br>树、森林的后根遍历和二叉树的中序遍历相同,<br>因此对于树、森林的遍历可以转化为二叉树的遍历</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/Cluebinarytree.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/algorithm/Cluebinarytree.html" itemprop="url">
-                  线索二叉树
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-11T17:47:37+08:00">
-                2017-02-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>节省叶子结点空指针浪费的空间，来记录该结点按遍历顺序的前驱后继<br>只有中序遍历满足每隔一个结点会出现一个浪费空间的结点</p>
-<p>结点由五个属性组成；{<br>  lchild:取决于ltag<br>  ltag:为0时，lchild指向该结点左孩子，为1时lchild指向该结点的前驱<br>  data:该结点数据<br>  rchild:取决于rtag<br>  rtag:为0时，rchild指向该结点右孩子，为1时rchild指向该结点的后继<br>}</p>
-<p><a href="https://github.com/YooHannah/algorithm/blob/master/js/btree.js" target="_blank" rel="noopener">代码链接</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/angular/plugin.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/angular/plugin.html" itemprop="url">
-                  小插件使用
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-11T10:24:37+08:00">
-                2017-02-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="ng-clip-angularjs点击复制插件"><a href="#ng-clip-angularjs点击复制插件" class="headerlink" title="ng-clip/angularjs点击复制插件"></a>ng-clip/angularjs点击复制插件</h1><p><a href="https://github.com/YooHannah/algorithm/blob/master/plugin/clipboard.min.js" target="_blank" rel="noopener">插件所需js文件链接</a><br>用法：<br>1.在将要使用的控制器里配置好插件文件<br>2.在HTML里用data-clipboard-text绑定要复制的值，并用class或者id绑定复制动作所在的标签<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;a  class=&quot;font-green-meadow clicopy&quot; data-clipboard-text=&quot;&#123;&#123;x.scan_url&#125;&#125;&quot; &gt;&lt;i class=&quot;fa fa-copy&quot;&gt;&lt;/i&gt; 复制扫描链接&lt;/a&gt;</span><br></pre></td></tr></table></figure></p>
-<p>3.在控制器里面初始化复制插件对象，并写回调函数<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//复制链接</span></span><br><span class="line">$scope.copy = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> clipboard = <span class="keyword">new</span> Clipboard(<span class="string">'.clicopy'</span>);</span><br><span class="line">    clipboard.on(<span class="string">'success'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">      toastr.success(<span class="string">'复制成功!'</span>,<span class="string">'成功'</span>);</span><br><span class="line">      e.clearSelection();</span><br><span class="line">       &#125;);</span><br><span class="line"></span><br><span class="line">      clipboard.on(<span class="string">'error'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">         toastr.error(<span class="string">'复制失败!'</span>,<span class="string">'失败'</span>);</span><br><span class="line">      &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">$scope.copy();</span><br></pre></td></tr></table></figure></p>
-<h1 id="md5-加密处理"><a href="#md5-加密处理" class="headerlink" title="md5  加密处理"></a>md5  加密处理</h1><p><a href="https://github.com/YooHannah/algorithm/blob/master/plugin/md5.js" target="_blank" rel="noopener">所需文件</a><br>用法：<br> var hash = hex_md5($scope.password);<br>其实加密文件就是一个算法文件，加密算法也分好多种，所以不同算法加密加载不同的算法文件即可<br>nodejs的Crypto模块是一个加密模块，也可用于加密处理<br><a href="http://www.thinksaas.cn/topics/0/35/35489.html" target="_blank" rel="noopener">相关链接</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1567,7 +1801,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">236</span>
+              <span class="site-state-item-count">239</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1584,7 +1818,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

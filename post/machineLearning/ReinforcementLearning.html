@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
 
 
-  <meta name="keywords" content="machineLearing,">
+  <meta name="keywords" content="machineLearning,">
 
 
 
@@ -87,7 +87,7 @@
 
 
 <meta name="description" content="强化学习的主要思想不是告诉算法每个输入的正确输出是什么而是指定一个奖励函数，告诉它什么时候做的好，什么时候做的不好算法的工作是自动找出如何选择好的动作  一些概念以火星探测器为例，在其决定路线的过程中产生的几个概念  S ： 当前状态 a : 动作 S’ : 下一个状态 R : 奖励函数 teminal state : 终止状态每种路线回报通过计算路上每一步奖励乘以折现系数加和得到  policy">
-<meta name="keywords" content="machineLearing">
+<meta name="keywords" content="machineLearning">
 <meta property="og:type" content="article">
 <meta property="og:title" content="强化学习">
 <meta property="og:url" content="http://yoohannah.github.io/post/machineLearning/ReinforcementLearning.html">
@@ -118,7 +118,7 @@
 <meta property="og:image" content="http://yoohannah.github.io/image/LLM/223.png">
 <meta property="og:image" content="http://yoohannah.github.io/image/LLM/224.png">
 <meta property="og:image" content="http://yoohannah.github.io/image/LLM/225.png">
-<meta property="og:updated_time" content="2024-10-10T11:43:17.176Z">
+<meta property="og:updated_time" content="2024-11-27T09:37:11.850Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="强化学习">
 <meta name="twitter:description" content="强化学习的主要思想不是告诉算法每个输入的正确输出是什么而是指定一个奖励函数，告诉它什么时候做的好，什么时候做的不好算法的工作是自动找出如何选择好的动作  一些概念以火星探测器为例，在其决定路线的过程中产生的几个概念  S ： 当前状态 a : 动作 S’ : 下一个状态 R : 奖励函数 teminal state : 终止状态每种路线回报通过计算路上每一步奖励乘以折现系数加和得到  policy">
@@ -384,7 +384,7 @@
 <h1 id="贝尔曼公式"><a href="#贝尔曼公式" class="headerlink" title="贝尔曼公式"></a>贝尔曼公式</h1><p><img src="/image/LLM/209.png" alt><br><img src="/image/LLM/210.png" alt><br><img src="/image/LLM/211.png" alt></p>
 <h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><p>面对环境随机的情况，动作实际执行过程可能存在多个可能路线，导致每次得到的最大回报值不同，因此计算当前状态最大收益时取所有路线情况的平均值进行计算<br>即使用期望回报值进行计算<br><img src="/image/LLM/212.png" alt><br><img src="/image/LLM/213.png" alt></p>
 <h1 id="DQN-算法"><a href="#DQN-算法" class="headerlink" title="DQN 算法"></a>DQN 算法</h1><p>D: deep learning<br>Q: Q function<br>N: Network</p>
-<p>对于连续状态值的情况，使用神经网络训练Q函数进行深度强化学习<br><img src="/image/LLM/214.png" alt><br><img src="/image/LLM/215.png" alt><br><img src="/image/LLM/216.png" alt></p>
+<p>对于连续状态值的情况，使用神经网络训练Q函数进行深度强化学习<br><img src="/image/LLM/214.png" alt><br><img src="/image/LLM/215.png" alt><br><img src="/image/LLM/216.png" alt><br>By using experience replay we avoid problematic correlations, oscillations and instabilities. In addition, experience replay also allows the agent to potentially use the same experience in multiple weight updates, which increases data efficiency.<br>通过使用经验重放，我们可以避免有问题的相关性、振荡和不稳定性。此外，经验重放还允许代理在多次权重更新中使用相同的经验，从而提高数据效率。</p>
 <h2 id="优化-1"><a href="#优化-1" class="headerlink" title="优化"></a>优化</h2><h3 id="优化神经网络结构"><a href="#优化神经网络结构" class="headerlink" title="优化神经网络结构"></a>优化神经网络结构</h3><p>上面将s和a作为X 同时参与训练，最终只会得到一个动作a最大回报函数值,需要进行多次运算<br>如果仅将s作为输入，输出层产生多个a的回报值，就可以根据回报值大小选择相应的动作</p>
 <p><img src="/image/LLM/217.png" alt><br><img src="/image/LLM/218.png" alt></p>
 <h3 id="epsilon-greedy-policy"><a href="#epsilon-greedy-policy" class="headerlink" title="epsilon-greedy policy"></a>epsilon-greedy policy</h3><p>选择action 过程中，如果一直按Q值最大原则选择action,万一初始值特别小无法开启我们想要的第一步程序，就会导致无法进行后续的action<br>epsilon-greedy policy 方案就是找一个合适的阈值epsilon，比如说0.05,<br>95%的时间选择最大Q值action (贪婪剥削策略)<br>5%的时间选择随机选择action（探索策略）<br>这样就可以避免选到固定不符合预期的action,开放一定的窗口有可能选到其他的action<br>epsilon 大小 类似于梯度，随训练过程进行会逐渐变小，变小的过程，模型也就学会了如何选择更有可能选择符合预期的action</p>
@@ -392,6 +392,7 @@
 <h3 id="小批量"><a href="#小批量" class="headerlink" title="小批量"></a>小批量</h3><p>训练数据如果非常庞大，在训练过程中可能会造成时间消耗，为了提高训练速度，可以采用小批量的方式进行<br>将训练数据分成多个批次，每次迭代用不同批次数据，虽然梯度会比较嘈杂，但还是会朝着梯度下降的方向进行<br><img src="/image/LLM/220.png" alt><br><img src="/image/LLM/221.png" alt><br><img src="/image/LLM/222.png" alt><br><img src="/image/LLM/223.png" alt></p>
 <h3 id="软更新"><a href="#软更新" class="headerlink" title="软更新"></a>软更新</h3><p>在更新参数过程中，每次按比例更新参数，每次仅更新部分比例的参数，可以使强化学习更好的收敛<br><img src="/image/LLM/224.png" alt></p>
 <h1 id="强化学习的一些限制"><a href="#强化学习的一些限制" class="headerlink" title="强化学习的一些限制"></a>强化学习的一些限制</h1><p><img src="/image/LLM/225.png" alt></p>
+<p><a href="https://github.com/kaieye/2022-Machine-Learning-Specialization/blob/main/Unsupervised%20learning%20recommenders%20reinforcement%20learning/week3/Practice%20Lab-Reinforcement%20Learning/C3_W3_A1_Assignment.ipynb" target="_blank" rel="noopener">实验练习</a></p>
 
       
     </div>
@@ -415,7 +416,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/machineLearing/" rel="tag"># machineLearing</a>
+            <a href="/tags/machineLearning/" rel="tag"># machineLearning</a>
           
         </div>
       
@@ -424,8 +425,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/post/machineLearning/abnormalTest.html" rel="next" title="异常检测">
-                <i class="fa fa-chevron-left"></i> 异常检测
+              <a href="/post/machineLearning/RecommenderSystem.html" rel="next" title="推荐系统">
+                <i class="fa fa-chevron-left"></i> 推荐系统
               </a>
             
           </div>
@@ -433,6 +434,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/machineLearning/datalabel.html" rel="prev" title="数据标注">
+                数据标注 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -498,7 +503,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">236</span>
+              <span class="site-state-item-count">239</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -515,7 +520,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

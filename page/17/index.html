@@ -259,6 +259,429 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/php/php_MySQL.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/php/php_MySQL.html" itemprop="url">
+                  MySQL的基本知识
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-26T21:37:37+08:00">
+                2017-05-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="五个基本单位"><a href="#五个基本单位" class="headerlink" title="五个基本单位"></a>五个基本单位</h1><p>数据库服务器:指用来运行数据库服务的一台电脑<br>数据库:一个数据库服务器里面有可以有多个数据库。主要用来分类使用。<br>数据表:专门用来区分一个数据库中的不同数据<br>数据字段:也叫数据列,日常所见表格里面的列<br>数据行:真正的数据存在每一个表的行里面</p>
+<h1 id="语句类别"><a href="#语句类别" class="headerlink" title="语句类别"></a>语句类别</h1><p>1.数据定义语言(DDL ，Data Defintion Language)语句：数据定义语句，用于定义不同的数据段、数据库、表、列、索引等。常用的语句关键字包括create、drop、alter等。<br>2.数据操作语言(DML ， Data Manipulation Language)语句：数据操纵语句，用于添加、删除、更新和查询数据库记录，并检查数据的完整性。常用的语句关键字主要包括insert、delete、update和select等。<br>3.数据控制语言(DCL， Data Control Language)<br>语句：数据控制语句，用于控制不同数据段直接的许可和访问级别的语句。<br>这些语句定义了数据库、表、字段、用户的访问权限和安全级别。主要的语句关键字包括grant、revoke等。</p>
+<h1 id="操作语句"><a href="#操作语句" class="headerlink" title="操作语句"></a>操作语句</h1><p>create database 数据库名;      创建数据库<br>show databases;                查看当前服务器有哪些数据库，显示所有数据库名<br>use 数据库名;                  选中数据库，进入到相应的数据库中<br>show tables;                   显示当前数据库下的所有表<br>drop database 数据库名;        删除数据库<br>create table 表名(字段名1 字段类型,….字段名n 字段类型n); 建表<br>desc 表名;                     查看表结构，显示表中属性</p>
+<p>show create table 表名 \G;<br>查看表的创建语句，“\G”选项的含义是使得记录能够按照字段竖着排列，对于内 容比较长的记录更易于显示。<br>可以看到表的 engine（存储引擎) 和 charset(字符集)等信息<br>在创建表的时候能够制定引擎<br>例<br>CREATE TABLE emp (<br>     useraname varchar(10) DEFAULT NULL,<br>     password date DEFAULT NULL,<br> )ENGINE=InnoDB DEFAULT CHARSET=utf8;</p>
+<p>drop table 表名;                删除表<br>alter table 表名 modify 字段名 类型字段; 修改表字段类型<br>alter table 表名 add column 字段名 类型;  增加表字段<br>alter table 表名 add 字段名2 字段类型 after 字段名1; 在字段名1后面增加字段名1<br>alter table 表名 add 字段名2 字段类型 first; 在最开始的位置增加字段<br>alter table 表名 drop column 字段名;                 删除表字段<br>alter table 表名 change 字段原名 字段新名 字段类型;  表字段改名</p>
+<p>alter table 旧表名 rename 新的表名; 修改表名</p>
+<p>修改表字段排列顺序<br>在前的字段增加和修改语句（add/change/modify）中，最后都可以加一个可选项 first|after。</p>
+<h1 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h1><h2 id="整型"><a href="#整型" class="headerlink" title="整型"></a>整型</h2><p>MySQL数据类型    所占字节    值范围<br>tinyint    1字节    -128~127<br>smallint    2字节    -32768~32767<br>mediumint    3字节    -8388608~8388607<br>int    4字节    范围-2147483648~2147483647<br>bigint    8字节    +-9.22*10的18次方<br>1.在创建表字段时，性别我们可以使用无符号的微小整型（tinyint）来表示。用0表示女、用1表示男。用2表示未知。<br>2.同样人类年龄也是，在创建表字段时可用用无符号的整型。因为人类的年龄还没有负数<br>3.在实际使用过程中。我们业务中最大需要存储多大的数值。我们创建表时，就选择什么样的类型来存储这样的值。</p>
+<h2 id="浮点类型"><a href="#浮点类型" class="headerlink" title="浮点类型"></a>浮点类型</h2><p>MySQL数据类型    所占字节    值范围<br>float(m, d)    4字节    单精度浮点型，m总个数，d小数位<br>double(m, d)    8字节    双精度浮点型，m总个数，d小数位<br>decimal(m, d)  decimal是存储为字符串的浮点数<br>浮点是非精确值，会存在不太准确的情况,而decimal叫做定点数。<br>在MySQL内部，本质上是用字符串存储的。实际使用过程中如果存在金额、钱精度要求比较高的浮点数存储，建议使用decimal（定点数）这个类型</p>
+<h2 id="字符类型"><a href="#字符类型" class="headerlink" title="字符类型"></a>字符类型</h2><p>MySQL数据类型    所占字节    值范围<br>CHAR    0-255字节    定长字符串<br>VARCHAR    0-255字节    变长字符串<br>TINYBLOB    0-255字节    不超过255个字符的二进制字符串<br>TINYTEXT    0-255字节    短文本字符串<br>BLOB    0-65535字节    二进制形式的长文本数据<br>TEXT    0-65535字节    长文本数据<br>MEDIUMBLOB    0-16 777 215字节    二进制形式的中等长度文本数据<br>MEDIUMTEXT    0-16 777 215字节    中等长度文本数据<br>LOGNGBLOB    0-4 294 967 295字节    二进制形式的极大文本数据<br>LONGTEXT    0-4 294 967 295字节    极大文本数据<br>VARBINARY(M)    允许长度0-M个字节的定长字节符串    值的长度+1个字节<br>BINARY(M)    M    允许长度0-M个字节的定长字节符串</p>
+<h2 id="时间类型"><a href="#时间类型" class="headerlink" title="时间类型"></a>时间类型</h2><p>MySQL数据类型    所占字节    值范围<br>date    3字节    日期，格式：2014-09-18<br>time    3字节    时间，格式：08:42:30<br>datetime    8字节    日期时间，格式：2014-09-18 08:42:30<br>timestamp    4字节    自动存储记录修改的时间<br>year    1字节    年份</p>
+<h2 id="复合类型"><a href="#复合类型" class="headerlink" title="复合类型"></a>复合类型</h2><p>MySQL数据类型    说明    举例<br>set    集合类型    set(“member”, “member2″, … “member64″)<br>enum    枚举类型    enum(“member1″, “member2″, … “member65535″)<br>一个 ENUM 类型只允许从一个集合中取得一个值；而 SET 类型允许从一个集合中取得任意多个值。</p>
+<h2 id="常用中文字符集"><a href="#常用中文字符集" class="headerlink" title="常用中文字符集"></a>常用中文字符集</h2><p>gbk_chinese_ci    简体中文, 不区分大小写<br>utf8_general_ci    Unicode (多语言), 不区分大小写<br>mysql在写utf-8的时候写的是utf8。不加中间的中横线</p>
+<h1 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h1><p>使用show engines命令可显示当前服务器支持的所有引擎<br>引擎名称<br>MyISAM    常用。读取效率很高的引擎<br>InnoDB    常用。写入，支持事处等都支持<br>Archive    不常用。归档引擎，压缩比高达1:10，用于数据归档<br>NDB    不常用。主要在MySQL 集群服务器中使用，</p>
+<p>行锁：写入、更新操作的时候将这一行锁起来，不让其他人再操作了。<br>表锁：写入、更新操作时，将表给锁起来不让其他人再操作了。<br>事务：同时操作多个数据，若其中的一个数据操作失败。可回滚到操作之前。常用于银行、电商、金融等系统中</p>
+<p>MyISAM<br>不支持事务，表锁(表级锁，加锁会锁住整个表)，支持全文索引,操作速度快。常用于读取多的业务。<br>myisam存储引擎表由myd和myi组成。.myd用来存放数据文件，.myi用来存放索引文件。<br>对于myisam存储引擎表，mysql数据库只缓存其索引文件，数据文件的缓存由操作系统本身来完成。</p>
+<p>InnoDB<br>支持事务，主要面向在线事务处理(OLTP)方面的应用。<br>行锁设计，支持外键，即默认情况下读取操作不加锁。</p>
+<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><p>1.普通索引    最基本的索引，它没有任何限制<br>alter table 表  add index(字段)</p>
+<p>2.唯一索引    某一行企用了唯一索引则不准许这一列的行数据中有重复的值。针对这一列的每一行数据都要求是唯一的<br>alter table 表  add UNIQUE(字段)</p>
+<p>3.主键索引    它是一种特殊的唯一索引，不允许有空值。一般是在建表的时候同时创建主键索引，常用于用户ID。类似于书中的页码<br>alter table 表  add PRIMARY KEY(字段)</p>
+<p>4.全文索引    对于需要全局搜索的数据，进行全文索引<br>alter table 表  add FULLTEXT(字段)</p>
+<p>创建表时可在创建表语句后加上对应的类型即可声明索引：<br>CREATE TABLE test (<br>     id INT NOT NULL ,<br>     username VARCHAR(20) NOT NULL ,<br>     password INT NOT NULL ,<br>     content INT NOT NULL ,<br>     PRIMARY KEY (id),<br>     INDEX pw (password),<br>     UNIQUE (username),<br>     FULLTEXT (content)<br> ) ENGINE = InnoDB;</p>
+<h1 id="插入记录"><a href="#插入记录" class="headerlink" title="插入记录"></a>插入记录</h1><p>  方法一：<br>    insert into 表 values(值1,值2,值n);<br>  表中有多少个字段就必须要插入多少个值。一个不能多，一个也不能少。若有默认值，不想传，可以写上null。<br>  顺序应该和表字段的排序一致。<br>  方法二：<br>  insert into 表(字段1,字段2,字段n) values(值1,值2,值n);<br>  除非有必填字段必须要写入值外。如果有默认值的不想写可以忽略不写。mysql会自动补主默认值。<br>  以表(字段1,字段2,字段n)字段顺序为值的顺序。<br>  基本语法变形：一次插入多条记录<br>  INSERT INTO user(username,password,sex)<br>     values(‘ll’, ‘abcdef’, 1),<br>     ( ‘loe’, ‘bcdeef’, 0),<br>     ( ‘key’, ‘123456’, 1),<br>     (‘tom’, ‘987654’, 1);</p>
+<h1 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h1><p>select <em> from 表;                             查询表中所有字段中的所有结果,”</em>“ 是一种正则表达式的写法，表示匹配所有<br>select 字段1[,字段2,字段n] from 表;           指定字段查询<br>select distinct 字段 from 表;                 查询单个字段不重复记录 distinct<br>select  字段 from 表 where 条件;              条件查询 where,条件可以是逻辑比较运算符的比较式</p>
+<p>select 字段 from 表 order  by 字段 排序关键词; 查询结果按照字段排序关键词排序<br>排序关键词:<br>asc    升序排列，从小到大（默认）<br>desc    降序排列，从大到小</p>
+<p>select 字段 from 表 order  by 字段1 排序关键词,… …字段n desc|asc;<br>order by 后面可以跟多个不同的字段排序，并且排序字段的不同结果集的顺序也不同，<br>如果排序字段的值一样，则值相同的字段按照第二个排序字段进行排序。</p>
+<p>select 字段 from 表  limit 数量; 对于查询或者排序后的结果集，如果希望只显示一部分而不是全部，使用 limit 关键字结果集数量限制。<br>select 字段 from 表 order by 字段 关键词 limit 数量; 限制结果集并排序<br>select 字段 from 表  limit 偏移量,数量; 结果集区间选择，偏移量从0开始，0是第一条数据<br>select 函数(字段) from 表; 从表中将按字段查询的结果进行函数处理<br>函数<br>sum    求和<br>count    统计总数<br>max    最大值<br>min    最小值<br>avg    平均值</p>
+<p>select <em> from 表 group by 字段;    将表中数据按字段分组<br>select </em> from 表 group by 字段 having 条件; 分组结果再过滤。having 是筛选组 而where是筛选记录<br>例：统计省份数量后再进行分组显示： select count(province),province  from money group by province;</p>
+<p>整体的SQL语句配合使用的语法结构如下：<br>SELECT<br>     [字段1 [as 别名1],[函数(字段2) ,]……字段n]<br> FROM 表名<br> [WHERE where条件]<br> [GROUP BY 字段]<br> [HAVING where_contition]<br> [order 条件]<br> [limit 条件]<br> 例<br> 查询money表字段：id,username,balance,province 要求id&gt;1 余额大于50，使用地区进行分组。我们使用用户id进行降序，要求只准显示3条。<br> select id,username,balance,province from money where id &gt; 1 and balance &gt; 50 group by province order by id desc limit 3;</p>
+<h1 id="多表联合查询"><a href="#多表联合查询" class="headerlink" title="多表联合查询"></a>多表联合查询</h1><h2 id="内连接"><a href="#内连接" class="headerlink" title="内连接"></a>内连接</h2><p>将两个表中存在联结关系的字段符合联结关系的那些记录形成记录集的联结。<br>基本语法1：<br>select 表1.字段 [as 别名],表n.字段  from 表1 [别名],表n where 条件;<br>取满足条件的数据的在各表中的各字段<br>例<br>select user.uid ,user.username as username,order_goods.oid,order_goods.uid,order_goods.name as shopname from user,order_goods  where user.uid = order_goods.uid;<br>若表user中某条数据x的uid与表order_goods中的某条数据y的uid相同,则取出user表中数据x的 uid、username，取出order_goods中数据y的uid,name,其中order_goods的name的值以shopname的值显示<br>基本语法2：<br>select 表1.字段 [as 别名],表n.字段  from 表1 INNER JOIN 表n on  条件;<br>例<br>select user.uid ,user.username as username,order_goods.oid,order_goods.uid,order_goods.name as shopname from user inner join order_goods  on  user.uid = order_goods.uid;<br>效果同基本语法1</p>
+<p>##　外连接<br>会选出其他不匹配的记录，分为外左联结和外右联结。<br>左连接：包含所有的左边表中的记录甚至是右边表中没有和它匹配的记录<br>select 表1.字段 [as 别名],表n.字段  from 表1 LEFT JOIN 表n on  条件;<br>例<br>select *  from user left join order_goods  on  user.uid = order_goods.uid;<br>以左边ｕｓｅｒ为主，查询哪些用户未购买过商品，并将用户信息显示出来，ｕｓｅｒ表全部显示</p>
+<p>右连接：包含所有的右边表中的记录甚至是右边表中没有和它匹配的记录<br>select 表1.字段 [as 别名],表n.字段  from 表1 right JOIN 表n on  条件;<br>例<br>select *  from user right join order_goods  on  user.uid = order_goods.uid;<br>查询商品表中哪些用户购买过商品，并将用户信息显示出来，order_goods全部显示</p>
+<h2 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h2><p>需要的条件是另外一个select语句的结果，即使用子查询<br>用于子查询的关键字包括in、not in、=、!=、exists、not exists等。<br>select 字段  from 表 where 字段 in(条件)<br>例<br>select *  from user where uid in (select uid from order_goods);<br>从order_goods取出uid这一列，将uid在user中对应的数据取出来</p>
+<h2 id="记录联合"><a href="#记录联合" class="headerlink" title="记录联合"></a>记录联合</h2><p>使用 union 和 union all 关键字，将两个表的数据按照一定的查询条件查询出来后，将结果合并到一起显示。<br>union all 把结果直接合并在一起<br>union 是将 union all 后的结果进行一次distinct，去除重复记录后的结果。</p>
+<h1 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h1><p>使用update<br>update 表名 set 字段1=值1,字段2=值2,字段n=值n where 条件；<br>例<br>update emp set  balance=balance-500 where userid = 15;<br>将emp表中userid为15的数据的balance减15<br>同时对两个表进行更新<br>update 表1,表2 set 字段1=值1,字段2=值2,字段n=值n where 条件<br>例<br>update money m,user u m.balance=m.balance<em>u.age where m.userid=u.id;<br>修改money，将money表的别名设置为m；user表的别名设置为u；将m表的余额改为m表的balance</em>用户表的age。执行条件是：m.userid = u.id</p>
+<h1 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h1><p>用delete<br>DELETE FROM 表 [where 条件];<br>删除时如果不加where条件，会清空掉整个表的记录，返回被删除的记录数</p>
+<p>清空表 如果使用，<br>truncate table 表名;<br>表中若有自增字段，这个自增字段会将起始值恢复成1</p>
+<h1 id="权限"><a href="#权限" class="headerlink" title="权限"></a>权限</h1><h2 id="添加权限"><a href="#添加权限" class="headerlink" title="添加权限"></a>添加权限</h2><p>grant 权限 on 库.表 to ‘用户‘@’主机’ identified by ‘密码’;<br>grant select, insert on test.* to ‘liwenkai‘@’localhost’ identified by ‘4311’;<br>给予liwenkai用户，在本机连接test库所有表的权限。操作的这些表具有查询和写入权限</p>
+<h2 id="删除权限"><a href="#删除权限" class="headerlink" title="删除权限"></a>删除权限</h2><p>revoke 权限 on 库.表 from ‘用户‘@’主机’;<br>revoke select, insert on test.* to ‘liwenkai‘@’localhost’ identified by ‘4311’;<br>给予liwenkai用户，在本机连接test库所有表的权限。操作的这些表具有查询和写入权限</p>
+<h2 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h2><p>grant all        在grant后接all说明给予所有权限<br>revoke all       在revoke后接all说明删除所有权限<br>权限 on .        . 所明给予所有库所有表的操作权限<br>‘用户‘@’主机’    主机里面若为%。任意来源的主机均可以使用这个用户来访问</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/php/php_MySQLuse.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/php/php_MySQLuse.html" itemprop="url">
+                  php中MySQL的使用
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-26T21:37:37+08:00">
+                2017-05-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="php连接数据库"><a href="#php连接数据库" class="headerlink" title="php连接数据库"></a>php连接数据库</h1><p>查看数据库主机，用户名<br>use myaql；<br>select Host from user;<br>select user from user;</p>
+<h2 id="连接数据库服务器"><a href="#连接数据库服务器" class="headerlink" title="连接数据库服务器"></a>连接数据库服务器</h2><p>mysql_connect函数<br>$con = mysql_connect(“localhost”,”peter”,”abc123”);<br>参数1    主机<br>参数2    数据库服务器登陆名<br>参数3    密码<br>参数4    数据库的名称<br>参数5    数据库服务器端口不填默认3306</p>
+<p>若参数4，数据库名称在此步已填并择，不需要执行第三步</p>
+<h2 id="判断链接是否正常"><a href="#判断链接是否正常" class="headerlink" title="判断链接是否正常"></a>判断链接是否正常</h2><p>如果有错误，存在错误号<br>if (mysql_errno($conn)) {<br>   echo mysql_error($conn);<br>   exit;<br>}</p>
+<p>mysql_errno 返回连接错误号，无错误返回0<br>参数1    传入mysql_connect返回的资源</p>
+<p>mysql_error 返回连接错误字符串<br>参数1    传入mysql_connect返回的资源</p>
+<h2 id="选择数据库"><a href="#选择数据库" class="headerlink" title="选择数据库"></a>选择数据库</h2><p>mysql_select_db函数<br>mysql_select_db(‘user’,$conn);<br>参数1    传入mysql_connect返回的资源<br>参数2    需要连接的数据库名</p>
+<h2 id="设置字符集"><a href="#设置字符集" class="headerlink" title="设置字符集"></a>设置字符集</h2><p>mysql_set_charset<br>mysql_set_charset(‘utf8’,$conn);<br>参数1    字符集类型<br>参数2    传入mysql_connect返回的资源</p>
+<h2 id="准备SQL语句"><a href="#准备SQL语句" class="headerlink" title="准备SQL语句"></a>准备SQL语句</h2><p>要传入数据库的操作语句<br>注意参数如何拼接</p>
+<p>如果是int类型的就使用<br>$sql=”insert into user(mycon) values(“.$my_con.”)”;<br>//或者<br>$sql=’insert into user(mycon) values(‘.$my_con.’)’;</p>
+<p>如果是字符型的就要使用单引号或者双引号括起来<br>$sql=”insert into user(mycon) values(‘“.$my_con.”‘)”;<br>//或者这样写<br>$sql=’insert into user(mycon) values(“‘.$my_con.’”)’;</p>
+<p>多个<br>$sql = “INSERT INTO user (username,password,createtime,createip)<br>values<br>(‘“ . $username . “‘,’” . $password . “‘,” . $time . “,’” . $ip . “‘)”;</p>
+<h2 id="发送SQL语句"><a href="#发送SQL语句" class="headerlink" title="发送SQL语句"></a>发送SQL语句</h2><p>$result = mysql_query($sql,$conn);</p>
+<h2 id="根据不同操作，判断执行是否正常或者遍历数据"><a href="#根据不同操作，判断执行是否正常或者遍历数据" class="headerlink" title="根据不同操作，判断执行是否正常或者遍历数据"></a>根据不同操作，判断执行是否正常或者遍历数据</h2><p>发送的是select类别的语句，通常需要将结果输出显示出来。就需要用到遍历显示数据的函数<br>函数    mysql_fetch_array<br>功能    得到result结果集中的数据，返回数组进行便利<br>参数1    传入查询出来的结果变量<br>参数2    传入MYSQLI_NUM返回索引数组，MYSQLI_ASSOC返回关联数组，MYSQLI_BOTH返回索引和关联</p>
+<p>函数    mysql_fetch_assoc<br>功能    得到result结果集中的数据，返回关联数组进行便利<br>参数1    传入查询出来的结果变量</p>
+<p>函数    mysql_fetch_row<br>功能    得到result结果集中的数据，返回索引数组进行便利<br>参数1    传入查询出来的结果变量</p>
+<p>函数    mysql_fetch_object<br>功能    得到result结果集中的数据，返回对象进行遍历<br>参数1    传入查询出来的结果变量</p>
+<p>函数    mysql_num_rows<br>功能    返回查询出来的结果总数<br>参数1    传入查询出来的结果变量</p>
+<p>函数    sql_num_rows<br>功能    返回查询出来的结果总数<br>参数1    传入查询出来的结果变量</p>
+<p>如果发送的是insert的语句，通常需要得到是否执行成功，或者同时拿到自增的ID。<br>函数    mysqli_fetch_field<br>功能    遍历数据行<br>参数1    传入查询出来的结果变量</p>
+<p>如果发送的是update和delete类别的语句。只需要判断是否执行成功即可。</p>
+<p>if ($result) {<br>   echo ‘成功’;<br>} else {<br>    echo $sql;//查看是否是SQL语句拼接有问题<br>  echo ‘失败’;<br>}</p>
+<h2 id="关闭数据库"><a href="#关闭数据库" class="headerlink" title="关闭数据库"></a>关闭数据库</h2><p>函数    mysqli_close<br>功能    关闭数据库连接<br>参数1    传入mysqli_connect返回的资源</p>
+<p>mysql_close($conn);//关闭数据库</p>
+<h1 id="显示服务器信息函数"><a href="#显示服务器信息函数" class="headerlink" title="显示服务器信息函数"></a>显示服务器信息函数</h1><p>函数    mysqli_get_server_info<br>功能    返回服务器信息<br>参数1    传入mysqli_connect返回的资源</p>
+<p>函数    mysqli_get_server_version<br>功能    返回服务器版本<br>参数1    传入mysqli_connect返回的资源</p>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/php/registration/connect.php" target="_blank" rel="noopener">一个用户注册的代码链接</a></p>
+<h2 id="数据显示乱码终极解决办法"><a href="#数据显示乱码终极解决办法" class="headerlink" title="数据显示乱码终极解决办法"></a>数据显示乱码终极解决办法</h2><p>多个不同的文件系统中一定要统一编码。<br>9个要点分别是：<br>    1.html编码与MySQL编码一致<br>    2.PHP编码与MySQL编码一致<br>    3.若有header头发送字符集，请与数据库一样<br>      如果php中有header头，一定要是utf-8的<br>      header(‘content-type:text/html;charset=utf-8’);<br>    4.&lt;meta http-equiv=“Content-Type”content=“text/html; charset=utf-8” /&gt;要和页面的文字编码一致<br>    5.数据库建库的字符集要统一<br>    6.表的字符集要统一<br>    7.列的字符集要统一(表设了,列就默认写表的)<br>    8.连接,校验的字符集要统一<br>      通过mysqli_set_charset(‘utf8’)来MySQL连接、结果和校验的字符集设置。<br>      注：数据库的字符集声明和文件中的略有不同。utf8为mysql数据库的，utf-8为文件中使用的<br>    9.结果集的字符集要统一</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/php/php_imge.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/php/php_imge.html" itemprop="url">
+                  图片上传
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-02T22:22:37+08:00">
+                2017-05-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="用函数画图"><a href="#用函数画图" class="headerlink" title="用函数画图"></a>用函数画图</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">//创建图片</span><br><span class="line">$img = imagecreatetruecolor(500, 500);</span><br><span class="line"></span><br><span class="line">//分配颜色 为图片准备需要用到的颜色</span><br><span class="line">$red = imagecolorallocate($img, 255, 0, 0);</span><br><span class="line"></span><br><span class="line">$green = imagecolorallocate($img, 0, 255, 0);</span><br><span class="line"></span><br><span class="line">$blue = imagecolorallocate($img, 0, 0, 255);</span><br><span class="line"></span><br><span class="line">$pur = imagecolorallocate($img, 255, 0, 255);</span><br><span class="line"></span><br><span class="line">$yellow = imagecolorallocate($img, 121, 72, 0);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//填充背景 (0,0)(500,500)指图片左上角和右下角两点，从而确定图片的矩形</span><br><span class="line">imagefilledrectangle($img, 0, 0, 500, 500, $green);</span><br><span class="line"></span><br><span class="line">//画对角线 对角线起始点坐标</span><br><span class="line">imageline($img, 0, 0, 500, 500, $red);</span><br><span class="line">imageline($img, 500, 0, 0, 500, $blue);</span><br><span class="line"></span><br><span class="line">//画圆</span><br><span class="line">//bool imagefilledellipse ( resource $图片资源 , int $圆心x , int $圆心y , int $圆的宽 , int $圆的高 , int $圆的颜色 )</span><br><span class="line">imagefilledellipse($img, 250, 250, 200, 200, $yellow);</span><br><span class="line"></span><br><span class="line">//圆中间画矩形，同样通过左上角右下角确定矩形</span><br><span class="line">imagefilledrectangle($img, 200, 200, 300, 300, $blue);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//保存图片，图片名为haha.jpg</span><br><span class="line">imagejpeg($img, &apos;haha.jpg&apos;);</span><br><span class="line"></span><br><span class="line">//销毁资源</span><br><span class="line">imagedestroy($img);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="画验证码"><a href="#画验证码" class="headerlink" title="画验证码"></a>画验证码</h1><p><a href="https://github.com/YooHannah/algorithm/blob/master/php/Verificationcode.php" target="_blank" rel="noopener">代码链接</a></p>
+<h1 id="图片加水印"><a href="#图片加水印" class="headerlink" title="图片加水印"></a>图片加水印</h1><p>bool imagecopymerge ( resource $目标图片 , resource $来源图片, int $目标开始的x , int $目标开始的y, int $来源的x , int $来源的y , int $来源的宽 , int $来源的高 , int $透明度)<br>注意：<br>透明度的值为0-100的整数。imagecopy和imagecopymerge的区别在于一个有透明度，一个没有透明度。<br>大致步骤：<br> 1.打开原图（也叫操作的目标图片）<br> 2.打开水印图（也叫水印来源图片）<br> 3.使用 imagecopymerge 将小图合并至大图的指定位置<br> 4.输出图片<br> 5.销毁资源<br> <a href="https://github.com/YooHannah/algorithm/blob/master/php/Watermark.php" target="_blank" rel="noopener">代码链接</a></p>
+<h1 id="图像放缩和裁剪"><a href="#图像放缩和裁剪" class="headerlink" title="图像放缩和裁剪"></a>图像放缩和裁剪</h1><p>操作方式说明：<br>从来源图片的开始点(x,y)起，指定的宽高的大小图片。放至到目标图片的起点(x,y)，指定宽高大小的图片中。</p>
+<h2 id="缩放图片"><a href="#缩放图片" class="headerlink" title="缩放图片"></a>缩放图片</h2><p>imagecopyresampled    重采样拷贝部分图像并调整大小<br>bool imagecopyresampled ( resource $目标图 , resource $来源图 , int $目标开始的x位置 , int $目标开始的y位置 , int $来源开始的x位置 , int $来源开始的y位置 , int $目标图片的宽 , int $目标图片的高, int $来源图片的宽 , int $来源图片的高 )<br>大致步骤：<br>1.打开来源图片<br>2.设置图片缩放百分比（缩放）<br>3.获得来源图片，按比调整大小<br>4.新建一个指定大小的图片为目标图<br>5.将来源图调整后的大小放到目标中<br>6.销毁资源<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">//打开来源图片</span><br><span class="line">$image = imagecreatefrompng(&apos;fbb.png&apos;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//定义百分比，缩放到0.1大小</span><br><span class="line">$percent = 0.1;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 将图片宽高获取到</span><br><span class="line">list($width, $height) = getimagesize(&apos;fbb.png&apos;);</span><br><span class="line"></span><br><span class="line">//设置新的缩放的宽高</span><br><span class="line">$new_width = $width * $percent;</span><br><span class="line">$new_height = $height * $percent;</span><br><span class="line"></span><br><span class="line">//创建新图片</span><br><span class="line">$new_image = imagecreatetruecolor($new_width, $new_height);</span><br><span class="line"></span><br><span class="line">//将原图$image按照指定的宽高，复制到$new_image指定的宽高大小中</span><br><span class="line">imagecopyresampled($new_image, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);</span><br><span class="line"></span><br><span class="line">header(&apos;content-type:image/jpeg&apos;);</span><br><span class="line">imagejpeg($new_image);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure></p>
+<h2 id="裁剪图片"><a href="#裁剪图片" class="headerlink" title="裁剪图片"></a>裁剪图片</h2><p>imagecopyresized    拷贝部分图像并调整大小<br>bool imagecopyresized ( resource $目标图 , resource $来源图 , int $目标开始的x位置 , int $目标开始的y位置 , int $来源开始的x位置 , int $来源开始的y位置 , int $目标图片的宽 , int $目标图片的高, int $来源图片的宽 , int $来源图片的高 )<br>大致步骤：<br> 1.打开来源图片和目标图片<br> 2.截取来源图片中的点，设置宽高。放至到目标图片中。（裁剪）<br> 3.保存图片输入<br> 4.销毁资源</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"> $dst = imagecreatefrompng(&apos;hsq.png&apos;);</span><br><span class="line"> $src = imagecreatefrompng(&apos;du.png&apos;);</span><br><span class="line"> imagecopyresized($dst, $src, 281, 71, 407, 154, 132, 160, 80, 90);</span><br><span class="line"> header(&apos;content-type:image/jpeg&apos;);</span><br><span class="line">imagejpeg($dst);</span><br><span class="line">imagedestroy($dst);</span><br><span class="line"> imagedestroy($src);</span><br><span class="line"> ?&gt;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/php/php_fileupload.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1258,362 +1681,6 @@ void clearstatcache ( void ) 功能：清楚文件的状态缓存
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/multliwaysearchtree.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/algorithm/multliwaysearchtree.html" itemprop="url">
-                  多路查找树
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-08T20:59:37+08:00">
-                2017-04-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>特点：<br>每个结点的孩子可以多于两个，且每一个结点处可以存储多个元素<br>所有元素之间存在某种特定的排序关系<br>2-3树：每一个结点都具有两个或者三个孩子的多路查找树，所有叶子结点都在同一层次上<br>2结点：拥有两个孩子和一个元素，左子树包含元素小于结点元素，右子树则大于，要么有两个孩子，要么一个孩子也没有<br>3结点：拥有三个孩子两个元素，孩子和结点元素呈一定顺序，要么有三个孩子，要么一个孩子也没有<br>2-3-4树：每一个结点都具有两个或者三个孩子或四个孩子的多路查找树，所有叶子结点都在同一层次上<br>4结点：拥有四个个孩子三个元素，孩子和结点元素呈一定顺序，要么有四个孩子，要么一个孩子也没有</p>
-<h1 id="2-3树插入原理"><a href="#2-3树插入原理" class="headerlink" title="2-3树插入原理"></a>2-3树插入原理</h1><p>1.如果是一个空树，直接插入形成一个2结点，即根结点<br>2.插入到一个结构为2结点的叶子上，直接将该2结点转为3结点<br>3.插入到一个结构为3结点的叶子结点，而该叶子结点双亲为2结点，则将该双亲2结点扩展为3结点，将元素插进去<br>4.插入到一个结构为3结点的叶子结点，而其双亲也为3结点，则继续往上找其双亲的双亲是否为2结点，若是，则将该2结点扩展为3结点，将双亲的一个元素挪上去，将3结点的元素挪到双亲，然后插入元素<br>5.插入到一个结构为3结点的叶子结点，往上追溯到根结点也为3结点，则说明该子树已满，需要增加树的高度，即将树每个结点拆都分成2结点，从而保证，所有叶结点在统一层次</p>
-<h1 id="2-3树删除原理"><a href="#2-3树删除原理" class="headerlink" title="2-3树删除原理"></a>2-3树删除原理</h1><p>1.删除的元素位于结构为3结点的叶子上，直接删掉就好，3结点变2结点<br>2.删除元素位于结构为2结点的叶子上，<br>若双亲也为2结点结构，且双亲另一个孩子为3结点，则将元素删除后，左旋或右旋，将原来双亲移下来做孩子，将原来3结点一个元素移上去做双亲，另一个不动继续做孩子<br>若双亲为2结点结构，且双亲另一个孩子也为2结点,假设删除的是左子树的元素，则寻找双亲的双亲的直接后继元素来填充双亲的双亲的元素位置，将双亲的双亲的元素做双亲元素的孩子，将双亲元素移下来做孩子，将双亲原来的孩子移上去做双亲<br>若双亲是一个3结点结构，则将双亲一个元素移下来，3结点变2结点<br>若删除时，整颗树是一个满2叉树状态，则将树的深度变小，2结点变3结点<br>3.删除元素位于结构为2结点的双亲位置，若其右孩子为3结点则将其直接后继结点顶上去，3结点孩子变2结点<br>4.删除元素位于结构为3结点的双亲位置，若其直接前驱位于3结点结构，则将前驱顶上去，3结点变2结点<br>若其直接前驱位于2结点结构，则将前驱与直接后继合并为3结点，双亲变2结点</p>
-<h1 id="B树"><a href="#B树" class="headerlink" title="B树"></a>B树</h1><p>一种平衡的多路查找树，2-3树和2-3-4树都是B树的特例<br>把结点最大的孩子树数目称为B树的阶，因此2-3树是3阶B树，2-3-4树是4阶B树<br>一个m阶的B树有如下属性<br>如果根结点不是叶结点，则其至少有两颗子树<br>每一个非根的分支节点都有K-1个元素和K个孩子，其中K满足：m/2向上取整 &lt;= K &lt;= m<br>所有叶子结点都位于同一层次<br>每个分支结点包含元素个数，该结点各元素及其孩子的信息</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/balancesortbtree.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/algorithm/balancesortbtree.html" itemprop="url">
-                  平衡二叉排序树
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-08T14:51:37+08:00">
-                2017-04-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h1><p>首先得是一颗二叉排序树<br>左子树与右子树都是平衡二叉树<br>每个结点左子树与右子树的深度差的绝对值不能大于1<br>结点左子树深度减右子树深度的差叫做平衡因子BF，即|BF|&lt;=1，BF=-1/1/0<br>平衡二叉树就是一颗二叉树上所有结点的平衡因子的绝对值小于等于1 的树</p>
-<h1 id="关键操作"><a href="#关键操作" class="headerlink" title="关键操作"></a>关键操作</h1><p>左子树bf大于右子树bf，右旋<br>左子树bf小于右子树bf，左旋<br>左旋的子树的右子树若存在左子树，将该左子树做左旋子树根结点的右子树，左旋子树根结点做其右子树的左子树<br>右旋的子树的左子树若存在右子树，将该右子树做右旋子树根结点的左结点，右旋子树根结点做其左子树的右子树</p>
-<h1 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h1><p>现用以下数据构建平衡二叉树<br>3,2,1,4,5,6,7,10,9,8<br><img src="/image/balancebtree.png" alt="balance"><br>按照大于父节点做右子树小于父结点做左子树原则,将3,2,1构建树，当1进入树之后3的左子树深度2减右子树深度0大于1，以2为中心进行右旋，如图1<br>继续添加4和5，当5进入树之后，3的左右子树深度差为-2，断开2,3链接，将3,4,5,以4为中心左旋，再与2相连，如图2<br>继续添加6，当6进入树之后,这时2的bf为-2，以2的右子树根结点为中心左旋，此时1,2和3均为4的左子树，则将4的原左子树做新左子树的右子树，如图3<br>添加7,当7进入树之后,5的bf为-2，断开4,5链接，以6为中心左旋，再与4相连，如图4<br>添加10、9,当9进入树之后,6的bf为-2,断开6、7，因为10有左结点，先将9、10关系转换，让10做9孩子结点，然后以9为中心左旋，再与6相连,如图5<br>添加8,4、6的bf又变为-2,断开4、6,9的bf为1，因为将来要对6左旋，所以先将9右旋，使9的bf变成0或负值，再对6以7为中心左旋，如图6<br>最终结果如图7<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/balancebtree.js" target="_blank" rel="noopener">代码链接</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/sortbtree.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/algorithm/sortbtree.html" itemprop="url">
-                  二叉排序树
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-03T16:51:37+08:00">
-                2017-04-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>将无序的数组，把首项当做根结点开始，按照比双亲结点小的做左子树，比双亲结点大的做右子树的规则<br>建立一颗二叉树，对二叉树进行中序遍历，即得到无序数组从小到大的排序<br>二叉排序树特点<br>—- 若它的左子树不为空，则左子树上所有结点的值均小于它的根结构的值<br>—- 若它的右子树不为空，则右子树上所有结点的值均大于它的根结构的值<br>—- 它的左右子树也分别为二叉排序树(递归)<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/SortingBtree.js" target="_blank" rel="noopener">代码链接</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1657,7 +1724,7 @@ void clearstatcache ( void ) 功能：清楚文件的状态缓存
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">236</span>
+              <span class="site-state-item-count">239</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1674,7 +1741,7 @@ void clearstatcache ( void ) 功能：清楚文件的状态缓存
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

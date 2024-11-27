@@ -259,6 +259,424 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/css3.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/knowledge/css3.html" itemprop="url">
+                  关于CSS3样式的一点小结
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-21T22:27:58+08:00">
+                2019-02-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="border-image"><a href="#border-image" class="headerlink" title="border-image"></a>border-image</h1><p>会覆盖border属性设置的边框样式<br>原理依据border-image-slice将图片切成九宫格<br><img src="/image/borderOri.jpg" alt="borderOri"><br>EFGH位于边框四角，不参与拉伸或重复<br>ABCD分别在各自所在边上进行拉伸或者重复<br>I不参加修饰</p>
+<h2 id="border-image-source"><a href="#border-image-source" class="headerlink" title="border-image-source"></a>border-image-source</h2><p>图片地址<br>格式url(imgurl) </p>
+<h2 id="border-image-slice"><a href="#border-image-slice" class="headerlink" title="border-image-slice"></a>border-image-slice</h2><p>从距离top，right,bottom,left边多少切割图片，切4刀，形成9宫格<br>可为数字(图像的像素（位图图像）或向量的坐标（如果图像是矢量图像）)/百分数(水平/垂直偏移图像宽度的百分之多少)<br>不设置时，图片整体位于边框四角。<br>一个值时表示4个距离一致；两个值表示垂直方向两刀和水平两刀距离相同，四个值表示距离四个边各自的距离<br>特殊情况，<br>如果距上下边的长度等于高的一半，即在图片水平中线来一刀，则BD两个切片不会被切出来，左右边框会因为没有切片覆盖显示background-color<br>同理，距左右边的长度等于宽的一半，在图片垂直中线来一刀，则AC两个切片不会被切出来，上下边框会因为没有切片覆盖显示background-color<br>所以如果仅装饰边框4个角，可以采用距离边等于宽高一半的方法切割图片</p>
+<h2 id="border-image-repeat"><a href="#border-image-repeat" class="headerlink" title="border-image-repeat"></a>border-image-repeat</h2><p>水平边要不要repeat 垂直边要不要repeat 默认拉伸<br>可取值：stretch 默认拉伸；repeat 重复切片；round;重复切片，但会适当调整大小，避免出现半截图片<br><img src="/image/borderimg.jpg" alt="borderimg"><br><img src="/image/borderimg1.jpg" alt="borderimg1"></p>
+<h1 id="border-radius"><a href="#border-radius" class="headerlink" title="border-radius"></a>border-radius</h1><p>设置边框外圆半径<br>5px ———— 4个角都设半径为5px的圆形圆角<br>5px/10px  ———— 4个角都设水平半径为5px，垂直半径为10px的椭圆形圆角<br>5px 10px  左上和右下角半径5px圆形，右上和左下半径10px的圆形圆角<br>5px 10px 20px  左上角半径5px圆形，右上和左下半径10px的圆形,右下角半径20px圆形圆角<br>5px 10px 20px 15px 左上角半径5px圆形，右上半径10px的圆形,右下角半径20px圆形,左下15p圆形圆角<br>5px 10px 20px 15px/10px 15px 25px 20px 四个角同时设置椭圆型圆角</p>
+<p>当半径值小于等于边框border宽度时，border内部不会具有圆角效果，内圆半径=外圆半径-边框宽度<br>若相邻边宽不同，则角会从宽边平滑到窄边<br>表格table设置圆角时，只有将border-collapse:separate时才正常显示<br>如果想取消原有圆角设置，可以将对应值设置为0<br>特殊应用：直接通过设置容器长宽和border-radius绘制圆形，半圆，扇形，椭圆<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">width:300px</span><br><span class="line">height:300px</span><br><span class="line">border-radius:150px;//圆形</span><br><span class="line">border-radius: 0 300px 0px 0px;//扇形</span><br><span class="line"></span><br><span class="line">width:600px</span><br><span class="line">height:300px</span><br><span class="line">border-radius:150px;//椭圆形</span><br><span class="line">border-radius: 300px 300px 0px 0px;//半圆</span><br></pre></td></tr></table></figure></p>
+<h1 id="box-sizing"><a href="#box-sizing" class="headerlink" title="box-sizing"></a>box-sizing</h1><p>content-box  ———— 元素width代表内容宽度<br>border-box   ————  元素width = border+padding + 内容宽度</p>
+<h2 id="resize"><a href="#resize" class="headerlink" title="resize"></a>resize</h2><p>容器能否拖拽以及拖拽方式<br>none | both | horizontal | vertial | inherit</p>
+<h2 id="outline"><a href="#outline" class="headerlink" title="outline"></a>outline</h2><p>相当于border,但不占文档流，不破坏布局<br>颜色 样式 宽度 偏移</p>
+<h2 id="box-shadow"><a href="#box-shadow" class="headerlink" title="box-shadow"></a>box-shadow</h2><p>边框阴影，由多个值配置<br>insert ？ 水平方向偏移（正右负左）垂直偏移（正下负上）模糊半径 伸缩半径(相当于阴影宽度)<br>设置insert时，设置内阴影，不设时，设置外阴影<br>内阴影用在img标签上无效<br>实例应用<br>1.单边阴影<br>box-shadow:red 0px -5px 5px -3px,给top边设置了阴影，通过设置伸缩半径-3px防止其他边模糊半径5px效果<br>2.四边阴影<br>box-shadow:0 0 10px red;//10px为模糊半径<br>box-shadow:0 0 0 10px red;//10px为伸缩半径,此效果相当于设置了一个宽10px的红边，但不占文档流<br>层级关系：外阴影—&gt;背景色—&gt;背景图—&gt;内阴影—&gt;边框<br>3.多层阴影<br>每组用逗号隔开，靠前的设置面积（伸缩半径）太大的话会遮盖之后的设置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//彩虹色</span><br><span class="line">box-shadow: red 0px 0px 10px 10px, inset orange 0px 0px 10px 15px, inset yellow 0px 0px 10px 30px, inset green 0px 0px 10px 45px, inset blue 0px 0px 10px 60px, inset purple 0px 0px 10px 75px;</span><br></pre></td></tr></table></figure></p>
+<h1 id="text-shadow"><a href="#text-shadow" class="headerlink" title="text-shadow"></a>text-shadow</h1><p>水平方向偏移(正右负左) 垂直偏移(正下负上) 模糊半径 颜色(位置随意)</p>
+<h2 id="text-overflow"><a href="#text-overflow" class="headerlink" title="text-overflow"></a>text-overflow</h2><p>超出容器是否显示省略号<br>使用条件<br>width：500px;容器有具体宽度<br>overflow: hidden;超出隐藏<br>white-space: nowrap;//禁止换行</p>
+<h2 id="word-wrap"><a href="#word-wrap" class="headerlink" title="word-wrap"></a>word-wrap</h2><p>长单词url换行<br>normal 默认，半角空格/连字符地方换行,长文本UrL会伸到容器外<br>break-word 在边界换行，不截断英文单词</p>
+<h2 id="word-break"><a href="#word-break" class="headerlink" title="word-break"></a>word-break</h2><p>自动换行处理方法<br>normal 默认，整字，英文单词整个换行<br>break-all 可截断单词换行<br>keep-all 不允许断开换行，chrome，safari不支持</p>
+<h2 id="white-space"><a href="#white-space" class="headerlink" title="white-space"></a>white-space</h2><p>页面显示与html文本书写格式处理<br>normal 根据容器宽度换行，连续空格合并成一个<br>pre 空白换行跟html书写格式一致，行为类似pre标签<br>nowrap 不换行，连续空格合并成一个，超出容器尺寸按容器overflow处理<br>pre-line 换行跟html书写格式一致，续空格合并成一个<br>pre-wrap  保留空白，正常换行，与pre区别在于pre标签对一些符号上的支持和规范</p>
+<h2 id="文本换行"><a href="#文本换行" class="headerlink" title="文本换行"></a>文本换行</h2><p>1.pre标签自动换行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pre&#123;</span><br><span class="line">    white-space:pre;</span><br><span class="line">    word-wrap:break-word</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2.td自动换行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">table&#123;</span><br><span class="line">    table-layout:fixed;</span><br><span class="line">    width:***px;</span><br><span class="line">&#125;</span><br><span class="line">table td&#123;</span><br><span class="line">    overflow:hidden;</span><br><span class="line">    word-wrap:break-word;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>3.除以上两种标签自动换行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">element&#123;</span><br><span class="line">    overflow:hidden;</span><br><span class="line">    word-wrap:break-word;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>4.标签内容强制不换行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">element&#123;</span><br><span class="line">    white-space:nowrap;</span><br><span class="line">    word-break:keep-all;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="background-attachment"><a href="#background-attachment" class="headerlink" title="background-attachment"></a>background-attachment</h1><p>背景图是否随页面滚动条滚动，始终不会随容器滚动条滚动<br>scroll ———— 滚动<br>fixed ———— 不滚动</p>
+<h1 id="background-image"><a href="#background-image" class="headerlink" title="background-image"></a>background-image</h1><p>1.起始位置<br>background-color始终从border与margin交界线的左上角(用A表示)开始<br>background-image默认从padding与border交界线的左上角(用B表示)开始,但是可以通过设置background-position决定起始点<br>2.在Z轴上，覆盖顺序<br>background-color ——&gt; background-image ——&gt; border,conten的背景色<br>background-repeat值为repeat和no-repeat时,对覆盖有不同影响</p>
+<h2 id="background-repeat"><a href="#background-repeat" class="headerlink" title="background-repeat"></a>background-repeat</h2><p>图片比容器小时，重复方式<br>no-repeat ———— 仅从B点开始铺一次,background-image不会填充border部分的background-color,图片不够大时会显示background-color<br><img src="/image/bgimg2.png" alt="bgimg2"><br>repeat ———— 从B点开始,先垂直重复，再整体水平重复，background-image会覆盖border部分的background-color,图片起点还是B,然后垂直重复,整体水平重复<br><img src="/image/bgimg1.png" alt="bgimg1"><br>repeat-x ———— 从B点开始，仅水平重复，不再整体垂直重复，覆盖border<br>repeat-y ———— 从B点开始，仅垂直重复，不再整体水平重复,覆盖border</p>
+<h2 id="background-position"><a href="#background-position" class="headerlink" title="background-position"></a>background-position</h2><p>背景图片开始位置在padding与border交界线什么地方<br>两个值为长度或者百分数时，第一个值表示容器水平方向的位置，相对于left边位置；第二个值表示容器垂直方向的位置，相对于TOP边位置，可以混用<br>但只设一个值时，表示距离left位置，垂直方向默认为居中<br>两个值为关键字时，left,right,center表示水平位置，top,bottom,center表示垂直位置，<br>前后位置可随意，left bottom 等于 bottom left<br>仅设置一个值时，另一个方向默认center,例left 相当于left center,背景图位于左边垂直中间位置；center，即水平垂直居中<br><img src="/image/bgimg3.png" alt="bgimg3"></p>
+<h2 id="background-origin"><a href="#background-origin" class="headerlink" title="background-origin"></a>background-origin</h2><p>同样可以重置图片开始位置，指定居于哪条线，<br>同时指定background-position时，先根据background-origin确定线，依线根据background-position确定位置<br>border-box ———— margin与border交界线<br>padding-box ———— border与padding交界线,默认值<br>content-box ———— padding与内容块交界线</p>
+<h2 id="background-clip"><a href="#background-clip" class="headerlink" title="background-clip"></a>background-clip</h2><p>设置背景色background-color铺设范围<br>border-box ———— 从margin与border交界线开始铺<br>padding-box ———— 从border与padding交界线开始铺<br>content-box ———— 从padding与内容块交界线开始铺</p>
+<h2 id="background-size"><a href="#background-size" class="headerlink" title="background-size"></a>background-size</h2><p>以background-origin设置的值为容器,设置图片大小<br>auto 原始尺寸<br>具体长度值1个或2个<br>百分数1个或2个 相对容器的百分之多少，不是图片大小<br>contain 放大，铺满容器<br>cover 按照图片宽高比例，缩放</p>
+<h2 id="opacity"><a href="#opacity" class="headerlink" title="opacity"></a>opacity</h2><p>透明度：0-1的值，值越小越透明<br>表示颜色的rgba,hsla的第四位都表示透明度，取值同opacity</p>
+<h2 id="linear-gradient"><a href="#linear-gradient" class="headerlink" title="linear-gradient"></a>linear-gradient</h2><p>线性渐变,用于background-image<br>到达方向，开始颜色，（中间过渡色，）结束颜色<br>到达方向：to left 从右到左；to top left 从右下到左上角；xx deg，使用角度正值顺时针，负值逆时针<br>颜色名后空格加百分数，百分数指色标，色标即颜色在整个距离上开始的位置</p>
+<h2 id="radical-gradient"><a href="#radical-gradient" class="headerlink" title="radical-gradient"></a>radical-gradient</h2><p>径向渐变，用于background-image<br>半径 （形状）（at 圆心位置），开始颜色，（中间过渡色，）结束颜色<br>半径：两值相同即为圆形渐变，否则为椭圆渐变；<br>距离容器中心 closed-side 最近边| closed-corner 最近角| farthest-side 最远边| farthest-corner最远角距离<br>形状： circle | ellipse<br>圆心位置：left bottom |100px 200px |20% 15% 默认center</p>
+<h1 id="transform"><a href="#transform" class="headerlink" title="transform"></a>transform</h1><h2 id="transform-origin"><a href="#transform-origin" class="headerlink" title="transform-origin"></a>transform-origin</h2><p>重置变形函数作用起点，但translate()移动函数始终以元素中心点进行位移<br>left bottom | 20% 10%</p>
+<h2 id="transform-style"><a href="#transform-style" class="headerlink" title="transform-style"></a>transform-style</h2><p>子元素以2D还是3D形式处理变换过程<br>flat :2D<br>present-3d: 3D<br>如果同时有设置overflow：hidden,那么设置present-3d不生效，相当于flat</p>
+<h2 id="perspective"><a href="#perspective" class="headerlink" title="perspective"></a>perspective</h2><p>父元素是否呈现3d效果，这越小3D效果越明显，none不显示</p>
+<h2 id="perspective-origin"><a href="#perspective-origin" class="headerlink" title="perspective-origin"></a>perspective-origin</h2><p>perspective 原点，从哪个点开始呈现3d效果</p>
+<h2 id="perspective-1"><a href="#perspective-1" class="headerlink" title="perspective()"></a>perspective()</h2><p>用于子元素，参数大于0时，激活3d效果</p>
+<h2 id="back-visibility"><a href="#back-visibility" class="headerlink" title="back-visibility"></a>back-visibility</h2><p>旋转180度，背面是否显示为正面的镜面效果，visible | hidden<br>3D表示是否透视</p>
+<h2 id="功能函数"><a href="#功能函数" class="headerlink" title="功能函数"></a>功能函数</h2><p>可在transform中空格隔开同时使用多个<br>2D<br>位移<br>translate(_ |X,Y) X正值为向右，Y正值为向下<br>translateX(<em>）<br>translateY(</em>）<br>放缩<br>scale(_ |X,Y) 0-1缩小，大于1放大，取负值时，先翻转再放缩<br>scaleX(<em>）<br>scaleY(</em>）<br>旋转<br>rotate(<em>)角度值，顺时针正，逆时针负<br>倾斜<br>skew(</em> |X,Y) 水平 垂直方向倾斜<br>skewX(<em>)<br>skewY(</em>)</p>
+<p>3D<br>位移<br>translate3d(X,Y,Z) X正值为向右，Y正值为向下<br>translateZ(<em>）<br>放缩<br>scale3d(</em> |X,Y,Z) 0-1缩小，大于1放大，取负值时，先翻转再放缩<br>scaleZ(<em>）<br>旋转<br>rotate3d(X,Y,Z,角度)X,Y,Z值为0-1，表示绕轴旋转的矢量值，角度值，顺时针正，逆时针负<br>rotateX(</em>)<br>rotateY(<em>)<br>rotateZ(</em>)</p>
+<p>以上功能都能让矩阵函数表示<br>2d时使用matrix()<br>3d时使用matrix3d()</p>
+<h1 id="transition"><a href="#transition" class="headerlink" title="transition"></a>transition</h1><p>过度属性(css样式)none/all，具备过渡效果的属性，color,阴影，渐变<br>过渡时间 s/ms 整个变化持续时间<br>过度函数 ease|linear|ease-in|ease-out|ease-in-out|step,以上函数表示以什么样的速度变化，都可以用三次贝塞尔曲线实现<br>延迟时间 s/ms 变化延迟多长时间再开始，赋值为负值时，立即开始，之前的变换被截断<br>配置多项时，每组配置逗号隔开<br>终状态一般定义于各种触发伪类：hover,active,focus,checked<br>或者根据媒体查询结果</p>
+<h1 id="keyframes"><a href="#keyframes" class="headerlink" title="@keyframes"></a>@keyframes</h1><p>定义动画每一帧样式<br>@keyframes 取个名字apple{<br>   0%{动画第一帧样式}<br>   各种百分数{动画过渡帧样式}<br>   100%{动画最后一帧样式}<br>}</p>
+<h1 id="animation"><a href="#animation" class="headerlink" title="animation"></a>animation</h1><p>animation各个子属性<br>animation-name:@keyframes声明的动画帧的名字，例如apple<br>animation-duration:播放一遍的时间<br>animation-timing-function:播放方式<br>animation-delay:延迟多长时间再播放<br>animation-iteration-count:播放次数<br>animation-direction:倒放还是正放动画normal正放alternate倒放<br>animation-play-state:播放状态running播放|paused暂停<br>animation-fill-mode:结束定格在哪一帧</p>
+<h1 id="media"><a href="#media" class="headerlink" title="@media"></a>@media</h1><p>媒体查询<br>@media 10种媒体类型 and (13种设备特性) and (13种设备特性){样式}</p>
+<h1 id="font-face"><a href="#font-face" class="headerlink" title="@font-face"></a>@font-face</h1><p>从服务器加载字体类型</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">@font-face&#123;</span><br><span class="line">    font=family:xxx;</span><br><span class="line">    src:url()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/css3flex.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/knowledge/css3flex.html" itemprop="url">
+                  探索flex布局
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-01T07:54:58+08:00">
+                2019-02-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>flex布局<br>盒状弹性布局，盒子大小可以随容器大小变化</p>
+<h1 id="容器属性"><a href="#容器属性" class="headerlink" title="容器属性"></a>容器属性</h1><p><b>display</b>  决定开始作为弹性容器</p>
+<p>—— flex : 将容器设置为弹性伸缩容器<br>—— inline-flex :使弹性容器成为单个不可分的行内级元素<br>注意，columns属性此时在flex容器上不在有效果</p>
+<p><b>flex-direction</b> 决定主轴方向<br>—— row:水平向右，子模块书写顺序横向排列，开头的放在最左端,子模块不设宽度情况下宽度由内容决定<br>—— row-reverse:水平向左，子模块书写顺序横向排列，开头的放在最右端，子模块不设宽度情况下宽度由内容决定<br>—— column:从上到下，子模块书写顺序纵向排列，开头的放在最上面，子模块不设高度情况下高度由内容决定<br>—— column-reverse:从下到上，子模块书写顺序纵向排列，开头的放在最下面，子模块不设高度情况下高度由内容决定<br><img src="/image/flex1.png" alt="flex1"></p>
+<p><b>flex-wrap</b> 对于子模块是否超出最大宽度或高度时要不要换行/列，默认不换行/列,宽/高度自动按所有模块比例缩小<br>—— nowrap:默认值<br>—— wrap:换行,水平排列的子模块多出的部分沿column方向排第二行;纵向排列的子模块多出的部分沿row方向排第二列;<br>—— wrap-reverse:换行，水平排列的子模块多出的部分沿column-reverse方向排第二行；纵向排列的子模块多出的部分沿row-reverse方向排第二列;<br><img src="/image/flex2.png" alt="flex2.png"><br><img src="/image/flex3.png" alt="flex3.png"><br><img src="/image/flex4.png" alt="flex4.png"></p>
+<p><b>flex-flow</b> :[flex-direction][flex-wrap]flex-direction和 flex-wrap的复合属性,<br>先按flex-direction排列，超出部分用flex-wrap决定<br><img src="/image/flex5.png" alt="flex5.png"></p>
+<p><b>justify-content</b> 在剩余子模块允许换行或者有剩余宽度或者高度时相对主轴的对齐方式，超出但不换行时，按比例放缩<br>—— center：按实际间距位于主轴中心<br>—— flex-start:按实际间距位于主轴开始排列的位置，第一个贴边<br>—— flex-end :按实际间距和顺序向主轴方向排列，最后一个贴边<br>—— space-between ：第一个和最后一个挨着边框，其它间距相等<br>—— space-around：第一个和最后一个离边框距离为子模块间距的一半<br>处理主轴为侧轴的布局时,设置了具体高度才会生效<br><img src="/image/flex6.png" alt="flex6.png"></p>
+<p><b>align-items</b> 子模块整体相对侧轴的位置,row和row-reverse侧轴为column,column和column-reverse侧轴为row<br>—— center：侧轴中心<br>—— flex-start:侧轴起点位置<br>—— flex-end :侧轴终点位置<br>—— stretch：侧轴方向属性值未设置时，拉伸子模块该属性为容器对应属性值，弹性元素被在侧轴方向被拉伸到与容器相同的高度或宽度。<br>—— baseline:所有模块的内容第一行对齐<br><img src="/image/flex7.png" alt="flex7.png"></p>
+<p><b>align-content</b> 决定多行或者多列在侧轴排列方式，row和row-reverse侧轴为column,column和column-reverse侧轴为row<br>—— center：整体在侧轴中心<br>—— flex-start:整体在侧轴起点位置<br>—— flex-end :整体在侧轴终点位置<br>—— stretch：侧轴方向属性值未设置时，拉伸子模块该属性填满容器对应属性值<br>—— space-between ：第一行/列和最后一行/列挨着边框，其它间距相等<br>—— space-around:第一行/列和最后一行/列离边框距离为子模块间距的一半<br><img src="/image/flex8.png" alt="flex8.png"></p>
+<h1 id="模块属性"><a href="#模块属性" class="headerlink" title="模块属性"></a>模块属性</h1><p><b>align-self</b>  自己决定相对侧轴的位置<br>属性值同align-items,默认值为auto，表示继承父元素的align-items属性，如果没有父元素，则等同于stretch。</p>
+<p><b>order</b> 决定模块排列顺序，值越大，越最后被排列</p>
+<p><b>flex-grow</b> 放大比例，当容器空间有剩余时按此比列分配内存空间，填满，比如<br>宽度1000px的容器，4个子模块一共占了800，剩200，4个模块该值分别设为2 ：1：1：1，<br>则200被分为5份，一份40，每个模块按比例 分别拿80，40，40，40 放大自己的面积</p>
+<p><b>flex-shrink</b> 缩小比例，当容器空间有不足时按此比列分配缩小子模块，比如<br>容器宽800，5个模块需要占1000，差200，5个模块该值比为4：1：1：1：1，<br>则200被分为8份，一份25，，每个模块按比例分别减少100，25，25，25，25 缩小自己的面积</p>
+<p><b>flex-basis</b> 在分配多余空间/缩小之前，项目占据的主轴空间，用于计算一共需要多少空间时放大还是缩小<br>auto 默认值，子模块本来大小</p>
+<p><b>flex</b>  ：none | [ &lt;’flex-grow’&gt; &lt;’flex-shrink’&gt;? || &lt;’flex-basis’&gt; ] 以上三项复合属性</p>
+<p>一些特殊flex 值的表现情况<br>flex:auto | 1 1 auto;  空间充裕时，模块等比例分配多余空间进行扩展；空间不足时，模块等比例缩小<br>flex:none | 0 0 auto;  不论空间是否充裕，模块大小根据自身设置的尺寸不变，间距变化<br>flex:initial | 0 1 auto | 0 auto; 空间即使充裕也保持原始大小，但空间不足时，模块等比例缩小<br>flex:正值； 模块可根据空间大小收缩，同时多个模块设置时，以该值作为比例进行收缩，放大比等于缩小比</p>
+<p>注意，float,clear和vertical-align在伸缩项目上没有效果<br><a href="https://yoohannah.github.io/post/knowledge/layouts.html">flex 实现 圣杯布局</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/vue/vueSlot.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/vue/vueSlot.html" itemprop="url">
+                  Slot复用
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-13T16:38:15+08:00">
+                2019-01-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>项目列表组件需要实现点击自动增加一行,可展示自定义内容的可扩展内容<br>列表table组件被应用在page组件，page组件被应用在具体业务页面，slot的具体内容在业务页面传递进去<br><img src="/image/tableextend1.png" alt="tableextend1"><br>问题难点<br>1.多层组件slot传递<br>2.同一个slot在table组件中循环使用在多处时，不会被渲染</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>1.slot 只能一层一层传递，所以解决多层传递，就是在page层应用table时，增加slot接收业务页面传递进来的slot具体内容<br>2.同名slot不能在同一组件被重复渲染，即不允许有重名slot<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">重名的 Slots 移除</span><br><span class="line">同一模板中的重名 &lt;slot&gt; 已经弃用。当一个 slot 已经被渲染过了，那么就不能在同一模板其它地方被再次渲染了。如果要在不同位置渲染同一内容，可一用 prop 来传递。</span><br></pre></td></tr></table></figure></p>
+<h1 id="回归问题"><a href="#回归问题" class="headerlink" title="回归问题"></a>回归问题</h1><h2 id="多层组件slot传递"><a href="#多层组件slot传递" class="headerlink" title="多层组件slot传递"></a>多层组件slot传递</h2><p>在page层使用table组件时将&lt;slot&gt;&lt;/slot&gt;放在table组件中，将slot内容当作table的slot传递给table<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">1.业务页面具体自定义内容传入</span><br><span class="line">&lt;PageComponent :pageConfig=&quot;pageConfig&quot; ref=&quot;child&quot;&gt;</span><br><span class="line">    &lt;div slot=&apos;tableExtend&apos;&gt;</span><br><span class="line">    &lt;extendTable :detailConfig=&quot;pageConfig.table.isExtend.detailConfig&quot;</span><br><span class="line">        v-if=&quot;pageConfig.table.isExtend.detailConfig[0].data.length&gt;0&quot;&gt;</span><br><span class="line">    &lt;/extendTable&gt;</span><br><span class="line">    &lt;div style=&quot;padding: 10px;&quot; v-if=&quot;pageConfig.table.isExtend.detailConfig[0].data.length === 0&quot;&gt;暂无数据&lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/PageComponent&gt;</span><br><span class="line"></span><br><span class="line">2.page组件table部分</span><br><span class="line">&lt;section class=&quot;page-table&quot;&gt;</span><br><span class="line">    &lt;tableTemp :table=&quot;pageConfig.table&quot; :pageConfig=&quot;pageConfig&quot; @sendIds=&quot;receiveIds&quot; ref=&quot;refTest&quot;&gt;</span><br><span class="line">        &lt;slot :name=&apos;pageConfig.table.isExtend.slot&apos; v-if=&quot;pageConfig.table.isExtend&quot;&gt;&lt;/slot&gt; //将slot放在这里</span><br><span class="line">    &lt;/tableTemp&gt;</span><br><span class="line">&lt;/section&gt;</span><br><span class="line">3.table部分</span><br><span class="line"> 利用template实现列表行和扩展行一对一</span><br><span class="line"> &lt;template v-for=&quot;(value,index) in table.tableData&quot;&gt; </span><br><span class="line">    &lt;tr :key=&quot;index&quot;&gt;</span><br><span class="line">        &lt;td v-for=&quot;(val,i) in table.tableEle&quot; v-if=&quot;val.display&quot; :key=&quot;i&quot;&gt;</span><br><span class="line">            &lt;div class=&quot;extendStyle&quot; v-if=&apos;table.isExtend &amp;&amp; i==firstShow&apos;&gt;</span><br><span class="line">                &lt;a v-show=&quot;index != currentActive&quot; @click=&quot;loadDetail(value,index)&quot;&gt;&lt;i class=&quot;ivu-icon ivu-icon-ios-arrow-forward&quot;&gt;&lt;/i&gt;&lt;/a&gt; //loadDetail去调父组件函数获取详情数据</span><br><span class="line">                &lt;a v-show=&quot;index === currentActive&quot; @click=&quot;loadDetail(value,index)&quot; class=&quot;active&quot;&gt;&lt;i class=&quot;ivu-icon ivu-icon-ios-arrow-forward&quot;&gt;&lt;/i&gt;&lt;/a&gt;</span><br><span class="line">            &lt;/div&gt;</span><br><span class="line">            &lt;div v-if=&apos;!table.isExtend&apos;&gt;</span><br><span class="line">            ...</span><br><span class="line">            &lt;/div&gt;</span><br><span class="line">        &lt;/td&gt;</span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line">    //在组装行的时候增加备用扩展行，利用第三方变量控制扩展行显示隐藏</span><br><span class="line">    &lt;tr v-if=&quot;index === currentActive&quot; :key=&quot;index+0.5&quot; class=&apos;bgc&apos;&gt;  </span><br><span class="line">        &lt;td :colspan=&apos;tdNumber&apos; id=&apos;extend1&apos;&gt;//合并单元格</span><br><span class="line">            &lt;slot :name=&apos;table.isExtend.slot&apos;&gt;&lt;/slot&gt;//直接这样是不能渲染的，因为这样通过循环会出现多个同名slot</span><br><span class="line">        &lt;/td&gt;</span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line">&lt;/template&gt; </span><br><span class="line">//去调父组件函数获取详情数据</span><br><span class="line">loadDetail(item, index) &#123;</span><br><span class="line">    this.currentActive = this.currentActive === index ? -1 : index</span><br><span class="line">    this.$store.commit(&apos;changeTableExtendActive&apos;,this.currentActive)</span><br><span class="line">    if(this.currentActive === -1)&#123;</span><br><span class="line">        return</span><br><span class="line">    &#125;</span><br><span class="line">    let func = this.pageConfig.table.isExtend.func</span><br><span class="line">    this.$parent.$parent[func](item,index)</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure></p>
+<h2 id="slot重用"><a href="#slot重用" class="headerlink" title="slot重用"></a>slot重用</h2><h3 id="方法一-作用域插槽"><a href="#方法一-作用域插槽" class="headerlink" title="方法一 作用域插槽"></a>方法一 作用域插槽</h3><p>在子组件中将slot中用到的数据传递给slot标签的data属性,<br>父组件借助slot-scope属性,获取子组件中slot标签的data属性传递的数据<br>即可应用在slot模板中，另外slot模板中如果用到点击事件回调函数，可以直接在父组件中定义，直接调用</p>
+<p>注意slot-scope绑定的变量在使用时,子组件传递的实际值被包含在一个data属性中，所以需要通过slotscope.data.xxxxx去获取<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">爷爷组件</span><br><span class="line">&lt;PageComponent :pageConfig=&quot;pageConfig&quot; ref=&quot;child&quot;&gt;</span><br><span class="line">    &lt;template slot-scope=&quot;isExtend&quot;&gt;</span><br><span class="line">        &lt;extendTable :detailConfig=&quot;isExtend.data.detailConfig&quot; //包含的data中</span><br><span class="line">            v-if=&quot;isExtend.data.detailConfig[0].data.length&gt;0&quot;&gt;</span><br><span class="line">        &lt;/extendTable&gt;</span><br><span class="line">        &lt;div style=&quot;padding: 10px;&quot; v-if=&quot;isExtend.data.detailConfig[0].data.length === 0&quot;&gt;暂无数据&lt;/div&gt;</span><br><span class="line">    &lt;/template&gt;</span><br><span class="line">&lt;/PageComponent&gt;</span><br><span class="line">父组件</span><br><span class="line">&lt;section class=&quot;page-table&quot;&gt;</span><br><span class="line">    &lt;tableTemp :table=&quot;pageConfig.table&quot; :pageConfig=&quot;pageConfig&quot; @sendIds=&quot;receiveIds&quot; ref=&quot;refTest&quot;&gt;</span><br><span class="line">        &lt;slot :data=&apos;pageConfig.table.isExtend&apos; v-if=&quot;pageConfig.table.isExtend&quot;&gt;&lt;/slot&gt;</span><br><span class="line">    &lt;/tableTemp&gt;</span><br><span class="line">&lt;/section&gt;</span><br><span class="line">子组件</span><br><span class="line">&lt;tr v-if=&quot;index === currentActive&quot; :key=&quot;index+0.5&quot; class=&apos;bgc&apos;&gt; </span><br><span class="line">    &lt;td :colspan=&apos;tdNumber&apos; id=&apos;extend1&apos;&gt;</span><br><span class="line">        &lt;slot :data=&apos;table.isExtend&apos;&gt;&lt;/slot&gt; //直接使用</span><br><span class="line">    &lt;/td&gt;</span><br><span class="line">&lt;/tr&gt;</span><br></pre></td></tr></table></figure></p>
+<h3 id="插曲"><a href="#插曲" class="headerlink" title="插曲"></a>插曲</h3><p>一个业务场景需要同时渲染多个table,即通过一次配置，可渲染多个table的组件，<br>一个同事将循环table的逻辑放在了table组件本身里面，造成table本身是一个可循环输出多个table的组件<br>这样如果一开始在爷爷组件放入多个具名slot,因为不能在子组件slot标签添加name属性（会循环出同名slot），<br>那所有的slot都会出现在每一个table组件中<br>因此有了方法二<br><img src="/image/tableextend2.png" alt="tableextend2"></p>
+<h3 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h3><p>利用page层传递slot到table组件思想，在table中使用slot时，将其包裹在一个新组件中，<br>利用新组件复用，实现slot组件复用，(相当于将slot传递到新组件——-&gt;待查原理)<br>而新组件通过render函数依据slot节点生成<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">子组件</span><br><span class="line"> &lt;tr v-if=&quot;(indexx+&apos;-&apos;+index) === currentActive&quot; :key=&quot;index+0.5&quot; class=&apos;bgc&apos;&gt;</span><br><span class="line">    &lt;td :colspan=&apos;itemConfig.config.length&apos;&gt;</span><br><span class="line">        &lt;!-- slot标签要放在tdslot标签充当slot,否则详情数据拉回来之后不会进行更新组件 --&gt;</span><br><span class="line">        &lt;tdSlot :name=&apos;itemConfig.isExtend.slot&apos;&gt; &lt;slot :name=&apos;itemConfig.isExtend.slot&apos;&gt;&lt;/slot&gt; &lt;/tdSlot&gt;</span><br><span class="line">        &lt;!-- tdslot在main.js中定义 --&gt;</span><br><span class="line">    &lt;/td&gt;</span><br><span class="line">&lt;/tr&gt;</span><br><span class="line">loadDetail(item, indexx, index) &#123;</span><br><span class="line">    this.currentActive = this.currentActive === indexx+&apos;-&apos;+index ? -1 : indexx+&apos;-&apos;+index //通过多层key判断展开</span><br><span class="line">    if(this.currentActive === -1)&#123;</span><br><span class="line">        return</span><br><span class="line">    &#125;</span><br><span class="line">    let func = this.detailConfig[indexx].isExtend.func</span><br><span class="line">    this.$parent.$parent[func](item,indexx, index)</span><br><span class="line">&#125;</span><br><span class="line">新组件带着slot生成</span><br><span class="line">Vue.component(&apos;tdSlot&apos;, &#123;</span><br><span class="line"></span><br><span class="line">  render(createElement) &#123;</span><br><span class="line">    function deepClone(vnodes, createElement) &#123;</span><br><span class="line">      function cloneVNode (vnode) &#123;对slot节点进行深度复制</span><br><span class="line">        const clonedChildren = vnode.children &amp;&amp; vnode.children.map(vnode =&gt; cloneVNode(vnode))</span><br><span class="line">        const cloned = createElement(vnode.tag, vnode.data, clonedChildren)</span><br><span class="line">        cloned.text = vnode.text</span><br><span class="line">        cloned.isComment = vnode.isComment</span><br><span class="line">        cloned.componentOptions = vnode.componentOptions</span><br><span class="line">        cloned.elm = vnode.elm</span><br><span class="line">        cloned.context = vnode.context</span><br><span class="line">        cloned.ns = vnode.ns</span><br><span class="line">        cloned.isStatic = vnode.isStatic</span><br><span class="line">        cloned.key = vnode.key</span><br><span class="line"></span><br><span class="line">        return cloned</span><br><span class="line">      &#125;</span><br><span class="line">      const clonedVNodes = vnodes.map(vnode =&gt; cloneVNode(vnode))</span><br><span class="line">      return clonedVNodes</span><br><span class="line">    &#125;</span><br><span class="line">    var slots = this.$parent.$slots.default //从父组件拿到slot</span><br><span class="line">    var slot = null</span><br><span class="line">    for(let i=0;i&lt;slots.length;i++)&#123;</span><br><span class="line">      if(slots[i].data &amp;&amp; this.name === slots[i].data.slot)&#123; //多个slot，拿到自己table.isExtend配置的那一个</span><br><span class="line">        slot = slots[i]</span><br><span class="line">        break</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return createElement(&apos;div&apos;,&#123;class:&apos;tdslot&apos;&#125;,deepClone([slot], createElement)) //做一下深度复制</span><br><span class="line">    &lt;!-- return createElement(&apos;div&apos;,&#123;class:&apos;tdslot&apos;&#125;,[slot]) --&gt; 这样也可以</span><br><span class="line">  &#125;,</span><br><span class="line">  props:&#123;</span><br><span class="line">    name:&#123;</span><br><span class="line">      type:String,</span><br><span class="line">      default:&apos;&apos;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">父组件</span><br><span class="line">&lt;detailsTable v-if=&quot;detailPageConfig.detailConfig&quot; :detailConfig=&quot;detailPageConfig.detailConfig&quot;&gt;</span><br><span class="line">    &lt;slot v-for=&apos;(item,index) in detailPageConfig.detailConfig&apos; v-if=&apos;item.isExtend&apos; :name=&apos;detailPageConfig.detailConfig[index].isExtend.slot&apos; &gt;&lt;/slot&gt;</span><br><span class="line">&lt;/detailsTable&gt;</span><br><span class="line">爷爷组件</span><br><span class="line">&lt;detailsPage :detailPageConfig=&quot;detailPageConfig&quot;&gt;</span><br><span class="line">    &lt;div slot=&apos;tableExtend-1&apos;&gt; //多个slot 并列写即可</span><br><span class="line">    &lt;detailsTable :detailConfig=&quot;detailPageConfig.detailConfig[1].isExtend.detailConfig&quot;</span><br><span class="line">        v-if=&quot;this.detailPageConfig.detailConfig[1].isExtend.detailConfig[0].data.length&gt;0&quot;&gt;</span><br><span class="line">    &lt;/detailsTable&gt;</span><br><span class="line">    &lt;div v-if=&quot;this.detailPageConfig.detailConfig[1].isExtend.detailConfig[0].data.length&lt;1&quot;&gt;暂无数据&lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/detailsPage&gt;</span><br></pre></td></tr></table></figure></p>
+<h3 id="方法三"><a href="#方法三" class="headerlink" title="方法三"></a>方法三</h3><p>其实之所以会出现重名slot是因为table的大循环逻辑放在了自己组件内，<br>其实输出多个table的逻辑放在page层即可，table还是独立的table，<br>这样插入slot时就不是同名slot，各自slot,插入各自table<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">父组件</span><br><span class="line">&lt;template v-for=&apos;(item,index) in detailPageConfig.detailConfig&apos;&gt;</span><br><span class="line">    &lt;detailsTable :detailConfig=&quot;item&quot; :key=&apos;index&apos;&gt;</span><br><span class="line">    &lt;slot v-if=&apos;item.isExtend&apos; :name=&apos;item.isExtend.slot&apos; &gt;&lt;/slot&gt;</span><br><span class="line">    &lt;/detailsTable&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">子组件</span><br><span class="line">&lt;tr v-if=&quot;index === currentActive&quot; :key=&quot;index+0.5&quot; class=&apos;bgc&apos;&gt;</span><br><span class="line">    &lt;td :colspan=&apos;detailConfig.config.length&apos;&gt;</span><br><span class="line">        &lt;slot&gt;&lt;/slot&gt;//只要将自己的slot放进来即可</span><br><span class="line">    &lt;/td&gt;</span><br><span class="line">&lt;/tr&gt;</span><br></pre></td></tr></table></figure></p>
+<p><a href="https://www.jianshu.com/p/c735cc612e63" target="_blank" rel="noopener">参考资料</a><br><a href="https://cnodejs.org/topic/58c0ad17d282728c0ec4029a" target="_blank" rel="noopener">参考资料</a><br><a href="https://segmentfault.com/a/1190000010913794" target="_blank" rel="noopener">参考资料</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/SyntheticEvent.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1122,411 +1540,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/vue/basic/filestructor.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/vue/basic/filestructor.html" itemprop="url">
-                  文件结构
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-22T11:40:37+08:00">
-                2018-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h1><p>使用命令行构建<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">npm install --global vue-cli //全局安装vue命令</span><br><span class="line">vue init webpack my-project //使用vue命令构建名为my-project的项目</span><br><span class="line">cd my-project //进入项目所在文件夹</span><br><span class="line">npm run dev //运行项目</span><br></pre></td></tr></table></figure></p>
-<h1 id="文件结构"><a href="#文件结构" class="headerlink" title="文件结构"></a>文件结构</h1><pre><code class="lang-bash">.
-├── build/                      <span class="hljs-comment"># webpack config files</span>
-│   └── ...
-├── config/
-│   ├── index.js                <span class="hljs-comment"># main project config</span>
-│   └── ...
-├── src/
-│   ├── main.js                 <span class="hljs-comment"># app entry file</span>
-│   ├── App.vue                 <span class="hljs-comment"># main app component</span>
-│   ├── components/             <span class="hljs-comment"># ui components</span>
-│   │   └── ...
-│   └── assets/                 <span class="hljs-comment"># module assets (processed by webpack)</span>
-│       └── ...
-├── static/                     <span class="hljs-comment"># pure static assets (directly copied)</span>
-├── <span class="hljs-built_in">test</span>/
-│   └── unit/                   <span class="hljs-comment"># unit tests</span>
-│   │   ├── specs/              <span class="hljs-comment"># test spec files</span>
-│   │   ├── eslintrc            <span class="hljs-comment"># config file for eslint with extra settings only for unit tests</span>
-│   │   ├── index.js            <span class="hljs-comment"># test build entry file</span>
-│   │   ├── jest.conf.js        <span class="hljs-comment"># Config file when using Jest for unit tests</span>
-│   │   └── karma.conf.js       <span class="hljs-comment"># test runner config file when using Karma for unit tests</span>
-│   │   ├── setup.js            <span class="hljs-comment"># file that runs before Jest runs your unit tests</span>
-│   └── e2e/                    <span class="hljs-comment"># e2e tests</span>
-│   │   ├── specs/              <span class="hljs-comment"># test spec files</span>
-│   │   ├── custom-assertions/  <span class="hljs-comment"># custom assertions for e2e tests</span>
-│   │   ├── runner.js           <span class="hljs-comment"># test runner script</span>
-│   │   └── nightwatch.conf.js  <span class="hljs-comment"># test runner config file</span>
-├── .babelrc                    <span class="hljs-comment"># babel config</span>
-├── .editorconfig               <span class="hljs-comment"># indentation, spaces/tabs and similar settings for your editor</span>
-├── .eslintrc.js                <span class="hljs-comment"># eslint config</span>
-├── .eslintignore               <span class="hljs-comment"># eslint ignore rules</span>
-├── .gitignore                  <span class="hljs-comment"># sensible defaults for gitignore</span>
-├── .postcssrc.js               <span class="hljs-comment"># postcss config</span>
-├── index.html                  <span class="hljs-comment"># index.html template</span>
-├── package.json                <span class="hljs-comment"># build scripts and dependencies</span>
-└── README.md                   <span class="hljs-comment"># Default README file</span>
-</code></pre>
-
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/vue/basic/vueprops.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/vue/basic/vueprops.html" itemprop="url">
-                  vue对象属性
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-22T11:40:37+08:00">
-                2018-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="el"><a href="#el" class="headerlink" title="el"></a>el</h1><p>其值为vue模板挂载ID,用于标识vue的APP template挂载在index.html的什么位置</p>
-<h1 id="data"><a href="#data" class="headerlink" title="data"></a>data</h1><h1 id="method"><a href="#method" class="headerlink" title="method"></a>method</h1><h1 id="计算属性computed"><a href="#计算属性computed" class="headerlink" title="计算属性computed"></a>计算属性computed</h1><p>通过&#123; &#123;&#125;&#125;}插值的时候,可以在大括号里面添加一个简单的计算表达式，从而将计算结果插入,但是对于复杂的计算,需要执行多个计算表达式时不能放在大括号里面的，为方便绑定，在computed属性中定义计算属性A，A是一个函数用到变量b，然后将该A属性插入，从而实现相关值b变化，插入值A随之响应的效果</p>
-<p>相当于计算属性因为依赖项改变而执行计算，将计算结果插入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">例</span><br><span class="line"> &lt;p&gt;Original data: &quot;&#123;&#123; value &#125;&#125;&quot;&lt;/p&gt;</span><br><span class="line"> &lt;p&gt;Computed result: &quot;&#123;&#123; doubleValue &#125;&#125;&quot;&lt;/p&gt;</span><br><span class="line"> &lt;button @click=&apos;changeValue&apos;&gt;&lt;button&gt;</span><br><span class="line"> </span><br><span class="line">  export default &#123;</span><br><span class="line">    data() &#123;</span><br><span class="line">        value: 10</span><br><span class="line">    &#125;,</span><br><span class="line">    computed: &#123;</span><br><span class="line">        doubleValue: function() &#123;</span><br><span class="line">            return this.value * 2</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    method: &#123;</span><br><span class="line">        changeValue: function() &#123;</span><br><span class="line">            this.value++</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"> //当value 变化时，doubleValue通过运算将结果插入</span><br></pre></td></tr></table></figure></p>
-<p>与method区别</p>
-<p>也可以在大括号里面调用method中定义的方法，达到计算响应<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;&#123;&#123;doubleVlue()&#125;&#125;&lt;/p&gt;</span><br><span class="line">&lt;button @click=&apos;changeValue&apos;&gt;&lt;button&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">    data() &#123;</span><br><span class="line">        value: 10</span><br><span class="line">    &#125;,</span><br><span class="line">    method: &#123;</span><br><span class="line">        doubleValue: function() &#123;</span><br><span class="line">            return this.value * 2</span><br><span class="line">        &#125;,</span><br><span class="line">        changeValue: function() &#123;</span><br><span class="line">            this.value++</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
-<p>当计算属性函数依赖的值不发生变化时，每次调用计算属性都会去取最后一次运算的结果，即读取缓存的结果</p>
-<p>比如有一个计算属性A需要遍历一个庞大的数组然后得到一个结果，而这个结果则用于其他计算，这样我们就不需要每次去运算A属性函数得到结果，直接读取缓存结果即可</p>
-<p>但如果属性A结果的得来是通过运行method方法，那么每次调用A就会进行计算一次，就会造成很大开销</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">//computed方式</span><br><span class="line">&lt;p&gt;Original data: &quot;&#123;&#123; value &#125;&#125;&quot;&lt;/p&gt;</span><br><span class="line">&lt;p&gt;Computed result: &#123;&#123; double &#125;&#125;&lt;/p&gt;</span><br><span class="line">&lt;button @click=&apos;changeValue&apos;&gt;&lt;button&gt;</span><br><span class="line"></span><br><span class="line">export default &#123;</span><br><span class="line">    data() &#123;</span><br><span class="line">        value: 10</span><br><span class="line">    &#125;,</span><br><span class="line">    computed: &#123;</span><br><span class="line">      double: function() &#123;</span><br><span class="line">        return  this.value + this.doubleValue</span><br><span class="line">      &#125;,</span><br><span class="line">      doubleValue: function() &#123;</span><br><span class="line">        console.log(&apos;double&apos;) //只打印一次</span><br><span class="line">        return  2</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    method: &#123;</span><br><span class="line">        changeValue: function() &#123;</span><br><span class="line">            this.value++</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">//method方式</span><br><span class="line"></span><br><span class="line">&lt;p&gt;Original data: &quot;&#123;&#123; value &#125;&#125;&quot;&lt;/p&gt;</span><br><span class="line">&lt;p&gt;Computed result: &#123;&#123; value + doubleValue() &#125;&#125;&lt;/p&gt;</span><br><span class="line">&lt;button @click=&apos;changeValue&apos;&gt;1234&lt;button&gt;</span><br><span class="line"></span><br><span class="line">export default &#123;</span><br><span class="line">    data() &#123;</span><br><span class="line">        value: 10</span><br><span class="line">    &#125;,</span><br><span class="line">    method: &#123;</span><br><span class="line">        doubleValue: function() &#123;</span><br><span class="line">            console.log(&apos;double&apos;) //value 改变一次，打印一次,即函数会被执行一次</span><br><span class="line">            return 2</span><br><span class="line">        &#125;,</span><br><span class="line">        changeValue: function() &#123;</span><br><span class="line">            this.value++</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<p>计算属性还可以设置getter和setter<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">computed: &#123;</span><br><span class="line">  fullName: &#123;</span><br><span class="line">    // getter</span><br><span class="line">    get: function () &#123;</span><br><span class="line">      return this.firstName + &apos; &apos; + this.lastName</span><br><span class="line">    &#125;,</span><br><span class="line">    // setter</span><br><span class="line">    set: function (newValue) &#123;</span><br><span class="line">      var names = newValue.split(&apos; &apos;)</span><br><span class="line">      this.firstName = names[0]</span><br><span class="line">      this.lastName = names[names.length - 1]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">//给fullName设置值的时候,比如fullName = &apos;John Doe&apos; 时，setter 会被调用，firstName 和 lastName 也会相应地被更新</span><br></pre></td></tr></table></figure></p>
-<h1 id="watch"><a href="#watch" class="headerlink" title="watch"></a>watch</h1><p>定义某个变量发生变化时需要执行的函数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;Original data: &quot;&#123;&#123; value &#125;&#125;&quot;&lt;/p&gt;</span><br><span class="line">&lt;p&gt;Computed result: &#123;&#123; result &#125;&#125;&lt;/p&gt;</span><br><span class="line">&lt;button @click=&apos;changeValue&apos;&gt;1234&lt;button&gt;</span><br><span class="line"></span><br><span class="line">export default &#123;</span><br><span class="line">    data() &#123;</span><br><span class="line">        value: 10</span><br><span class="line">        result: 0</span><br><span class="line">    &#125;,</span><br><span class="line">    watch: &#123;</span><br><span class="line">        value: function() &#123;</span><br><span class="line">            this.result +=10</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    method: &#123;</span><br><span class="line">        changeValue: function() &#123;</span><br><span class="line">            this.value++</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">//当value发生变化的时候，就会执行watch绑定的函数，从而可以让result发生响应</span><br></pre></td></tr></table></figure></p>
-<p>对比computed属性,假设一个结果需要依赖多个变量，如果使用watch方法则需要定义多个响应函数，而且响应函数是重复的，而如果使用computed属性则只需要定义一次即可<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">例</span><br><span class="line">//computed方式</span><br><span class="line">&lt;p&gt;Original data: &quot;&#123;&#123; value &#125;&#125;&quot;&lt;/p&gt;</span><br><span class="line">&lt;p&gt;Computed result: &#123;&#123; result &#125;&#125;&lt;/p&gt;</span><br><span class="line">&lt;button @click=&apos;changeValue&apos;&gt;1234&lt;/button&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">    data() &#123;</span><br><span class="line">        value: 10,</span><br><span class="line">        val:1</span><br><span class="line">    &#125;,</span><br><span class="line">   computed: &#123;</span><br><span class="line">      result: function() &#123;</span><br><span class="line">          return this.val + this.value</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    method: &#123;</span><br><span class="line">        changeValue: function() &#123;</span><br><span class="line">            this.value++</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">//watch方式</span><br><span class="line">&lt;p&gt;Original data: &quot;&#123;&#123; value &#125;&#125;&quot;&lt;/p&gt;</span><br><span class="line">&lt;p&gt;Computed result: &#123;&#123; result &#125;&#125;&lt;/p&gt;</span><br><span class="line">&lt;button @click=&apos;changeValue&apos;&gt;1234&lt;/button&gt;</span><br><span class="line"></span><br><span class="line">export default &#123;</span><br><span class="line">    data() &#123;</span><br><span class="line">        value: 10,</span><br><span class="line">        val:1</span><br><span class="line">    &#125;,</span><br><span class="line">    watch: &#123;</span><br><span class="line">      value: function() &#123;</span><br><span class="line">         this.result = this.val + this.value</span><br><span class="line">      &#125;,</span><br><span class="line">      val: function() &#123;</span><br><span class="line">          this.result = this.val + this.value</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    method: &#123;</span><br><span class="line">        changeValue: function() &#123;</span><br><span class="line">            this.value++</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
-<h1 id="生命周期钩子函数"><a href="#生命周期钩子函数" class="headerlink" title="生命周期钩子函数"></a>生命周期钩子函数</h1><h1 id="components"><a href="#components" class="headerlink" title="components"></a>components</h1>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/flex-direction.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/knowledge/flex-direction.html" itemprop="url">
-                  flex-drection属性使用
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-22T11:29:37+08:00">
-                2018-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在display:flex基础上使用flex-direction,可用于多子模块布局</p>
-<p>flex-direction可以为四个值</p>
-<p>row:水平并行排列在左侧</p>
-<p>row-reverse：水平并行排列在右侧，顺序与书写顺序相反,最前的在最右边</p>
-<p>column:垂直排列在上方,相当于display:block状态下模块默认布局</p>
-<p>column-reverse:垂直排列在下方,顺序与书写顺序相反，最前的在最下边</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">&lt;!doctype html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;style&gt;</span><br><span class="line">        #main1 </span><br><span class="line">        &#123;</span><br><span class="line">            width:200px;</span><br><span class="line">            height: 300px;</span><br><span class="line">            border:1px solid black;</span><br><span class="line">            display: flex;</span><br><span class="line">            flex-direction:row;</span><br><span class="line">        &#125;</span><br><span class="line">        #main2 </span><br><span class="line">        &#123;</span><br><span class="line">            width:200px;</span><br><span class="line">            height: 300px;</span><br><span class="line">            border:1px solid black;</span><br><span class="line">            display: flex;</span><br><span class="line">            flex-direction:row-reverse;</span><br><span class="line">        &#125;</span><br><span class="line">        #main3 </span><br><span class="line">        &#123;</span><br><span class="line">            width:200px;</span><br><span class="line">            height: 300px;</span><br><span class="line">            border:1px solid black;</span><br><span class="line">            display: flex;</span><br><span class="line">            flex-direction:column;</span><br><span class="line">        &#125;</span><br><span class="line">        #main4 </span><br><span class="line">        &#123;</span><br><span class="line">            width:200px;</span><br><span class="line">            height: 300px;</span><br><span class="line">            border:1px solid black;</span><br><span class="line">            display: flex;</span><br><span class="line">            flex-direction:column-reverse;</span><br><span class="line">        &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;h4&gt;This is an example for flex-direction:row(default)&lt;/h4&gt;</span><br><span class="line">&lt;div id=&quot;main1&quot;&gt;</span><br><span class="line">    &lt;div style=&quot;background-color:red;&quot;&gt;RED&lt;/div&gt;</span><br><span class="line">    &lt;div style=&quot;background-color:lightblue;&quot;&gt;BLUE&lt;/div&gt;</span><br><span class="line">    &lt;div style=&quot;background-color:lightgreen;&quot;&gt;GREEN&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;h4&gt;This is an example for flex-direction:row-reverse&lt;/h4&gt;</span><br><span class="line">&lt;div id=&quot;main2&quot;&gt;</span><br><span class="line">    &lt;div style=&quot;background-color:red;&quot;&gt;RED&lt;/div&gt;</span><br><span class="line">    &lt;div style=&quot;background-color:lightblue;&quot;&gt;BLUE&lt;/div&gt;</span><br><span class="line">    &lt;div style=&quot;background-color:lightgreen;&quot;&gt;GREEN&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;h4&gt;This is an example for flex-direction:column&lt;/h4&gt;</span><br><span class="line">&lt;div id=&quot;main3&quot;&gt;</span><br><span class="line">    &lt;div style=&quot;background-color:red;&quot;&gt;RED&lt;/div&gt;</span><br><span class="line">    &lt;div style=&quot;background-color:lightblue;&quot;&gt;BLUE&lt;/div&gt;</span><br><span class="line">    &lt;div style=&quot;background-color:lightgreen;&quot;&gt;GREEN&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;h4&gt;This is an example for flex-direction:column-reverse&lt;/h4&gt;</span><br><span class="line">&lt;div id=&quot;main4&quot;&gt;</span><br><span class="line">    &lt;div style=&quot;background-color:red;&quot;&gt;RED&lt;/div&gt;</span><br><span class="line">    &lt;div style=&quot;background-color:lightblue;&quot;&gt;BLUE&lt;/div&gt;</span><br><span class="line">    &lt;div style=&quot;background-color:lightgreen;&quot;&gt;GREEN&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1570,7 +1583,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">236</span>
+              <span class="site-state-item-count">239</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1587,7 +1600,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

@@ -1,0 +1,704 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="machineLearning,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="常见数据错误形式 超出正常数据范围，值或者太大或者太小 不符合相关校验规则，比如数值类型只能是整形，货币单位应该是美元，但是出现了英镑 形式错误，比如日期格式错误，电话号码格式错误，不符合相关语法语义规范   对于这样的数据要进行去除清洗处理 数据转换针对数值，图片，视频，文字不同输入类型，有不同转换方式小结  数值类型转换就采用各种归一化的计算公式进行转换 图片，可以采用裁剪尺寸，下采样，压缩，">
+<meta name="keywords" content="machineLearning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据清洗和转换">
+<meta property="og:url" content="http://yoohannah.github.io/post/machineLearning/dataWash.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="常见数据错误形式 超出正常数据范围，值或者太大或者太小 不符合相关校验规则，比如数值类型只能是整形，货币单位应该是美元，但是出现了英镑 形式错误，比如日期格式错误，电话号码格式错误，不符合相关语法语义规范   对于这样的数据要进行去除清洗处理 数据转换针对数值，图片，视频，文字不同输入类型，有不同转换方式小结  数值类型转换就采用各种归一化的计算公式进行转换 图片，可以采用裁剪尺寸，下采样，压缩，">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/236.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/237.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/238.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/239.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/240.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/241.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/242.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/243.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/244.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/245.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/246.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/247.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/248.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/249.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/250.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/251.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/252.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/253.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/254.png">
+<meta property="og:updated_time" content="2024-11-27T09:37:11.852Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据清洗和转换">
+<meta name="twitter:description" content="常见数据错误形式 超出正常数据范围，值或者太大或者太小 不符合相关校验规则，比如数值类型只能是整形，货币单位应该是美元，但是出现了英镑 形式错误，比如日期格式错误，电话号码格式错误，不符合相关语法语义规范   对于这样的数据要进行去除清洗处理 数据转换针对数值，图片，视频，文字不同输入类型，有不同转换方式小结  数值类型转换就采用各种归一化的计算公式进行转换 图片，可以采用裁剪尺寸，下采样，压缩，">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/LLM/236.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/machineLearning/dataWash.html">
+
+
+
+
+
+  <title> 数据清洗和转换 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/dataWash.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                数据清洗和转换
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-10-15T20:14:37+08:00">
+                2024-10-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="常见数据错误形式"><a href="#常见数据错误形式" class="headerlink" title="常见数据错误形式"></a>常见数据错误形式</h1><ol>
+<li>超出正常数据范围，值或者太大或者太小</li>
+<li>不符合相关校验规则，比如数值类型只能是整形，货币单位应该是美元，但是出现了英镑</li>
+<li>形式错误，比如日期格式错误，电话号码格式错误，不符合相关语法语义规范</li>
+</ol>
+<p><img src="/image/LLM/236.png" alt></p>
+<p>对于这样的数据要进行去除清洗处理</p>
+<h1 id="数据转换"><a href="#数据转换" class="headerlink" title="数据转换"></a>数据转换</h1><p>针对数值，图片，视频，文字不同输入类型，有不同转换方式<br><img src="/image/LLM/237.png" alt><br><img src="/image/LLM/238.png" alt><br><img src="/image/LLM/239.png" alt><br><img src="/image/LLM/240.png" alt><br><img src="/image/LLM/241.png" alt><br>小结</p>
+<ol>
+<li>数值类型转换就采用各种归一化的计算公式进行转换</li>
+<li>图片，可以采用裁剪尺寸，下采样，压缩，白化处理</li>
+<li>视频，可以采用截取关键片段，采样关键针降低数据处理陈本</li>
+<li>文字，可以进行词干提取，词形还原以及token化处理<br><img src="/image/LLM/242.png" alt></li>
+</ol>
+<h1 id="mL-常见算法类型"><a href="#mL-常见算法类型" class="headerlink" title="mL 常见算法类型"></a>mL 常见算法类型</h1><p>监督，自监督，半监督，无监督，强化学习<br><img src="/image/LLM/243.png" alt><br><img src="/image/LLM/244.png" alt></p>
+<h2 id="自监督相关概念"><a href="#自监督相关概念" class="headerlink" title="自监督相关概念"></a>自监督相关概念</h2><p><img src="/image/LLM/245.png" alt></p>
+<h2 id="决策树相关注意点"><a href="#决策树相关注意点" class="headerlink" title="决策树相关注意点"></a>决策树相关注意点</h2><p><img src="/image/LLM/246.png" alt><br><img src="/image/LLM/247.png" alt><br><img src="/image/LLM/248.png" alt></p>
+<h2 id="二分类评价指标"><a href="#二分类评价指标" class="headerlink" title="二分类评价指标"></a>二分类评价指标</h2><p><img src="/image/LLM/249.png" alt></p>
+<h2 id="复杂度解释or解释"><a href="#复杂度解释or解释" class="headerlink" title="复杂度解释or解释"></a>复杂度解释or解释</h2><p><img src="/image/LLM/250.png" alt><br><img src="/image/LLM/251.png" alt><br><img src="/image/LLM/252.png" alt><br><img src="/image/LLM/253.png" alt><br><img src="/image/LLM/254.png" alt></p>
+<p><a href="https://c.d2l.ai/stanford-cs329p/syllabus.html#data-i" target="_blank" rel="noopener">李沐机器学习ppt</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/machineLearning/" rel="tag"># machineLearning</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/machineLearning/datalabel.html" rel="next" title="数据标注">
+                <i class="fa fa-chevron-left"></i> 数据标注
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/deepLearning/basicKnowledge.html" rel="prev" title="一些基础知识">
+                一些基础知识 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">239</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#常见数据错误形式"><span class="nav-number">1.</span> <span class="nav-text">常见数据错误形式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据转换"><span class="nav-number">2.</span> <span class="nav-text">数据转换</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mL-常见算法类型"><span class="nav-number">3.</span> <span class="nav-text">mL 常见算法类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#自监督相关概念"><span class="nav-number">3.1.</span> <span class="nav-text">自监督相关概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#决策树相关注意点"><span class="nav-number">3.2.</span> <span class="nav-text">决策树相关注意点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二分类评价指标"><span class="nav-number">3.3.</span> <span class="nav-text">二分类评价指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#复杂度解释or解释"><span class="nav-number">3.4.</span> <span class="nav-text">复杂度解释or解释</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

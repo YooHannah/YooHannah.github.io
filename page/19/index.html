@@ -259,6 +259,389 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/mongoDB.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/nodejs/mongoDB.html" itemprop="url">
+                  mongoDB使用
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-19T21:45:37+08:00">
+                2017-03-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><p>cmd到mongoDB的bin文件夹,执行<br>mongod –dbpath data文件夹路径（例：D:\MongoDB\data）//运行<br>再打开一个cmd,同样切目录到bin文件夹下,执行<br>mongo //连接到数据库</p>
+<h1 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h1><h2 id="基础命令"><a href="#基础命令" class="headerlink" title="基础命令"></a>基础命令</h2><p>use dbname    //名为dbname的数据库若存在就将当前数据库切换到该数据库，若不存在，则新建该数据库并切换至该数据库<br>db   //查看当前数据库<br>show dbs    //查看所有数据库,新建的库，在插入数据后才会显示<br>db.dropDatabase() //删除当前数据库,但用db查看当前库，还是被删的这个库<br>db.tablename.drop() //删除数据库中名为tablename的集合<br>db.tablename.insert({“key”:”value”}) //创建名为objectname的表(对象),并插入数据,批量操作时可以直接在shell里面写for循环<br>show tables //查看该库中所有表(对象)<br>db.tablename.find() //在仓库中查找名为tablename的表，如果有就会将表中内容打印出来<br>db.tablename.find({“key”:”value”}) //在tablename表中查找具体数据，注意格式<br><img src="/image/mongodb1.png" alt="mongodb1"><br>db.tablename.update({查找值},{替换值}) //将查找值所在的集合替换为替换值<br><img src="/image/mongodb2.png" alt="mongodb2"><br>db.tablename.remove({查找值}) //删除查找值所在对象的全部数据，若为空，则将整表清空<br><img src="/image/mongodb3.png" alt="mongodb3"></p>
+<h2 id="条件查找"><a href="#条件查找" class="headerlink" title="条件查找"></a>条件查找</h2><p>1.比较查询<br>将查找条件放在value部分，用{}括起来<br>下图查询条件为age大于”$gt”22, 大于等于”$gte”22, 小于”$lt”22, 小于等于”$lte”22, 不等于”$ne”20,等于20的查询格式<br><img src="/image/mongodb4.png" alt="mongodb4"><br>使用正则表达式匹配时同样将正则表达式放在value的位置，而且不用{}或者””包括，直接/开始/结束<br>2.逻辑查询<br>下图查询条件分别为且，或者$or,在氛围内$in,不在范围内$nin<br><img src="/image/mongodb5.png" alt="mongodb5"></p>
+<h2 id="局部修改"><a href="#局部修改" class="headerlink" title="局部修改"></a>局部修改</h2><p>$inc 属性不存在就创建并赋值，如果存在，就在原来的基础上增加要修改的值<br>$set 仅修改<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&gt; db.person.find()</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;58ccdcb002efa48d7589f2ae&quot;), &quot;name&quot; : &quot;jack&quot;, &quot;age&quot; : 20 &#125;</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;58ccdcb502efa48d7589f2af&quot;), &quot;name&quot; : &quot;joe&quot;, &quot;age&quot; : 25 &#125;</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;58ccdcd302efa48d7589f2b0&quot;), &quot;name&quot; : &quot;mark&quot;, &quot;age&quot; : 15 &#125;</span><br><span class="line">&gt; db.person.update(&#123;&quot;name&quot;:&quot;jack&quot;&#125;,&#123;$inc:&#123;&quot;age&quot;:10&#125;&#125;)</span><br><span class="line">WriteResult(&#123; &quot;nMatched&quot; : 1, &quot;nUpserted&quot; : 0, &quot;nModified&quot; : 1 &#125;)</span><br><span class="line">&gt; db.person.update(&#123;&quot;name&quot;:&quot;mark&quot;&#125;,&#123;$set:&#123;&quot;age&quot;:10&#125;&#125;)</span><br><span class="line">WriteResult(&#123; &quot;nMatched&quot; : 1, &quot;nUpserted&quot; : 0, &quot;nModified&quot; : 1 &#125;)</span><br><span class="line">&gt; db.person.find()</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;58ccdcb002efa48d7589f2ae&quot;), &quot;name&quot; : &quot;jack&quot;, &quot;age&quot; : 30 &#125;</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;58ccdcb502efa48d7589f2af&quot;), &quot;name&quot; : &quot;joe&quot;, &quot;age&quot; : 25 &#125;</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;58ccdcd302efa48d7589f2b0&quot;), &quot;name&quot; : &quot;mark&quot;, &quot;age&quot; : 10 &#125;</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure></p>
+<p>特殊情况：update的第一个参数不存在，即查找值不在person中，可以如下设置，将其新增<br>db.person.update({“name”:”jackson”},{$inc:{“age”:10}},true)<br>注意：update默认仅更新匹配得到的第一个集合，如果想更新全部匹配得到的结果，<br>可以将第四个参数设为true</p>
+<h2 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a>数据处理</h2><p>1.计数<br>db.person.count()  //获取person中数据条数<br>db.person.count({“age”:20}) // 获取person中age等于20的数据条数<br>2.统计<br>db.person.distinct(“age”) //获取person中所有age的值，重复的值只取一次<br>3.分组<br>db.person.group({<br>    “key”:{“age”:true},//按age分组，age相同的分一组<br>    “initial”:{“person”:[]}, //分组内容<br>    “$reduce”:function(cur,prev){ //符合分组条件，将该条数据放入该组集合中，cur指当前处理的该条数据，prev指上次函数的累计对象，第一次为initial的值。<br>        prev.person.push(cur.name);<br>    },<br>  “finalize”:function(out){//将一条数据划分到一组后执行的处理<br>  out.count = out.person.length;<br>  },<br>  “condition”:{“age”:{$lt:25}}//分组条件，对什么样的数据进行分组<br>})<br>4.映射<br>通过map对集合进行分组，通过reduce对分组结果进行处理，理解为复杂的重组处理，最后会生成一个全新的集合<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">var map = function()&#123;</span><br><span class="line">	emit(this.name,&#123;count:1&#125;);  //集合按照name分组，分组内容均为&#123;count：1&#125;</span><br><span class="line">&#125;</span><br><span class="line">var reduce = function(key,value)&#123;  //对分组结果进行处理</span><br><span class="line">	var result = &#123;count:0&#125;;</span><br><span class="line">	for(var i = 0;i&lt;value.length;i++)&#123;</span><br><span class="line">		result.count +=value[i].count;</span><br><span class="line">	&#125;</span><br><span class="line">	return result;</span><br><span class="line">&#125;</span><br><span class="line">db.person.mapReduce(map,reduce,&#123;&quot;out&quot;:&quot;collection&quot;&#125;)</span><br><span class="line">db.collection.find()</span><br></pre></td></tr></table></figure></p>
+<p>5.循环处理<br>可以将集合赋值给一个变量然后进行循环处理，<br>var list = db.person.find();<br>list.forEach(function(x){<br>    print(x.name):<br>})</p>
+<p>6.可以多操作查询<br>对person集合数据按name排序然后分页<br>var single=db.person.find().sort({“name”,1}).skip(2).limit(2);</p>
+<p>7.索引查询<br>建立索引：<br>db.person.ensureIndex({“name”:1}) //建立按照name进行排序的索引，1为升序，-1为降序<br>db.person.ensureIndex({“name”:1},{“unique”:true}) //建立唯一索引，集合中不能出现重复键值对<br>db.person.ensureIndex({“name”:1,”birthday”:1}) //组合索引<br>查询优化器做出的选择往往是最优的，因为我们做查询时，查询优化器会使用我们建立的这些索引来创建查询方案，<br>如果某一个先执行完则其他查询方案被close掉，这种方案会被mongodb保存起来，当然如果非要用自己指定的查询方案，这也是可以的，在mongodb中给我们提供了hint方法让我们可以暴力执行。<br>db.person.find({“name”:”jack”,”birthday”:”1998-3-2”}).hint({“name”:1,”birthday”:1})</p>
+<p>删除索引：<br>db.person.dropIndexes(“name_1”)</p>
+<h1 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h1><p>将数据库数据复制到多台服务器上，防止因为一台服务器死机而导致数据无法使用的问题出现<br>将安装文件复制到其他磁盘上，模拟不同的服务器<br>启动H盘上的mongodb，把该数据库指定为主数据库<br>H:\mongoDB\bin&gt;mongod –dbpath H:\mongoDB\data –master<br>启动D盘上的mongodb，把该数据库指定为从属数据库<br>D:\mongoDB\bin&gt;mongod –dbpath D:\mongoDB\data –port 8888 –slave –source=127.0.0.1:27017<br>更换端口为8888，source表示主数据库地址<br>2017-03-20T10:12:17.424+0800 I REPL     [replslave] syncing from host:127.0.0.1:<br>27017<br>然后分别打开主shell(mongo 127.0.0.1:27017)和从shell(mongo 127.0.0.1:8888)查看所有集合<br>show dbs<br>因为从服务器上的数据库是不允许进行读写操作,所以从shell中会报错<br><img src="/image/mongodb7.png" alt="mongodb7"><br>解决，先执行：rs.slaveOk()<br>现在主shell中更改数据，在从shell中查看，看是否进行了同步<br>但有可能因为服务连接状态问题导致数据内容不同<br><img src="/image/mongodb8.png" alt="mongodb8"></p>
+<h1 id="集群"><a href="#集群" class="headerlink" title="集群"></a>集群</h1><p>不设定特定主数据库，如果哪个数据库死机了，集群就会推选一个从属数据库作为主数据库顶上，实现自动修复的效果<br>1.建立集群，命名集群名为shopex,replSet让服务器知道shopex下有端口为3333的另一个数据库服务器<br>新打开cmd<br>H:\mongoDB\bin&gt;mongod –dbpath H:\mongoDB\data –port 2222 –replSet shopex/127.0.0.1:3333<br>2.打开端口为3333的另一个数据库服务器<br>新打开cmd<br>D:\mongoDB\bin&gt;mongod –dbpath D:\mongoDB\data –port 3333 –replSet shopex/127.0.0.1:2222<br>3.在admin集合中初始化“副本集”<br>新打开cmd,开启shell<br>H:\mongoDB\bin&gt;mongo 127.0.0.1:2222/admin<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&gt; db.runCommand(&#123;&quot;replSetInitiate&quot;:&#123;</span><br><span class="line">... &quot;_id&quot;:&quot;shopex&quot;,</span><br><span class="line">... &quot;members&quot;:[</span><br><span class="line">... &#123;</span><br><span class="line">... &quot;_id&quot;:1,</span><br><span class="line">... &quot;host&quot;:&quot;127.0.0.1:2222&quot;</span><br><span class="line">... &#125;,</span><br><span class="line">... &#123;</span><br><span class="line">... &quot;_id&quot;:2,</span><br><span class="line">... &quot;host&quot;:&quot;127.0.0.1:3333&quot;</span><br><span class="line">... &#125;</span><br><span class="line">... ]&#125;&#125;)</span><br><span class="line">&#123; &quot;ok&quot; : 1 &#125;</span><br></pre></td></tr></table></figure></p>
+<p>4.设置仲裁服务器<br>新打开cmd,开启服务<br>D:\mongoDB\bin&gt;mongod –dbpath F:\mongoDB\data –port 4444 –replSet shopex/127.0.0.1:2222<br>开启shell,设置及产看结果<br>H:\mongoDB\bin&gt;mongo 127.0.0.1:2222/admin<br>shopex:PRIMARY&gt; rs.addArb(“127.0.0.1:4444”)<br>{ “ok” : 1 }<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line">shopex:PRIMARY&gt; rs.status()</span><br><span class="line">&#123;</span><br><span class="line">        &quot;set&quot; : &quot;shopex&quot;,</span><br><span class="line">        &quot;date&quot; : ISODate(&quot;2017-03-20T05:55:12.742Z&quot;),</span><br><span class="line">        &quot;myState&quot; : 1,</span><br><span class="line">        &quot;term&quot; : NumberLong(1),</span><br><span class="line">        &quot;heartbeatIntervalMillis&quot; : NumberLong(2000),</span><br><span class="line">        &quot;optimes&quot; : &#123;</span><br><span class="line">                &quot;lastCommittedOpTime&quot; : &#123;</span><br><span class="line">                        &quot;ts&quot; : Timestamp(1489989307, 1),</span><br><span class="line">                        &quot;t&quot; : NumberLong(1)</span><br><span class="line">                &#125;,</span><br><span class="line">                &quot;appliedOpTime&quot; : &#123;</span><br><span class="line">                        &quot;ts&quot; : Timestamp(1489989307, 1),</span><br><span class="line">                        &quot;t&quot; : NumberLong(1)</span><br><span class="line">                &#125;,</span><br><span class="line">                &quot;durableOpTime&quot; : &#123;</span><br><span class="line">                        &quot;ts&quot; : Timestamp(1489989307, 1),</span><br><span class="line">                        &quot;t&quot; : NumberLong(1)</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;members&quot; : [</span><br><span class="line">                &#123;</span><br><span class="line">                        &quot;_id&quot; : 1,</span><br><span class="line">                        &quot;name&quot; : &quot;127.0.0.1:2222&quot;,</span><br><span class="line">                        &quot;health&quot; : 1,</span><br><span class="line">                        &quot;state&quot; : 1,</span><br><span class="line">                        &quot;stateStr&quot; : &quot;PRIMARY&quot;,</span><br><span class="line">                        &quot;uptime&quot; : 596,</span><br><span class="line">                        &quot;optime&quot; : &#123;</span><br><span class="line">                                &quot;ts&quot; : Timestamp(1489989307, 1),</span><br><span class="line">                                &quot;t&quot; : NumberLong(1)</span><br><span class="line">                        &#125;,</span><br><span class="line">                        &quot;optimeDate&quot; : ISODate(&quot;2017-03-20T05:55:07Z&quot;),</span><br><span class="line">                        &quot;electionTime&quot; : Timestamp(1489989026, 1),</span><br><span class="line">                        &quot;electionDate&quot; : ISODate(&quot;2017-03-20T05:50:26Z&quot;),</span><br><span class="line">                        &quot;configVersion&quot; : 2,</span><br><span class="line">                        &quot;self&quot; : true</span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                        &quot;_id&quot; : 2,</span><br><span class="line">                        &quot;name&quot; : &quot;127.0.0.1:3333&quot;,</span><br><span class="line">                        &quot;health&quot; : 1,</span><br><span class="line">                        &quot;state&quot; : 2,</span><br><span class="line">                        &quot;stateStr&quot; : &quot;SECONDARY&quot;,</span><br><span class="line">                        &quot;uptime&quot; : 296,</span><br><span class="line">                        &quot;optime&quot; : &#123;</span><br><span class="line">                                &quot;ts&quot; : Timestamp(1489989307, 1),</span><br><span class="line">                                &quot;t&quot; : NumberLong(1)</span><br><span class="line">                        &#125;,</span><br><span class="line">                        &quot;optimeDurable&quot; : &#123;</span><br><span class="line">                                &quot;ts&quot; : Timestamp(1489989307, 1),</span><br><span class="line">                                &quot;t&quot; : NumberLong(1)</span><br><span class="line">                        &#125;,</span><br><span class="line">                        &quot;optimeDate&quot; : ISODate(&quot;2017-03-20T05:55:07Z&quot;),</span><br><span class="line">                        &quot;optimeDurableDate&quot; : ISODate(&quot;2017-03-20T05:55:07Z&quot;),</span><br><span class="line">                        &quot;lastHeartbeat&quot; : ISODate(&quot;2017-03-20T05:55:11.766Z&quot;),</span><br><span class="line">                        &quot;lastHeartbeatRecv&quot; : ISODate(&quot;2017-03-20T05:55:10.786Z&quot;</span><br><span class="line">),</span><br><span class="line">                        &quot;pingMs&quot; : NumberLong(0),</span><br><span class="line">                        &quot;syncingTo&quot; : &quot;127.0.0.1:2222&quot;,</span><br><span class="line">                        &quot;configVersion&quot; : 2</span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                        &quot;_id&quot; : 3,</span><br><span class="line">                        &quot;name&quot; : &quot;127.0.0.1:4444&quot;,</span><br><span class="line">                        &quot;health&quot; : 1,</span><br><span class="line">                        &quot;state&quot; : 7,</span><br><span class="line">                        &quot;stateStr&quot; : &quot;ARBITER&quot;,</span><br><span class="line">                        &quot;uptime&quot; : 44,</span><br><span class="line">                        &quot;lastHeartbeat&quot; : ISODate(&quot;2017-03-20T05:55:11.765Z&quot;),</span><br><span class="line">                        &quot;lastHeartbeatRecv&quot; : ISODate(&quot;2017-03-20T05:55:07.948Z&quot;</span><br><span class="line">),</span><br><span class="line">                        &quot;pingMs&quot; : NumberLong(0),</span><br><span class="line">                        &quot;configVersion&quot; : 2</span><br><span class="line">                &#125;</span><br><span class="line">        ],</span><br><span class="line">        &quot;ok&quot; : 1</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>现在如果关掉2222端口服务器，再打开，在执行rs.status(),可以看到2222的“stateStr”变成”SECONDARY”<br>“3333”的变成”PRIMARY”<br><a href="http://www.cnblogs.com/huangxincheng/archive/2012/02/29/2372699.html" target="_blank" rel="noopener">相关链接</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/prehensive.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/nodejs/prehensive.html" itemprop="url">
+                  开发小结
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-15T21:42:51+08:00">
+                2017-03-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="对于路由的理解"><a href="#对于路由的理解" class="headerlink" title="对于路由的理解"></a>对于路由的理解</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">官方定义：</span><br><span class="line">路由是指如何定义应用的端点（URIs）以及如何响应客户端的请求。</span><br><span class="line">路由是由一个 URI、HTTP 请求（GET、POST等）和若干个句柄组成，它的结构如下： app.METHOD(path, [callback...], callback)， app 是 express 对象的一个实例， METHOD 是一个 HTTP 请求方法， path 是服务器上的路径， callback 是当路由匹配时要执行的函数。</span><br></pre></td></tr></table></figure>
+<p>当浏览器向服务器发过来一个http请求时，会携带请求路径和请求方法,服务器根据发过来的路径和请求方法进行匹配,二者都匹配的话，就执行对应的回调函数<br>请求的目的在客户端看来可能多种多样，比如单纯的访问页面，重新获取页面数据，向后台传递数据，但是在服务端看来都是一样的处理方法，匹配路径和方法，进行回调函数，<br>即通过匹配执行相应的动作，比如<br>客户端想访问一个页面，回调函数就执行渲染页面的操作<br>客户端要传递数据给数据库，回调函数就获取传递的数据然后给到数据库<br>作用就像一个指南针，根据客户端不同的请求，执行不同的操作<br>但涉及到的具体操作（数据处理）可能会通过其他文件的处理函数来实现<br><a href="http://www.expressjs.com.cn/guide/routing.html" target="_blank" rel="noopener">官方文档</a></p>
+<h1 id="对于中间件的理解"><a href="#对于中间件的理解" class="headerlink" title="对于中间件的理解"></a>对于中间件的理解</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">官方定义</span><br><span class="line">中间件（Middleware） 是一个函数，它可以访问请求对象（request object (req)）, 响应对象（response object (res)）, 和 web 应用中处于请求-响应循环流程中的中间件，一般被命名为 next 的变量。</span><br><span class="line">中间件的功能包括：</span><br><span class="line">执行任何代码。</span><br><span class="line">修改请求和响应对象。</span><br><span class="line">终结请求-响应循环。</span><br><span class="line">调用堆栈中的下一个中间件。</span><br><span class="line">如果当前中间件没有终结请求-响应循环，则必须调用 next() 方法将控制权交给下一个中间件，否则请求就会挂起。</span><br></pre></td></tr></table></figure>
+<p>粗浅的理解为功能处理函数，比如路由匹配里的回调函数，根据功能和使用方式不同分成多种<br>1.应用级中间件， app.use() 和 app.METHOD()的回调函数<br>2.路由级中间件，var router = express.Router()， router.use() 或 router.VERB() 的回调函数<br>3.错误处理中间件，进行错误处理的的函数，参数与其他不同<br>4.内置中间件, express.static<br>5.第三方中间件,通过npm安装的模块，即我们使用的模块也算是中间件<br><a href="http://www.expressjs.com.cn/guide/using-middleware.html#middleware.application" target="_blank" rel="noopener">官方文档</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/Middleware.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/nodejs/Middleware.html" itemprop="url">
+                  对于一些模块的探究
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-15T21:32:51+08:00">
+                2017-03-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="express-session"><a href="#express-session" class="headerlink" title="express-session"></a>express-session</h1><p>用来提供会话支持，获取用户的会话对象,用来维护用户相关信息<br>当浏览器访问服务器并发送第一次请求时，服务器端会创建一个session对象，生成一个类似于key,value的键值对， 然后将key(cookie)返回到浏览器(客户)端，浏览器下次再访问时，携带key(cookie)，找到对应的session(value)。 客户的信息都保存在session中。<br>当客户访问其他页面时，可以判断客户的登录状态，做出提示，相当于登录拦截。<br>session可以和Redis或者数据库等结合做持久化操作，当服务器挂掉时也不会导致某些客户信息（购物车）丢失。</p>
+<h2 id="常用参数"><a href="#常用参数" class="headerlink" title="常用参数:"></a>常用参数:</h2><p>secret: 一个String类型的字符串，作为服务器端生成session的签名。<br>name: 返回客户端的key的名称，默认为connect.sid,也可以自己设置。<br>resave: (是否允许)当客户端并行发送多个请求时，其中一个请求在另一个请求结束时对session进行修改覆盖并保存。</p>
+<p>默认为true。但是(后续版本)有可能默认失效，所以最好手动添加。</p>
+<p>saveUninitialized: 初始化session时是否保存到存储。默认为true， 但是(后续版本)有可能默认失效，所以最好手动添加。</p>
+<p>cookie: 设置返回到前端key的属性，默认值为{ path: ‘/’, httpOnly: true, secure: false, maxAge: null }。</p>
+<h2 id="一些方法"><a href="#一些方法" class="headerlink" title="一些方法:"></a>一些方法:</h2><p>Session.destroy():删除session，当检测到客户端关闭时调用。</p>
+<p>Session.reload():当session有修改时，刷新session。</p>
+<p>Session.regenerate()：将已有session初始化。</p>
+<p>Session.save()：保存session。</p>
+<h1 id="connect-flash"><a href="#connect-flash" class="headerlink" title="connect-flash"></a>connect-flash</h1><p>官方解释<br>The flash is a special area of the session used for storing messages. Messages are written to the flash and cleared after being displayed to the user. The flash is typically used in combination with redirects, ensuring that the message is available to the next page that is to be rendered.</p>
+<p>即一个在session中存放临时信息的地方，显示给用户后,在渲染下一个页面前被清空</p>
+<h2 id="函数用法："><a href="#函数用法：" class="headerlink" title="函数用法："></a>函数用法：</h2><p>(1)如果传入的参数多于两个，那么首先获取第二个以及以后的参数，然后对第二个以后的参数进行format操作，最后把数据封装到req.session.flash中，同时返回<br>req.flash(‘info’, ‘email has been sent to %s.’, userName);<br>(2)如果传入的第二个参数是一个数组，那么把这个数组每一个元素封装到req.session.flash中，然后返回特定type的数据的长度<br>(3)如果仅仅传入了type则返回指定类型的数据，并把数据从req.session.flash中删除<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">req.flash(&apos;info&apos;, &apos;email re-sent&apos;);</span><br><span class="line">req.flash(&apos;info&apos;);// =&gt; [&apos;email sent&apos;, &apos;email re-sent&apos;]</span><br><span class="line">req.flash(&apos;info&apos;);// =&gt; []这时候info已经清空了</span><br></pre></td></tr></table></figure></p>
+<p>(4)如果用户没有传入任何参数那么返回的原来的局部变量保存到的req.session.flash对象,清空req.session.flash域</p>
+<h2 id="实际使用："><a href="#实际使用：" class="headerlink" title="实际使用："></a>实际使用：</h2><p>安装<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ npm install express-session //flash放在session中</span><br><span class="line">$ npm install connect-flash</span><br></pre></td></tr></table></figure></p>
+<p>配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var flash = require(&apos;connect-flash&apos;);</span><br><span class="line">var session = require(&apos;express-session&apos;);</span><br><span class="line">app.use(session(&#123; //一些参数配置</span><br><span class="line">  secret: params1,</span><br><span class="line">  key: params2,</span><br><span class="line">  cookie: &#123;maxAge: 60000&#125;,</span><br><span class="line">  resave: false,</span><br><span class="line">  saveUninitialized: true</span><br><span class="line">&#125;));</span><br><span class="line">app.use(flash());</span><br></pre></td></tr></table></figure></p>
+<p>使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">router.post(&apos;/login&apos;, function(req, res, next) &#123;</span><br><span class="line">  User.get(req.body.username,function(err,user)&#123;</span><br><span class="line">      if(!user || user.name === &apos;&apos;)&#123;</span><br><span class="line">        req.flash(&apos;error&apos;,&apos;用户不存在&apos;);</span><br><span class="line">        return res.redirect(&apos;login&apos;);</span><br><span class="line">      &#125;</span><br><span class="line">      if(req.body.password != user.password)&#123;</span><br><span class="line">        req.flash(&apos;error&apos;,&apos;密码不对&apos;);</span><br><span class="line">        return res.redirect(&apos;login&apos;);</span><br><span class="line">      &#125;</span><br><span class="line">      req.flash(&apos;info&apos;,&apos;登录成功&apos;);</span><br><span class="line">      res.redirect(&apos;login&apos;);</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>一般和redirect一起使用，保证在渲染下一个页面的时候数据可用</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/step.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1462,602 +1845,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/graphstruct.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/algorithm/graphstruct.html" itemprop="url">
-                  图的存储结构
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-01T21:59:30+08:00">
-                2017-03-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="1-邻接矩阵"><a href="#1-邻接矩阵" class="headerlink" title="1.邻接矩阵"></a>1.邻接矩阵</h1><h2 id="1-无向图"><a href="#1-无向图" class="headerlink" title="1.无向图"></a>1.无向图</h2><p><img src="/image/graph1.png" alt="graph1"><br>一个一维数组存储图中顶点信息，</p>
-<table>
-<thead>
-<tr>
-<th>顶点数组</th>
-<th>v0</th>
-<th>v1</th>
-<th>v2</th>
-<th>v3</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>一个二维数组(邻接矩阵)存储图中边或弧的信息<br>0表示不存在顶点间的边，1表示顶点间存在边</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>v0</th>
-<th>v1</th>
-<th>v2</th>
-<th>v3</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>v0</td>
-<td>0</td>
-<td>1</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<td>v1</td>
-<td>1</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<td>v2</td>
-<td>1</td>
-<td>1</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<td>v3</td>
-<td>1</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-</tr>
-</tbody>
-</table>
-<p>无向图构成的邻接矩阵为对称矩阵，对角线值为0<br>—–顶点Vi在邻接矩阵中第i行(或第i列)的元素之和为该顶点的度<br>—–扫描矩阵中第i行元素，元素为1的列为顶点Vi的邻接点</p>
-<h2 id="2-有向图"><a href="#2-有向图" class="headerlink" title="2.有向图"></a>2.有向图</h2><p><img src="/image/graph2.png" alt="graph2"><br>一个一维数组存储图中顶点信息，</p>
-<table>
-<thead>
-<tr>
-<th>顶点数组</th>
-<th>v0</th>
-<th>v1</th>
-<th>v2</th>
-<th>v3</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>坐标[Vi][Vj]的值，1表示Vi指向Vj的弧存在，0表示不存在</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>v0</th>
-<th>v1</th>
-<th>v2</th>
-<th>v3</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>v0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<td>v1</td>
-<td>1</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<td>v2</td>
-<td>1</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>v3</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-</tbody>
-</table>
-<p>第Vi列的元素之和为顶点Vi的入度<br>第Vi行的元素之和为顶点Vi的出度</p>
-<h2 id="3-网"><a href="#3-网" class="headerlink" title="3.网"></a>3.网</h2><p><img src="/image/tu3.png" alt="tu3"><br>邻接矩阵各元素的值不再用0/1表示，而是用权表示<br>顶点间若不存在弧，则用\infty无穷表示,顶点自己到自己的权为0</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>v0</th>
-<th>v1</th>
-<th>v2</th>
-<th>v3</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>v0</td>
-<td>0</td>
-<td>\infty</td>
-<td>\infty</td>
-<td>18</td>
-</tr>
-<tr>
-<td>v1</td>
-<td>8</td>
-<td>0</td>
-<td>2</td>
-<td>\infty</td>
-</tr>
-<tr>
-<td>v2</td>
-<td>4</td>
-<td>\infty</td>
-<td>0</td>
-<td>\infty</td>
-</tr>
-<tr>
-<td>v3</td>
-<td>\infty</td>
-<td>\infty</td>
-<td>\infty</td>
-<td>0</td>
-</tr>
-</tbody>
-</table>
-<h1 id="2-邻接表"><a href="#2-邻接表" class="headerlink" title="2.邻接表"></a>2.邻接表</h1><h2 id="无向图"><a href="#无向图" class="headerlink" title="无向图"></a>无向图</h2><p>顶点用一个一维数组存储<br>每个顶点Vi的所有邻接点构成一个线性表，由于个数不确定，用单链表来表示<br><img src="/image/tu4.png" alt="tu4"><br><img src="/image/tu5.png" alt="tu5"></p>
-<h2 id="有向图"><a href="#有向图" class="headerlink" title="有向图"></a>有向图</h2><p>把顶点当弧尾建立邻接表，邻接表长度就是该顶点出度<br><img src="/image/tu6.png" alt="tu6"><br>把顶点当弧头建的表叫逆邻接表，邻接表长度就是该顶点入度<br><img src="/image/tu7.png" alt="tu7"></p>
-<h2 id="网"><a href="#网" class="headerlink" title="网"></a>网</h2><p>在边表结点定义中再增加一个数据域来存储权值<br><img src="/image/tu8.png" alt="tu8"></p>
-<h1 id="3-十字链表-有向图"><a href="#3-十字链表-有向图" class="headerlink" title="3.十字链表(有向图)"></a>3.十字链表(有向图)</h1><p>顶点表结构</p>
-<p>|data|firstIn|firstOut|<br>data：顶点数据<br>firstIn:第一个入边表的指针<br>firstOut:第一个出边表的指针</p>
-<p>边表结点结构 表示以条边</p>
-<table>
-<thead>
-<tr>
-<th>tailVex</th>
-<th>headVex</th>
-<th>headLink</th>
-<th>tailLink</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>tailVex:该弧起点的顶点在顶点表的下标<br>headVex:该弧终点的顶点在顶点表的下标<br>headLink:指向headVex的弧的指针<br>tailLink: 从tailVex出发的弧的指针<br><img src="/image/graph2.png" alt="graph2"><br><img src="/image/tu9.png" alt="tu9"></p>
-<h1 id="4-邻接多重表-无向表"><a href="#4-邻接多重表-无向表" class="headerlink" title="4.邻接多重表(无向表)"></a>4.邻接多重表(无向表)</h1><p>关注对象是图中的表不是顶点<br>|iVex|iLink|jVex|jLink|<br>iVex和jVex是与某条边依附的两个顶点在顶点表中的下标<br>iLink：指向依附顶点iVex的下一条边，<br>jLink：指向依附顶点jVex的下一条边，<br><img src="/image/tu10.png" alt="tu10"></p>
-<h1 id="5-边集数组"><a href="#5-边集数组" class="headerlink" title="5.边集数组"></a>5.边集数组</h1><p>由两个一维数组构成<br>一个是存储顶点的信息<br>另一个存储边的信息<br>边数组的每个数据元素由一条边的起点下标(begin)、终点下标(end)和权(weight)组成</p>
-<p><img src="/image/tu11.png" alt="tu11"></p>
-<table>
-<thead>
-<tr>
-<th>顶点数组</th>
-<th>v0</th>
-<th>v1</th>
-<th>v2</th>
-<th>v3</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>边数组</th>
-<th>begin</th>
-<th>end</th>
-<th>weight</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>edges[0]</td>
-<td>0</td>
-<td>3</td>
-<td>5</td>
-</tr>
-<tr>
-<td>edges[1]</td>
-<td>1</td>
-<td>0</td>
-<td>4</td>
-</tr>
-<tr>
-<td>edges[2]</td>
-<td>1</td>
-<td>2</td>
-<td>3</td>
-</tr>
-<tr>
-<td>edges[3]</td>
-<td>2</td>
-<td>0</td>
-<td>8</td>
-</tr>
-</tbody>
-</table>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/performance/compatible_date.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/performance/compatible_date.html" itemprop="url">
-                  日期格式兼容
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-26T21:14:37+08:00">
-                2017-02-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="IE11-chrome-360-火狐兼容日期格式兼容"><a href="#IE11-chrome-360-火狐兼容日期格式兼容" class="headerlink" title="IE11/chrome/360/火狐兼容日期格式兼容"></a>IE11/chrome/360/火狐兼容日期格式兼容</h1><p> $scope.date= new Date().toLocaleDateString().replace(/\//g,’-‘);<br> 获取到的”year-month-day”格式支持/chrome/360/火狐，但到了IE11就变成”year年month月day”</p>
-<p> var date = new Date();<br> var y = date.getFullYear();<br> var m = date.getMonth()+1;<br> var d = date.getDate();<br> var day = date.getDay();<br> var dateString=y+”-“+m+”-“+d;<br> $scope.date= dateString;</p>
-<p> 这样获取的”year-month-day”格式支持以上四种浏览器</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/angular/imgupload.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/angular/imgupload.html" itemprop="url">
-                  AngularJs自定义指令实现图片上传
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-22T22:14:30+08:00">
-                2017-02-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>//定义file-Model指令的代码<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">MetronicApp.directive(<span class="string">'fileModel'</span>, [<span class="string">'$parse'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">$parse</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    restrict: <span class="string">'A'</span>,</span><br><span class="line">    link: <span class="function"><span class="keyword">function</span>(<span class="params">scope, element, attrs, ngModel</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">var</span> model = $parse(attrs.fileModel);</span><br><span class="line">      <span class="keyword">var</span> modelSetter = model.assign;</span><br><span class="line">      element.bind(<span class="string">'change'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>&#123;</span><br><span class="line">        scope.$apply(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">          modelSetter(scope, element[<span class="number">0</span>].files[<span class="number">0</span>]);</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">//附件预览</span></span><br><span class="line">           scope.file = (event.srcElement || event.target).files[<span class="number">0</span>];</span><br><span class="line">            scope.getFile();</span><br><span class="line">            <span class="keyword">this</span>.value = <span class="string">''</span>; <span class="comment">//清除已上传的文件，否则无法连续上传相同文件</span></span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line">])</span><br></pre></td></tr></table></figure></p>
-<p>//在HTML使用时的代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> &lt;div class=&quot;form-group&quot;&gt;</span><br><span class="line">    &lt;label class=&quot;control-label col-md-3&quot;&gt;图片上传&lt;/label&gt;</span><br><span class="line">     &lt;div class=&quot;col-md-9 fileinput&quot;&gt;</span><br><span class="line">         &lt;img src=&quot;&#123;&#123;detaildata.banner&#125;&#125;&quot; name=&quot;img&quot; style=&quot;width:40px;height: 40px;&quot;&gt;</span><br><span class="line">        &lt;span class=&quot;btn red btn-outline btn-file&quot; style=&quot;margin-left: 10px;margin-top:0px;&quot;&gt;</span><br><span class="line">        &lt;span class=&quot;fileinput-new&quot;&gt; 重新上传 &lt;/span&gt;</span><br><span class="line">        &lt;input type=&quot;hidden&quot;&gt;&lt;input id=&quot;upload&quot; type=&quot;file&quot; file-model=&quot;myFile&quot; name=&quot;...&quot; accept=&quot;image/*&quot; &gt;</span><br><span class="line">        &lt;/span&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
-<p>//Controller中上传图片时的js函数<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$scope.getFile = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">   <span class="keyword">var</span> postData = &#123;</span><br><span class="line">            fileName: $scope.file</span><br><span class="line">          &#125;;</span><br><span class="line">       fileReader.readAsDataUrl($rootScope.settings.url + <span class="string">""</span>, postData).success( <span class="function"><span class="keyword">function</span>(<span class="params">response</span>) </span>&#123;</span><br><span class="line">                $scope.detaildata.banner = response;</span><br><span class="line">        &#125;);</span><br><span class="line"> &#125;;</span><br></pre></td></tr></table></figure></p>
-<p> //定义fileReader服务的代码<br> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">angular.module(<span class="string">'MetronicApp'</span>)</span><br><span class="line">.factory(<span class="string">'fileReader'</span>, [<span class="string">"$http"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">$http</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> readAsDataURL = <span class="function"><span class="keyword">function</span> (<span class="params">url, data</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> fd = <span class="keyword">new</span> FormData();</span><br><span class="line">          angular.forEach(data, <span class="function"><span class="keyword">function</span>(<span class="params">val, key</span>) </span>&#123;</span><br><span class="line">            fd.append(key, val);</span><br><span class="line">          &#125;);</span><br><span class="line">          <span class="keyword">var</span> args = &#123;</span><br><span class="line">            method: <span class="string">'POST'</span>,</span><br><span class="line">            url: url,</span><br><span class="line">            data: fd,</span><br><span class="line">            headers: &#123;<span class="string">'Content-Type'</span>: <span class="literal">undefined</span>&#125;,</span><br><span class="line">            transformRequest: angular.identity</span><br><span class="line">          &#125;;</span><br><span class="line">          <span class="keyword">return</span> $http(args);</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    readAsDataUrl: readAsDataURL</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;])</span><br></pre></td></tr></table></figure></p>
-<p>整个上传的过程，点击“重新上传”按钮，file-model指令绑定的change事件会检测本次选择的图片与上次是否为一致，不一致则会执行file-model定义时的代码<br> element.bind(‘change’, function(event){<br>        scope.$apply(function(){<br>          modelSetter(scope, element[0].files[0]);<br>        });<br>        //附件预览<br>           scope.file = (event.srcElement || event.target).files[0];      //给Controller 中$scope.file赋值<br>            scope.getFile();    //调用Controller 中 $scope.getFile();<br>          this.value = ‘’; //清除已上传的文件，否则无法连续上传相同文件<br>      });<br>控制器中的$scope.getFile()函数用到fileReader.readAsDataUrl函数上传图片给后台，这个函数在定义fileReader时被定义</p>
-<p>定义指令时，若没有清除已上传文件，连续多次上传时，将导致无法连续上传相同图片的bug.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2101,7 +1888,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">236</span>
+              <span class="site-state-item-count">239</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -2118,7 +1905,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

