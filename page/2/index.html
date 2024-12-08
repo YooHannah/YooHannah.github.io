@@ -259,6 +259,139 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/biasVariance.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/machineLearning/biasVariance.html" itemprop="url">
+                  高偏差和高方差
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-09-27T17:39:37+08:00">
+                2024-09-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>通过判断高方差和高偏差的大小可以判断模型的性能问题<br>一般有以下两个性能问题<br>高偏差意味着模型欠拟合<br>高方差意味着模型过拟合</p>
+<p>高偏差的情况下，<br>Jtrain 值会比较大，且Jtrain和Jcv 值相近<br>也就是说Jtrain 较高对应的训练数据的拟合度本身就不够</p>
+<p>高方差的情况下，<br>Jcv 会远大于Jtrain, Jtrain 值可能比较小<br>就是说模型对训练数据很拟合，但是对交叉验证数据不够拟合</p>
+<p>也有高方差和高偏差两个问题同时存在的情况<br>Jtrain 值会比较大，且Jcv 远大于Jtrain,<br>这种情况意味着模型可能对一些数据过拟合，对一些数据又存在欠拟合</p>
+<p><img src="/image/LLM/109.png" alt></p>
+<h1 id="正则化参数𝜆-对模型的影响"><a href="#正则化参数𝜆-对模型的影响" class="headerlink" title="正则化参数𝜆 对模型的影响"></a>正则化参数𝜆 对模型的影响</h1><p>如果𝜆偏大会导致Jtrain 偏大，出现欠拟合<br>(想象𝜆现在是一个非常大的数值，为使Jtrain 最小，就会让w值逐渐趋近0, 最终模型无限接近b)<br>如果𝜆偏小会导致Jtrain 偏小，但是Jcv 偏大，出现过拟合<br>(想象𝜆现在无限趋近于0，或者直接等于0， 那么要使Jtrain 最小，w取值就得变大，多项式就会被保留，最终模型出现过拟合)<br>如果𝜆取值适中就可以实现Jtrain和Jcv 值都偏低，模型适当拟合的效果<br><img src="/image/LLM/110.png" alt></p>
+<h2 id="𝜆-如何取值"><a href="#𝜆-如何取值" class="headerlink" title="𝜆 如何取值"></a>𝜆 如何取值</h2><p>通过选取不同 𝜆 带入计算最小损失函数，用得到的(w,b)值计算Jcv, 选取多组Jcv 中 最小值的(w,b)进行Jtest 计算，<br><img src="/image/LLM/111.png" alt></p>
+<h2 id="𝜆-趋势图"><a href="#𝜆-趋势图" class="headerlink" title="𝜆 趋势图"></a>𝜆 趋势图</h2><p>𝜆 对于误差的影响趋势和多项式对误差的影响趋势呈镜像关系<br>𝜆 值从小到大，Jtrain 从小到大，模型从过拟合到欠拟合<br>多项式平方数从小到大，Jtrain 从大到小， 模型从欠拟合到过拟合<br><img src="/image/LLM/112.png" alt></p>
+<h1 id="建立性能基准线来判断模型性能"><a href="#建立性能基准线来判断模型性能" class="headerlink" title="建立性能基准线来判断模型性能"></a>建立性能基准线来判断模型性能</h1><p>计算基准线与Jtrain 的差A， A 如果偏大说明模型存在高偏差欠拟合问题<br>计算Jtrain 与 Jcv 的差B，B 如果偏大说明存在高方差过拟合问题<br>如果A 大于B 说明存在高偏差，欠拟合<br>如果A 小于B 说明存在高方差，过拟合<br>如果A 和 B 数值接近，说明 高偏差和高方差同时存在<br><img src="/image/LLM/115.png" alt><br>基准线可以来自<br>人类的测试水平<br>竞争算法的性能水平<br>基于过程经验判断的水平<br><img src="/image/LLM/114.png" alt><br>以 语音识别为例<br><img src="/image/LLM/113.png" alt></p>
+<h1 id="学习曲线"><a href="#学习曲线" class="headerlink" title="学习曲线"></a>学习曲线</h1><p>Jtrain 和Jcv 随 训练集大小m变化的趋势曲线被称为学习曲线</p>
+<p>一般情况下，<br>Jtrain 会随m 变大逐渐变大，因为为了拟合更多数据，数据比一定会散落在曲线上，误差累加起来数值会变大<br>Jcv 会随m 变大逐渐变小，因为更多的数据可以展示更多的情况，是模型拟合度更高，对于Jcv 计算就是越小<br><img src="/image/LLM/116.png" alt></p>
+<p>但是对于存在高偏差的模型，增加样本数量并不一定能对模型拟合产生多大帮助，<br>因为高偏差模型具备欠拟合特点，随样本数增加损失函数也会增加，且相对基本线误差依然存在<br><img src="/image/LLM/117.png" alt></p>
+<p>对于存在高方差的模型，增加样本数量可以起到一定帮助<br>因为高方差模型具体过拟合特点，会将增加的样本继续拟合到自己的训练模型中，相当容纳近了更多的数据情况<br>可以更好的拟合实际的情况<br><img src="/image/LLM/118.png" alt></p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>高偏差和高方差的一些解决方案<br><img src="/image/LLM/119.png" alt></p>
+<h1 id="神经网络中的应用"><a href="#神经网络中的应用" class="headerlink" title="神经网络中的应用"></a>神经网络中的应用</h1><p>神经网络是低偏差的模型，<br>在训练过程中如果Jtrain 过大可以使用更大的神经网络，缺点就是运算速度会变低且会增加研发成本<br>在Jtrain 基本与基准线相差不大时计算Jvc，如果Jvc 过大可以增加数据样本重新回到模型计算<br>经过上面不断重复的过程，最终得到合适的模型参数<br><img src="/image/LLM/120.png" alt><br>只要数据规则化做的合适，大型神经网络总是会比小型神经网络表现好一些<br><img src="/image/LLM/121.png" alt><br>在tensorFlow 中，可以在构建layer 时传入规则化参数<br><img src="/image/LLM/122.png" alt></p>
+<h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><p>练习多项式，正则化参数𝜆，训练数据个数m, 神经网络层数<br><a href="https://colab.research.google.com/github/kaieye/2022-Machine-Learning-Specialization/blob/main/Advanced%20Learning%20Algorithms/week3/8.Practice%20Lab%20Advice%20for%20applying%20machine%20learning/C2_W3_Assignment.ipynb#scrollTo=3tnHtCF35uzg" target="_blank" rel="noopener">链接</a></p>
+<p>The simple model is a bit better in the training set than the regularized model but it worse in the cross validation set.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/advanceOpt.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1706,278 +1839,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/mobxlearn.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/knowledge/mobxlearn.html" itemprop="url">
-                  Mobx 运行机制深入研究
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-03T15:17:37+08:00">
-                2024-03-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="追踪原理"><a href="#追踪原理" class="headerlink" title="追踪原理"></a><strong>追踪原理</strong></h1><p><a href="https://cn.mobx.js.org/best/react.html" target="_blank" rel="noopener">官方文档</a></p>
-<p>MobX 会对在执行 <strong>跟踪函数 期间</strong> 读取的任何现有的<strong>可观察属性</strong>做出反应</p>
-<p>“<strong>读取</strong>” 是对象属性的间接引用，可以用过 . (例如 user.name) 或者 [] (例如 user[‘name’]) 的形式完成。</p>
-<p>“<strong>追踪函数</strong>” 是 <strong>computed 表达式、observer 组件的 render() 方法和 when、reaction 和 autorun 的第一个入参函数。</strong></p>
-<p>“<strong>过程(during)</strong>” 意味着只追踪那些在函数执行时被读取的 observable 。这些值是否由追踪函数直接或间接使用并不重要。</p>
-<p>换句话说，MobX 不会对其作出反应:</p>
-<p>从 observable 获取的值，但是在追踪函数之外</p>
-<p>在异步调用的代码块中读取的 observable</p>
-<p>Mobx 5 以下 MobX 不会追踪还不存在的索引或者对象属性(当使用 observable 映射(map)时除外)。</p>
-<p>所以建议总是使用 .length 来检查保护基于数组索引的访问。</p>
-<p>所有数组的索引分配都可以检测到，但前提条件必须是提供的索引小于数组长度。</p>
-<h2 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a><strong>核心概念</strong></h2><p>追踪属性访问，而不是值</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">let message = observable(&#123;</span><br><span class="line">    title: &quot;Foo&quot;,</span><br><span class="line">    author: &#123;</span><br><span class="line">        name: &quot;Michel&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    likes: [</span><br><span class="line">        &quot;John&quot;, &quot;Sara&quot;</span><br><span class="line">    ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YjI2YjAxNTdhOWZkMmM1ZjFkOThlOTRhM2RlMWJkYjdfcnliUm9PSXdJWFZseExRcFdxNDhNaHNUcEh4dURwQ0pfVG9rZW46Ym94Y250QmJzT2ZWZkh3QzZVd05mNjlWSExmXzE3MDcxOTA3Mzk6MTcwNzE5NDMzOV9WNA" alt></p>
-<p>mobx会追踪箭头有没有变化</p>
-<p>如果箭头发生变化，就会执行追踪函数</p>
-<h1 id="使用注意"><a href="#使用注意" class="headerlink" title="使用注意"></a><strong>使用注意</strong></h1><h2 id="处理数据时"><a href="#处理数据时" class="headerlink" title="处理数据时"></a><strong>处理数据时</strong></h2><p>1.更改没有被obserable的箭头，追踪函数不执行</p>
-<p>2.追踪函数里使用间接引用指向obserable属性，追踪函数不执行</p>
-<p>3.对新增的属性，可以使用set,get实现obserable</p>
-<p>4.在异步代码中访问的obserable属性，不会引起追踪函数执行</p>
-<pre><code>1.更改没有被obserable的箭头，追踪函数不执行
-autorun(() =&gt; {
-    console.log(message.title)
-})
-message = observable({ title: &quot;Bar&quot; }) //指向message的箭头没有被obervable
-autorun(() =&gt; {
-    message.likes;//箭头没变，又没有访问数组里面的属性
-})
-message.likes.push(&quot;Jennifer&quot;);
-
-2.追踪函数里使用间接引用指向obserable属性，追踪函数不执行
-var title = message.title;
-autorun(() =&gt; {
-    console.log(title) //访问箭头没有变，还是指向老值的位置
-})
-message.title = &quot;Bar&quot; //箭头改了，但autorun里没有用到
-const author = message.author;
-autorun(() =&gt; {
-    console.log(author.name) 
-})
-message.author.name = &quot;Sara&quot;;//会执行跟踪函数，autorun里有访问name属性，这里指向name值得箭头改了
-message.author = { name: &quot;John&quot; };//不会执行，没有访问author属性的箭头
-
-正确使用
-
-A:
-autorun(() =&gt; {
-    console.log(message.author.name)
-})
-message.author.name = &quot;Sara&quot;;
-message.author = { name: &quot;John&quot; };
-B:
-function upperCaseAuthorName(author) {
-    const baseName = author.name;
-    return baseName.toUpperCase();
-}
-autorun(() =&gt; {
-    console.log(upperCaseAuthorName(message.author))
-})
-message.author.name = &quot;Chesterton&quot;
-
-3.异步
-const message = observable({ title: &quot;hello&quot; })
-autorun(() =&gt; {
-    console.log(message) //会执行两次，因为console.log是异步的，请确保始终传递不变数据 ( immutable data ) 或防御副本给 console.log。
-})
-message.title = &quot;Hello world&quot;
-autorun(() =&gt; {
-    setTimeout(
-        () =&gt; console.log(message.likes.join(&quot;, &quot;)), //异步执行，访问原始数据打印一次
-        10
-    )
-})
-message.likes.push(&quot;Jennifer&quot;);//不会引起autorun执行
-
-4.MobX 5 可以追踪还不存在的属性
-autorun(() =&gt; {
-    console.log(message.postDate)
-})
-message.postDate = new Date()
-</code></pre><h2 id="组件使用时"><a href="#组件使用时" class="headerlink" title="组件使用时"></a><strong>组件使用时</strong></h2><h3 id="子组件问题"><a href="#子组件问题" class="headerlink" title="子组件问题"></a><strong>子组件问题</strong></h3><p><strong>MobX 只会为数据是直接通过 render 存取的 observer 组件进行数据追踪</strong></p>
-<p>所以当需要将数据传递给子组件时，要保证子组件也是一个obserable组件，可以做出反应</p>
-<p>解决办法：</p>
-<p>1.将子组件使用obserable函数处理</p>
-<p>它用 mobx.autorun 包装了组件的 render 函数以确保任何组件渲染中使用的数据变化时都可以强制刷新组件</p>
-<p>2.使用mobx-react的Obserable组件包裹子组件</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">方法一：将子组件使用obserable函数处理</span><br><span class="line"><span class="keyword">const</span> MyComponent = observer(<span class="function">(<span class="params">&#123; message &#125;</span>) =&gt;</span></span><br><span class="line">    &lt;SomeContainer</span><br><span class="line">        title = &#123;() =&gt; &lt;TitleRenderer message=&#123;message&#125; /&gt;&#125;</span><br><span class="line">    /&gt;</span><br><span class="line">)</span><br><span class="line"><span class="keyword">const</span> TitleRenderer = observer(<span class="function">(<span class="params">&#123; message &#125;</span>) =&gt;</span></span><br><span class="line">    &lt;div&gt;&#123;message.title&#125;&lt;<span class="regexp">/div&gt;&#125;</span></span><br><span class="line"><span class="regexp">)</span></span><br><span class="line"><span class="regexp">message.title = "Bar"</span></span><br><span class="line"><span class="regexp">方法二：使用mobx-react的Obserable组件包裹子组件</span></span><br><span class="line"><span class="regexp">const MyComponent = (&#123; message &#125;) =&gt;</span></span><br><span class="line"><span class="regexp">    &lt;SomeContainer</span></span><br><span class="line"><span class="regexp">        title = &#123;() =&gt;</span></span><br><span class="line"><span class="regexp">            &lt;Observer&gt;</span></span><br><span class="line"><span class="regexp">                &#123;() =&gt; &lt;div&gt;&#123;message.title&#125;&lt;/</span>div&gt;&#125;</span><br><span class="line">            &lt;<span class="regexp">/Observer&gt;</span></span><br><span class="line"><span class="regexp">        &#125;</span></span><br><span class="line"><span class="regexp">    /</span>&gt;</span><br><span class="line">message.title = <span class="string">"Bar"</span></span><br></pre></td></tr></table></figure>
-<h3 id="避免在本地字段中缓存-observable"><a href="#避免在本地字段中缓存-observable" class="headerlink" title="避免在本地字段中缓存 observable"></a><strong>避免在本地字段中缓存 observable</strong></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@observer class MyComponent extends React.component &#123;</span><br><span class="line">    author;</span><br><span class="line">    constructor(props) &#123;</span><br><span class="line">        super(props)</span><br><span class="line">        this.author = props.message.author;//message.author发生变化时不会引起render</span><br><span class="line">    &#125;</span><br><span class="line">    render() &#123;</span><br><span class="line">        return &lt;div&gt;&#123;this.author.name&#125;&lt;/div&gt; //.name可以引起render</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>优化，使用计算属性，或者在render函数中进行间接引用</p>
-<pre><code>@observer class MyComponent extends React.component {
-    @computed get author() {
-        return this.props.message.author
-    }
-</code></pre><h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>1.从性能上考虑，越晚进行间接引用越好</p>
-<p>2.数组里面的是对象而不是字符串，那么对于发生在某个具体的对象中发生的变化，渲染数组的父组件将不会重新渲染</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">const Message = observer((&#123; message &#125;) =&gt;</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">        &#123;message.title&#125;</span><br><span class="line">        &lt;Author author=&#123; message.author &#125; /&gt;</span><br><span class="line">        &lt;Likes likes=&#123; message.likes &#125; /&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">)</span><br><span class="line">const Author = observer((&#123; author &#125;) =&gt;</span><br><span class="line">    &lt;span&gt;&#123;author.name&#125;&lt;/span&gt;</span><br><span class="line">)</span><br><span class="line">const Likes = observer((&#123; likes &#125;) =&gt;</span><br><span class="line">    &lt;ul&gt;</span><br><span class="line">        &#123;likes.map(like =&gt;</span><br><span class="line">            &lt;li&gt;&#123;like&#125;&lt;/li&gt;</span><br><span class="line">        )&#125;</span><br><span class="line">    &lt;/ul&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">变化</th>
-<th style="text-align:left">重新渲染组件</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">message.title = “Bar”</td>
-<td style="text-align:left">Message</td>
-</tr>
-<tr>
-<td style="text-align:left">message.author.name = “Susan”</td>
-<td style="text-align:left">Author (.author 在 Message 中进行间接引用, 但没有改变)*</td>
-</tr>
-<tr>
-<td style="text-align:left">message.author = { name: “Susan”}</td>
-<td style="text-align:left">Message, Author</td>
-</tr>
-<tr>
-<td style="text-align:left">message.likes[0] = “Michel”</td>
-<td style="text-align:left">Likes</td>
-</tr>
-</tbody>
-</table>
-<h1 id="一些-对比"><a href="#一些-对比" class="headerlink" title="一些 对比"></a>一些 对比</h1><h1 id="autorun-vs-compute"><a href="#autorun-vs-compute" class="headerlink" title="autorun vs compute"></a><strong>autorun vs compute</strong></h1><p>当使用 autorun 时，所提供的函数总是立即被触发一次，然后每次它的依赖关系改变时会再次被触发</p>
-<p>computed(function) 创建的函数只有当它有自己的观察者时才会重新计算，否则它的值会被认为是不相关的</p>
-<p>如果一个计算值不再被观察了，例如使用它的UI不复存在了，MobX 可以自动地将其垃圾回收。</p>
-<p>而 autorun 中的值必须要手动清理才行</p>
-<h1 id="autorun-vs-reaction"><a href="#autorun-vs-reaction" class="headerlink" title="autorun vs reaction"></a><strong>autorun vs reaction</strong></h1><p>reaction(() =&gt; data, (data, reaction) =&gt; { sideEffect }, options?)</p>
-<p>它接收两个函数参数，第一个(<strong>数据</strong>函数)是用来追踪并返回数据作为第二个函数(<strong>效果</strong>函数)的输入。</p>
-<p>传入 reaction 的第二个函数(副作用函数)当调用时会接收两个参数。</p>
-<p>第一个参数是由 data 函数返回的值。</p>
-<p>第二个参数是当前的 reaction，可以用来在执行期间清理 reaction</p>
-<p>reaction 返回一个清理函数。</p>
-<p>不同于 autorun 的是当创建时 **效果 **函数不会直接运行，只有在数据表达式首次返回一个新值后才会运行。</p>
-<p>在执行 <strong>效果</strong>函数时访问的任何 observable 都不会被追踪。</p>
-<p><strong>效果</strong>函数仅对<strong>数据</strong>函数中访问的数据作出反应，这可能会比实际在<strong>效果</strong>函数使用的数据要少。</p>
-<p>此外，<strong>效果</strong> 函数只会在表达式返回的数据发生更改时触发。 换句话说: reaction需要你生产 <strong>效果</strong>函数中</p>
-<p>所需要的东西。</p>
-<h1 id="useObserver-vs-Observer-vs-observer"><a href="#useObserver-vs-Observer-vs-observer" class="headerlink" title="useObserver vs Observer vs observer"></a><strong>useObserver vs Observer vs observer</strong></h1><p><a href="https://juejin.im/post/6844904137167994893" target="_blank" rel="noopener">相关文档</a></p>
-<p>1.虽然只是在返回DOM的地方使用 useObserver(), 但是，当dom中数据改变的时候，整个component都会重新render</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function Person() &#123;</span><br><span class="line">  console.log(&apos;in useObserver&apos;);//点击按钮会触发执行</span><br><span class="line">  const person = useLocalStore(() =&gt; (&#123; name: &apos;John&apos; &#125;));</span><br><span class="line">  return useObserver(() =&gt; (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &#123;person.name&#125;</span><br><span class="line">      &lt;button onClick=&#123;() =&gt; (person.name = &apos;Mike&apos;)&#125;&gt;No! I am Mike&lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  ));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>2.Observer 标签组件可以更精准的控制想要重新渲染的地方</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">export default function ObservePerson() &#123;</span><br><span class="line">    console.log(&apos;in Observer&apos;);//点击按钮不会执行</span><br><span class="line">    const person = useLocalStore(() =&gt; (&#123;name: &apos;John&apos;&#125;))</span><br><span class="line">    return (</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">            The old name is: &#123;person.name&#125; //点击按钮不会更新</span><br><span class="line">            &lt;div&gt;</span><br><span class="line">                &lt;Observer&gt;&#123;() =&gt; &lt;div&gt;&#123;person.name&#125;&lt;/div&gt;&#125;&lt;/Observer&gt; //点击按钮会更新</span><br><span class="line">                &lt;button onClick=&#123;() =&gt; (person.name = &apos;Mike&apos;)&#125;&gt;</span><br><span class="line">                    I want to be Mike</span><br><span class="line">                &lt;/button&gt;</span><br><span class="line">            &lt;/div&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>3.与useObserver相比，除了使用方法不同，目前不知道区别在哪，有时间需要探究一下</p>
-<pre><code>const ObserverLowercasePerson: React.FC&lt;any&gt; = observer(() =&gt; {
-    console.log(&apos;in Observer&apos;) //点击按钮也会执行
-    const person = useLocalStore(() =&gt; ({name: &apos;John&apos;}));
-    return (
-        &lt;div&gt;
-            &lt;div&gt;The name is: {person.name}&lt;/div&gt;
-            &lt;button onClick={() =&gt; (person.name = &apos;Mike&apos;)}&gt;
-                Change name
-            &lt;/button&gt;
-        &lt;/div&gt;
-    )
-})
-```
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2021,7 +1882,7 @@ message.postDate = new Date()
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">239</span>
+              <span class="site-state-item-count">240</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

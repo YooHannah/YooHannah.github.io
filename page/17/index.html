@@ -259,6 +259,136 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/php/CookieAndSession.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/php/CookieAndSession.html" itemprop="url">
+                  cookie和session
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-26T21:38:37+08:00">
+                2017-05-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="cookie"><a href="#cookie" class="headerlink" title="cookie"></a>cookie</h1><p>设置cookie<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">bool setcookie  (</span><br><span class="line">	string $名字</span><br><span class="line">	[, string $值]</span><br><span class="line">	[, int $过期时间  = 0]</span><br><span class="line">	[, string $路径]</span><br><span class="line">	[, string $域名]</span><br><span class="line">	[, bool $安全  = false]</span><br><span class="line">	[, bool $http只读  = false]</span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
+<p> 参数 描述<br>$名字 必需。规定 cookie 的名称。<br>$值 可选。规定 cookie 的值。<br>$有效期 可选。规定 cookie 的有效期。<br>$路径 可选。规定 cookie 的服务器路径。<br>$域名 可选。规定 cookie 的域名。<br>$安全 可选。规定是否通过安全的 HTTPS 连接来传输 cookie。<br>$http安读 可选。如果true，那么js就无法读取改cookie，增加安全性。</p>
+<p>在服务端通过$_COOKIE[‘name’] 来读取cookie了。</p>
+<p><a href="https://github.com/YooHannah/algorithm/tree/master/php/cookie" target="_blank" rel="noopener">使用cookie例子</a></p>
+<h1 id="session"><a href="#session" class="headerlink" title="session"></a>session</h1><p> session_start(); //开启session<br> $_SESSION[‘userName’] = ‘wang’; //添加session数据<br> $userName = $_SESSION[‘userName’]; //读取session数据<br> unset($_SESSION[‘XXX’]);//销毁单个session数据<br> $_SESSION = array();//销毁全部session数据<br> session_destory();//这个函数会销毁当前会话中的全部数据，并结束当前会话,但是不会重置当前会话所关联的全局变量，也不会重置会话 cookie</p>
+<p> 在php.ini配置文件中有这么一行 session.save_handler = files,<br> files,说明了php默认的是用文件读写的方式来保存session的<br> session.save_path = “/tmp”, “/tmp”即存储路径</p>
+<p><a href="https://github.com/YooHannah/algorithm/tree/master/php/shoppingcart" target="_blank" rel="noopener">使用session例子</a></p>
+<h1 id="curl"><a href="#curl" class="headerlink" title="curl"></a>curl</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"><span class="comment">//初始化</span></span><br><span class="line">$ch = curl_init();</span><br><span class="line"><span class="comment">//设置选项，包括URL</span></span><br><span class="line">curl_setopt($ch, CURLOPT_URL, <span class="string">"http://www.php.cn"</span>);</span><br><span class="line">curl_setopt($ch, CURLOPT_RETURNTRANSFER, <span class="number">1</span>);</span><br><span class="line">curl_setopt($ch, CURLOPT_HEADER, <span class="number">0</span>);</span><br><span class="line"><span class="comment">//执行并获取HTML文档内容</span></span><br><span class="line">$output = curl_exec($ch);</span><br><span class="line"><span class="comment">//释放curl句柄</span></span><br><span class="line">curl_close($ch);</span><br><span class="line"><span class="comment">//打印获得的数据</span></span><br><span class="line">print_r($output);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>函数    curl_setopt<br>参数1    curl资源变量<br>参数2    curl参数选项<br>参数3    curl参数值</p>
+<p>CURLOPT_URL           这个参数选项规定了请求的url地址。<br>CURLOPT_RETURNTRANSFER   curl请求后返回对应的结果 若需要返回值即为1。不需请求后返回的结果可设置为0。</p>
+<p>如果是get请求，我们不需要设置发送的参数。在post等请求的时候，我们需要设置发送方法为post方法。并设置发送的数据。<br>CURLOPT_POST    值设为1是使用POST方法，0为不使用POST方法<br>CURLOPT_POSTFIELDS  设置传递的数据<br>//声明使用POST方式来进行发送<br>    curl_setopt($ch, CURLOPT_POST, 1);<br>//发送什么数据呢<br>curl_setopt($ch, CURLOPT_POSTFIELDS, $data);</p>
+<p>如果是https有的时候需要忽略https的安全证书。</p>
+<p>CURLOPT_SSL_VERIFYPEER和CURLOPT_SSL_VERIFYHOST 两个参数改为false即忽略了证书。<br>curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);<br>curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);<br>CURLOPT_HEADER  决定是是否处理http的头信息，不接收处理的话可将这个值设置为0。<br>CURLOPT_TIMEOUT 设置请求的超时时间</p>
+<p>$output = curl_exec($ch); 如果执行的结果有数据。使用curl_exec执行后，会将结果返回给$output变量。<br>curl_close($ch); 关闭curl资源。<br><a href="https://github.com/YooHannah/algorithm/blob/master/php/curl1.php" target="_blank" rel="noopener">curlget 截取页面例子</a><br><a href="https://github.com/YooHannah/algorithm/blob/master/php/curlpost.php" target="_blank" rel="noopener">curlpost例子</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/php/php_MySQL.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1561,126 +1691,6 @@ void clearstatcache ( void ) 功能：清楚文件的状态缓存
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/hash.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/algorithm/hash.html" itemprop="url">
-                  散列表(哈希表)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-09T18:21:37+08:00">
-                2017-04-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>记录的存储位置 = f(关键字)<br>散列技术是在存储位置和它的关键字之间建立一个确定的对应关系f,使得每个关键字key对应一个存储位置f(key)<br>对应关系函数f称为散列函数(哈希函数)<br>采用三列技术将记录存储在一块连续的存储空间中，这块连续存储空间称为散列表(哈希表)</p>
-<h1 id="查找步骤"><a href="#查找步骤" class="headerlink" title="查找步骤"></a>查找步骤</h1><p>当存储记录时，通过散列函数计算出记录的散列地址<br>当查找记录时，通过散列函数计算记录的散列地址，并按此散列地址访问该记录<br>各记录之间没有任何关系<br>散列表适合1对1查找，不适合查找范围，也不适合关键字对应多个结果的查找<br>散列函数通过不同的关键字，计算出了相同地址，称之为冲突</p>
-<h1 id="构建散列函数"><a href="#构建散列函数" class="headerlink" title="构建散列函数"></a>构建散列函数</h1><p>散列函数原则=计算简单+分布均匀(散列地址)<br>直接定址法<br>取关键字的某个线性函数值为散列地址：f(key)=a*key+b<br>适合查找表小，key比较连续的情况，不常用<br>数字分析法<br>适合处理关键字位数比较大的情况<br>抽取关键字的某几位作为散列地址<br>平方取中法<br>平方取中法是将关键字平方之后取中间若干位数字作为散列地址<br>适合不知道关键字的分布，关键字位数不是很大的情况<br>折叠法<br>将关键字从左到右分割成位数相等的几部分，然后将这几部分叠加求和，并按散列表表长取后几位作为散列地址<br>除留余数法<br>f(key) = key mod p(p &lt;= m)<br>m为表长<br>这个方法不仅可以对关键字直接取模，也可以通过折叠、平方取中后再取模<br>p的取值是关键，最好接近m的最小质数<br>随机数法<br>选择一个随机数，取关键字的随机函数值为它的散列地址<br>f(key) = random(key)<br>random为随机函数，适合关键字长度不等的情况<br>选取方法时要考虑的因素：<br>计算散列地址所需时间<br>关键字长度<br>散列表大小<br>关键字分布情况<br>记录查找频率</p>
-<h1 id="处理散列冲突的方法"><a href="#处理散列冲突的方法" class="headerlink" title="处理散列冲突的方法"></a>处理散列冲突的方法</h1><p>开放定址法<br>一旦发生了冲突，就去寻找下一个空的散列地址，只要散列表足够大，空的散列地址总能找到，并将记录存入<br>1.线性探测法<br>fi(key) = (f(key)+di) mod m<br>其中di = 1,2,…,m-1<br>意思是，散列函数计算的地址已经被其他记录占据，就将散列函数计算的地址每次次加1到m-1的一个数,<br>再mod表长，将每次计算的结果当做新地址去探测有没有记录，如果没有就将该地址做为记录的地址<br>2.二次探测法<br>修改一次探测法di的取值<br>另di = 1^2,-1^2,2^2,-2^2,q^2,-q^2,其中q&lt;=m/2<br>3.随机探测法<br>对di采用随机函数计算得到<br>再散列函数法<br>fi(key) = RHi(key)(i=1,2,3,…k)<br>就是用第一个散列函数计算的地址发生冲突就换第二个散列函数，如果第二个也发生冲突，则换第三个，以此类推<br>链地址法<br>地址处不存放单一记录，而是存放记录的链表，记录1指向记录2，计算得到地址相同，就继续指下去<br>公共溢出区法<br>不发生冲突的关键字放在基本表，将发生冲突的记录依次存放在溢出表，<br>查找时基本表找不到时就去查溢出表，溢出表找不到再宣告失败</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1724,7 +1734,7 @@ void clearstatcache ( void ) 功能：清楚文件的状态缓存
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">239</span>
+              <span class="site-state-item-count">240</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

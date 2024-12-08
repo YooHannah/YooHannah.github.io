@@ -1,0 +1,707 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="deepLearning,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="矩阵维度为方便重复计算，减少for循环的使用，在神经网络的计算过程中，尽可能的将数据转成向量进行计算利用向量的广播能力进行快速计算，神经网络多层传递过程中，矩阵的维度一般遵循以下关系 如果前一层（输入）维度为（m,1），中间层维度是（n, 1）, 后一层（输出）维度是（p， 1）那么 中间层w的维度就是（n, m）， b 的维度就是（n，1）, b 的维度始终和中间层一致输出层W的维度（p,n），">
+<meta name="keywords" content="deepLearning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="神经网络的相关推导公式">
+<meta property="og:url" content="http://yoohannah.github.io/post/deepLearning/NeuralNetwork.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="矩阵维度为方便重复计算，减少for循环的使用，在神经网络的计算过程中，尽可能的将数据转成向量进行计算利用向量的广播能力进行快速计算，神经网络多层传递过程中，矩阵的维度一般遵循以下关系 如果前一层（输入）维度为（m,1），中间层维度是（n, 1）, 后一层（输出）维度是（p， 1）那么 中间层w的维度就是（n, m）， b 的维度就是（n，1）, b 的维度始终和中间层一致输出层W的维度（p,n），">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/11.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/28.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/12.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/13.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/14.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/15.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/16.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/29.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/17.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/18.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/19.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/20.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/21.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/22.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/24.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/23.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/25.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/26.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/27.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/30.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/31.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/32.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/33.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/34.png">
+<meta property="og:updated_time" content="2024-12-08T12:56:44.342Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="神经网络的相关推导公式">
+<meta name="twitter:description" content="矩阵维度为方便重复计算，减少for循环的使用，在神经网络的计算过程中，尽可能的将数据转成向量进行计算利用向量的广播能力进行快速计算，神经网络多层传递过程中，矩阵的维度一般遵循以下关系 如果前一层（输入）维度为（m,1），中间层维度是（n, 1）, 后一层（输出）维度是（p， 1）那么 中间层w的维度就是（n, m）， b 的维度就是（n，1）, b 的维度始终和中间层一致输出层W的维度（p,n），">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/deepLearning/11.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/deepLearning/NeuralNetwork.html">
+
+
+
+
+
+  <title> 神经网络的相关推导公式 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/deepLearning/NeuralNetwork.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                神经网络的相关推导公式
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-12-01T21:24:37+08:00">
+                2024-12-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="矩阵维度"><a href="#矩阵维度" class="headerlink" title="矩阵维度"></a>矩阵维度</h1><p>为方便重复计算，减少for循环的使用，在神经网络的计算过程中，尽可能的将数据转成向量进行计算<br>利用向量的广播能力进行快速计算，神经网络多层传递过程中，矩阵的维度一般遵循以下关系</p>
+<p>如果前一层（输入）维度为（m,1），中间层维度是（n, 1）, 后一层（输出）维度是（p， 1）<br>那么 中间层w的维度就是（n, m）， b 的维度就是（n，1）, b 的维度始终和中间层一致<br>输出层W的维度（p,n），b 的维度就是(p,1)</p>
+<p><img src="/image/deepLearning/11.png" alt></p>
+<h3 id="参数的矩阵维度关系"><a href="#参数的矩阵维度关系" class="headerlink" title="参数的矩阵维度关系"></a>参数的矩阵维度关系</h3><p><img src="/image/deepLearning/28.png" alt></p>
+<h1 id="向前传播计算过程"><a href="#向前传播计算过程" class="headerlink" title="向前传播计算过程"></a>向前传播计算过程</h1><h2 id="一个神经元的计算"><a href="#一个神经元的计算" class="headerlink" title="一个神经元的计算"></a>一个神经元的计算</h2><p>每个神经元的计算包括两部分，先计算z,在用激活函数计算a,<br>同一层不同神经元计算的区别就在于使用不同的参数<br><img src="/image/deepLearning/12.png" alt><br>如果将参数w和b整理成向量，对当前样本数据进行一次性向量计算<br>就可以直接得到当前层的直接产出向量<br><img src="/image/deepLearning/13.png" alt></p>
+<h2 id="一层神经元的计算"><a href="#一层神经元的计算" class="headerlink" title="一层神经元的计算"></a>一层神经元的计算</h2><p>同样，每一层都可以用相同的计算式表示<br><img src="/image/deepLearning/14.png" alt></p>
+<h2 id="一组样本数据的计算"><a href="#一组样本数据的计算" class="headerlink" title="一组样本数据的计算"></a>一组样本数据的计算</h2><p>通过for 循环进行每一层的计算可得到所有样本数据的预测数据y^<br><img src="/image/deepLearning/15.png" alt><br>但是通过将输入层维度(m,1) 的向量增加为（m,x）的向量，可以实现一次计算x个样本的效果，从而去掉for循环<br>如果中间层有n个神经元，输出得到的结果就是(n,x)的矩阵<br>第n - 1行 上的x个数，每个数代表每个样本数据在中间层第n-1个神经元的计算后的值<br>第x - 1列 上的n个数，每个数代表第x-i个样本数据在中间层计算后的每个神经元的值<br><img src="/image/deepLearning/16.png" alt><br>最终经过两层神经元处理后变成，结果变成(1,x)的向量，每个值代表每个样本经过神经网络计算后的预测值</p>
+<h3 id="输入输出值矩阵维度之间的关系"><a href="#输入输出值矩阵维度之间的关系" class="headerlink" title="输入输出值矩阵维度之间的关系"></a>输入输出值矩阵维度之间的关系</h3><p><img src="/image/deepLearning/29.png" alt></p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p><img src="/image/deepLearning/17.png" alt></p>
+<h1 id="其他激活函数"><a href="#其他激活函数" class="headerlink" title="其他激活函数"></a>其他激活函数</h1><p>除了sigmoid 激活函数外，常见的激活函数还有Tanh, ReLu,和leaky ReLu,<br>后三者更常见，且使用更广泛，sigmoid基本只用于二分类场景<br><img src="/image/deepLearning/18.png" alt></p>
+<h2 id="为什么不使用线性函数作为激活函数"><a href="#为什么不使用线性函数作为激活函数" class="headerlink" title="为什么不使用线性函数作为激活函数"></a>为什么不使用线性函数作为激活函数</h2><p>因为如果使用线性函数作为激活函数，无论神经网络有多少层，都相当于只进行了一次线性函数计算，隐藏层作用消失<br><img src="/image/deepLearning/19.png" alt></p>
+<h2 id="不同激活函数的导数"><a href="#不同激活函数的导数" class="headerlink" title="不同激活函数的导数"></a>不同激活函数的导数</h2><p><img src="/image/deepLearning/20.png" alt><br><img src="/image/deepLearning/21.png" alt><br><img src="/image/deepLearning/22.png" alt></p>
+<h1 id="向后传播过程"><a href="#向后传播过程" class="headerlink" title="向后传播过程"></a>向后传播过程</h1><p>回顾一下梯度下降的计算过程<br><img src="/image/deepLearning/24.png" alt><br>对于单个神经元的向后传播过程，就是计算单个神经元参数偏导数的过程<br><img src="/image/deepLearning/23.png" alt></p>
+<p>对于多层的神经网络进行带入<br><img src="/image/deepLearning/25.png" alt></p>
+<h2 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h2><p>同向前传播一样，通过引入向量矩阵，减少for循环<br><img src="/image/deepLearning/26.png" alt></p>
+<h1 id="为啥不能初始化参数为0？"><a href="#为啥不能初始化参数为0？" class="headerlink" title="为啥不能初始化参数为0？"></a>为啥不能初始化参数为0？</h1><p>如果初始化参数为0或相同值，那么所有节点计算的值都相同，会产生对称性，对后续计算的影响也相同，同样会导致隐藏层节点结算无效<br>解决办法就是随机初始化参数<br><img src="/image/deepLearning/27.png" alt><br>一般一开始会将参数随机成比较小的值，如果一开始是比较大的值，z 的值就会比较大，<br>当激活函数是sigmoid 或者tanh 这样的激活函数时，<br>计算结果所在的位置就会在梯度比较平缓的地方导致，激活函数处于比较饱和的状态，梯度下降比较慢，影响学习速度</p>
+<h1 id="深度网络"><a href="#深度网络" class="headerlink" title="深度网络"></a>深度网络</h1><h2 id="向前传播"><a href="#向前传播" class="headerlink" title="向前传播"></a>向前传播</h2><p><img src="/image/deepLearning/30.png" alt></p>
+<h2 id="向后传播"><a href="#向后传播" class="headerlink" title="向后传播"></a>向后传播</h2><p><img src="/image/deepLearning/31.png" alt></p>
+<h2 id="一些超参数"><a href="#一些超参数" class="headerlink" title="一些超参数"></a>一些超参数</h2><p><img src="/image/deepLearning/32.png" alt></p>
+<h2 id="小结-2"><a href="#小结-2" class="headerlink" title="小结"></a>小结</h2><p><img src="/image/deepLearning/33.png" alt></p>
+<h3 id="为什么要使用深层网络"><a href="#为什么要使用深层网络" class="headerlink" title="为什么要使用深层网络"></a>为什么要使用深层网络</h3><p>使用小的（单层神经元数据量少的）的但是有多层的深层网络，往往会比使用浅层(layer数少)网络计算步骤更简洁<br>比如下面的电路与或非门计算过程<br>如果像左侧使用深层网络，每一次层神经元都少一半<br>如果使用右侧单层神经网络，这一层上的神经元会以2的指数方式计算<br>总体算下来，深层网络需要处理的神经元会少很多</p>
+<p><img src="/image/deepLearning/34.png" alt></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/deepLearning/" rel="tag"># deepLearning</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/deepLearning/basicKnowledge.html" rel="next" title="一些基础知识">
+                <i class="fa fa-chevron-left"></i> 一些基础知识
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">240</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#矩阵维度"><span class="nav-number">1.</span> <span class="nav-text">矩阵维度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#参数的矩阵维度关系"><span class="nav-number">1.0.1.</span> <span class="nav-text">参数的矩阵维度关系</span></a></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#向前传播计算过程"><span class="nav-number">2.</span> <span class="nav-text">向前传播计算过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一个神经元的计算"><span class="nav-number">2.1.</span> <span class="nav-text">一个神经元的计算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一层神经元的计算"><span class="nav-number">2.2.</span> <span class="nav-text">一层神经元的计算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一组样本数据的计算"><span class="nav-number">2.3.</span> <span class="nav-text">一组样本数据的计算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#输入输出值矩阵维度之间的关系"><span class="nav-number">2.3.1.</span> <span class="nav-text">输入输出值矩阵维度之间的关系</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">2.4.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他激活函数"><span class="nav-number">3.</span> <span class="nav-text">其他激活函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么不使用线性函数作为激活函数"><span class="nav-number">3.1.</span> <span class="nav-text">为什么不使用线性函数作为激活函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不同激活函数的导数"><span class="nav-number">3.2.</span> <span class="nav-text">不同激活函数的导数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#向后传播过程"><span class="nav-number">4.</span> <span class="nav-text">向后传播过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#小结-1"><span class="nav-number">4.1.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#为啥不能初始化参数为0？"><span class="nav-number">5.</span> <span class="nav-text">为啥不能初始化参数为0？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#深度网络"><span class="nav-number">6.</span> <span class="nav-text">深度网络</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#向前传播"><span class="nav-number">6.1.</span> <span class="nav-text">向前传播</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#向后传播"><span class="nav-number">6.2.</span> <span class="nav-text">向后传播</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些超参数"><span class="nav-number">6.3.</span> <span class="nav-text">一些超参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结-2"><span class="nav-number">6.4.</span> <span class="nav-text">小结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么要使用深层网络"><span class="nav-number">6.4.1.</span> <span class="nav-text">为什么要使用深层网络</span></a></li></ol></li></ol></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

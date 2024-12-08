@@ -259,6 +259,278 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/mobxlearn.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/knowledge/mobxlearn.html" itemprop="url">
+                  Mobx 运行机制深入研究
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-03T15:17:37+08:00">
+                2024-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="追踪原理"><a href="#追踪原理" class="headerlink" title="追踪原理"></a><strong>追踪原理</strong></h1><p><a href="https://cn.mobx.js.org/best/react.html" target="_blank" rel="noopener">官方文档</a></p>
+<p>MobX 会对在执行 <strong>跟踪函数 期间</strong> 读取的任何现有的<strong>可观察属性</strong>做出反应</p>
+<p>“<strong>读取</strong>” 是对象属性的间接引用，可以用过 . (例如 user.name) 或者 [] (例如 user[‘name’]) 的形式完成。</p>
+<p>“<strong>追踪函数</strong>” 是 <strong>computed 表达式、observer 组件的 render() 方法和 when、reaction 和 autorun 的第一个入参函数。</strong></p>
+<p>“<strong>过程(during)</strong>” 意味着只追踪那些在函数执行时被读取的 observable 。这些值是否由追踪函数直接或间接使用并不重要。</p>
+<p>换句话说，MobX 不会对其作出反应:</p>
+<p>从 observable 获取的值，但是在追踪函数之外</p>
+<p>在异步调用的代码块中读取的 observable</p>
+<p>Mobx 5 以下 MobX 不会追踪还不存在的索引或者对象属性(当使用 observable 映射(map)时除外)。</p>
+<p>所以建议总是使用 .length 来检查保护基于数组索引的访问。</p>
+<p>所有数组的索引分配都可以检测到，但前提条件必须是提供的索引小于数组长度。</p>
+<h2 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a><strong>核心概念</strong></h2><p>追踪属性访问，而不是值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">let message = observable(&#123;</span><br><span class="line">    title: &quot;Foo&quot;,</span><br><span class="line">    author: &#123;</span><br><span class="line">        name: &quot;Michel&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    likes: [</span><br><span class="line">        &quot;John&quot;, &quot;Sara&quot;</span><br><span class="line">    ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YjI2YjAxNTdhOWZkMmM1ZjFkOThlOTRhM2RlMWJkYjdfcnliUm9PSXdJWFZseExRcFdxNDhNaHNUcEh4dURwQ0pfVG9rZW46Ym94Y250QmJzT2ZWZkh3QzZVd05mNjlWSExmXzE3MDcxOTA3Mzk6MTcwNzE5NDMzOV9WNA" alt></p>
+<p>mobx会追踪箭头有没有变化</p>
+<p>如果箭头发生变化，就会执行追踪函数</p>
+<h1 id="使用注意"><a href="#使用注意" class="headerlink" title="使用注意"></a><strong>使用注意</strong></h1><h2 id="处理数据时"><a href="#处理数据时" class="headerlink" title="处理数据时"></a><strong>处理数据时</strong></h2><p>1.更改没有被obserable的箭头，追踪函数不执行</p>
+<p>2.追踪函数里使用间接引用指向obserable属性，追踪函数不执行</p>
+<p>3.对新增的属性，可以使用set,get实现obserable</p>
+<p>4.在异步代码中访问的obserable属性，不会引起追踪函数执行</p>
+<pre><code>1.更改没有被obserable的箭头，追踪函数不执行
+autorun(() =&gt; {
+    console.log(message.title)
+})
+message = observable({ title: &quot;Bar&quot; }) //指向message的箭头没有被obervable
+autorun(() =&gt; {
+    message.likes;//箭头没变，又没有访问数组里面的属性
+})
+message.likes.push(&quot;Jennifer&quot;);
+
+2.追踪函数里使用间接引用指向obserable属性，追踪函数不执行
+var title = message.title;
+autorun(() =&gt; {
+    console.log(title) //访问箭头没有变，还是指向老值的位置
+})
+message.title = &quot;Bar&quot; //箭头改了，但autorun里没有用到
+const author = message.author;
+autorun(() =&gt; {
+    console.log(author.name) 
+})
+message.author.name = &quot;Sara&quot;;//会执行跟踪函数，autorun里有访问name属性，这里指向name值得箭头改了
+message.author = { name: &quot;John&quot; };//不会执行，没有访问author属性的箭头
+
+正确使用
+
+A:
+autorun(() =&gt; {
+    console.log(message.author.name)
+})
+message.author.name = &quot;Sara&quot;;
+message.author = { name: &quot;John&quot; };
+B:
+function upperCaseAuthorName(author) {
+    const baseName = author.name;
+    return baseName.toUpperCase();
+}
+autorun(() =&gt; {
+    console.log(upperCaseAuthorName(message.author))
+})
+message.author.name = &quot;Chesterton&quot;
+
+3.异步
+const message = observable({ title: &quot;hello&quot; })
+autorun(() =&gt; {
+    console.log(message) //会执行两次，因为console.log是异步的，请确保始终传递不变数据 ( immutable data ) 或防御副本给 console.log。
+})
+message.title = &quot;Hello world&quot;
+autorun(() =&gt; {
+    setTimeout(
+        () =&gt; console.log(message.likes.join(&quot;, &quot;)), //异步执行，访问原始数据打印一次
+        10
+    )
+})
+message.likes.push(&quot;Jennifer&quot;);//不会引起autorun执行
+
+4.MobX 5 可以追踪还不存在的属性
+autorun(() =&gt; {
+    console.log(message.postDate)
+})
+message.postDate = new Date()
+</code></pre><h2 id="组件使用时"><a href="#组件使用时" class="headerlink" title="组件使用时"></a><strong>组件使用时</strong></h2><h3 id="子组件问题"><a href="#子组件问题" class="headerlink" title="子组件问题"></a><strong>子组件问题</strong></h3><p><strong>MobX 只会为数据是直接通过 render 存取的 observer 组件进行数据追踪</strong></p>
+<p>所以当需要将数据传递给子组件时，要保证子组件也是一个obserable组件，可以做出反应</p>
+<p>解决办法：</p>
+<p>1.将子组件使用obserable函数处理</p>
+<p>它用 mobx.autorun 包装了组件的 render 函数以确保任何组件渲染中使用的数据变化时都可以强制刷新组件</p>
+<p>2.使用mobx-react的Obserable组件包裹子组件</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">方法一：将子组件使用obserable函数处理</span><br><span class="line"><span class="keyword">const</span> MyComponent = observer(<span class="function">(<span class="params">&#123; message &#125;</span>) =&gt;</span></span><br><span class="line">    &lt;SomeContainer</span><br><span class="line">        title = &#123;() =&gt; &lt;TitleRenderer message=&#123;message&#125; /&gt;&#125;</span><br><span class="line">    /&gt;</span><br><span class="line">)</span><br><span class="line"><span class="keyword">const</span> TitleRenderer = observer(<span class="function">(<span class="params">&#123; message &#125;</span>) =&gt;</span></span><br><span class="line">    &lt;div&gt;&#123;message.title&#125;&lt;<span class="regexp">/div&gt;&#125;</span></span><br><span class="line"><span class="regexp">)</span></span><br><span class="line"><span class="regexp">message.title = "Bar"</span></span><br><span class="line"><span class="regexp">方法二：使用mobx-react的Obserable组件包裹子组件</span></span><br><span class="line"><span class="regexp">const MyComponent = (&#123; message &#125;) =&gt;</span></span><br><span class="line"><span class="regexp">    &lt;SomeContainer</span></span><br><span class="line"><span class="regexp">        title = &#123;() =&gt;</span></span><br><span class="line"><span class="regexp">            &lt;Observer&gt;</span></span><br><span class="line"><span class="regexp">                &#123;() =&gt; &lt;div&gt;&#123;message.title&#125;&lt;/</span>div&gt;&#125;</span><br><span class="line">            &lt;<span class="regexp">/Observer&gt;</span></span><br><span class="line"><span class="regexp">        &#125;</span></span><br><span class="line"><span class="regexp">    /</span>&gt;</span><br><span class="line">message.title = <span class="string">"Bar"</span></span><br></pre></td></tr></table></figure>
+<h3 id="避免在本地字段中缓存-observable"><a href="#避免在本地字段中缓存-observable" class="headerlink" title="避免在本地字段中缓存 observable"></a><strong>避免在本地字段中缓存 observable</strong></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@observer class MyComponent extends React.component &#123;</span><br><span class="line">    author;</span><br><span class="line">    constructor(props) &#123;</span><br><span class="line">        super(props)</span><br><span class="line">        this.author = props.message.author;//message.author发生变化时不会引起render</span><br><span class="line">    &#125;</span><br><span class="line">    render() &#123;</span><br><span class="line">        return &lt;div&gt;&#123;this.author.name&#125;&lt;/div&gt; //.name可以引起render</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>优化，使用计算属性，或者在render函数中进行间接引用</p>
+<pre><code>@observer class MyComponent extends React.component {
+    @computed get author() {
+        return this.props.message.author
+    }
+</code></pre><h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>1.从性能上考虑，越晚进行间接引用越好</p>
+<p>2.数组里面的是对象而不是字符串，那么对于发生在某个具体的对象中发生的变化，渲染数组的父组件将不会重新渲染</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">const Message = observer((&#123; message &#125;) =&gt;</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">        &#123;message.title&#125;</span><br><span class="line">        &lt;Author author=&#123; message.author &#125; /&gt;</span><br><span class="line">        &lt;Likes likes=&#123; message.likes &#125; /&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">)</span><br><span class="line">const Author = observer((&#123; author &#125;) =&gt;</span><br><span class="line">    &lt;span&gt;&#123;author.name&#125;&lt;/span&gt;</span><br><span class="line">)</span><br><span class="line">const Likes = observer((&#123; likes &#125;) =&gt;</span><br><span class="line">    &lt;ul&gt;</span><br><span class="line">        &#123;likes.map(like =&gt;</span><br><span class="line">            &lt;li&gt;&#123;like&#125;&lt;/li&gt;</span><br><span class="line">        )&#125;</span><br><span class="line">    &lt;/ul&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">变化</th>
+<th style="text-align:left">重新渲染组件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">message.title = “Bar”</td>
+<td style="text-align:left">Message</td>
+</tr>
+<tr>
+<td style="text-align:left">message.author.name = “Susan”</td>
+<td style="text-align:left">Author (.author 在 Message 中进行间接引用, 但没有改变)*</td>
+</tr>
+<tr>
+<td style="text-align:left">message.author = { name: “Susan”}</td>
+<td style="text-align:left">Message, Author</td>
+</tr>
+<tr>
+<td style="text-align:left">message.likes[0] = “Michel”</td>
+<td style="text-align:left">Likes</td>
+</tr>
+</tbody>
+</table>
+<h1 id="一些-对比"><a href="#一些-对比" class="headerlink" title="一些 对比"></a>一些 对比</h1><h1 id="autorun-vs-compute"><a href="#autorun-vs-compute" class="headerlink" title="autorun vs compute"></a><strong>autorun vs compute</strong></h1><p>当使用 autorun 时，所提供的函数总是立即被触发一次，然后每次它的依赖关系改变时会再次被触发</p>
+<p>computed(function) 创建的函数只有当它有自己的观察者时才会重新计算，否则它的值会被认为是不相关的</p>
+<p>如果一个计算值不再被观察了，例如使用它的UI不复存在了，MobX 可以自动地将其垃圾回收。</p>
+<p>而 autorun 中的值必须要手动清理才行</p>
+<h1 id="autorun-vs-reaction"><a href="#autorun-vs-reaction" class="headerlink" title="autorun vs reaction"></a><strong>autorun vs reaction</strong></h1><p>reaction(() =&gt; data, (data, reaction) =&gt; { sideEffect }, options?)</p>
+<p>它接收两个函数参数，第一个(<strong>数据</strong>函数)是用来追踪并返回数据作为第二个函数(<strong>效果</strong>函数)的输入。</p>
+<p>传入 reaction 的第二个函数(副作用函数)当调用时会接收两个参数。</p>
+<p>第一个参数是由 data 函数返回的值。</p>
+<p>第二个参数是当前的 reaction，可以用来在执行期间清理 reaction</p>
+<p>reaction 返回一个清理函数。</p>
+<p>不同于 autorun 的是当创建时 **效果 **函数不会直接运行，只有在数据表达式首次返回一个新值后才会运行。</p>
+<p>在执行 <strong>效果</strong>函数时访问的任何 observable 都不会被追踪。</p>
+<p><strong>效果</strong>函数仅对<strong>数据</strong>函数中访问的数据作出反应，这可能会比实际在<strong>效果</strong>函数使用的数据要少。</p>
+<p>此外，<strong>效果</strong> 函数只会在表达式返回的数据发生更改时触发。 换句话说: reaction需要你生产 <strong>效果</strong>函数中</p>
+<p>所需要的东西。</p>
+<h1 id="useObserver-vs-Observer-vs-observer"><a href="#useObserver-vs-Observer-vs-observer" class="headerlink" title="useObserver vs Observer vs observer"></a><strong>useObserver vs Observer vs observer</strong></h1><p><a href="https://juejin.im/post/6844904137167994893" target="_blank" rel="noopener">相关文档</a></p>
+<p>1.虽然只是在返回DOM的地方使用 useObserver(), 但是，当dom中数据改变的时候，整个component都会重新render</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function Person() &#123;</span><br><span class="line">  console.log(&apos;in useObserver&apos;);//点击按钮会触发执行</span><br><span class="line">  const person = useLocalStore(() =&gt; (&#123; name: &apos;John&apos; &#125;));</span><br><span class="line">  return useObserver(() =&gt; (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &#123;person.name&#125;</span><br><span class="line">      &lt;button onClick=&#123;() =&gt; (person.name = &apos;Mike&apos;)&#125;&gt;No! I am Mike&lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  ));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2.Observer 标签组件可以更精准的控制想要重新渲染的地方</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">export default function ObservePerson() &#123;</span><br><span class="line">    console.log(&apos;in Observer&apos;);//点击按钮不会执行</span><br><span class="line">    const person = useLocalStore(() =&gt; (&#123;name: &apos;John&apos;&#125;))</span><br><span class="line">    return (</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">            The old name is: &#123;person.name&#125; //点击按钮不会更新</span><br><span class="line">            &lt;div&gt;</span><br><span class="line">                &lt;Observer&gt;&#123;() =&gt; &lt;div&gt;&#123;person.name&#125;&lt;/div&gt;&#125;&lt;/Observer&gt; //点击按钮会更新</span><br><span class="line">                &lt;button onClick=&#123;() =&gt; (person.name = &apos;Mike&apos;)&#125;&gt;</span><br><span class="line">                    I want to be Mike</span><br><span class="line">                &lt;/button&gt;</span><br><span class="line">            &lt;/div&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3.与useObserver相比，除了使用方法不同，目前不知道区别在哪，有时间需要探究一下</p>
+<pre><code>const ObserverLowercasePerson: React.FC&lt;any&gt; = observer(() =&gt; {
+    console.log(&apos;in Observer&apos;) //点击按钮也会执行
+    const person = useLocalStore(() =&gt; ({name: &apos;John&apos;}));
+    return (
+        &lt;div&gt;
+            &lt;div&gt;The name is: {person.name}&lt;/div&gt;
+            &lt;button onClick={() =&gt; (person.name = &apos;Mike&apos;)}&gt;
+                Change name
+            &lt;/button&gt;
+        &lt;/div&gt;
+    )
+})
+```
+</code></pre>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/trendCard.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1028,6 +1300,136 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/question.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/react/hooks/question.html" itemprop="url">
+                  一些其他小问题
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-29T16:20:02+08:00">
+                2021-11-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>1.<br>在 useEffect 中如果使用了某些变量，却没有在依赖项中指定，会发生什么呢？</p>
+<p>依赖那里没有传任何参数的话，会每次render都执行。<br>依赖项有传值但是，有部分依赖没有传，那么没有传的那部分，数据即使变化也不会执行副作用。</p>
+<p>对于这节课中显示的 Blog 文章的例子，我们在 useEffect 中使用了 setBlogContent 这样一个函数，本质上它也是一个局部变量，那么这个函数需要被作为依赖项吗？为什么？</p>
+<p>函数应该是不会变化的，所以不需要监听。</p>
+<p>2.<br>useState 其实也是能够在组件的多次渲染之间共享数据的，那么在 useRef 的计时器例子中，能否用 state 去保存 window.setInterval() 返回的 timer 呢？</p>
+<p>可以，只是没有 useRef 更优，因为在更新 state 值后会导致重新渲染，而 ref 值发生变化时，是不会触发组件的重新渲染的，这也是 useRef 区别于 useState 的地方。</p>
+<p>3.<br>componentWillUnmount 近似的实现：组件销毁和文章 id 变化时执行。那么在函数组件中如果要实现严格的 componentWillUnmount，也就是只在组件销毁时执行，应该如何实现？\</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">useEffect(() =&gt; &#123;</span><br><span class="line">  return () =&gt; &#123;</span><br><span class="line">    // 这里只会在组件销毁前（componentWillUnmount）执行一次</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, [])</span><br></pre></td></tr></table></figure>
+<p>4.<br>每次调用 useArticle 这个 Hook 的时候都会触发副作用去获取数据。<br>但是有时候，我们希望在有些组件自动获取，但有的组件中需要点击某个按钮才去获取数据，那么你会如何设计这个 Hook？（可能这道题有一点难度。）</p>
+<p>useArticle Hook 可以提供一个参数，用来标记本地调用是否默认触发副作用去获取数据；对于点击按钮才触发请求的功能，可以在 Hook 中将获取数据的方法 retrn 出去，供外部自由调用。</p>
+<ol start="5">
+<li>Hook 一般都是使用的 useState 保存了状态数据，也就意味着状态的范围限定在组件内部，组件销毁后，数据就没了。那么如果希望数据直接缓存到全局状态，应该如何做呢？</li>
+</ol>
+<p>可以借助 redux，配合 useContext 等 api ，将状态数据存储至全局中。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1129.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1121,136 +1523,6 @@
 <p>按需加载可以说是减少首屏加载时间最为有效的手段，它可以让用户在打开应用时，无需加载所有代码就能开始使用，从而提升用户体验。</p>
 <h1 id="使用-service-worker-缓存前端资源"><a href="#使用-service-worker-缓存前端资源" class="headerlink" title="使用 service worker 缓存前端资源"></a>使用 service worker 缓存前端资源</h1><p>和浏览器自动的资源缓存机制相比，Service Worker 加上 Cache Storage 这个缓存机制，具有更高的准确性和可靠性。</p>
 <p>因为它可以确保两点：<br>缓存永远不过期。你只要下载过一次，就永远不需要再重新下载，除非主动删除。<br>永远不会访问过期的资源。换句话说，如果发布了一个新版本，那么你可以通过版本化的一些机制，来确保用户访问到的一定是最新的资源。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/question.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks/question.html" itemprop="url">
-                  一些其他小问题
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-29T16:20:02+08:00">
-                2021-11-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>1.<br>在 useEffect 中如果使用了某些变量，却没有在依赖项中指定，会发生什么呢？</p>
-<p>依赖那里没有传任何参数的话，会每次render都执行。<br>依赖项有传值但是，有部分依赖没有传，那么没有传的那部分，数据即使变化也不会执行副作用。</p>
-<p>对于这节课中显示的 Blog 文章的例子，我们在 useEffect 中使用了 setBlogContent 这样一个函数，本质上它也是一个局部变量，那么这个函数需要被作为依赖项吗？为什么？</p>
-<p>函数应该是不会变化的，所以不需要监听。</p>
-<p>2.<br>useState 其实也是能够在组件的多次渲染之间共享数据的，那么在 useRef 的计时器例子中，能否用 state 去保存 window.setInterval() 返回的 timer 呢？</p>
-<p>可以，只是没有 useRef 更优，因为在更新 state 值后会导致重新渲染，而 ref 值发生变化时，是不会触发组件的重新渲染的，这也是 useRef 区别于 useState 的地方。</p>
-<p>3.<br>componentWillUnmount 近似的实现：组件销毁和文章 id 变化时执行。那么在函数组件中如果要实现严格的 componentWillUnmount，也就是只在组件销毁时执行，应该如何实现？\</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">useEffect(() =&gt; &#123;</span><br><span class="line">  return () =&gt; &#123;</span><br><span class="line">    // 这里只会在组件销毁前（componentWillUnmount）执行一次</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, [])</span><br></pre></td></tr></table></figure>
-<p>4.<br>每次调用 useArticle 这个 Hook 的时候都会触发副作用去获取数据。<br>但是有时候，我们希望在有些组件自动获取，但有的组件中需要点击某个按钮才去获取数据，那么你会如何设计这个 Hook？（可能这道题有一点难度。）</p>
-<p>useArticle Hook 可以提供一个参数，用来标记本地调用是否默认触发副作用去获取数据；对于点击按钮才触发请求的功能，可以在 Hook 中将获取数据的方法 retrn 出去，供外部自由调用。</p>
-<ol start="5">
-<li>Hook 一般都是使用的 useState 保存了状态数据，也就意味着状态的范围限定在组件内部，组件销毁后，数据就没了。那么如果希望数据直接缓存到全局状态，应该如何做呢？</li>
-</ol>
-<p>可以借助 redux，配合 useContext 等 api ，将状态数据存储至全局中。</p>
 
           
         
@@ -1538,133 +1810,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1126.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks/1126.html" itemprop="url">
-                  合理组织项目文件结构
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-26T16:20:02+08:00">
-                2021-11-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>按领域组织文件夹结构</p>
-<p>每增加一个新的功能，整个应用程序的复杂度不应该明显上升。这样才能保证我们的应用程序始终可扩展，可维护。</p>
-<p>软件复杂度的根源完全来自复杂的依赖关系</p>
-<p>从业务功能去理解，依赖可以分为两种。<br>第一种是硬依赖。如果功能 A 的实现必须基于功能 B，也就是说没有功能 B，功能 A 就是不可运行的，那么我们可以说 A 硬依赖于 B。<br>比如对于博客系统，评论功能肯定是基于文章功能的，因为评论的对象就是文章，脱离了文章，评论功能就没有意义。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">import CommentList from &apos;./CommentList&apos;;</span><br><span class="line">function ArticleView() &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;div className=&quot;article-view&quot;&gt;</span><br><span class="line">      &lt;MainContent /&gt;</span><br><span class="line">      &lt;CommentList /&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>第二种是软依赖。如果功能 B 扩展了功能 A，也就是说，没有功能 B，功能 A 自身也是可以独立工作的，只是缺少了某些能力。<br>同样对于博客应用，文章管理是主要的功能，而评论功能则可以认为是增强了文章的功能。<br>照此来看，即使没有评论功能，文章功能也是可以独立运行的。这样就可以认为文章功能软依赖于评论功能。<br>我们应该让文章功能相关的代码，不要硬依赖于评论功能的代码。</p>
-<p>在业务功能上是一个软依赖，但是在代码实现层面，却往往做成了硬依赖。<br>这就导致随着功能的不断增加，整个应用变得越来越复杂，最终降低了整体的开发效率</p>
-<p>让模块之间的交互不再通过硬依赖。<br>解决办法就是<br><b>扩展点机制</b>：在任何可能产生单点复杂度的模块中，通过扩展点的方式，允许其它模块为其增加功能。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">// 在需要扩展的地方定义扩展点</span><br><span class="line">function ArticleView(&#123; id &#125;) &#123;</span><br><span class="line">  const &#123; article &#125; = useArticle(id);</span><br><span class="line">  return (</span><br><span class="line">    &lt;div className=&quot;article-view&quot;&gt;</span><br><span class="line">      &lt;MainContent article=&#123;article&#125; /&gt;</span><br><span class="line">      &#123;/* 定义了一个名为 article.footer 的扩展点 */&#125;</span><br><span class="line">      &lt;Extension name=&quot;article.footer&quot; args=&#123;article&#125; /&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 在被扩展的组件里，将自己挂到扩展点上，这样就算被扩展组件直接删除，对需要扩展的功能组件来说也毫无影响</span><br><span class="line">extensionEngine.register(&apos;article.footer&apos;, article =&gt; &#123;</span><br><span class="line">  return &lt;CommentList article=&#123;article&#125; /&gt;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>软件复杂度产生的根源，来自复杂的依赖关系。<br>随着功能的增加，系统复杂度也在不断增加，那么整个项目就会到达一个不可维护的状态。<br>所以我们首先需要从项目结构层面，去对复杂度做物理上的隔离，确保业务模块相关的代码都能在独立的文件夹中。<br>其次，我们要妥善地处理业务模块之间的依赖关系。<br>不仅需要在业务上区分硬依赖和软依赖。<br>同时呢，在技术的实现层面也要能做到模块的松耦合。<br>当然，上面的所有介绍要落实到实际的项目，还有很多细节问题需要考虑，<br>比如如何避免在单点模块定义所有的路由，如何避免一个导航菜单组件包含了所有业务功能的导航逻辑，等等。<br>总结来说，这里是整个隔离复杂度的思路，可以根据实际场景进行有针对性的思考，进而解决复杂度的问题。<br>同时更为重要的是，在进行实际项目开发，尤其是大型项目的架构设计时，一定要时刻有管理系统复杂度的意识，<br>不能只考虑功能是否实现，而不管复杂度，那样终究会导致系统越来越复杂，不断降低开发和维护的效率，甚至导致项目失败。</p>
-<p><a href="https://github.com/rekit/js-plugin" target="_blank" rel="noopener">一个扩展点引擎</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1708,7 +1853,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">239</span>
+              <span class="site-state-item-count">240</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

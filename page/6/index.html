@@ -259,6 +259,131 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/middlwareSrc.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/nodejs/middlwareSrc.html" itemprop="url">
+                  KOA框架剥洋葱原理
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-24T17:18:37+08:00">
+                2020-06-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="收集"><a href="#收集" class="headerlink" title="收集"></a>收集</h1><p>new 一个koa实例后，调用use接口会将传入的中间件函数push到middleware属性数组中做收集<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">application.js</span><br><span class="line"></span><br><span class="line">use(fn) &#123;</span><br><span class="line">    if (typeof fn !== &apos;function&apos;) throw new TypeError(&apos;middleware must be a function!&apos;);</span><br><span class="line">    if (isGeneratorFunction(fn)) &#123;</span><br><span class="line">      deprecate(&apos;Support for generators will be removed in v3. &apos; +</span><br><span class="line">                &apos;See the documentation for examples of how to convert old middleware &apos; +</span><br><span class="line">                &apos;https://github.com/koajs/koa/blob/master/docs/migration.md&apos;);</span><br><span class="line">      fn = convert(fn);</span><br><span class="line">    &#125;</span><br><span class="line">    debug(&apos;use %s&apos;, fn._name || fn.name || &apos;-&apos;);</span><br><span class="line">    this.middleware.push(fn);</span><br><span class="line">    return this;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>根据koa框架版本不同，需要将使用generator函数写的中间件转化成基于promise的函数形式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line">const convert = require(&apos;koa-convert&apos;);</span><br><span class="line"></span><br><span class="line">function convert (mw) &#123;</span><br><span class="line">  if (typeof mw !== &apos;function&apos;) &#123;</span><br><span class="line">    throw new TypeError(&apos;middleware must be a function&apos;)</span><br><span class="line">  &#125;</span><br><span class="line">  //再次确认是否是generator函数</span><br><span class="line">  if (mw.constructor.name !== &apos;GeneratorFunction&apos;) &#123;</span><br><span class="line">    // 假设它是一个基于promise的中间件</span><br><span class="line">    // 就直接返回</span><br><span class="line">    return mw</span><br><span class="line">  &#125;</span><br><span class="line">  //如果是generator函数就转换成promise形式</span><br><span class="line">  const converted = function (ctx, next) &#123;</span><br><span class="line">    return co.call(ctx, mw.call(ctx, createGenerator(next)))</span><br><span class="line">  &#125;</span><br><span class="line">  converted._name = mw._name || mw.name</span><br><span class="line">  return converted</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const co = require(&apos;co&apos;)</span><br><span class="line"></span><br><span class="line">function co(gen) &#123;</span><br><span class="line">  var ctx = this;</span><br><span class="line">  var args = slice.call(arguments, 1)</span><br><span class="line"></span><br><span class="line">  // we wrap everything in a promise to avoid promise chaining,</span><br><span class="line">  // which leads to memory leak errors.</span><br><span class="line">  // see https://github.com/tj/co/issues/180</span><br><span class="line">  return new Promise(function(resolve, reject) &#123;</span><br><span class="line">    if (typeof gen === &apos;function&apos;) gen = gen.apply(ctx, args);</span><br><span class="line">    if (!gen || typeof gen.next !== &apos;function&apos;) return resolve(gen);</span><br><span class="line"></span><br><span class="line">    onFulfilled();</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @param &#123;Mixed&#125; res</span><br><span class="line">     * @return &#123;Promise&#125;</span><br><span class="line">     * @api private</span><br><span class="line">     */</span><br><span class="line"></span><br><span class="line">    function onFulfilled(res) &#123;</span><br><span class="line">      var ret;</span><br><span class="line">      try &#123;</span><br><span class="line">        ret = gen.next(res);</span><br><span class="line">      &#125; catch (e) &#123;</span><br><span class="line">        return reject(e);</span><br><span class="line">      &#125;</span><br><span class="line">      next(ret);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * @param &#123;Error&#125; err</span><br><span class="line">     * @return &#123;Promise&#125;</span><br><span class="line">     * @api private</span><br><span class="line">     */</span><br><span class="line"></span><br><span class="line">    function onRejected(err) &#123;</span><br><span class="line">      var ret;</span><br><span class="line">      try &#123;</span><br><span class="line">        ret = gen.throw(err);</span><br><span class="line">      &#125; catch (e) &#123;</span><br><span class="line">        return reject(e);</span><br><span class="line">      &#125;</span><br><span class="line">      next(ret);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * Get the next value in the generator,</span><br><span class="line">     * return a promise.</span><br><span class="line">     *</span><br><span class="line">     * @param &#123;Object&#125; ret</span><br><span class="line">     * @return &#123;Promise&#125;</span><br><span class="line">     * @api private</span><br><span class="line">     */</span><br><span class="line"></span><br><span class="line">    function next(ret) &#123;</span><br><span class="line">      if (ret.done) return resolve(ret.value);</span><br><span class="line">      var value = toPromise.call(ctx, ret.value);</span><br><span class="line">      if (value &amp;&amp; isPromise(value)) return value.then(onFulfilled, onRejected);</span><br><span class="line">      return onRejected(new TypeError(&apos;You may only yield a function, promise, generator, array, or object, &apos;</span><br><span class="line">        + &apos;but the following object was passed: &quot;&apos; + String(ret.value) + &apos;&quot;&apos;));</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="整合"><a href="#整合" class="headerlink" title="整合"></a>整合</h1><p>调用listen函数开启服务时，整合所有中间件为一个大函数，大函数中进行剥洋葱流程<br>在收到请求时调用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">application.js</span><br><span class="line"></span><br><span class="line">listen(...args) &#123;</span><br><span class="line">  debug(&apos;listen&apos;);</span><br><span class="line">  const server = http.createServer(this.callback());</span><br><span class="line">  return server.listen(...args);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">callback() &#123;</span><br><span class="line">  const fn = compose(this.middleware); //整合中间件</span><br><span class="line"></span><br><span class="line">  if (!this.listenerCount(&apos;error&apos;)) this.on(&apos;error&apos;, this.onerror);</span><br><span class="line"></span><br><span class="line">  const handleRequest = (req, res) =&gt; &#123;</span><br><span class="line">    const ctx = this.createContext(req, res);</span><br><span class="line">    return this.handleRequest(ctx, fn); //调用中间件</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  return handleRequest;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">handleRequest(ctx, fnMiddleware) &#123;</span><br><span class="line">  //通过传递过来的ctx,获取到原生的可写流</span><br><span class="line">  const res = ctx.res;</span><br><span class="line">  //设置默认状态码</span><br><span class="line">  res.statusCode = 404;</span><br><span class="line">  const onerror = err =&gt; ctx.onerror(err);</span><br><span class="line">  const handleResponse = () =&gt; respond(ctx);</span><br><span class="line">  onFinished(res, onerror);</span><br><span class="line">  //调用中间件大函数 同时准备catch处理中间件级错误</span><br><span class="line">  return fnMiddleware(ctx).then(handleResponse).catch(onerror); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>整合中间件 ，返回大函数，大函数中有剥洋葱模型<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">function compose (middleware) &#123;</span><br><span class="line">  if (!Array.isArray(middleware)) throw new TypeError(&apos;Middleware stack must be an array!&apos;)</span><br><span class="line">  for (const fn of middleware) &#123;</span><br><span class="line">    if (typeof fn !== &apos;function&apos;) throw new TypeError(&apos;Middleware must be composed of functions!&apos;)</span><br><span class="line">  &#125;</span><br><span class="line">  //调用时fnMiddleware(ctx).then(handleResponse).catch(onerror); </span><br><span class="line">  //next 是undefined</span><br><span class="line">  return function (context, next) &#123;</span><br><span class="line">    // last called middleware #</span><br><span class="line">    let index = -1</span><br><span class="line">    return dispatch(0)</span><br><span class="line">    function dispatch (i) &#123;</span><br><span class="line">      if (i &lt;= index) return Promise.reject(new Error(&apos;next() called multiple times&apos;))</span><br><span class="line">      index = i</span><br><span class="line">      let fn = middleware[i]</span><br><span class="line">      if (i === middleware.length) fn = next</span><br><span class="line">      if (!fn) return Promise.resolve()</span><br><span class="line">      try &#123;//try-catch 用于保证错误在promise的情况能够正常捕获</span><br><span class="line">        return Promise.resolve(fn(context, dispatch.bind(null, i + 1)));</span><br><span class="line">      &#125; catch (err) &#123;</span><br><span class="line">        return Promise.reject(err)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="剥洋葱流程"><a href="#剥洋葱流程" class="headerlink" title="剥洋葱流程"></a>剥洋葱流程</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">let index = -1</span><br><span class="line">return dispatch(0) //从第一个中间件开始执行</span><br><span class="line">function dispatch (i) &#123;</span><br><span class="line">  //防止next 在一个中间件中被调用多次</span><br><span class="line">  if (i &lt;= index) return Promise.reject(new Error(&apos;next() called multiple times&apos;))</span><br><span class="line">  index = i</span><br><span class="line">  let fn = middleware[i] //拿到中间件</span><br><span class="line">  if (i === middleware.length) fn = next //如果中间件函数全部调用完，fn 赋值为next,next为undefined</span><br><span class="line">  if (!fn) return Promise.resolve() //fn为next=&gt;undefined时成立，即执行到最后返回一个Promise.resolve() 可以继续写then</span><br><span class="line">  try &#123;//try-catch 用于保证错误在promise的情况能够正常捕获</span><br><span class="line">    //执行中间件函数，传入ctx,next参数，next即dispatch.bind(null, i + 1)，</span><br><span class="line">    //递归调用下一个中间件函数</span><br><span class="line">    //从这一步可以实现await next()时，先执行下一个中间件函数</span><br><span class="line">    //中间件有调用next,就利用await暂停当前中间件执行，开始执行下一个中间件</span><br><span class="line">    return Promise.resolve(fn(context, dispatch.bind(null, i + 1)));</span><br><span class="line">  &#125; catch (err) &#123;</span><br><span class="line">    return Promise.reject(err)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>利用await暂停当前中间件执行，调用next开始执行下一个中间件</p>
+<p>如果下一个中间件没有调next,且不是最后一个中间件，<br>即不会再调用dispatch执行下下一个中间件，则后续中间件都不会被执行到</p>
+<p>如果下一个中间件是最后一个中间件，且在其中调用了next,则不会走到这个流程，<br>在上面的流程中就return</p>
+<p>如果下一个中间件是最后一个中间件,则执行完return Promise.resolve<br>上一个中间件await 拿到结果后继续执行await后面的代码<br>执行完await后面代码后，上上一个中间件await 拿到结果，继续执行当前中间件await后代码<br>依次类推，直到第一个中间件await后代码执行完毕，整个中间件流程，<br>即剥洋葱流程先内层后外层执行流程完毕<br>返回promise 接着then处理响应或者中间有错误捕获错误<br>fnMiddleware(ctx).then(handleResponse).catch(onerror)</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/vue/vuex2.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1544,125 +1669,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/shadowDom.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/knowledge/shadowDom.html" itemprop="url">
-                  Shadow DOM
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-27T20:18:15+08:00">
-                2020-01-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Shadow DOM是HTML的一个规范，它允许浏览器开发者封装自己的HTML标签，css样式和特定js代码<br>同时也可以让开发者常见类似video这样的自定义一级标签，<br>创建的这些新标签和相关的api被称为 WEB Component</p>
-<p>Shadow host 是shadow dom 的容器元素，就是最终使用的标签元素<br>Shadow root 是shadow dom 具体内容的根节点，可以使用document.createShadowRoot()创建<br>shadow tree 是shadow dom 包含的子节点数</p>
-<p>在shadow root 上可以任意通过DOM操作添加任意shadow tree，同时指定样式和处理逻辑<br>并将自己的API暴露出来<br>完成创建后需要通过document.registerElement()在文档中注册元素<br>shadow dom 创建就完成了</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1706,7 +1712,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">239</span>
+              <span class="site-state-item-count">240</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
