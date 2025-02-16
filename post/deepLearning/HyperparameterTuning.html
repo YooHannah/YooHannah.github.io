@@ -1,0 +1,693 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="deepLearning,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="超参数如何取值直接调优根据经验对于超参数的重要性进行排序  学习率 momentum 的β（~0.9）;隐藏层的神经元数量;mini batch size 隐藏层的数量；学习率的衰减率 adam 的β1（~0.9），β2（~0.999）Σ（10^-8）这三者一般固定，很少需要调试  数值选择上遵循随机取值和精确搜索的原则随机取值可以快速找到影响较大的超参数，确定范围后，精确搜索可以进一步优化超参数">
+<meta name="keywords" content="deepLearning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="超参数调优">
+<meta property="og:url" content="http://yoohannah.github.io/post/deepLearning/HyperparameterTuning.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="超参数如何取值直接调优根据经验对于超参数的重要性进行排序  学习率 momentum 的β（~0.9）;隐藏层的神经元数量;mini batch size 隐藏层的数量；学习率的衰减率 adam 的β1（~0.9），β2（~0.999）Σ（10^-8）这三者一般固定，很少需要调试  数值选择上遵循随机取值和精确搜索的原则随机取值可以快速找到影响较大的超参数，确定范围后，精确搜索可以进一步优化超参数">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/78.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/79.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/80.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/81.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/82.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/83.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/84.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/85.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/86.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/87.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/88.png">
+<meta property="og:updated_time" content="2025-02-07T00:07:52.257Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="超参数调优">
+<meta name="twitter:description" content="超参数如何取值直接调优根据经验对于超参数的重要性进行排序  学习率 momentum 的β（~0.9）;隐藏层的神经元数量;mini batch size 隐藏层的数量；学习率的衰减率 adam 的β1（~0.9），β2（~0.999）Σ（10^-8）这三者一般固定，很少需要调试  数值选择上遵循随机取值和精确搜索的原则随机取值可以快速找到影响较大的超参数，确定范围后，精确搜索可以进一步优化超参数">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/deepLearning/78.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/deepLearning/HyperparameterTuning.html">
+
+
+
+
+
+  <title> 超参数调优 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/deepLearning/HyperparameterTuning.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                超参数调优
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-31T21:26:37+08:00">
+                2025-01-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="超参数如何取值"><a href="#超参数如何取值" class="headerlink" title="超参数如何取值"></a>超参数如何取值</h1><h2 id="直接调优"><a href="#直接调优" class="headerlink" title="直接调优"></a>直接调优</h2><p>根据经验对于超参数的重要性进行排序</p>
+<ol>
+<li>学习率</li>
+<li>momentum 的β（~0.9）;隐藏层的神经元数量;mini batch size</li>
+<li>隐藏层的数量；学习率的衰减率</li>
+<li>adam 的β1（~0.9），β2（~0.999）Σ（10^-8）这三者一般固定，很少需要调试</li>
+</ol>
+<p>数值选择上遵循随机取值和精确搜索的原则<br>随机取值可以快速找到影响较大的超参数，确定范围后，精确搜索可以进一步优化超参数，由粗糙到精细</p>
+<p><img src="/image/deepLearning/78.png" alt><br><img src="/image/deepLearning/79.png" alt><br><img src="/image/deepLearning/80.png" alt></p>
+<h2 id="借鉴已有其他领域模型，复用其参数进行测试评估"><a href="#借鉴已有其他领域模型，复用其参数进行测试评估" class="headerlink" title="借鉴已有其他领域模型，复用其参数进行测试评估"></a>借鉴已有其他领域模型，复用其参数进行测试评估</h2><h2 id="根据计算能力选择调试方式"><a href="#根据计算能力选择调试方式" class="headerlink" title="根据计算能力选择调试方式"></a>根据计算能力选择调试方式</h2><p>1，如果计算能力有限，一次进行一个模型的训练调试，用时间换取效果<br>2，如果计算能力充足，一次同时进行多个模型的不同超参训练调试，用并行换取时间</p>
+<h1 id="batch归一化处理"><a href="#batch归一化处理" class="headerlink" title="batch归一化处理"></a>batch归一化处理</h1><p>基于对输入样本数据进行归一化处理可加速算法训练学习的原理，对隐层的输入数据也同样进行归一化处理，<br>可以降低前一层的数据计算结束变动对后一层计算的影响，降低前后层的联系，每一层都可以独立学习，从而加速算法的训练速度<br><img src="/image/deepLearning/81.png" alt><br><img src="/image/deepLearning/82.png" alt><br><img src="/image/deepLearning/83.png" alt><br><img src="/image/deepLearning/84.png" alt><br><img src="/image/deepLearning/85.png" alt><br><img src="/image/deepLearning/86.png" alt></p>
+<h1 id="Softmax-regression"><a href="#Softmax-regression" class="headerlink" title="Softmax regression"></a>Softmax regression</h1><p>Softmax 算法是一种用于多分类任务的函数，通常应用于神经网络的输出层，以将网络的输出转换为概率分布。<br>它可以将一个未归一化的向量（即原始的网络输出）转换为一个归一化的概率分布，使得每个类别的概率值在 0 到 1 之间，并且所有类别的概率和为 1。<br><img src="/image/deepLearning/87.png" alt></p>
+<h1 id="TensorFlow-框架学习"><a href="#TensorFlow-框架学习" class="headerlink" title="TensorFlow 框架学习"></a>TensorFlow 框架学习</h1><p><img src="/image/deepLearning/88.png" alt></p>
+<blockquote>
+<p>What you should remember: - Tensorflow is a programming framework used in deep learning - The two main object classes in tensorflow are Tensors and Operators. - When you code in tensorflow you have to take the following steps: - Create a graph containing Tensors (Variables, Placeholders …) and Operations (tf.matmul, tf.add, …) - Create a session - Initialize the session - Run the session to execute the graph - You can execute the graph multiple times as you’ve seen in model() - The backpropagation and optimization is automatically done when running the session on the “optimizer” object.</p>
+</blockquote>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/TensorFlow/index.py" target="_blank" rel="noopener">实验</a><br><a href="https://github.com/GeeeekExplorer/AndrewNg-Deep-Learning/blob/master/Improving%20Deep%20Neural%20Networks%20Hyperparameter%20tuning%2C%20Regularization%20and%20Optimization/week7/TensorFlow%20Tutorial%20Solution.ipynb" target="_blank" rel="noopener">练习代码</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/deepLearning/" rel="tag"># deepLearning</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/deepLearning/OptGradientDescent.html" rel="next" title="一些优化梯度下降的方法">
+                <i class="fa fa-chevron-left"></i> 一些优化梯度下降的方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/deepLearning/ConvolutionalNeuralNetworks.html" rel="prev" title="卷积神经网络">
+                卷积神经网络 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">245</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#超参数如何取值"><span class="nav-number">1.</span> <span class="nav-text">超参数如何取值</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#直接调优"><span class="nav-number">1.1.</span> <span class="nav-text">直接调优</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#借鉴已有其他领域模型，复用其参数进行测试评估"><span class="nav-number">1.2.</span> <span class="nav-text">借鉴已有其他领域模型，复用其参数进行测试评估</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#根据计算能力选择调试方式"><span class="nav-number">1.3.</span> <span class="nav-text">根据计算能力选择调试方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#batch归一化处理"><span class="nav-number">2.</span> <span class="nav-text">batch归一化处理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Softmax-regression"><span class="nav-number">3.</span> <span class="nav-text">Softmax regression</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TensorFlow-框架学习"><span class="nav-number">4.</span> <span class="nav-text">TensorFlow 框架学习</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

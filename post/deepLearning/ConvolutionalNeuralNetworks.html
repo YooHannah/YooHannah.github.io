@@ -1,0 +1,817 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="deepLearning,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="背景如果用神经网络直接处理1000x1000的图片，那么在一开始入参就需要1000x1000x3 = 3mili个参数，加上后续layer的参数，会导致整个神经网络需要足够巨大的内存，且消耗训练时间，另外难以获取足够多的数据防止出现过拟合问题和竞争需求因此，计算机视觉中进行图片识别就引入了卷积计算，解决大图片识别问题 卷积计算卷积运算在图像处理和计算机视觉中被广泛用于边缘检测。边缘检测是识别图像中">
+<meta name="keywords" content="deepLearning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="卷积神经网络">
+<meta property="og:url" content="http://yoohannah.github.io/post/deepLearning/ConvolutionalNeuralNetworks.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="背景如果用神经网络直接处理1000x1000的图片，那么在一开始入参就需要1000x1000x3 = 3mili个参数，加上后续layer的参数，会导致整个神经网络需要足够巨大的内存，且消耗训练时间，另外难以获取足够多的数据防止出现过拟合问题和竞争需求因此，计算机视觉中进行图片识别就引入了卷积计算，解决大图片识别问题 卷积计算卷积运算在图像处理和计算机视觉中被广泛用于边缘检测。边缘检测是识别图像中">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/111.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/112.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/113.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/114.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/115.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/116.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/117.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/118.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/119.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/120.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/121.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/122.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/123.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/124.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/125.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/126.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/127.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/128.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/129.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/130.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/131.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/132.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/133.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/134.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/135.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/136.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/137.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/138.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/139.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/140.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/141.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/142.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/143.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/144.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/145.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/146.png%0A进行数据增强过程也存在超参调试(颜色变化多少，随机裁剪时的参数">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/147.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/148.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/149.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/150.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/151.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/152.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/153.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/154.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/155.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/156.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/157.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/158.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/159.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/160.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/161.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/162.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/163.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/164.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/165.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/166.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/167.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/168.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/169.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/170.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/171.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/172.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/173.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/174.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/175.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/176.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/177.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/178.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/179.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/180.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/181.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/182.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/183.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/184.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/185.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/186.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/187.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/188.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/189.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/190.png">
+<meta property="og:updated_time" content="2025-02-16T08:52:10.511Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="卷积神经网络">
+<meta name="twitter:description" content="背景如果用神经网络直接处理1000x1000的图片，那么在一开始入参就需要1000x1000x3 = 3mili个参数，加上后续layer的参数，会导致整个神经网络需要足够巨大的内存，且消耗训练时间，另外难以获取足够多的数据防止出现过拟合问题和竞争需求因此，计算机视觉中进行图片识别就引入了卷积计算，解决大图片识别问题 卷积计算卷积运算在图像处理和计算机视觉中被广泛用于边缘检测。边缘检测是识别图像中">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/deepLearning/111.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/deepLearning/ConvolutionalNeuralNetworks.html">
+
+
+
+
+
+  <title> 卷积神经网络 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/deepLearning/ConvolutionalNeuralNetworks.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                卷积神经网络
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-02-03T17:15:37+08:00">
+                2025-02-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>如果用神经网络直接处理1000x1000的图片，那么在一开始入参就需要1000x1000x3 = 3mili个参数，加上后续layer的参数，<br>会导致整个神经网络需要足够巨大的内存，且消耗训练时间，另外难以获取足够多的数据防止出现过拟合问题和竞争需求<br>因此，计算机视觉中进行图片识别就引入了卷积计算，解决大图片识别问题</p>
+<h1 id="卷积计算"><a href="#卷积计算" class="headerlink" title="卷积计算"></a>卷积计算</h1><p>卷积运算在图像处理和计算机视觉中被广泛用于边缘检测。<br>边缘检测是识别图像中像素值变化显著的区域，这些区域通常对应于物体的边界。<br>卷积运算通过在图像上应用特定的滤波器（或卷积核）来实现这一点。</p>
+<p>卷积运算涉及将一个小矩阵（称为卷积核或滤波器）在图像上滑动，并在每个位置计算该核与图像局部区域的点积。<br>卷积核的大小通常较小（如 3x3、5x5），而图像可能很大。</p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><p>选择卷积核：选择一个合适的卷积核，例如 Sobel 核，用于检测图像中的边缘。<br>滑动卷积核：将卷积核从图像的左上角开始，逐像素地在图像上滑动。对于每个位置，将卷积核与图像的对应区域进行点积运算。<br>计算卷积值：将卷积核与图像局部区域的像素值相乘并求和，得到该位置的卷积值。<br>生成输出图像：将每个位置的卷积值组成一个新的图像，该图像的每个像素值表示原始图像中对应位置的边缘强度。<br><img src="/image/deepLearning/111.png" alt><br><img src="/image/deepLearning/112.png" alt><br><img src="/image/deepLearning/113.png" alt><br><img src="/image/deepLearning/114.png" alt><br><img src="/image/deepLearning/115.png" alt></p>
+<h3 id="padding"><a href="#padding" class="headerlink" title="padding"></a>padding</h3><p>如上计算过程存在两个弊端<br>一个是卷积计算完之后，输出图像的大小会比输入图像小，如果神经网络有100层，每一层都缩小一点点，最终得到的图片可能是1x1大小的图片，<br>另外一个是无法充分利用图片边缘信息，因为卷积核在边缘处计算时，图片的边缘数据只被用到了一次，但是中间的数据被用到了多次，导致图片信息没有等概率的参数推测<br>为了解决这个问题，在图片边缘添加p圈0，这样卷积核在边缘处计算时，图片的边缘数据就可以被用到了多次，从而可以防止计算后图片缩小<br>这个操作的过程就是卷积计算加padding的操作<br><img src="/image/deepLearning/116.png" alt><br>加padding有两种方式valid 和 same<br>valid 表示不加padding，输出图片计算公式为 nxn  * fxf = (n-f+1) x (n-f+1)<br>same 表示加padding，使得输出图像的大小和输入图像的大小相同<br>(n + 2p - f + 1 ) x (n + 2p - f + 1 ) = n x n<br>p = (f - 1) / 2<br>这样过滤器f 一般为奇数，才能保证实现对称填充(4周填充数相同)，不然会出现不对称填充（左边多右边少）<br>另外奇数过滤器为奇数，会存在中心点，方便定位过滤器位置<br><img src="/image/deepLearning/117.png" alt></p>
+<h3 id="stride"><a href="#stride" class="headerlink" title="stride"></a>stride</h3><p>stride 表示卷积核在图像上滑动的步长，默认值为1，表示每次滑动一个像素<br>如果stride 为2，表示每次滑动2个像素，这样可以减少计算量，同时可以减少输出图像的大小<br>输出图像的大小计算公式为 math.floor((n + 2p - f) / stride) + 1</p>
+<p><img src="/image/deepLearning/118.png" alt></p>
+<h3 id="三维计算"><a href="#三维计算" class="headerlink" title="三维计算"></a>三维计算</h3><p>上面讨论的是在一张灰度图片上的计算，如果是彩色图片，那么需要对图片的每个通道进行卷积计算，<br>然后将每个通道的卷积结果相加，得到最终的输出图像<br>最终输入图片大小同上，为 (n-f+1) x (n-f+1)<br>但是要保证输入图片的通道数和卷积核的通道数相同，否则无法进行卷积计算<br><img src="/image/deepLearning/119.png" alt><br>如果同时对图片进行多个通道，多个过滤器的计算，<br>那么输出图片维度需要加上过滤器的个数，相当于一张过滤器产生一个通道<br>输出图片的大小为 (n-f+1) x (n-f+1) x 过滤器的个数<br><img src="/image/deepLearning/120.png" alt></p>
+<h1 id="卷积层"><a href="#卷积层" class="headerlink" title="卷积层"></a>卷积层</h1><p>之前的神经网络，输入x 和 w 都是具体的一个数字，现在相当之于x 和 w 是一个三维矩阵<br>有几个过滤器，相当于有几个神经元，每个神经元的输入是一个三维矩阵，<br>每个神经元的w是一个和上一层输入深度相同的三维矩阵, b 也是一个和上一层输入深度相同的三维矩阵<br>这样每个神经元计算结果就是一个2维矩阵，<br>多个神经元的计算结果就是一个三维矩阵，相当于多个通道的图片</p>
+<h2 id="单层的实现原理"><a href="#单层的实现原理" class="headerlink" title="单层的实现原理"></a>单层的实现原理</h2><p><img src="/image/deepLearning/121.png" alt><br>相关符号表示<br><img src="/image/deepLearning/122.png" alt></p>
+<h2 id="卷积层的实现"><a href="#卷积层的实现" class="headerlink" title="卷积层的实现"></a>卷积层的实现</h2><p><img src="/image/deepLearning/123.png" alt></p>
+<h1 id="池化层"><a href="#池化层" class="headerlink" title="池化层"></a>池化层</h1><p>减小模型规模，提高计算速度<br>类似与卷积层，只不过在过滤器范围内，不再是卷积计算，而是取最大值或者平均值<br>但是要注意，池化层的过滤器大小和步长是固定的，在整个神经网络中属于静态属性，不参与梯度下降运算<br><img src="/image/deepLearning/124.png" alt><br><img src="/image/deepLearning/125.png" alt><br><img src="/image/deepLearning/126.png" alt></p>
+<h1 id="卷积神经网络"><a href="#卷积神经网络" class="headerlink" title="卷积神经网络"></a>卷积神经网络</h1><p>上面提到了卷积层和池化层，卷积神经网络的最后一层叫做全连接层<br>相当于之前的标准神经网络，将卷积层和池化层的输出结果进行展平，然后进行全连接计算<br><img src="/image/deepLearning/127.png" alt><br>随着卷积池化层的增加，图片尺寸会越来越小，但是通道越来多<br>池化层没有学习参数，卷积层可学习参数远小于全连接层<br>而且随着卷积神经网络的向后计算，激活值数据逐渐减少<br><img src="/image/deepLearning/128.png" alt></p>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><blockquote>
+<p>Parameter sharing: A feature detector (such as a vertical edge detector) that’s useful in one part of the image is probably useful in another part of the image.<br>Sparsity of connections: In each layer, each output value<br>depends only on a small number of inputs.</p>
+</blockquote>
+<ol>
+<li>参数共享，从而减少参数数量</li>
+<li>结果输出仅依赖输入的部分数据，计算速度快</li>
+</ol>
+<p><img src="/image/deepLearning/129.png" alt></p>
+<h1 id="三种常见的卷积神经网络架构"><a href="#三种常见的卷积神经网络架构" class="headerlink" title="三种常见的卷积神经网络架构"></a>三种常见的卷积神经网络架构</h1><h2 id="LeNet-5"><a href="#LeNet-5" class="headerlink" title="LeNet - 5"></a>LeNet - 5</h2><p>论文: LeCun et al., 1998. Gradient-based learning applied to document recognition<br><img src="/image/deepLearning/130.png" alt></p>
+<h2 id="AlexNet"><a href="#AlexNet" class="headerlink" title="AlexNet"></a>AlexNet</h2><p>论文: Krizhevsky et al., 2012. ImageNet classification with deep convolutional neural networks<br><img src="/image/deepLearning/131.png" alt></p>
+<h2 id="VGG-16"><a href="#VGG-16" class="headerlink" title="VGG-16"></a>VGG-16</h2><p>简化了神经网络的结构，所有的卷积层和池化层都相同<br>16 指的是整个网络架构中所有卷积层，池化层以及全连接层的层数总和<br>结构庞大，会有约1.38亿个参数<br>但是结构规律，<br>池化层都在缩小一倍图片尺寸<br>过滤器数量随层数递深，整倍增长</p>
+<p>论文：Simonyan &amp; Zisserman 2015. Very deep convolutional networks for large-scale image recognition<br><img src="/image/deepLearning/132.png" alt></p>
+<h1 id="残差网络"><a href="#残差网络" class="headerlink" title="残差网络"></a>残差网络</h1><h2 id="残差块"><a href="#残差块" class="headerlink" title="残差块"></a>残差块</h2><p>在计算a^[l+2]前，激活函数不再使用z^(l+2)作为入参，而是以z^(l+2) + a^(l) 作为入参<br>即 a^(l+2) = g(z^(l+2) + a^(l))<br>其中a^(l) 被称为残差块<br>在通用场景下，残差块(a^(l))可能不止被加在后面第二层的计算中，可能会加入在更深的网络层中，<br>这种在main path 的基础上进行的计算又叫short cut  捷径/ skip connect 远跳链接<br><img src="/image/deepLearning/133.png" alt></p>
+<h2 id="残差网络-1"><a href="#残差网络-1" class="headerlink" title="残差网络"></a>残差网络</h2><p>将多个远跳链接计算堆积在一起就形成残差网络，可以使神经网络按照理论规律，随着神经网路层数加深，误差降低<br><img src="/image/deepLearning/134.png" alt></p>
+<h2 id="残差网络优化原理"><a href="#残差网络优化原理" class="headerlink" title="残差网络优化原理"></a>残差网络优化原理</h2><p>根据残差块的计算原理<br>a^(l+2) = g(z^(l+2) + a^(l))<br>a^(l+2) = g(w^(l+2) * a^(l+1) + b^(l+2) + a^(l))<br>在进行梯度下降处理过程中如果有使用L2正则化,或者梯度缩减,导致 w^(l+2),  b^(l+2)变小至0,<br>那么残差块的计算结果就会变成<br>a^(l+2) = g(a^(l))<br>这时激活函数式是Relu函数的话,就会得到<br>a^(l+2) = a^(l)<br>也就是说，我们通过在激活函数前添加一个远跳链接，<br>不仅没有影响网络本身性能，而且发现(学习到)了一个恒等映射，<br>可以直接利用a^(l+2) = a^(l)进行计算，<br>中间的两个隐藏层的增加对整个网络没有影响，没有的话会更好<br>扩展思路，如果跳跃链接加在更深的网络层，甚至神经网络最后一层<br>有可能学习到比恒等映射更有用的东西，从而提高整个网络的性能</p>
+<p>另外，如果没有跳跃链接，随着网络层数的增加，深层参数的初始化会是一个非常困难的事情，更别说是学习恒等映射<br>这也是为什么随着层数加深，训练的效果不是越来越好，反而越糟</p>
+<p>因此，通过增加跳跃连接形成残差网络，从不影响性能开始学习恒等映射，然后梯度下降只能从这里进行更新，<br>从而避免梯度消失或爆炸，进而提高整个网络的性能</p>
+<p>上述讨论假设在全链接层或者卷积层的 a^(l+2),a^(l) 维度相同可以成立，<br>但是在卷积层中，如果 a^(l+2),a^(l)维度不同, 需要给a^(l) 增加参数保证和 a^(l+2) 维度相同<br><img src="/image/deepLearning/135.png" alt><br><img src="/image/deepLearning/136.png" alt></p>
+<p>论文：He et al., 2015. Deep residual networks for image recognition</p>
+<h1 id="Inception网络"><a href="#Inception网络" class="headerlink" title="Inception网络"></a>Inception网络</h1><h2 id="1-x-1-卷积层"><a href="#1-x-1-卷积层" class="headerlink" title="1 x 1 卷积层"></a>1 x 1 卷积层</h2><p>当对三维矩阵进行1<em>1 的卷积计算时，相当于取三维矩阵的一个切片进行加和计算<br>对于1</em>1 的过滤器，利用其个数，可以对三维矩阵实现【通道】压缩或增加，<br>从而实现对输入数据的维度变换<br><img src="/image/deepLearning/137.png" alt><br><img src="/image/deepLearning/138.png" alt></p>
+<p>在下面的Inception网络中, 被用来构建【瓶颈层】<br>对矩阵先压缩在扩展，从而大大降低计算成本</p>
+<p>论文：[Lin et al., 2013. Network in network]</p>
+<h2 id="Inception网络-1"><a href="#Inception网络-1" class="headerlink" title="Inception网络"></a>Inception网络</h2><p>可以自行选择过滤器实现卷积层和池化层的计算，代替人工来确定卷积层中的过滤器类型(1<em>1, 3</em>3, 5<em>5, 7</em>7, 个数)<br><img src="/image/deepLearning/139.png" alt><br>直接进行卷积计算，计算量巨大<br><img src="/image/deepLearning/140.png" alt><br>可以引入瓶颈层降低计算量<br><img src="/image/deepLearning/141.png" alt></p>
+<h2 id="inception-module"><a href="#inception-module" class="headerlink" title="inception module"></a>inception module</h2><p>在普通卷积计算中引入瓶颈层，最后将所有结果进行拼接，这个模块就是inception module<br><img src="/image/deepLearning/142.png" alt></p>
+<h2 id="inception-network"><a href="#inception-network" class="headerlink" title="inception network"></a>inception network</h2><p>将多个inception module 堆叠在一起，就形成了inception network<br><img src="/image/deepLearning/143.png" alt></p>
+<p>论文： Szegedy et al., 2014, Going Deeper with Convolutions</p>
+<h1 id="迁移学习"><a href="#迁移学习" class="headerlink" title="迁移学习"></a>迁移学习</h1><p>卷积网络中的迁移学习没什么不同，在公开模型基础上继续进行训练<br>对于训练数据较少的情况，建议固定所有隐藏层参数，仅更改softmax 层结构，使之符合自己的分类规则<br>相当于只训练输出结果层的参数，</p>
+<p>一个提高训练速度的方法是因为隐藏层参数固定，可以看做固定函数，训练数据不多的情况下，<br>提前计算好所有训练数据的最后一层的激活值，拿激活值进行训练，避免重复计算</p>
+<p>对于训练数据较多的情况，建议固定前面几层的参数，仅更改后面几层的参数，使之符合自己的分类规则<br>相当于只训练后面几层的参数</p>
+<p>对于训练数据超多的情况，可以放开所有层级，以已有参数做初始值，从头开始训练</p>
+<p><img src="/image/deepLearning/144.png" alt></p>
+<h1 id="数据增强"><a href="#数据增强" class="headerlink" title="数据增强"></a>数据增强</h1><h2 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h2><p>镜像处理，随机裁剪，旋转,shearing,local warping(局部扭曲)<br><img src="/image/deepLearning/145.png" alt><br>色彩转换(加减rgb值, PCA颜色增强算法)<br><img src="/image/deepLearning/146.png
+进行数据增强过程也存在超参调试(颜色变化多少，随机裁剪时的参数" alt><br><img src="/image/deepLearning/147.png" alt></p>
+<h1 id="架构实现选择"><a href="#架构实现选择" class="headerlink" title="架构实现选择"></a>架构实现选择</h1><p>对于数据量少的情况，一般进行更多的手工设计<br>对于数据量多的情况，一般使用更简单的算法和更少的手工工程，不需要精心设计<br><img src="/image/deepLearning/148.png" alt><br><img src="/image/deepLearning/149.png" alt><br>Use open source code<br>• Use architectures of networks published in the literature<br>• Use open source implementations if possible<br>• Use pretrained models and fine-tune on your dataset</p>
+<h1 id="目标检测"><a href="#目标检测" class="headerlink" title="目标检测"></a>目标检测</h1><p>在图片分类的基础上，我们可以进行分类和定位<br>但是分类的定位都针对一个对象进行讨论<br>如果是对一张图的多个对象进行分类和定位就是对象检测<br><img src="/image/deepLearning/150.png" alt>)</p>
+<h2 id="定义输出"><a href="#定义输出" class="headerlink" title="定义输出"></a>定义输出</h2><p>在分类的基础上，定义输出是一个向量，包含分类和定位信息<br>pc 代表是否有检测目标存在，存在为1，不存在为0，不存在的情况下，后续向量值不做继续讨论<br>bx 对象中心点横坐标<br>by 对象中心店纵坐标<br>bh 对象在图中相对整幅图片高度<br>bw 对象在图中相对整幅图片宽度<br>c1 c2 c3 代表具体是哪一个对象，其中一个值为1 时，另外两个为0，同时pc 为1<br><img src="/image/deepLearning/151.png" alt><br>损失函数分为pc 是否为1 两种计算方式<br>在实际计算过程中，可能会去将y 向量分类，pc, bx ~bw, c1~c3 然后分别使用不同的计算方法进行损失值计算<br><img src="/image/deepLearning/152.png" alt></p>
+<h3 id="特征点检测"><a href="#特征点检测" class="headerlink" title="特征点检测"></a>特征点检测</h3><p>原理同定位检测，只不过输出向量是N个特征点的位置坐标 + pc值<br><img src="/image/deepLearning/153.png" alt></p>
+<h2 id="滑动窗口进行图像识别"><a href="#滑动窗口进行图像识别" class="headerlink" title="滑动窗口进行图像识别"></a>滑动窗口进行图像识别</h2><p>识别一张图片中是否有某个物体的过程一般是通过分别定义不同大小的窗口，对图片进行滑动裁剪<br>对裁剪到的图片进行对象识别，但是这样无疑会大大增加计算量<br>解决方案就是利用卷积计算的过程，避免窗口滑动过程重复区域的重复计算<br>直接将一张图片输入，直接得到物体识别的结果<br><img src="/image/deepLearning/154.png" alt><br>卷积滑动窗口的具体实现，现将FC 层也转成卷积层，方便输入各个窗口的计算值<br><img src="/image/deepLearning/155.png" alt><br><img src="/image/deepLearning/156.png" alt></p>
+<h2 id="YOLO"><a href="#YOLO" class="headerlink" title="YOLO"></a>YOLO</h2><p>YOLO(you only look once) 算法通过对图片进行格子分割，直接对格子内图片进行对象识别，从而更准确的判断对象位置<br>最后的输出结果代表每个格子的识别和位置检测结果<br><img src="/image/deepLearning/157.png" alt><br>如何解释结果？<br>bx,by,相对一个格子而言，肯定要小于1<br>bh,bw 同样相对于一个格子的大小，进行比例计算，有可能大于1，说明对象是跨格子存在的<br><img src="/image/deepLearning/158.png" alt></p>
+<h3 id="交并比"><a href="#交并比" class="headerlink" title="交并比"></a>交并比</h3><p>用于评价一个位置检测算法的好坏<br>预测值面积与实际对象所占面积重叠的部分就是交集大小 –&gt; S1<br>二者面积之和即为并集大小 –&gt;S2<br>交并比 = S1/S2<br>阈值认为决定，1 当然是最好的，说明准确发现了对象位置<br><img src="/image/deepLearning/159.png" alt></p>
+<h3 id="非最大值抑制-？？？"><a href="#非最大值抑制-？？？" class="headerlink" title="非最大值抑制 ？？？"></a>非最大值抑制 ？？？</h3><p>用于解决出现多个位置检测符合条件的情况<br><img src="/image/deepLearning/160.png" alt><br>原理就是在符合条件的窗口中寻找最大正交比</p>
+<ol>
+<li>对于所有格子的输出，去掉pc概率小于阈值的格子</li>
+<li>对剩下格子循环处理，首先找pc值最大的格子A最为最终的检测结果，然后计算剩余格子与A 的交并比，去掉交并比大于一定阈值的格子(在最大值附近)，剩余格子的话，继续循环处理<br>如果是对多类对象进行同时检测，则需要对各个类别，分别进行非最大值抑制处理<br><img src="/image/deepLearning/161.png" alt></li>
+</ol>
+<h3 id="ancher-box-？"><a href="#ancher-box-？" class="headerlink" title="ancher box ？"></a>ancher box ？</h3><p>用于处理两个对象同时出现在一个格子的情况<br>提前定义两个不同形状的ancher box， 分别用不同ancher box去识别不同的对象<br>然后根据正交比大小，判断当前格子的对象是哪个分类，修改对应分类位置的值<br>注意这里，通过增加输出通道，输出从单一结果，变成两个<br>一般很少遇到3个对象同时出现在一个格子的情况，暂不考虑<br><img src="/image/deepLearning/162.png" alt><br><img src="/image/deepLearning/163.png" alt></p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p><img src="/image/deepLearning/164.png" alt><br><img src="/image/deepLearning/165.png" alt><br><img src="/image/deepLearning/166.png" alt></p>
+<p>论文【难】： Redmon et al., 2015, You Only Look Once: Unified real-time object detection</p>
+<h3 id="R-CNN"><a href="#R-CNN" class="headerlink" title="R-CNN"></a>R-CNN</h3><p> 利用图像分割算法，对图像进行分割后，在一定区域内进行图像识别和定位<br>缺点不如YOLO一次性计算快</p>
+<p><img src="/image/deepLearning/167.png" alt><br><img src="/image/deepLearning/168.png" alt></p>
+<h1 id="人脸识别"><a href="#人脸识别" class="headerlink" title="人脸识别"></a>人脸识别</h1><h2 id="验证与识别"><a href="#验证与识别" class="headerlink" title="验证与识别"></a>验证与识别</h2><p>验证比识别要简单一些，属于1对1 的问题，识别输入仅仅是一张图，相对来说更难<br><img src="/image/deepLearning/169.png" alt></p>
+<h2 id="one-shot-amp-similarity"><a href="#one-shot-amp-similarity" class="headerlink" title="one shot &amp; similarity"></a>one shot &amp; similarity</h2><p>one shot learning 就是根据已有的一张图片对输入的图片进行识别<br>用传统的训练思维处理容易出现过拟合，而且数据库更新需要重新训练，成本高<br><img src="/image/deepLearning/170.png" alt><br>解决方式是通过看他们相似度的方法进行图片验证，比较输入图片和图库图片，<br>有差值小于阈值的图片的话，说明有这个人，没有小于阈值的图片的话，则输入图片对应的人没有在数据库中<br><img src="/image/deepLearning/171.png" alt></p>
+<h3 id="Siamese-network"><a href="#Siamese-network" class="headerlink" title="Siamese network"></a>Siamese network</h3><p>根据相似度进行图片验证的网络架构<br>原理就是，对两张图片进行相同的网络架构处理得到能够尽可能代表两张图片的128为编码<br>然后对两个编码进行范数运算，如果是同一个人则范数值会很小，否则会很大<br><img src="/image/deepLearning/172.png" alt><br>模型训练过程也是通过进行范数比较然后再去调整模型参数<br><img src="/image/deepLearning/173.png" alt></p>
+<p>论文： Taigman et. al., 2014. DeepFace closing the gap to human level performance</p>
+<h3 id="三元损失函数"><a href="#三元损失函数" class="headerlink" title="三元损失函数"></a>三元损失函数</h3><p>在训练过程过程中，通过构造识别对象的三元组数据，进行损失函数计算<br>具体过程就是分别准备待识别对象A，与待识别对象相似的对象P，与待识别对象差异较大的对象N三者的图像编码<br>通过计算比较AP与AN 之间范数的大小关系，用作损失函数的计算<br>注意这里引入超参α用于加强 AP 与AN之间的差距，提高准确度，也防止出现图像编码始终为0，导致比较关系始终成立情况出现<br><img src="/image/deepLearning/174.png" alt><br><img src="/image/deepLearning/175.png" alt><br><img src="/image/deepLearning/176.png" alt></p>
+<p>论文：Schroff et al.,2015, FaceNet: A unified embedding for face recognition and clustering</p>
+<h3 id="Siamese-network-二分类"><a href="#Siamese-network-二分类" class="headerlink" title="Siamese network + 二分类"></a>Siamese network + 二分类</h3><p>在 Siamese network  基础上，对输入的两张图片进行计算得出0 和 1 的结果，直接判断二者是否是同一个人<br><img src="/image/deepLearning/177.png" alt><br>y^的计算方式可以有多种<br>在实际使用中可以提前计算好数据库中图片编码，需要验证的时候只计算输入图片编码即可<br><img src="/image/deepLearning/178.png" alt></p>
+<h1 id="神经风格迁移"><a href="#神经风格迁移" class="headerlink" title="神经风格迁移"></a>神经风格迁移</h1><p>将一张作为内容的图片C合并上一张具有艺术表现风格的图片S，从而生成一张具有图片B艺术表现风格，但图片内容是图片A 的新图片 G<br><img src="/image/deepLearning/179.png" alt></p>
+<h2 id="可视化深层网络"><a href="#可视化深层网络" class="headerlink" title="可视化深层网络"></a>可视化深层网络</h2><p><img src="/image/deepLearning/180.png" alt><br><img src="/image/deepLearning/181.png" alt><br>【要去读】<br>论文： Zeiler and Fergus., 2013, Visualizing and understanding convolutional networks</p>
+<h2 id="成本函数"><a href="#成本函数" class="headerlink" title="成本函数"></a>成本函数</h2><p>由两部分组成，CG之间的内容成本函数Jcg（衡量内容相似度），SG之间的风格成本函数Jsg(衡量风格相似度)<br><img src="/image/deepLearning/182.png" alt><br><img src="/image/deepLearning/183.png" alt><br>论文：Gatys et al., 2015. A neural algorithm of artistic style. </p>
+<h3 id="内容成本函数"><a href="#内容成本函数" class="headerlink" title="内容成本函数"></a>内容成本函数</h3><p>计算CG在相同预训练模型上某一层的激活函数值的相似度，如果二者相似说明图片有相似的内容<br><img src="/image/deepLearning/184.png" alt></p>
+<h3 id="风格成本函数"><a href="#风格成本函数" class="headerlink" title="风格成本函数"></a>风格成本函数</h3><p>如果两个通道间关联度高，说明图片风格特征同时出现的概率高<br>通过某一层计算激活函数值各通道间的关联程度定义来衡量图片的风格，<br>如果SG相似度低，则成本函数值高<br><img src="/image/deepLearning/185.png" alt><br><img src="/image/deepLearning/186.png" alt><br><img src="/image/deepLearning/187.png" alt><br><img src="/image/deepLearning/188.png" alt></p>
+<h1 id="1D-2D-3D-卷积计算"><a href="#1D-2D-3D-卷积计算" class="headerlink" title="1D 2D 3D 卷积计算"></a>1D 2D 3D 卷积计算</h1><p><img src="/image/deepLearning/189.png" alt><br><img src="/image/deepLearning/190.png" alt></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/deepLearning/" rel="tag"># deepLearning</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/deepLearning/HyperparameterTuning.html" rel="next" title="超参数调优">
+                <i class="fa fa-chevron-left"></i> 超参数调优
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">245</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#卷积计算"><span class="nav-number">2.</span> <span class="nav-text">卷积计算</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#步骤"><span class="nav-number">2.1.</span> <span class="nav-text">步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#padding"><span class="nav-number">2.1.1.</span> <span class="nav-text">padding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stride"><span class="nav-number">2.1.2.</span> <span class="nav-text">stride</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三维计算"><span class="nav-number">2.1.3.</span> <span class="nav-text">三维计算</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#卷积层"><span class="nav-number">3.</span> <span class="nav-text">卷积层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#单层的实现原理"><span class="nav-number">3.1.</span> <span class="nav-text">单层的实现原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#卷积层的实现"><span class="nav-number">3.2.</span> <span class="nav-text">卷积层的实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#池化层"><span class="nav-number">4.</span> <span class="nav-text">池化层</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#卷积神经网络"><span class="nav-number">5.</span> <span class="nav-text">卷积神经网络</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#优点"><span class="nav-number">5.1.</span> <span class="nav-text">优点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三种常见的卷积神经网络架构"><span class="nav-number">6.</span> <span class="nav-text">三种常见的卷积神经网络架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#LeNet-5"><span class="nav-number">6.1.</span> <span class="nav-text">LeNet - 5</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AlexNet"><span class="nav-number">6.2.</span> <span class="nav-text">AlexNet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VGG-16"><span class="nav-number">6.3.</span> <span class="nav-text">VGG-16</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#残差网络"><span class="nav-number">7.</span> <span class="nav-text">残差网络</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#残差块"><span class="nav-number">7.1.</span> <span class="nav-text">残差块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#残差网络-1"><span class="nav-number">7.2.</span> <span class="nav-text">残差网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#残差网络优化原理"><span class="nav-number">7.3.</span> <span class="nav-text">残差网络优化原理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Inception网络"><span class="nav-number">8.</span> <span class="nav-text">Inception网络</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-x-1-卷积层"><span class="nav-number">8.1.</span> <span class="nav-text">1 x 1 卷积层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Inception网络-1"><span class="nav-number">8.2.</span> <span class="nav-text">Inception网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#inception-module"><span class="nav-number">8.3.</span> <span class="nav-text">inception module</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#inception-network"><span class="nav-number">8.4.</span> <span class="nav-text">inception network</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#迁移学习"><span class="nav-number">9.</span> <span class="nav-text">迁移学习</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据增强"><span class="nav-number">10.</span> <span class="nav-text">数据增强</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#图片"><span class="nav-number">10.1.</span> <span class="nav-text">图片</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#架构实现选择"><span class="nav-number">11.</span> <span class="nav-text">架构实现选择</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#目标检测"><span class="nav-number">12.</span> <span class="nav-text">目标检测</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#定义输出"><span class="nav-number">12.1.</span> <span class="nav-text">定义输出</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特征点检测"><span class="nav-number">12.1.1.</span> <span class="nav-text">特征点检测</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#滑动窗口进行图像识别"><span class="nav-number">12.2.</span> <span class="nav-text">滑动窗口进行图像识别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#YOLO"><span class="nav-number">12.3.</span> <span class="nav-text">YOLO</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#交并比"><span class="nav-number">12.3.1.</span> <span class="nav-text">交并比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非最大值抑制-？？？"><span class="nav-number">12.3.2.</span> <span class="nav-text">非最大值抑制 ？？？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ancher-box-？"><span class="nav-number">12.3.3.</span> <span class="nav-text">ancher box ？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-number">12.3.4.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#R-CNN"><span class="nav-number">12.3.5.</span> <span class="nav-text">R-CNN</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#人脸识别"><span class="nav-number">13.</span> <span class="nav-text">人脸识别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#验证与识别"><span class="nav-number">13.1.</span> <span class="nav-text">验证与识别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#one-shot-amp-similarity"><span class="nav-number">13.2.</span> <span class="nav-text">one shot &amp; similarity</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Siamese-network"><span class="nav-number">13.2.1.</span> <span class="nav-text">Siamese network</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三元损失函数"><span class="nav-number">13.2.2.</span> <span class="nav-text">三元损失函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Siamese-network-二分类"><span class="nav-number">13.2.3.</span> <span class="nav-text">Siamese network + 二分类</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#神经风格迁移"><span class="nav-number">14.</span> <span class="nav-text">神经风格迁移</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#可视化深层网络"><span class="nav-number">14.1.</span> <span class="nav-text">可视化深层网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#成本函数"><span class="nav-number">14.2.</span> <span class="nav-text">成本函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#内容成本函数"><span class="nav-number">14.2.1.</span> <span class="nav-text">内容成本函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#风格成本函数"><span class="nav-number">14.2.2.</span> <span class="nav-text">风格成本函数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1D-2D-3D-卷积计算"><span class="nav-number">15.</span> <span class="nav-text">1D 2D 3D 卷积计算</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

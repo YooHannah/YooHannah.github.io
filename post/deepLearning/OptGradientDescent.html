@@ -1,0 +1,731 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="deepLearning,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="小批量梯度下降算法在单轮训练过程中，不再一次从计算整个训练数据，将整个训练数据分批进行训练，每批（epoch）训练的样本数称为batch size batch size 最大等于整个训练样本数m时，相当于进行一次批量运算，就是标准的批量梯度下降算法,需要计算完基于整个训练样本参数和损失函数，花费时间较长，然后才能进行梯度下降计算 12345678910111213# (Batch) Gradien">
+<meta name="keywords" content="deepLearning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一些优化梯度下降的方法">
+<meta property="og:url" content="http://yoohannah.github.io/post/deepLearning/OptGradientDescent.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="小批量梯度下降算法在单轮训练过程中，不再一次从计算整个训练数据，将整个训练数据分批进行训练，每批（epoch）训练的样本数称为batch size batch size 最大等于整个训练样本数m时，相当于进行一次批量运算，就是标准的批量梯度下降算法,需要计算完基于整个训练样本参数和损失函数，花费时间较长，然后才能进行梯度下降计算 12345678910111213# (Batch) Gradien">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/65.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/66.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/67.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/68.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/70.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/69.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/71.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/72.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/74.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/73.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/75.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/76.png">
+<meta property="og:updated_time" content="2025-02-07T00:07:52.259Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一些优化梯度下降的方法">
+<meta name="twitter:description" content="小批量梯度下降算法在单轮训练过程中，不再一次从计算整个训练数据，将整个训练数据分批进行训练，每批（epoch）训练的样本数称为batch size batch size 最大等于整个训练样本数m时，相当于进行一次批量运算，就是标准的批量梯度下降算法,需要计算完基于整个训练样本参数和损失函数，花费时间较长，然后才能进行梯度下降计算 12345678910111213# (Batch) Gradien">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/deepLearning/65.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/deepLearning/OptGradientDescent.html">
+
+
+
+
+
+  <title> 一些优化梯度下降的方法 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/deepLearning/OptGradientDescent.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                一些优化梯度下降的方法
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-31T14:57:37+08:00">
+                2025-01-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="小批量梯度下降算法"><a href="#小批量梯度下降算法" class="headerlink" title="小批量梯度下降算法"></a>小批量梯度下降算法</h1><p>在单轮训练过程中，不再一次从计算整个训练数据，将整个训练数据分批进行训练，每批（epoch）训练的样本数称为batch size</p>
+<p>batch size 最大等于整个训练样本数m时，相当于进行一次批量运算，就是标准的批量梯度下降算法,<br>需要计算完基于整个训练样本参数和损失函数，花费时间较长，然后才能进行梯度下降计算</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># (Batch) Gradient Descent:</span><br><span class="line">X = data_input</span><br><span class="line">Y = labels</span><br><span class="line">parameters = initialize_parameters(layers_dims)</span><br><span class="line">for i in range(0, num_iterations):</span><br><span class="line">    # Forward propagation</span><br><span class="line">    a, caches = forward_propagation(X, parameters)</span><br><span class="line">    # Compute cost.</span><br><span class="line">    cost += compute_cost(a, Y)</span><br><span class="line">    # Backward propagation.</span><br><span class="line">    grads = backward_propagation(a, caches, parameters)</span><br><span class="line">    # Update parameters.</span><br><span class="line">    parameters = update_parameters(parameters, grads)</span><br></pre></td></tr></table></figure>
+<p>batch size 最小等于1时，就是一个批次处理一个数据, 速度快，但是没法利用向量加速梯度下降，也称为随机梯度下降算法Stochastic Gradient Descent:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># Stochastic Gradient Descent:</span><br><span class="line">X = data_input</span><br><span class="line">Y = labels</span><br><span class="line">parameters = initialize_parameters(layers_dims)</span><br><span class="line">for i in range(0, num_iterations):</span><br><span class="line">    for j in range(0, m):</span><br><span class="line">        # Forward propagation</span><br><span class="line">        a, caches = forward_propagation(X[:,j], parameters) # X[:,j] 从m列中，每次取一列，就是一个样本</span><br><span class="line">        # Compute cost</span><br><span class="line">        cost += compute_cost(a, Y[:,j])</span><br><span class="line">        # Backward propagation</span><br><span class="line">        grads = backward_propagation(a, caches, parameters)</span><br><span class="line">        # Update parameters.</span><br><span class="line">        parameters = update_parameters(parameters, grads)</span><br></pre></td></tr></table></figure></p>
+<p>当batch size 介于1和m之间时，就是小批量梯度下降算法Mini-batch Gradient Descent<br>小批量梯度下降处理数据分两步，<br>一步是混洗数据，将数据集顺序打乱，但保证X(i) 和 Y（i）是一一对应的<br>第二步是将数据分成多个batch，每个batch包含batch size 个样本，需要注意如果m 不能整除batch size，最后一个batch 是不足batch size 个样本，需要单独处理</p>
+<blockquote>
+<p>Shuffling and Partitioning are the two steps required to build mini-batches -<br>Powers of two are often chosen to be the mini-batch size, e.g., 16, 32, 64, 128.</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"># GRADED FUNCTION: random_mini_batches</span><br><span class="line"></span><br><span class="line">def random_mini_batches(X, Y, mini_batch_size = 64, seed = 0):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Creates a list of random minibatches from (X, Y)</span><br><span class="line">    </span><br><span class="line">    Arguments:</span><br><span class="line">    X -- input data, of shape (input size, number of examples)</span><br><span class="line">    Y -- true &quot;label&quot; vector (1 for blue dot / 0 for red dot), of shape (1, number of examples)</span><br><span class="line">    mini_batch_size -- size of the mini-batches, integer</span><br><span class="line">    </span><br><span class="line">    Returns:</span><br><span class="line">    mini_batches -- list of synchronous (mini_batch_X, mini_batch_Y)</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    </span><br><span class="line">    np.random.seed(seed)            # To make your &quot;random&quot; minibatches the same as ours</span><br><span class="line">    m = X.shape[1]                  # number of training examples</span><br><span class="line">    mini_batches = []</span><br><span class="line">        </span><br><span class="line">    # Step 1: Shuffle (X, Y)</span><br><span class="line">    permutation = list(np.random.permutation(m))</span><br><span class="line">    shuffled_X = X[:, permutation]</span><br><span class="line">    shuffled_Y = Y[:, permutation].reshape((1,m))</span><br><span class="line"></span><br><span class="line">    # Step 2: Partition (shuffled_X, shuffled_Y). Minus the end case.</span><br><span class="line">    num_complete_minibatches = math.floor(m/mini_batch_size) # number of mini batches of size mini_batch_size in your partitionning</span><br><span class="line">    for k in range(0, num_complete_minibatches):</span><br><span class="line">        mini_batch_X = shuffled_X[:, k * mini_batch_size : (k + 1) * mini_batch_size]</span><br><span class="line">        mini_batch_Y = shuffled_Y[:, k * mini_batch_size : (k + 1) * mini_batch_size]</span><br><span class="line">        mini_batch = (mini_batch_X, mini_batch_Y)</span><br><span class="line">        mini_batches.append(mini_batch)</span><br><span class="line">    </span><br><span class="line">    # Handling the end case (last mini-batch &lt; mini_batch_size)</span><br><span class="line">    if m % mini_batch_size != 0:</span><br><span class="line">        ### START CODE HERE ### (approx. 2 lines)</span><br><span class="line">        mini_batch_X = shuffled_X[:, num_complete_minibatches * mini_batch_size :]</span><br><span class="line">        mini_batch_Y = shuffled_Y[:, num_complete_minibatches * mini_batch_size :]</span><br><span class="line">        ### END CODE HERE ###</span><br><span class="line">        mini_batch = (mini_batch_X, mini_batch_Y)</span><br><span class="line">        mini_batches.append(mini_batch)</span><br><span class="line">    </span><br><span class="line">    return mini_batches</span><br></pre></td></tr></table></figure>
+<p>迭代过程处理的数据集就是上面分批好的mini_batches</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mini_batches = random_mini_batches(X, Y, mini_batch_size = 64, seed = 0)</span><br><span class="line">t =  math.floor(m/mini_batch_size)</span><br><span class="line">if m % mini_batch_size != 0</span><br><span class="line">  t+=1</span><br><span class="line">for i in range(0, num_iterations):</span><br><span class="line">    for j in range(0, t):</span><br><span class="line">        # Forward propagation</span><br><span class="line">        a, caches = forward_propagation(mini_batches[j][0], parameters) # 取一批计算一批，不用整个计算完再更新梯度</span><br><span class="line">        # Compute cost</span><br><span class="line">        cost += compute_cost(a, mini_batches[j][1])</span><br><span class="line">        # Backward propagation</span><br><span class="line">        grads = backward_propagation(a, caches, parameters)</span><br><span class="line">        # Update parameters.</span><br><span class="line">        parameters = update_parameters(parameters, grads)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>The difference between gradient descent, mini-batch gradient descent and stochastic gradient descent is the number of examples you use to perform one update step. - You have to tune a learning rate hyperparameter  𝛼 . - With a well-turned mini-batch size, usually it outperforms either gradient descent or stochastic gradient descent (particularly when the training set is large).</p>
+</blockquote>
+<p><img src="/image/deepLearning/65.png" alt><br><img src="/image/deepLearning/66.png" alt><br><img src="/image/deepLearning/67.png" alt><br><img src="/image/deepLearning/68.png" alt></p>
+<h1 id="momentum"><a href="#momentum" class="headerlink" title="momentum"></a>momentum</h1><h2 id="指数加权平均"><a href="#指数加权平均" class="headerlink" title="指数加权平均"></a>指数加权平均</h2><p>指数加权平均（Exponential Weighted Moving Average, EWMA）是一种用于平滑时间序列数据的技术。<br>它通过对数据点赋予不同的权重来计算平均值，较新的数据点权重较大，较旧的数据点权重较小。<br>这样可以更敏感地反映最新数据的变化，同时保留历史数据的趋势。<br>指数加权平均的计算公式如下：</p>
+<p>St = β <em> St-1 + （1-β） </em> Xt<br>其中：<br> St是时间 t 时刻的指数加权平均值。<br> Xt是时间 t 时刻的实际数据值。<br> β 是平滑因子，取值范围在 0 到 1 之间。较大的  值使得 EWMA 对最新数据更敏感，较小的  值则使得 EWMA 更平滑。<br> St-1是时间 t-1 时刻的指数加权平均值。<br>解释<br>初始值：通常，初始的指数加权平均值 S0  可以设置为第一个数据点 X0 。<br>递归计算：每个新的数据点都会更新 EWMA，新的 EWMA 是当前数据点和前一个 EWMA 的加权和。<br>平滑因子 ：决定了新数据点和历史数据对当前 EWMA 的影响程度。较大的  值会使得 EWMA 对新数据点变化更敏感，较小的  值会使得 EWMA 更平滑，受历史数据影响更大。</p>
+<h3 id="偏差修正"><a href="#偏差修正" class="headerlink" title="偏差修正"></a>偏差修正</h3><p>在计算 EWMA 时，初始值的选择对后续计算的影响较大。特别是在数据序列的初始阶段，<br>由于缺乏足够的历史数据，计算的平均值可能会偏离真实值。<br>因此，需要对初始阶段的计算结果进行修正，以减小这种偏差。<br>为了进行偏差修正，我们可以使用以下公式：<br>St^ = St / (1 - β^t)<br>其中：<br>St^是经过偏差修正的时间 t 时刻的指数加权平均值。<br>St是时间 t 时刻的未修正的指数加权平均值。<br>t是时间步数，从1 开始，它是β^t 是指β的 t 次方。<br>通过对初始值进行修正，我们可以使 EWMA 在初始阶段更接近真实值，从而减少偏差。<br>修正后的 EWMA 可以帮助我们更准确地反映数据的趋势和变化。</p>
+<h2 id="momentum-1"><a href="#momentum-1" class="headerlink" title="momentum"></a>momentum</h2><p>momentum 是一种优化算法，用于加速梯度下降过程。它通过引入动量（momentum）的概念来加速参数的更新。<br>在每次迭代中，momentum 会考虑上一次迭代的梯度方向，并根据动量的大小来调整当前的梯度方向。<br>这样可以在梯度下降的过程中，更加平滑地更新参数，从而加速收敛。<br>momentum 的计算公式如下：<br>VdW = β <em> VdW + (1 - β) </em> dW<br>Vdb = β <em> Vdb + (1 - β) </em> db<br>W = W - α <em> VdW<br>b = b - α </em> Vdb<br>其中：<br>VdW是权重参数W的动量。<br>Vdb是偏置参数b的动量。<br>dW是权重参数W的梯度。<br>db是偏置参数b的梯度。<br>α是学习率。<br>β是动量因子，通常取值在0.9到0.99之间。</p>
+<p>由于小批量梯度下降所采用的路径将“振荡”至收敛，利用momentum可以减少这些振荡。<br>（将VdW，带入W更新式子计算，会发现 W 下降的比之前要慢一些，负负得正，会加回来-β <em> VdW + β </em> dW）<br><img src="/image/deepLearning/70.png" alt><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"># GRADED FUNCTION: initialize_velocity</span><br><span class="line"></span><br><span class="line">def initialize_velocity(parameters):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Initializes the velocity as a python dictionary with:</span><br><span class="line">                - keys: &quot;dW1&quot;, &quot;db1&quot;, ..., &quot;dWL&quot;, &quot;dbL&quot; </span><br><span class="line">                - values: numpy arrays of zeros of the same shape as the corresponding gradients/parameters.</span><br><span class="line">    Arguments:</span><br><span class="line">    parameters -- python dictionary containing your parameters.</span><br><span class="line">                    parameters[&apos;W&apos; + str(l)] = Wl</span><br><span class="line">                    parameters[&apos;b&apos; + str(l)] = bl</span><br><span class="line">    </span><br><span class="line">    Returns:</span><br><span class="line">    v -- python dictionary containing the current velocity.</span><br><span class="line">                    v[&apos;dW&apos; + str(l)] = velocity of dWl</span><br><span class="line">                    v[&apos;db&apos; + str(l)] = velocity of dbl</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    </span><br><span class="line">    L = len(parameters) // 2 # number of layers in the neural networks</span><br><span class="line">    v = &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    # Initialize velocity</span><br><span class="line">    for l in range(L):</span><br><span class="line">        v[&quot;dW&quot; + str(l+1)] = np.zeros_like(parameters[&quot;W&quot; + str(l+1)])</span><br><span class="line">        v[&quot;db&quot; + str(l+1)] = np.zeros_like(parameters[&quot;b&quot; + str(l+1)])</span><br><span class="line">        </span><br><span class="line">    return v</span><br></pre></td></tr></table></figure></p>
+<p><img src="/image/deepLearning/69.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># GRADED FUNCTION: update_parameters_with_momentum</span><br><span class="line"></span><br><span class="line">def update_parameters_with_momentum(parameters, grads, v, beta, learning_rate):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Update parameters using Momentum</span><br><span class="line">    </span><br><span class="line">    Arguments:</span><br><span class="line">    parameters -- python dictionary containing your parameters:</span><br><span class="line">                    parameters[&apos;W&apos; + str(l)] = Wl</span><br><span class="line">                    parameters[&apos;b&apos; + str(l)] = bl</span><br><span class="line">    grads -- python dictionary containing your gradients for each parameters:</span><br><span class="line">                    grads[&apos;dW&apos; + str(l)] = dWl</span><br><span class="line">                    grads[&apos;db&apos; + str(l)] = dbl</span><br><span class="line">    v -- python dictionary containing the current velocity:</span><br><span class="line">                    v[&apos;dW&apos; + str(l)] = ...</span><br><span class="line">                    v[&apos;db&apos; + str(l)] = ...</span><br><span class="line">    beta -- the momentum hyperparameter, scalar</span><br><span class="line">    learning_rate -- the learning rate, scalar</span><br><span class="line">    </span><br><span class="line">    Returns:</span><br><span class="line">    parameters -- python dictionary containing your updated parameters </span><br><span class="line">    v -- python dictionary containing your updated velocities</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">    L = len(parameters) // 2 # number of layers in the neural networks</span><br><span class="line">    </span><br><span class="line">    # Momentum update for each parameter</span><br><span class="line">    for l in range(L):</span><br><span class="line">        </span><br><span class="line">        # compute velocities</span><br><span class="line">        v[&quot;dW&quot; + str(l+1)] = beta * v[&quot;dW&quot; + str(l+1)] + (1 - beta) * grads[&quot;dW&quot; + str(l+1)]</span><br><span class="line">        v[&quot;db&quot; + str(l+1)] = beta * v[&quot;db&quot; + str(l+1)] + (1 - beta) * grads[&quot;db&quot; + str(l+1)]</span><br><span class="line">        # update parameters</span><br><span class="line">        parameters[&quot;W&quot; + str(l+1)] -= learning_rate * v[&quot;dW&quot; + str(l+1)]</span><br><span class="line">        parameters[&quot;b&quot; + str(l+1)] -= learning_rate * v[&quot;db&quot; + str(l+1)]</span><br><span class="line">        </span><br><span class="line">    return parameters, v</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Note that:</p>
+</blockquote>
+<blockquote>
+<p>The velocity is initialized with zeros. So the algorithm will take a few iterations to “build up” velocity and start to take bigger steps.<br>If  𝛽=0 , then this just becomes standard gradient descent without momentum.<br>How do you choose  𝛽 ?</p>
+</blockquote>
+<blockquote>
+<p>The larger the momentum  𝛽  is, the smoother the update because the more we take the past gradients into account. But if  𝛽  is too big, it could also smooth out the updates too much.<br>Common values for  𝛽  range from 0.8 to 0.999. If you don’t feel inclined to tune this,  𝛽=0.9  is often a reasonable default.<br>Tuning the optimal  𝛽  for your model might need trying several values to see what works best in term of reducing the value of the cost function  𝐽 .</p>
+</blockquote>
+<blockquote>
+<p>Momentum takes past gradients into account to smooth out the steps of gradient descent. It can be applied with batch gradient descent, mini-batch gradient descent or stochastic gradient descent. - You have to tune a momentum hyperparameter  𝛽  and a learning rate  𝛼 .</p>
+</blockquote>
+<h1 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h1><h2 id="RMSprop"><a href="#RMSprop" class="headerlink" title="RMSprop"></a>RMSprop</h2><p>Root Mean Square Propagation<br>类似指数加权平均，在更改更新梯度的逻辑，不再直接减去学习率乘以梯度，而是减去学习率乘以优化处理后的梯度值，详见如下公式<br><img src="/image/deepLearning/71.png" alt></p>
+<h2 id="Adam-优化算法"><a href="#Adam-优化算法" class="headerlink" title="Adam 优化算法"></a>Adam 优化算法</h2><p>结合指数平均和RMSprop两种算法更新梯度<br><img src="/image/deepLearning/72.png" alt><br><img src="/image/deepLearning/74.png" alt><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"># GRADED FUNCTION: initialize_adam</span><br><span class="line"></span><br><span class="line">def initialize_adam(parameters) :</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Initializes v and s as two python dictionaries with:</span><br><span class="line">                - keys: &quot;dW1&quot;, &quot;db1&quot;, ..., &quot;dWL&quot;, &quot;dbL&quot; </span><br><span class="line">                - values: numpy arrays of zeros of the same shape as the corresponding gradients/parameters.</span><br><span class="line">    </span><br><span class="line">    Arguments:</span><br><span class="line">    parameters -- python dictionary containing your parameters.</span><br><span class="line">                    parameters[&quot;W&quot; + str(l)] = Wl</span><br><span class="line">                    parameters[&quot;b&quot; + str(l)] = bl</span><br><span class="line">    </span><br><span class="line">    Returns: </span><br><span class="line">    v -- python dictionary that will contain the exponentially weighted average of the gradient.</span><br><span class="line">                    v[&quot;dW&quot; + str(l)] = ...</span><br><span class="line">                    v[&quot;db&quot; + str(l)] = ...</span><br><span class="line">    s -- python dictionary that will contain the exponentially weighted average of the squared gradient.</span><br><span class="line">                    s[&quot;dW&quot; + str(l)] = ...</span><br><span class="line">                    s[&quot;db&quot; + str(l)] = ...</span><br><span class="line"></span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    </span><br><span class="line">    L = len(parameters) // 2 # number of layers in the neural networks</span><br><span class="line">    v = &#123;&#125;</span><br><span class="line">    s = &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    # Initialize v, s. Input: &quot;parameters&quot;. Outputs: &quot;v, s&quot;.</span><br><span class="line">    for l in range(L):</span><br><span class="line">        v[&quot;dW&quot; + str(l+1)] = np.zeros_like(parameters[&quot;W&quot; + str(l+1)])</span><br><span class="line">        v[&quot;db&quot; + str(l+1)] = np.zeros_like(parameters[&quot;b&quot; + str(l+1)])</span><br><span class="line">        s[&quot;dW&quot; + str(l+1)] = np.zeros_like(parameters[&quot;W&quot; + str(l+1)])</span><br><span class="line">        s[&quot;db&quot; + str(l+1)] = np.zeros_like(parameters[&quot;b&quot; + str(l+1)])</span><br><span class="line">    </span><br><span class="line">    return v, s</span><br><span class="line"></span><br><span class="line"># GRADED FUNCTION: update_parameters_with_adam</span><br><span class="line"></span><br><span class="line">def update_parameters_with_adam(parameters, grads, v, s, t, learning_rate = 0.01,</span><br><span class="line">                                beta1 = 0.9, beta2 = 0.999,  epsilon = 1e-8):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Update parameters using Adam</span><br><span class="line">    </span><br><span class="line">    Arguments:</span><br><span class="line">    parameters -- python dictionary containing your parameters:</span><br><span class="line">                    parameters[&apos;W&apos; + str(l)] = Wl</span><br><span class="line">                    parameters[&apos;b&apos; + str(l)] = bl</span><br><span class="line">    grads -- python dictionary containing your gradients for each parameters:</span><br><span class="line">                    grads[&apos;dW&apos; + str(l)] = dWl</span><br><span class="line">                    grads[&apos;db&apos; + str(l)] = dbl</span><br><span class="line">    v -- Adam variable, moving average of the first gradient, python dictionary</span><br><span class="line">    s -- Adam variable, moving average of the squared gradient, python dictionary</span><br><span class="line">    learning_rate -- the learning rate, scalar.</span><br><span class="line">    beta1 -- Exponential decay hyperparameter for the first moment estimates </span><br><span class="line">    beta2 -- Exponential decay hyperparameter for the second moment estimates </span><br><span class="line">    epsilon -- hyperparameter preventing division by zero in Adam updates</span><br><span class="line"></span><br><span class="line">    Returns:</span><br><span class="line">    parameters -- python dictionary containing your updated parameters </span><br><span class="line">    v -- Adam variable, moving average of the first gradient, python dictionary</span><br><span class="line">    s -- Adam variable, moving average of the squared gradient, python dictionary</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    </span><br><span class="line">    L = len(parameters) // 2                 # number of layers in the neural networks</span><br><span class="line">    v_corrected = &#123;&#125;                         # Initializing first moment estimate, python dictionary</span><br><span class="line">    s_corrected = &#123;&#125;                         # Initializing second moment estimate, python dictionary</span><br><span class="line">    </span><br><span class="line">    # Perform Adam update on all parameters</span><br><span class="line">    for l in range(L):</span><br><span class="line">        # Moving average of the gradients. Inputs: &quot;v, grads, beta1&quot;. Output: &quot;v&quot;.</span><br><span class="line">        v[&quot;dW&quot; + str(l+1)] = beta1 * v[&quot;dW&quot; + str(l+1)] + (1 - beta1) * grads[&quot;dW&quot; + str(l+1)]</span><br><span class="line">        v[&quot;db&quot; + str(l+1)] = beta1 * v[&quot;db&quot; + str(l+1)] + (1 - beta1) * grads[&quot;db&quot; + str(l+1)]</span><br><span class="line"></span><br><span class="line">        # Compute bias-corrected first moment estimate. Inputs: &quot;v, beta1, t&quot;. Output: &quot;v_corrected&quot;.</span><br><span class="line">        v_corrected[&quot;dW&quot; + str(l+1)] = v[&quot;dW&quot; + str(l+1)] / (1 - beta1 ** t)</span><br><span class="line">        v_corrected[&quot;db&quot; + str(l+1)] = v[&quot;db&quot; + str(l+1)] / (1 - beta1 ** t)</span><br><span class="line"></span><br><span class="line">        # Moving average of the squared gradients. Inputs: &quot;s, grads, beta2&quot;. Output: &quot;s&quot;.</span><br><span class="line">        s[&quot;dW&quot; + str(l+1)] = beta2 * s[&quot;dW&quot; + str(l+1)] + (1 - beta2) * grads[&quot;dW&quot; + str(l+1)] ** 2</span><br><span class="line">        s[&quot;db&quot; + str(l+1)] = beta2 * s[&quot;db&quot; + str(l+1)] + (1 - beta2) * grads[&quot;db&quot; + str(l+1)] ** 2</span><br><span class="line"></span><br><span class="line">        # Compute bias-corrected second raw moment estimate. Inputs: &quot;s, beta2, t&quot;. Output: &quot;s_corrected&quot;.</span><br><span class="line">        s_corrected[&quot;dW&quot; + str(l+1)] = s[&quot;dW&quot; + str(l+1)] / (1 - beta2 ** t)</span><br><span class="line">        s_corrected[&quot;db&quot; + str(l+1)] = s[&quot;db&quot; + str(l+1)] / (1 - beta2 ** t)</span><br><span class="line"></span><br><span class="line">        # Update parameters. Inputs: &quot;parameters, learning_rate, v_corrected, s_corrected, epsilon&quot;. Output: &quot;parameters&quot;.</span><br><span class="line">        parameters[&quot;W&quot; + str(l+1)] -= learning_rate * v_corrected[&quot;dW&quot; + str(l+1)] / (np.sqrt(s_corrected[&quot;dW&quot; + str(l+1)]) + epsilon)</span><br><span class="line">        parameters[&quot;b&quot; + str(l+1)] -= learning_rate * v_corrected[&quot;db&quot; + str(l+1)] / (np.sqrt(s_corrected[&quot;db&quot; + str(l+1)]) + epsilon)</span><br><span class="line"></span><br><span class="line">    return parameters, v, s</span><br></pre></td></tr></table></figure></p>
+<p><img src="/image/deepLearning/73.png" alt><br><a href="https://arxiv.org/pdf/1412.6980" target="_blank" rel="noopener">Adam 算法原理</a></p>
+<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/OptGradientDescent/index.py" target="_blank" rel="noopener">上面三种算法练习</a></p>
+<p>小结</p>
+<blockquote>
+<p>Momentum usually helps, but given the small learning rate and the simplistic dataset, its impact is almost negligeable. Also, the huge oscillations you see in the cost come from the fact that some minibatches are more difficult thans others for the optimization algorithm.</p>
+</blockquote>
+<blockquote>
+<p>Adam on the other hand, clearly outperforms mini-batch gradient descent and Momentum. If you run the model for more epochs on this simple dataset, all three methods will lead to very good results. However, you’ve seen that Adam converges a lot faster.</p>
+</blockquote>
+<p>实验效果Adam算法速度快，准确率高</p>
+<blockquote>
+<p>Some advantages of Adam include:</p>
+</blockquote>
+<blockquote>
+<p>Relatively low memory requirements (though higher than gradient descent and gradient descent with momentum)<br>Usually works well even with little tuning of hyperparameters (except  𝛼 )</p>
+</blockquote>
+<h1 id="学习率衰减"><a href="#学习率衰减" class="headerlink" title="学习率衰减"></a>学习率衰减</h1><p>在小批量梯度下降计算过程中，随着计算批次后移，逐渐减小学习率的值，可以降低梯度震荡幅度，加速收敛速度<br>一些学习率衰减算法如下<br><img src="/image/deepLearning/75.png" alt><br><img src="/image/deepLearning/76.png" alt></p>
+<h1 id="两个经验法则"><a href="#两个经验法则" class="headerlink" title="两个经验法则"></a>两个经验法则</h1><p>Unlikely to get stuck in a bad local optima 一般不存在局部最优解，损失函数与参数关系往往成马鞍装<br>Plateaus can make learning slow 平缓的地方往往会造成学习速度下降，需要花费更多时间找到更优解</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/deepLearning/" rel="tag"># deepLearning</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/deepLearning/OptNeuralNetwork.html" rel="next" title="一些优化深度神经网络【训练过程】的方法">
+                <i class="fa fa-chevron-left"></i> 一些优化深度神经网络【训练过程】的方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/deepLearning/HyperparameterTuning.html" rel="prev" title="超参数调优">
+                超参数调优 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">245</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#小批量梯度下降算法"><span class="nav-number">1.</span> <span class="nav-text">小批量梯度下降算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#momentum"><span class="nav-number">2.</span> <span class="nav-text">momentum</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#指数加权平均"><span class="nav-number">2.1.</span> <span class="nav-text">指数加权平均</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#偏差修正"><span class="nav-number">2.1.1.</span> <span class="nav-text">偏差修正</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#momentum-1"><span class="nav-number">2.2.</span> <span class="nav-text">momentum</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Adam"><span class="nav-number">3.</span> <span class="nav-text">Adam</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#RMSprop"><span class="nav-number">3.1.</span> <span class="nav-text">RMSprop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Adam-优化算法"><span class="nav-number">3.2.</span> <span class="nav-text">Adam 优化算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验"><span class="nav-number">4.</span> <span class="nav-text">实验</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#学习率衰减"><span class="nav-number">5.</span> <span class="nav-text">学习率衰减</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#两个经验法则"><span class="nav-number">6.</span> <span class="nav-text">两个经验法则</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

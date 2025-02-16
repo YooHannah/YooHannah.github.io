@@ -259,6 +259,796 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/deepLearning/ConvolutionalNeuralNetworks.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/deepLearning/ConvolutionalNeuralNetworks.html" itemprop="url">
+                  卷积神经网络
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-02-03T17:15:37+08:00">
+                2025-02-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>如果用神经网络直接处理1000x1000的图片，那么在一开始入参就需要1000x1000x3 = 3mili个参数，加上后续layer的参数，<br>会导致整个神经网络需要足够巨大的内存，且消耗训练时间，另外难以获取足够多的数据防止出现过拟合问题和竞争需求<br>因此，计算机视觉中进行图片识别就引入了卷积计算，解决大图片识别问题</p>
+<h1 id="卷积计算"><a href="#卷积计算" class="headerlink" title="卷积计算"></a>卷积计算</h1><p>卷积运算在图像处理和计算机视觉中被广泛用于边缘检测。<br>边缘检测是识别图像中像素值变化显著的区域，这些区域通常对应于物体的边界。<br>卷积运算通过在图像上应用特定的滤波器（或卷积核）来实现这一点。</p>
+<p>卷积运算涉及将一个小矩阵（称为卷积核或滤波器）在图像上滑动，并在每个位置计算该核与图像局部区域的点积。<br>卷积核的大小通常较小（如 3x3、5x5），而图像可能很大。</p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><p>选择卷积核：选择一个合适的卷积核，例如 Sobel 核，用于检测图像中的边缘。<br>滑动卷积核：将卷积核从图像的左上角开始，逐像素地在图像上滑动。对于每个位置，将卷积核与图像的对应区域进行点积运算。<br>计算卷积值：将卷积核与图像局部区域的像素值相乘并求和，得到该位置的卷积值。<br>生成输出图像：将每个位置的卷积值组成一个新的图像，该图像的每个像素值表示原始图像中对应位置的边缘强度。<br><img src="/image/deepLearning/111.png" alt><br><img src="/image/deepLearning/112.png" alt><br><img src="/image/deepLearning/113.png" alt><br><img src="/image/deepLearning/114.png" alt><br><img src="/image/deepLearning/115.png" alt></p>
+<h3 id="padding"><a href="#padding" class="headerlink" title="padding"></a>padding</h3><p>如上计算过程存在两个弊端<br>一个是卷积计算完之后，输出图像的大小会比输入图像小，如果神经网络有100层，每一层都缩小一点点，最终得到的图片可能是1x1大小的图片，<br>另外一个是无法充分利用图片边缘信息，因为卷积核在边缘处计算时，图片的边缘数据只被用到了一次，但是中间的数据被用到了多次，导致图片信息没有等概率的参数推测<br>为了解决这个问题，在图片边缘添加p圈0，这样卷积核在边缘处计算时，图片的边缘数据就可以被用到了多次，从而可以防止计算后图片缩小<br>这个操作的过程就是卷积计算加padding的操作<br><img src="/image/deepLearning/116.png" alt><br>加padding有两种方式valid 和 same<br>valid 表示不加padding，输出图片计算公式为 nxn  * fxf = (n-f+1) x (n-f+1)<br>same 表示加padding，使得输出图像的大小和输入图像的大小相同<br>(n + 2p - f + 1 ) x (n + 2p - f + 1 ) = n x n<br>p = (f - 1) / 2<br>这样过滤器f 一般为奇数，才能保证实现对称填充(4周填充数相同)，不然会出现不对称填充（左边多右边少）<br>另外奇数过滤器为奇数，会存在中心点，方便定位过滤器位置<br><img src="/image/deepLearning/117.png" alt></p>
+<h3 id="stride"><a href="#stride" class="headerlink" title="stride"></a>stride</h3><p>stride 表示卷积核在图像上滑动的步长，默认值为1，表示每次滑动一个像素<br>如果stride 为2，表示每次滑动2个像素，这样可以减少计算量，同时可以减少输出图像的大小<br>输出图像的大小计算公式为 math.floor((n + 2p - f) / stride) + 1</p>
+<p><img src="/image/deepLearning/118.png" alt></p>
+<h3 id="三维计算"><a href="#三维计算" class="headerlink" title="三维计算"></a>三维计算</h3><p>上面讨论的是在一张灰度图片上的计算，如果是彩色图片，那么需要对图片的每个通道进行卷积计算，<br>然后将每个通道的卷积结果相加，得到最终的输出图像<br>最终输入图片大小同上，为 (n-f+1) x (n-f+1)<br>但是要保证输入图片的通道数和卷积核的通道数相同，否则无法进行卷积计算<br><img src="/image/deepLearning/119.png" alt><br>如果同时对图片进行多个通道，多个过滤器的计算，<br>那么输出图片维度需要加上过滤器的个数，相当于一张过滤器产生一个通道<br>输出图片的大小为 (n-f+1) x (n-f+1) x 过滤器的个数<br><img src="/image/deepLearning/120.png" alt></p>
+<h1 id="卷积层"><a href="#卷积层" class="headerlink" title="卷积层"></a>卷积层</h1><p>之前的神经网络，输入x 和 w 都是具体的一个数字，现在相当之于x 和 w 是一个三维矩阵<br>有几个过滤器，相当于有几个神经元，每个神经元的输入是一个三维矩阵，<br>每个神经元的w是一个和上一层输入深度相同的三维矩阵, b 也是一个和上一层输入深度相同的三维矩阵<br>这样每个神经元计算结果就是一个2维矩阵，<br>多个神经元的计算结果就是一个三维矩阵，相当于多个通道的图片</p>
+<h2 id="单层的实现原理"><a href="#单层的实现原理" class="headerlink" title="单层的实现原理"></a>单层的实现原理</h2><p><img src="/image/deepLearning/121.png" alt><br>相关符号表示<br><img src="/image/deepLearning/122.png" alt></p>
+<h2 id="卷积层的实现"><a href="#卷积层的实现" class="headerlink" title="卷积层的实现"></a>卷积层的实现</h2><p><img src="/image/deepLearning/123.png" alt></p>
+<h1 id="池化层"><a href="#池化层" class="headerlink" title="池化层"></a>池化层</h1><p>减小模型规模，提高计算速度<br>类似与卷积层，只不过在过滤器范围内，不再是卷积计算，而是取最大值或者平均值<br>但是要注意，池化层的过滤器大小和步长是固定的，在整个神经网络中属于静态属性，不参与梯度下降运算<br><img src="/image/deepLearning/124.png" alt><br><img src="/image/deepLearning/125.png" alt><br><img src="/image/deepLearning/126.png" alt></p>
+<h1 id="卷积神经网络"><a href="#卷积神经网络" class="headerlink" title="卷积神经网络"></a>卷积神经网络</h1><p>上面提到了卷积层和池化层，卷积神经网络的最后一层叫做全连接层<br>相当于之前的标准神经网络，将卷积层和池化层的输出结果进行展平，然后进行全连接计算<br><img src="/image/deepLearning/127.png" alt><br>随着卷积池化层的增加，图片尺寸会越来越小，但是通道越来多<br>池化层没有学习参数，卷积层可学习参数远小于全连接层<br>而且随着卷积神经网络的向后计算，激活值数据逐渐减少<br><img src="/image/deepLearning/128.png" alt></p>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><blockquote>
+<p>Parameter sharing: A feature detector (such as a vertical edge detector) that’s useful in one part of the image is probably useful in another part of the image.<br>Sparsity of connections: In each layer, each output value<br>depends only on a small number of inputs.</p>
+</blockquote>
+<ol>
+<li>参数共享，从而减少参数数量</li>
+<li>结果输出仅依赖输入的部分数据，计算速度快</li>
+</ol>
+<p><img src="/image/deepLearning/129.png" alt></p>
+<h1 id="三种常见的卷积神经网络架构"><a href="#三种常见的卷积神经网络架构" class="headerlink" title="三种常见的卷积神经网络架构"></a>三种常见的卷积神经网络架构</h1><h2 id="LeNet-5"><a href="#LeNet-5" class="headerlink" title="LeNet - 5"></a>LeNet - 5</h2><p>论文: LeCun et al., 1998. Gradient-based learning applied to document recognition<br><img src="/image/deepLearning/130.png" alt></p>
+<h2 id="AlexNet"><a href="#AlexNet" class="headerlink" title="AlexNet"></a>AlexNet</h2><p>论文: Krizhevsky et al., 2012. ImageNet classification with deep convolutional neural networks<br><img src="/image/deepLearning/131.png" alt></p>
+<h2 id="VGG-16"><a href="#VGG-16" class="headerlink" title="VGG-16"></a>VGG-16</h2><p>简化了神经网络的结构，所有的卷积层和池化层都相同<br>16 指的是整个网络架构中所有卷积层，池化层以及全连接层的层数总和<br>结构庞大，会有约1.38亿个参数<br>但是结构规律，<br>池化层都在缩小一倍图片尺寸<br>过滤器数量随层数递深，整倍增长</p>
+<p>论文：Simonyan &amp; Zisserman 2015. Very deep convolutional networks for large-scale image recognition<br><img src="/image/deepLearning/132.png" alt></p>
+<h1 id="残差网络"><a href="#残差网络" class="headerlink" title="残差网络"></a>残差网络</h1><h2 id="残差块"><a href="#残差块" class="headerlink" title="残差块"></a>残差块</h2><p>在计算a^[l+2]前，激活函数不再使用z^(l+2)作为入参，而是以z^(l+2) + a^(l) 作为入参<br>即 a^(l+2) = g(z^(l+2) + a^(l))<br>其中a^(l) 被称为残差块<br>在通用场景下，残差块(a^(l))可能不止被加在后面第二层的计算中，可能会加入在更深的网络层中，<br>这种在main path 的基础上进行的计算又叫short cut  捷径/ skip connect 远跳链接<br><img src="/image/deepLearning/133.png" alt></p>
+<h2 id="残差网络-1"><a href="#残差网络-1" class="headerlink" title="残差网络"></a>残差网络</h2><p>将多个远跳链接计算堆积在一起就形成残差网络，可以使神经网络按照理论规律，随着神经网路层数加深，误差降低<br><img src="/image/deepLearning/134.png" alt></p>
+<h2 id="残差网络优化原理"><a href="#残差网络优化原理" class="headerlink" title="残差网络优化原理"></a>残差网络优化原理</h2><p>根据残差块的计算原理<br>a^(l+2) = g(z^(l+2) + a^(l))<br>a^(l+2) = g(w^(l+2) * a^(l+1) + b^(l+2) + a^(l))<br>在进行梯度下降处理过程中如果有使用L2正则化,或者梯度缩减,导致 w^(l+2),  b^(l+2)变小至0,<br>那么残差块的计算结果就会变成<br>a^(l+2) = g(a^(l))<br>这时激活函数式是Relu函数的话,就会得到<br>a^(l+2) = a^(l)<br>也就是说，我们通过在激活函数前添加一个远跳链接，<br>不仅没有影响网络本身性能，而且发现(学习到)了一个恒等映射，<br>可以直接利用a^(l+2) = a^(l)进行计算，<br>中间的两个隐藏层的增加对整个网络没有影响，没有的话会更好<br>扩展思路，如果跳跃链接加在更深的网络层，甚至神经网络最后一层<br>有可能学习到比恒等映射更有用的东西，从而提高整个网络的性能</p>
+<p>另外，如果没有跳跃链接，随着网络层数的增加，深层参数的初始化会是一个非常困难的事情，更别说是学习恒等映射<br>这也是为什么随着层数加深，训练的效果不是越来越好，反而越糟</p>
+<p>因此，通过增加跳跃连接形成残差网络，从不影响性能开始学习恒等映射，然后梯度下降只能从这里进行更新，<br>从而避免梯度消失或爆炸，进而提高整个网络的性能</p>
+<p>上述讨论假设在全链接层或者卷积层的 a^(l+2),a^(l) 维度相同可以成立，<br>但是在卷积层中，如果 a^(l+2),a^(l)维度不同, 需要给a^(l) 增加参数保证和 a^(l+2) 维度相同<br><img src="/image/deepLearning/135.png" alt><br><img src="/image/deepLearning/136.png" alt></p>
+<p>论文：He et al., 2015. Deep residual networks for image recognition</p>
+<h1 id="Inception网络"><a href="#Inception网络" class="headerlink" title="Inception网络"></a>Inception网络</h1><h2 id="1-x-1-卷积层"><a href="#1-x-1-卷积层" class="headerlink" title="1 x 1 卷积层"></a>1 x 1 卷积层</h2><p>当对三维矩阵进行1<em>1 的卷积计算时，相当于取三维矩阵的一个切片进行加和计算<br>对于1</em>1 的过滤器，利用其个数，可以对三维矩阵实现【通道】压缩或增加，<br>从而实现对输入数据的维度变换<br><img src="/image/deepLearning/137.png" alt><br><img src="/image/deepLearning/138.png" alt></p>
+<p>在下面的Inception网络中, 被用来构建【瓶颈层】<br>对矩阵先压缩在扩展，从而大大降低计算成本</p>
+<p>论文：[Lin et al., 2013. Network in network]</p>
+<h2 id="Inception网络-1"><a href="#Inception网络-1" class="headerlink" title="Inception网络"></a>Inception网络</h2><p>可以自行选择过滤器实现卷积层和池化层的计算，代替人工来确定卷积层中的过滤器类型(1<em>1, 3</em>3, 5<em>5, 7</em>7, 个数)<br><img src="/image/deepLearning/139.png" alt><br>直接进行卷积计算，计算量巨大<br><img src="/image/deepLearning/140.png" alt><br>可以引入瓶颈层降低计算量<br><img src="/image/deepLearning/141.png" alt></p>
+<h2 id="inception-module"><a href="#inception-module" class="headerlink" title="inception module"></a>inception module</h2><p>在普通卷积计算中引入瓶颈层，最后将所有结果进行拼接，这个模块就是inception module<br><img src="/image/deepLearning/142.png" alt></p>
+<h2 id="inception-network"><a href="#inception-network" class="headerlink" title="inception network"></a>inception network</h2><p>将多个inception module 堆叠在一起，就形成了inception network<br><img src="/image/deepLearning/143.png" alt></p>
+<p>论文： Szegedy et al., 2014, Going Deeper with Convolutions</p>
+<h1 id="迁移学习"><a href="#迁移学习" class="headerlink" title="迁移学习"></a>迁移学习</h1><p>卷积网络中的迁移学习没什么不同，在公开模型基础上继续进行训练<br>对于训练数据较少的情况，建议固定所有隐藏层参数，仅更改softmax 层结构，使之符合自己的分类规则<br>相当于只训练输出结果层的参数，</p>
+<p>一个提高训练速度的方法是因为隐藏层参数固定，可以看做固定函数，训练数据不多的情况下，<br>提前计算好所有训练数据的最后一层的激活值，拿激活值进行训练，避免重复计算</p>
+<p>对于训练数据较多的情况，建议固定前面几层的参数，仅更改后面几层的参数，使之符合自己的分类规则<br>相当于只训练后面几层的参数</p>
+<p>对于训练数据超多的情况，可以放开所有层级，以已有参数做初始值，从头开始训练</p>
+<p><img src="/image/deepLearning/144.png" alt></p>
+<h1 id="数据增强"><a href="#数据增强" class="headerlink" title="数据增强"></a>数据增强</h1><h2 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h2><p>镜像处理，随机裁剪，旋转,shearing,local warping(局部扭曲)<br><img src="/image/deepLearning/145.png" alt><br>色彩转换(加减rgb值, PCA颜色增强算法)<br><img src="/image/deepLearning/146.png
+进行数据增强过程也存在超参调试(颜色变化多少，随机裁剪时的参数" alt><br><img src="/image/deepLearning/147.png" alt></p>
+<h1 id="架构实现选择"><a href="#架构实现选择" class="headerlink" title="架构实现选择"></a>架构实现选择</h1><p>对于数据量少的情况，一般进行更多的手工设计<br>对于数据量多的情况，一般使用更简单的算法和更少的手工工程，不需要精心设计<br><img src="/image/deepLearning/148.png" alt><br><img src="/image/deepLearning/149.png" alt><br>Use open source code<br>• Use architectures of networks published in the literature<br>• Use open source implementations if possible<br>• Use pretrained models and fine-tune on your dataset</p>
+<h1 id="目标检测"><a href="#目标检测" class="headerlink" title="目标检测"></a>目标检测</h1><p>在图片分类的基础上，我们可以进行分类和定位<br>但是分类的定位都针对一个对象进行讨论<br>如果是对一张图的多个对象进行分类和定位就是对象检测<br><img src="/image/deepLearning/150.png" alt>)</p>
+<h2 id="定义输出"><a href="#定义输出" class="headerlink" title="定义输出"></a>定义输出</h2><p>在分类的基础上，定义输出是一个向量，包含分类和定位信息<br>pc 代表是否有检测目标存在，存在为1，不存在为0，不存在的情况下，后续向量值不做继续讨论<br>bx 对象中心点横坐标<br>by 对象中心店纵坐标<br>bh 对象在图中相对整幅图片高度<br>bw 对象在图中相对整幅图片宽度<br>c1 c2 c3 代表具体是哪一个对象，其中一个值为1 时，另外两个为0，同时pc 为1<br><img src="/image/deepLearning/151.png" alt><br>损失函数分为pc 是否为1 两种计算方式<br>在实际计算过程中，可能会去将y 向量分类，pc, bx ~bw, c1~c3 然后分别使用不同的计算方法进行损失值计算<br><img src="/image/deepLearning/152.png" alt></p>
+<h3 id="特征点检测"><a href="#特征点检测" class="headerlink" title="特征点检测"></a>特征点检测</h3><p>原理同定位检测，只不过输出向量是N个特征点的位置坐标 + pc值<br><img src="/image/deepLearning/153.png" alt></p>
+<h2 id="滑动窗口进行图像识别"><a href="#滑动窗口进行图像识别" class="headerlink" title="滑动窗口进行图像识别"></a>滑动窗口进行图像识别</h2><p>识别一张图片中是否有某个物体的过程一般是通过分别定义不同大小的窗口，对图片进行滑动裁剪<br>对裁剪到的图片进行对象识别，但是这样无疑会大大增加计算量<br>解决方案就是利用卷积计算的过程，避免窗口滑动过程重复区域的重复计算<br>直接将一张图片输入，直接得到物体识别的结果<br><img src="/image/deepLearning/154.png" alt><br>卷积滑动窗口的具体实现，现将FC 层也转成卷积层，方便输入各个窗口的计算值<br><img src="/image/deepLearning/155.png" alt><br><img src="/image/deepLearning/156.png" alt></p>
+<h2 id="YOLO"><a href="#YOLO" class="headerlink" title="YOLO"></a>YOLO</h2><p>YOLO(you only look once) 算法通过对图片进行格子分割，直接对格子内图片进行对象识别，从而更准确的判断对象位置<br>最后的输出结果代表每个格子的识别和位置检测结果<br><img src="/image/deepLearning/157.png" alt><br>如何解释结果？<br>bx,by,相对一个格子而言，肯定要小于1<br>bh,bw 同样相对于一个格子的大小，进行比例计算，有可能大于1，说明对象是跨格子存在的<br><img src="/image/deepLearning/158.png" alt></p>
+<h3 id="交并比"><a href="#交并比" class="headerlink" title="交并比"></a>交并比</h3><p>用于评价一个位置检测算法的好坏<br>预测值面积与实际对象所占面积重叠的部分就是交集大小 –&gt; S1<br>二者面积之和即为并集大小 –&gt;S2<br>交并比 = S1/S2<br>阈值认为决定，1 当然是最好的，说明准确发现了对象位置<br><img src="/image/deepLearning/159.png" alt></p>
+<h3 id="非最大值抑制-？？？"><a href="#非最大值抑制-？？？" class="headerlink" title="非最大值抑制 ？？？"></a>非最大值抑制 ？？？</h3><p>用于解决出现多个位置检测符合条件的情况<br><img src="/image/deepLearning/160.png" alt><br>原理就是在符合条件的窗口中寻找最大正交比</p>
+<ol>
+<li>对于所有格子的输出，去掉pc概率小于阈值的格子</li>
+<li>对剩下格子循环处理，首先找pc值最大的格子A最为最终的检测结果，然后计算剩余格子与A 的交并比，去掉交并比大于一定阈值的格子(在最大值附近)，剩余格子的话，继续循环处理<br>如果是对多类对象进行同时检测，则需要对各个类别，分别进行非最大值抑制处理<br><img src="/image/deepLearning/161.png" alt></li>
+</ol>
+<h3 id="ancher-box-？"><a href="#ancher-box-？" class="headerlink" title="ancher box ？"></a>ancher box ？</h3><p>用于处理两个对象同时出现在一个格子的情况<br>提前定义两个不同形状的ancher box， 分别用不同ancher box去识别不同的对象<br>然后根据正交比大小，判断当前格子的对象是哪个分类，修改对应分类位置的值<br>注意这里，通过增加输出通道，输出从单一结果，变成两个<br>一般很少遇到3个对象同时出现在一个格子的情况，暂不考虑<br><img src="/image/deepLearning/162.png" alt><br><img src="/image/deepLearning/163.png" alt></p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p><img src="/image/deepLearning/164.png" alt><br><img src="/image/deepLearning/165.png" alt><br><img src="/image/deepLearning/166.png" alt></p>
+<p>论文【难】： Redmon et al., 2015, You Only Look Once: Unified real-time object detection</p>
+<h3 id="R-CNN"><a href="#R-CNN" class="headerlink" title="R-CNN"></a>R-CNN</h3><p> 利用图像分割算法，对图像进行分割后，在一定区域内进行图像识别和定位<br>缺点不如YOLO一次性计算快</p>
+<p><img src="/image/deepLearning/167.png" alt><br><img src="/image/deepLearning/168.png" alt></p>
+<h1 id="人脸识别"><a href="#人脸识别" class="headerlink" title="人脸识别"></a>人脸识别</h1><h2 id="验证与识别"><a href="#验证与识别" class="headerlink" title="验证与识别"></a>验证与识别</h2><p>验证比识别要简单一些，属于1对1 的问题，识别输入仅仅是一张图，相对来说更难<br><img src="/image/deepLearning/169.png" alt></p>
+<h2 id="one-shot-amp-similarity"><a href="#one-shot-amp-similarity" class="headerlink" title="one shot &amp; similarity"></a>one shot &amp; similarity</h2><p>one shot learning 就是根据已有的一张图片对输入的图片进行识别<br>用传统的训练思维处理容易出现过拟合，而且数据库更新需要重新训练，成本高<br><img src="/image/deepLearning/170.png" alt><br>解决方式是通过看他们相似度的方法进行图片验证，比较输入图片和图库图片，<br>有差值小于阈值的图片的话，说明有这个人，没有小于阈值的图片的话，则输入图片对应的人没有在数据库中<br><img src="/image/deepLearning/171.png" alt></p>
+<h3 id="Siamese-network"><a href="#Siamese-network" class="headerlink" title="Siamese network"></a>Siamese network</h3><p>根据相似度进行图片验证的网络架构<br>原理就是，对两张图片进行相同的网络架构处理得到能够尽可能代表两张图片的128为编码<br>然后对两个编码进行范数运算，如果是同一个人则范数值会很小，否则会很大<br><img src="/image/deepLearning/172.png" alt><br>模型训练过程也是通过进行范数比较然后再去调整模型参数<br><img src="/image/deepLearning/173.png" alt></p>
+<p>论文： Taigman et. al., 2014. DeepFace closing the gap to human level performance</p>
+<h3 id="三元损失函数"><a href="#三元损失函数" class="headerlink" title="三元损失函数"></a>三元损失函数</h3><p>在训练过程过程中，通过构造识别对象的三元组数据，进行损失函数计算<br>具体过程就是分别准备待识别对象A，与待识别对象相似的对象P，与待识别对象差异较大的对象N三者的图像编码<br>通过计算比较AP与AN 之间范数的大小关系，用作损失函数的计算<br>注意这里引入超参α用于加强 AP 与AN之间的差距，提高准确度，也防止出现图像编码始终为0，导致比较关系始终成立情况出现<br><img src="/image/deepLearning/174.png" alt><br><img src="/image/deepLearning/175.png" alt><br><img src="/image/deepLearning/176.png" alt></p>
+<p>论文：Schroff et al.,2015, FaceNet: A unified embedding for face recognition and clustering</p>
+<h3 id="Siamese-network-二分类"><a href="#Siamese-network-二分类" class="headerlink" title="Siamese network + 二分类"></a>Siamese network + 二分类</h3><p>在 Siamese network  基础上，对输入的两张图片进行计算得出0 和 1 的结果，直接判断二者是否是同一个人<br><img src="/image/deepLearning/177.png" alt><br>y^的计算方式可以有多种<br>在实际使用中可以提前计算好数据库中图片编码，需要验证的时候只计算输入图片编码即可<br><img src="/image/deepLearning/178.png" alt></p>
+<h1 id="神经风格迁移"><a href="#神经风格迁移" class="headerlink" title="神经风格迁移"></a>神经风格迁移</h1><p>将一张作为内容的图片C合并上一张具有艺术表现风格的图片S，从而生成一张具有图片B艺术表现风格，但图片内容是图片A 的新图片 G<br><img src="/image/deepLearning/179.png" alt></p>
+<h2 id="可视化深层网络"><a href="#可视化深层网络" class="headerlink" title="可视化深层网络"></a>可视化深层网络</h2><p><img src="/image/deepLearning/180.png" alt><br><img src="/image/deepLearning/181.png" alt><br>【要去读】<br>论文： Zeiler and Fergus., 2013, Visualizing and understanding convolutional networks</p>
+<h2 id="成本函数"><a href="#成本函数" class="headerlink" title="成本函数"></a>成本函数</h2><p>由两部分组成，CG之间的内容成本函数Jcg（衡量内容相似度），SG之间的风格成本函数Jsg(衡量风格相似度)<br><img src="/image/deepLearning/182.png" alt><br><img src="/image/deepLearning/183.png" alt><br>论文：Gatys et al., 2015. A neural algorithm of artistic style. </p>
+<h3 id="内容成本函数"><a href="#内容成本函数" class="headerlink" title="内容成本函数"></a>内容成本函数</h3><p>计算CG在相同预训练模型上某一层的激活函数值的相似度，如果二者相似说明图片有相似的内容<br><img src="/image/deepLearning/184.png" alt></p>
+<h3 id="风格成本函数"><a href="#风格成本函数" class="headerlink" title="风格成本函数"></a>风格成本函数</h3><p>如果两个通道间关联度高，说明图片风格特征同时出现的概率高<br>通过某一层计算激活函数值各通道间的关联程度定义来衡量图片的风格，<br>如果SG相似度低，则成本函数值高<br><img src="/image/deepLearning/185.png" alt><br><img src="/image/deepLearning/186.png" alt><br><img src="/image/deepLearning/187.png" alt><br><img src="/image/deepLearning/188.png" alt></p>
+<h1 id="1D-2D-3D-卷积计算"><a href="#1D-2D-3D-卷积计算" class="headerlink" title="1D 2D 3D 卷积计算"></a>1D 2D 3D 卷积计算</h1><p><img src="/image/deepLearning/189.png" alt><br><img src="/image/deepLearning/190.png" alt></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/deepLearning/HyperparameterTuning.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/deepLearning/HyperparameterTuning.html" itemprop="url">
+                  超参数调优
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-31T21:26:37+08:00">
+                2025-01-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="超参数如何取值"><a href="#超参数如何取值" class="headerlink" title="超参数如何取值"></a>超参数如何取值</h1><h2 id="直接调优"><a href="#直接调优" class="headerlink" title="直接调优"></a>直接调优</h2><p>根据经验对于超参数的重要性进行排序</p>
+<ol>
+<li>学习率</li>
+<li>momentum 的β（~0.9）;隐藏层的神经元数量;mini batch size</li>
+<li>隐藏层的数量；学习率的衰减率</li>
+<li>adam 的β1（~0.9），β2（~0.999）Σ（10^-8）这三者一般固定，很少需要调试</li>
+</ol>
+<p>数值选择上遵循随机取值和精确搜索的原则<br>随机取值可以快速找到影响较大的超参数，确定范围后，精确搜索可以进一步优化超参数，由粗糙到精细</p>
+<p><img src="/image/deepLearning/78.png" alt><br><img src="/image/deepLearning/79.png" alt><br><img src="/image/deepLearning/80.png" alt></p>
+<h2 id="借鉴已有其他领域模型，复用其参数进行测试评估"><a href="#借鉴已有其他领域模型，复用其参数进行测试评估" class="headerlink" title="借鉴已有其他领域模型，复用其参数进行测试评估"></a>借鉴已有其他领域模型，复用其参数进行测试评估</h2><h2 id="根据计算能力选择调试方式"><a href="#根据计算能力选择调试方式" class="headerlink" title="根据计算能力选择调试方式"></a>根据计算能力选择调试方式</h2><p>1，如果计算能力有限，一次进行一个模型的训练调试，用时间换取效果<br>2，如果计算能力充足，一次同时进行多个模型的不同超参训练调试，用并行换取时间</p>
+<h1 id="batch归一化处理"><a href="#batch归一化处理" class="headerlink" title="batch归一化处理"></a>batch归一化处理</h1><p>基于对输入样本数据进行归一化处理可加速算法训练学习的原理，对隐层的输入数据也同样进行归一化处理，<br>可以降低前一层的数据计算结束变动对后一层计算的影响，降低前后层的联系，每一层都可以独立学习，从而加速算法的训练速度<br><img src="/image/deepLearning/81.png" alt><br><img src="/image/deepLearning/82.png" alt><br><img src="/image/deepLearning/83.png" alt><br><img src="/image/deepLearning/84.png" alt><br><img src="/image/deepLearning/85.png" alt><br><img src="/image/deepLearning/86.png" alt></p>
+<h1 id="Softmax-regression"><a href="#Softmax-regression" class="headerlink" title="Softmax regression"></a>Softmax regression</h1><p>Softmax 算法是一种用于多分类任务的函数，通常应用于神经网络的输出层，以将网络的输出转换为概率分布。<br>它可以将一个未归一化的向量（即原始的网络输出）转换为一个归一化的概率分布，使得每个类别的概率值在 0 到 1 之间，并且所有类别的概率和为 1。<br><img src="/image/deepLearning/87.png" alt></p>
+<h1 id="TensorFlow-框架学习"><a href="#TensorFlow-框架学习" class="headerlink" title="TensorFlow 框架学习"></a>TensorFlow 框架学习</h1><p><img src="/image/deepLearning/88.png" alt></p>
+<blockquote>
+<p>What you should remember: - Tensorflow is a programming framework used in deep learning - The two main object classes in tensorflow are Tensors and Operators. - When you code in tensorflow you have to take the following steps: - Create a graph containing Tensors (Variables, Placeholders …) and Operations (tf.matmul, tf.add, …) - Create a session - Initialize the session - Run the session to execute the graph - You can execute the graph multiple times as you’ve seen in model() - The backpropagation and optimization is automatically done when running the session on the “optimizer” object.</p>
+</blockquote>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/TensorFlow/index.py" target="_blank" rel="noopener">实验</a><br><a href="https://github.com/GeeeekExplorer/AndrewNg-Deep-Learning/blob/master/Improving%20Deep%20Neural%20Networks%20Hyperparameter%20tuning%2C%20Regularization%20and%20Optimization/week7/TensorFlow%20Tutorial%20Solution.ipynb" target="_blank" rel="noopener">练习代码</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/deepLearning/OptGradientDescent.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/deepLearning/OptGradientDescent.html" itemprop="url">
+                  一些优化梯度下降的方法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-31T14:57:37+08:00">
+                2025-01-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="小批量梯度下降算法"><a href="#小批量梯度下降算法" class="headerlink" title="小批量梯度下降算法"></a>小批量梯度下降算法</h1><p>在单轮训练过程中，不再一次从计算整个训练数据，将整个训练数据分批进行训练，每批（epoch）训练的样本数称为batch size</p>
+<p>batch size 最大等于整个训练样本数m时，相当于进行一次批量运算，就是标准的批量梯度下降算法,<br>需要计算完基于整个训练样本参数和损失函数，花费时间较长，然后才能进行梯度下降计算</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># (Batch) Gradient Descent:</span><br><span class="line">X = data_input</span><br><span class="line">Y = labels</span><br><span class="line">parameters = initialize_parameters(layers_dims)</span><br><span class="line">for i in range(0, num_iterations):</span><br><span class="line">    # Forward propagation</span><br><span class="line">    a, caches = forward_propagation(X, parameters)</span><br><span class="line">    # Compute cost.</span><br><span class="line">    cost += compute_cost(a, Y)</span><br><span class="line">    # Backward propagation.</span><br><span class="line">    grads = backward_propagation(a, caches, parameters)</span><br><span class="line">    # Update parameters.</span><br><span class="line">    parameters = update_parameters(parameters, grads)</span><br></pre></td></tr></table></figure>
+<p>batch size 最小等于1时，就是一个批次处理一个数据, 速度快，但是没法利用向量加速梯度下降，也称为随机梯度下降算法Stochastic Gradient Descent:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># Stochastic Gradient Descent:</span><br><span class="line">X = data_input</span><br><span class="line">Y = labels</span><br><span class="line">parameters = initialize_parameters(layers_dims)</span><br><span class="line">for i in range(0, num_iterations):</span><br><span class="line">    for j in range(0, m):</span><br><span class="line">        # Forward propagation</span><br><span class="line">        a, caches = forward_propagation(X[:,j], parameters) # X[:,j] 从m列中，每次取一列，就是一个样本</span><br><span class="line">        # Compute cost</span><br><span class="line">        cost += compute_cost(a, Y[:,j])</span><br><span class="line">        # Backward propagation</span><br><span class="line">        grads = backward_propagation(a, caches, parameters)</span><br><span class="line">        # Update parameters.</span><br><span class="line">        parameters = update_parameters(parameters, grads)</span><br></pre></td></tr></table></figure></p>
+<p>当batch size 介于1和m之间时，就是小批量梯度下降算法Mini-batch Gradient Descent<br>小批量梯度下降处理数据分两步，<br>一步是混洗数据，将数据集顺序打乱，但保证X(i) 和 Y（i）是一一对应的<br>第二步是将数据分成多个batch，每个batch包含batch size 个样本，需要注意如果m 不能整除batch size，最后一个batch 是不足batch size 个样本，需要单独处理</p>
+<blockquote>
+<p>Shuffling and Partitioning are the two steps required to build mini-batches -<br>Powers of two are often chosen to be the mini-batch size, e.g., 16, 32, 64, 128.</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"># GRADED FUNCTION: random_mini_batches</span><br><span class="line"></span><br><span class="line">def random_mini_batches(X, Y, mini_batch_size = 64, seed = 0):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Creates a list of random minibatches from (X, Y)</span><br><span class="line">    </span><br><span class="line">    Arguments:</span><br><span class="line">    X -- input data, of shape (input size, number of examples)</span><br><span class="line">    Y -- true &quot;label&quot; vector (1 for blue dot / 0 for red dot), of shape (1, number of examples)</span><br><span class="line">    mini_batch_size -- size of the mini-batches, integer</span><br><span class="line">    </span><br><span class="line">    Returns:</span><br><span class="line">    mini_batches -- list of synchronous (mini_batch_X, mini_batch_Y)</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    </span><br><span class="line">    np.random.seed(seed)            # To make your &quot;random&quot; minibatches the same as ours</span><br><span class="line">    m = X.shape[1]                  # number of training examples</span><br><span class="line">    mini_batches = []</span><br><span class="line">        </span><br><span class="line">    # Step 1: Shuffle (X, Y)</span><br><span class="line">    permutation = list(np.random.permutation(m))</span><br><span class="line">    shuffled_X = X[:, permutation]</span><br><span class="line">    shuffled_Y = Y[:, permutation].reshape((1,m))</span><br><span class="line"></span><br><span class="line">    # Step 2: Partition (shuffled_X, shuffled_Y). Minus the end case.</span><br><span class="line">    num_complete_minibatches = math.floor(m/mini_batch_size) # number of mini batches of size mini_batch_size in your partitionning</span><br><span class="line">    for k in range(0, num_complete_minibatches):</span><br><span class="line">        mini_batch_X = shuffled_X[:, k * mini_batch_size : (k + 1) * mini_batch_size]</span><br><span class="line">        mini_batch_Y = shuffled_Y[:, k * mini_batch_size : (k + 1) * mini_batch_size]</span><br><span class="line">        mini_batch = (mini_batch_X, mini_batch_Y)</span><br><span class="line">        mini_batches.append(mini_batch)</span><br><span class="line">    </span><br><span class="line">    # Handling the end case (last mini-batch &lt; mini_batch_size)</span><br><span class="line">    if m % mini_batch_size != 0:</span><br><span class="line">        ### START CODE HERE ### (approx. 2 lines)</span><br><span class="line">        mini_batch_X = shuffled_X[:, num_complete_minibatches * mini_batch_size :]</span><br><span class="line">        mini_batch_Y = shuffled_Y[:, num_complete_minibatches * mini_batch_size :]</span><br><span class="line">        ### END CODE HERE ###</span><br><span class="line">        mini_batch = (mini_batch_X, mini_batch_Y)</span><br><span class="line">        mini_batches.append(mini_batch)</span><br><span class="line">    </span><br><span class="line">    return mini_batches</span><br></pre></td></tr></table></figure>
+<p>迭代过程处理的数据集就是上面分批好的mini_batches</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mini_batches = random_mini_batches(X, Y, mini_batch_size = 64, seed = 0)</span><br><span class="line">t =  math.floor(m/mini_batch_size)</span><br><span class="line">if m % mini_batch_size != 0</span><br><span class="line">  t+=1</span><br><span class="line">for i in range(0, num_iterations):</span><br><span class="line">    for j in range(0, t):</span><br><span class="line">        # Forward propagation</span><br><span class="line">        a, caches = forward_propagation(mini_batches[j][0], parameters) # 取一批计算一批，不用整个计算完再更新梯度</span><br><span class="line">        # Compute cost</span><br><span class="line">        cost += compute_cost(a, mini_batches[j][1])</span><br><span class="line">        # Backward propagation</span><br><span class="line">        grads = backward_propagation(a, caches, parameters)</span><br><span class="line">        # Update parameters.</span><br><span class="line">        parameters = update_parameters(parameters, grads)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>The difference between gradient descent, mini-batch gradient descent and stochastic gradient descent is the number of examples you use to perform one update step. - You have to tune a learning rate hyperparameter  𝛼 . - With a well-turned mini-batch size, usually it outperforms either gradient descent or stochastic gradient descent (particularly when the training set is large).</p>
+</blockquote>
+<p><img src="/image/deepLearning/65.png" alt><br><img src="/image/deepLearning/66.png" alt><br><img src="/image/deepLearning/67.png" alt><br><img src="/image/deepLearning/68.png" alt></p>
+<h1 id="momentum"><a href="#momentum" class="headerlink" title="momentum"></a>momentum</h1><h2 id="指数加权平均"><a href="#指数加权平均" class="headerlink" title="指数加权平均"></a>指数加权平均</h2><p>指数加权平均（Exponential Weighted Moving Average, EWMA）是一种用于平滑时间序列数据的技术。<br>它通过对数据点赋予不同的权重来计算平均值，较新的数据点权重较大，较旧的数据点权重较小。<br>这样可以更敏感地反映最新数据的变化，同时保留历史数据的趋势。<br>指数加权平均的计算公式如下：</p>
+<p>St = β <em> St-1 + （1-β） </em> Xt<br>其中：<br> St是时间 t 时刻的指数加权平均值。<br> Xt是时间 t 时刻的实际数据值。<br> β 是平滑因子，取值范围在 0 到 1 之间。较大的  值使得 EWMA 对最新数据更敏感，较小的  值则使得 EWMA 更平滑。<br> St-1是时间 t-1 时刻的指数加权平均值。<br>解释<br>初始值：通常，初始的指数加权平均值 S0  可以设置为第一个数据点 X0 。<br>递归计算：每个新的数据点都会更新 EWMA，新的 EWMA 是当前数据点和前一个 EWMA 的加权和。<br>平滑因子 ：决定了新数据点和历史数据对当前 EWMA 的影响程度。较大的  值会使得 EWMA 对新数据点变化更敏感，较小的  值会使得 EWMA 更平滑，受历史数据影响更大。</p>
+<h3 id="偏差修正"><a href="#偏差修正" class="headerlink" title="偏差修正"></a>偏差修正</h3><p>在计算 EWMA 时，初始值的选择对后续计算的影响较大。特别是在数据序列的初始阶段，<br>由于缺乏足够的历史数据，计算的平均值可能会偏离真实值。<br>因此，需要对初始阶段的计算结果进行修正，以减小这种偏差。<br>为了进行偏差修正，我们可以使用以下公式：<br>St^ = St / (1 - β^t)<br>其中：<br>St^是经过偏差修正的时间 t 时刻的指数加权平均值。<br>St是时间 t 时刻的未修正的指数加权平均值。<br>t是时间步数，从1 开始，它是β^t 是指β的 t 次方。<br>通过对初始值进行修正，我们可以使 EWMA 在初始阶段更接近真实值，从而减少偏差。<br>修正后的 EWMA 可以帮助我们更准确地反映数据的趋势和变化。</p>
+<h2 id="momentum-1"><a href="#momentum-1" class="headerlink" title="momentum"></a>momentum</h2><p>momentum 是一种优化算法，用于加速梯度下降过程。它通过引入动量（momentum）的概念来加速参数的更新。<br>在每次迭代中，momentum 会考虑上一次迭代的梯度方向，并根据动量的大小来调整当前的梯度方向。<br>这样可以在梯度下降的过程中，更加平滑地更新参数，从而加速收敛。<br>momentum 的计算公式如下：<br>VdW = β <em> VdW + (1 - β) </em> dW<br>Vdb = β <em> Vdb + (1 - β) </em> db<br>W = W - α <em> VdW<br>b = b - α </em> Vdb<br>其中：<br>VdW是权重参数W的动量。<br>Vdb是偏置参数b的动量。<br>dW是权重参数W的梯度。<br>db是偏置参数b的梯度。<br>α是学习率。<br>β是动量因子，通常取值在0.9到0.99之间。</p>
+<p>由于小批量梯度下降所采用的路径将“振荡”至收敛，利用momentum可以减少这些振荡。<br>（将VdW，带入W更新式子计算，会发现 W 下降的比之前要慢一些，负负得正，会加回来-β <em> VdW + β </em> dW）<br><img src="/image/deepLearning/70.png" alt><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"># GRADED FUNCTION: initialize_velocity</span><br><span class="line"></span><br><span class="line">def initialize_velocity(parameters):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Initializes the velocity as a python dictionary with:</span><br><span class="line">                - keys: &quot;dW1&quot;, &quot;db1&quot;, ..., &quot;dWL&quot;, &quot;dbL&quot; </span><br><span class="line">                - values: numpy arrays of zeros of the same shape as the corresponding gradients/parameters.</span><br><span class="line">    Arguments:</span><br><span class="line">    parameters -- python dictionary containing your parameters.</span><br><span class="line">                    parameters[&apos;W&apos; + str(l)] = Wl</span><br><span class="line">                    parameters[&apos;b&apos; + str(l)] = bl</span><br><span class="line">    </span><br><span class="line">    Returns:</span><br><span class="line">    v -- python dictionary containing the current velocity.</span><br><span class="line">                    v[&apos;dW&apos; + str(l)] = velocity of dWl</span><br><span class="line">                    v[&apos;db&apos; + str(l)] = velocity of dbl</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    </span><br><span class="line">    L = len(parameters) // 2 # number of layers in the neural networks</span><br><span class="line">    v = &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    # Initialize velocity</span><br><span class="line">    for l in range(L):</span><br><span class="line">        v[&quot;dW&quot; + str(l+1)] = np.zeros_like(parameters[&quot;W&quot; + str(l+1)])</span><br><span class="line">        v[&quot;db&quot; + str(l+1)] = np.zeros_like(parameters[&quot;b&quot; + str(l+1)])</span><br><span class="line">        </span><br><span class="line">    return v</span><br></pre></td></tr></table></figure></p>
+<p><img src="/image/deepLearning/69.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># GRADED FUNCTION: update_parameters_with_momentum</span><br><span class="line"></span><br><span class="line">def update_parameters_with_momentum(parameters, grads, v, beta, learning_rate):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Update parameters using Momentum</span><br><span class="line">    </span><br><span class="line">    Arguments:</span><br><span class="line">    parameters -- python dictionary containing your parameters:</span><br><span class="line">                    parameters[&apos;W&apos; + str(l)] = Wl</span><br><span class="line">                    parameters[&apos;b&apos; + str(l)] = bl</span><br><span class="line">    grads -- python dictionary containing your gradients for each parameters:</span><br><span class="line">                    grads[&apos;dW&apos; + str(l)] = dWl</span><br><span class="line">                    grads[&apos;db&apos; + str(l)] = dbl</span><br><span class="line">    v -- python dictionary containing the current velocity:</span><br><span class="line">                    v[&apos;dW&apos; + str(l)] = ...</span><br><span class="line">                    v[&apos;db&apos; + str(l)] = ...</span><br><span class="line">    beta -- the momentum hyperparameter, scalar</span><br><span class="line">    learning_rate -- the learning rate, scalar</span><br><span class="line">    </span><br><span class="line">    Returns:</span><br><span class="line">    parameters -- python dictionary containing your updated parameters </span><br><span class="line">    v -- python dictionary containing your updated velocities</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">    L = len(parameters) // 2 # number of layers in the neural networks</span><br><span class="line">    </span><br><span class="line">    # Momentum update for each parameter</span><br><span class="line">    for l in range(L):</span><br><span class="line">        </span><br><span class="line">        # compute velocities</span><br><span class="line">        v[&quot;dW&quot; + str(l+1)] = beta * v[&quot;dW&quot; + str(l+1)] + (1 - beta) * grads[&quot;dW&quot; + str(l+1)]</span><br><span class="line">        v[&quot;db&quot; + str(l+1)] = beta * v[&quot;db&quot; + str(l+1)] + (1 - beta) * grads[&quot;db&quot; + str(l+1)]</span><br><span class="line">        # update parameters</span><br><span class="line">        parameters[&quot;W&quot; + str(l+1)] -= learning_rate * v[&quot;dW&quot; + str(l+1)]</span><br><span class="line">        parameters[&quot;b&quot; + str(l+1)] -= learning_rate * v[&quot;db&quot; + str(l+1)]</span><br><span class="line">        </span><br><span class="line">    return parameters, v</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Note that:</p>
+</blockquote>
+<blockquote>
+<p>The velocity is initialized with zeros. So the algorithm will take a few iterations to “build up” velocity and start to take bigger steps.<br>If  𝛽=0 , then this just becomes standard gradient descent without momentum.<br>How do you choose  𝛽 ?</p>
+</blockquote>
+<blockquote>
+<p>The larger the momentum  𝛽  is, the smoother the update because the more we take the past gradients into account. But if  𝛽  is too big, it could also smooth out the updates too much.<br>Common values for  𝛽  range from 0.8 to 0.999. If you don’t feel inclined to tune this,  𝛽=0.9  is often a reasonable default.<br>Tuning the optimal  𝛽  for your model might need trying several values to see what works best in term of reducing the value of the cost function  𝐽 .</p>
+</blockquote>
+<blockquote>
+<p>Momentum takes past gradients into account to smooth out the steps of gradient descent. It can be applied with batch gradient descent, mini-batch gradient descent or stochastic gradient descent. - You have to tune a momentum hyperparameter  𝛽  and a learning rate  𝛼 .</p>
+</blockquote>
+<h1 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h1><h2 id="RMSprop"><a href="#RMSprop" class="headerlink" title="RMSprop"></a>RMSprop</h2><p>Root Mean Square Propagation<br>类似指数加权平均，在更改更新梯度的逻辑，不再直接减去学习率乘以梯度，而是减去学习率乘以优化处理后的梯度值，详见如下公式<br><img src="/image/deepLearning/71.png" alt></p>
+<h2 id="Adam-优化算法"><a href="#Adam-优化算法" class="headerlink" title="Adam 优化算法"></a>Adam 优化算法</h2><p>结合指数平均和RMSprop两种算法更新梯度<br><img src="/image/deepLearning/72.png" alt><br><img src="/image/deepLearning/74.png" alt><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"># GRADED FUNCTION: initialize_adam</span><br><span class="line"></span><br><span class="line">def initialize_adam(parameters) :</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Initializes v and s as two python dictionaries with:</span><br><span class="line">                - keys: &quot;dW1&quot;, &quot;db1&quot;, ..., &quot;dWL&quot;, &quot;dbL&quot; </span><br><span class="line">                - values: numpy arrays of zeros of the same shape as the corresponding gradients/parameters.</span><br><span class="line">    </span><br><span class="line">    Arguments:</span><br><span class="line">    parameters -- python dictionary containing your parameters.</span><br><span class="line">                    parameters[&quot;W&quot; + str(l)] = Wl</span><br><span class="line">                    parameters[&quot;b&quot; + str(l)] = bl</span><br><span class="line">    </span><br><span class="line">    Returns: </span><br><span class="line">    v -- python dictionary that will contain the exponentially weighted average of the gradient.</span><br><span class="line">                    v[&quot;dW&quot; + str(l)] = ...</span><br><span class="line">                    v[&quot;db&quot; + str(l)] = ...</span><br><span class="line">    s -- python dictionary that will contain the exponentially weighted average of the squared gradient.</span><br><span class="line">                    s[&quot;dW&quot; + str(l)] = ...</span><br><span class="line">                    s[&quot;db&quot; + str(l)] = ...</span><br><span class="line"></span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    </span><br><span class="line">    L = len(parameters) // 2 # number of layers in the neural networks</span><br><span class="line">    v = &#123;&#125;</span><br><span class="line">    s = &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    # Initialize v, s. Input: &quot;parameters&quot;. Outputs: &quot;v, s&quot;.</span><br><span class="line">    for l in range(L):</span><br><span class="line">        v[&quot;dW&quot; + str(l+1)] = np.zeros_like(parameters[&quot;W&quot; + str(l+1)])</span><br><span class="line">        v[&quot;db&quot; + str(l+1)] = np.zeros_like(parameters[&quot;b&quot; + str(l+1)])</span><br><span class="line">        s[&quot;dW&quot; + str(l+1)] = np.zeros_like(parameters[&quot;W&quot; + str(l+1)])</span><br><span class="line">        s[&quot;db&quot; + str(l+1)] = np.zeros_like(parameters[&quot;b&quot; + str(l+1)])</span><br><span class="line">    </span><br><span class="line">    return v, s</span><br><span class="line"></span><br><span class="line"># GRADED FUNCTION: update_parameters_with_adam</span><br><span class="line"></span><br><span class="line">def update_parameters_with_adam(parameters, grads, v, s, t, learning_rate = 0.01,</span><br><span class="line">                                beta1 = 0.9, beta2 = 0.999,  epsilon = 1e-8):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Update parameters using Adam</span><br><span class="line">    </span><br><span class="line">    Arguments:</span><br><span class="line">    parameters -- python dictionary containing your parameters:</span><br><span class="line">                    parameters[&apos;W&apos; + str(l)] = Wl</span><br><span class="line">                    parameters[&apos;b&apos; + str(l)] = bl</span><br><span class="line">    grads -- python dictionary containing your gradients for each parameters:</span><br><span class="line">                    grads[&apos;dW&apos; + str(l)] = dWl</span><br><span class="line">                    grads[&apos;db&apos; + str(l)] = dbl</span><br><span class="line">    v -- Adam variable, moving average of the first gradient, python dictionary</span><br><span class="line">    s -- Adam variable, moving average of the squared gradient, python dictionary</span><br><span class="line">    learning_rate -- the learning rate, scalar.</span><br><span class="line">    beta1 -- Exponential decay hyperparameter for the first moment estimates </span><br><span class="line">    beta2 -- Exponential decay hyperparameter for the second moment estimates </span><br><span class="line">    epsilon -- hyperparameter preventing division by zero in Adam updates</span><br><span class="line"></span><br><span class="line">    Returns:</span><br><span class="line">    parameters -- python dictionary containing your updated parameters </span><br><span class="line">    v -- Adam variable, moving average of the first gradient, python dictionary</span><br><span class="line">    s -- Adam variable, moving average of the squared gradient, python dictionary</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    </span><br><span class="line">    L = len(parameters) // 2                 # number of layers in the neural networks</span><br><span class="line">    v_corrected = &#123;&#125;                         # Initializing first moment estimate, python dictionary</span><br><span class="line">    s_corrected = &#123;&#125;                         # Initializing second moment estimate, python dictionary</span><br><span class="line">    </span><br><span class="line">    # Perform Adam update on all parameters</span><br><span class="line">    for l in range(L):</span><br><span class="line">        # Moving average of the gradients. Inputs: &quot;v, grads, beta1&quot;. Output: &quot;v&quot;.</span><br><span class="line">        v[&quot;dW&quot; + str(l+1)] = beta1 * v[&quot;dW&quot; + str(l+1)] + (1 - beta1) * grads[&quot;dW&quot; + str(l+1)]</span><br><span class="line">        v[&quot;db&quot; + str(l+1)] = beta1 * v[&quot;db&quot; + str(l+1)] + (1 - beta1) * grads[&quot;db&quot; + str(l+1)]</span><br><span class="line"></span><br><span class="line">        # Compute bias-corrected first moment estimate. Inputs: &quot;v, beta1, t&quot;. Output: &quot;v_corrected&quot;.</span><br><span class="line">        v_corrected[&quot;dW&quot; + str(l+1)] = v[&quot;dW&quot; + str(l+1)] / (1 - beta1 ** t)</span><br><span class="line">        v_corrected[&quot;db&quot; + str(l+1)] = v[&quot;db&quot; + str(l+1)] / (1 - beta1 ** t)</span><br><span class="line"></span><br><span class="line">        # Moving average of the squared gradients. Inputs: &quot;s, grads, beta2&quot;. Output: &quot;s&quot;.</span><br><span class="line">        s[&quot;dW&quot; + str(l+1)] = beta2 * s[&quot;dW&quot; + str(l+1)] + (1 - beta2) * grads[&quot;dW&quot; + str(l+1)] ** 2</span><br><span class="line">        s[&quot;db&quot; + str(l+1)] = beta2 * s[&quot;db&quot; + str(l+1)] + (1 - beta2) * grads[&quot;db&quot; + str(l+1)] ** 2</span><br><span class="line"></span><br><span class="line">        # Compute bias-corrected second raw moment estimate. Inputs: &quot;s, beta2, t&quot;. Output: &quot;s_corrected&quot;.</span><br><span class="line">        s_corrected[&quot;dW&quot; + str(l+1)] = s[&quot;dW&quot; + str(l+1)] / (1 - beta2 ** t)</span><br><span class="line">        s_corrected[&quot;db&quot; + str(l+1)] = s[&quot;db&quot; + str(l+1)] / (1 - beta2 ** t)</span><br><span class="line"></span><br><span class="line">        # Update parameters. Inputs: &quot;parameters, learning_rate, v_corrected, s_corrected, epsilon&quot;. Output: &quot;parameters&quot;.</span><br><span class="line">        parameters[&quot;W&quot; + str(l+1)] -= learning_rate * v_corrected[&quot;dW&quot; + str(l+1)] / (np.sqrt(s_corrected[&quot;dW&quot; + str(l+1)]) + epsilon)</span><br><span class="line">        parameters[&quot;b&quot; + str(l+1)] -= learning_rate * v_corrected[&quot;db&quot; + str(l+1)] / (np.sqrt(s_corrected[&quot;db&quot; + str(l+1)]) + epsilon)</span><br><span class="line"></span><br><span class="line">    return parameters, v, s</span><br></pre></td></tr></table></figure></p>
+<p><img src="/image/deepLearning/73.png" alt><br><a href="https://arxiv.org/pdf/1412.6980" target="_blank" rel="noopener">Adam 算法原理</a></p>
+<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/OptGradientDescent/index.py" target="_blank" rel="noopener">上面三种算法练习</a></p>
+<p>小结</p>
+<blockquote>
+<p>Momentum usually helps, but given the small learning rate and the simplistic dataset, its impact is almost negligeable. Also, the huge oscillations you see in the cost come from the fact that some minibatches are more difficult thans others for the optimization algorithm.</p>
+</blockquote>
+<blockquote>
+<p>Adam on the other hand, clearly outperforms mini-batch gradient descent and Momentum. If you run the model for more epochs on this simple dataset, all three methods will lead to very good results. However, you’ve seen that Adam converges a lot faster.</p>
+</blockquote>
+<p>实验效果Adam算法速度快，准确率高</p>
+<blockquote>
+<p>Some advantages of Adam include:</p>
+</blockquote>
+<blockquote>
+<p>Relatively low memory requirements (though higher than gradient descent and gradient descent with momentum)<br>Usually works well even with little tuning of hyperparameters (except  𝛼 )</p>
+</blockquote>
+<h1 id="学习率衰减"><a href="#学习率衰减" class="headerlink" title="学习率衰减"></a>学习率衰减</h1><p>在小批量梯度下降计算过程中，随着计算批次后移，逐渐减小学习率的值，可以降低梯度震荡幅度，加速收敛速度<br>一些学习率衰减算法如下<br><img src="/image/deepLearning/75.png" alt><br><img src="/image/deepLearning/76.png" alt></p>
+<h1 id="两个经验法则"><a href="#两个经验法则" class="headerlink" title="两个经验法则"></a>两个经验法则</h1><p>Unlikely to get stuck in a bad local optima 一般不存在局部最优解，损失函数与参数关系往往成马鞍装<br>Plateaus can make learning slow 平缓的地方往往会造成学习速度下降，需要花费更多时间找到更优解</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/deepLearning/OptNeuralNetwork.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/deepLearning/OptNeuralNetwork.html" itemprop="url">
+                  一些优化深度神经网络【训练过程】的方法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-29T10:48:37+08:00">
+                2025-01-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="数据集的使用"><a href="#数据集的使用" class="headerlink" title="数据集的使用"></a>数据集的使用</h1><p>一般将数据集分成三部分，训练集（training set），交叉验证集（cross validation set / dev set），测试集（test set）<br>训练集用于训练模型<br>交叉验证集用于调整超参数，或者比较不同模型算法性能的优劣<br>测试集用于对最终模型的进行无偏评估(是否存在欠拟合或过拟合)</p>
+<p>如果不需要进行最终的无偏评估，那么可以将交叉验证集和测试集合并为一个数据集，进行模型训练和评估<br>将测试集数据合并到交叉验证集中，数据集最终只会剩下训练集和测试验证集</p>
+<p>另外需要注意进行训练的数据集和验证测试的数据集要来自同一个分布，否则会影响训练速度<br>比如训练集图片来自网络，分辨率高，清晰度高，但是测试集图片来自手机，分辨率低，清晰度低<br>那么训练出来的模型在测试集上的表现可能会很差</p>
+<p><img src="/image/deepLearning/42.png" alt><br><img src="/image/deepLearning/43.png" alt></p>
+<h1 id="使用偏差-bias-和方差-variance-对模型进行评估"><a href="#使用偏差-bias-和方差-variance-对模型进行评估" class="headerlink" title="使用偏差(bias)和方差(variance)对模型进行评估"></a>使用偏差(bias)和方差(variance)对模型进行评估</h1><p>高偏差一般欠拟合<br>高方差一般过拟合<br>先来复习一下偏差和方差的定义<br><a href="https://yoohannah.github.io/post/machineLearning/overfitting.html">解决过拟合问题</a><br><a href="https://yoohannah.github.io/post/machineLearning/biasVariance.html">高偏差和高方差</a><br><img src="/image/deepLearning/44.png" alt><br><img src="/image/LLM/119.png" alt></p>
+<h2 id="正则化处理-Regularization-过拟合问题"><a href="#正则化处理-Regularization-过拟合问题" class="headerlink" title="正则化处理(Regularization)过拟合问题"></a>正则化处理(Regularization)过拟合问题</h2><p>通过给成本函数增加正则化项，进行权重衰减，来降低模型的方差，从而避免过拟合的出现<br><img src="/image/deepLearning/45.png" alt><br><img src="/image/deepLearning/46.png" alt><br><img src="/image/deepLearning/48.png" alt><br><img src="/image/deepLearning/47.png" alt></p>
+<h2 id="L2-具体实现"><a href="#L2-具体实现" class="headerlink" title="L2 具体实现"></a>L2 具体实现</h2><p><img src="/image/deepLearning/60.png" alt><br><img src="/image/deepLearning/61.png" alt></p>
+<h2 id="Dropout-正则化"><a href="#Dropout-正则化" class="headerlink" title="Dropout 正则化"></a>Dropout 正则化</h2><p>dropout 方法 实现原理就是在每层计算前前，生成随机蒙层，按keep_prob比例随机干掉一些节点，再参与运算，计算后除以keep_prob，保证最终输出的结果不变<br>在反向传播时，使用向前传播的蒙层对梯度进行相应的处理，保证该轮的参数矩阵相同，所以要对向前传播的蒙层进行缓存处理方便使用<br><img src="/image/deepLearning/49.png" alt><br><img src="/image/deepLearning/50.png" alt></p>
+<p>可以看到相比L2 类似于对w 进行缩小处理，dropout 方法类似于对w 进行放大处理, 因为干掉一些节点相当于随机取消某些w 的影响，最后除以keep_prob 相当于对w 进行放大处理</p>
+<h2 id="其它正则化方法"><a href="#其它正则化方法" class="headerlink" title="其它正则化方法"></a>其它正则化方法</h2><p>除了上面提到给cost函数添加L1,L2正则化项，还可以通过dropout 方法，数据增强，提早结束训练等正则化方法来避免过拟合的出现<br><img src="/image/deepLearning/51.png" alt><br><img src="/image/deepLearning/52.png" alt></p>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/Regularization/index.py" target="_blank" rel="noopener">L2和Dropout实验</a></p>
+<h1 id="归一化训练集"><a href="#归一化训练集" class="headerlink" title="归一化训练集"></a>归一化训练集</h1><p>通过对训练数据集进行归一化处理，加快梯度下降，提高训练速度<br>复习一下<a href="https://yoohannah.github.io/post/machineLearning/lineregression.html">特征放缩</a><br><img src="/image/deepLearning/53.png" alt><br><img src="/image/deepLearning/54.png" alt></p>
+<h1 id="初始化参数"><a href="#初始化参数" class="headerlink" title="初始化参数"></a>初始化参数</h1><p>由于神经网络的多层的计算过程中，权重是乘积关系，如果各层初始化参数一开始大于1 或者小于1，整个乘积下来，就导致y^ 无限大或者无限小，从而导致梯度爆炸或者梯度消失<br><img src="/image/deepLearning/55.png" alt><br>解决<br><img src="/image/deepLearning/56.png" alt><br><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/Initialization/index.py" target="_blank" rel="noopener">不同初始化参数方式</a></p>
+<h1 id="梯度校验"><a href="#梯度校验" class="headerlink" title="梯度校验"></a>梯度校验</h1><p>双边误差会比单边误差更准确<br><img src="/image/deepLearning/57.png" alt><br>梯度校验的过程就是拿到一轮训练的参数和梯度，进行摊平处理，字典变 n * 1 二维数组，每一层的每一个w 是一个数组<br>对每一层每一个参数修改一个很小的值，一次加，一次减，重新计算cost 值，拿到两个cost 值后进行双边误差计算，<br>整个参数都计算完后，与梯度进行比较，详见公式<br>如果比较值相差不大，说明梯度计算没有问题<br><img src="/image/deepLearning/58.png" alt><br><img src="/image/deepLearning/59.png" alt></p>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p><img src="/image/deepLearning/62.png" alt><br><img src="/image/deepLearning/63.png" alt><br><img src="/image/deepLearning/64.png" alt><br><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/GradientChecking/index.py" target="_blank" rel="noopener">具体代码</a></p>
+<h1 id="分析解决问题"><a href="#分析解决问题" class="headerlink" title="分析解决问题"></a>分析解决问题</h1><p>之前提到的一些优化模型的方法<br><img src="/image/deepLearning/89.png" alt></p>
+<h2 id="正交化"><a href="#正交化" class="headerlink" title="正交化"></a>正交化</h2><p>是一种解决问题的思想，简单来说就是通过将问题分解为相互独立的子问题，从而使得每个子问题可以独立解决，减少相互干扰<br>比如下面的训练过程，每一个阶段有每一个阶段要完成的目标，每一个阶段的实现目标过程会遇到不同问题，针对不同阶段不同问题采取相应解决办法<br>每个子目标相互独立，互不干扰一个阶段的目标完成后，再进行下一个阶段的目标<br><img src="/image/deepLearning/90.png" alt><br>就相当于把一个大问题分解为多个小问题，每个小问题相互独立，互不干扰，<br>针对不同问题，采取相应的解决办法，最终完整整个模型的训练</p>
+<h2 id="建立单一数字评估指标"><a href="#建立单一数字评估指标" class="headerlink" title="建立单一数字评估指标"></a>建立单一数字评估指标</h2><p>如果需要对多个指标进行优化，参考上面正交化思想，独立解决每个指标的优化问题，即建立单一数字评估指标<br>模型评估阶段会用到多个指标，比如准确率，召回率，F1 值，<br>但是这些指标之间存在相互影响，比如准确率高，召回率低，F1 值低<br>所以需要建立单一数字评估指标，比如F1 值，通过F1<br>此时F1 值就是【优化指标】(需要继续提高的指标)，其他指标就是【满足指标】(达到一定阈值即可)<br>之后模型训练相当于就朝着优化项指标进行训练，有的放矢<br>或者通过其他指标综合计算出唯一的指标值来评估模型优劣<br><a href="https://yoohannah.github.io/post/machineLearning/MachineLearningDevelopmentProcess.html">相关复习一</a><br><a href="https://yoohannah.github.io/post/machineLearning/abnormalTest.html">相关复习二</a><br><img src="/image/deepLearning/91.png" alt></p>
+<h2 id="混洗数据保证数据分布均匀"><a href="#混洗数据保证数据分布均匀" class="headerlink" title="混洗数据保证数据分布均匀"></a>混洗数据保证数据分布均匀</h2><p>避免dev和test集数据分布差异过大，在训练过程中，会导致模型训练效果不佳<br>在训练前，把数据进行混洗，打乱数据分布，保证dev和test数据分布差异不大</p>
+<blockquote>
+<p>Choose a dev set and test set to reflect data you expect to get in the future and consider important to do well on.</p>
+</blockquote>
+<h3 id="数据集大小建议"><a href="#数据集大小建议" class="headerlink" title="数据集大小建议"></a>数据集大小建议</h3><blockquote>
+<p>Set your dev set to be big enough to detect differences in algorithm/models you’re trying out.<br>Set your test set to be big enough to give high confidence in the overall performance of your system.<br>如果对实际数据效果要求较高，那么最好要有test set 进行性能测试，否则会影响实际使用效果</p>
+</blockquote>
+<h2 id="更改指标"><a href="#更改指标" class="headerlink" title="更改指标"></a>更改指标</h2><p>如果训练过程中，之前设置的指标已经不能满足模型训练要求，<br>或者已经错误的对模型进行了筛选，<br>要么需要更改指标，要么需要更改模型结构，要么更改dev/test set<br><img src="/image/deepLearning/92.png" alt><br><img src="/image/deepLearning/93.png" alt></p>
+<h2 id="以人的能力为参考"><a href="#以人的能力为参考" class="headerlink" title="以人的能力为参考"></a>以人的能力为参考</h2><p><img src="/image/deepLearning/94.png" alt><br>Why compare to human-level performance<br>Humans are quite good at a lot of tasks. So long as ML is worse than humans, you can:</p>
+<ul>
+<li>Get labeled data from humans.</li>
+<li>Gain insight from manual error analysis: Why did a person get this right?</li>
+<li>Better analysis of bias/variance.<br><img src="/image/deepLearning/95.png" alt></li>
+</ul>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p><img src="/image/deepLearning/96.png" alt><br><img src="/image/deepLearning/97.png" alt></p>
+<h1 id="错误分析"><a href="#错误分析" class="headerlink" title="错误分析"></a>错误分析</h1><p>对判断错误的数据进行错误类型统计分析，决定下一步优化方向，给出优先级<br><img src="/image/deepLearning/98.png" alt></p>
+<h2 id="清除标签错误"><a href="#清除标签错误" class="headerlink" title="清除标签错误"></a>清除标签错误</h2><p>如果dev/test set 数据中，存在标签错误的数据，<br>如果该类数据在错误数据中占比较大，已经影响到dev set 阶段对模型的选择<br>则需要采取措施进行标签错误的数据清除<br><img src="/image/deepLearning/99.png" alt></p>
+<blockquote>
+<p>Correcting incorrect dev/test set examples<br>• Apply same process to your dev and test sets to make sure they continue to come from the same distribution 分布相同<br>• Consider examining examples your algorithm got right as well as ones it got wrong.正确错误数据都检查下标签<br>• Train and dev/test data may now come from slightly different distributions. 训练数据和验证测试数据现在可以来自稍微不同的分布</p>
+</blockquote>
+<h3 id="不同分布数据集处理"><a href="#不同分布数据集处理" class="headerlink" title="不同分布数据集处理"></a>不同分布数据集处理</h3><p>对于训练集和验证测试集分布不同的问题<br>不建议将数据混洗后再进行训练，这样会导致验证测试阶段不是实际数据，而是部分测试数据的问题<br>更好的处理办法是把验证测试集数据集的50%也进行训练，剩下50%再均分进行验证测试<br><img src="/image/deepLearning/100.png" alt><br><img src="/image/deepLearning/101.png" alt></p>
+<h2 id="快速搭建然后迭代"><a href="#快速搭建然后迭代" class="headerlink" title="快速搭建然后迭代"></a>快速搭建然后迭代</h2><p>如果需要对一个全新的问题进行模型训练，建议快速搭建模型，然后迭代，在迭代中发现问题，优化算法<br>• Set up dev/test set and metric<br>• Build initial system quickly<br>• Use Bias/Variance analysis &amp; Error analysis to prioritize next steps.<br>但是要尽可能避免系统过于简单或者过于复杂，<br>对于有众多论文支持的问题，比如人脸识别，可以根据论文快速搭建复杂模型，然后开始训练<br>对于陌生领域的问题，则可以由简单到复杂进行训练</p>
+<h2 id="不匹配数据"><a href="#不匹配数据" class="headerlink" title="不匹配数据"></a>不匹配数据</h2><p>更细致的对错误率进行分析，通过计算不同错误率的差值，分析不同原因比重，决定优化方向<br>· 可避免偏差<br>· 方差，如果比较大，说明模型不能泛化到同一分布数据<br>· 数据不匹配，训练数据和验证数据可能分布不同<br>· 过拟合程度<br><img src="/image/deepLearning/102.png" alt><br><img src="/image/deepLearning/103.png" alt><br><img src="/image/deepLearning/104.png" alt></p>
+<h3 id="如何结局数据不匹配问题"><a href="#如何结局数据不匹配问题" class="headerlink" title="如何结局数据不匹配问题"></a>如何结局数据不匹配问题</h3><p>对train set 和dev set进行错误分析，找出二者不同，然后尽可能多的用dev set 数据进行训练<br>除了去收集真实的dev set，还可以通过人工合成的数据进行训练，<br>但是要注意，人工合成的数据只是实际数据的一个子集，避免出现对子集数据过拟合的情况<br>Addressing data mismatch<br>• Carry out manual error analysis to try to understand difference between training and dev/test sets<br>• Make training data more similar; or collect more data similar to dev/test sets<br><img src="/image/deepLearning/105.png" alt><br><img src="/image/deepLearning/106.png" alt></p>
+<h1 id="迁移学习"><a href="#迁移学习" class="headerlink" title="迁移学习"></a>迁移学习</h1><p><a href="https://yoohannah.github.io/post/machineLearning/MachineLearningDevelopmentProcess.html">复习</a><br>适用情形<br>• Task A and B have the same input x.<br>• You have a lot more data for Task A than Task B.<br>• Low level features from A could be helpful for learning B.<br><img src="/image/deepLearning/107.png" alt></p>
+<h1 id="多任务学习"><a href="#多任务学习" class="headerlink" title="多任务学习"></a>多任务学习</h1><p>建立单一神经网络同时输出多个任务的结果<br>适用情形<br>• Training on a set of tasks that could benefit from having shared lower-level features.<br>• Usually: Amount of data you have for each task is quite similar.<br>• Can train a big enough neural network to do well on all the tasks.<br><img src="/image/deepLearning/108.png" alt></p>
+<h1 id="端到端深度学习"><a href="#端到端深度学习" class="headerlink" title="端到端深度学习"></a>端到端深度学习</h1><p>端到端深度学习（End-to-End Deep Learning）是指在构建和训练深度学习模型时，直接从原始输入数据到最终输出结果的整个过程都由一个单一的模型来完成。<br>这种方法避免了传统机器学习中常见的多个独立步骤和手工特征工程，旨在通过一个统一的模型自动学习和优化整个任务。</p>
+<p>优点:<br>• Let the data speak<br>• Less hand-designing of components needed<br>缺点:<br>• May need large amount of data<br>• Excludes potentially useful hand-designed components</p>
+<p>适用情形<br>Do you have sufficient data to learn a function of the complexity needed to map x to y?<br>有没有足够有效的直接从x到y映射数据用来进行复杂函数的学习？</p>
+<p>现实中，如果没足够多x-&gt; Y  的映射数据，存在中间数据方便，x-&gt; Z -&gt; Y 这样的映射数据，<br>那么将端到端任务分解成两个小任务，会更简单<br>比如下面的人脸识别和根据手X光图片判断儿童年龄，自动驾驶，但如果是机器翻译就比较适合端到端</p>
+<p><img src="/image/deepLearning/109.png" alt><br><img src="/image/deepLearning/110.png" alt></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/streamExamp.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/nodejs/streamExamp.html" itemprop="url">
+                  一个实现流通信的案例
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-26T16:17:37+08:00">
+                2025-01-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>前端包括node层和纯前端层，需要请求第三方http接口在页面实现chatGTP的打字机效果</p>
+<h1 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h1><ol>
+<li>在node层调用第三方http接口，避免跨域问题</li>
+<li>由于第三方接口为流式接口，从node层发出请求再转发到前端也需要进行流式通信</li>
+<li>前端层对返回的流式数据进行处理后更新数据呈现在页面上</li>
+</ol>
+<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><ol>
+<li>前端层使用fetch进行请求，使用ReadableStream进行流式处理</li>
+<li>node层使用axios进行请求，使用stream进行流式处理  </li>
+</ol>
+<h2 id="node层实现"><a href="#node层实现" class="headerlink" title="node层实现"></a>node层实现</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">'axios'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; PassThrough &#125; <span class="keyword">from</span> <span class="string">'stream'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">faqStream</span>(<span class="params">body?: any</span>): <span class="title">Promise</span>&lt;<span class="title">any</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> ctx = useContext&lt;HttpContext&gt;();</span><br><span class="line">  ctx.set(&#123;</span><br><span class="line">    Connection: <span class="string">'keep-alive'</span>,</span><br><span class="line">    <span class="string">'Cache-Control'</span>: <span class="string">'no-cache'</span>,</span><br><span class="line">    <span class="string">'Content-Type'</span>: <span class="string">'application/octet-stream'</span> <span class="comment">// 表示返回数据是个 stream</span></span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">const</span> stream = <span class="keyword">new</span> PassThrough();</span><br><span class="line">  ctx.body = stream;</span><br><span class="line">  <span class="comment">// 发起第三方请求</span></span><br><span class="line">  <span class="keyword">const</span> headers = &#123;</span><br><span class="line">    <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span></span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">const</span> url = <span class="string">'http://vvvv.xxxx.net/aiBot/oncall_response_stream'</span>;</span><br><span class="line">  axios</span><br><span class="line">    .post(url, ctx.request.body, &#123; <span class="attr">headers</span>: headers, <span class="attr">responseType</span>: <span class="string">'stream'</span> &#125;)</span><br><span class="line">    .then(<span class="function">(<span class="params">response</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (response.status !== <span class="number">200</span>) &#123;</span><br><span class="line">        <span class="built_in">console</span>.error(<span class="string">'Error status:'</span>, response.status);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      response.data.on(<span class="string">'data'</span>, (chunk) =&gt; &#123;</span><br><span class="line">        chunk</span><br><span class="line">          .toString()</span><br><span class="line">          .split(<span class="string">'\n\n'</span>)</span><br><span class="line">          .filter(<span class="function">(<span class="params">item</span>) =&gt;</span> item)</span><br><span class="line">          .forEach(<span class="function">(<span class="params">chunkStr</span>) =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">let</span> chunkJson = &#123;&#125;;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">              chunkJson = <span class="built_in">JSON</span>.parse(chunkStr);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">              <span class="built_in">console</span>.error(<span class="string">'Error parse:'</span>, error);</span><br><span class="line">              <span class="built_in">console</span>.error(<span class="string">'Error chunkStr:'</span>, chunkStr);</span><br><span class="line">              <span class="built_in">console</span>.error(<span class="string">'Error origin chunk:'</span>, chunk.toString());</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (chunkJson?.data?.chunk) &#123;</span><br><span class="line">              <span class="comment">// 拿到有效数据后，传给前端</span></span><br><span class="line">              stream.write(chunkJson.data.chunk);</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;);</span><br><span class="line">      &#125;);</span><br><span class="line">      response.data.on(<span class="string">'end'</span>, () =&gt; &#123;</span><br><span class="line">        <span class="comment">// 第三方请求流结束后，关闭向前端写的流</span></span><br><span class="line">        stream.end();</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;)</span><br><span class="line">    .catch(<span class="function">(<span class="params">error</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.error(<span class="string">'Error all:'</span>, error);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="前端层实现"><a href="#前端层实现" class="headerlink" title="前端层实现"></a>前端层实现</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">  <span class="keyword">import</span> &#123; useState, useCallback, useRef &#125; <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> [listLoading, setListLoading] = useState(<span class="number">0</span>);</span><br><span class="line">  <span class="keyword">const</span> [hasReport, setHasReport] = useState(<span class="number">-1</span>);</span><br><span class="line">  <span class="keyword">const</span> [AiRemoteData, setAIRemoteData] = useState(<span class="string">''</span>);</span><br><span class="line">  <span class="keyword">const</span> AiRequestController = useRef();</span><br><span class="line">  <span class="keyword">const</span> &#123; addThrottle &#125; = useThrottleFunc();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 拉取Ai 回答</span></span><br><span class="line">  <span class="keyword">const</span> getAIRemoteData = useCallback(</span><br><span class="line">    addThrottle(</span><br><span class="line">      <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">        <span class="keyword">const</span> &#123; keyWord &#125; = query;</span><br><span class="line">        <span class="keyword">if</span> (!keyWord) &#123;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          setListLoading(<span class="function">(<span class="params">val</span>) =&gt;</span> val + <span class="number">1</span>);</span><br><span class="line">          <span class="keyword">if</span> (AiRequestController.current) &#123;</span><br><span class="line">            <span class="comment">// 如果当前请求存在，则取消当前请求</span></span><br><span class="line">            AiRequestController.current.abort();</span><br><span class="line">          &#125;</span><br><span class="line">          AiRequestController.current = <span class="keyword">new</span> AbortController();</span><br><span class="line">          <span class="keyword">const</span> jwtToken = <span class="keyword">await</span> getJwt();</span><br><span class="line">          <span class="comment">// 1. 创建一个新的请求</span></span><br><span class="line">          <span class="keyword">const</span> response = <span class="keyword">await</span> fetch(</span><br><span class="line">            <span class="string">`https://hahahaha.net/api/diagnosisBasic/faqStream`</span>,</span><br><span class="line">            &#123;</span><br><span class="line">              method: <span class="string">'POST'</span>,</span><br><span class="line">              body: <span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">                user_id: userInfo.id,</span><br><span class="line">                query: keyWord,</span><br><span class="line">                class: ''</span><br><span class="line">              &#125;),</span><br><span class="line">              headers: &#123;</span><br><span class="line">                <span class="string">'x-jwt-token'</span>: jwtToken</span><br><span class="line">              &#125;,</span><br><span class="line">              signal: AiRequestController.current.signal</span><br><span class="line">            &#125;</span><br><span class="line">          );</span><br><span class="line">          <span class="keyword">const</span> reader = response.body.getReader(); <span class="comment">// 获取reader</span></span><br><span class="line">          <span class="keyword">const</span> decoder = <span class="keyword">new</span> TextDecoder(); <span class="comment">// 文本解码器</span></span><br><span class="line">          <span class="keyword">let</span> answer = <span class="string">''</span>; <span class="comment">// 存储答案</span></span><br><span class="line">          <span class="comment">// 2. 循环取值</span></span><br><span class="line">          <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            <span class="comment">// 取值, value 是后端返回流信息, done 表示后端结束流的输出</span></span><br><span class="line">            <span class="keyword">const</span> &#123; value, done &#125; = <span class="keyword">await</span> reader.read();</span><br><span class="line">            <span class="keyword">if</span> (done) &#123;</span><br><span class="line">              <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 对 value 进行解码</span></span><br><span class="line">            <span class="keyword">const</span> val = decoder.decode(value);</span><br><span class="line">            <span class="keyword">if</span> (!answer) &#123;</span><br><span class="line">              setListLoading(<span class="function">(<span class="params">count</span>) =&gt;</span> count - <span class="number">1</span>);</span><br><span class="line">              setHasReport(<span class="number">-1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            answer += val;</span><br><span class="line">            setAIRemoteData(answer);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> &#123;</span><br><span class="line">          setAIRemoteData(<span class="string">''</span>);</span><br><span class="line">          <span class="built_in">console</span>.error(<span class="string">'数据解析出错'</span>);</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">          setListLoading(<span class="function">(<span class="params">val</span>) =&gt;</span> val - <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="number">500</span>,</span><br><span class="line">      <span class="string">'getAIRemoteData'</span></span><br><span class="line">    ),</span><br><span class="line">    [query.keyWord]</span><br><span class="line">  );</span><br></pre></td></tr></table></figure>
+<h3 id="番外-全局节流函数"><a href="#番外-全局节流函数" class="headerlink" title="番外: 全局节流函数"></a>番外: 全局节流函数</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> throttleTimerList: &#123; [key: string]: Timeout | <span class="literal">null</span> &#125; = &#123;&#125;;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> useThrottleFunc = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> timer = useRef();</span><br><span class="line">  <span class="keyword">const</span> addThrottle = (</span><br><span class="line">    fn: <span class="function">(<span class="params">params?: LooseObject | <span class="literal">undefined</span></span>) =&gt;</span> <span class="keyword">void</span>,</span><br><span class="line">    waitTime?: number,</span><br><span class="line">    timerKey?: string</span><br><span class="line">  ) =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> timerFlag = timerKey || <span class="string">'getRemoteData'</span>;</span><br><span class="line">    throttleTimerList[timerFlag] = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="function">(<span class="params">params?: LooseObject | <span class="literal">undefined</span></span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (throttleTimerList[timerFlag]) &#123;</span><br><span class="line">        clearTimeout(throttleTimerList[timerFlag]);</span><br><span class="line">      &#125;</span><br><span class="line">      throttleTimerList[timerFlag] = setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        fn(params);</span><br><span class="line">        clearTimeout(throttleTimerList[timerFlag]);</span><br><span class="line">        throttleTimerList[timerFlag] = <span class="literal">null</span>;</span><br><span class="line">      &#125;, waitTime || <span class="number">500</span>);</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  useEffect(</span><br><span class="line">    () =&gt; <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">Object</span>.keys(throttleTimerList).forEach(<span class="function">(<span class="params">key</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (throttleTimerList[key]) &#123;</span><br><span class="line">          clearTimeout(throttleTimerList[key]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">delete</span> throttleTimerList[key];</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;,</span><br><span class="line">    []</span><br><span class="line">  );</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    addThrottle,</span><br><span class="line">    throttleTimer: timer</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h1 id="相关知识链接"><a href="#相关知识链接" class="headerlink" title="相关知识链接"></a>相关知识链接</h1><p><a href="https://nodejs.cn/api/webstreams.html#%E7%A4%BA%E4%BE%8B-readablestream" target="_blank" rel="noopener">NODE-Stream</a><br><a href="https://nodejs.cn/api/webstreams.html#%E7%A4%BA%E4%BE%8B-readablestream" target="_blank" rel="noopener">NODE-ReadableStream</a><br><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/ReadableStream" target="_blank" rel="noopener">ReadableStream</a><br><a href="https://juejin.cn/post/7211401380770349115" target="_blank" rel="noopener">application/octet-stream vs text/event-stream</a><br><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/AbortController" target="_blank" rel="noopener">AbortController</a><br><a href="https://juejin.cn/post/7329884027186724901" target="_blank" rel="noopener">fetch获取流式数据相关问题</a><br><a href="https://juejin.cn/post/7212270321622286394#heading-7" target="_blank" rel="noopener">在 Koa 中基于 gpt-3.5 模型实现一个最基本的流式问答 DEMO</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/deepLearning/NeuralNetwork.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -359,6 +1149,119 @@
 <h2 id="小结-2"><a href="#小结-2" class="headerlink" title="小结"></a>小结</h2><p><img src="/image/deepLearning/33.png" alt></p>
 <h3 id="为什么要使用深层网络"><a href="#为什么要使用深层网络" class="headerlink" title="为什么要使用深层网络"></a>为什么要使用深层网络</h3><p>使用小的（单层神经元数据量少的）的但是有多层的深层网络，往往会比使用浅层(layer数少)网络计算步骤更简洁<br>比如下面的电路与或非门计算过程<br>如果像左侧使用深层网络，每一次层神经元都少一半<br>如果使用右侧单层神经网络，这一层上的神经元会以2的指数方式计算<br>总体算下来，深层网络需要处理的神经元会少很多</p>
 <p><img src="/image/deepLearning/34.png" alt></p>
+<h1 id="实验练习"><a href="#实验练习" class="headerlink" title="实验练习"></a>实验练习</h1><h2 id="逻辑回归全过程"><a href="#逻辑回归全过程" class="headerlink" title="逻辑回归全过程"></a>逻辑回归全过程</h2><p><a href="https://github.com/GeeeekExplorer/AndrewNg-Deep-Learning/blob/master/Neural%20Networks%20and%20Deep%20Learning/Week%202/Logistic%20Regression%20as%20a%20Neural%20Network/Logistic%20Regression%20with%20a%20Neural%20Network%20mindset%20Solution.ipynb" target="_blank" rel="noopener">gitbub[ipynb]链接</a><br><a href="https://colab.research.google.com/github/GeeeekExplorer/AndrewNg-Deep-Learning/blob/master/Neural%20Networks%20and%20Deep%20Learning/Week%202/Logistic%20Regression%20as%20a%20Neural%20Network/Logistic%20Regression%20with%20a%20Neural%20Network%20mindset%20Solution.ipynb#scrollTo=OEOpKgClZLco" target="_blank" rel="noopener">实验</a></p>
+<h2 id="思路梳理"><a href="#思路梳理" class="headerlink" title="思路梳理"></a>思路梳理</h2><h2 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a>数据处理</h2><h3 id="向量化"><a href="#向量化" class="headerlink" title="向量化"></a>向量化</h3><p>实验中要实现对一张图片是否是猫的判断，<br>首先要对图片进行处理，将图片转换成向量，<br>一个像素点由RGB三个数据组成, 现在如果横竖都取图片的64个像素点<br>一张64X64的图片就有64X64=4096个 [r,g,b] 这样的数据，<br>一张图片的数据表示就是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    [[196 192 190], [193 186 182],...中间还有61组, [188 179 174]], 每一行 有64个</span><br><span class="line">    [[196 192 190], [193 186 182],..., [188 179 174]],</span><br><span class="line">    ... 中间有60行</span><br><span class="line">    [[196 192 190], [193 186 182],..., [188 179 174]]</span><br><span class="line">    [[196 192 190], [193 186 182],..., [88 79 74]]</span><br><span class="line">] 一共64行</span><br></pre></td></tr></table></figure>
+<p>现在把所有数据摊平再转置，就可转成一个[64X64X3=12288, 1]的向量,<br>也就是m个测试数据组成的矩阵中的一列</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[[196,], [192,],..., [88,], [79,],[74,]]</span><br></pre></td></tr></table></figure>
+<p>A trick when you want to flatten a matrix X of shape (a,b,c,d) to a matrix X_flatten of shape (b ∗ c ∗ d, a) is to use:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">X_flatten = X.reshape(X.shape[0], -1).T</span><br></pre></td></tr></table></figure>
+<p>现在我们有209个训练数据的训练集train_set_x_orig的维度是(209, 64, 64, 3)<br>a 就是209<br>现将要将训练集数据一次性转成209列的向量<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">m_train = train_set_x_orig.shape[0] // 209</span><br><span class="line">train_set_x_flatten = train_set_x_orig.reshape(m_train, -1).T</span><br></pre></td></tr></table></figure></p>
+<p>train_set_x_flatten 现在的维度就是(12288, 209)<br>每一列是一张图片的像素数据</p>
+<h3 id="数据中心标准化"><a href="#数据中心标准化" class="headerlink" title="数据中心标准化"></a>数据中心标准化</h3><p>基于现在处理的是图片的像素数据，所以所有的数据肯定都在0~255之间</p>
+<blockquote>
+<p>One common preprocessing step in machine learning is to center and standardize your dataset,<br>meaning that you substract the mean of the whole numpy array from each example,<br>and then divide each example by the standard deviation of the whole numpy array.<br>But for picture datasets,<br>it is simpler and more convenient and works almost as well to just divide every row of the dataset by 255 (the maximum value of a pixel channel).</p>
+</blockquote>
+<p>一个常见的预处理步骤是尽可能将数据聚拢到坐标系0附近，常用的方法是对数据进行标准化，<br>也就是将数据减去均值，然后将数据除以标准差<br>但是对于图片数据集来说，<br>除以255（像素通道的最大值），会更简单，而且效果也差不多<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">train_set_x = train_set_x_flatten / 255.</span><br></pre></td></tr></table></figure></p>
+<h3 id="小结-3"><a href="#小结-3" class="headerlink" title="小结"></a>小结</h3><blockquote>
+<p>What you need to remember:<br>Common steps for pre-processing a new dataset are:<br>Figure out the dimensions and shapes of the problem (m_train, m_test, num_px, …)<br>Reshape the datasets such that each example is now a vector of size (num_px <em> num_px </em> 3, 1)<br>“Standardize” the data</p>
+</blockquote>
+<p>常见的数据预处理步骤：</p>
+<ol>
+<li>确定问题的维度和形状（m_train, m_test, num_px, …）</li>
+<li>将数据集重新组织成每个示例都是大小为（num_px <em> num_px </em> 3, 1）的向量</li>
+<li>标准化数据</li>
+</ol>
+<h2 id="构建模型"><a href="#构建模型" class="headerlink" title="构建模型"></a>构建模型</h2><blockquote>
+<p>The main steps for building a Neural Network are:</p>
+</blockquote>
+<blockquote>
+<p>Define the model structure (such as number of input features)<br>Initialize the model’s parameters<br>Loop:<br>Calculate current loss (forward propagation)<br>Calculate current gradient (backward propagation)<br>Update parameters (gradient descent)<br>You often build 1-3 separately and integrate them into one function we call model().</p>
+</blockquote>
+<p>构建一个神经网络模型的主要步骤：</p>
+<ol>
+<li>定义模型结构（例如输入特征的数量,这里是一张图片的12288个rgb数据）</li>
+<li>初始化模型的参数</li>
+<li>循环：<br> 计算当前损失（前向传播）<br> 计算当前梯度（反向传播）<br> 更新参数（梯度下降）<br>通常会将1-3分别构建, 然后将它们集成到一个函数中，我们称之为model()。<br><img src="/image/deepLearning/LogReg_kiank.png" alt></li>
+</ol>
+<h3 id="𝑠𝑖𝑔𝑚𝑜𝑖𝑑函数实现"><a href="#𝑠𝑖𝑔𝑚𝑜𝑖𝑑函数实现" class="headerlink" title="𝑠𝑖𝑔𝑚𝑜𝑖𝑑函数实现"></a>𝑠𝑖𝑔𝑚𝑜𝑖𝑑函数实现</h3><p>𝑠𝑖𝑔𝑚𝑜𝑖𝑑(𝑤𝑇𝑥+𝑏)=1/(1+𝑒−(𝑤𝑇𝑥+𝑏))<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&quot;&quot;&quot;</span><br><span class="line">    Compute the sigmoid of z</span><br><span class="line">    Arguments:</span><br><span class="line">    z -- A scalar or numpy array of any size.</span><br><span class="line">    Return:</span><br><span class="line">    s -- sigmoid(z)</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">def sigmoid(z):</span><br><span class="line">    s = 1/(1+np.exp(-z))</span><br><span class="line">    return s</span><br></pre></td></tr></table></figure></p>
+<h3 id="初始化模型的参数"><a href="#初始化模型的参数" class="headerlink" title="初始化模型的参数"></a>初始化模型的参数</h3><p>用0来初始化参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&quot;&quot;&quot;</span><br><span class="line">This function creates a vector of zeros of shape (dim, 1) for w and initializes b to 0.</span><br><span class="line">Argument:</span><br><span class="line">dim -- num_px * num_px * 3</span><br><span class="line">Returns:</span><br><span class="line">w -- initialized vector of shape (dim, 1)</span><br><span class="line">b -- initialized scalar (corresponds to the bias)</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">def initialize_with_zeros(dim):</span><br><span class="line">    w = np.zeros((dim, 1))</span><br><span class="line">    b = 0</span><br><span class="line">    return w, b</span><br><span class="line"></span><br><span class="line">## 测试</span><br><span class="line">dim = 2</span><br><span class="line">w, b = initialize_with_zeros(dim)</span><br><span class="line"></span><br><span class="line">==&gt;</span><br><span class="line">w = [[0.]</span><br><span class="line"> [0.]]</span><br><span class="line">b = 0.0</span><br></pre></td></tr></table></figure></p>
+<h3 id="前向向后传播实现"><a href="#前向向后传播实现" class="headerlink" title="前向向后传播实现"></a>前向向后传播实现</h3><p>根据公式进行代码实现<br><img src="/image/deepLearning/35.png" alt><br>最终得到每轮训练的损失函数和梯度</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"># GRADED FUNCTION: propagate</span><br><span class="line"></span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">Implement the cost function and its gradient for the propagation explained above</span><br><span class="line"></span><br><span class="line">Arguments:</span><br><span class="line">w -- weights, a numpy array of size (num_px * num_px * 3, 1)</span><br><span class="line">b -- bias, a scalar</span><br><span class="line">X -- data of size (num_px * num_px * 3, number of examples)</span><br><span class="line">Y -- true &quot;label&quot; vector (containing 0 if non-cat, 1 if cat) of size (1, number of examples)</span><br><span class="line"></span><br><span class="line">Return:</span><br><span class="line">cost -- negative log-likelihood cost for logistic regression</span><br><span class="line">dw -- gradient of the loss with respect to w, thus same shape as w</span><br><span class="line">db -- gradient of the loss with respect to b, thus same shape as b</span><br><span class="line"></span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">def propagate(w, b, X, Y):</span><br><span class="line">   </span><br><span class="line">    </span><br><span class="line">    m = X.shape[1]</span><br><span class="line">    </span><br><span class="line">    # FORWARD PROPAGATION (FROM X TO COST)</span><br><span class="line">    A = sigmoid(w.T @ X + b)                                    # compute activation 得到 (m,1) 的矩阵A,m 是训练集样本数</span><br><span class="line">    cost = -np.mean(Y * np.log(A) + (1 - Y) * np.log(1 - A))    # compute cost, 在某些 NumPy 的特定版本或上下文中, np.mean 的输出可能是形状为 (1,) 的数组，而不是一个纯标量</span><br><span class="line">    </span><br><span class="line">    # BACKWARD PROPAGATION (TO FIND GRAD)</span><br><span class="line">    dw = X @ (A - Y).T / m</span><br><span class="line">    db = np.mean(A - Y)</span><br><span class="line"></span><br><span class="line">    assert(dw.shape == w.shape)</span><br><span class="line">    assert(db.dtype == float)</span><br><span class="line">    cost = np.squeeze(cost) # 移除多余的单一维度，确保 cost 是标量</span><br><span class="line">    assert(cost.shape == ()) # 这里明确要求 cost 的形状是 ()，即零维标量。如果 cost 是 (1,)，那么会触发断言错误。</span><br><span class="line">    </span><br><span class="line">    grads = &#123;&quot;dw&quot;: dw,</span><br><span class="line">             &quot;db&quot;: db&#125;</span><br><span class="line">    </span><br><span class="line">    return grads, cost</span><br></pre></td></tr></table></figure>
+<h3 id="梯度下降实现"><a href="#梯度下降实现" class="headerlink" title="梯度下降实现"></a>梯度下降实现</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">&quot;&quot;&quot;</span><br><span class="line">This function optimizes w and b by running a gradient descent algorithm</span><br><span class="line"></span><br><span class="line">Arguments:</span><br><span class="line">w -- weights, a numpy array of size (num_px * num_px * 3, 1)</span><br><span class="line">b -- bias, a scalar</span><br><span class="line">X -- data of shape (num_px * num_px * 3, number of examples)</span><br><span class="line">Y -- true &quot;label&quot; vector (containing 0 if non-cat, 1 if cat), of shape (1, number of examples)</span><br><span class="line">num_iterations -- number of iterations of the optimization loop</span><br><span class="line">learning_rate -- learning rate of the gradient descent update rule</span><br><span class="line">print_cost -- True to print the loss every 100 steps</span><br><span class="line"></span><br><span class="line">Returns:</span><br><span class="line">params -- dictionary containing the weights w and bias b</span><br><span class="line">grads -- dictionary containing the gradients of the weights and bias with respect to the cost function</span><br><span class="line">costs -- list of all the costs computed during the optimization, this will be used to plot the learning curve.</span><br><span class="line"></span><br><span class="line">1) Calculate the cost and the gradient for the current parameters. Use propagate().</span><br><span class="line">2) Update the parameters using gradient descent rule for w and b.</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">def optimize(w, b, X, Y, num_iterations, learning_rate, print_cost = False):</span><br><span class="line">     costs = [] // 收集每轮计算的损失函数值</span><br><span class="line">    </span><br><span class="line">    for i in range(num_iterations):</span><br><span class="line">        </span><br><span class="line">        # Cost and gradient calculation (≈ 1-4 lines of code)</span><br><span class="line">        # 第一轮用初始化w和b计算的损失函数和梯度</span><br><span class="line">        # 后面用更新后的w和b计算的损失函数和梯度</span><br><span class="line">        grads, cost = propagate(w, b, X, Y) </span><br><span class="line">        </span><br><span class="line">        # 解构梯度</span><br><span class="line">        dw = grads[&quot;dw&quot;]</span><br><span class="line">        db = grads[&quot;db&quot;]</span><br><span class="line">        </span><br><span class="line">        # 梯度下降更新参数</span><br><span class="line">        w = w - learning_rate * dw</span><br><span class="line">        b = b - learning_rate * db</span><br><span class="line">        </span><br><span class="line">        # Record the costs</span><br><span class="line">        # 每100轮记录一次损失函数值</span><br><span class="line">        if i % 100 == 0: </span><br><span class="line">            costs.append(cost)</span><br><span class="line">        </span><br><span class="line">        # 如果需要每100轮打印下损失函数就再打印下</span><br><span class="line">        if print_cost and i % 100 == 0:</span><br><span class="line">            print (&quot;Cost after iteration %i: %f&quot; %(i, cost))</span><br><span class="line">    </span><br><span class="line">    # num_iterations轮 训练结束后返回最终更新到的参数，梯度，和损失函数集合(可以用于绘制学习曲线)</span><br><span class="line">    params = &#123;&quot;w&quot;: w,</span><br><span class="line">              &quot;b&quot;: b&#125;</span><br><span class="line">    </span><br><span class="line">    grads = &#123;&quot;dw&quot;: dw,</span><br><span class="line">             &quot;db&quot;: db&#125;</span><br><span class="line">    </span><br><span class="line">    return params, grads, costs</span><br></pre></td></tr></table></figure>
+<h3 id="预测函数"><a href="#预测函数" class="headerlink" title="预测函数"></a>预测函数</h3><p>根据公式实现预测函数</p>
+<p>  𝑌̂ =𝐴=𝜎(𝑤𝑇𝑋+𝑏)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&apos;&apos;&apos;</span><br><span class="line">Predict whether the label is 0 or 1 using learned logistic regression parameters (w, b)</span><br><span class="line"></span><br><span class="line">Arguments:</span><br><span class="line">w -- weights, a numpy array of size (num_px * num_px * 3, 1)</span><br><span class="line">b -- bias, a scalar</span><br><span class="line">X -- data of size (num_px * num_px * 3, number of examples)</span><br><span class="line"></span><br><span class="line">Returns:</span><br><span class="line">Y_prediction -- a numpy array (vector) containing all predictions (0/1) for the examples in X</span><br><span class="line">&apos;&apos;&apos;</span><br><span class="line"># X 是摊平后数据 (12288, m), X.shape[0] 是影响因素个数 12288 个RGB值, X.shape[1] 是训练集样本数</span><br><span class="line">def predict(w, b, X):</span><br><span class="line">    </span><br><span class="line">    m = X.shape[1]</span><br><span class="line">    Y_prediction = np.zeros((1,m))</span><br><span class="line">    w = w.reshape(X.shape[0], 1)</span><br><span class="line">    </span><br><span class="line">    # Compute vector &quot;A&quot; predicting the probabilities of a cat being present in the picture</span><br><span class="line">    A = sigmoid(w.T @ X + b)</span><br><span class="line">    </span><br><span class="line">    for i in range(A.shape[1]):</span><br><span class="line">        # Convert probabilities A[0,i] to actual predictions p[0,i] </span><br><span class="line">        # 大于0.5 预测为1 是猫, 小于0.5 预测为0, 不是猫</span><br><span class="line">        Y_prediction[0, i] = A[0, i] &gt; 0.5</span><br><span class="line">    </span><br><span class="line">    assert(Y_prediction.shape == (1, m))</span><br><span class="line">    </span><br><span class="line">    return Y_prediction</span><br></pre></td></tr></table></figure>
+<h3 id="组装模型"><a href="#组装模型" class="headerlink" title="组装模型"></a>组装模型</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line">Builds the logistic regression model by calling the function you&apos;ve implemented previously</span><br><span class="line"></span><br><span class="line">Arguments:</span><br><span class="line">X_train -- training set represented by a numpy array of shape (num_px * num_px * 3, m_train)</span><br><span class="line">Y_train -- training labels represented by a numpy array (vector) of shape (1, m_train)</span><br><span class="line">X_test -- test set represented by a numpy array of shape (num_px * num_px * 3, m_test)</span><br><span class="line">Y_test -- test labels represented by a numpy array (vector) of shape (1, m_test)</span><br><span class="line">num_iterations -- hyperparameter representing the number of iterations to optimize the parameters</span><br><span class="line">learning_rate -- hyperparameter representing the learning rate used in the update rule of optimize()</span><br><span class="line">print_cost -- Set to true to print the cost every 100 iterations</span><br><span class="line"></span><br><span class="line">Returns:</span><br><span class="line">d -- dictionary containing information about the model.</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">def model(X_train, Y_train, X_test, Y_test, num_iterations = 2000, learning_rate = 0.5, print_cost = False):</span><br><span class="line"></span><br><span class="line">    # initialize parameters with zeros (≈ 1 line of code)</span><br><span class="line">    # 初始化模型的参数</span><br><span class="line">    w, b = initialize_with_zeros(X_train.shape[0])</span><br><span class="line"></span><br><span class="line">    # Gradient descent (≈ 1 line of code)</span><br><span class="line">    # 根据训练数据采用梯度下降方法更新参数</span><br><span class="line">    parameters, grads, costs = optimize(w, b, X_train, Y_train, num_iterations, learning_rate, print_cost)</span><br><span class="line">    </span><br><span class="line">    # Retrieve parameters w and b from dictionary &quot;parameters&quot;</span><br><span class="line">    w = parameters[&quot;w&quot;]</span><br><span class="line">    b = parameters[&quot;b&quot;]</span><br><span class="line">    </span><br><span class="line">    # Predict test/train set examples (≈ 2 lines of code)</span><br><span class="line">    # 用训练好的参数预测测试集和训练集的结果</span><br><span class="line">    Y_prediction_test = predict(w, b, X_test)</span><br><span class="line">    Y_prediction_train = predict(w, b, X_train)</span><br><span class="line"></span><br><span class="line">    # Print train/test Errors</span><br><span class="line">    # 打印训练集和测试集的准确率</span><br><span class="line">    print(&quot;train accuracy: &#123;&#125; %&quot;.format(100 - np.mean(np.abs(Y_prediction_train - Y_train)) * 100))</span><br><span class="line">    print(&quot;test accuracy: &#123;&#125; %&quot;.format(100 - np.mean(np.abs(Y_prediction_test - Y_test)) * 100))</span><br><span class="line"></span><br><span class="line">    # 返回模型训练的损失函数值(学习曲线)，训练测试数据集的预测结果(判断模型是否拟合)，模型的参数, 学习率，迭代次数等信息</span><br><span class="line">    d = &#123;&quot;costs&quot;: costs,</span><br><span class="line">         &quot;Y_prediction_test&quot;: Y_prediction_test, </span><br><span class="line">         &quot;Y_prediction_train&quot; : Y_prediction_train, </span><br><span class="line">         &quot;w&quot; : w, </span><br><span class="line">         &quot;b&quot; : b,</span><br><span class="line">         &quot;learning_rate&quot; : learning_rate,</span><br><span class="line">         &quot;num_iterations&quot;: num_iterations&#125;</span><br><span class="line">    </span><br><span class="line">    return d</span><br><span class="line"></span><br><span class="line"># 调用模型</span><br><span class="line"># 注意入参train_set_x, train_set_y, test_set_x, test_set_y, 是经过预处理的数据集</span><br><span class="line">d = model(train_set_x, train_set_y, test_set_x, test_set_y, num_iterations = 2000, learning_rate = 0.005, print_cost = True)</span><br></pre></td></tr></table></figure>
+<h3 id="模型分析"><a href="#模型分析" class="headerlink" title="模型分析"></a>模型分析</h3><ol>
+<li>预测结果分析</li>
+</ol>
+<p>除了函数本身里面的准确率计算，可以初步判断模型是否过拟合训练数据，还可以单独拿出一个测试数据，和 预测数据进行结果比较，进行验证</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">index = 14</span><br><span class="line">plt.imshow(test_set_x[:,index].reshape((num_px, num_px, 3)))</span><br><span class="line">print (&quot;y = &quot; + str(test_set_y[0,index]) + &quot;, you predicted that it is a \&quot;&quot; + classes[int(d[&quot;Y_prediction_test&quot;][0,index])].decode(&quot;utf-8&quot;) +  &quot;\&quot; picture.&quot;)</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>学习曲线分析</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># Plot learning curve (with costs)</span><br><span class="line">costs = np.squeeze(d[&apos;costs&apos;])</span><br><span class="line">plt.plot(costs)</span><br><span class="line">plt.ylabel(&apos;cost&apos;)</span><br><span class="line">plt.xlabel(&apos;iterations (per hundreds)&apos;)</span><br><span class="line">plt.title(&quot;Learning rate =&quot; + str(d[&quot;learning_rate&quot;]))</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>学习率分析 or 超参数分析</li>
+</ol>
+<p>增加训练次数，观察学习曲线变化同理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">learning_rates = [0.01, 0.001, 0.0001]</span><br><span class="line">models = &#123;&#125;</span><br><span class="line">for i in learning_rates:</span><br><span class="line">    print (&quot;learning rate is: &quot; + str(i))</span><br><span class="line">    models[str(i)] = model(train_set_x, train_set_y, test_set_x, test_set_y, num_iterations = 1500, learning_rate = i, print_cost = False)</span><br><span class="line">    print (&apos;\n&apos; + &quot;-------------------------------------------------------&quot; + &apos;\n&apos;)</span><br><span class="line"></span><br><span class="line">for i in learning_rates:</span><br><span class="line">    plt.plot(np.squeeze(models[str(i)][&quot;costs&quot;]), label = str(models[str(i)][&quot;learning_rate&quot;]))</span><br><span class="line"></span><br><span class="line">plt.ylabel(&apos;cost&apos;)</span><br><span class="line">plt.xlabel(&apos;iterations (hundreds)&apos;)</span><br><span class="line"></span><br><span class="line">legend = plt.legend(loc=&apos;upper center&apos;, shadow=True)</span><br><span class="line">frame = legend.get_frame()</span><br><span class="line">frame.set_facecolor(&apos;0.90&apos;)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<h3 id="应用训练结果进行预测"><a href="#应用训练结果进行预测" class="headerlink" title="应用训练结果进行预测"></a>应用训练结果进行预测</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">my_image = &quot;my_image2.jpg&quot;   # change this to the name of your image file </span><br><span class="line"></span><br><span class="line">fname = &quot;images/&quot; + my_image</span><br><span class="line">image = np.array(plt.imread(fname))</span><br><span class="line">image = image/255.</span><br><span class="line">my_image = np.array(Image.fromarray(np.uint8(image)).resize((num_px,num_px))).reshape((1, num_px*num_px*3)).T // 摊平数据(12288, 1)</span><br><span class="line">#my_image = scipy.misc.imresize(image, size=(num_px,num_px)).reshape((1, num_px*num_px*3)).T</span><br><span class="line">my_predicted_image = predict(d[&quot;w&quot;], d[&quot;b&quot;], my_image)</span><br><span class="line"></span><br><span class="line">plt.imshow(image)</span><br><span class="line">print(&quot;y = &quot; + str(np.squeeze(my_predicted_image)) + &quot;, your algorithm predicts a \&quot;&quot; + classes[int(np.squeeze(my_predicted_image)),].decode(&quot;utf-8&quot;) +  &quot;\&quot; picture.&quot;)</span><br></pre></td></tr></table></figure>
+<p><a href="https://dennybritz.com/posts/wildml/implementing-a-neural-network-from-scratch/" target="_blank" rel="noopener">二分类问题的实践</a><br><a href="https://scikit-learn.org/stable/" target="_blank" rel="noopener">scikit框架</a></p>
+<h2 id="使用隐藏层实现对非线性数据的分类"><a href="#使用隐藏层实现对非线性数据的分类" class="headerlink" title="使用隐藏层实现对非线性数据的分类"></a>使用隐藏层实现对非线性数据的分类</h2><p>题目<br>我们现在有一堆数据分布成花朵的形状，非线性，如下，<br><img src="/image/deepLearning/37.png" alt><br>可以看到上面的数据有的是红色，有的是蓝色，假设红色代表支持特朗普，蓝色代表支持拜登<br>我们希望用一个神经网络来对这些数据进行分类，<br>分类结果就是输入数据可以直接得到数据是红色还是蓝色的标签<br>解决思路就想办法对红色和蓝色的数据集中地区进行分块划分，<br>如果我们还是用sigmoid 函数，那么就会变成线性的，不会得到正确的区块划分<br><img src="/image/deepLearning/38.png" alt><br>我们希望用一个非线性函数把数据进行精确度更好的划分</p>
+<blockquote>
+<p>The general methodology to build a Neural Network is to: </p>
+<ol>
+<li>Define the neural network structure ( # of input units, # of hidden units, etc). </li>
+<li>Initialize the model’s parameters </li>
+<li>Loop: - Implement forward propagation - Compute loss - Implement backward propagation to get the gradients - Update parameters (gradient descent)</li>
+</ol>
+<p>You often build helper functions to compute steps 1-3 and then merge them into one function we call nn_model().<br>Once you’ve built nn_model() and learnt the right parameters, you can make predictions on new data.</p>
+</blockquote>
+<h3 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h3><p><img src="/image/deepLearning/39.png" alt></p>
+<h3 id="涉及方程"><a href="#涉及方程" class="headerlink" title="涉及方程"></a>涉及方程</h3><p>向前传播<br><img src="/image/deepLearning/40.png" alt><br>反向传播<br><img src="/image/deepLearning/41.png" alt></p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>重点关注模型组装好后，如何使用，如何预测，精确度计算，超参数如何训练，<a href="https://yoohannah.github.io/post/machineLearning/MachineLearningDevelopmentProcess.html">迁移学习</a>怎么做</p>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/NeuralNetworkModel/index.py" target="_blank" rel="noopener">非线性逻辑回归实现代码</a></p>
+<h2 id="L层神经网络实现"><a href="#L层神经网络实现" class="headerlink" title="L层神经网络实现"></a>L层神经网络实现</h2><p>整体架构<br><img src="/image/deepLearning/LModel.png" alt></p>
+<ol>
+<li>向前传播的时候，前L-1层都是先线性然后用relu 函数激活，最后一层是线性然后用sigmoid 函数激活<blockquote>
+<p>The model’s structure is: LINEAR -&gt; RELU -&gt; LINEAR -&gt; SIGMOID.<br><img src="/image/deepLearning/forward.png" alt></p>
+</blockquote>
+</li>
+<li>计算损失函数<br><img src="/image/deepLearning/cost.png" alt></li>
+<li>反向传播的时候，与向前传播相反，除第一层是线性然后用sigmoid 函数激活，后面l-1层是线性然后用relu 函数激活，前面的每一层都是线性然后用relu 函数激活<blockquote>
+<p>The model’s structure is: SIGMOID -&gt; LINEAR -&gt; RELU -&gt; LINEAR -&gt; RELU -&gt; … -&gt; SIGMOID.<br>for every forward function, there is a corresponding backward function. That is why at every step of your forward module you will be storing some values in a cache. The cached values are useful for computing gradients. In the backpropagation module you will then use the cache to calculate the gradients. This assignment will show you exactly how to carry out each of these steps.<br><img src="/image/deepLearning/backforward.png" alt><br>使用链式法则, 对下面的线性函数求导dw, db, dA<br><img src="/image/deepLearning/dao1.png" alt><br>得到反向传播计算公式<br><img src="/image/deepLearning/dao2.png" alt></p>
+</blockquote>
+</li>
+</ol>
+<p>注意输出层的sigmoid 函数求导<br><img src="/image/deepLearning/dao3.png" alt></p>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/DeepNeuralNetwork/index.py" target="_blank" rel="noopener">L层神经网络实现代码</a></p>
+<h2 id="运行异常"><a href="#运行异常" class="headerlink" title="运行异常"></a>运行异常</h2><ol>
+<li>参数初始化问题</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>语句</th>
+<th>初始化方式</th>
+<th>优缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>np.random.randn(layer_dims[l], layer_dims[l - 1])</code></td>
+<td>标准正态分布初始化</td>
+<td>简单，但可能导致梯度爆炸或梯度消失，尤其是在深层网络中。</td>
+</tr>
+<tr>
+<td><code>np.random.randn(layer_dims[l], layer_dims[l-1]) / np.sqrt(layer_dims[l-1])</code></td>
+<td>Xavier初始化的变体，<code>np.sqrt(layer_dims[l-1])</code>是上一层神经元个数</td>
+<td>提供更稳定的梯度和激活值，适合对称激活函数（如Sigmoid、Tanh）。减少梯度爆炸或梯度消失问题。</td>
+</tr>
+</tbody>
+</table>
+<p>如果使用 ReLU 或 Leaky ReLU 作为激活函数，可以采用 He 初始化：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">parameters[&apos;W&apos; + str(l)] = np.random.randn(layer_dims[l], layer_dims[l-1]) * np.sqrt(2 / layer_dims[l-1])</span><br></pre></td></tr></table></figure></p>
 
           
         
@@ -475,7 +1378,7 @@
       
         
           
-            <h1 id="深度学习会什么会崛起"><a href="#深度学习会什么会崛起" class="headerlink" title="深度学习会什么会崛起"></a>深度学习会什么会崛起</h1><p>随着 数据量的增多，计算能力的提高以及算法的进步，使得深度学习的训练周期变短，可以快速进行迭代更新优化<br>从而用于工业生成</p>
+            <h1 id="深度学习为什么会崛起"><a href="#深度学习为什么会崛起" class="headerlink" title="深度学习为什么会崛起"></a>深度学习为什么会崛起</h1><p>随着 数据量的增多，计算能力的提高以及算法的进步，使得深度学习的训练周期变短，可以快速进行迭代更新优化<br>从而用于工业生成</p>
 <p>下面以二分类问题为例，复习一下相关的数学知识和概念</p>
 <h1 id="损失函数和成本函数"><a href="#损失函数和成本函数" class="headerlink" title="损失函数和成本函数"></a>损失函数和成本函数</h1><p>重新理解一下<br>损失函数是一个训练数据的预测结果和实际值的差<br>成本函数是所有训练数据的损失函数的平均值<br><img src="/image/deepLearning/1.png" alt></p>
 <h1 id="常见求导公式"><a href="#常见求导公式" class="headerlink" title="常见求导公式"></a>常见求导公式</h1><p>1.C’=0(C为常数)；<br>2.(Xn)’=nX(n-1) (n∈R)；<br>3.(sinX)’=cosX；<br>4.(cosX)’=-sinX；<br>5.(aX)’=aXIna （ln为自然对数）；<br>6.(logaX)’=1/(Xlna) (a&gt;0，且a≠1)；<br>7.(tanX)’=1/(cosX)2=(secX)2<br>8.(cotX)’=-1/(sinX)2=-(cscX)2<br>9.(secX)’=tanX secX；<br>10.(cscX)’=-cotX cscX；</p>
@@ -484,6 +1387,9 @@
 <h1 id="梯度下降计算过程"><a href="#梯度下降计算过程" class="headerlink" title="梯度下降计算过程"></a>梯度下降计算过程</h1><p><img src="/image/deepLearning/4.png" alt><br><img src="/image/deepLearning/5.png" alt><br><img src="/image/deepLearning/6.png" alt><br><img src="/image/deepLearning/7.png" alt><br>Neural network programming guideline<br>Whenever possible, avoid explicit for-loops.<br>避免for-loops循环计算带来的算力损耗，使用向量对上面两次循环(训练数迭代和参数迭代)进行优化，最终只剩训练次数一次loop 循环<br><img src="/image/deepLearning/8.png" alt></p>
 <h2 id="广播"><a href="#广播" class="headerlink" title="广播"></a>广播</h2><p>通过使用向量的广播计算，可以大幅度减少for循环的计算成本<br>广播常见的计算过程如下</p>
 <p><img src="/image/deepLearning/9.png" alt><br><img src="/image/deepLearning/10.png" alt></p>
+<h3 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h3><p>使用广播的运算概念，实现下面的softmax 函数<br><img src="/image/deepLearning/36.png" alt><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">def softmax(x):</span><br><span class="line">    &quot;&quot;&quot;Calculates the softmax for each row of the input x.</span><br><span class="line"></span><br><span class="line">    Your code should work for a row vector and also for matrices of shape (m,n).</span><br><span class="line"></span><br><span class="line">    Argument:</span><br><span class="line">    x -- A numpy matrix of shape (m,n)</span><br><span class="line"></span><br><span class="line">    Returns:</span><br><span class="line">    s -- A numpy matrix equal to the softmax of x, of shape (m,n)</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    # Apply exp() element-wise to x. Use np.exp(...).</span><br><span class="line">    x_exp = np.exp(x)</span><br><span class="line"></span><br><span class="line">    # Create a vector x_sum that sums each row of x_exp. Use np.sum(..., axis = 1, keepdims = True).</span><br><span class="line">    x_sum = np.sum(x_exp, axis=1, keepdims=True)</span><br><span class="line">    </span><br><span class="line">    # Compute softmax(x) by dividing x_exp by x_sum. It should automatically use numpy broadcasting.</span><br><span class="line">    s = x_exp / x_sum</span><br><span class="line">    </span><br><span class="line">    return s</span><br><span class="line"></span><br><span class="line">x = np.array([</span><br><span class="line">    [9, 2, 5, 0, 0],</span><br><span class="line">    [7, 5, 0, 0 ,0]])</span><br><span class="line">print(&quot;softmax(x) = &quot; + str(softmax(x)))</span><br><span class="line">==&gt;</span><br><span class="line">softmax(x) = [[9.80897665e-01 8.94462891e-04 1.79657674e-02 1.21052389e-04</span><br><span class="line">  1.21052389e-04]</span><br><span class="line"> [8.78679856e-01 1.18916387e-01 8.01252314e-04 8.01252314e-04</span><br><span class="line">  8.01252314e-04]]</span><br></pre></td></tr></table></figure></p>
+<p><a href="https://github.com/GeeeekExplorer/AndrewNg-Deep-Learning/blob/master/Neural%20Networks%20and%20Deep%20Learning/Week%202/Python%20Basics%20with%20Numpy/Python%20Basics%20With%20Numpy%20Solution.ipynb" target="_blank" rel="noopener">github 实验练习</a></p>
+<p><a href="https://docs.scipy.org/doc/numpy-1.10.1/reference/generated/numpy.exp.html" target="_blank" rel="noopener">numpy 官网</a></p>
 
           
         
@@ -926,718 +1832,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/RecommenderSystem.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/machineLearning/RecommenderSystem.html" itemprop="url">
-                  推荐系统
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-10-06T07:10:37+08:00">
-                2024-10-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>下面以根据电影评分推荐电影为例，介绍推荐系统的开发过程</p>
-<h1 id="思路整理"><a href="#思路整理" class="headerlink" title="思路整理"></a>思路整理</h1><p>根据电影的特征，用户对每个电影都会有一个评分(0-5分)，比如电影A的评分是5分，电影B的评分是4分，电影C的评分是3分<br>一般情况下，用户对某电影评分越高，说明后续对该类型电影的青睐度越高，对于系统来说越值得推荐给用户<br>即系统需要预测用户对某个电影X的评分，从而决定是否推荐给用户<br>系统需要依赖的数据是电影的特征数据（X）和以往用户对电影的评分数据(Y)<br>根据二者的关系，计算出相关的算法参数<br>当有需要预测一个电影评分的时候，输入待评分电影特征即可得到评分，然后根据阈值判断是否推荐给用户<br>下面是对一个观众的电影评分预测过程<br><img src="/image/LLM/179.png" alt><br>对应的成本函数<br><img src="/image/LLM/180.png" alt><br>如果训练集有多个用户的评分数据，拿到所有用户的参数后加合，就可以预测大众用户对某个电影的整体评分情况<br><img src="/image/LLM/181.png" alt></p>
-<h1 id="协同过滤算法"><a href="#协同过滤算法" class="headerlink" title="协同过滤算法"></a>协同过滤算法</h1><p>对于电影的评分，一开始不能确定使用电影的哪些特征，协同过滤算法将输入，电影的特征X， 也看做是一个参数参与成本函数的计算<br>从而利用梯度下降过程找到合适的参数和特征值</p>
-<h2 id="推导过程"><a href="#推导过程" class="headerlink" title="推导过程"></a>推导过程</h2><ol>
-<li>已知多个人对一部电影的评分和相关参数，可以反推出X 的 情况<br><img src="/image/LLM/182.png" alt></li>
-<li>如果现在已知多个人对一部电影的评分和相关参数，可以对电影特征X进行成本函数计算<br>加和之后可以对多个电影的特征进行预测<br><img src="/image/LLM/183.png" alt></li>
-<li>观察成本函数的公式，现在加和参数和特征的成本函数，<br><img src="/image/LLM/185.png" alt><br><img src="/image/LLM/184.png" alt></li>
-<li>可以发现， 梯度下降过程，可以同时找出多个人对电影评分参数和对多部电影的特征值推测<br><img src="/image/LLM/186.png" alt></li>
-</ol>
-<p>协同在这里的体现在于多个用户对一部电影进行了评价，通过合作得到了对电影的整体评价，同时可以预测出能够代表这部电影的特征值<br>反过来，可以预测尚未对同一部电影进行评分的其他用户的评分<br>即从多个用户收集数据，然后预测其他用户的评分</p>
-<h1 id="线性回归转向二进制分类"><a href="#线性回归转向二进制分类" class="headerlink" title="线性回归转向二进制分类"></a>线性回归转向二进制分类</h1><p>基于线性回归的推荐系统适合于上面评分有连续值的推测，基于上述思路，将评分结果通过逻辑函数转成二进制结果<br>即可实现二进制分类问题的预测<br><img src="/image/LLM/187.png" alt><br><img src="/image/LLM/188.png" alt><br><img src="/image/LLM/189.png" alt></p>
-<h1 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h1><h2 id="均值归一化"><a href="#均值归一化" class="headerlink" title="均值归一化"></a>均值归一化</h2><p>对于尚未对电影作为任何评价的用户，如果参数为0，那么预测的评分结果为0，会极大影响推荐的准确性<br>因此，先对多用户评分计算均值，然后对所有用户的评分减去均值，得到新的评分，在新的评分上进行参数获取<br>进行评分预测的时候再把均值加回来，这样即使参数为0，预测的评分值也是之前评分的均值，对整体评分meian值不会有影响<br><img src="/image/LLM/190.png" alt></p>
-<h2 id="如何找到相似的推荐"><a href="#如何找到相似的推荐" class="headerlink" title="如何找到相似的推荐"></a>如何找到相似的推荐</h2><p>找到与当前item 距离最近的其他item<br><img src="/image/LLM/191.png" alt></p>
-<h2 id="协同过滤的限制"><a href="#协同过滤的限制" class="headerlink" title="协同过滤的限制"></a>协同过滤的限制</h2><ol>
-<li>对冷启动问题不友好</li>
-<li>不能直接获取到有价值的特征数据，可能是关于观众或者电影的片面的信息，只能从这些信息上推测用户的爱好<br><img src="/image/LLM/192.png" alt></li>
-</ol>
-<h1 id="基于内容的推荐算法"><a href="#基于内容的推荐算法" class="headerlink" title="基于内容的推荐算法"></a>基于内容的推荐算法</h1><p>对比基于协同过滤的推荐算法(根据用户对相似item的评分进行推荐)<br>基于内容的推荐算法同时基于用户和item的特征，通过计算item 和用户的匹配度，来判断用户是否对该item感兴趣<br><img src="/image/LLM/193.png" alt></p>
-<h2 id="主要思路"><a href="#主要思路" class="headerlink" title="主要思路"></a>主要思路</h2><p>利用神经网络从用户特征和item 特征中提取n 个特征，计算二者的点积从而判断用户是否对item感兴趣，是否要推荐给用户<br><img src="/image/LLM/194.png" alt><br><img src="/image/LLM/195.png" alt><br><img src="/image/LLM/196.png" alt><br><img src="/image/LLM/197.png" alt><br><img src="/image/LLM/198.png" alt></p>
-<h1 id="从大目录中进行推荐"><a href="#从大目录中进行推荐" class="headerlink" title="从大目录中进行推荐"></a>从大目录中进行推荐</h1><ol>
-<li><p>进行检索，找出候选列表<br>但是检索过程需要注意，通过对更多的项目进行检索可以得到更好的结果但是检索的速度回变慢，<br>为了分析优化权衡二者，可以实施离线实验观察新增的检索项是否增加了检索结果的相关性</p>
-</li>
-<li><p>对候选列表进行fine-tune排序找出得分最高的item给用户</p>
-</li>
-</ol>
-<p><img src="/image/LLM/199.png" alt><br><img src="/image/LLM/200.png" alt><br><img src="/image/LLM/201.png" alt></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/abnormalTest.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/machineLearning/abnormalTest.html" itemprop="url">
-                  异常检测
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-10-05T18:50:37+08:00">
-                2024-10-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="异常检测"><a href="#异常检测" class="headerlink" title="异常检测"></a>异常检测</h1><p>异常检测是机器学习中一个重要的概念，它是指在数据中检测出不符合预期的数据点，以便及时发现和处理异常情况。</p>
-<h2 id="检测方法：密度估计"><a href="#检测方法：密度估计" class="headerlink" title="检测方法：密度估计"></a>检测方法：密度估计</h2><p>密度估计是异常检测中的一种方法，它通过计算数据的密度分布来识别异常数据点。<br>通过将特征值的可能性进行乘积计算，得到数据的密度，然后跟阈值进行比较，判断当前数据是否正常。<br><img src="/image/LLM/164.png" alt><br><img src="/image/LLM/169.png" alt><br><img src="/image/LLM/165.png" alt></p>
-<h1 id="高斯分布"><a href="#高斯分布" class="headerlink" title="高斯分布"></a>高斯分布</h1><p>高斯分布的位置受数据集的平均值𝜇和方差𝜎^2 决定<br><img src="/image/LLM/166.png" alt><br>𝜇 决定钟形最高点在x轴上的位置<br>𝜎^2 决定钟形的宽度，因为整个钟形面积为1，所以，如果𝜎^2 变小，那个整个钟形会变得很高<br><img src="/image/LLM/167.png" alt></p>
-<p><img src="/image/LLM/168.png" alt></p>
-<h1 id="异常检测算法步骤"><a href="#异常检测算法步骤" class="headerlink" title="异常检测算法步骤"></a>异常检测算法步骤</h1><ol>
-<li>在训练数据中选择你认为可能会引起异常的数据的n个特征值</li>
-<li>计算各个特征值的平均值𝜇和方差𝜎^2</li>
-<li>计算每个特征值的密度，如果密度小于阈值，则认为是异常数据</li>
-</ol>
-<p><img src="/image/LLM/170.png" alt></p>
-<h1 id="开发过程中如何评估异常检测系统"><a href="#开发过程中如何评估异常检测系统" class="headerlink" title="开发过程中如何评估异常检测系统"></a>开发过程中如何评估异常检测系统</h1><p>通常采用实数评估方案，就是可以用一个具体的数值小小来衡量算法的好坏<br>假设训练数据中的数据都是正常的，存在标签0<br>在交叉验证和测试数据中，存在少量异常数据，标签为1<br>测试算法好坏的标准就是能否将异常数据识别出来<br>如果是特别少量的异常数据，可以仅通过交叉验证来评估测试好坏<br>从而决定合适的阈值大小<br><img src="/image/LLM/171.png" alt><br><img src="/image/LLM/172.png" alt><br>另外的评估方法可参考<a href>二分类错误度量</a><br>相关的衡量指标，真假值，精确率，召回率，F1 score等<br><img src="/image/LLM/173.png" alt></p>
-<h1 id="如何选择异常检测算法和监督学习"><a href="#如何选择异常检测算法和监督学习" class="headerlink" title="如何选择异常检测算法和监督学习"></a>如何选择异常检测算法和监督学习</h1><p>异常检测算法适用于</p>
-<ol>
-<li>正常数据少量但是有大量异常数据</li>
-<li>异常的特征值是未知的，且是多样的</li>
-</ol>
-<p>监督学习算法适用于</p>
-<ol>
-<li>存在大量异常和正常数据</li>
-<li>有足够数据告诉算法什么是正常的数据，什么是异常的数据<br>将来出现的异常数据很可能是之前训练集中出现过的异常数据</li>
-</ol>
-<p><img src="/image/LLM/174.png" alt></p>
-<p><img src="/image/LLM/175.png" alt></p>
-<h1 id="如何选择要使用的特征"><a href="#如何选择要使用的特征" class="headerlink" title="如何选择要使用的特征"></a>如何选择要使用的特征</h1><ol>
-<li><p>选择符合高斯分布的特征，如果不能拟合高斯分布，可以通过取对数，开方等方式进行特殊处理后进行拟合<br>但要注意，训练数据如果有对特征值进行特殊处理，那么交叉验证集合测试集也要进行相同的处理<br><img src="/image/LLM/176.png" alt></p>
-</li>
-<li><p>对于误判的异常数据，可以通过增加特征值来进行弥补，保证数据在新加的特征值上存在异常大或者异常小的数据</p>
-</li>
-</ol>
-<p><img src="/image/LLM/177.png" alt></p>
-<ol start="3">
-<li>可以在已有的原始特征值基础上创造新的特征值参与运算<br><img src="/image/LLM/178.png" alt></li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/Kmeans.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/machineLearning/Kmeans.html" itemprop="url">
-                  Kmeans 聚类算法
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-10-03T00:37:37+08:00">
-                2024-10-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>无监督学习算法一</p>
-<h1 id="什么是聚类"><a href="#什么是聚类" class="headerlink" title="什么是聚类"></a>什么是聚类</h1><p>将输入数据分成多个类别，每个类别包含一组相似的数据点的过程就是聚类，分好的类被称为cluster</p>
-<h1 id="聚类算法k-means处理过程"><a href="#聚类算法k-means处理过程" class="headerlink" title="聚类算法k-means处理过程"></a>聚类算法k-means处理过程</h1><ol>
-<li>随机选择k个点作为初始的中心点, 计算每个点到中心点的距离，将每个点分配到距离最近的中心点所属的类别中</li>
-<li>计算每个类别的中心点(平均值)，并更新中心点，重复步骤1</li>
-<li>直到中心点不再变化，或者达到最大迭代次数</li>
-</ol>
-<h2 id="具体实现-伪代码"><a href="#具体实现-伪代码" class="headerlink" title="具体实现(伪代码)"></a>具体实现(伪代码)</h2><p><img src="/image/LLM/157.png" alt><br><img src="/image/LLM/158.png" alt></p>
-<h2 id="成本函数"><a href="#成本函数" class="headerlink" title="成本函数"></a>成本函数</h2><p><img src="/image/LLM/159.png" alt><br><img src="/image/LLM/160.png" alt></p>
-<h2 id="如何初始化中心点"><a href="#如何初始化中心点" class="headerlink" title="如何初始化中心点"></a>如何初始化中心点</h2><p>随机选择k个点作为初始的中心点（k小于m），计算最终中心点和损失函数<br>重复N次，选择损失函数最小的中心点作为最终的中心点<br><img src="/image/LLM/161.png" alt></p>
-<h2 id="如何选择K的数量"><a href="#如何选择K的数量" class="headerlink" title="如何选择K的数量"></a>如何选择K的数量</h2><p>取决后续如何使用分类好的集群数据<br><img src="/image/LLM/163.png" alt><br><img src="/image/LLM/162.png" alt></p>
-<p><a href="https://github.com/kaieye/2022-Machine-Learning-Specialization/blob/main/Unsupervised%20learning%20recommenders%20reinforcement%20learning/week1/2%20Practice%20Lab1/C3_W1_KMeans_Assignment.ipynb" target="_blank" rel="noopener">压缩图像应用</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/decisionTreeModel.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/machineLearning/decisionTreeModel.html" itemprop="url">
-                  决策树模型
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-09-30T15:31:37+08:00">
-                2024-09-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>决策树模型是通过计算特征纯度后，选取最大纯度值的特征作为决策节点，<br>将数据根据是否符合当前特征节点一份为二，再根据特征纯度，继续划分，<br>最后根据停止划分规则进行数据分类或推测的模型</p>
-<p><img src="/image/LLM/136.png" alt></p>
-<h1 id="创建过程"><a href="#创建过程" class="headerlink" title="创建过程"></a>创建过程</h1><p>决策树创建过程需要考虑两件事</p>
-<ol>
-<li><p>在每个节点上如果选择根据什么特征进行数据分类<br>Maximize purity<br>如果一个特征在把数据分成两组之后，使分组后的数据能够最大程度的趋于同一类，那么这个特征就是纯度高的特征,<br>即 如果这个特征能够直接决定数据属于哪个分类的程度越高，纯度就越高<br>比如用DNA特征判断猫狗分类比用耳朵是尖的还是软的更直接，DNA特征就是最大纯度的特征<br><img src="/image/LLM/137.png" alt></p>
-</li>
-<li><p>什么时候停止数据分类<br>a. 当一个节点里面的数据都属于同一类的时候<br>b. 到达树的深度最大值的时候，树越深，过拟合越有可能，计算成本越高<br>c. 当特征纯度(熵)低于某个阈值的时候<br>d. 当节点里的数据个数低于某个阈值的时候</p>
-</li>
-</ol>
-<p><img src="/image/LLM/138.png" alt></p>
-<h2 id="熵"><a href="#熵" class="headerlink" title="熵"></a>熵</h2><p>可以理解为数据的混乱程度，如果数据特别混乱，则值越大，返回数据如果种类单一，则值越小，趋近0<br>这里用熵来计算特征的非纯度或者较杂质程度，<br>如果根据某个特征分类后的数据的熵 越小，说数据越干净，杂质越少<br>反之，如果得到的熵越大，说数据越混乱，不同类的数据越多<br>如下面判断是否是猫的问题<br>p1 代表是每组数据中猫的比例，都是猫或狗的话熵 是0，5:5 的时候熵 最大值为1，数据最混乱<br><img src="/image/LLM/139.png" alt><br>具体熵 的计算公式如下<br><img src="/image/LLM/140.png" alt></p>
-<h2 id="信息增益"><a href="#信息增益" class="headerlink" title="信息增益"></a>信息增益</h2><p>在了解熵的含义后，用下面的计算过程选择节点的判断特征<br>根节点的熵减去分类后两个节点熵的加权平均值，值越大说明分类后数据越纯了<br><img src="/image/LLM/141.png" alt><br>这个计算方式得到的值就叫信息增益<br>即特征信息增益越大，在分类过程中，能够把数据分的越纯<br><img src="/image/LLM/142.png" alt></p>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>决策树学习过程<br><img src="/image/LLM/143.png" alt><br>对于每个节点，都要像对待根节点一样<br>根据拿到的数据先找到最大信息增益的特征然后进行分类<br>整个过程就是一个递归的过程，直到满足停止分类的规则为止<br><img src="/image/LLM/144.png" alt></p>
-<h1 id="多特征值处理办法"><a href="#多特征值处理办法" class="headerlink" title="多特征值处理办法"></a>多特征值处理办法</h1><h2 id="one-hot"><a href="#one-hot" class="headerlink" title="one-hot"></a>one-hot</h2><p>If a categorical feature can take on 𝑘 values, create 𝑘 binary features (0 or 1 valued).<br>如果一个特征有大于2个以上的N可枚举值，那么将当前特征拆分成N个新的代表相应枚举值的特征即可<br><img src="/image/LLM/145.png" alt></p>
-<h2 id="连续值"><a href="#连续值" class="headerlink" title="连续值"></a>连续值</h2><p>如果一个特质的值是连续值，不可枚举，那么需要设定一个阈值，大于该阈值一类，小于则是另一类，从而实现对该特征的二分类<br>阈值的选取还是通过计算信息增益，选取能够使信息增益值最大的阈值参与分类<br>一般情况下先对所有数据按这个特征值排序，然后选取排序列表中两个数据间的中点做阈值进行信息增益计算，<br>多轮计算后再从中选取信息增益最大的阈值<br><img src="/image/LLM/146.png" alt></p>
-<h1 id="回归树"><a href="#回归树" class="headerlink" title="回归树"></a>回归树</h1><p>上面是使用决策树进行分类计算<br>接下来使用方差对连续数据进行推测，就是回归树<br>如下图，根据前三个特征，推测weight 的值，weight 是个连续的值，不能枚举的<br><img src="/image/LLM/147.png" alt></p>
-<p><img src="/image/LLM/148.png" alt></p>
-<p><a href="https://colab.research.google.com/github/kaieye/2022-Machine-Learning-Specialization/blob/main/Advanced%20Learning%20Algorithms/week4/7.Practice%20lab%20decision%20trees/C2_W4_Decision_Tree_with_Markdown.ipynb#scrollTo=5MIhOlYfSm26" target="_blank" rel="noopener">决策树练习</a></p>
-<h1 id="多个决策树"><a href="#多个决策树" class="headerlink" title="多个决策树"></a>多个决策树</h1><p>单个决策树对训练数据非常敏感，只要更改一个训练数据，就有可能更改信息增益排序，<br>从而影响节点特征选择，进而导致整棵树发生变化，使得算法失去健壮性<br>解决办法就是构建多个树，让他们投票最终的预测结果，使整体的算法对任何单个树可能在做什么不那么敏感<br><img src="/image/LLM/149.png" alt></p>
-<h2 id="放回抽样"><a href="#放回抽样" class="headerlink" title="放回抽样"></a>放回抽样</h2><p>一共有m个训练数据，每次从m个数据中随机抽取1个数据，直到抽取到m个数据，抽取到的数据可能是重复的<br><img src="/image/LLM/150.png" alt></p>
-<h2 id="随机森林算法"><a href="#随机森林算法" class="headerlink" title="随机森林算法"></a>随机森林算法</h2><p>使用放回抽样的数据选取方法，每次拿到m个训练数据，用这个m个训练数据训练决策树，重复 B(小于100)次,<br>得到B棵决策树，从而形成决策树森林对预测结果进行投票，这种算法就是随机森林算法<br><img src="/image/LLM/151.png" alt><br>B 如果大于100 一个是训练效果会下降，推测准确性降低，另外一个就是会增加计算成本，使算法变得复杂，得不偿失</p>
-<h3 id="随机特征选取"><a href="#随机特征选取" class="headerlink" title="随机特征选取"></a>随机特征选取</h3><p>对于具备N个特征的数据，通常选择N的K个特征子集进行训练，如果N特别大，K一般等于N的平方根<br><img src="/image/LLM/152.png" alt></p>
-<h2 id="XGBoost-随机森林增强算法"><a href="#XGBoost-随机森林增强算法" class="headerlink" title="XGBoost 随机森林增强算法"></a>XGBoost 随机森林增强算法</h2><p>除了第一次等概率的从m个训练数据中抽样new dataSet 外，后续的每一轮抽样，都将前一轮推测失败的训练数据的权重加大，<br>使被抽取到的概率变高，尽可能的将推测失败的数据参与到后续的训练中，从而推动算法更快的学习，并学习的更好，提高算法的准确性<br><img src="/image/LLM/153.png" alt></p>
-<p>这种算法又称为XGBoost 算法，是随机森林算法的改进版，优点如下<br><img src="/image/LLM/154.png" alt><br><img src="/image/LLM/155.png" alt></p>
-<h1 id="决策树-VS-神经网络"><a href="#决策树-VS-神经网络" class="headerlink" title="决策树 VS 神经网络"></a>决策树 VS 神经网络</h1><p><img src="/image/LLM/156.png" alt></p>
-<h2 id="决策树-amp-决策森林"><a href="#决策树-amp-决策森林" class="headerlink" title="决策树&amp; 决策森林"></a>决策树&amp; 决策森林</h2><p>适合结构化数据(可以用表格表示的数据)<br>不适合非结构化数据（音视频，图像）<br>小的决策树可以被人类解释推测过程<br>训练速度快，缩短算法迭代循环周期，更快的提高算法性能</p>
-<h2 id="神经网络"><a href="#神经网络" class="headerlink" title="神经网络"></a>神经网络</h2><p>对于所有数据类型都很友好，包括结构化和非结构化<br>训练速度比决策树要慢<br>但可以轻松实现迁移学习，但是决策树每次训练只能特定的特征，得到特定的决策树<br>方便构建多模型系统，神经网络间串联方便</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/MachineLearningDevelopmentProcess.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/machineLearning/MachineLearningDevelopmentProcess.html" itemprop="url">
-                  机器学习开发过程
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-09-29T16:39:37+08:00">
-                2024-09-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><img src="/image/LLM/123.png" alt></p>
-<p>整个开发过程是一个选择框架，训练模型，诊断模型循环的过程</p>
-<h1 id="错误分析"><a href="#错误分析" class="headerlink" title="错误分析"></a>错误分析</h1><p>除了从高偏差高误差角度对模型进行分析外，还可以对mcv 产生错误分类的角度对模型进行分析<br><img src="/image/LLM/125.png" alt></p>
-<p>可以从交叉验证集测试产生的错误中进行分析<br>通过将错误进行归类统计，找出对模型影响比例较大的错误和比例较小的错误<br>从而调整模型训练的方向，已解决上面遇到的问题<br><img src="/image/LLM/124.png" alt></p>
-<p>如果交叉验证集产生错误的数据比较庞大，可以选择进行随机抽取一定小批量的数据进行错误分类，以节省人力</p>
-<h1 id="添加数据"><a href="#添加数据" class="headerlink" title="添加数据"></a>添加数据</h1><p>通过引入更多数据完善模型的判断，更关注通过注入的数据引发的对模型的训练结果的影响</p>
-<h2 id="数据增强"><a href="#数据增强" class="headerlink" title="数据增强"></a>数据增强</h2><p>Augmentation: modifying an existing training example to create a new training example.<br>在原有数据基础上，通过添加特定种类的噪声，形成新的测试数据，从而完善特定种类的错误判断<br>对于图片和音频数据都适用<br><img src="/image/LLM/126.png" alt><br>但是对添加随机或者无意义噪声产生的数据进行训练，对于模型训练不会有多大帮助</p>
-<h2 id="数据合成"><a href="#数据合成" class="headerlink" title="数据合成"></a>数据合成</h2><p>Synthesis: using artificial data inputs to create a new training example.<br>直接由计算机合成训练过程中使用的数据，通常用于计算机视觉训练的场景<br><img src="/image/LLM/127.png" alt></p>
-<h1 id="迁移学习"><a href="#迁移学习" class="headerlink" title="迁移学习"></a>迁移学习</h1><p>在已有大模型训练结果基础上，通过修改输出层结果使之符合自己使用场景的训练方法<br>好处是，在数据有限的情况下，可以直接使用输出层之前的参数开始训练，减少自己从头开始训练的工作</p>
-<p>例如下面这个使用1000+分类的训练识别数字0-9的模型，只是在输出层将1000+ 输出改成10种输出，在此基础上开始训练<br><img src="/image/LLM/128.png" alt><br>一般训练步骤为下载相同输入(文本的下载文本的，音视频的下载音视频的)的预训练模型，然后用自己的数据进行训练(fine tuning)<br><img src="/image/LLM/129.png" alt></p>
-<h1 id="完整开发流程"><a href="#完整开发流程" class="headerlink" title="完整开发流程"></a>完整开发流程</h1><p><img src="/image/LLM/130.png" alt></p>
-<h2 id="部署阶段"><a href="#部署阶段" class="headerlink" title="部署阶段"></a>部署阶段</h2><p>通常应用层跟模型通过Api 进行通信，用户输入x， 模型返回预测值y^<br>软件工程师需要注意</p>
-<ol>
-<li>尽可能的保障低成本的计算出具有可靠性和有效性的预测结果</li>
-<li>可以进行大规模用户扩展使用</li>
-<li>在用户隐私允许同意的情况下进行日志记录输入和输出</li>
-<li>对模型进行系统监控，比如根据上面日志的记录，计算出因为当前数据变化导致计算结果不准时，判断是否让模型进行进一步优化</li>
-<li>保障模型更新，在上一步进行模型优化后要保证能够将老的模型替换成新模型</li>
-</ol>
-<p><img src="/image/LLM/131.png" alt></p>
-<h1 id="避免道德偏见伦理问题"><a href="#避免道德偏见伦理问题" class="headerlink" title="避免道德偏见伦理问题"></a>避免道德偏见伦理问题</h1><ol>
-<li>建议多元化(多背景，多种族)团队，上线前进行头脑风暴，探索可能对弱势群体造成伤害的可能</li>
-<li>参考行业标准</li>
-<li>上线前通过技术诊断产生的伤害可能性，从而决策是否可以上线</li>
-<li>制定延缓计划，上线后观测可能产生的伤害，及时进行回滚处理<br><img src="/image/LLM/132.png" alt></li>
-</ol>
-<h1 id="二分类错误度量"><a href="#二分类错误度量" class="headerlink" title="二分类错误度量"></a>二分类错误度量</h1><p>在对倾斜数据集(y=1 和y = 0 所占比例不是5:5)进行训练时，<br>判断模型预测结果好坏通常交叉验证集的数据计算精确率和召回率两个指标衡量<br><img src="/image/LLM/133.png" alt><br>如果二者都趋近0或1时，说明当前的模型不是一个有用的模型，一直在打印0或1<br>只有二者值都很大时，才说明算法是有用的</p>
-<p>精确率表示实际上y = 1的可能性<br>召回率表示模型计算出y = 1 的可能性</p>
-<h2 id="对于精确率和召回率的衡量"><a href="#对于精确率和召回率的衡量" class="headerlink" title="对于精确率和召回率的衡量"></a>对于精确率和召回率的衡量</h2><p>一种是通过设置阈值大小去权衡二者，从而进行取舍<br>提高阈值，会增加精度，降低召回率<br>降低阈值，会降低精度，提高召回率<br><img src="/image/LLM/134.png" alt><br>另外一种是使用F1 score分数(调和平均数)，自动计算出最佳的精度和召回率，从而选择对应的算法<br><img src="/image/LLM/135.png" alt></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/24/">24</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1676,7 +1875,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">240</span>
+              <span class="site-state-item-count">245</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1740,7 +1939,7 @@
         <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2024</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

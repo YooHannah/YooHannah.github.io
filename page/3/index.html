@@ -259,6 +259,940 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/logicRegression.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/machineLearning/logicRegression.html" itemprop="url">
+                  逻辑回归模型
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-09-17T19:31:37+08:00">
+                2024-09-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="背景-amp-amp-解决问题"><a href="#背景-amp-amp-解决问题" class="headerlink" title="背景&amp;&amp;解决问题"></a>背景&amp;&amp;解决问题</h1><p>逻辑回归模型时一种解决二分类问题的算法</p>
+<p>如果用线性回归去解决分类问题，会导致过拟合出现，每增加一个测试数据，都可能导致模型发生变化</p>
+<p><img src="/image/LLM/40.png" alt></p>
+<p>通过使用sigmoid function函数，设置阈值，可以将线性回归产生的结果归类到两个结果上去</p>
+<p><img src="/image/LLM/41.png" alt></p>
+<p><img src="/image/LLM/42.png" alt></p>
+<p>虽然目标是二分类，即结果只能是0 或者1<br>但是f(w,b) = g(w·x+b) 计算的结果值A只能无限接近这两个值<br>这里可以将A理解成结果是1 的可能性</p>
+<p><img src="/image/LLM/43.png" alt></p>
+<h2 id="决策边界"><a href="#决策边界" class="headerlink" title="决策边界"></a>决策边界</h2><p>在逻辑回归模型f(w,b) = g(w·x+b)  中<br>z = w·x+b 又称为 决策边界，将不同结果的数据在坐标系中进行隔离<br>如果特征在z 中没有多项式运算，那么，得到的边界必定是直线的，但是如果有多项式，拿得到的边界线就是非线性的<br><img src="/image/LLM/44.png" alt><br><img src="/image/LLM/45.png" alt><br><img src="/image/LLM/46.png" alt><br><img src="/image/LLM/47.png" alt></p>
+<h2 id="成本函数"><a href="#成本函数" class="headerlink" title="成本函数"></a>成本函数</h2><p>线性回归的平方误差算法的成本函数在应用到逻辑回归时，会产生多个局部最小值，再用梯度下降的算法去找参数时，无法找到最小值</p>
+<p><img src="/image/LLM/48.png" alt></p>
+<p>逻辑回归引入逻辑损失函数，根据单个数据集随参数变化的趋势，判断整体的变化趋势<br>操作就是将原本平方误差除以2的操作移到求和之前，单独计算每个特征值的部分就是损失函数</p>
+<p>Logistic Regression uses a loss function more suited to the task of categorization where the target is 0 or 1 rather than any number.</p>
+<p>these definitions are used:</p>
+<p>Loss is a measure of the difference of a single example to its target value while the</p>
+<p>Cost is a measure of the losses over the training set</p>
+<p>下面是推导过程和最终的式子</p>
+<p><img src="/image/LLM/49.png" alt><br><img src="/image/LLM/50.png" alt><br><img src="/image/LLM/51.png" alt><br><img src="/image/LLM/52.png" alt><br><img src="/image/LLM/53.png" alt></p>
+<h2 id="梯度下降找到w-amp-b"><a href="#梯度下降找到w-amp-b" class="headerlink" title="梯度下降找到w&amp;b"></a>梯度下降找到w&amp;b</h2><p><img src="/image/LLM/54.png" alt><br><img src="/image/LLM/55.png" alt><br><img src="/image/LLM/56.png" alt></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/lineregression.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/machineLearning/lineregression.html" itemprop="url">
+                  线性回归模型
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-09-07T19:31:37+08:00">
+                2024-09-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="一些专业术语表达"><a href="#一些专业术语表达" class="headerlink" title="一些专业术语表达"></a>一些专业术语表达</h1><p><img src="/image/LLM/1.png" alt><br><img src="/image/LLM/2.png" alt><br>x–&gt; 训练数据入参，特征值，这里仅有一个，这个模型也被叫做 单变量线性回归模型 x(i) 第i个训练数据的x<br>y–&gt; 训练数据入参，标记值， example 的lable ,y(i) 第i个训练数据的y<br>y-hat –&gt; 出参，推测值, 模型（f（x）= wx + b） 的 结果值</p>
+<h1 id="成本函数"><a href="#成本函数" class="headerlink" title="成本函数"></a>成本函数</h1><h2 id="平方误差成本函数"><a href="#平方误差成本函数" class="headerlink" title="平方误差成本函数"></a>平方误差成本函数</h2><p><img src="/image/LLM/3.png" alt><br>在f(x) = wx+ b 的模型中<br>w: 斜率<br>b: 截距，intercepter 直接与Y轴交点距离远点距离</p>
+<p>用J(w,b)表示成本函数，找到能够使J(w,b) 的值最小的w和b，就可以找到使f(x)最接近所有测试集的模型，最拟合训练数据的模型<br>先讨论在b = 0 的情况下，j（w） 随w 变化的趋势<br><img src="/image/LLM/4.png" alt><br>找到使j(w) 最小的w,即U形线最凹的地方<br><img src="/image/LLM/5.png" alt><br>现在把b的变化趋势也加入讨论，j(w,b) 随w，b 变化的趋势，将变成3d 的碗状<br><img src="/image/LLM/6.png" alt><br>最凹的地方就是J(w,b)值最小的地方<br><img src="/image/LLM/7.png" alt><br>利用等高线的表达方式，换一种视角找J(w,b)的最小值，就是将3D 图进行水平切割，得到关于w,b 的二维椭圆视图<br>不同(w,b) 组合可能会落在在同一条线上的，相同线上的J(w,b)值一样大<br>所以能够使J(w,b)值最小的(w,b)值，就是同心圆里面最里面那个圆上的多对(w,b), 当圆极限到一个点时，就只有一对(w,b)使J(w,b)最小<br><img src="/image/LLM/8.png" alt><br><img src="/image/LLM/9.png" alt></p>
+<h1 id="GradientDescentAlgorithm-梯度下降算法"><a href="#GradientDescentAlgorithm-梯度下降算法" class="headerlink" title="GradientDescentAlgorithm 梯度下降算法"></a>GradientDescentAlgorithm 梯度下降算法</h1><p>是一种寻找使成本函数达到最小值参数的通用算法，现在不再局限与于f(x) = wx+b 单变量线性模型<br>对于多变量模型，也就意味着多个w, 这样J(w,b) 就会变成J(w0,…wi,b), J(w0, …wi) 的趋势不再是U形<br><img src="/image/LLM/10.png" alt><br>梯度下降指的是，从一个点出发，环顾四周，找到能够下降的谷底的最快的方向，即梯度最陡的方向，下降一步，每走一步都按最陡方案下降，从而实现最快到达谷底的目的<br>达到谷底即意味着找到J(w0,…wi,b)最小值<br>但是梯度下降有一个特性，就是，虽然从同一点出发，如果第一步选择反向不同，或者走的方式不同，肯定会到达不同谷底<br>不同谷底意味着不同的J(w0,…wi,b)最小值，这些最小值，都叫做局部最小值<br><img src="/image/LLM/11.png" alt></p>
+<h3 id="算法实现与理解"><a href="#算法实现与理解" class="headerlink" title="算法实现与理解"></a>算法实现与理解</h3><p>J(w,b)关于w 导数 表征 U形趋势线上随w 变化的梯度值，也就是斜率<br>前面的系数α表征 下坡的步伐大小 是一个0-1 的正小数值，称为学习率<br>w,b 同时变化，同时更新<br><img src="/image/LLM/12.png" alt><br>当梯度大于0时，temp_w 逐渐变小，J(w,b) 的值也逐渐变小<br>当梯度小于0 时，temp_w 逐渐变大（负斜率，绝对值在变小）， J(w,b)的值逐渐变小<br>说明J(w,b) 的值随梯度的变化符合随w的变化趋势<br>当斜率绝对值逐渐变小时，就是都朝J(w,b) 最小值聚拢<br><img src="/image/LLM/13.png" alt><br><a href="https://colab.research.google.com/github/kaieye/2022-Machine-Learning-Specialization/blob/main/Supervised%20Machine%20Learning%20Regression%20and%20Classification/week1/work/C1_W1_Lab05_Gradient_Descent_Soln.ipynb" target="_blank" rel="noopener">实验</a></p>
+<h4 id="关于学习率"><a href="#关于学习率" class="headerlink" title="关于学习率"></a>关于学习率</h4><p>太小会增加计算步骤，从而使梯度算法变慢<br>太大可能导致过冲，永远无法到达最小值;甚至无法实现聚拢趋势，导致发散<br><img src="/image/LLM/14.png" alt></p>
+<h3 id="局部最小值"><a href="#局部最小值" class="headerlink" title="局部最小值"></a>局部最小值</h3><p>如果当前参数已经使得成本函数到达一个局部最小值，那么J(w,b) 关于w 导数值将会是0，那么temp_w 会始终停留在一个固定的值，不再变化<br>梯度下降算法将不会再进行下一步的计算，保持当前参数在当前的这个一个局部最小值的状态</p>
+<p>随这个梯度下降，我们可以知道我们正在朝成本函数最小值靠近，在学习率固定情况下，更新步骤也在下降(斜率本身朝0在逐渐变小)，说明没有学习率的变化，也能到达局部最小值<br>但如果同时将学习率调小，降低下降的步伐，可以更小幅度的一点点接近最小值，最终找到成本函数最小值<br><img src="/image/LLM/15.png" alt></p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>线性回归模型，成本函数，和梯度下降算法<br><img src="/image/LLM/16.png" alt><br><img src="/image/LLM/17.png" alt><br>上述梯度下降算法具体来说是批量梯度下降，因为每一步都用到了所有训练数据<br><img src="/image/LLM/18.png" alt></p>
+<h1 id="多元线性回归"><a href="#多元线性回归" class="headerlink" title="多元线性回归"></a>多元线性回归</h1><p>以上讨论的是只有一个特征值x 作为输入的情况，下面要讨论的是同时有n个特征值做输入的模型，被称为多元线性回归模型</p>
+<p>一些符号的表示方法<br><img src="/image/LLM/19.png" alt></p>
+<h2 id="模型表达式"><a href="#模型表达式" class="headerlink" title="模型表达式"></a>模型表达式</h2><p><img src="/image/LLM/20.png" alt><br><img src="/image/LLM/21.png" alt></p>
+<h2 id="向量化"><a href="#向量化" class="headerlink" title="向量化"></a>向量化</h2><p>好处</p>
+<ol>
+<li>代码实现简洁</li>
+<li>运算速度快</li>
+</ol>
+<p><img src="/image/LLM/22.png" alt><br><img src="/image/LLM/23.png" alt><br><img src="/image/LLM/24.png" alt></p>
+<h2 id="对于多元线性回归-的-梯度下降算法"><a href="#对于多元线性回归-的-梯度下降算法" class="headerlink" title="对于多元线性回归 的 梯度下降算法"></a>对于多元线性回归 的 梯度下降算法</h2><p>w 相关的计算转成向量计算，不同权重值，取对应特征值进行计算<br><img src="/image/LLM/25.png" alt><br><img src="/image/LLM/26.png" alt></p>
+<p><a href="https://colab.research.google.com/github/kaieye/2022-Machine-Learning-Specialization/blob/main/Supervised%20Machine%20Learning%20Regression%20and%20Classification/week2/1.Multiple%20linear%20regression/C1_W2_Lab02_Multiple_Variable_Soln.ipynb" target="_blank" rel="noopener">实验</a></p>
+<h1 id="实践技巧"><a href="#实践技巧" class="headerlink" title="实践技巧"></a>实践技巧</h1><p>如何更快的找到合适的参数去拟合训练集</p>
+<h2 id="特征缩放"><a href="#特征缩放" class="headerlink" title="特征缩放"></a>特征缩放</h2><h3 id="参数大小与特征值大小关系"><a href="#参数大小与特征值大小关系" class="headerlink" title="参数大小与特征值大小关系"></a>参数大小与特征值大小关系</h3><p>如果某一特征值(x1 属于[1000,5000]范围)相对其他特征值(x2,x3,..xn,属于[1,10]范围),数值范围较大，其对应参数w1 则相对其他较小<br>反之，如果特征值较小，则参数较大，这样的规律可以更快的找到适合的参数<br><img src="/image/LLM/27.png" alt><br><img src="/image/LLM/28.png" alt><br>如果特征值的取值范围非常不同时，会导致梯度下降速度变慢<br>但如果将所有特征值想办法归一到相同的范围内，就可以加快梯度下降过程，降低计算步骤<br><img src="/image/LLM/29.png" alt></p>
+<h3 id="缩放计算方式"><a href="#缩放计算方式" class="headerlink" title="缩放计算方式"></a>缩放计算方式</h3><h4 id="除以最大值"><a href="#除以最大值" class="headerlink" title="除以最大值"></a>除以最大值</h4><p>特征值除以各自范围的最大值<br><img src="/image/LLM/30.png" alt></p>
+<h4 id="均值归一化"><a href="#均值归一化" class="headerlink" title="均值归一化"></a>均值归一化</h4><p>特征值 减去平均值，再除以极差值(范围最大值减去范围最小值)<br><img src="/image/LLM/31.png" alt></p>
+<h4 id="Z-SCORE归一化"><a href="#Z-SCORE归一化" class="headerlink" title="Z-SCORE归一化"></a>Z-SCORE归一化</h4><p>特征值 减去 标准差，除以 平均值<br><img src="/image/LLM/32.png" alt></p>
+<h4 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h4><p>并不一定非要落在-1 到1 之间，落在相同的数量级之间就可接受<br><img src="/image/LLM/33.png" alt></p>
+<h2 id="如何找到成本函数最小值"><a href="#如何找到成本函数最小值" class="headerlink" title="如何找到成本函数最小值"></a>如何找到成本函数最小值</h2><h3 id="学习曲线"><a href="#学习曲线" class="headerlink" title="学习曲线"></a>学习曲线</h3><p>绘制成本函数随迭代次数变化的趋势图，称为学习曲线，主要是根据曲线走势判断梯度是否在收敛<br>如果随迭代次数增加，成本函数一直呈下降趋势，说明梯度正在下降，是正常的<br>当下降到一定程度，随迭代次数成本函数不再有明显下降，说明梯度收敛到了极限，也就是找到了成本函数的最低点<br>但如果随次数增加，成本函数出现上升，这是不正常的，则说明学习率选取过大，需要重新选取，或者代码出现错误</p>
+<h3 id="自动收敛测试"><a href="#自动收敛测试" class="headerlink" title="自动收敛测试"></a>自动收敛测试</h3><p>自行定义一个极小的值，当某次迭代后成本函数值小于该值时，就认为梯度下降关闭，成本函数达到最小值，停止迭代，取当前迭代wb做模型参数<br>缺点就是极小值难以估计，且结果不太可靠<br><img src="/image/LLM/34.png" alt></p>
+<h2 id="如何选择合适学习率"><a href="#如何选择合适学习率" class="headerlink" title="如何选择合适学习率"></a>如何选择合适学习率</h2><p>根据学习曲线调整学习率<br>学习率太大会导致学习曲线出现上升趋势<br>太小会导致迭代次数增加<br><img src="/image/LLM/35.png" alt><br>可以先对不同量级的学习率进行测试，观察学习曲线变化快慢<br>然后进行N倍测试，再比较，通过多组测试观察学习曲线变化快慢进行选取<br><img src="/image/LLM/36.png" alt></p>
+<h2 id="特征工程"><a href="#特征工程" class="headerlink" title="特征工程"></a>特征工程</h2><p>通过转换或者合并直接(原始)的特征值，生成新的特征值进行模型训练<br><img src="/image/LLM/37.png" alt></p>
+<h2 id="多项式回归"><a href="#多项式回归" class="headerlink" title="多项式回归"></a>多项式回归</h2><p>如果特征值只有一个的情况下，不希望得到线性回归的直线模型，希望用曲线去拟合训练集<br>可以采用下面两种方法去拟合</p>
+<ol>
+<li>通乘方构建新特征值，但是在进行训练时要进行归一化处理，因为乘方处理后，各个特质值范围的数量级会变得不同</li>
+<li>通过开方进行新特征值构建<br><img src="/image/LLM/38.png" alt></li>
+</ol>
+<h1 id="如何在colab中运行github-上的jupiter文件"><a href="#如何在colab中运行github-上的jupiter文件" class="headerlink" title="如何在colab中运行github 上的jupiter文件"></a>如何在colab中运行github 上的jupiter文件</h1><p>下面这个链接时梯度下降实现的.ipynb 文件</p>
+<p><a href="https://github.com/kaieye/2022-Machine-Learning-Specialization/blob/main/Supervised%20Machine%20Learning%20Regression%20and%20Classification/week1/work/C1_W1_Lab05_Gradient_Descent_Soln.ipynb" target="_blank" rel="noopener">https://github.com/kaieye/2022-Machine-Learning-Specialization/blob/main/Supervised%20Machine%20Learning%20Regression%20and%20Classification/week1/work/C1_W1_Lab05_Gradient_Descent_Soln.ipynb</a></p>
+<p>复制域名之后的path<br>kaieye/2022-Machine-Learning-Specialization/blob/main/<br>Supervised%20Machine%20Learning%20Regression%20and%20Classification/week1/work/C1_W1_Lab05_Gradient_Descent_Soln.ipynb<br>拼接到 <a href="https://colab.research.google.com/github/" target="_blank" rel="noopener">https://colab.research.google.com/github/</a> 后面</p>
+<p>得到访问链接</p>
+<p><a href="https://colab.research.google.com/github/kaieye/2022-Machine-Learning-Specialization/blob/main/Supervised%20Machine%20Learning%20Regression%20and%20Classification/week1/work/C1_W1_Lab05_Gradient_Descent_Soln.ipynb" target="_blank" rel="noopener">https://colab.research.google.com/github/kaieye/2022-Machine-Learning-Specialization/blob/main/Supervised%20Machine%20Learning%20Regression%20and%20Classification/week1/work/C1_W1_Lab05_Gradient_Descent_Soln.ipynb</a></p>
+<p>如果.ipynb有依赖其他py 文件，可以点击上传图标直接上传<br><img src="/image/LLM/39.png" alt></p>
+<p>但是要注意这里上传的文件都是运行时的状态，页面关闭即销毁，<br>如果想要保存自己修改后的.ipynb文件可以通过添加副本到google/drive 来实现</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/definition.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/machineLearning/definition.html" itemprop="url">
+                  机器学习定义
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-09-02T08:10:37+08:00">
+                2024-09-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="什么是机器学习"><a href="#什么是机器学习" class="headerlink" title="什么是机器学习"></a>什么是机器学习</h1><p>filed of study that gives computers the ability to learn without being explicity programmed.</p>
+<p>让计算机在没有明确编程的情况下学习的研究领域</p>
+<p>– Arthur Samuel (1959)</p>
+<h1 id="Supervised-Learning-监督学习"><a href="#Supervised-Learning-监督学习" class="headerlink" title="Supervised Learning 监督学习"></a>Supervised Learning 监督学习</h1><p>learns from being given ‘right answers’</p>
+<p>learns from  data labeled with ‘right answers’</p>
+<h2 id="regression-algorithms-回归算法"><a href="#regression-algorithms-回归算法" class="headerlink" title="regression algorithms 回归算法"></a>regression algorithms 回归算法</h2><p>从无限多可能数字中预测数字</p>
+<p>predict a number 预测无限可能中的一种<br>infinitely many possible outputs</p>
+<h2 id="classify-algorithms-分类算法"><a href="#classify-algorithms-分类算法" class="headerlink" title="classify algorithms 分类算法"></a>classify algorithms 分类算法</h2><p>predict categories 预测有限分类中的一类<br>small number of possible outputs</p>
+<h1 id="Unsupervised-Learning-无监督学习"><a href="#Unsupervised-Learning-无监督学习" class="headerlink" title="Unsupervised Learning 无监督学习"></a>Unsupervised Learning 无监督学习</h1><p>find sth interesting in unlabeled data<br>data only comes with input x ,but not output labels y, algorithm has to find structure in the data</p>
+<h2 id="clustering-algorithms-聚类算法"><a href="#clustering-algorithms-聚类算法" class="headerlink" title="clustering algorithms 聚类算法"></a>clustering algorithms 聚类算法</h2><p>place the unlabeled data (automatically group) into different clusters</p>
+<p>eg. google news, grouping customers</p>
+<p>==&gt; group similar data points together</p>
+<h2 id="Anomaly-detection-异常检测"><a href="#Anomaly-detection-异常检测" class="headerlink" title="Anomaly detection 异常检测"></a>Anomaly detection 异常检测</h2><p> find unusal data points (events)</p>
+<p> eg. 金融诈骗中的交易异常</p>
+<h2 id="Dimensionality-reduction-降维算法"><a href="#Dimensionality-reduction-降维算法" class="headerlink" title="Dimensionality reduction  降维算法"></a>Dimensionality reduction  降维算法</h2><p>compressn data using fewer numbers</p>
+<p>压缩大数据集到小数据集，同时丢失尽可能少的信息</p>
+<h2 id="Reinforcement-Learning-强化学习"><a href="#Reinforcement-Learning-强化学习" class="headerlink" title="Reinforcement Learning 强化学习"></a>Reinforcement Learning 强化学习</h2>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/compressMethod.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/knowledge/compressMethod.html" itemprop="url">
+                  关于报文压缩方法的探究
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-03T18:16:37+08:00">
+                2024-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="问题发现"><a href="#问题发现" class="headerlink" title="问题发现"></a>问题发现</h1><p>项目中需要对大数据量请求时间进行缩短优化的工作，优化过程中发现，浏览器响应报文压缩方法为br的情况会比gzip的时间要长11-13s，具体表现如下</p>
+<p>服务端响应用时45s</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YmZmZTIyZmEzZWRkZDQ2OGZmODc5YmM5ZmJkMGM0ZGRfUGF4OE1qUElncThDQXd6SkpqVWFNY3g1MDNTcXBTdUlfVG9rZW46TW5namJPWnZ1b2F2MWZ4VFRQUmNuVXRnbk9oXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>但是浏览器<strong>等</strong>服务端返回却花了58s</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=OWNkYzA0ODEyYTlmMmE3ZTQ4OGM2MTc3ZDAwZTY2MzZfS3VBYVlKNDcwWTgxSklXSTRqQVdkcW1UZHd6NWR4STJfVG9rZW46Tm80M2I4Smd2b0pmamV4QkhGdWMxU3JXbmxlXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NTBiZTE2NDk3ZDg1YWFmYTQ0OTM3ODYwNGZhZjIzODlfOEtIaGNvbXc4NXhDbWNHbG1oWmtXSXVaWTBKa2tRNmFfVG9rZW46RUhlV2J1UWRqb3JUN094WWRoMWNCaE5ibmJoXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>这样浏览器就会比服务器响应<strong>多等</strong>了58-45= <strong>13s</strong>，不是很正常</p>
+<p>现在直接拿浏览器请求的cUrl 发起请求</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ODcyYjM3NTk3MjMxYzRiNzUyYzY3MDI3ZGIyY2Y1MmFfaEJFVDNmUHFxUXlzckgxUTV5dXZ5cFZBZUhpN1Jpck5fVG9rZW46QkVpV2JrWVBlb05kYlh4R0NnNmNyQWtHbncyXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ZDU4ZDI1YjUzOWFmYTZkOWU0Y2U5NGJiOTJhZGMxODBfN3lDakIwSklNVnRMbmxCc2JaZkgzYzRLbzIwQW9RUThfVG9rZW46SzdCT2JVekpYb3VwcWd4VjM4SGNMcDBJbmZkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NmQ2NjE1NDk2M2NlNzMyNDkyNDgzNWE5ZDY4Yzk1YzFfWEZFVDVDZVpjSVVQMjkzbHRqZk96TFhpVDAxcGxYYktfVG9rZW46TXJiZGJCOG9zb1N4eFp4WUFlRmMwRjJobkpkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>可以看到非浏览器请求的响应使用了gzip压缩，总用时48s, 服务端用时46s, 耗时差2s</p>
+<p>可见使用gzip压缩算法耗时是远优于br压缩的</p>
+<h1 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h1><p>想办法禁用掉br压缩方法</p>
+<ol>
+<li>指定service Mesh压缩方法</li>
+</ol>
+<p>第一步，检查服务集群是否开启了service mesh，开启后指定才有效</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NDQ0OGQ2OWUxZDJlNGViNTJkMDMyY2I1M2Q0YjJkOWJfcms4d0dMb0ZSSnlJYk9Nb2pVWVl4a1dDMlJwellPNTVfVG9rZW46QWdNNmJXU1gzb2ljUGZ4S1ZzUWNJTUVhbjJyXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>第二步，直接在【通用流量平台-&gt;稳定性管理】指定压缩方法</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YmQwYjNiODQ2YTQ2MDM1Nzg5OGJjN2I1YzE3M2Y3NzNfM2pRbTJvOTRVblpFWDg1V3FTeUlyVkRBUWZkZ2NLT2NfVG9rZW46VlVvZWJ4NGU3bzFDd2d4blpab2M1OHdibjNkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>Service mesh 在指定压缩方法后，会对所有请求按指定的压缩算法进行压缩，不管content-length 大小，也不管上游是否已经指定了其他压缩方法，简单粗暴，适合快速解决问题</p>
+<ol>
+<li>TLB + 项目配置</li>
+</ol>
+<p>该方法是在探究原因过程中发现，过程比较曲折，需要排查修改两个地方，着急解决问题不适宜</p>
+<ol>
+<li>确认下自己的服务是否为node服务且有使用koa-compress插件(<strong>注意排查框架是否有默认注入</strong>)，需要将br 压缩算法关闭，具体关闭形式可能因框架不同配置姿势不同，但可以参考下插件<a href="https://github.com/koajs/compress" target="_blank" rel="noopener">官方配置</a></li>
+<li>关闭TLB 路由Ngnix默认br 压缩算法配置，禁止使用br算法</li>
+</ol>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MjE0NjZiZDAwOWViMmJmYjgwYjgzZmRhMWU5OGZmNzdfQUtKenJndjJZMmQySXdvdFlyRUFoeFVPNWZGSzRFSEtfVG9rZW46Q05TdmJMQml0b0NFQkd4aWx0bmNnYUZEbkZoXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>虽然复杂，但是方案会比方法一更合理一些</p>
+<h2 id="为什么不在发起请求时直接更改accept-encoding？"><a href="#为什么不在发起请求时直接更改accept-encoding？" class="headerlink" title="为什么不在发起请求时直接更改accept-encoding？"></a>为什么不在发起请求时直接更改accept-encoding？</h2><p>解决这个问题的另一条途径就是从源头，请求发起端就去掉相关br的设置，也就是更改accept-encoding, 让它不包含br，如果客户端不支持br 压缩，那请求响应自然是不能使用br 压缩的，但是天有不测风云，accept-encoding 是一个不能通过代码去修改的请求报文(<a href="https://developer.mozilla.org/zh-CN/docs/Glossary/Forbidden_header_name" target="_blank" rel="noopener">详见</a>)，所以这条路是行不通的。</p>
+<h1 id="这到底是怎么回事？"><a href="#这到底是怎么回事？" class="headerlink" title="这到底是怎么回事？"></a>这到底是怎么回事？</h1><p>虽然使用方法一可以快速彻底的解决掉问题，但是不应用方法一时，可以发现的一个明显问题就是不同请求的压缩方法不同，而且存在不使用压缩方法的情况，这就激起了作者尘封已久的好奇心，到底是谁在指定content-encoding呢？</p>
+<p>接下来就需要看一下从服务端到客户端，到底是哪个环节在决定content-encoding</p>
+<h2 id="Koa-compress"><a href="#Koa-compress" class="headerlink" title="Koa-compress"></a>Koa-compress</h2><p>鉴于本人node服务项目基于ACE1.X构建，在搜索代码进行排查时，并没有在配置文件中搜到相关的配置，重新查阅框架文档的时候，才注意到框架有进行<a href="https://iesfe.bytedance.net/ace-v1/fullstack/basic/middleware/#compress" target="_blank" rel="noopener">默认注入</a>，这就从服务端源头找到了一个会更改content-encoding的地方，俗话说，灯下黑，不过如此。</p>
+<p>既然有使用koa-compress, 而且<a href="https://github.com/koajs/compress/tree/master/lib" target="_blank" rel="noopener">源码</a>不是很复杂，那就简单探索下它的压缩原理</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YTgyZTg5MmY1NWUyMTYzNGQ1NzUxZTBiM2EzYjk4N2ZfdGRzZ3lxQW1iVTdER21JYUxzQm9iWGFGbjFlSnA4bERfVG9rZW46SUVBMGJmaWJKb2xGQkh4U0JXM2NVYmVBbkNMXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>查看源码可知，当content-length大于1024b时，会根据Accept-encoding进行压缩</p>
+<p>在Accept-Encoding值是’gzip, deflate, br’情况下</p>
+<p>压缩方法的选择逻辑就是accept-encoding有br 会优先使用br，如果br被禁用就使用gzip</p>
+<p>由于默认注入时，没有指定压缩阈值，所以当我们的请求数据过大, 大于1024b时，自然就会触发koa-compress进行br压缩，也就是说上面问题的出现，罪魁祸首就是koa-compress</p>
+<p>但是当数据量小于1024b时，又会出现br，甚至不进行压缩又是怎么回事呢？</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NTk5ZjMxMTIwOTgwMTc3YzY5MjRmMjRkYjMyNDdlOGRfMHA4SlJNbDdaalBzQ1dWSXhuQXNJcXZJQTFjV2U3b0NfVG9rZW46VHBDSGJDNWZ0b2VxUW14cnFJWWNXa0ZnbkdnXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ZDIyZTAwZjdkYmI1YTg1OWY3OGFlOTI4MzFhOWVmNzdfMmFlZGZ4S25DekNnUzhSZTB4Z2NDUVY3dVpZMWs5SFpfVG9rZW46VmV1V2JlNnZzb2hHald4M0RGTWNMYk1hbk1nXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<h3 id="whisle插曲"><a href="#whisle插曲" class="headerlink" title="whisle插曲"></a>whisle插曲</h3><p>在排查过程中，相同条件请求，在本地开启whistle代理，通过域名进行本地访问，出现了响应始终是gzip 的情况，这对于大于1024b的响应就不对了，按上面koa-compress逻辑，应该是br才对</p>
+<p>经过在http\://localhost:8899/#network 抓包，可以发现whistle给本地服务的请求报文accept-encoding是不带br的</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=OWVkMWNjYzMwZDE2N2ExMjNmNzFkOTk2NTgyM2U4YWJfZ1BYSnFNUGNZVkpvaGVRamZaenp0b2hKZHFqOEt2TU1fVG9rZW46UWxDRmIwT1Vqb3ViY2R4VFQwcGNDMDlwbnNiXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>经过与whistle开发者请教(<a href="https://github.com/avwo/whistle/issues/950" target="_blank" rel="noopener">issue</a>)，whistle确实会篡改我们的报文，把accept-encoding中的br 去掉，这样就实现了响应始终是gzip压缩的效果，因此，在本地的测试推荐大家直接使用localhost访问，避免代理的干扰</p>
+<p>以下在本地进行的测试也均是在关闭代理情况下进行</p>
+<h2 id="TLB"><a href="#TLB" class="headerlink" title="TLB"></a>TLB</h2><p>根据请求响应链路，响应从node服务返回后，会依次经过Mesh, TLB然后到浏览器</p>
+<p>由于mesh 在不指定压缩算法的情况下是<strong>不参与</strong>压缩的，所以对于小于1024的数据压缩，矛头指向了TLB</p>
+<p>在开始验证前，先来了解下TLB的压缩原理<a href="https://bytedance.feishu.cn/docx/CgO6dfGYOo86eYxILLPcMc2MnRc" target="_blank" rel="noopener">TLB压缩问题oncall排查手册</a></p>
+<p>文中对我们比较重要的信息是这部分</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YjZmMDE3ZmJjNzYxNThjZjk5Mzc2MDBlNmVkYjk4YzRfODVpZm9jSDFKUnUwUUJzZ2hVbnIyZEJoa3lZZWo4Z2ZfVG9rZW46QVFRTWJpRXJSb0dKTHF4d25qY2NaaHpTblJkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>文中配置与tlb同学确认后就是默认配置，这样对于我们验证就有了参照物</p>
+<p>在关掉koa-compress 的br 压缩后，我进行了如下实验</p>
+<ol>
+<li>构造响应不同content-length的接口</li>
+<li>分别通过本地localhost 访问，域名访问，以及关掉tlb 的br 压缩后再通过域名访问以上接口（保证经过tlb）</li>
+</ol>
+<p>得到如下结果（no表示不压缩）</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">content-length</th>
+<th style="text-align:left">localhost:3000</th>
+<th style="text-align:left">域名访问</th>
+<th style="text-align:left">tlb 设置 brotli = off</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">117</td>
+<td style="text-align:left">no</td>
+<td style="text-align:left">no</td>
+<td style="text-align:left">no</td>
+</tr>
+<tr>
+<td style="text-align:left">152</td>
+<td style="text-align:left">no</td>
+<td style="text-align:left">br</td>
+<td style="text-align:left">no</td>
+</tr>
+<tr>
+<td style="text-align:left">204</td>
+<td style="text-align:left">no</td>
+<td style="text-align:left">br</td>
+<td style="text-align:left">gzip</td>
+</tr>
+<tr>
+<td style="text-align:left">958</td>
+<td style="text-align:left">no</td>
+<td style="text-align:left">br</td>
+<td style="text-align:left">gzip</td>
+</tr>
+<tr>
+<td style="text-align:left">1208</td>
+<td style="text-align:left">gzip</td>
+<td style="text-align:left">gzip</td>
+<td style="text-align:left">gzip</td>
+</tr>
+</tbody>
+</table>
+<p>从koa-compress 压缩原理我们可以知道从服务端响应的数据，大于1024采用gzip，小于则不压缩</p>
+<p>所以本地访问是符合预期的</p>
+<p>经过域名访问，我们可以看到小于1024大于150的响应被用br进行压缩了, 符合br 大于150就压缩</p>
+<p>当把tlb 上nginx的br开启指令关掉，我们可以看到小于1024大于200的响应被用gzip压缩了，符合gzip 大于200就压缩的逻辑</p>
+<p>再看大于1024的最后一行，当服务端已经指定content-encoding的时候，tlb 是不会进行压缩的，会沿用上游指定压缩算法</p>
+<p>综上看来，<strong>TLB 会在上游响应未指定content-encoding的时候进行小于1M响应数据的压缩, 默认大于150b时会使用br压缩，大于200b且禁用br情况下才会使用gzip，如果上游指定了content-encoding, 就沿用上游压缩算法</strong></p>
+<p>至此，响应报文的content-encoding 来源我们搞清楚了，接下来回到解决办法一，验证下service mesh指定压缩方法后报文变化</p>
+<h3 id="集群插曲"><a href="#集群插曲" class="headerlink" title="集群插曲"></a>集群插曲</h3><p>虽然<a href="https://bytedance.feishu.cn/docx/CgO6dfGYOo86eYxILLPcMc2MnRc" target="_blank" rel="noopener">文档</a>中指令是默认指令，但不并是<strong>所有</strong>TLB集群的默认Ngnix 配置，如果出现了与上述结论异常的情况，需要邀请TLB 的同学帮忙查一下域名依赖的<strong>TLB 集群</strong>是否就是文档中的默认配置（因为只有TLB同学有权限可以查）</p>
+<p>比如，相同600B请求，Boe 环境是br压缩，但是线上则变成了gzip</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ZjFjMTkwMTg2NzkzNDA3MDZmOTZlNGEzMGYzOTc2OGVfdFY3ZUhMN0tIU2lFdTRuaDFDbzl6bWNOTEtDUEwyRWtfVG9rZW46RERKdmI0azFPbzJQdjd4TkpNQ2NDd2JobmVkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YzE1YWJjZTNjZWNhNDA4NDk0ODNjNjg0MTNlMGFlMTRfVmJ1VVA0M1pMZm5hQ0hqcDJQOVVwd3lwZUFlUm5rUHpfVG9rZW46VTVoeGJlNXhsb3g2SWN4SXBZbmNFakxGbmtBXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>按上面的结论，服务器不会对小于1024的请求进行压缩，经过tlb 默认配置会使用br，boe 环境是正常的，线上是不正常的，经过排查发现，线上tlb 依赖的<strong>集群默认</strong>配置没有开启br ，所以再走默认配置会进行gzip压缩</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MzQzNDk5NGQyMDc0YTE4NzA1MGU5YzJkN2ZlOGM2MDlfNGtDdVNGYTUxMTdBUUR2em9aS1lpcERXN3FsNFFqRkhfVG9rZW46R2VlZWJ0TTU0b2VxcWN4OXNtM2MyQ0hibmZkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YzUzZGYyNDkyOTE4YjQxZGVhMWU3ZDIyZmNlYWYwNjNfdzNvWUtFT0U4amcyeXdTT3U5TE51UlJoVFlPS1pFTDVfVG9rZW46SUZPY2JtamJ6b0RmQ014YWtjdmM2UWJSbjBlXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<h3 id="Cloud-IDE"><a href="#Cloud-IDE" class="headerlink" title="Cloud IDE"></a>Cloud IDE</h3><p>这里需要注意一点的是，上面我们在发现小于1024的压缩算法异常时，访问的是cloud IDE 上启动项目后帮我们生成的域名，我们在本地请求接口是没有进行压缩的，也就是说cloud IDE生成的域名是有经过TLB的，而且其集群默认开启了br压缩</p>
+<h2 id="Service-Mesh"><a href="#Service-Mesh" class="headerlink" title="Service Mesh"></a>Service Mesh</h2><p>实验条件(复现问题)：</p>
+<p>TLB nginx 不禁用br</p>
+<p>不禁用koa=compress的br压缩算法</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">content-length</th>
+<th style="text-align:left">localhost:3000</th>
+<th style="text-align:left">域名访问</th>
+<th style="text-align:left">域名访问</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">117</td>
+<td style="text-align:left">no</td>
+<td style="text-align:left">no</td>
+<td style="text-align:left">gzip</td>
+</tr>
+<tr>
+<td style="text-align:left">152</td>
+<td style="text-align:left">no</td>
+<td style="text-align:left">br</td>
+<td style="text-align:left">gzip</td>
+</tr>
+<tr>
+<td style="text-align:left">204</td>
+<td style="text-align:left">no</td>
+<td style="text-align:left">br</td>
+<td style="text-align:left">gzip</td>
+</tr>
+<tr>
+<td style="text-align:left">958</td>
+<td style="text-align:left">no</td>
+<td style="text-align:left">br</td>
+<td style="text-align:left">gzip</td>
+</tr>
+<tr>
+<td style="text-align:left">1208</td>
+<td style="text-align:left">br</td>
+<td style="text-align:left">br</td>
+<td style="text-align:left">gzip</td>
+</tr>
+</tbody>
+</table>
+<p>我们从浏览器发起请求</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=M2IyNDRhOTRhNDk3Yzg3ZWMxOWY2NWQ1NWQzYjYzZDNfWWVyY2toZjFxWDJqRlE4aGtOM25BRE5XQTU3cEpjVGNfVG9rZW46VlhJSmJDOUhtb01GREp4UzJHSmNzaTdzbkpiXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>在最后一个中间件打印响应头，说明服务器没有参与数据压缩 (可以通过设置priority让中间件在最后一个执行)</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YTJlNTA3NzA4ZTA2YjcxZjE1ZDNjMmE5ZjEzYWU1YTFfcFlUVGhlMHFyb2JwQ1JGNVRvTklaMWd1WDJoSGg2ektfVG9rZW46Wk4wMWIyUFhDb2Z6UXV4dGVUS2NqSXprbklkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>然后通过监听端口报文</p>
+<p>tcpdump -i eth0 port 3000 -nn</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MzAwZDkxZjUxNWQ1YWUwNGZkNzQyZmY3ZTA5MjgwNDhfYWM5TEZTZWZvQXpRTEpoT2xOdGZRU1FISmZZUFZwSFFfVG9rZW46WGdPdWJwdzZMb2ZTd1Z4NzRPRWNvOFdSbkVjXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>基本上通过上述表现我们基本上是可以判断是mesh 进行了压缩</p>
+<p>但是，我们现在监听的是3000配置端口(其他服务监听实例输出的端口)</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NjRjYTJiYTI1NzBmMWRlOGYzNDMxOTQ2Y2Q3MmNkYzBfMGtXMzc2c3NVQW9jUmVoNXZoV0RQVHhGOW5YZ2JqemFfVG9rZW46UGE2T2JqVjVJb2JnTDl4NXdJbGNZSG9sbjFjXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>如果3000端口吐出来的是经过了mesh的话，那通信的结构应该是这样</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NTc5NDRmMzRjOGY5MzkwZTQ3MTY0NGNhNjhlNzBiN2FfYjViaDYyRkNLVXdSZk9WeDkwS3ZYcnJGYVllZG0zOXJfVG9rZW46WHJjU2JVbHY0b2l1alJ4eVlZdWNrUzNHbkh6XzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p><strong>往深了想一下，上面的判断逻辑并不是非常精确</strong></p>
+<ol>
+<li>node 最后吐出来的数据的header 可能跟我们上面在最后一个中间件打印的header并不同，也就是说我们在最后一个中间件打印的header 并不是最终实例吐出数据的header，有一些 header 是会在最后吐数据的时候装的</li>
+<li>Gzip 的请求头真的是mesh 加上去的吗？实例和mesh 之间不会还有其他服务？</li>
+</ol>
+<p>要解决上面两个疑问，就要想办法去抓取一下mesh 接收的数据，也就是服务吐给mesh的数据</p>
+<h3 id="抓取mesh-socket"><a href="#抓取mesh-socket" class="headerlink" title="抓取mesh socket"></a>抓取mesh socket</h3><p>当给服务开启mesh 服务时，mesh 会给环境注入一些<a href="https://bytedance.feishu.cn/wiki/wikcnNBQTrQvvto4XpAtlgDtbvh" target="_blank" rel="noopener">环境变量</a></p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MGQyNDk2YzM4Y2ZkNTcyMTVhOGQ2ZGQ4NThlNzMyODNfaUlEV3htRTNEZVRCWEZxVXhZR0JMVEd3dTBLQ1dDUUxfVG9rZW46SWN4cWJWdHZib2JLaEN4STY4VmM1RnRObktjXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ZGNiZjlhY2U5NDkzZjI5NjYwN2NkNGRiZWY5MDIxNjVfRmNwb1VDVFRVRWZ6bjRKWksxZlEwd2lFb2w3SlVxREVfVG9rZW46WndZWGI0aGg3bzFJaUp4ZVBzUGNxWmtyblhnXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>其中SERVICE_MESH_HTTP_EGRESS_ADDR 这个变量对应的地址就是服务交给mesh 转发的数据</p>
+<p>即服务会往这个地址吐数据，然后再由mesh从这里转发再吐出去</p>
+<p>那我们接下来就要想办法去读这个socket</p>
+<p><a href="https://plantegg.github.io/2018/01/01/%E9%80%9A%E8%BF%87tcpdump%E5%AF%B9Unix%20Socket%20%E8%BF%9B%E8%A1%8C%E6%8A%93%E5%8C%85%E8%A7%A3%E6%9E%90/" target="_blank" rel="noopener">通过tcpdump对Unix Domain Socket 进行抓包解析</a></p>
+<p>当我打算用curl 命令去执行相关方法时，却发现没有相应地址的socket</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MTBlNWU4ZTVhNGUxZmFhNmY4NzBhMTRhMmQxYzk2ODZfVlgzRHdpZGVGbTllQnBXaVZZNVlyaTFyajRyOTBXYVdfVG9rZW46UGE3dmJIZGJlb25YVHJ4OUFaOWNaWFlGbmxUXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>ok，拉mesh 同学onCall 说这种情况是因为服务器和mesh之间不是用的uds通信，用的ip PORT通信</p>
+<p><a href="https://bytedance.feishu.cn/wiki/wikcn4bvZsBkZMpUVC2WQ0lUzPg#OqPeFE" target="_blank" rel="noopener">ByteMesh HTTP 出流量接入</a></p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YTk1YzA0YjJmNmYxODc4ZDcwMjcxMDY2MzY3MTg1OWJfcVVsa2M1WUFxN3dtelJnQzJTbHJZNTI3cVpjWGtya3JfVG9rZW46SHJUemJRV2xwbzFrdWx4QWRDSWN1NEVvblZoXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<h3 id="抓取PORT-9507"><a href="#抓取PORT-9507" class="headerlink" title="抓取PORT 9507"></a>抓取PORT 9507</h3><p>&#x20;那我现在需要找到MESH_EGRESS_PORT具体是什么</p>
+<p>无论是通过打印环境变量</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NTM3NTkyNGJhZmIxOWVhNTcyZmFkODhhMDJmZmFmNzlfcXk2dkRFZ3E3SUtKWVFVTkQ4ZkR2c3ZVNUw4VDBZS3dfVG9rZW46UmN3QWJ0Y0l2b1lqT2d4MWhnbGNScUJnbm1iXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>还是通过 cat /proc/\${pid}/environ 查看配置文件，以及通过查看监听端口</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ZTkxMWI0YTIxYzJkOWI4NzgxNjdlNzg1N2Q0MmU2MDdfSU1MRnNDRjFLdDNya0t6bWFoMzB0Yk5uREhlSjVZVkJfVG9rZW46SlpVZ2IwR0pVbzlSbnp4RkpoQ2NtbWVSbkJoXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>基本都确定lookback通信的port 是9507</p>
+<p>Ok 那我们再回到用tcpdump 抓包的方式,会发现什么也抓不到</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ZTA2ZGY0ZmY5MTA0YWRmZDUwM2Y4ZWRmYzllMmUxNTdfMW9zdGE2bVp0cWMyWnpJYnhnSUNyYXZwQW16VXRISW1fVG9rZW46TE5URmJFY0g1b3ZyYkx4SkRlVmNJWFJWbkdjXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>陷入死胡同, 那就是说没有数据包经过mesh 接收数据的端口</p>
+<h3 id="重新认识Service-Mesh"><a href="#重新认识Service-Mesh" class="headerlink" title="重新认识Service Mesh"></a>重新认识Service Mesh</h3><h4 id="入流量"><a href="#入流量" class="headerlink" title="入流量"></a>入流量</h4><p>我们之前是通过入流量开启压缩算法的</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ODJjMTdiYmU4MjExZmJiMGFmYjlkYzYyZDM5NTg1NTNfeDNjR2dwYm9neHR6OVNhOGs5eTVWMXhibkg5TWIzVE5fVG9rZW46UFFvdmJieDBtb2tiMUV4ZURmaWMxVGI1blhnXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>入流量在整个通信链路中的作用是这样的</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MzYwYjFhOTE5YWUyM2M1MjU0NGU1NTIwODQ0NTJlNTJfTVcxUFZTcHpGM2U2a1YyUHJ2cHZJdkZ0NUNkbm5nc3BfVG9rZW46STFERGJzY2dXb3dRVGV4WExWbWNLQXVvbnVEXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>&#x20;所以现在需要抓取的是入流量的端口<a href="https://bytedance.feishu.cn/wiki/wikcntxkGyIyWhfQ2ZZiqCmOj4c" target="_blank" rel="noopener">ByteMesh WebSocket &amp; HTTP/1.1 &amp; HTTP/2协议接入约定</a></p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NmY1NDM1ODcyNDZiNDJhMjk3YTIxMjEyODJlMTIzNDNfVnlvM1hRMEVwY0RzRW0xYXFXR3hjUTdlWUNBNkowclhfVG9rZW46R2d6T2I3ZURjb0l3NEd4VHNsYmNzMnpubmRkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>需要找到MESH_INGRESS_PORT 通过查看pid 下面 environ 文件可以看到port 为3000，也就是配置端口</p>
+<p>然后尝试监听 <a href="https://www.cnblogs.com/zgq123456/articles/10251860.html" target="_blank" rel="noopener">https://www.cnblogs.com/zgq123456/articles/10251860.html</a></p>
+<p>tcpdump -i any -A -s 0 ‘tcp port 3000 and (((ip[2:2] - ((ip[0]&amp;0xf)&lt;&lt;2)) - ((tcp[12]&amp;0xf0)&gt;&gt;2)) != 0)’</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NTk1NjI5ZTgzMjBlZjQ0MmY3MjNkZTM2OWI0NzRmZTBfQ1ZJM3JCcFhvamFaOGhrZXNGT0w2MUd6cVFRcnY5d2RfVG9rZW46R2tKTGJQRmlob2JqSjh4dWFLYWM1QmtjbmdkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NGU2ZWI0MzMzN2MxYWIwNjU0NDgzMTc1NTc2MmEyNWZfTDdvSmpVNk9xbXFpQmJFTFBNbTdsV3ZLZXRQa29JcVpfVG9rZW46WGp2NmJCeUhJbzlGMUl4UDFEZWNjTlpzbnhiXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>这一次看到了报文的整个变化过程如上两图</p>
+<h4 id="出流量"><a href="#出流量" class="headerlink" title="出流量"></a>出流量</h4><p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MGQ3YjQ2NGZhZDU2NzY0MTRkNmRlZDAxN2FlNzRjODlfNVJIOW11d1cyWlFNZ1JYQWVMZ2t2WWw5dWg3VENlTDFfVG9rZW46WXlVa2J4R1Fsb1Jva0F4RktMZGNjWW5WbnNmXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MGQyOGI1OGFhNjlmNDlhZThkZWJjZWY1ZjVmMDNlMThfeUxHQ0w2anc5Zjc4MTU4RUlKOW1qS2NTYWJoUFlrRkNfVG9rZW46V2Y0S2JCVHZ1b2Nndml4TTB2a2NvSUtDbjhnXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>通过给服务开启出流量代理，可以看到两种通信地址</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YjIxMDQzZjNjNTE5ZTEyYTcxMjU4NTY1NTRkMWRmZDFfRmZBRWYwc2RnT0xMUkVrZ01DNmw1NmNhUjJ0QWxUNmVfVG9rZW46Vk5BbWJzVHR5b3JnUVh4SjYwS2NSREUwbkxnXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>SERVICE_MESH_EGRESS_ADDR 即如果node 跟下游服务通信会走dsl 通信</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=OTg1NmYwMDdmNTJjNjk2MTNkNTVkYWM4M2MwYmIzYTJfZVR5VFFxNXNGM2REaXppZkpwQ1BlOWpranA3S2RRWnlfVG9rZW46STl1Y2JUUEhjb2FwcjJ4VVA3c2M1U2JIbkllXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>MESH_EGRESS_PORT 即如果node 发起http 请求会通过这个端口与mesh 进行http 通信，过程同上面入流量过程</p>
+<h5 id="看一下UDS报文长啥样"><a href="#看一下UDS报文长啥样" class="headerlink" title="看一下UDS报文长啥样"></a>看一下UDS报文长啥样</h5><p>还是参考这篇<a href="https://plantegg.github.io/2018/01/01/%E9%80%9A%E8%BF%87tcpdump%E5%AF%B9Unix%20Socket%20%E8%BF%9B%E8%A1%8C%E6%8A%93%E5%8C%85%E8%A7%A3%E6%9E%90/" target="_blank" rel="noopener">文章</a>的方法</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=OTExN2NmOGE1ZDQ2MmU4ODllMzdmZWUxNzE0MjNlY2JfZ2hua29rcnN3WnFKSXY5SDZrWmViZ0t5U0RIdTBFZ1VfVG9rZW46QkhyWGJjZ2JRbzJDajN4V1ZtaGN6TXZYbmFiXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<ol>
+<li>为方便后续指令执行，切到rpc.egress.sock所在文件夹，</li>
+</ol>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ZTM0YTFmNTRkOTQwMzY2ZWUyMzdlODA4MGViYzlkNGNfWVQ2Y3FWRk5LVU93Y2xmWGEzeUU3V1pwYWd4aHlCOVpfVG9rZW46T252V2JVRGs3b29sSUh4dzRNN2NrSWNLbnFmXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MGE2ZDE0ZmYxMjA1ODU1MWQyN2RhNjc5YjUzZWJmYzFfQ2w0eGpCN3F4SHFDUTROdjFZWGtqeDkwb042YW5NbTZfVG9rZW46R3B3SWJQbm9Tb3lvN2V4T0kxOWNnWHozbk9nXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<ol>
+<li>将给到rpc.egress.sock 的数据转发到 8089</li>
+</ol>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YmY1YTlkYTI3ZWFhZGM0NDZlMWIzYzM1YzExN2NjMzdfa0NISWFuZDEyeHVqR281ZzJybWRzdE55V2lsb2FPUEdfVG9rZW46UmNtQ2JZeUdob3AwVWt4SEpJWWNWQ1c1blVlXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<ol>
+<li>用curl 发起请求，并用tcpdump 对8089进行抓包</li>
+</ol>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=OTljZjM4MjdmYjRhZmFmZmJlZmE4M2ZkNjU5NDYyYWFfcUQ5QXc1cEdwMGNpZmxTdngxVG5ZaUV2VVFoZW1rWXlfVG9rZW46QlZkbGJUR0tOb2ZCVnJ4bkdGM2NnVUlKbnpoXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>注意使用curl –-unix-socket /rpc.egress.sock 时 如果不支持–-unix-socket 参数，需要使用apt-get 升级curl 版本，如无法升级，可能是linux 版本不再维护，可尝试替换基础镜像(指定高版本linux 的)进行部署后再测试 虽然位于rpc.egress.sock 所在文件夹下执行，但是前面的/ 不能省</p>
+<p>先用tcpdump -i any -netvv port 8089 看看能不能</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ZDYzMGQxYTI3OWRjZTljYjZiMmE4ZjkxYjIzMWRkY2Ffd0lOelN3Sk9COFc0TjRhSWhxamxqNmZSTGVleFNEampfVG9rZW46SGo0U2I3MjBUb2hxRUt4SnZMVmM0aGJxbjRlXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<p>加上-A -s , ===&gt; tcpdump -i any -A -s 0 -netvv port 8089 看看具体报文</p>
+<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=N2MxNTE1ZjliYTE4ZDNhYzUzNTVmMzk3NjBmODg4MGVfc0hxdFdkTjJJRU04QVMwbURUVWNzSGZ0a1BOaDZrZDZfVG9rZW46Wk15S2J3WTZqb2RMZmp4UVBFTGNmaDdhblRmXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
+<h1 id="知识收获"><a href="#知识收获" class="headerlink" title="知识收获"></a>知识收获</h1><h2 id="cUrl"><a href="#cUrl" class="headerlink" title="cUrl"></a>cUrl</h2><p>cUrl <a href="https://curl.se/docs/manual.html" target="_blank" rel="noopener">命令相关参数</a></p>
+<p>-v/–verbose 用于打印更多信息，包括发送的请求信息</p>
+<p>-o /dev/null 把输出写到该文件中，保留远程文件的文件名</p>
+<p>-w ‘%{size_download}\n’ 获取下载大小</p>
+<p>--unix-socket 测试socket 地址，注意要求curl 版本7.50+，如果webshell 不支持，需要考虑更换tce基础镜像</p>
+<h2 id="常用linux命令"><a href="#常用linux命令" class="headerlink" title="常用linux命令"></a>常用linux命令</h2><h3 id="tcpdump"><a href="#tcpdump" class="headerlink" title="tcpdump"></a>tcpdump</h3><p>tcpdump -i eth0 port 3000 -nn</p>
+<p>tcpdump -i eth0 -nn -vv</p>
+<p>tcpdump -i lo -nn -vv</p>
+<p><a href="https://www.cnblogs.com/zgq123456/articles/10251860.html" target="_blank" rel="noopener">https://www.cnblogs.com/zgq123456/articles/10251860.html</a></p>
+<h3 id="查看"><a href="#查看" class="headerlink" title="查看"></a>查看</h3><p>lsof -i | grep LISTEN</p>
+<p>ps -le</p>
+<p>ps -ef | grep node</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>apt/apt-get update</p>
+<p>apt/apt-get install 包名</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/historySearchDesign.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/knowledge/historySearchDesign.html" itemprop="url">
+                  历史记录功能设计
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-03T15:17:37+08:00">
+                2024-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>根据用户反馈，查询条件多个时，想要重新看一下上次的查询结果，操作比较繁琐，希望可以有历史查询的功能，将最近查询的n次记录可以找到，方便回溯问题</p>
+<h1 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h1><h2 id="前端"><a href="#前端" class="headerlink" title="前端"></a>前端</h2><p>在用户点击查询按钮的时候，将当前页面链接调接口保存起来，查询时链接会携带查询条件</p>
+<h1 id="后端"><a href="#后端" class="headerlink" title="后端"></a>后端</h1><h2 id="存储"><a href="#存储" class="headerlink" title="存储"></a>存储</h2><p>&#x20;历史记录需要跟用户身份做绑定，当前天级uv可达75人，不适宜用tcc或者wcc平台进行数据存储</p>
+<p>&#x20;所以需要申请资源进行数据存储</p>
+<p><strong>容量</strong></p>
+<p>&#x20;一个连接大小按照500Byte算，如果只保存最近10条记录，那么一个用户需要5000b ==&gt; 5kb</p>
+<p>目前平台用户数以1000为底计算,一开始平台会需要 5kb * 1000 ==&gt;5000kb ==&gt; 5mb</p>
+<p>(目前纯个人用户有530，加上以部门为单位申请的权限，各部门人数不确定)</p>
+<p>假设半年后用户量翻倍那么存储空间需要增加一倍也就是10MB</p>
+<p><strong>负载</strong></p>
+<p>目前平台日pv 350,日uv 50, 大致计算一个用户一天会访问页面7次，四舍五入假设1天会进行10次查询</p>
+<p>1个用户1天会进行10次数据库读写</p>
+<p>那整个平台1天平均会进行500次读写，高峰假设1000次读写(75四舍五入)</p>
+<p>平均 500 * 500 /(3600*24) ~~ 0.003kb/s 高峰1000*500/(3600*24) ~~~0.006kb/s</p>
+<p>很低</p>
+<h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><p>本来想如果数据库有数组的话，表结构就是用户id + 记录数组；</p>
+<p>没有的话，我现在想了两种方案，</p>
+<p>一个就是用字符串存这个数组，用户id + 记录数组字符串形式，相当于更新时要先获得这个字符串，转成数组后，看有没有10条，没有的话直接push,有的话，把时间最早的那条删除，push进数组，再转成字符串更新数据库，这样缺点就是展示的时候也得字符串转数组一下；</p>
+<p>另一种就是用户id只和一条记录存在一起，不用一个字符串存整个10条记录，更新的时候我去拿数据的时候拿整个用户id所有的，超过10条的话就用数据库删除方法把时间早的删除了，再存进去最新的</p>
+<p>看起来都挺麻烦</p>
+<p>而且在实际接入数据库的过程中，还要手动执行命令行产生model相关文件</p>
+<p>通过调研公司存储系统的各种方式，觉得redis可以更好的解决存储问题，redis支持List类型存储，</p>
+<p>而且LPUSH, LPOP,EXPIRE方法可以很好的帮助实现数据存取更新缓存等问题,省了数据库建表等过程</p>
+<h2 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h2><p>redis可以很好的支持数据删除，在更新数据的时候重新设置过期时间即可保证删除不活跃用户的记录</p>
+<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><p>申请redis服务，用户工号做redis的key值，key值的value即用户的查询历史记录list,</p>
+<p>写接口: 查记录，更新记录</p>
+<p>前端在点击查询的时候调接口更新记录</p>
+<h1 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h1><p><a href="https://bytedance.feishu.cn/wiki/wikcnfEUcTwW8A3bUUQNtqUlsUd" target="_blank" rel="noopener">存储系统对比 （草稿）Storage System Comparision（Draft）</a> #</p>
+<p><a href="https://bytedance.feishu.cn/wiki/wikcnKKISdh4ftbAj6FG24gAwCb" target="_blank" rel="noopener">数据结构与命令一览 List of data structure and commands</a> #</p>
+<p><a href="https://redis.io/commands" target="_blank" rel="noopener">https://redis.io/commands</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/mobxlearn.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1136,685 +2070,11 @@ message.postDate = new Date()
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/systemDesign.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/knowledge/systemDesign.html" itemprop="url">
-                  系统设计案例
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-02-02T09:31:06+08:00">
-                2022-02-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>案例：用户将存储内容粘贴到站点，站点给用户返回一个短地址，用户通过短地址，可以访问之前粘贴的内容或者跳转之前的原始站点</p>
-<h1 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h1><ol>
-<li><p>对于用户来说操作要简单，生成的短地址要简单，而且要唯一，不同用户即使内容一样也要生成唯一的短地址</p>
-</li>
-<li><p>时间有效性，从存储角度来说，不可能一直帮用户存储所有生成的短地址，不然存储会越来越大，所以通过设置短地址有效的访问时间，可以减少存储成本</p>
-</li>
-</ol>
-<h1 id="技术"><a href="#技术" class="headerlink" title="技术"></a>技术</h1><ol>
-<li>可用性(high Availability)， 保障用户功能可用</li>
-<li>低延时(low latency)，用户拿到短地址或者通过短地址跳转其他网站时，重定向时间不宜过长</li>
-<li>安全性（non guessable），不能被猜出来，用户在生成一定短地址时如果携带一些个人信息，不应体现在短地址中，否则会造成用户信息泄露</li>
-<li>对于ins/微博/小红书之类的社交功能还要保障一致性，博主发的照片，follower看到的内容应该是一样的</li>
-</ol>
-<h1 id="容量负载能力假设"><a href="#容量负载能力假设" class="headerlink" title="容量负载能力假设"></a>容量负载能力假设</h1><p>对一个用户来说，可以抽象出两个主要请求</p>
-<ol>
-<li>请求生成短url，我们要把请求参数或者原始信息存储起来 inbound</li>
-<li>请求访问url，把生成的url返回给用户使用，进行重定向 outbound</li>
-</ol>
-<p>假设一个短地址按500byte大小存储</p>
-<h2 id="容量"><a href="#容量" class="headerlink" title="容量"></a>容量</h2><p>假设一个月会有100万个新短地址生成，<br>那么5年会产生</p>
-<p>100万<em>5年</em>12个月 ==&gt; 约等于60亿个短地址</p>
-<p>60亿*500byte ==&gt; 3TB 会有需要3TB大小的容量存储</p>
-<h2 id="负载能力"><a href="#负载能力" class="headerlink" title="负载能力"></a>负载能力</h2><p>假设一个月有100个用户，每个用户会进行100万次访问短地址进行重定向的操作</p>
-<p>那么每秒钟会有<br>（100 <em> 100万）/（30D </em> 24H * 3600s） ==&gt; 约等于4000个短url 要给到用户<br>同时会有<br>4000/ 100 ==&gt; 大概40个短url 需要被生成</p>
-<p>那么服务所需要的带宽就可以计算出来</p>
-<p>inbound : 40<em> 500 byte 约等于 20kb/s<br>outbound: 4000</em> 500 byte 约等于 20MB/s</p>
-<h1 id="API-数据库设计"><a href="#API-数据库设计" class="headerlink" title="API 数据库设计"></a>API 数据库设计</h1><h2 id="api"><a href="#api" class="headerlink" title="api"></a>api</h2><p>假设会用到简单的增删<br>生成短url createURL(api-key, originUrl, expired-Date, userId)<br>删除url  deleteURL(api-key,shortUrl)</p>
-<h2 id="DataBase"><a href="#DataBase" class="headerlink" title="DataBase"></a>DataBase</h2><p>对于shortUrl</p>
-<p>pk: hash<br>originUrl,<br>expired-date,<br>userId<br>…</p>
-<p>对于user<br>pk: userId<br>name<br>…</p>
-<h2 id="生成shortUrl"><a href="#生成shortUrl" class="headerlink" title="生成shortUrl"></a>生成shortUrl</h2><p>假如计划生成一个6个字符的短url，使用base64的加密算法的话可以生成64 ^ 6 大约640个短url,</p>
-<p>满足之前5年会产生60个亿的唯一性需求</p>
-<h1 id="整体逻辑"><a href="#整体逻辑" class="headerlink" title="整体逻辑"></a>整体逻辑</h1><p>用户 —&gt;request shortUrl generation —&gt; app</p>
-<p>app —&gt; base64 encoding + 从key generation DB中拿一个nonUse 的key —&gt; 得到shortUrl —&gt;DB</p>
-<p>DB —&gt; app –&gt;用户</p>
-<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="Cache"><a href="#Cache" class="headerlink" title="Cache"></a>Cache</h2><p>2-8原则</p>
-<p>用存储的20% 的url做cache内容，可以满足80% 的访问需求</p>
-<h2 id="load-balance"><a href="#load-balance" class="headerlink" title="load balance"></a>load balance</h2><p>均衡流量</p>
-<h2 id="过期后的url处理，key的处理"><a href="#过期后的url处理，key的处理" class="headerlink" title="过期后的url处理，key的处理"></a>过期后的url处理，key的处理</h2><h2 id="分布式存储，分片"><a href="#分布式存储，分片" class="headerlink" title="分布式存储，分片"></a>分布式存储，分片</h2><h2 id="对于社交功能的newFeed的推送"><a href="#对于社交功能的newFeed的推送" class="headerlink" title="对于社交功能的newFeed的推送"></a>对于社交功能的newFeed的推送</h2><p>pull / push / pull + push hybrid</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/question.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks/question.html" itemprop="url">
-                  一些其他小问题
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-29T16:20:02+08:00">
-                2021-11-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>1.<br>在 useEffect 中如果使用了某些变量，却没有在依赖项中指定，会发生什么呢？</p>
-<p>依赖那里没有传任何参数的话，会每次render都执行。<br>依赖项有传值但是，有部分依赖没有传，那么没有传的那部分，数据即使变化也不会执行副作用。</p>
-<p>对于这节课中显示的 Blog 文章的例子，我们在 useEffect 中使用了 setBlogContent 这样一个函数，本质上它也是一个局部变量，那么这个函数需要被作为依赖项吗？为什么？</p>
-<p>函数应该是不会变化的，所以不需要监听。</p>
-<p>2.<br>useState 其实也是能够在组件的多次渲染之间共享数据的，那么在 useRef 的计时器例子中，能否用 state 去保存 window.setInterval() 返回的 timer 呢？</p>
-<p>可以，只是没有 useRef 更优，因为在更新 state 值后会导致重新渲染，而 ref 值发生变化时，是不会触发组件的重新渲染的，这也是 useRef 区别于 useState 的地方。</p>
-<p>3.<br>componentWillUnmount 近似的实现：组件销毁和文章 id 变化时执行。那么在函数组件中如果要实现严格的 componentWillUnmount，也就是只在组件销毁时执行，应该如何实现？\</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">useEffect(() =&gt; &#123;</span><br><span class="line">  return () =&gt; &#123;</span><br><span class="line">    // 这里只会在组件销毁前（componentWillUnmount）执行一次</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, [])</span><br></pre></td></tr></table></figure>
-<p>4.<br>每次调用 useArticle 这个 Hook 的时候都会触发副作用去获取数据。<br>但是有时候，我们希望在有些组件自动获取，但有的组件中需要点击某个按钮才去获取数据，那么你会如何设计这个 Hook？（可能这道题有一点难度。）</p>
-<p>useArticle Hook 可以提供一个参数，用来标记本地调用是否默认触发副作用去获取数据；对于点击按钮才触发请求的功能，可以在 Hook 中将获取数据的方法 retrn 出去，供外部自由调用。</p>
-<ol start="5">
-<li>Hook 一般都是使用的 useState 保存了状态数据，也就意味着状态的范围限定在组件内部，组件销毁后，数据就没了。那么如果希望数据直接缓存到全局状态，应该如何做呢？</li>
-</ol>
-<p>可以借助 redux，配合 useContext 等 api ，将状态数据存储至全局中。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1129.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks/1129.html" itemprop="url">
-                  如何提升应用打开速度
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-29T16:20:02+08:00">
-                2021-11-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="使用-import-语句，定义按需加载的起始模块"><a href="#使用-import-语句，定义按需加载的起始模块" class="headerlink" title="使用 import 语句，定义按需加载的起始模块"></a>使用 import 语句，定义按需加载的起始模块</h1><p>对于这个需求，ECMA Script 标准有一个提案，专门用于动态加载模块，语法是 import(someModule)。<br>注意，这里的 import 和我们一般用于引入模块的静态声明方式不同，比如 import something from ‘somemodule’ 。<br>但这里的 import 是作为一个函数动态运行的，这个 import() 函数会返回一个 Promise。<br>这样，在模块加载成功后，就可以在 Promise 的 then 回调函数中去使用这个模块了。</p>
-<p>虽然这只是一个提案，并没有成为标准，但是 Webpack 等打包工具利用了这样的语法去定义代码的分包。</p>
-<p>也就是说，Webpack 实现了这样的语法。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">function ProfilePage() &#123;</span><br><span class="line">  // 定义一个 state 用于存放需要加载的组件</span><br><span class="line">  const [RealPage, setRealPage] = useState(null);</span><br><span class="line">  </span><br><span class="line">  // 根据路径动态加载真正的组件实现</span><br><span class="line">  import(&apos;./RealProfilePage&apos;).then((comp) =&gt; &#123;</span><br><span class="line">    setRealPage(Comp);</span><br><span class="line">  &#125;);</span><br><span class="line">  // 如果组件未加载则显示 Loading 状态</span><br><span class="line">  if (!RealPage) return &apos;Loading....&apos;;</span><br><span class="line">  </span><br><span class="line">  // 组件加载成功后则将其渲染到界面</span><br><span class="line">  return &lt;RealPage /&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>import() 这个语句完全是由 Webpack 进行处理的。</p>
-<p>按需加载的实现原理：Webpack 利用了动态 import 语句，自动实现了整个应用的拆包。<br>而在实际开发中，其实并不需要关心 Webpack 是如何做到的，<br>而只需要考虑：该在哪个位置使用 import 语句去定义动态加载的拆分点。</p>
-<p>总体需要采用的策略是：按业务模块为目标去做隔离，尽量在每个模块的起始页面去定义这个拆分点。</p>
-<p><b>react-loadable</b>，专门用于 React 组件的按需加载。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import Loadable from &quot;react-loadable&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 创建一个显示加载状态的组件</span><br><span class="line">function Loading(&#123; error &#125;) &#123;</span><br><span class="line">  return error ? &apos;Failed&apos; : &apos;Loading&apos;;</span><br><span class="line">&#125;</span><br><span class="line">// 创建加载器组件</span><br><span class="line">const HelloLazyLoad = Loadable(&#123;</span><br><span class="line">  loader: () =&gt; import(&quot;./RealHelloLazyLoad&quot;),</span><br><span class="line">  loading: Loading,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>可以看到 Loadable 这个高阶组件主要就是两个 API。</p>
-<p>loader：用于传入一个加载器回调，在组件渲染到页面时被执行。<br>在这个回调函数中，我们只需要直接使用 import 语句去加载需要的模块就可以了。</p>
-<p>loading：表示用于显示加载状态的组件。在模块加载完成之前，加载器就会渲染这个组件。<br>如果模块加载失败，那么 react-loadable 会将 errors 属性传递给 Loading 组件，方便你根据错误状态来显示不同的信息给用户。</p>
-<p>按需加载可以说是减少首屏加载时间最为有效的手段，它可以让用户在打开应用时，无需加载所有代码就能开始使用，从而提升用户体验。</p>
-<h1 id="使用-service-worker-缓存前端资源"><a href="#使用-service-worker-缓存前端资源" class="headerlink" title="使用 service worker 缓存前端资源"></a>使用 service worker 缓存前端资源</h1><p>和浏览器自动的资源缓存机制相比，Service Worker 加上 Cache Storage 这个缓存机制，具有更高的准确性和可靠性。</p>
-<p>因为它可以确保两点：<br>缓存永远不过期。你只要下载过一次，就永远不需要再重新下载，除非主动删除。<br>永远不会访问过期的资源。换句话说，如果发布了一个新版本，那么你可以通过版本化的一些机制，来确保用户访问到的一定是最新的资源。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1128.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks/1128.html" itemprop="url">
-                  重新认识路由
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-28T16:20:02+08:00">
-                2021-11-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>路由管理，就是让你的页面能够根据 URL 的变化进行页面的切换，这是前端应用中一个非常重要的机制</p>
-<p>路由的核心逻辑就是根据 URL 路径这个状态，来决定在主内容区域显示什么组件。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">// 自定义路由</span><br><span class="line">const MyRouter = (&#123; children &#125;) =&gt; &#123;</span><br><span class="line">  const routes = _.keyBy(</span><br><span class="line">    children.map((c) =&gt; c.props),</span><br><span class="line">    &quot;path&quot;,</span><br><span class="line">  );</span><br><span class="line">  const [hash] = useHash();</span><br><span class="line">  const Page = routes[hash.replace(&quot;#&quot;, &quot;&quot;)]?.component;</span><br><span class="line">  // 如果路由不存在就返回 Not found.</span><br><span class="line">  return Page ? &lt;Page /&gt; : &quot;Not found.&quot;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">const Route = () =&gt; null;</span><br><span class="line"></span><br><span class="line">// 应用</span><br><span class="line">function SamplePages &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;div className=&quot;sample-pages&quot;&gt;</span><br><span class="line">      &#123;/* 定义了侧边导航栏 */&#125;</span><br><span class="line">      &lt;div className=&quot;sider&quot;&gt;</span><br><span class="line">        &lt;a href=&quot;#page1&quot;&gt;Page 1&lt;/a&gt;</span><br><span class="line">        &lt;a href=&quot;#page2&quot;&gt;Page 2&lt;/a&gt;</span><br><span class="line">        &lt;a href=&quot;#page3&quot;&gt;Page 3&lt;/a&gt;</span><br><span class="line">        &lt;a href=&quot;#page4&quot;&gt;Page 4&lt;/a&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">      &lt;div className=&quot;exp-15-page-container&quot;&gt;</span><br><span class="line">        &#123;/* 定义路由配置 */&#125;</span><br><span class="line">        &lt;MyRouter&gt;</span><br><span class="line">          &lt;Route path=&quot;page1&quot; component=&#123;Page1&#125; /&gt;</span><br><span class="line">          &lt;Route path=&quot;page2&quot; component=&#123;Page2&#125; /&gt;</span><br><span class="line">          &lt;Route path=&quot;page3&quot; component=&#123;Page3&#125; /&gt;</span><br><span class="line">          &lt;Route path=&quot;page4&quot; component=&#123;Page4&#125; /&gt;</span><br><span class="line">        &lt;/MyRouter&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h1 id="使用React-Router"><a href="#使用React-Router" class="headerlink" title="使用React Router"></a>使用React Router</h1><h2 id="简单应用"><a href="#简单应用" class="headerlink" title="简单应用"></a>简单应用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">// 从 react-router-dom 引入路由框架提供的一些组件</span><br><span class="line">import &#123; BrowserRouter, Switch, Route, Link &#125; from &quot;react-router-dom&quot;;</span><br><span class="line">// 引入了两个课程示例页面</span><br><span class="line">import Counter from &quot;./01/Counter&quot;;</span><br><span class="line">import UserList from &quot;./01/UserList&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 使用数组定义了页面组件和导航的标题，从而方便下面的渲染逻辑</span><br><span class="line">const routes = [</span><br><span class="line">  [&quot;01 Counter&quot;, Counter],</span><br><span class="line">  [&quot;01 UserList&quot;, UserList],</span><br><span class="line">];</span><br><span class="line">function App() &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;BrowserRouter&gt;</span><br><span class="line">      &lt;div className=&quot;app&quot;&gt;</span><br><span class="line">        &lt;ul className=&quot;sider&quot;&gt;</span><br><span class="line">          &#123;routes.map(([label]) =&gt; (</span><br><span class="line">            &lt;li&gt;</span><br><span class="line">              &lt;Link to=&#123;`/$&#123;label.replace(&quot; &quot;, &quot;/&quot;)&#125;`&#125;&gt;&#123;label&#125;&lt;/Link&gt;</span><br><span class="line">            &lt;/li&gt;</span><br><span class="line">          ))&#125;</span><br><span class="line">        &lt;/ul&gt;</span><br><span class="line">        &lt;div id=&quot;pageContainer&quot; className=&quot;page-container&quot;&gt;</span><br><span class="line">          &lt;Switch&gt;</span><br><span class="line">            &#123;routes.map(([label, Component]) =&gt; (</span><br><span class="line">              &lt;Route key=&#123;label&#125; path=&#123;`/$&#123;label.replace(&quot; &quot;, &quot;/&quot;)&#125;`&#125;&gt;</span><br><span class="line">                &lt;Component /&gt;</span><br><span class="line">              &lt;/Route&gt;</span><br><span class="line">            ))&#125;</span><br><span class="line">            &#123;/* 定义一个默认的路由 */&#125;</span><br><span class="line">            &lt;Route path=&quot;/&quot; exact&gt;</span><br><span class="line">              &lt;h1&gt;Welcome!&lt;/h1&gt;</span><br><span class="line">            &lt;/Route&gt;</span><br><span class="line">            &lt;Route path=&quot;*&quot;&gt;Page not found.&lt;/Route&gt;</span><br><span class="line">          &lt;/Switch&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/BrowserRouter&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>相关组件作用</p>
-<p>BrowserRouter：标识用标准的 URL 路径去管理路由，比如 /my-page1 这样的标准 URL 路径。<br>除此之外，还有 MemoryRouter，表示通过内存管理路由；<br>HashRouter，标识通过 hash 管理路由。<br>自己实现的例子其实就是用的 hash 来实现路由。</p>
-<p>Link：定义一个导航链接，点击时可以无刷新地改变页面 URL，从而实现 React Router 控制的导航。</p>
-<p>Route: 定义一条路由规则，可以指定匹配的路径、要渲染的内容等等。</p>
-<p>Switch：在默认情况下，所有匹配的 Route 节点都会被展示，但是 Switch 标记可以保证只有第一个匹配到的路由才会被渲染。</p>
-<p><a href="https://v5.reactrouter.com/web/guides/quick-start" target="_blank" rel="noopener">react router</a></p>
-<h2 id="使用嵌套路由：实现二级导航页面"><a href="#使用嵌套路由：实现二级导航页面" class="headerlink" title="使用嵌套路由：实现二级导航页面"></a>使用嵌套路由：实现二级导航页面</h2><p>需要路由框架具备两个能力：</p>
-<p>能够模糊匹配。比如 /page1/general 、/page1/profile 这样两个路由，需要都能匹配到 Page1 这样一个组件。<br>然后 Page1 内部呢，再根据 general 和 profile 这两个子路由决定展示哪个具体的页面。</p>
-<p>Route 能够嵌套使用。在我们自定义 Route 的例子中，Route 组件仅用于收集路由定义的信息，不渲染任何内容。<br>如果需要路由能嵌套使用，那就意味着需要在 Route 下还能嵌套使用 Route。而这在 React Router 是提供支持的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import &#123; BrowserRouter, Route, Link &#125; from &quot;react-router-dom&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">const Page1 = () =&gt; &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;div className=&quot;exp-15-page1&quot;&gt;</span><br><span class="line">      &lt;div className=&quot;exp-15-page1-header&quot;&gt;</span><br><span class="line">        &lt;Link to=&quot;/page1/general&quot;&gt;General&lt;/Link&gt;</span><br><span class="line">        &lt;Link to=&quot;/page1/profile&quot;&gt;Profile&lt;/Link&gt;</span><br><span class="line">        &lt;Link to=&quot;/page1/settings&quot;&gt;Settings&lt;/Link&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">      &lt;div className=&quot;exp-15-page1-content&quot;&gt;</span><br><span class="line">        &lt;Route path=&quot;/page1/general&quot;&gt;General Page&lt;/Route&gt;</span><br><span class="line">        &lt;Route path=&quot;/page1/profile&quot;&gt;Profile Page&lt;/Route&gt;</span><br><span class="line">        &lt;Route path=&quot;/page1/settings&quot;&gt;Settings Page&lt;/Route&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;;</span><br><span class="line">const Page2 = () =&gt; &quot;Page 2&quot;;</span><br><span class="line">const Page3 = () =&gt; &quot;Page 3&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">function NestedRouting() &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;BrowserRouter&gt;</span><br><span class="line">      &lt;h1&gt;Nested Routing&lt;/h1&gt;</span><br><span class="line">      &lt;div className=&quot;exp-15-nested-routing&quot;&gt;</span><br><span class="line">        &lt;div className=&quot;exp-15-sider&quot;&gt;</span><br><span class="line">          &lt;Link to=&quot;/page1&quot;&gt;Page 1&lt;/Link&gt;</span><br><span class="line">          &lt;Link to=&quot;/page2&quot;&gt;Page 2&lt;/Link&gt;</span><br><span class="line">          &lt;Link to=&quot;/page3&quot;&gt;Page 3&lt;/Link&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">        &lt;div className=&quot;exp-15-page-container&quot;&gt;</span><br><span class="line">          &lt;Route path=&quot;/page1&quot;&gt;&lt;Page1 /&gt;&lt;/Route&gt;</span><br><span class="line">          &lt;Route path=&quot;/page2&quot;&gt;&lt;Page2 /&gt;&lt;/Route&gt;</span><br><span class="line">          &lt;Route path=&quot;/page3&quot;&gt;&lt;Page3 /&gt;&lt;/Route&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/BrowserRouter&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="在-URL-中保存页面状态（页面参数）"><a href="#在-URL-中保存页面状态（页面参数）" class="headerlink" title="在 URL 中保存页面状态（页面参数）"></a>在 URL 中保存页面状态（页面参数）</h2><p>在url携带页面相关信息，将页面的一些状态存放到 URL 中，<br>一方面可以提升用户体验，另一方面也可以简化页面之间的交互。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;Route path=&quot;/tabs-page/:activeTab&quot; component=&#123;TabsPage&#125; /&gt;</span><br><span class="line"></span><br><span class="line">import &#123; useCallback &#125; from &quot;react&quot;;</span><br><span class="line">import &#123; Tabs, Table &#125; from &quot;antd&quot;;</span><br><span class="line">import &#123; useHistory, useParams &#125; from &quot;react-router-dom&quot;;</span><br><span class="line">import data from &quot;../10/data&quot;;</span><br><span class="line">import &#123; useSearchParam &#125; from &quot;react-use&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">const &#123; TabPane &#125; = Tabs;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">export default () =&gt; &#123;</span><br><span class="line">  // 通过 React Router 的 API 获取 activeTab 这个参数信息</span><br><span class="line">  const &#123; activeTab = &quot;users&quot; &#125; = useParams();</span><br><span class="line">  // 通过查询字符串获取当前的页码信息</span><br><span class="line">  const page = parseInt(useSearchParam(&quot;page&quot;), 10) || 1;</span><br><span class="line">  </span><br><span class="line">  // 通过 React Router 提供的 history 对象来操作 URL</span><br><span class="line">  const history = useHistory();</span><br><span class="line">  const handleTabChange = useCallback(</span><br><span class="line">    (tab) =&gt; history.push(`/15/TabsPage/$&#123;tab&#125;`),</span><br><span class="line">    [history],</span><br><span class="line">  );</span><br><span class="line">  // 定义表格的翻页功能</span><br><span class="line">  const pagination = &#123;</span><br><span class="line">    pageSize: 3,</span><br><span class="line">    current: page,</span><br><span class="line">    onChange: (p) =&gt; &#123;</span><br><span class="line">      history.push(`/15/TabsPage/$&#123;activeTab&#125;?page=$&#123;p&#125;`);</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;;</span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;h1&gt;Tabs Page&lt;/h1&gt;</span><br><span class="line">      &lt;Tabs activeKey=&#123;activeTab&#125; onChange=&#123;handleTabChange&#125;&gt;</span><br><span class="line">        &lt;TabPane tab=&quot;Users&quot; key=&quot;users&quot;&gt;</span><br><span class="line">          &lt;Table</span><br><span class="line">            dataSource=&#123;data&#125;</span><br><span class="line">            columns=&#123;[</span><br><span class="line">              &#123; dataIndex: &quot;name&quot;, title: &quot;User Name&quot; &#125;,</span><br><span class="line">              &#123; dataIndex: &quot;city&quot;, title: &quot;City&quot; &#125;,</span><br><span class="line">            ]&#125;</span><br><span class="line">            pagination=&#123;pagination&#125;</span><br><span class="line">          /&gt;</span><br><span class="line">        &lt;/TabPane&gt;</span><br><span class="line">        &lt;TabPane tab=&quot;Jobs&quot; key=&quot;jobs&quot;&gt;</span><br><span class="line">          &lt;Table</span><br><span class="line">            dataSource=&#123;data&#125;</span><br><span class="line">            columns=&#123;[&#123; dataIndex: &quot;job&quot;, title: &quot;Job Title&quot; &#125;]&#125;</span><br><span class="line">            pagination=&#123;pagination&#125;</span><br><span class="line">          /&gt;</span><br><span class="line">        &lt;/TabPane&gt;</span><br><span class="line">      &lt;/Tabs&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>注意</p>
-<p>这里遵循了唯一数据源的原则，避免定义中间状态去存储 tab 和页码的信息，而是直接去操作 URL，这样可以让代码逻辑更加清晰和直观。</p>
-<h2 id="路由层面实现权限控制"><a href="#路由层面实现权限控制" class="headerlink" title="路由层面实现权限控制"></a>路由层面实现权限控制</h2><p>利用前端路由的动态特性。路由是通过 JSX 以声明式的方式去定义的，这就意味着路由的定义规则是可以根据条件进行变化的，也就是所谓的动态路由。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">import &#123; useState &#125; from &quot;react&quot;;</span><br><span class="line">import &#123; Button &#125; from &quot;antd&quot;;</span><br><span class="line">import &#123; Route, Link &#125; from &quot;react-router-dom&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 定义了两个示例页面组件</span><br><span class="line">const Page1 = () =&gt; &quot;Page 1&quot;;</span><br><span class="line">const Page2 = () =&gt; &quot;Page 2&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 定义了一个组件用户展示未登录状态</span><br><span class="line">const UnauthedPage = () =&gt; (</span><br><span class="line">  &lt;span style=&#123;&#123; color: &quot;red&quot; &#125;&#125;&gt;Unauthorized, please log in first.&lt;/span&gt;</span><br><span class="line">);</span><br><span class="line">export default () =&gt; &#123;</span><br><span class="line">  // 模拟用户是否登录的状态，通过一个按钮进行切换</span><br><span class="line">  const [loggedIn, setLoggedIn] = useState(false);</span><br><span class="line">  </span><br><span class="line">  // 定义了两套路由，一套用于登录后，一套用于未登录状态</span><br><span class="line">  const routes = loggedIn</span><br><span class="line">    ? [</span><br><span class="line">        &#123;</span><br><span class="line">          path: &quot;/15/RouterAuth&quot;,</span><br><span class="line">          component: Page1,</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          path: &quot;/15/RouterAuth/page1&quot;,</span><br><span class="line">          component: Page1,</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          path: &quot;/15/RouterAuth/page2&quot;,</span><br><span class="line">          component: Page2,</span><br><span class="line">        &#125;,</span><br><span class="line">      ]</span><br><span class="line">      // 如果未登录，那么对于所有 /15/RouterAuth 开头的路径，显示未授权页面</span><br><span class="line">    : [&#123; path: &quot;/15/RouterAuth&quot;, component: UnauthedPage &#125;];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;h1&gt;Router Auth&lt;/h1&gt;</span><br><span class="line">      &lt;Button</span><br><span class="line">        type=&#123;loggedIn ? &quot;primary&quot; : &quot;&quot;&#125;</span><br><span class="line">        onClick=&#123;() =&gt; setLoggedIn((v) =&gt; !v)&#125;</span><br><span class="line">      &gt;</span><br><span class="line">        &#123;loggedIn ? &quot;Log Out&quot; : &quot;Log In&quot;&#125;</span><br><span class="line">      &lt;/Button&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">      &lt;div className=&quot;exp-15-router-auth&quot;&gt;</span><br><span class="line">        &lt;div className=&quot;exp-15-sider&quot;&gt;</span><br><span class="line">          &lt;Link to=&quot;/15/RouterAuth/page1&quot;&gt;Page 1&lt;/Link&gt;</span><br><span class="line">          &lt;Link to=&quot;/15/RouterAuth/page2&quot;&gt;Page 2&lt;/Link&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">        &lt;div className=&quot;exp-15-page-container&quot;&gt;</span><br><span class="line">          &#123;/* */&#125;</span><br><span class="line">          &#123;routes.map((r) =&gt; (</span><br><span class="line">            &lt;Route path=&#123;r.path&#125; component=&#123;r.component&#125; /&gt;</span><br><span class="line">          ))&#125;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br></pre></td></tr></table></figure>
-<p>代码中核心的机制就在于我们根据登录状态，创建了不同的路由规则，这样就能在源头上对权限进行集中控制，避免用户未经授权就访问某些受保护的页面。</p>
-<p>同时呢，因为在相同的 URL 下进行了信息提示，那么也就更容易实现用户登录后还能返回原页面的功能。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1127.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks/1127.html" itemprop="url">
-                  Hooks 在forms上的使用
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-27T16:20:02+08:00">
-                2021-11-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>应用思想就是在这个 Hook 去维护整个表单的状态，并提供根据名字去取值和设值的方法，从而方便表单在组件中的使用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line">// 包含验证功能validators 的hooks, 处理表单状态管理</span><br><span class="line">const useForm = (initialValues = &#123;&#125;, validators) =&gt; &#123;</span><br><span class="line">  const [values, setValues] = useState(initialValues);</span><br><span class="line">  // 定义了 errors 状态</span><br><span class="line">  const [errors, setErrors] = useState(&#123;&#125;);</span><br><span class="line"></span><br><span class="line">  const setFieldValue = useCallback(</span><br><span class="line">    (name, value) =&gt; &#123;</span><br><span class="line">      setValues((values) =&gt; (&#123;</span><br><span class="line">        ...values,</span><br><span class="line">        [name]: value,</span><br><span class="line">      &#125;));</span><br><span class="line"></span><br><span class="line">      // 如果存在验证函数，则调用验证用户输入</span><br><span class="line">      if (validators[name]) &#123;</span><br><span class="line">        const errMsg = validators[name](value);</span><br><span class="line">        setErrors((errors) =&gt; (&#123;</span><br><span class="line">          ...errors,</span><br><span class="line">          // 如果返回错误信息，则将其设置到 errors 状态，否则清空错误状态</span><br><span class="line">          [name]: errMsg || null,</span><br><span class="line">        &#125;));</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    [validators],</span><br><span class="line">  );</span><br><span class="line">  // 将 errors 状态也返回给调用者</span><br><span class="line">  return &#123; values, errors, setFieldValue &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 应用</span><br><span class="line"></span><br><span class="line">import &#123; useCallback &#125; from &quot;react&quot;;</span><br><span class="line">import useForm from &apos;./useForm&apos;;</span><br><span class="line"></span><br><span class="line">export default () =&gt; &#123;</span><br><span class="line">  const validators = useMemo(() =&gt; &#123;</span><br><span class="line">    return &#123;</span><br><span class="line">      name: (value) =&gt; &#123;</span><br><span class="line">        // 要求 name 的长度不得小于 2</span><br><span class="line">        if (value.length &lt; 2) return &quot;Name length should be no less than 2.&quot;;</span><br><span class="line">        return null;</span><br><span class="line">      &#125;,</span><br><span class="line">      email: (value) =&gt; &#123;</span><br><span class="line">        // 简单的实现一个 email 验证逻辑：必须包含 @ 符号。</span><br><span class="line">        if (!value.includes(&quot;@&quot;)) return &quot;Invalid email address&quot;;</span><br><span class="line">        return null;</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;, []);</span><br><span class="line">  // 使用 useForm 得到表单的状态管理逻辑</span><br><span class="line">  const &#123; values, errors, setFieldValue &#125; = useForm(&#123;&#125;, validators);</span><br><span class="line">  // 处理表单的提交事件</span><br><span class="line">  const handleSubmit = useCallback(</span><br><span class="line">    (evt) =&gt; &#123;</span><br><span class="line">      // 使用 preventDefault() 防止页面被刷新</span><br><span class="line">      evt.preventDefault();</span><br><span class="line">      console.log(values);</span><br><span class="line">    &#125;,</span><br><span class="line">    [values],</span><br><span class="line">  );</span><br><span class="line">  return (</span><br><span class="line">    &lt;form onSubmit=&#123;handleSubmit&#125;&gt;</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;label&gt;Name: &lt;/label&gt;</span><br><span class="line">        &lt;input</span><br><span class="line">          value=&#123;values.name || null&#125;</span><br><span class="line">          onChange=&#123;(evt) =&gt; setFieldValue(&quot;name&quot;, evt.target.value)&#125;</span><br><span class="line">        /&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;label&gt;Email:&lt;/label&gt;</span><br><span class="line">        &lt;input</span><br><span class="line">          value=&#123;values.email || null&#125;</span><br><span class="line">          onChange=&#123;(evt) =&gt; setFieldValue(&quot;email&quot;, evt.target.value)&#125;</span><br><span class="line">        /&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">      &lt;button type=&quot;submit&quot;&gt;Submit&lt;/button&gt;</span><br><span class="line">    &lt;/form&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>把表单的状态管理单独提取出来，成为一个可重用的 Hook。<br>这样在表单的实现组件中，就只需要更多地去关心 UI 的渲染，而无需关心状态是如何存储和管理的，从而方便表单组件的开发。</p>
-<p>Form 最为核心的机制就是我们将表单元素的所有状态提取出来，<br>这样表单就可以分为状态逻辑和 UI 展现逻辑，从而实现数据层和表现层的分离。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/24/">24</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1853,7 +2113,7 @@ message.postDate = new Date()
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">240</span>
+              <span class="site-state-item-count">245</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1917,7 +2177,7 @@ message.postDate = new Date()
         <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2024</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

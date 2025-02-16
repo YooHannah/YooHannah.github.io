@@ -1,0 +1,678 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="nodejs,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="背景前端包括node层和纯前端层，需要请求第三方http接口在页面实现chatGTP的打字机效果 方案 在node层调用第三方http接口，避免跨域问题 由于第三方接口为流式接口，从node层发出请求再转发到前端也需要进行流式通信 前端层对返回的流式数据进行处理后更新数据呈现在页面上  实现 前端层使用fetch进行请求，使用ReadableStream进行流式处理 node层使用axios进行请">
+<meta name="keywords" content="nodejs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一个实现流通信的案例">
+<meta property="og:url" content="http://yoohannah.github.io/post/nodejs/streamExamp.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="背景前端包括node层和纯前端层，需要请求第三方http接口在页面实现chatGTP的打字机效果 方案 在node层调用第三方http接口，避免跨域问题 由于第三方接口为流式接口，从node层发出请求再转发到前端也需要进行流式通信 前端层对返回的流式数据进行处理后更新数据呈现在页面上  实现 前端层使用fetch进行请求，使用ReadableStream进行流式处理 node层使用axios进行请">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2025-02-07T00:07:52.261Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一个实现流通信的案例">
+<meta name="twitter:description" content="背景前端包括node层和纯前端层，需要请求第三方http接口在页面实现chatGTP的打字机效果 方案 在node层调用第三方http接口，避免跨域问题 由于第三方接口为流式接口，从node层发出请求再转发到前端也需要进行流式通信 前端层对返回的流式数据进行处理后更新数据呈现在页面上  实现 前端层使用fetch进行请求，使用ReadableStream进行流式处理 node层使用axios进行请">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/nodejs/streamExamp.html">
+
+
+
+
+
+  <title> 一个实现流通信的案例 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/streamExamp.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                一个实现流通信的案例
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-26T16:17:37+08:00">
+                2025-01-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>前端包括node层和纯前端层，需要请求第三方http接口在页面实现chatGTP的打字机效果</p>
+<h1 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h1><ol>
+<li>在node层调用第三方http接口，避免跨域问题</li>
+<li>由于第三方接口为流式接口，从node层发出请求再转发到前端也需要进行流式通信</li>
+<li>前端层对返回的流式数据进行处理后更新数据呈现在页面上</li>
+</ol>
+<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><ol>
+<li>前端层使用fetch进行请求，使用ReadableStream进行流式处理</li>
+<li>node层使用axios进行请求，使用stream进行流式处理  </li>
+</ol>
+<h2 id="node层实现"><a href="#node层实现" class="headerlink" title="node层实现"></a>node层实现</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">'axios'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; PassThrough &#125; <span class="keyword">from</span> <span class="string">'stream'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">faqStream</span>(<span class="params">body?: any</span>): <span class="title">Promise</span>&lt;<span class="title">any</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> ctx = useContext&lt;HttpContext&gt;();</span><br><span class="line">  ctx.set(&#123;</span><br><span class="line">    Connection: <span class="string">'keep-alive'</span>,</span><br><span class="line">    <span class="string">'Cache-Control'</span>: <span class="string">'no-cache'</span>,</span><br><span class="line">    <span class="string">'Content-Type'</span>: <span class="string">'application/octet-stream'</span> <span class="comment">// 表示返回数据是个 stream</span></span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">const</span> stream = <span class="keyword">new</span> PassThrough();</span><br><span class="line">  ctx.body = stream;</span><br><span class="line">  <span class="comment">// 发起第三方请求</span></span><br><span class="line">  <span class="keyword">const</span> headers = &#123;</span><br><span class="line">    <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span></span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">const</span> url = <span class="string">'http://vvvv.xxxx.net/aiBot/oncall_response_stream'</span>;</span><br><span class="line">  axios</span><br><span class="line">    .post(url, ctx.request.body, &#123; <span class="attr">headers</span>: headers, <span class="attr">responseType</span>: <span class="string">'stream'</span> &#125;)</span><br><span class="line">    .then(<span class="function">(<span class="params">response</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (response.status !== <span class="number">200</span>) &#123;</span><br><span class="line">        <span class="built_in">console</span>.error(<span class="string">'Error status:'</span>, response.status);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      response.data.on(<span class="string">'data'</span>, (chunk) =&gt; &#123;</span><br><span class="line">        chunk</span><br><span class="line">          .toString()</span><br><span class="line">          .split(<span class="string">'\n\n'</span>)</span><br><span class="line">          .filter(<span class="function">(<span class="params">item</span>) =&gt;</span> item)</span><br><span class="line">          .forEach(<span class="function">(<span class="params">chunkStr</span>) =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">let</span> chunkJson = &#123;&#125;;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">              chunkJson = <span class="built_in">JSON</span>.parse(chunkStr);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">              <span class="built_in">console</span>.error(<span class="string">'Error parse:'</span>, error);</span><br><span class="line">              <span class="built_in">console</span>.error(<span class="string">'Error chunkStr:'</span>, chunkStr);</span><br><span class="line">              <span class="built_in">console</span>.error(<span class="string">'Error origin chunk:'</span>, chunk.toString());</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (chunkJson?.data?.chunk) &#123;</span><br><span class="line">              <span class="comment">// 拿到有效数据后，传给前端</span></span><br><span class="line">              stream.write(chunkJson.data.chunk);</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;);</span><br><span class="line">      &#125;);</span><br><span class="line">      response.data.on(<span class="string">'end'</span>, () =&gt; &#123;</span><br><span class="line">        <span class="comment">// 第三方请求流结束后，关闭向前端写的流</span></span><br><span class="line">        stream.end();</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;)</span><br><span class="line">    .catch(<span class="function">(<span class="params">error</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.error(<span class="string">'Error all:'</span>, error);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="前端层实现"><a href="#前端层实现" class="headerlink" title="前端层实现"></a>前端层实现</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">  <span class="keyword">import</span> &#123; useState, useCallback, useRef &#125; <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> [listLoading, setListLoading] = useState(<span class="number">0</span>);</span><br><span class="line">  <span class="keyword">const</span> [hasReport, setHasReport] = useState(<span class="number">-1</span>);</span><br><span class="line">  <span class="keyword">const</span> [AiRemoteData, setAIRemoteData] = useState(<span class="string">''</span>);</span><br><span class="line">  <span class="keyword">const</span> AiRequestController = useRef();</span><br><span class="line">  <span class="keyword">const</span> &#123; addThrottle &#125; = useThrottleFunc();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 拉取Ai 回答</span></span><br><span class="line">  <span class="keyword">const</span> getAIRemoteData = useCallback(</span><br><span class="line">    addThrottle(</span><br><span class="line">      <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">        <span class="keyword">const</span> &#123; keyWord &#125; = query;</span><br><span class="line">        <span class="keyword">if</span> (!keyWord) &#123;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          setListLoading(<span class="function">(<span class="params">val</span>) =&gt;</span> val + <span class="number">1</span>);</span><br><span class="line">          <span class="keyword">if</span> (AiRequestController.current) &#123;</span><br><span class="line">            <span class="comment">// 如果当前请求存在，则取消当前请求</span></span><br><span class="line">            AiRequestController.current.abort();</span><br><span class="line">          &#125;</span><br><span class="line">          AiRequestController.current = <span class="keyword">new</span> AbortController();</span><br><span class="line">          <span class="keyword">const</span> jwtToken = <span class="keyword">await</span> getJwt();</span><br><span class="line">          <span class="comment">// 1. 创建一个新的请求</span></span><br><span class="line">          <span class="keyword">const</span> response = <span class="keyword">await</span> fetch(</span><br><span class="line">            <span class="string">`https://hahahaha.net/api/diagnosisBasic/faqStream`</span>,</span><br><span class="line">            &#123;</span><br><span class="line">              method: <span class="string">'POST'</span>,</span><br><span class="line">              body: <span class="built_in">JSON</span>.stringify(&#123;</span><br><span class="line">                user_id: userInfo.id,</span><br><span class="line">                query: keyWord,</span><br><span class="line">                class: ''</span><br><span class="line">              &#125;),</span><br><span class="line">              headers: &#123;</span><br><span class="line">                <span class="string">'x-jwt-token'</span>: jwtToken</span><br><span class="line">              &#125;,</span><br><span class="line">              signal: AiRequestController.current.signal</span><br><span class="line">            &#125;</span><br><span class="line">          );</span><br><span class="line">          <span class="keyword">const</span> reader = response.body.getReader(); <span class="comment">// 获取reader</span></span><br><span class="line">          <span class="keyword">const</span> decoder = <span class="keyword">new</span> TextDecoder(); <span class="comment">// 文本解码器</span></span><br><span class="line">          <span class="keyword">let</span> answer = <span class="string">''</span>; <span class="comment">// 存储答案</span></span><br><span class="line">          <span class="comment">// 2. 循环取值</span></span><br><span class="line">          <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">            <span class="comment">// 取值, value 是后端返回流信息, done 表示后端结束流的输出</span></span><br><span class="line">            <span class="keyword">const</span> &#123; value, done &#125; = <span class="keyword">await</span> reader.read();</span><br><span class="line">            <span class="keyword">if</span> (done) &#123;</span><br><span class="line">              <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 对 value 进行解码</span></span><br><span class="line">            <span class="keyword">const</span> val = decoder.decode(value);</span><br><span class="line">            <span class="keyword">if</span> (!answer) &#123;</span><br><span class="line">              setListLoading(<span class="function">(<span class="params">count</span>) =&gt;</span> count - <span class="number">1</span>);</span><br><span class="line">              setHasReport(<span class="number">-1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            answer += val;</span><br><span class="line">            setAIRemoteData(answer);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> &#123;</span><br><span class="line">          setAIRemoteData(<span class="string">''</span>);</span><br><span class="line">          <span class="built_in">console</span>.error(<span class="string">'数据解析出错'</span>);</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">          setListLoading(<span class="function">(<span class="params">val</span>) =&gt;</span> val - <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="number">500</span>,</span><br><span class="line">      <span class="string">'getAIRemoteData'</span></span><br><span class="line">    ),</span><br><span class="line">    [query.keyWord]</span><br><span class="line">  );</span><br></pre></td></tr></table></figure>
+<h3 id="番外-全局节流函数"><a href="#番外-全局节流函数" class="headerlink" title="番外: 全局节流函数"></a>番外: 全局节流函数</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> throttleTimerList: &#123; [key: string]: Timeout | <span class="literal">null</span> &#125; = &#123;&#125;;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> useThrottleFunc = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> timer = useRef();</span><br><span class="line">  <span class="keyword">const</span> addThrottle = (</span><br><span class="line">    fn: <span class="function">(<span class="params">params?: LooseObject | <span class="literal">undefined</span></span>) =&gt;</span> <span class="keyword">void</span>,</span><br><span class="line">    waitTime?: number,</span><br><span class="line">    timerKey?: string</span><br><span class="line">  ) =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> timerFlag = timerKey || <span class="string">'getRemoteData'</span>;</span><br><span class="line">    throttleTimerList[timerFlag] = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="function">(<span class="params">params?: LooseObject | <span class="literal">undefined</span></span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (throttleTimerList[timerFlag]) &#123;</span><br><span class="line">        clearTimeout(throttleTimerList[timerFlag]);</span><br><span class="line">      &#125;</span><br><span class="line">      throttleTimerList[timerFlag] = setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        fn(params);</span><br><span class="line">        clearTimeout(throttleTimerList[timerFlag]);</span><br><span class="line">        throttleTimerList[timerFlag] = <span class="literal">null</span>;</span><br><span class="line">      &#125;, waitTime || <span class="number">500</span>);</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  useEffect(</span><br><span class="line">    () =&gt; <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">Object</span>.keys(throttleTimerList).forEach(<span class="function">(<span class="params">key</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (throttleTimerList[key]) &#123;</span><br><span class="line">          clearTimeout(throttleTimerList[key]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">delete</span> throttleTimerList[key];</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;,</span><br><span class="line">    []</span><br><span class="line">  );</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    addThrottle,</span><br><span class="line">    throttleTimer: timer</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h1 id="相关知识链接"><a href="#相关知识链接" class="headerlink" title="相关知识链接"></a>相关知识链接</h1><p><a href="https://nodejs.cn/api/webstreams.html#%E7%A4%BA%E4%BE%8B-readablestream" target="_blank" rel="noopener">NODE-Stream</a><br><a href="https://nodejs.cn/api/webstreams.html#%E7%A4%BA%E4%BE%8B-readablestream" target="_blank" rel="noopener">NODE-ReadableStream</a><br><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/ReadableStream" target="_blank" rel="noopener">ReadableStream</a><br><a href="https://juejin.cn/post/7211401380770349115" target="_blank" rel="noopener">application/octet-stream vs text/event-stream</a><br><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/AbortController" target="_blank" rel="noopener">AbortController</a><br><a href="https://juejin.cn/post/7329884027186724901" target="_blank" rel="noopener">fetch获取流式数据相关问题</a><br><a href="https://juejin.cn/post/7212270321622286394#heading-7" target="_blank" rel="noopener">在 Koa 中基于 gpt-3.5 模型实现一个最基本的流式问答 DEMO</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nodejs/" rel="tag"># nodejs</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/deepLearning/NeuralNetwork.html" rel="next" title="神经网络的相关推导公式">
+                <i class="fa fa-chevron-left"></i> 神经网络的相关推导公式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/deepLearning/OptNeuralNetwork.html" rel="prev" title="一些优化深度神经网络【训练过程】的方法">
+                一些优化深度神经网络【训练过程】的方法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">245</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#方案"><span class="nav-number">2.</span> <span class="nav-text">方案</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现"><span class="nav-number">3.</span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#node层实现"><span class="nav-number">3.1.</span> <span class="nav-text">node层实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前端层实现"><span class="nav-number">3.2.</span> <span class="nav-text">前端层实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#番外-全局节流函数"><span class="nav-number">3.2.1.</span> <span class="nav-text">番外: 全局节流函数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#相关知识链接"><span class="nav-number">4.</span> <span class="nav-text">相关知识链接</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

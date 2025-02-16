@@ -1,0 +1,760 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="deepLearning,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="数据集的使用一般将数据集分成三部分，训练集（training set），交叉验证集（cross validation set / dev set），测试集（test set）训练集用于训练模型交叉验证集用于调整超参数，或者比较不同模型算法性能的优劣测试集用于对最终模型的进行无偏评估(是否存在欠拟合或过拟合) 如果不需要进行最终的无偏评估，那么可以将交叉验证集和测试集合并为一个数据集，进行模型训练和">
+<meta name="keywords" content="deepLearning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一些优化深度神经网络【训练过程】的方法">
+<meta property="og:url" content="http://yoohannah.github.io/post/deepLearning/OptNeuralNetwork.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="数据集的使用一般将数据集分成三部分，训练集（training set），交叉验证集（cross validation set / dev set），测试集（test set）训练集用于训练模型交叉验证集用于调整超参数，或者比较不同模型算法性能的优劣测试集用于对最终模型的进行无偏评估(是否存在欠拟合或过拟合) 如果不需要进行最终的无偏评估，那么可以将交叉验证集和测试集合并为一个数据集，进行模型训练和">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/42.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/43.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/44.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/119.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/45.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/46.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/48.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/47.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/60.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/61.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/49.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/50.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/51.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/52.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/53.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/54.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/55.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/56.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/57.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/58.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/59.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/62.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/63.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/64.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/89.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/90.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/91.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/92.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/93.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/94.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/95.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/96.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/97.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/98.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/99.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/100.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/101.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/102.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/103.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/104.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/105.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/106.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/107.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/108.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/109.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/110.png">
+<meta property="og:updated_time" content="2025-02-08T00:34:37.076Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一些优化深度神经网络【训练过程】的方法">
+<meta name="twitter:description" content="数据集的使用一般将数据集分成三部分，训练集（training set），交叉验证集（cross validation set / dev set），测试集（test set）训练集用于训练模型交叉验证集用于调整超参数，或者比较不同模型算法性能的优劣测试集用于对最终模型的进行无偏评估(是否存在欠拟合或过拟合) 如果不需要进行最终的无偏评估，那么可以将交叉验证集和测试集合并为一个数据集，进行模型训练和">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/deepLearning/42.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/deepLearning/OptNeuralNetwork.html">
+
+
+
+
+
+  <title> 一些优化深度神经网络【训练过程】的方法 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/deepLearning/OptNeuralNetwork.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                一些优化深度神经网络【训练过程】的方法
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-29T10:48:37+08:00">
+                2025-01-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="数据集的使用"><a href="#数据集的使用" class="headerlink" title="数据集的使用"></a>数据集的使用</h1><p>一般将数据集分成三部分，训练集（training set），交叉验证集（cross validation set / dev set），测试集（test set）<br>训练集用于训练模型<br>交叉验证集用于调整超参数，或者比较不同模型算法性能的优劣<br>测试集用于对最终模型的进行无偏评估(是否存在欠拟合或过拟合)</p>
+<p>如果不需要进行最终的无偏评估，那么可以将交叉验证集和测试集合并为一个数据集，进行模型训练和评估<br>将测试集数据合并到交叉验证集中，数据集最终只会剩下训练集和测试验证集</p>
+<p>另外需要注意进行训练的数据集和验证测试的数据集要来自同一个分布，否则会影响训练速度<br>比如训练集图片来自网络，分辨率高，清晰度高，但是测试集图片来自手机，分辨率低，清晰度低<br>那么训练出来的模型在测试集上的表现可能会很差</p>
+<p><img src="/image/deepLearning/42.png" alt><br><img src="/image/deepLearning/43.png" alt></p>
+<h1 id="使用偏差-bias-和方差-variance-对模型进行评估"><a href="#使用偏差-bias-和方差-variance-对模型进行评估" class="headerlink" title="使用偏差(bias)和方差(variance)对模型进行评估"></a>使用偏差(bias)和方差(variance)对模型进行评估</h1><p>高偏差一般欠拟合<br>高方差一般过拟合<br>先来复习一下偏差和方差的定义<br><a href="https://yoohannah.github.io/post/machineLearning/overfitting.html">解决过拟合问题</a><br><a href="https://yoohannah.github.io/post/machineLearning/biasVariance.html">高偏差和高方差</a><br><img src="/image/deepLearning/44.png" alt><br><img src="/image/LLM/119.png" alt></p>
+<h2 id="正则化处理-Regularization-过拟合问题"><a href="#正则化处理-Regularization-过拟合问题" class="headerlink" title="正则化处理(Regularization)过拟合问题"></a>正则化处理(Regularization)过拟合问题</h2><p>通过给成本函数增加正则化项，进行权重衰减，来降低模型的方差，从而避免过拟合的出现<br><img src="/image/deepLearning/45.png" alt><br><img src="/image/deepLearning/46.png" alt><br><img src="/image/deepLearning/48.png" alt><br><img src="/image/deepLearning/47.png" alt></p>
+<h2 id="L2-具体实现"><a href="#L2-具体实现" class="headerlink" title="L2 具体实现"></a>L2 具体实现</h2><p><img src="/image/deepLearning/60.png" alt><br><img src="/image/deepLearning/61.png" alt></p>
+<h2 id="Dropout-正则化"><a href="#Dropout-正则化" class="headerlink" title="Dropout 正则化"></a>Dropout 正则化</h2><p>dropout 方法 实现原理就是在每层计算前前，生成随机蒙层，按keep_prob比例随机干掉一些节点，再参与运算，计算后除以keep_prob，保证最终输出的结果不变<br>在反向传播时，使用向前传播的蒙层对梯度进行相应的处理，保证该轮的参数矩阵相同，所以要对向前传播的蒙层进行缓存处理方便使用<br><img src="/image/deepLearning/49.png" alt><br><img src="/image/deepLearning/50.png" alt></p>
+<p>可以看到相比L2 类似于对w 进行缩小处理，dropout 方法类似于对w 进行放大处理, 因为干掉一些节点相当于随机取消某些w 的影响，最后除以keep_prob 相当于对w 进行放大处理</p>
+<h2 id="其它正则化方法"><a href="#其它正则化方法" class="headerlink" title="其它正则化方法"></a>其它正则化方法</h2><p>除了上面提到给cost函数添加L1,L2正则化项，还可以通过dropout 方法，数据增强，提早结束训练等正则化方法来避免过拟合的出现<br><img src="/image/deepLearning/51.png" alt><br><img src="/image/deepLearning/52.png" alt></p>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/Regularization/index.py" target="_blank" rel="noopener">L2和Dropout实验</a></p>
+<h1 id="归一化训练集"><a href="#归一化训练集" class="headerlink" title="归一化训练集"></a>归一化训练集</h1><p>通过对训练数据集进行归一化处理，加快梯度下降，提高训练速度<br>复习一下<a href="https://yoohannah.github.io/post/machineLearning/lineregression.html">特征放缩</a><br><img src="/image/deepLearning/53.png" alt><br><img src="/image/deepLearning/54.png" alt></p>
+<h1 id="初始化参数"><a href="#初始化参数" class="headerlink" title="初始化参数"></a>初始化参数</h1><p>由于神经网络的多层的计算过程中，权重是乘积关系，如果各层初始化参数一开始大于1 或者小于1，整个乘积下来，就导致y^ 无限大或者无限小，从而导致梯度爆炸或者梯度消失<br><img src="/image/deepLearning/55.png" alt><br>解决<br><img src="/image/deepLearning/56.png" alt><br><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/Initialization/index.py" target="_blank" rel="noopener">不同初始化参数方式</a></p>
+<h1 id="梯度校验"><a href="#梯度校验" class="headerlink" title="梯度校验"></a>梯度校验</h1><p>双边误差会比单边误差更准确<br><img src="/image/deepLearning/57.png" alt><br>梯度校验的过程就是拿到一轮训练的参数和梯度，进行摊平处理，字典变 n * 1 二维数组，每一层的每一个w 是一个数组<br>对每一层每一个参数修改一个很小的值，一次加，一次减，重新计算cost 值，拿到两个cost 值后进行双边误差计算，<br>整个参数都计算完后，与梯度进行比较，详见公式<br>如果比较值相差不大，说明梯度计算没有问题<br><img src="/image/deepLearning/58.png" alt><br><img src="/image/deepLearning/59.png" alt></p>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p><img src="/image/deepLearning/62.png" alt><br><img src="/image/deepLearning/63.png" alt><br><img src="/image/deepLearning/64.png" alt><br><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/GradientChecking/index.py" target="_blank" rel="noopener">具体代码</a></p>
+<h1 id="分析解决问题"><a href="#分析解决问题" class="headerlink" title="分析解决问题"></a>分析解决问题</h1><p>之前提到的一些优化模型的方法<br><img src="/image/deepLearning/89.png" alt></p>
+<h2 id="正交化"><a href="#正交化" class="headerlink" title="正交化"></a>正交化</h2><p>是一种解决问题的思想，简单来说就是通过将问题分解为相互独立的子问题，从而使得每个子问题可以独立解决，减少相互干扰<br>比如下面的训练过程，每一个阶段有每一个阶段要完成的目标，每一个阶段的实现目标过程会遇到不同问题，针对不同阶段不同问题采取相应解决办法<br>每个子目标相互独立，互不干扰一个阶段的目标完成后，再进行下一个阶段的目标<br><img src="/image/deepLearning/90.png" alt><br>就相当于把一个大问题分解为多个小问题，每个小问题相互独立，互不干扰，<br>针对不同问题，采取相应的解决办法，最终完整整个模型的训练</p>
+<h2 id="建立单一数字评估指标"><a href="#建立单一数字评估指标" class="headerlink" title="建立单一数字评估指标"></a>建立单一数字评估指标</h2><p>如果需要对多个指标进行优化，参考上面正交化思想，独立解决每个指标的优化问题，即建立单一数字评估指标<br>模型评估阶段会用到多个指标，比如准确率，召回率，F1 值，<br>但是这些指标之间存在相互影响，比如准确率高，召回率低，F1 值低<br>所以需要建立单一数字评估指标，比如F1 值，通过F1<br>此时F1 值就是【优化指标】(需要继续提高的指标)，其他指标就是【满足指标】(达到一定阈值即可)<br>之后模型训练相当于就朝着优化项指标进行训练，有的放矢<br>或者通过其他指标综合计算出唯一的指标值来评估模型优劣<br><a href="https://yoohannah.github.io/post/machineLearning/MachineLearningDevelopmentProcess.html">相关复习一</a><br><a href="https://yoohannah.github.io/post/machineLearning/abnormalTest.html">相关复习二</a><br><img src="/image/deepLearning/91.png" alt></p>
+<h2 id="混洗数据保证数据分布均匀"><a href="#混洗数据保证数据分布均匀" class="headerlink" title="混洗数据保证数据分布均匀"></a>混洗数据保证数据分布均匀</h2><p>避免dev和test集数据分布差异过大，在训练过程中，会导致模型训练效果不佳<br>在训练前，把数据进行混洗，打乱数据分布，保证dev和test数据分布差异不大</p>
+<blockquote>
+<p>Choose a dev set and test set to reflect data you expect to get in the future and consider important to do well on.</p>
+</blockquote>
+<h3 id="数据集大小建议"><a href="#数据集大小建议" class="headerlink" title="数据集大小建议"></a>数据集大小建议</h3><blockquote>
+<p>Set your dev set to be big enough to detect differences in algorithm/models you’re trying out.<br>Set your test set to be big enough to give high confidence in the overall performance of your system.<br>如果对实际数据效果要求较高，那么最好要有test set 进行性能测试，否则会影响实际使用效果</p>
+</blockquote>
+<h2 id="更改指标"><a href="#更改指标" class="headerlink" title="更改指标"></a>更改指标</h2><p>如果训练过程中，之前设置的指标已经不能满足模型训练要求，<br>或者已经错误的对模型进行了筛选，<br>要么需要更改指标，要么需要更改模型结构，要么更改dev/test set<br><img src="/image/deepLearning/92.png" alt><br><img src="/image/deepLearning/93.png" alt></p>
+<h2 id="以人的能力为参考"><a href="#以人的能力为参考" class="headerlink" title="以人的能力为参考"></a>以人的能力为参考</h2><p><img src="/image/deepLearning/94.png" alt><br>Why compare to human-level performance<br>Humans are quite good at a lot of tasks. So long as ML is worse than humans, you can:</p>
+<ul>
+<li>Get labeled data from humans.</li>
+<li>Gain insight from manual error analysis: Why did a person get this right?</li>
+<li>Better analysis of bias/variance.<br><img src="/image/deepLearning/95.png" alt></li>
+</ul>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p><img src="/image/deepLearning/96.png" alt><br><img src="/image/deepLearning/97.png" alt></p>
+<h1 id="错误分析"><a href="#错误分析" class="headerlink" title="错误分析"></a>错误分析</h1><p>对判断错误的数据进行错误类型统计分析，决定下一步优化方向，给出优先级<br><img src="/image/deepLearning/98.png" alt></p>
+<h2 id="清除标签错误"><a href="#清除标签错误" class="headerlink" title="清除标签错误"></a>清除标签错误</h2><p>如果dev/test set 数据中，存在标签错误的数据，<br>如果该类数据在错误数据中占比较大，已经影响到dev set 阶段对模型的选择<br>则需要采取措施进行标签错误的数据清除<br><img src="/image/deepLearning/99.png" alt></p>
+<blockquote>
+<p>Correcting incorrect dev/test set examples<br>• Apply same process to your dev and test sets to make sure they continue to come from the same distribution 分布相同<br>• Consider examining examples your algorithm got right as well as ones it got wrong.正确错误数据都检查下标签<br>• Train and dev/test data may now come from slightly different distributions. 训练数据和验证测试数据现在可以来自稍微不同的分布</p>
+</blockquote>
+<h3 id="不同分布数据集处理"><a href="#不同分布数据集处理" class="headerlink" title="不同分布数据集处理"></a>不同分布数据集处理</h3><p>对于训练集和验证测试集分布不同的问题<br>不建议将数据混洗后再进行训练，这样会导致验证测试阶段不是实际数据，而是部分测试数据的问题<br>更好的处理办法是把验证测试集数据集的50%也进行训练，剩下50%再均分进行验证测试<br><img src="/image/deepLearning/100.png" alt><br><img src="/image/deepLearning/101.png" alt></p>
+<h2 id="快速搭建然后迭代"><a href="#快速搭建然后迭代" class="headerlink" title="快速搭建然后迭代"></a>快速搭建然后迭代</h2><p>如果需要对一个全新的问题进行模型训练，建议快速搭建模型，然后迭代，在迭代中发现问题，优化算法<br>• Set up dev/test set and metric<br>• Build initial system quickly<br>• Use Bias/Variance analysis &amp; Error analysis to prioritize next steps.<br>但是要尽可能避免系统过于简单或者过于复杂，<br>对于有众多论文支持的问题，比如人脸识别，可以根据论文快速搭建复杂模型，然后开始训练<br>对于陌生领域的问题，则可以由简单到复杂进行训练</p>
+<h2 id="不匹配数据"><a href="#不匹配数据" class="headerlink" title="不匹配数据"></a>不匹配数据</h2><p>更细致的对错误率进行分析，通过计算不同错误率的差值，分析不同原因比重，决定优化方向<br>· 可避免偏差<br>· 方差，如果比较大，说明模型不能泛化到同一分布数据<br>· 数据不匹配，训练数据和验证数据可能分布不同<br>· 过拟合程度<br><img src="/image/deepLearning/102.png" alt><br><img src="/image/deepLearning/103.png" alt><br><img src="/image/deepLearning/104.png" alt></p>
+<h3 id="如何结局数据不匹配问题"><a href="#如何结局数据不匹配问题" class="headerlink" title="如何结局数据不匹配问题"></a>如何结局数据不匹配问题</h3><p>对train set 和dev set进行错误分析，找出二者不同，然后尽可能多的用dev set 数据进行训练<br>除了去收集真实的dev set，还可以通过人工合成的数据进行训练，<br>但是要注意，人工合成的数据只是实际数据的一个子集，避免出现对子集数据过拟合的情况<br>Addressing data mismatch<br>• Carry out manual error analysis to try to understand difference between training and dev/test sets<br>• Make training data more similar; or collect more data similar to dev/test sets<br><img src="/image/deepLearning/105.png" alt><br><img src="/image/deepLearning/106.png" alt></p>
+<h1 id="迁移学习"><a href="#迁移学习" class="headerlink" title="迁移学习"></a>迁移学习</h1><p><a href="https://yoohannah.github.io/post/machineLearning/MachineLearningDevelopmentProcess.html">复习</a><br>适用情形<br>• Task A and B have the same input x.<br>• You have a lot more data for Task A than Task B.<br>• Low level features from A could be helpful for learning B.<br><img src="/image/deepLearning/107.png" alt></p>
+<h1 id="多任务学习"><a href="#多任务学习" class="headerlink" title="多任务学习"></a>多任务学习</h1><p>建立单一神经网络同时输出多个任务的结果<br>适用情形<br>• Training on a set of tasks that could benefit from having shared lower-level features.<br>• Usually: Amount of data you have for each task is quite similar.<br>• Can train a big enough neural network to do well on all the tasks.<br><img src="/image/deepLearning/108.png" alt></p>
+<h1 id="端到端深度学习"><a href="#端到端深度学习" class="headerlink" title="端到端深度学习"></a>端到端深度学习</h1><p>端到端深度学习（End-to-End Deep Learning）是指在构建和训练深度学习模型时，直接从原始输入数据到最终输出结果的整个过程都由一个单一的模型来完成。<br>这种方法避免了传统机器学习中常见的多个独立步骤和手工特征工程，旨在通过一个统一的模型自动学习和优化整个任务。</p>
+<p>优点:<br>• Let the data speak<br>• Less hand-designing of components needed<br>缺点:<br>• May need large amount of data<br>• Excludes potentially useful hand-designed components</p>
+<p>适用情形<br>Do you have sufficient data to learn a function of the complexity needed to map x to y?<br>有没有足够有效的直接从x到y映射数据用来进行复杂函数的学习？</p>
+<p>现实中，如果没足够多x-&gt; Y  的映射数据，存在中间数据方便，x-&gt; Z -&gt; Y 这样的映射数据，<br>那么将端到端任务分解成两个小任务，会更简单<br>比如下面的人脸识别和根据手X光图片判断儿童年龄，自动驾驶，但如果是机器翻译就比较适合端到端</p>
+<p><img src="/image/deepLearning/109.png" alt><br><img src="/image/deepLearning/110.png" alt></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/deepLearning/" rel="tag"># deepLearning</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/nodejs/streamExamp.html" rel="next" title="一个实现流通信的案例">
+                <i class="fa fa-chevron-left"></i> 一个实现流通信的案例
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/deepLearning/OptGradientDescent.html" rel="prev" title="一些优化梯度下降的方法">
+                一些优化梯度下降的方法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">245</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据集的使用"><span class="nav-number">1.</span> <span class="nav-text">数据集的使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用偏差-bias-和方差-variance-对模型进行评估"><span class="nav-number">2.</span> <span class="nav-text">使用偏差(bias)和方差(variance)对模型进行评估</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#正则化处理-Regularization-过拟合问题"><span class="nav-number">2.1.</span> <span class="nav-text">正则化处理(Regularization)过拟合问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#L2-具体实现"><span class="nav-number">2.2.</span> <span class="nav-text">L2 具体实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dropout-正则化"><span class="nav-number">2.3.</span> <span class="nav-text">Dropout 正则化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它正则化方法"><span class="nav-number">2.4.</span> <span class="nav-text">其它正则化方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#归一化训练集"><span class="nav-number">3.</span> <span class="nav-text">归一化训练集</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#初始化参数"><span class="nav-number">4.</span> <span class="nav-text">初始化参数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#梯度校验"><span class="nav-number">5.</span> <span class="nav-text">梯度校验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#实验"><span class="nav-number">5.1.</span> <span class="nav-text">实验</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分析解决问题"><span class="nav-number">6.</span> <span class="nav-text">分析解决问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#正交化"><span class="nav-number">6.1.</span> <span class="nav-text">正交化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#建立单一数字评估指标"><span class="nav-number">6.2.</span> <span class="nav-text">建立单一数字评估指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#混洗数据保证数据分布均匀"><span class="nav-number">6.3.</span> <span class="nav-text">混洗数据保证数据分布均匀</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据集大小建议"><span class="nav-number">6.3.1.</span> <span class="nav-text">数据集大小建议</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更改指标"><span class="nav-number">6.4.</span> <span class="nav-text">更改指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#以人的能力为参考"><span class="nav-number">6.5.</span> <span class="nav-text">以人的能力为参考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">6.6.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#错误分析"><span class="nav-number">7.</span> <span class="nav-text">错误分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#清除标签错误"><span class="nav-number">7.1.</span> <span class="nav-text">清除标签错误</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#不同分布数据集处理"><span class="nav-number">7.1.1.</span> <span class="nav-text">不同分布数据集处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#快速搭建然后迭代"><span class="nav-number">7.2.</span> <span class="nav-text">快速搭建然后迭代</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不匹配数据"><span class="nav-number">7.3.</span> <span class="nav-text">不匹配数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何结局数据不匹配问题"><span class="nav-number">7.3.1.</span> <span class="nav-text">如何结局数据不匹配问题</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#迁移学习"><span class="nav-number">8.</span> <span class="nav-text">迁移学习</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#多任务学习"><span class="nav-number">9.</span> <span class="nav-text">多任务学习</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#端到端深度学习"><span class="nav-number">10.</span> <span class="nav-text">端到端深度学习</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

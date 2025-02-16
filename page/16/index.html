@@ -259,6 +259,666 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/Karmatest.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/knowledge/Karmatest.html" itemprop="url">
+                  Karma test
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-12T23:54:02+08:00">
+                2017-08-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Karma-test"><a href="#Karma-test" class="headerlink" title="Karma test"></a>Karma test</h1><p>Karma是由Google团队开发的一套前端测试运行框架。它不同于测试框架（例如jasmine，mocha等），运行在这些测试框架之上。主要完成以下工作：<br>Karma启动一个web服务器，生成包含js源代码和js测试脚本的页面；<br>运行浏览器加载页面，并显示测试的结果；<br>如果开启检测，则当文件有修改时，执行继续执行以上过程。</p>
+<h1 id="搭建测试环境"><a href="#搭建测试环境" class="headerlink" title="搭建测试环境"></a>搭建测试环境</h1><p>npm install -g karma-cli //让全局都可以运行karma的命令行,命令行工具<br>npm i karma –save-dev //只在当前项目中使用karma<br>npm install //安装项目的依赖 package.json<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&quot;devDependencies&quot;: &#123;</span><br><span class="line">    &quot;karma&quot;: &quot;^1.7.0&quot;,</span><br><span class="line">    &quot;karma-chrome-launcher&quot;: &quot;^2.2.0&quot;,</span><br><span class="line">    &quot;karma-mocha&quot;: &quot;^1.3.0&quot;,</span><br><span class="line">    &quot;mocha&quot;: &quot;^3.5.0&quot;,</span><br><span class="line">    &quot;should&quot;: &quot;^11.2.1&quot;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>karma init //在cmd中运行该命令,构建karma.conf.js文件,运行后会询问相关问题然后生成karma.conf.js文件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">Which testing framework <span class="keyword">do</span> you want to use ?</span><br><span class="line">Press tab to list possible options. Enter to move to the next question.</span><br><span class="line">&gt; mocha <span class="comment">//选择要使用的框架,不能直接输入,是选择题,点击键盘箭头可更改选项</span></span><br><span class="line"></span><br><span class="line">Do you want to use Require.js ?</span><br><span class="line">This will add Require.js plugin.</span><br><span class="line">Press tab to list possible options. Enter to move to the next question.</span><br><span class="line">&gt; no  <span class="comment">//是否add Require.js plugin</span></span><br><span class="line"></span><br><span class="line">Do you want to capture any browsers automatically ?</span><br><span class="line">Press tab to list possible options. Enter empty string to move to the next quest</span><br><span class="line">ion.</span><br><span class="line">&gt; Chrome <span class="comment">//选择用哪个浏览器打开测试页，也是选择题，不能输入</span></span><br><span class="line">&gt;</span><br><span class="line"></span><br><span class="line">What is the location <span class="keyword">of</span> your source and test files ?</span><br><span class="line">You can use glob patterns, eg. <span class="string">"js/*.js"</span> or <span class="string">"test/**/*Spec.js"</span>.</span><br><span class="line">Enter empty string to move to the next question.</span><br><span class="line">&gt; src<span class="comment">/*.js  //添加要测试的代码的路径，不是测试用例代码的路径，同时，代码中用到的其他文件也在这里同时添加，</span></span><br><span class="line"><span class="comment">11 08 2017 15:03:13.822:WARN [init]: There is no file matching this pattern.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">&gt; //	回车可以切换下一行继续添加，连续回车进入下一个问题</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Should any of the files included by the previous patterns be excluded ?</span></span><br><span class="line"><span class="comment">You can use glob patterns, eg. "**/</span>*.swp<span class="string">".</span></span><br><span class="line"><span class="string">Enter empty string to move to the next question.</span></span><br><span class="line"><span class="string">&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Do you want Karma to watch all the files and run the tests on change ?</span></span><br><span class="line"><span class="string">Press tab to list possible options.</span></span><br><span class="line"><span class="string">&gt; yes //是否跟所有文件自动开启测试</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Config file generated at "</span>G:\css\homework1\karma.conf.js<span class="string">".</span></span><br></pre></td></tr></table></figure></p>
+<p>karma.conf.js文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">module.exports = function(config) &#123;</span><br><span class="line">  config.set(&#123;</span><br><span class="line"></span><br><span class="line">    // base path that will be used to resolve all patterns (eg. files, exclude)</span><br><span class="line">    basePath: &apos;&apos;,//根路径，后面配置的基本所有相对路径都会根据这个路径来构造。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // frameworks to use 使用到的框架</span><br><span class="line">    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter</span><br><span class="line">    frameworks: [&apos;mocha&apos;],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // list of files / patterns to load in the browser  将会在浏览器里面执行的代码</span><br><span class="line">    files: [</span><br><span class="line">      &apos;node_modules/should/should.js&apos;,</span><br><span class="line">      &apos;js/*.js&apos;,</span><br><span class="line">      &apos;quz/*.js&apos;,</span><br><span class="line">      &apos;test/*.js&apos;</span><br><span class="line">    ],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // list of files to exclude 需要从 files 中排除掉的文件</span><br><span class="line">    exclude: [</span><br><span class="line">    ],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // preprocess matching files before serving them to the browser需要做预处理的文件，以及这些文件对应的预处理器。</span><br><span class="line">    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor</span><br><span class="line">    preprocessors: &#123;////此处就可以将 coffee 、 ES6 等代码转换一下。</span><br><span class="line">        &apos;js/*.js&apos;: [&apos;coverage&apos;],//测试覆盖率</span><br><span class="line">        &apos;quz/*.js&apos;: [&apos;coverage&apos;]//测试覆盖率</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // test results reporter to use 测试结果报告器</span><br><span class="line">    // possible values: &apos;dots&apos;, &apos;progress&apos;</span><br><span class="line">    // available reporters: https://npmjs.org/browse/keyword/karma-reporter</span><br><span class="line">    reporters: [&apos;progress&apos;, &apos;coverage&apos;],</span><br><span class="line"></span><br><span class="line">     // 覆盖率报告器配置</span><br><span class="line">    coverageReporter: &#123;</span><br><span class="line">      type : &apos;lcov&apos;, //html格式会生成html文件，lcov格式可以和coveralls结合生成coveralls徽章</span><br><span class="line">      dir : &apos;coverage/&apos;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    // web server port 服务器端口号</span><br><span class="line">    port: 9876,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // enable / disable colors in the output (reporters and logs)</span><br><span class="line">    colors: true,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // level of logging 日志级别</span><br><span class="line">    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG</span><br><span class="line">    logLevel: config.LOG_INFO,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // enable / disable watching file and executing tests whenever any file changes 启用/禁用监视文件变化重新执行测试的功能</span><br><span class="line">    autoWatch: true,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // start these browsers 使用的浏览器</span><br><span class="line">    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher</span><br><span class="line">    browsers: [&apos;Chrome&apos;],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // Continuous Integration mode true测试一次就结束,false测试完一直处于测试状态</span><br><span class="line">    // if true, Karma captures browsers, runs the tests and exits</span><br><span class="line">    singleRun: true,</span><br><span class="line"></span><br><span class="line">    // Concurrency level</span><br><span class="line">    // how many browser should be started simultaneous</span><br><span class="line">    concurrency: Infinity</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="集成测试Travis-CI"><a href="#集成测试Travis-CI" class="headerlink" title="集成测试Travis CI"></a>集成测试Travis CI</h1><p><a href="/post/knowledge/TravishCI.html">Travish CI使用</a><br>通过Travis CI测试我们可以获得一个测试通过的标志<a href="https://travis-ci.org/YooHannah/homework1" target="_blank" rel="noopener"><img src="https://travis-ci.org/YooHannah/homework1.svg?branch=develop" alt="Build Status"></a>，可以将它放在github仓库readme.md文件里面<br><img src="/image/coverage1.png" alt="coverage1"><br>更改链接中branch的值可以获得对应分支的测试结果</p>
+<h1 id="测试代码覆盖率-Coverage"><a href="#测试代码覆盖率-Coverage" class="headerlink" title="测试代码覆盖率 Coverage"></a>测试代码覆盖率 Coverage</h1><p>衡量测试脚本的质量–代码覆盖率:测试中运行到的代码占所有代码的比率</p>
+<p>安装测试覆盖率工具<br>npm i –save-dev karma-coverage</p>
+<p>修改配置文件karma.conf.js<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// modified</span><br><span class="line">preprocessors: &#123;</span><br><span class="line">    &apos;src/**/*.js&apos;: [&apos;coverage&apos;], //要测试的功能代码路径：[&apos;coverage&apos;]   多个文件夹就逗号隔开，按格式写下去</span><br><span class="line">    &apos;js/*.js&apos;: [&apos;coverage&apos;],</span><br><span class="line">    &apos;quz/*.js&apos;: [&apos;coverage&apos;]</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line">//modified</span><br><span class="line">reporters: [&apos;progress&apos;, &apos;coverage&apos;],</span><br><span class="line"></span><br><span class="line">// add</span><br><span class="line">coverageReporter: &#123;</span><br><span class="line">  type : &apos;html&apos;,</span><br><span class="line">  dir : &apos;coverage/&apos;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure></p>
+<p>运行karma start,会新增coverage文件夹,里面只有一个浏览器名的文件夹，里面是根据preprocessors添加的路径生成对应的文件夹和其他文件，<br>其他文件里面有index.html文件，是整个测试的测试报告，文件夹里是每个文件的覆盖测试结果和代码具体的覆盖情况</p>
+<p>注意：如果不想将测试结果上传github,记得更改.gitignore文件，将coverage文件夹忽略掉</p>
+<h1 id="获取覆盖率标志"><a href="#获取覆盖率标志" class="headerlink" title="获取覆盖率标志"></a>获取覆盖率标志</h1><p>github 仓库经常会看到这个标志<br><img src="/image/coverage2.png" alt="coverage2"><br>就是说项目的测试覆盖率是91%，要获取这个标志我们需要将测试覆盖率放到<a href="https://coveralls.io" target="_blank" rel="noopener">Coveralls</a>上</p>
+<p>安装 coveralls方便我们在Travis CI上测试完之后将结果上传<br>npm i coveralls –save-dev</p>
+<p>更改karma.conf.js<br>coverageReporter: {<br>  type : ‘lcov’, //将html改为lcov<br>  dir : ‘coverage/‘<br>},<br>接下来操作步骤可以有两种<br>方法一：<br>仅更改 package.json文件,不保留测试命令karma start<br>更改package.json的scripts<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123;</span><br><span class="line">    &quot;test&quot;: &quot;./node_modules/karma/bin/karma start --browsers Firefox --single-run &amp;&amp; find coverage -name lcov.info -print0 | xargs -0 cat | ./node_modules/coveralls/bin/coveralls.js &amp;&amp; rm -rf ./coverage&quot;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>方法二：<br>更改package.json文件,保留测试命令karma start<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123;</span><br><span class="line">		&quot;test&quot;: &quot;karma start&quot;,</span><br><span class="line">    &quot;report&quot;: &quot;find coverage -name lcov.info -print0 | xargs -0 cat | ./node_modules/coveralls/bin/coveralls.js &amp;&amp; rm -rf ./coverage&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>也要更改.travis.yml文件，添加以下语句<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">after_success:</span><br><span class="line">  - &quot;npm run report&quot;</span><br></pre></td></tr></table></figure></p>
+<p>然后push代码，等Travi CI 完成测试后，我们可以在<a href="https://coveralls.io" target="_blank" rel="noopener">Coveralls</a>上获取标志,<br>在总的测试结果那个页面不是具体某次提交的页面获取<br><img src="/image/coverage3.png" alt="coverage3"><br>点击EMBED可以获取不同格式的标志代码，<br>复制粘贴MARKDOWN 格式可以放在readme.md文件中直接使用</p>
+<p>相关链接：<br><a href="https://csbun.github.io/blog/2015/11/karma/" target="_blank" rel="noopener">使用 Karma 在真实浏览器上测试</a><br><a href="https://segmentfault.com/a/1190000006895064" target="_blank" rel="noopener">前端单元测试之Karma环境搭建</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/test/assert.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/test/assert.html" itemprop="url">
+                  断言语句assert
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-12T23:54:02+08:00">
+                2017-08-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>测试用例里面的一种判断语句</p>
+<p>在mocha中需要require<br>var assert = require(‘assert’)</p>
+<p>参数一般有三个<br>value 待判断的值<br>expected 要和value进行比较的值，看二者是否相等或者不相等,如果没有expected，则是在判断value的值是否为真<br>message 判断结果为错误时,抛出来的错误提醒语句，如果 message 参数为 undefined，则赋予默认的错误信息。</p>
+<p>assert(value[, message]) 同assert.ok()<br>assert.ok(value[, message]) value如果不为真值,抛出一个带有 message 属性的 AssertionError</p>
+<p>assert.fail(message) 抛出错误信息message</p>
+<p>assert.fail(actual, expected, message, operator) 根据参数抛出相应错误信息<br>如果 message 不存在，则错误信息会被设为 actual 的值加分隔符 operator 再加 expected 的值。 否则，错误信息为 message 的值,operator没有的话，默认为!=</p>
+<p>assert.ifError(value) 如果 value 为真，则抛出 value,如果为假，则测试通过</p>
+<p>assert.equal(actual, expected[, message])      使用相等运算符（==）测试 actual 参数与 expected 参数是否相等。<br>assert.deepEqual(actual, expected[, message])  测试 actual 参数与 expected 参数是否深度相等。 原始值使用 相等运算符（==）比较，只比较可枚举的自身属性。<br>深度相等意味着子对象的可枚举的自身属性也会被比较<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">const obj1 = &#123;</span><br><span class="line">  a: &#123;</span><br><span class="line">    b: 1</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">const obj3 = &#123;</span><br><span class="line">  a: &#123;</span><br><span class="line">    b: 1</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">const obj4 = Object.create(obj1);</span><br><span class="line">assert.deepEqual(obj1, obj4);</span><br><span class="line">// 抛出 AssertionError: &#123; a: &#123; b: 1 &#125; &#125; deepEqual &#123;&#125;</span><br><span class="line">// 原型会被忽略</span><br><span class="line">assert.deepEqual(obj1, obj3);</span><br><span class="line">// 通过，两个对象相等</span><br></pre></td></tr></table></figure></p>
+<p>assert.deepStrictEqual(actual, expected[, message])<br>大多数情况下与 assert.deepEqual() 一样，但有三个例外：</p>
+<p>原始值使用 全等运算符（===）比较。使用SameValueZero比较法来比较设置的值及映射的键（也就意味不用考虑caveats）。<br>对象的 原型 也使用 全等运算符 比较。<br>对象的类型标签应该相同。</p>
+<p>assert.notEqual(actual, expected[, message])              使用 不等运算符（!=）测试是否不相等。<br>assert.notDeepEqual(actual, expected[, message])          测试是否不深度相等。 与 assert.deepEqual() 相反。<br>assert.notStrictEqual(actual, expected[, message])        使用 不全等运算符（!==）测试是否不全等。<br>assert.notDeepStrictEqual(actual, expected[, message])    测试是否不深度全等。 与 assert.deepStrictEqual() 相反。</p>
+<p>assert.throws(block[, error][, message])   期望 block 函数抛出错误error，如果block(function)抛出error的错误，则测试通过<br>error 可以是构造函数、正则表达式、或自定义的验证函数。</p>
+<p>assert.doesNotThrow(block[, error][, message])  断言 block 函数不会抛出错误<br>当 assert.doesNotThrow() 被调用时，它会立即调用 block 函数。<br>如果抛出错误且错误类型与 error 参数指定的相同，则抛出 AssertionError。 如果错误类型不相同，或 error 参数是 undefined，则错误会被抛回给调用者。<br>如果block不抛出错误，则测试通过</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/test/Karmatest.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/test/Karmatest.html" itemprop="url">
+                  Karma test
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-12T23:54:02+08:00">
+                2017-08-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Karma-test"><a href="#Karma-test" class="headerlink" title="Karma test"></a>Karma test</h1><p>Karma是由Google团队开发的一套前端测试运行框架。它不同于测试框架（例如jasmine，mocha等），运行在这些测试框架之上。主要完成以下工作：<br>Karma启动一个web服务器，生成包含js源代码和js测试脚本的页面；<br>运行浏览器加载页面，并显示测试的结果；<br>如果开启检测，则当文件有修改时，执行继续执行以上过程。</p>
+<h1 id="搭建测试环境"><a href="#搭建测试环境" class="headerlink" title="搭建测试环境"></a>搭建测试环境</h1><p>npm install -g karma-cli //让全局都可以运行karma的命令行,命令行工具<br>npm i karma –save-dev //只在当前项目中使用karma<br>npm install //安装项目的依赖 package.json<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&quot;devDependencies&quot;: &#123;</span><br><span class="line">    &quot;karma&quot;: &quot;^1.7.0&quot;,</span><br><span class="line">    &quot;karma-chrome-launcher&quot;: &quot;^2.2.0&quot;,</span><br><span class="line">    &quot;karma-mocha&quot;: &quot;^1.3.0&quot;,</span><br><span class="line">    &quot;mocha&quot;: &quot;^3.5.0&quot;,</span><br><span class="line">    &quot;should&quot;: &quot;^11.2.1&quot;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>karma init //在cmd中运行该命令,构建karma.conf.js文件,运行后会询问相关问题然后生成karma.conf.js文件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">Which testing framework <span class="keyword">do</span> you want to use ?</span><br><span class="line">Press tab to list possible options. Enter to move to the next question.</span><br><span class="line">&gt; mocha <span class="comment">//选择要使用的框架,不能直接输入,是选择题,点击键盘箭头可更改选项</span></span><br><span class="line"></span><br><span class="line">Do you want to use Require.js ?</span><br><span class="line">This will add Require.js plugin.</span><br><span class="line">Press tab to list possible options. Enter to move to the next question.</span><br><span class="line">&gt; no  <span class="comment">//是否add Require.js plugin</span></span><br><span class="line"></span><br><span class="line">Do you want to capture any browsers automatically ?</span><br><span class="line">Press tab to list possible options. Enter empty string to move to the next quest</span><br><span class="line">ion.</span><br><span class="line">&gt; Chrome <span class="comment">//选择用哪个浏览器打开测试页，也是选择题，不能输入</span></span><br><span class="line">&gt;</span><br><span class="line"></span><br><span class="line">What is the location <span class="keyword">of</span> your source and test files ?</span><br><span class="line">You can use glob patterns, eg. <span class="string">"js/*.js"</span> or <span class="string">"test/**/*Spec.js"</span>.</span><br><span class="line">Enter empty string to move to the next question.</span><br><span class="line">&gt; src<span class="comment">/*.js  //添加要测试的代码的路径，不是测试用例代码的路径，同时，代码中用到的其他文件也在这里同时添加，</span></span><br><span class="line"><span class="comment">11 08 2017 15:03:13.822:WARN [init]: There is no file matching this pattern.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">&gt; //	回车可以切换下一行继续添加，连续回车进入下一个问题</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Should any of the files included by the previous patterns be excluded ?</span></span><br><span class="line"><span class="comment">You can use glob patterns, eg. "**/</span>*.swp<span class="string">".</span></span><br><span class="line"><span class="string">Enter empty string to move to the next question.</span></span><br><span class="line"><span class="string">&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Do you want Karma to watch all the files and run the tests on change ?</span></span><br><span class="line"><span class="string">Press tab to list possible options.</span></span><br><span class="line"><span class="string">&gt; yes //是否跟所有文件自动开启测试</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Config file generated at "</span>G:\css\homework1\karma.conf.js<span class="string">".</span></span><br></pre></td></tr></table></figure></p>
+<p>karma.conf.js文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">module.exports = function(config) &#123;</span><br><span class="line">  config.set(&#123;</span><br><span class="line"></span><br><span class="line">    // base path that will be used to resolve all patterns (eg. files, exclude)</span><br><span class="line">    basePath: &apos;&apos;,//根路径，后面配置的基本所有相对路径都会根据这个路径来构造。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // frameworks to use 使用到的框架</span><br><span class="line">    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter</span><br><span class="line">    frameworks: [&apos;mocha&apos;],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // list of files / patterns to load in the browser  将会在浏览器里面执行的代码</span><br><span class="line">    files: [</span><br><span class="line">      &apos;node_modules/should/should.js&apos;,</span><br><span class="line">      &apos;js/*.js&apos;,</span><br><span class="line">      &apos;quz/*.js&apos;,</span><br><span class="line">      &apos;test/*.js&apos;</span><br><span class="line">    ],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // list of files to exclude 需要从 files 中排除掉的文件</span><br><span class="line">    exclude: [</span><br><span class="line">    ],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // preprocess matching files before serving them to the browser需要做预处理的文件，以及这些文件对应的预处理器。</span><br><span class="line">    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor</span><br><span class="line">    preprocessors: &#123;////此处就可以将 coffee 、 ES6 等代码转换一下。</span><br><span class="line">        &apos;js/*.js&apos;: [&apos;coverage&apos;],//测试覆盖率</span><br><span class="line">        &apos;quz/*.js&apos;: [&apos;coverage&apos;]//测试覆盖率</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // test results reporter to use 测试结果报告器</span><br><span class="line">    // possible values: &apos;dots&apos;, &apos;progress&apos;</span><br><span class="line">    // available reporters: https://npmjs.org/browse/keyword/karma-reporter</span><br><span class="line">    reporters: [&apos;progress&apos;, &apos;coverage&apos;],</span><br><span class="line"></span><br><span class="line">     // 覆盖率报告器配置</span><br><span class="line">    coverageReporter: &#123;</span><br><span class="line">      type : &apos;lcov&apos;, //html格式会生成html文件，lcov格式可以和coveralls结合生成coveralls徽章</span><br><span class="line">      dir : &apos;coverage/&apos;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    // web server port 服务器端口号</span><br><span class="line">    port: 9876,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // enable / disable colors in the output (reporters and logs)</span><br><span class="line">    colors: true,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // level of logging 日志级别</span><br><span class="line">    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG</span><br><span class="line">    logLevel: config.LOG_INFO,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // enable / disable watching file and executing tests whenever any file changes 启用/禁用监视文件变化重新执行测试的功能</span><br><span class="line">    autoWatch: true,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // start these browsers 使用的浏览器</span><br><span class="line">    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher</span><br><span class="line">    browsers: [&apos;Chrome&apos;],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // Continuous Integration mode true测试一次就结束,false测试完一直处于测试状态</span><br><span class="line">    // if true, Karma captures browsers, runs the tests and exits</span><br><span class="line">    singleRun: true,</span><br><span class="line"></span><br><span class="line">    // Concurrency level</span><br><span class="line">    // how many browser should be started simultaneous</span><br><span class="line">    concurrency: Infinity</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="集成测试Travis-CI"><a href="#集成测试Travis-CI" class="headerlink" title="集成测试Travis CI"></a>集成测试Travis CI</h1><p><a href="/post/knowledge/TravishCI.html">Travish CI使用</a><br>通过Travis CI测试我们可以获得一个测试通过的标志<a href="https://travis-ci.org/YooHannah/homework1" target="_blank" rel="noopener"><img src="https://travis-ci.org/YooHannah/homework1.svg?branch=develop" alt="Build Status"></a>，可以将它放在github仓库readme.md文件里面<br><img src="/image/coverage1.png" alt="coverage1"><br>更改链接中branch的值可以获得对应分支的测试结果</p>
+<h1 id="测试代码覆盖率-Coverage"><a href="#测试代码覆盖率-Coverage" class="headerlink" title="测试代码覆盖率 Coverage"></a>测试代码覆盖率 Coverage</h1><p>衡量测试脚本的质量–代码覆盖率:测试中运行到的代码占所有代码的比率</p>
+<p>安装测试覆盖率工具<br>npm i –save-dev karma-coverage</p>
+<p>修改配置文件karma.conf.js<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// modified</span><br><span class="line">preprocessors: &#123;</span><br><span class="line">    &apos;src/**/*.js&apos;: [&apos;coverage&apos;], //要测试的功能代码路径：[&apos;coverage&apos;]   多个文件夹就逗号隔开，按格式写下去</span><br><span class="line">    &apos;js/*.js&apos;: [&apos;coverage&apos;],</span><br><span class="line">    &apos;quz/*.js&apos;: [&apos;coverage&apos;]</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line">//modified</span><br><span class="line">reporters: [&apos;progress&apos;, &apos;coverage&apos;],</span><br><span class="line"></span><br><span class="line">// add</span><br><span class="line">coverageReporter: &#123;</span><br><span class="line">  type : &apos;html&apos;,</span><br><span class="line">  dir : &apos;coverage/&apos;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure></p>
+<p>运行karma start,会新增coverage文件夹,里面只有一个浏览器名的文件夹，里面是根据preprocessors添加的路径生成对应的文件夹和其他文件，<br>其他文件里面有index.html文件，是整个测试的测试报告，文件夹里是每个文件的覆盖测试结果和代码具体的覆盖情况</p>
+<p>注意：如果不想将测试结果上传github,记得更改.gitignore文件，将coverage文件夹忽略掉</p>
+<h1 id="获取覆盖率标志"><a href="#获取覆盖率标志" class="headerlink" title="获取覆盖率标志"></a>获取覆盖率标志</h1><p>github 仓库经常会看到这个标志<br><img src="/image/coverage2.png" alt="coverage2"><br>就是说项目的测试覆盖率是91%，要获取这个标志我们需要将测试覆盖率放到<a href="https://coveralls.io" target="_blank" rel="noopener">Coveralls</a>上</p>
+<p>安装 coveralls方便我们在Travis CI上测试完之后将结果上传<br>npm i coveralls –save-dev</p>
+<p>更改karma.conf.js<br>coverageReporter: {<br>  type : ‘lcov’, //将html改为lcov<br>  dir : ‘coverage/‘<br>},<br>接下来操作步骤可以有两种<br>方法一：<br>仅更改 package.json文件,不保留测试命令karma start<br>更改package.json的scripts<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123;</span><br><span class="line">    &quot;test&quot;: &quot;./node_modules/karma/bin/karma start --browsers Firefox --single-run &amp;&amp; find coverage -name lcov.info -print0 | xargs -0 cat | ./node_modules/coveralls/bin/coveralls.js &amp;&amp; rm -rf ./coverage&quot;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>方法二：<br>更改package.json文件,保留测试命令karma start<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123;</span><br><span class="line">		&quot;test&quot;: &quot;karma start&quot;,</span><br><span class="line">    &quot;report&quot;: &quot;find coverage -name lcov.info -print0 | xargs -0 cat | ./node_modules/coveralls/bin/coveralls.js &amp;&amp; rm -rf ./coverage&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>也要更改.travis.yml文件，添加以下语句<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">after_success:</span><br><span class="line">  - &quot;npm run report&quot;</span><br></pre></td></tr></table></figure></p>
+<p>然后push代码，等Travi CI 完成测试后，我们可以在<a href="https://coveralls.io" target="_blank" rel="noopener">Coveralls</a>上获取标志,<br>在总的测试结果那个页面不是具体某次提交的页面获取<br><img src="/image/coverage3.png" alt="coverage3"><br>点击EMBED可以获取不同格式的标志代码，<br>复制粘贴MARKDOWN 格式可以放在readme.md文件中直接使用</p>
+<p>相关链接：<br><a href="https://csbun.github.io/blog/2015/11/karma/" target="_blank" rel="noopener">使用 Karma 在真实浏览器上测试</a><br><a href="https://segmentfault.com/a/1190000006895064" target="_blank" rel="noopener">前端单元测试之Karma环境搭建</a><br><a href="https://imweb.io/topic/5833d14cf8a1d5546059a301" target="_blank" rel="noopener">前端自动化测试解决方案探析</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/var.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/js/var.html" itemprop="url">
+                  变量提升
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-09T22:02:37+08:00">
+                2017-08-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>一个变量的生成需要经历 创建、初始化、赋值三个阶段<br>let 的「创建」过程被提升了，但是初始化没有提升。<br>var 的「创建」和「初始化」都被提升了。<br>function 的「创建」「初始化」和「赋值」都被提升了。<br>const，其实 const 和 let 只有一个区别，那就是 const 只有「创建」和「初始化」，没有「赋值」过程。<br><a href="https://zhuanlan.zhihu.com/p/28140450" target="_blank" rel="noopener">let</a><br>1、<br>假设有如下代码：</p>
+<p>function fn(){<br>  var x = 1<br>  var y = 2<br>}<br>fn()</p>
+<p>在执行 fn 时，会有以下过程（不完全）：</p>
+<p>进入 fn，为 fn 创建一个环境。<br>找到 fn 中所有用 var 声明的变量，在这个环境中「创建」这些变量（即 x 和 y）。<br>将这些变量「初始化」为 undefined。<br>开始执行代码<br>x = 1 将 x 变量「赋值」为 1<br>y = 2 将 y 变量「赋值」为 2<br>也就是说 var 声明会在代码执行之前就将「创建变量，并将其初始化为 undefined」。</p>
+<p>这就解释了为什么在 var x = 1 之前 console.log(x) 会得到 undefined。</p>
+<p>2、<br>fn2()</p>
+<p>function fn2(){<br>  console.log(2)<br>}<br>JS 引擎会有一下过程：</p>
+<p>找到所有用 function 声明的变量，在环境中「创建」这些变量。<br>将这些变量「初始化」并「赋值」为 function(){ console.log(2) }。<br>开始执行代码 fn2()<br>也就是说 function 声明会在代码执行之前就「创建、初始化并赋值」<br>3、<br>{<br>  let x = 1<br>  x = 2<br>}<br>只看 {} 里面的过程：</p>
+<p>找到所有用 let 声明的变量，在环境中「创建」这些变量<br>开始执行代码（注意现在还没有初始化）<br>执行 x = 1，将 x 「初始化」为 1（这并不是一次赋值，如果代码是 let x，就将 x 初始化为 undefined）<br>执行 x = 2，对 x 进行「赋值」<br>这就解释了为什么在 let x 之前使用 x 会报错：</p>
+<p>let x = ‘global’<br>{<br>  console.log(x) // Uncaught ReferenceError: x is not defined<br>  let x = 1<br>}<br>原因有两个</p>
+<p>console.log(x) 中的 x 指的是下面的 x，而不是全局的 x<br>执行 log 时 x 还没「初始化」，所以不能使用（也就是所谓的暂时死区）</p>
+<p>补充<br>1.<br>在进入一个执行环境后，先把 var 和 function 声明的变量前置， 再去顺序执行代码<br>是 var 声明在前还是 function 声明的在前？按先来后到，同名覆盖。当然如果一个变量已经有值，再 var 是无效的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">var fn</span><br><span class="line">function fn()&#123;&#125;</span><br><span class="line"></span><br><span class="line">console.log(fn)  //function</span><br><span class="line"></span><br><span class="line">function fn()&#123;&#125;</span><br><span class="line">var fn   //已经声明过 fn， 再 var 无效，并不会重置为 undefined</span><br><span class="line"></span><br><span class="line">console.log(fn)  //function</span><br></pre></td></tr></table></figure></p>
+<p>2.<br>函数在执行的过程中，先从自己内部找变量<br>如果找不到，再从创建当前函数所在的作用域去找, 以此往上<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">var a = 1</span><br><span class="line">function fn1()&#123;</span><br><span class="line">  function fn2()&#123;</span><br><span class="line">    console.log(a)</span><br><span class="line">  &#125;</span><br><span class="line">  var a = 2</span><br><span class="line">  return fn2</span><br><span class="line">&#125;</span><br><span class="line">var fn = fn1()</span><br><span class="line">fn() //输出多少 2</span><br><span class="line">////////////////////////////////</span><br><span class="line">var a = 1</span><br><span class="line">function fn1()&#123;</span><br><span class="line">  var a = 2</span><br><span class="line">  return fn2</span><br><span class="line">&#125;</span><br><span class="line">function fn2()&#123;</span><br><span class="line">  console.log(a)</span><br><span class="line">&#125;</span><br><span class="line">var fn = fn1()</span><br><span class="line">fn() //输出多少 1</span><br></pre></td></tr></table></figure></p>
+<h1 id="相关"><a href="#相关" class="headerlink" title="相关"></a>相关</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var a = &#123;n:1&#125;;</span><br><span class="line">var b = a;</span><br><span class="line">a.x = a = &#123;n:2&#125;;</span><br><span class="line">console.log(a)//&#123;n:2&#125;</span><br><span class="line">console.log(b)//&#123;n:1,x:&#123;n:2&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>a.x = a = {n:2};执行顺序</p>
+<ol>
+<li>a.x,这时a,b指向{n:1},增加x,属性，但值为undefined，即这时a,b为{n:1,x:undefined}</li>
+</ol>
+<p>2.a={n:2},a这时指向{n:2},b依然为{n:1,x:undefined}</p>
+<p>3.a.x = a;这时的x是{n:1,x:undefined}中的x,指向a,此时a指向{n:2}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a==1 &amp;&amp; a==2 &amp;&amp; a==3</span><br></pre></td></tr></table></figure>
+<p>可能为true<br>关键在于==在比较两端之前会调用对象的valueof,toString等方法，只要a对象中的toString方法有递增值返回就可以实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const a = &#123;</span><br><span class="line">  i: 1,</span><br><span class="line">  toString: function () &#123;</span><br><span class="line">    return a.i++;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>立即执行函数的目的<br>造出一个函数作用域，防止污染全局变量<br>ES 6 新语法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">let name</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/aboutthis.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/js/aboutthis.html" itemprop="url">
+                  关于this
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-09T22:00:37+08:00">
+                2017-08-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="普通函数中的this"><a href="#普通函数中的this" class="headerlink" title="普通函数中的this"></a>普通函数中的this</h1><ol>
+<li>this总是代表它的直接调用者, 例如 obj.func ,那么func中的this就是obj<br>2.在默认情况(非严格模式下,未使用 ‘use strict’),没找到直接调用者,则this指的是 window<br>3.在严格模式下,没有直接调用者的函数中的this是 undefined<br>4.使用call,apply,bind绑定的,this指的是 绑定的对象,<br>bind绑定一次后不会改变，且bind 的执行的结果返回的是绑定了一个对象的新函数<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>、</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>);<span class="comment">//window</span></span><br><span class="line">&#125;</span><br><span class="line">test();</span><br><span class="line"></span><br><span class="line"><span class="number">2</span>、</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"><span class="meta">  'use strict'</span>;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>);<span class="comment">//undefined</span></span><br><span class="line">&#125;</span><br><span class="line">test();</span><br><span class="line"></span><br><span class="line"><span class="number">3</span>、</span><br><span class="line"><span class="built_in">window</span>.val = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">var</span> obj = &#123;</span><br><span class="line">    val: <span class="number">2</span>,</span><br><span class="line">    fn: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">this</span>.val *= <span class="number">2</span>;    <span class="comment">//普通函数，this指向调用者</span></span><br><span class="line">      val *= <span class="number">2</span>;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span>.val);</span><br><span class="line">      <span class="built_in">console</span>.log(val);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">  obj.fn();<span class="comment">// 4 2</span></span><br><span class="line">  <span class="keyword">var</span> func = obj.fn;</span><br><span class="line">  func(); <span class="comment">//8 8</span></span><br><span class="line"><span class="comment">//obj.fn()执行时,val 没有在fn的作用域里面定义，则去obj.fn()的作用域里面找,obj.fn()位于window,window.val是1;this指向obj,this.val是2</span></span><br><span class="line"><span class="comment">//func()执行时，window.val由于执行obj.fn(),现在是2;func()在window作用域下执行,this就是window,所以this.val和val都是window.val</span></span><br><span class="line"></span><br><span class="line"><span class="number">4</span>、</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> test = <span class="string">'in the f!'</span>;</span><br><span class="line">  setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123; <span class="comment">//是函数就会建立作用域</span></span><br><span class="line"> 	 <span class="built_in">console</span>(<span class="string">'inner '</span>+ test) <span class="comment">// inner in the f!</span></span><br><span class="line">  &#125;, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//以上代码等于</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> test = <span class="string">'in the f!'</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">ff</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        alert(<span class="string">'inner '</span> + test) <span class="comment">//test在ff里面没定义，但在f里面进行了定义</span></span><br><span class="line">    &#125; <span class="comment">// 能访问到f中的test局部变量</span></span><br><span class="line"></span><br><span class="line">    setTimeout(ff, <span class="number">0</span>); <span class="comment">// inner in the f!</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">f();</span><br><span class="line"><span class="number">5</span>、</span><br><span class="line"><span class="keyword">var</span> lzh = &#123;</span><br><span class="line">    name: <span class="string">'lzh'</span>,</span><br><span class="line">    say: <span class="function"><span class="keyword">function</span>(<span class="params">something</span>)</span>&#123;</span><br><span class="line">        alert(something + <span class="keyword">this</span>.name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> iny = &#123;</span><br><span class="line">    name: <span class="string">'iny'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">lzh.say.apply(iny, [<span class="string">'hi, I am '</span>]); <span class="comment">// 输出 hi I am iny</span></span><br><span class="line"><span class="number">6</span>、</span><br><span class="line"><span class="keyword">var</span> arr = []</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>; i&lt;<span class="number">3</span>; i++)&#123;</span><br><span class="line">    arr[i] = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123; <span class="built_in">console</span>.log(<span class="keyword">this</span>) &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> fn = arr[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">arr[<span class="number">0</span>]</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">解析: 因为函数是个特殊的对象，所以 arr 相当于 &#123; '0': function()&#123;&#125;, '1': function()&#123;&#125;, '2': function()&#123;&#125;, length:3&#125;</span></span><br><span class="line"><span class="comment">arr[0]相当于 `arr['0']` 相当于 `arr.0` （当然这种写法不符合规范），所以 arr[0]等价于 arr.0.call(arr), this就是 arr</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line">fn()</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">解析: 相当于 `fn.call(undefined)`， 所以 fn 里面的 this 是 Window</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="number">7</span>、</span><br><span class="line"><span class="keyword">var</span> app = &#123;</span><br><span class="line">    container: <span class="built_in">document</span>.querySelector(<span class="string">'body'</span>),</span><br><span class="line">    bind: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.container.addEventListener(<span class="string">'click'</span>, <span class="keyword">this</span>.sayHello)                  <span class="comment">//点击的时候会执行 sayHello，sayHello 里面的 this 代表 body 对象</span></span><br><span class="line">        <span class="keyword">this</span>.container.addEventListener(<span class="string">'click'</span>, <span class="keyword">this</span>.sayHello.bind(<span class="keyword">this</span>))  <span class="comment">//点击的时候会执行 sayHello，sayHello 里面的 this 代表 app 对象</span></span><br><span class="line">    &#125;,</span><br><span class="line">    sayHello: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">       <span class="built_in">console</span>.log(<span class="keyword">this</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">app.bind()</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="箭头函数中的this"><a href="#箭头函数中的this" class="headerlink" title="箭头函数中的this"></a>箭头函数中的this</h1><p>默认指向在定义它时,它所绑定的对象的上一级,而不是执行时的对象, 定义它的时候,可能环境是window</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="keyword">this</span>);</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line">foo()()()() <span class="comment">//window</span></span><br><span class="line"><span class="keyword">var</span> f = foo.call(&#123;<span class="attr">id</span>: <span class="number">1</span>&#125;);</span><br><span class="line">f()()() <span class="comment">//&#123;id:1&#125;</span></span><br><span class="line"><span class="keyword">var</span> t1 = f.call(&#123;<span class="attr">id</span>: <span class="number">2</span>&#125;)()();<span class="comment">//&#123;id:1&#125;</span></span><br><span class="line"><span class="keyword">var</span> t2 = f().call(&#123;<span class="attr">id</span>: <span class="number">3</span>&#125;)();<span class="comment">//&#123;id:1&#125;</span></span><br><span class="line"><span class="keyword">var</span> t3 = f()().call(&#123;<span class="attr">id</span>: <span class="number">4</span>&#125;);<span class="comment">//&#123;id:1&#125;</span></span><br></pre></td></tr></table></figure>
+<h1 id="setTimeout中的this"><a href="#setTimeout中的this" class="headerlink" title="setTimeout中的this"></a>setTimeout中的this</h1><p> 普通函数指向window<br> 箭头函数指向定义的对象<br> 引用函数,指向调用对象</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"> 0、</span><br><span class="line"> var obj = &#123;</span><br><span class="line">    fn1 : function () &#123;</span><br><span class="line">        console.log(this);          //obj</span><br><span class="line">    &#125;,</span><br><span class="line">    fn2 :　function () &#123;</span><br><span class="line">        setTimeout(function () &#123;</span><br><span class="line">            console.log(this);     //window 匿名函数执行在window环境，找不到宿主对象，所以指向window</span><br><span class="line">        &#125;,0);</span><br><span class="line">    &#125;,</span><br><span class="line">    fn3: function () &#123;</span><br><span class="line">      setTimeout(() =&gt; &#123;</span><br><span class="line">        console.log(this);         //obj 箭头函数创建在obj上</span><br><span class="line">      &#125;,100);</span><br><span class="line">    &#125;</span><br><span class="line">    fn4: function () &#123;</span><br><span class="line">      var that = this;</span><br><span class="line">      setTimeout(function () &#123;</span><br><span class="line">        console.log(that)          //obj 在setTimeout里面引用obj</span><br><span class="line">        console.log(this)          //window</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    fn5: function () &#123;</span><br><span class="line">      var f1 = () =&gt; &#123;</span><br><span class="line">        console.log(this);         // obj f1定义处在obj里面</span><br><span class="line">        setTimeout(() =&gt; &#123;</span><br><span class="line">          console.log(this);       // obj 箭头函数定义处在obj里面</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125;</span><br><span class="line">      f1();</span><br><span class="line">    &#125;</span><br><span class="line">    fn6: function () &#123;</span><br><span class="line">      var f2 = function () &#123;</span><br><span class="line">        console.log(this);         // window, f2调用时,没有宿主对象,默认是window</span><br><span class="line">        setTimeout(() =&gt; &#123;</span><br><span class="line">          console.log(this);      // window 箭头函数定义在f2确定的window里面</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125;;</span><br><span class="line">      f2();</span><br><span class="line">    &#125;</span><br><span class="line">    fn7: function () &#123;</span><br><span class="line">      &apos;use strict&apos;;</span><br><span class="line">      var f3 = function () &#123;</span><br><span class="line">        console.log(this); // undefined</span><br><span class="line">        setTimeout(() =&gt; &#123;</span><br><span class="line">          console.log(this); // undefined</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125;;</span><br><span class="line">      f3();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">obj.fn1();</span><br><span class="line">obj.fn2();</span><br><span class="line">obj.fn3();</span><br><span class="line">obj.fn4();</span><br><span class="line">···</span><br><span class="line"></span><br><span class="line">1、</span><br><span class="line">function foo()&#123;</span><br><span class="line">	setTimeout(function()&#123;</span><br><span class="line">    console.log(this) //window 匿名函数，找不到宿主对象</span><br><span class="line">  &#125;, 100);</span><br><span class="line">  setTimeout(() =&gt; &#123;</span><br><span class="line">    console.log(this) //window foo挂载在window对象上</span><br><span class="line">  &#125;, 100);</span><br><span class="line">&#125;</span><br><span class="line">foo();</span><br><span class="line">foo.call(&#123;id:42&#125;); //window &#123;id:42&#125; foo运行时所在的对象，恰好是箭头函数定义时所在的对象</span><br><span class="line">//call([thisObj[,arg1[, arg2,....]) 方法可将一个函数的对象上下文从初始的上下文改变为由 thisObj 指定的新对象。</span><br><span class="line"></span><br><span class="line">2、</span><br><span class="line">function method() &#123;</span><br><span class="line">  alert(this.value);  // 输出 42  第二个this</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function Foo() &#123;</span><br><span class="line">    this.value = 42;</span><br><span class="line">    setTimeout(this.method, 500);  // 这里this指向window   第一个this</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Foo();</span><br><span class="line">//Foo挂载在window上，当执行Foo时，this指向window,Foo里面的value被挂到window，method本来就挂在window上，所以执行this.method就是调用window.method</span><br><span class="line">//method执行，它的this指向window,这时window已经挂上value值42</span><br></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"> //其他理解</span><br><span class="line"> let app = &#123;</span><br><span class="line">    fn1: function(a)&#123;</span><br><span class="line">        console.log(this)  //app</span><br><span class="line">    &#125;</span><br><span class="line">    fn2(a) &#123;</span><br><span class="line">        consoel.log(this)  //app</span><br><span class="line">    &#125;,</span><br><span class="line">    fn3: (a)=&gt;&#123;</span><br><span class="line">        console.log(this)  //window</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">app.fn2.call(app)</span><br><span class="line">app.fn3.call( 它的上一级的 this )</span><br><span class="line"> 1.</span><br><span class="line"> var app = &#123;</span><br><span class="line">    init() &#123;</span><br><span class="line">        var menu = &#123;</span><br><span class="line">            init: ()=&gt;&#123;</span><br><span class="line">                console.log(this)</span><br><span class="line">            &#125;,</span><br><span class="line">            bind() &#123;</span><br><span class="line">                console.log(this)   </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        menu.init() </span><br><span class="line">         /*相当于  menu.init.call(menu 所在的环境下的 this)  ， 所以 init 里面的 this 也就是 app。</span><br><span class="line">         （假设 app.init 也是箭头函数，想想 menu.init 里面的 this 是什么？）          </span><br><span class="line">         */</span><br><span class="line">        menu.bind() </span><br><span class="line">        /*相当于 menu.bind.call(menu)，也就是 menu，所以 bind 里面的 this 就是 menu</span><br><span class="line">        */</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">app.init()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> 2.</span><br><span class="line"> var app = &#123;</span><br><span class="line">    fn1() &#123;</span><br><span class="line">        setTimeout(function()&#123;</span><br><span class="line">            console.log(this)</span><br><span class="line">        &#125;, 10)</span><br><span class="line">    &#125;,</span><br><span class="line">    fn2() &#123;</span><br><span class="line">        setTimeout(()=&gt;&#123;</span><br><span class="line">            console.log(this)</span><br><span class="line">        &#125;,20)</span><br><span class="line">    &#125;,</span><br><span class="line">    fn3() &#123;</span><br><span class="line">        setTimeout((function()&#123;</span><br><span class="line">            console.log(this)</span><br><span class="line">        &#125;).bind(this), 30)        </span><br><span class="line">    &#125;,</span><br><span class="line">    fn4: ()=&gt; &#123;</span><br><span class="line">        setTimeout(()=&gt;&#123;</span><br><span class="line">            console.log(this)</span><br><span class="line">        &#125;,40)        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">app.fn1()</span><br><span class="line">app.fn2()</span><br><span class="line">app.fn3()</span><br><span class="line">app.fn4()</span><br><span class="line"></span><br><span class="line">var app = &#123;</span><br><span class="line">    fn1() &#123;</span><br><span class="line">        function fn()&#123;</span><br><span class="line">            console.log(this)</span><br><span class="line">        &#125;</span><br><span class="line">        //过10ms 后执行</span><br><span class="line">        //fn.call(undefined) ，所以输出 Window</span><br><span class="line">    &#125;,</span><br><span class="line">    fn2() &#123;</span><br><span class="line">        //过20ms 执行箭头函数</span><br><span class="line">        //箭头函数里面没资格有 自己的 this，借用 setTimeout 外面的 this，也就是 app</span><br><span class="line">    &#125;,</span><br><span class="line">    fn3() &#123;</span><br><span class="line">        // 创建了一个新函数，这个新函数里面绑定了 外面的this，也就是 app</span><br><span class="line">        // 20 ms 后执行新函数，输出 this，也就是刚刚绑定的 app    </span><br><span class="line">    &#125;</span><br><span class="line">    fn4: ()=&gt; &#123;</span><br><span class="line">        //过40ms 执行箭头函数</span><br><span class="line">        //箭头函数里面没资格有 this，用 setTimeout 外面的 this</span><br><span class="line">        //setTimeout 所在的 fn4也是箭头函数，没资格拥有自己的 this，借用外面的 this ，也就是 Window     </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><a href="http://www.cnblogs.com/libin-1/p/5814792.html" target="_blank" rel="noopener">应用</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/test/TravishCI.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -928,618 +1588,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/layouts.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/knowledge/layouts.html" itemprop="url">
-                  常见页面布局小结
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-03T06:30:02+08:00">
-                2017-08-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="圣杯布局"><a href="#圣杯布局" class="headerlink" title="圣杯布局"></a>圣杯布局</h1><p>三栏布局,左右两栏宽度固定,中间一栏宽度随屏幕宽度自适应<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">&lt;div id=&quot;header&quot;&gt;#header&lt;/div&gt;</span><br><span class="line">&lt;div id=&quot;container&quot;&gt;</span><br><span class="line">  &lt;div id=&quot;center&quot; class=&quot;column&quot;&gt;#center&lt;/div&gt;</span><br><span class="line">  &lt;div id=&quot;left&quot; class=&quot;column&quot;&gt;#left&lt;/div&gt;</span><br><span class="line">  &lt;div id=&quot;right&quot; class=&quot;column&quot;&gt;#right&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;div id=&quot;footer&quot;&gt;#footer&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line"></span><br><span class="line">&lt;style type=&quot;text/css&quot;&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">  min-width: 550px;      /* 2x LC width + RC width */</span><br><span class="line">&#125;</span><br><span class="line">#container &#123;</span><br><span class="line">  padding-left: 200px;   /* LC width */</span><br><span class="line">  padding-right: 150px;  /* RC width */</span><br><span class="line">&#125;</span><br><span class="line">#container .column &#123;</span><br><span class="line">  position: relative;/* 让左右两栏进行相对位移，位移到container的内边距位置 */</span><br><span class="line">  min-height: 200px;/* 高度自适应*/</span><br><span class="line">  float: left;</span><br><span class="line">&#125;</span><br><span class="line">#center &#123;</span><br><span class="line">  width: 100%;</span><br><span class="line">  background-color: #e9e9e9;</span><br><span class="line">&#125;</span><br><span class="line">#left &#123;</span><br><span class="line">  width: 200px;          /* LC width */</span><br><span class="line">  right: 200px;           /*LC width *//*相对于 container 的右边线向左偏移 200px 将自己位移到container内边距 */</span><br><span class="line">  margin-left: -100%;/*浮动到与中间平行 */</span><br><span class="line">  background-color: red;</span><br><span class="line">&#125;</span><br><span class="line">#right &#123;</span><br><span class="line">  width: 150px;          /* RC width */</span><br><span class="line">  margin-right: -150px;  /* RC width */</span><br><span class="line">  background-color: blue;</span><br><span class="line">&#125;</span><br><span class="line">#footer &#123;</span><br><span class="line">  clear: both;/*清除 footer 的上下环境，以免遭跟上面三栏一起浮动*/</span><br><span class="line">&#125;</span><br><span class="line">#header, </span><br><span class="line">#footer &#123;</span><br><span class="line">  background-color: #c9c9c9;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure></p>
-<p><img src="/image/holy1.png" alt="圣杯1"><br><img src="/image/holy2.png" alt="圣杯2"></p>
-<p>flex 实现 圣杯布局<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">&lt;!doctype html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;header&gt;header&lt;/header&gt;</span><br><span class="line">    &lt;section&gt;</span><br><span class="line">      &lt;nav&gt;nav&lt;/nav&gt;</span><br><span class="line">      &lt;article&gt;article&lt;/article&gt;</span><br><span class="line">      &lt;aside&gt;aside&lt;/aside&gt;</span><br><span class="line">    &lt;/section&gt;</span><br><span class="line">    &lt;footer&gt;footer&lt;/footer&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line"> body&#123;</span><br><span class="line">   display: flex;</span><br><span class="line">   flex-flow: column wrap;</span><br><span class="line">   justify-content:flex-start;</span><br><span class="line"> &#125;</span><br><span class="line"> header,section,nav,aside,footer&#123;</span><br><span class="line">   display: block;</span><br><span class="line"> &#125;</span><br><span class="line"> header&#123;</span><br><span class="line">   order: 1;</span><br><span class="line">   width: 100%;</span><br><span class="line">   min-height: 100px;</span><br><span class="line">   padding: 10px 20px;</span><br><span class="line">   background-color: antiquewhite;</span><br><span class="line"> &#125;</span><br><span class="line"> section&#123;</span><br><span class="line">   flex: 1; </span><br><span class="line">   order: 2;</span><br><span class="line">   min-width: 100%;</span><br><span class="line">   margin: 20px 0;</span><br><span class="line">   display: flex;</span><br><span class="line"> &#125;</span><br><span class="line"> footer&#123;</span><br><span class="line">   order: 3;</span><br><span class="line">   min-height: 60px;</span><br><span class="line">   min-width: 100%;</span><br><span class="line">   padding: 1%;</span><br><span class="line">   background-color: burlywood;</span><br><span class="line"> &#125;</span><br><span class="line"> nav&#123;</span><br><span class="line">   order:1;</span><br><span class="line">   width: 220px;</span><br><span class="line">   padding: 1%;</span><br><span class="line">   background-color: aquamarine;</span><br><span class="line"> &#125;</span><br><span class="line"> article&#123;</span><br><span class="line">   flex: 1;/* 可伸缩 */</span><br><span class="line">   order:2;</span><br><span class="line">   padding: 1%;</span><br><span class="line">   margin:0 2%;</span><br><span class="line">   background-color: blue;</span><br><span class="line">   word-break: break-all;</span><br><span class="line"> &#125;</span><br><span class="line"> aside&#123;</span><br><span class="line">   order:3;</span><br><span class="line">   width:220px;</span><br><span class="line">   padding: 1%;</span><br><span class="line">   background-color: aqua;</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
-<h1 id="双飞翼布局"><a href="#双飞翼布局" class="headerlink" title="双飞翼布局"></a>双飞翼布局</h1><p>效果同圣杯布局，只是写法上DOM在center里面新增加了div,css不再使用relative定位，只是用float和外边距<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id=&quot;header&quot;&gt;header&lt;/div&gt;</span><br><span class="line">&lt;div id=&quot;container&quot;&gt;</span><br><span class="line">  &lt;div id=&quot;center&quot; class=&quot;column&quot;&gt;</span><br><span class="line">    &lt;div id=&quot;innerCenter&quot;&gt;center&lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  &lt;div id=&quot;left&quot; class=&quot;column&quot;&gt;left&lt;/div&gt;</span><br><span class="line">  &lt;div id=&quot;right&quot; class=&quot;column&quot;&gt;right&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;div id=&quot;footer&quot;&gt;footer&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;style type=&quot;text/css&quot;&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    min-width: 351px; /* LC width + RC width +1*/</span><br><span class="line">  &#125;</span><br><span class="line">  #container .column &#123;</span><br><span class="line">    min-height: 200px;</span><br><span class="line">    float: left;</span><br><span class="line">  &#125;</span><br><span class="line">  #innerCenter &#123; /*代替圣杯container的padding处理*/</span><br><span class="line">    margin-left: 200px;</span><br><span class="line">    margin-right: 150px;</span><br><span class="line">  &#125;</span><br><span class="line">  #center &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    background-color: #e9e9e9;</span><br><span class="line">  &#125;</span><br><span class="line">  #left &#123;</span><br><span class="line">    width: 200px;</span><br><span class="line">    margin-left: -100%;</span><br><span class="line">    background-color: red;</span><br><span class="line">  &#125;</span><br><span class="line">  #right &#123;</span><br><span class="line">    width: 150px;</span><br><span class="line">    margin-left: -150px;</span><br><span class="line">    background-color: blue;</span><br><span class="line">  &#125;</span><br><span class="line">  #footer &#123;</span><br><span class="line">    clear: both;</span><br><span class="line">  &#125;</span><br><span class="line">  #header, #footer &#123;</span><br><span class="line">    background-color: #c9c9c9;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure></p>
-<p><img src="/image/holy3.png" alt="圣杯3"><br><img src="/image/holy4.png" alt="圣杯4"></p>
-<h1 id="7种垂直居中"><a href="#7种垂直居中" class="headerlink" title="7种垂直居中"></a>7种垂直居中</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br></pre></td><td class="code"><pre><span class="line">1.tabel自带</span><br><span class="line">&lt;body&gt;</span><br><span class="line">  &lt;table class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;tr&gt;</span><br><span class="line">      &lt;td class=&quot;child&quot;&gt;</span><br><span class="line">      一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字</span><br><span class="line">      &lt;/td&gt;</span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line">  &lt;/table&gt;</span><br><span class="line">  .parent&#123;</span><br><span class="line">  border: 1px solid red;</span><br><span class="line">  height: 600px;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.child&#123;</span><br><span class="line">  border: 1px solid green;</span><br><span class="line">&#125;</span><br><span class="line">2.在水平居中部分的前后添加inline-block元素，高度100%，三个子元素，vertical-align:middle</span><br><span class="line">&lt;body&gt;</span><br><span class="line">  &lt;div class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;child&quot;&gt;</span><br><span class="line">      一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">.parent&#123;</span><br><span class="line">  border: 3px solid red;</span><br><span class="line">  height: 600px;</span><br><span class="line">  text-align: center;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.child&#123;</span><br><span class="line">  border: 3px solid black;</span><br><span class="line">  display: inline-block;</span><br><span class="line">  width: 300px;</span><br><span class="line">  vertical-align: middle;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.parent:before&#123;</span><br><span class="line">  content:&apos;&apos;;</span><br><span class="line">  outline: 3px solid red;</span><br><span class="line">  display: inline-block;</span><br><span class="line">  height: 100%;</span><br><span class="line">  vertical-align: middle;</span><br><span class="line">&#125;</span><br><span class="line">.parent:after&#123;</span><br><span class="line">  content:&apos;&apos;;</span><br><span class="line">  outline: 3px solid red;</span><br><span class="line">  display: inline-block;</span><br><span class="line">  height: 100%;</span><br><span class="line">  vertical-align: middle;</span><br><span class="line">&#125;</span><br><span class="line">如果用标签元素，则前后元素类设置为.parent .after&#123;&#125;,.parent .before&#123;&#125;</span><br><span class="line"></span><br><span class="line">3.父元素position设置为相对定位relative,子元素位置相对父元素，设置为absolute,通过设置top和left 50%决定距离父元素上边和左边的距离，</span><br><span class="line">再通过margin-top,margin-left为子元素高和宽的一半将子元素和父元素中心重合</span><br><span class="line">&lt;div class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;child&quot;&gt;</span><br><span class="line">      一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">.parent&#123;</span><br><span class="line">  height: 600px;</span><br><span class="line">  border: 1px solid red;</span><br><span class="line">  position: relative;</span><br><span class="line">&#125;</span><br><span class="line">.child&#123;</span><br><span class="line">  border: 1px solid green;</span><br><span class="line">  width: 300px;</span><br><span class="line">  height: 100px;</span><br><span class="line">  position: absolute;</span><br><span class="line">  top: 50%;</span><br><span class="line">  left: 50%;</span><br><span class="line">  margin:-50px 0 0 -150px;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">4.父元素relative,子元素absolute，top和left均为 50%，transform:translate(-50%,-50%)</span><br><span class="line">&lt;div class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;child&quot;&gt;</span><br><span class="line">      一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">.parent&#123;</span><br><span class="line">  height: 600px;</span><br><span class="line">  border: 1px solid red;</span><br><span class="line">  position: relative;</span><br><span class="line">&#125;</span><br><span class="line">.child&#123;</span><br><span class="line">  border: 1px solid green;</span><br><span class="line">  position: absolute;</span><br><span class="line">  top: 50%;</span><br><span class="line">  left: 50%;</span><br><span class="line">  transform: translate(-50%,-50%);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">5.父元素relative,子元素absolute，子元素，上下左右都是0，margin:auto</span><br><span class="line">&lt;div class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;child&quot;&gt;</span><br><span class="line">      一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">.parent&#123;</span><br><span class="line">  height: 600px;</span><br><span class="line">  border: 1px solid red;</span><br><span class="line">  position: relative;</span><br><span class="line">&#125;</span><br><span class="line">.child&#123;</span><br><span class="line">  border: 1px solid green;</span><br><span class="line">  width: 300px;</span><br><span class="line">  position: absolute;</span><br><span class="line">  margin: auto;</span><br><span class="line">  top: 0;</span><br><span class="line">  bottom: 0;</span><br><span class="line">  left: 0;</span><br><span class="line">  right: 0;</span><br><span class="line">&#125;</span><br><span class="line">6.felx布局，父元素display:flex,justify-content:center;align-items:center</span><br><span class="line">&lt;div class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;child&quot;&gt;</span><br><span class="line">      一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  .parent&#123;</span><br><span class="line">  height: 600px;</span><br><span class="line">  border: 3px solid red;</span><br><span class="line"></span><br><span class="line">  display: flex;</span><br><span class="line">  justify-content: center;</span><br><span class="line">  align-items: center;</span><br><span class="line">&#125;</span><br><span class="line">.child&#123;</span><br><span class="line">  border: 3px solid green;</span><br><span class="line">  width: 300px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="清除浮动"><a href="#清除浮动" class="headerlink" title="清除浮动"></a>清除浮动</h1><p>1.在父元素上添加样式overflow:hidden/auto<br>2.给父元素设置高度或者添加float属性（使之成为浮动元素）<br>3.在子元素结尾添加空div标签或者br标签，或者给父元素添加:after伪类，设置属性clear：both<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">.clearfix::after&#123;</span><br><span class="line">    content: &apos;&apos;; display: block; clear:both;</span><br><span class="line">&#125;</span><br><span class="line">.clearfix&#123;</span><br><span class="line">    zoom: 1; /* IE 兼容 */</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h1 id="多列布局"><a href="#多列布局" class="headerlink" title="多列布局"></a>多列布局</h1><p>column-width —— 列宽,不设置时由其他属性决定<br>column-count —— 列数,不设置时由其他属性决定<br>columns —— column-width column-count</p>
-<p>column-gap —— 列间距<br>column-rule —— 间距线，位于列间距中间，介于background和content之间，宽度大于列间距时消失<br>宽度 样式 颜色</p>
-<p>column-fill —— 各列宽度<br>auto 随内容自动调整 |balance 以内容最多一列统一高度<br>column-span —— 子元素是否合并列<br>none/all</p>
-<p>静态布局：尺寸不变，布局不变<br>自适应布局：为不同尺寸屏幕设计不同静态布局<br>流式布局：通过更改模块大小，保证整体布局<br>响应式布局：针对不同尺寸屏幕，设计不同流式布局<br>弹性布局：可以设置模块大小放缩保证布局，也可以固定模块大小，更改布局<br><a href="https://www.cnblogs.com/yanayana/p/7066948.html" target="_blank" rel="noopener">各种布局概念区分</a><br><a href="/post/react/course/layout.html">react涉及布局</a><br><a href="http://www.imooc.com/article/2235" target="_blank" rel="noopener">相关资料</a><br><a href="http://www.cnblogs.com/dolphinX/archive/2012/10/13/2722501.html" target="_blank" rel="noopener">CSS布局 ——从display，position， float属性谈起</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/qrcode.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/knowledge/qrcode.html" itemprop="url">
-                  使用QRcode.js生成二维码
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-01T07:26:37+08:00">
-                2017-08-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在页面中引入QRcode.js文件，再js部分进行定义<br>var qrcode = new QRCode(document.getElementById(“qrcode0”), { //qrcode0放置二维码容器的id<br>        width : 150,//二维码大小<br>        height : 150<br>});<br>qrcode.makeCode(url);//url,生成二维码的依据</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/angular/angularjsfilterEmoji.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/angular/angularjsfilterEmoji.html" itemprop="url">
-                  Angularjs 利用图片更换emoji表情
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-01T06:46:02+08:00">
-                2017-08-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在某些浏览器中,emoji表情不能正常显示,只能显示原始状态如下<br><img src="/image/emoji1.png" alt="erroremoji"><br>为使表情正常显示，这里利用转码方法将emoji符号用图片替换<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//对数据$scope.data.remark做表情替换处理,$scope.data.remark是包含emoji符号的字符串</span></span><br><span class="line">    <span class="keyword">var</span> str=$scope.data.remark;</span><br><span class="line">    str=str.replace(rep,<span class="function"><span class="keyword">function</span>(<span class="params">code</span>) </span>&#123; <span class="comment">//code即匹配到的emoji符号,对该符号通过_escapeToUtf32(code)转码,得到对应图片名,然后图片替换</span></span><br><span class="line">     <span class="keyword">return</span> <span class="string">'&lt;img class="emoji" style="vertical-align:middle" src="assets/img/emoji/'</span>+_escapeToUtf32(code) + <span class="string">'.png"&gt;'</span>;</span><br><span class="line">    &#125;)</span><br><span class="line">    $scope.data.remark = str;</span><br><span class="line"></span><br><span class="line"><span class="comment">//用emoji符号的unicode码匹配emoji符号,例如270c匹配 victory hand符号</span></span><br><span class="line"> <span class="keyword">var</span> rep =<span class="regexp">/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]|\u270c|\u261d/g</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//emoji 表情转码</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span>  <span class="title">_escapeToUtf32</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> escaped = [],</span><br><span class="line">      unicodeCodes = _convertStringToUnicodeCodePoints(str),</span><br><span class="line">      i = <span class="number">0</span>,</span><br><span class="line">      l = unicodeCodes.length,</span><br><span class="line">      hex;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (; i &lt; l; i++) &#123;</span><br><span class="line">      hex = unicodeCodes[i].toString(<span class="number">16</span>);</span><br><span class="line">      escaped.push(<span class="string">'0000'</span>.substr(hex.length) + hex);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> escaped.join(<span class="string">'-'</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">function</span> <span class="title">_convertStringToUnicodeCodePoints</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> surrogate1st = <span class="number">0</span>,</span><br><span class="line">      unicodeCodes = [],</span><br><span class="line">      i = <span class="number">0</span>,</span><br><span class="line">      l = str.length;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (; i &lt; l; i++) &#123;</span><br><span class="line">      <span class="keyword">var</span> utf16Code = str.charCodeAt(i);</span><br><span class="line">      <span class="keyword">if</span> (surrogate1st != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (utf16Code &gt;= <span class="number">0xDC00</span> &amp;&amp; utf16Code &lt;= <span class="number">0xDFFF</span>) &#123;</span><br><span class="line">          <span class="keyword">var</span> surrogate2nd = utf16Code,</span><br><span class="line">            unicodeCode = (surrogate1st - <span class="number">0xD800</span>) * (<span class="number">1</span> &lt;&lt; <span class="number">10</span>) + (<span class="number">1</span> &lt;&lt; <span class="number">16</span>) + (surrogate2nd - <span class="number">0xDC00</span>);</span><br><span class="line">          unicodeCodes.push(unicodeCode);</span><br><span class="line">        &#125;</span><br><span class="line">        surrogate1st = <span class="number">0</span>;</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (utf16Code &gt;= <span class="number">0xD800</span> &amp;&amp; utf16Code &lt;= <span class="number">0xDBFF</span>) &#123;</span><br><span class="line">        surrogate1st = utf16Code;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        unicodeCodes.push(utf16Code);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> unicodeCodes;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Angularjs对字符串里面的html标签不会按照HTML去解析,会当做字符串显示,</span></span><br><span class="line"><span class="comment">//所以这里需要对字符串进行过滤，使字符串里面的标签能按照html解析</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//新建过滤器trust2Html,这里使用$sce方法</span></span><br><span class="line">app.filter(<span class="string">'trust2Html'</span>, [<span class="string">'$sce'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">$sce</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">val</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> $sce.trustAsHtml(val);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;])</span><br><span class="line"></span><br><span class="line"><span class="comment">//在页面里面显示经过图片替换的含emoji符号的字符串</span></span><br><span class="line">&lt;label ng-bind-html=<span class="string">"data.remark|trust2Html"</span>&gt;&lt;<span class="regexp">/label&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>替换后结果<br><img src="/image/emoji2.png" alt="exactemoji"><br><a href="https://apps.timwhitlock.info/emoji/tables/unicode#block-6a-additional-emoticons" target="_blank" rel="noopener">Emoji Unicode Tables</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/JQuery_data.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/js/JQuery_data.html" itemprop="url">
-                  探究jQuery.data
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-30T13:43:02+08:00">
-                2017-07-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>jQuery.data用于处理标签数据绑定</p>
-<h1 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h1><p>1.赋值</p>
-<p>a.使用js<br>$(‘’).data(key,value); 一次赋值一个，value可以是任意js数据类型,包括Array 或者 Object<br>$(‘’).data(obj);一次赋值多个或者更新多个或者新增多个</p>
-<p>b.使用HTML标签属性<br>利用H5 标签的’data-‘属性添加键值对<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div data-role=&quot;page&quot; data-last-value=&quot;43&quot; data-hidden=&quot;true&quot; data-options=&apos;&#123;&quot;name&quot;:&quot;John&quot;&#125;&apos;&gt;&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
-<p>2.取值<br>$(‘’).data(key);获取key对应的数据值<br>$(‘’).data(); 一次性获取绑定在$(‘’)上的所有数据对象</p>
-<p>3.删除<br>$(‘’).removeData(key);</p>
-<h1 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h1><p>a. &lt;object&gt;（除非是Flash插件），&lt;applet&gt; 或 &lt;embed&gt;&gt; 三个标签不能使用.data方法</p>
-<p>b. 通过”data-“属性建立的标签数据，获取时注意<br>data-last-value=”43” ==&gt; $(‘div’).data(‘lastValue’)<br>data-options=’{“name”:”John”}’ ==&gt; $(“div”).data(“options”).name -&gt;John<br>取到的值会自动转化为js的数据类型</p>
-<p>c. $(‘’).data()被赋值到js变量A后，之后对$(‘’)进行数据处理，A的内容会进行同步变动，<br>如果更改A的内容，$(‘’).data()也会同步更改<br>但如果$(‘’).data()的值被用到了html里面,HTML里面的值不会变动</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">  &lt;style&gt;</span><br><span class="line">  div &#123; <span class="attr">color</span>:blue; &#125;</span><br><span class="line">  span &#123; <span class="attr">color</span>:red; &#125;</span><br><span class="line">  &lt;<span class="regexp">/style&gt;</span></span><br><span class="line"><span class="regexp">  &lt;script src="http:/</span><span class="regexp">/cdn.bootcss.com/</span>jquery/<span class="number">1.11</span><span class="number">.2</span>/jquery.min.js<span class="string">"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="string">&lt;/head&gt;</span></span><br><span class="line"><span class="string">&lt;body&gt;</span></span><br><span class="line"><span class="string">  &lt;div&gt;</span></span><br><span class="line"><span class="string">    The values stored were</span></span><br><span class="line"><span class="string">    &lt;span&gt;&lt;/span&gt;</span></span><br><span class="line"><span class="string">    and</span></span><br><span class="line"><span class="string">    &lt;span&gt;&lt;/span&gt;</span></span><br><span class="line"><span class="string">  &lt;/div&gt;</span></span><br><span class="line"><span class="string">&lt;script&gt;</span></span><br><span class="line"><span class="string">$("</span>div<span class="string">").data("</span>test<span class="string">", &#123; first: 16, last: "</span>pizza!<span class="string">" &#125;);</span></span><br><span class="line"><span class="string">$("</span>span:first<span class="string">").text($("</span>div<span class="string">").data("</span>test<span class="string">").first);</span></span><br><span class="line"><span class="string">$("</span>span:last<span class="string">").text($("</span>div<span class="string">").data("</span>test<span class="string">").last);</span></span><br><span class="line"><span class="string">//页面输出 The values stored were 16 and pizza!</span></span><br><span class="line"><span class="string">  var temp = $("</span>div<span class="string">").data();</span></span><br><span class="line"><span class="string">  console.log(temp);</span></span><br><span class="line"><span class="string">  $("</span>div<span class="string">").data(&#123; first: 25, last: "</span>pizza!<span class="string">" ,test:&#123;last:'fruit'&#125;&#125;);</span></span><br><span class="line"><span class="string">  // $("</span>span:first<span class="string">").text($("</span>div<span class="string">").data("</span>first<span class="string">"));</span></span><br><span class="line"><span class="string">  // $("</span>span:last<span class="string">").text($("</span>div<span class="string">").data("</span>test<span class="string">").last); </span></span><br><span class="line"><span class="string">  //如果没有以上两句页面不会发生任何变化，添加后</span></span><br><span class="line"><span class="string">  //页面输出 The values stored were 25 and fruit</span></span><br><span class="line"><span class="string">  console.log(temp);//temp与$("</span>div<span class="string">").data()保持一致</span></span><br><span class="line"><span class="string">  console.log($("</span>div<span class="string">").data())</span></span><br><span class="line"><span class="string">  temp.child = 'Jack';</span></span><br><span class="line"><span class="string">  console.log($("</span>div<span class="string">").data()) //增加一项&#123;child: "</span>Jack<span class="string">"&#125;</span></span><br><span class="line"><span class="string">  $("</span>div<span class="string">").removeData("</span>blah<span class="string">");//删除没有的属性不会报错</span></span><br><span class="line"><span class="string">  $("</span>div<span class="string">").removeData("</span>child<span class="string">");</span></span><br><span class="line"><span class="string">   console.log(temp);</span></span><br><span class="line"><span class="string">&lt;/script&gt;</span></span><br><span class="line"><span class="string">&lt;/body&gt;</span></span><br><span class="line"><span class="string">&lt;/html&gt;</span></span><br></pre></td></tr></table></figure>
-<p><a href="https://github.com/YooHannah/algorithm/blob/master/plugin/data.js" target="_blank" rel="noopener">JQuery.data源码解析</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/angular/ng-class.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/angular/ng-class.html" itemprop="url">
-                  angular样式绑定ng-class
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-25T22:00:37+08:00">
-                2017-06-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>ng-class命令可用于绑定不同的样式<br>使用方法即先在js中,定义样式集合<br>$scope.STATUS_NAME = [<br>  {‘labelClass’: ‘label1’},<br>  {‘labelClass’: ‘label2’},<br>  {‘labelClass’: ‘label3’},<br>  {‘labelClass’: ‘label4’}<br> ];<br> 对绑定对象赋值<br> angular.forEach($scope.data, function(data){<br>     //对数组中每一项，根据status属性赋给labelclass属性样式集合中的值<br>   data.labelClass = $scope.STATUS_NAME[data.status].labelClass;<br> });<br>在html中定义不同的样式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;style type=&quot;text/css&quot;&gt;</span><br><span class="line">	.label1&#123;</span><br><span class="line">    background-color:#87CEFA</span><br><span class="line">  &#125;</span><br><span class="line">  .label2&#123;</span><br><span class="line">    background-color:#90EE90</span><br><span class="line">  &#125;</span><br><span class="line">  .label3&#123;</span><br><span class="line">    background-color:#d2cd93</span><br><span class="line">  &#125;</span><br><span class="line">  .label4&#123;</span><br><span class="line">    background-color:#D3D3D3</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure></p>
-<p> 在html中使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;tr role=&quot;row&quot; ng-repeat=&quot;item in data track by $index&quot;&gt;</span><br><span class="line">	&lt;td&gt;&lt;span class=&quot;label&quot; ng-class=&quot;item.labelClass&quot;&gt;&#123;&#123;item.status_desc&#125;&#125;&lt;/span&gt;&lt;/td&gt;</span><br><span class="line">&lt;/tr&gt;</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/15/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><span class="space">&hellip;</span><a class="page-number" href="/page/24/">24</a><a class="extend next" rel="next" href="/page/17/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/15/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><span class="page-number current">16</span><a class="page-number" href="/page/17/">17</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><a class="extend next" rel="next" href="/page/17/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1578,7 +1631,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">240</span>
+              <span class="site-state-item-count">245</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1642,7 +1695,7 @@
         <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2024</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

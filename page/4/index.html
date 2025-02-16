@@ -259,6 +259,680 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/systemDesign.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/knowledge/systemDesign.html" itemprop="url">
+                  系统设计案例
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-02-02T09:31:06+08:00">
+                2022-02-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>案例：用户将存储内容粘贴到站点，站点给用户返回一个短地址，用户通过短地址，可以访问之前粘贴的内容或者跳转之前的原始站点</p>
+<h1 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h1><ol>
+<li><p>对于用户来说操作要简单，生成的短地址要简单，而且要唯一，不同用户即使内容一样也要生成唯一的短地址</p>
+</li>
+<li><p>时间有效性，从存储角度来说，不可能一直帮用户存储所有生成的短地址，不然存储会越来越大，所以通过设置短地址有效的访问时间，可以减少存储成本</p>
+</li>
+</ol>
+<h1 id="技术"><a href="#技术" class="headerlink" title="技术"></a>技术</h1><ol>
+<li>可用性(high Availability)， 保障用户功能可用</li>
+<li>低延时(low latency)，用户拿到短地址或者通过短地址跳转其他网站时，重定向时间不宜过长</li>
+<li>安全性（non guessable），不能被猜出来，用户在生成一定短地址时如果携带一些个人信息，不应体现在短地址中，否则会造成用户信息泄露</li>
+<li>对于ins/微博/小红书之类的社交功能还要保障一致性，博主发的照片，follower看到的内容应该是一样的</li>
+</ol>
+<h1 id="容量负载能力假设"><a href="#容量负载能力假设" class="headerlink" title="容量负载能力假设"></a>容量负载能力假设</h1><p>对一个用户来说，可以抽象出两个主要请求</p>
+<ol>
+<li>请求生成短url，我们要把请求参数或者原始信息存储起来 inbound</li>
+<li>请求访问url，把生成的url返回给用户使用，进行重定向 outbound</li>
+</ol>
+<p>假设一个短地址按500byte大小存储</p>
+<h2 id="容量"><a href="#容量" class="headerlink" title="容量"></a>容量</h2><p>假设一个月会有100万个新短地址生成，<br>那么5年会产生</p>
+<p>100万<em>5年</em>12个月 ==&gt; 约等于60亿个短地址</p>
+<p>60亿*500byte ==&gt; 3TB 会有需要3TB大小的容量存储</p>
+<h2 id="负载能力"><a href="#负载能力" class="headerlink" title="负载能力"></a>负载能力</h2><p>假设一个月有100个用户，每个用户会进行100万次访问短地址进行重定向的操作</p>
+<p>那么每秒钟会有<br>（100 <em> 100万）/（30D </em> 24H * 3600s） ==&gt; 约等于4000个短url 要给到用户<br>同时会有<br>4000/ 100 ==&gt; 大概40个短url 需要被生成</p>
+<p>那么服务所需要的带宽就可以计算出来</p>
+<p>inbound : 40<em> 500 byte 约等于 20kb/s<br>outbound: 4000</em> 500 byte 约等于 20MB/s</p>
+<h1 id="API-数据库设计"><a href="#API-数据库设计" class="headerlink" title="API 数据库设计"></a>API 数据库设计</h1><h2 id="api"><a href="#api" class="headerlink" title="api"></a>api</h2><p>假设会用到简单的增删<br>生成短url createURL(api-key, originUrl, expired-Date, userId)<br>删除url  deleteURL(api-key,shortUrl)</p>
+<h2 id="DataBase"><a href="#DataBase" class="headerlink" title="DataBase"></a>DataBase</h2><p>对于shortUrl</p>
+<p>pk: hash<br>originUrl,<br>expired-date,<br>userId<br>…</p>
+<p>对于user<br>pk: userId<br>name<br>…</p>
+<h2 id="生成shortUrl"><a href="#生成shortUrl" class="headerlink" title="生成shortUrl"></a>生成shortUrl</h2><p>假如计划生成一个6个字符的短url，使用base64的加密算法的话可以生成64 ^ 6 大约640个短url,</p>
+<p>满足之前5年会产生60个亿的唯一性需求</p>
+<h1 id="整体逻辑"><a href="#整体逻辑" class="headerlink" title="整体逻辑"></a>整体逻辑</h1><p>用户 —&gt;request shortUrl generation —&gt; app</p>
+<p>app —&gt; base64 encoding + 从key generation DB中拿一个nonUse 的key —&gt; 得到shortUrl —&gt;DB</p>
+<p>DB —&gt; app –&gt;用户</p>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="Cache"><a href="#Cache" class="headerlink" title="Cache"></a>Cache</h2><p>2-8原则</p>
+<p>用存储的20% 的url做cache内容，可以满足80% 的访问需求</p>
+<h2 id="load-balance"><a href="#load-balance" class="headerlink" title="load balance"></a>load balance</h2><p>均衡流量</p>
+<h2 id="过期后的url处理，key的处理"><a href="#过期后的url处理，key的处理" class="headerlink" title="过期后的url处理，key的处理"></a>过期后的url处理，key的处理</h2><h2 id="分布式存储，分片"><a href="#分布式存储，分片" class="headerlink" title="分布式存储，分片"></a>分布式存储，分片</h2><h2 id="对于社交功能的newFeed的推送"><a href="#对于社交功能的newFeed的推送" class="headerlink" title="对于社交功能的newFeed的推送"></a>对于社交功能的newFeed的推送</h2><p>pull / push / pull + push hybrid</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1129.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/react/hooks/1129.html" itemprop="url">
+                  如何提升应用打开速度
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-29T16:20:02+08:00">
+                2021-11-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="使用-import-语句，定义按需加载的起始模块"><a href="#使用-import-语句，定义按需加载的起始模块" class="headerlink" title="使用 import 语句，定义按需加载的起始模块"></a>使用 import 语句，定义按需加载的起始模块</h1><p>对于这个需求，ECMA Script 标准有一个提案，专门用于动态加载模块，语法是 import(someModule)。<br>注意，这里的 import 和我们一般用于引入模块的静态声明方式不同，比如 import something from ‘somemodule’ 。<br>但这里的 import 是作为一个函数动态运行的，这个 import() 函数会返回一个 Promise。<br>这样，在模块加载成功后，就可以在 Promise 的 then 回调函数中去使用这个模块了。</p>
+<p>虽然这只是一个提案，并没有成为标准，但是 Webpack 等打包工具利用了这样的语法去定义代码的分包。</p>
+<p>也就是说，Webpack 实现了这样的语法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">function ProfilePage() &#123;</span><br><span class="line">  // 定义一个 state 用于存放需要加载的组件</span><br><span class="line">  const [RealPage, setRealPage] = useState(null);</span><br><span class="line">  </span><br><span class="line">  // 根据路径动态加载真正的组件实现</span><br><span class="line">  import(&apos;./RealProfilePage&apos;).then((comp) =&gt; &#123;</span><br><span class="line">    setRealPage(Comp);</span><br><span class="line">  &#125;);</span><br><span class="line">  // 如果组件未加载则显示 Loading 状态</span><br><span class="line">  if (!RealPage) return &apos;Loading....&apos;;</span><br><span class="line">  </span><br><span class="line">  // 组件加载成功后则将其渲染到界面</span><br><span class="line">  return &lt;RealPage /&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>import() 这个语句完全是由 Webpack 进行处理的。</p>
+<p>按需加载的实现原理：Webpack 利用了动态 import 语句，自动实现了整个应用的拆包。<br>而在实际开发中，其实并不需要关心 Webpack 是如何做到的，<br>而只需要考虑：该在哪个位置使用 import 语句去定义动态加载的拆分点。</p>
+<p>总体需要采用的策略是：按业务模块为目标去做隔离，尽量在每个模块的起始页面去定义这个拆分点。</p>
+<p><b>react-loadable</b>，专门用于 React 组件的按需加载。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import Loadable from &quot;react-loadable&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 创建一个显示加载状态的组件</span><br><span class="line">function Loading(&#123; error &#125;) &#123;</span><br><span class="line">  return error ? &apos;Failed&apos; : &apos;Loading&apos;;</span><br><span class="line">&#125;</span><br><span class="line">// 创建加载器组件</span><br><span class="line">const HelloLazyLoad = Loadable(&#123;</span><br><span class="line">  loader: () =&gt; import(&quot;./RealHelloLazyLoad&quot;),</span><br><span class="line">  loading: Loading,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>可以看到 Loadable 这个高阶组件主要就是两个 API。</p>
+<p>loader：用于传入一个加载器回调，在组件渲染到页面时被执行。<br>在这个回调函数中，我们只需要直接使用 import 语句去加载需要的模块就可以了。</p>
+<p>loading：表示用于显示加载状态的组件。在模块加载完成之前，加载器就会渲染这个组件。<br>如果模块加载失败，那么 react-loadable 会将 errors 属性传递给 Loading 组件，方便你根据错误状态来显示不同的信息给用户。</p>
+<p>按需加载可以说是减少首屏加载时间最为有效的手段，它可以让用户在打开应用时，无需加载所有代码就能开始使用，从而提升用户体验。</p>
+<h1 id="使用-service-worker-缓存前端资源"><a href="#使用-service-worker-缓存前端资源" class="headerlink" title="使用 service worker 缓存前端资源"></a>使用 service worker 缓存前端资源</h1><p>和浏览器自动的资源缓存机制相比，Service Worker 加上 Cache Storage 这个缓存机制，具有更高的准确性和可靠性。</p>
+<p>因为它可以确保两点：<br>缓存永远不过期。你只要下载过一次，就永远不需要再重新下载，除非主动删除。<br>永远不会访问过期的资源。换句话说，如果发布了一个新版本，那么你可以通过版本化的一些机制，来确保用户访问到的一定是最新的资源。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/question.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/react/hooks/question.html" itemprop="url">
+                  一些其他小问题
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-29T16:20:02+08:00">
+                2021-11-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>1.<br>在 useEffect 中如果使用了某些变量，却没有在依赖项中指定，会发生什么呢？</p>
+<p>依赖那里没有传任何参数的话，会每次render都执行。<br>依赖项有传值但是，有部分依赖没有传，那么没有传的那部分，数据即使变化也不会执行副作用。</p>
+<p>对于这节课中显示的 Blog 文章的例子，我们在 useEffect 中使用了 setBlogContent 这样一个函数，本质上它也是一个局部变量，那么这个函数需要被作为依赖项吗？为什么？</p>
+<p>函数应该是不会变化的，所以不需要监听。</p>
+<p>2.<br>useState 其实也是能够在组件的多次渲染之间共享数据的，那么在 useRef 的计时器例子中，能否用 state 去保存 window.setInterval() 返回的 timer 呢？</p>
+<p>可以，只是没有 useRef 更优，因为在更新 state 值后会导致重新渲染，而 ref 值发生变化时，是不会触发组件的重新渲染的，这也是 useRef 区别于 useState 的地方。</p>
+<p>3.<br>componentWillUnmount 近似的实现：组件销毁和文章 id 变化时执行。那么在函数组件中如果要实现严格的 componentWillUnmount，也就是只在组件销毁时执行，应该如何实现？\</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">useEffect(() =&gt; &#123;</span><br><span class="line">  return () =&gt; &#123;</span><br><span class="line">    // 这里只会在组件销毁前（componentWillUnmount）执行一次</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, [])</span><br></pre></td></tr></table></figure>
+<p>4.<br>每次调用 useArticle 这个 Hook 的时候都会触发副作用去获取数据。<br>但是有时候，我们希望在有些组件自动获取，但有的组件中需要点击某个按钮才去获取数据，那么你会如何设计这个 Hook？（可能这道题有一点难度。）</p>
+<p>useArticle Hook 可以提供一个参数，用来标记本地调用是否默认触发副作用去获取数据；对于点击按钮才触发请求的功能，可以在 Hook 中将获取数据的方法 retrn 出去，供外部自由调用。</p>
+<ol start="5">
+<li>Hook 一般都是使用的 useState 保存了状态数据，也就意味着状态的范围限定在组件内部，组件销毁后，数据就没了。那么如果希望数据直接缓存到全局状态，应该如何做呢？</li>
+</ol>
+<p>可以借助 redux，配合 useContext 等 api ，将状态数据存储至全局中。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1128.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/react/hooks/1128.html" itemprop="url">
+                  重新认识路由
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-28T16:20:02+08:00">
+                2021-11-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>路由管理，就是让你的页面能够根据 URL 的变化进行页面的切换，这是前端应用中一个非常重要的机制</p>
+<p>路由的核心逻辑就是根据 URL 路径这个状态，来决定在主内容区域显示什么组件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">// 自定义路由</span><br><span class="line">const MyRouter = (&#123; children &#125;) =&gt; &#123;</span><br><span class="line">  const routes = _.keyBy(</span><br><span class="line">    children.map((c) =&gt; c.props),</span><br><span class="line">    &quot;path&quot;,</span><br><span class="line">  );</span><br><span class="line">  const [hash] = useHash();</span><br><span class="line">  const Page = routes[hash.replace(&quot;#&quot;, &quot;&quot;)]?.component;</span><br><span class="line">  // 如果路由不存在就返回 Not found.</span><br><span class="line">  return Page ? &lt;Page /&gt; : &quot;Not found.&quot;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">const Route = () =&gt; null;</span><br><span class="line"></span><br><span class="line">// 应用</span><br><span class="line">function SamplePages &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;div className=&quot;sample-pages&quot;&gt;</span><br><span class="line">      &#123;/* 定义了侧边导航栏 */&#125;</span><br><span class="line">      &lt;div className=&quot;sider&quot;&gt;</span><br><span class="line">        &lt;a href=&quot;#page1&quot;&gt;Page 1&lt;/a&gt;</span><br><span class="line">        &lt;a href=&quot;#page2&quot;&gt;Page 2&lt;/a&gt;</span><br><span class="line">        &lt;a href=&quot;#page3&quot;&gt;Page 3&lt;/a&gt;</span><br><span class="line">        &lt;a href=&quot;#page4&quot;&gt;Page 4&lt;/a&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">      &lt;div className=&quot;exp-15-page-container&quot;&gt;</span><br><span class="line">        &#123;/* 定义路由配置 */&#125;</span><br><span class="line">        &lt;MyRouter&gt;</span><br><span class="line">          &lt;Route path=&quot;page1&quot; component=&#123;Page1&#125; /&gt;</span><br><span class="line">          &lt;Route path=&quot;page2&quot; component=&#123;Page2&#125; /&gt;</span><br><span class="line">          &lt;Route path=&quot;page3&quot; component=&#123;Page3&#125; /&gt;</span><br><span class="line">          &lt;Route path=&quot;page4&quot; component=&#123;Page4&#125; /&gt;</span><br><span class="line">        &lt;/MyRouter&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h1 id="使用React-Router"><a href="#使用React-Router" class="headerlink" title="使用React Router"></a>使用React Router</h1><h2 id="简单应用"><a href="#简单应用" class="headerlink" title="简单应用"></a>简单应用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">// 从 react-router-dom 引入路由框架提供的一些组件</span><br><span class="line">import &#123; BrowserRouter, Switch, Route, Link &#125; from &quot;react-router-dom&quot;;</span><br><span class="line">// 引入了两个课程示例页面</span><br><span class="line">import Counter from &quot;./01/Counter&quot;;</span><br><span class="line">import UserList from &quot;./01/UserList&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 使用数组定义了页面组件和导航的标题，从而方便下面的渲染逻辑</span><br><span class="line">const routes = [</span><br><span class="line">  [&quot;01 Counter&quot;, Counter],</span><br><span class="line">  [&quot;01 UserList&quot;, UserList],</span><br><span class="line">];</span><br><span class="line">function App() &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;BrowserRouter&gt;</span><br><span class="line">      &lt;div className=&quot;app&quot;&gt;</span><br><span class="line">        &lt;ul className=&quot;sider&quot;&gt;</span><br><span class="line">          &#123;routes.map(([label]) =&gt; (</span><br><span class="line">            &lt;li&gt;</span><br><span class="line">              &lt;Link to=&#123;`/$&#123;label.replace(&quot; &quot;, &quot;/&quot;)&#125;`&#125;&gt;&#123;label&#125;&lt;/Link&gt;</span><br><span class="line">            &lt;/li&gt;</span><br><span class="line">          ))&#125;</span><br><span class="line">        &lt;/ul&gt;</span><br><span class="line">        &lt;div id=&quot;pageContainer&quot; className=&quot;page-container&quot;&gt;</span><br><span class="line">          &lt;Switch&gt;</span><br><span class="line">            &#123;routes.map(([label, Component]) =&gt; (</span><br><span class="line">              &lt;Route key=&#123;label&#125; path=&#123;`/$&#123;label.replace(&quot; &quot;, &quot;/&quot;)&#125;`&#125;&gt;</span><br><span class="line">                &lt;Component /&gt;</span><br><span class="line">              &lt;/Route&gt;</span><br><span class="line">            ))&#125;</span><br><span class="line">            &#123;/* 定义一个默认的路由 */&#125;</span><br><span class="line">            &lt;Route path=&quot;/&quot; exact&gt;</span><br><span class="line">              &lt;h1&gt;Welcome!&lt;/h1&gt;</span><br><span class="line">            &lt;/Route&gt;</span><br><span class="line">            &lt;Route path=&quot;*&quot;&gt;Page not found.&lt;/Route&gt;</span><br><span class="line">          &lt;/Switch&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/BrowserRouter&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>相关组件作用</p>
+<p>BrowserRouter：标识用标准的 URL 路径去管理路由，比如 /my-page1 这样的标准 URL 路径。<br>除此之外，还有 MemoryRouter，表示通过内存管理路由；<br>HashRouter，标识通过 hash 管理路由。<br>自己实现的例子其实就是用的 hash 来实现路由。</p>
+<p>Link：定义一个导航链接，点击时可以无刷新地改变页面 URL，从而实现 React Router 控制的导航。</p>
+<p>Route: 定义一条路由规则，可以指定匹配的路径、要渲染的内容等等。</p>
+<p>Switch：在默认情况下，所有匹配的 Route 节点都会被展示，但是 Switch 标记可以保证只有第一个匹配到的路由才会被渲染。</p>
+<p><a href="https://v5.reactrouter.com/web/guides/quick-start" target="_blank" rel="noopener">react router</a></p>
+<h2 id="使用嵌套路由：实现二级导航页面"><a href="#使用嵌套路由：实现二级导航页面" class="headerlink" title="使用嵌套路由：实现二级导航页面"></a>使用嵌套路由：实现二级导航页面</h2><p>需要路由框架具备两个能力：</p>
+<p>能够模糊匹配。比如 /page1/general 、/page1/profile 这样两个路由，需要都能匹配到 Page1 这样一个组件。<br>然后 Page1 内部呢，再根据 general 和 profile 这两个子路由决定展示哪个具体的页面。</p>
+<p>Route 能够嵌套使用。在我们自定义 Route 的例子中，Route 组件仅用于收集路由定义的信息，不渲染任何内容。<br>如果需要路由能嵌套使用，那就意味着需要在 Route 下还能嵌套使用 Route。而这在 React Router 是提供支持的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import &#123; BrowserRouter, Route, Link &#125; from &quot;react-router-dom&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">const Page1 = () =&gt; &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;div className=&quot;exp-15-page1&quot;&gt;</span><br><span class="line">      &lt;div className=&quot;exp-15-page1-header&quot;&gt;</span><br><span class="line">        &lt;Link to=&quot;/page1/general&quot;&gt;General&lt;/Link&gt;</span><br><span class="line">        &lt;Link to=&quot;/page1/profile&quot;&gt;Profile&lt;/Link&gt;</span><br><span class="line">        &lt;Link to=&quot;/page1/settings&quot;&gt;Settings&lt;/Link&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">      &lt;div className=&quot;exp-15-page1-content&quot;&gt;</span><br><span class="line">        &lt;Route path=&quot;/page1/general&quot;&gt;General Page&lt;/Route&gt;</span><br><span class="line">        &lt;Route path=&quot;/page1/profile&quot;&gt;Profile Page&lt;/Route&gt;</span><br><span class="line">        &lt;Route path=&quot;/page1/settings&quot;&gt;Settings Page&lt;/Route&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;;</span><br><span class="line">const Page2 = () =&gt; &quot;Page 2&quot;;</span><br><span class="line">const Page3 = () =&gt; &quot;Page 3&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">function NestedRouting() &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;BrowserRouter&gt;</span><br><span class="line">      &lt;h1&gt;Nested Routing&lt;/h1&gt;</span><br><span class="line">      &lt;div className=&quot;exp-15-nested-routing&quot;&gt;</span><br><span class="line">        &lt;div className=&quot;exp-15-sider&quot;&gt;</span><br><span class="line">          &lt;Link to=&quot;/page1&quot;&gt;Page 1&lt;/Link&gt;</span><br><span class="line">          &lt;Link to=&quot;/page2&quot;&gt;Page 2&lt;/Link&gt;</span><br><span class="line">          &lt;Link to=&quot;/page3&quot;&gt;Page 3&lt;/Link&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">        &lt;div className=&quot;exp-15-page-container&quot;&gt;</span><br><span class="line">          &lt;Route path=&quot;/page1&quot;&gt;&lt;Page1 /&gt;&lt;/Route&gt;</span><br><span class="line">          &lt;Route path=&quot;/page2&quot;&gt;&lt;Page2 /&gt;&lt;/Route&gt;</span><br><span class="line">          &lt;Route path=&quot;/page3&quot;&gt;&lt;Page3 /&gt;&lt;/Route&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/BrowserRouter&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="在-URL-中保存页面状态（页面参数）"><a href="#在-URL-中保存页面状态（页面参数）" class="headerlink" title="在 URL 中保存页面状态（页面参数）"></a>在 URL 中保存页面状态（页面参数）</h2><p>在url携带页面相关信息，将页面的一些状态存放到 URL 中，<br>一方面可以提升用户体验，另一方面也可以简化页面之间的交互。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;Route path=&quot;/tabs-page/:activeTab&quot; component=&#123;TabsPage&#125; /&gt;</span><br><span class="line"></span><br><span class="line">import &#123; useCallback &#125; from &quot;react&quot;;</span><br><span class="line">import &#123; Tabs, Table &#125; from &quot;antd&quot;;</span><br><span class="line">import &#123; useHistory, useParams &#125; from &quot;react-router-dom&quot;;</span><br><span class="line">import data from &quot;../10/data&quot;;</span><br><span class="line">import &#123; useSearchParam &#125; from &quot;react-use&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">const &#123; TabPane &#125; = Tabs;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">export default () =&gt; &#123;</span><br><span class="line">  // 通过 React Router 的 API 获取 activeTab 这个参数信息</span><br><span class="line">  const &#123; activeTab = &quot;users&quot; &#125; = useParams();</span><br><span class="line">  // 通过查询字符串获取当前的页码信息</span><br><span class="line">  const page = parseInt(useSearchParam(&quot;page&quot;), 10) || 1;</span><br><span class="line">  </span><br><span class="line">  // 通过 React Router 提供的 history 对象来操作 URL</span><br><span class="line">  const history = useHistory();</span><br><span class="line">  const handleTabChange = useCallback(</span><br><span class="line">    (tab) =&gt; history.push(`/15/TabsPage/$&#123;tab&#125;`),</span><br><span class="line">    [history],</span><br><span class="line">  );</span><br><span class="line">  // 定义表格的翻页功能</span><br><span class="line">  const pagination = &#123;</span><br><span class="line">    pageSize: 3,</span><br><span class="line">    current: page,</span><br><span class="line">    onChange: (p) =&gt; &#123;</span><br><span class="line">      history.push(`/15/TabsPage/$&#123;activeTab&#125;?page=$&#123;p&#125;`);</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;;</span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;h1&gt;Tabs Page&lt;/h1&gt;</span><br><span class="line">      &lt;Tabs activeKey=&#123;activeTab&#125; onChange=&#123;handleTabChange&#125;&gt;</span><br><span class="line">        &lt;TabPane tab=&quot;Users&quot; key=&quot;users&quot;&gt;</span><br><span class="line">          &lt;Table</span><br><span class="line">            dataSource=&#123;data&#125;</span><br><span class="line">            columns=&#123;[</span><br><span class="line">              &#123; dataIndex: &quot;name&quot;, title: &quot;User Name&quot; &#125;,</span><br><span class="line">              &#123; dataIndex: &quot;city&quot;, title: &quot;City&quot; &#125;,</span><br><span class="line">            ]&#125;</span><br><span class="line">            pagination=&#123;pagination&#125;</span><br><span class="line">          /&gt;</span><br><span class="line">        &lt;/TabPane&gt;</span><br><span class="line">        &lt;TabPane tab=&quot;Jobs&quot; key=&quot;jobs&quot;&gt;</span><br><span class="line">          &lt;Table</span><br><span class="line">            dataSource=&#123;data&#125;</span><br><span class="line">            columns=&#123;[&#123; dataIndex: &quot;job&quot;, title: &quot;Job Title&quot; &#125;]&#125;</span><br><span class="line">            pagination=&#123;pagination&#125;</span><br><span class="line">          /&gt;</span><br><span class="line">        &lt;/TabPane&gt;</span><br><span class="line">      &lt;/Tabs&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意</p>
+<p>这里遵循了唯一数据源的原则，避免定义中间状态去存储 tab 和页码的信息，而是直接去操作 URL，这样可以让代码逻辑更加清晰和直观。</p>
+<h2 id="路由层面实现权限控制"><a href="#路由层面实现权限控制" class="headerlink" title="路由层面实现权限控制"></a>路由层面实现权限控制</h2><p>利用前端路由的动态特性。路由是通过 JSX 以声明式的方式去定义的，这就意味着路由的定义规则是可以根据条件进行变化的，也就是所谓的动态路由。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">import &#123; useState &#125; from &quot;react&quot;;</span><br><span class="line">import &#123; Button &#125; from &quot;antd&quot;;</span><br><span class="line">import &#123; Route, Link &#125; from &quot;react-router-dom&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 定义了两个示例页面组件</span><br><span class="line">const Page1 = () =&gt; &quot;Page 1&quot;;</span><br><span class="line">const Page2 = () =&gt; &quot;Page 2&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 定义了一个组件用户展示未登录状态</span><br><span class="line">const UnauthedPage = () =&gt; (</span><br><span class="line">  &lt;span style=&#123;&#123; color: &quot;red&quot; &#125;&#125;&gt;Unauthorized, please log in first.&lt;/span&gt;</span><br><span class="line">);</span><br><span class="line">export default () =&gt; &#123;</span><br><span class="line">  // 模拟用户是否登录的状态，通过一个按钮进行切换</span><br><span class="line">  const [loggedIn, setLoggedIn] = useState(false);</span><br><span class="line">  </span><br><span class="line">  // 定义了两套路由，一套用于登录后，一套用于未登录状态</span><br><span class="line">  const routes = loggedIn</span><br><span class="line">    ? [</span><br><span class="line">        &#123;</span><br><span class="line">          path: &quot;/15/RouterAuth&quot;,</span><br><span class="line">          component: Page1,</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          path: &quot;/15/RouterAuth/page1&quot;,</span><br><span class="line">          component: Page1,</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          path: &quot;/15/RouterAuth/page2&quot;,</span><br><span class="line">          component: Page2,</span><br><span class="line">        &#125;,</span><br><span class="line">      ]</span><br><span class="line">      // 如果未登录，那么对于所有 /15/RouterAuth 开头的路径，显示未授权页面</span><br><span class="line">    : [&#123; path: &quot;/15/RouterAuth&quot;, component: UnauthedPage &#125;];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;h1&gt;Router Auth&lt;/h1&gt;</span><br><span class="line">      &lt;Button</span><br><span class="line">        type=&#123;loggedIn ? &quot;primary&quot; : &quot;&quot;&#125;</span><br><span class="line">        onClick=&#123;() =&gt; setLoggedIn((v) =&gt; !v)&#125;</span><br><span class="line">      &gt;</span><br><span class="line">        &#123;loggedIn ? &quot;Log Out&quot; : &quot;Log In&quot;&#125;</span><br><span class="line">      &lt;/Button&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">      &lt;div className=&quot;exp-15-router-auth&quot;&gt;</span><br><span class="line">        &lt;div className=&quot;exp-15-sider&quot;&gt;</span><br><span class="line">          &lt;Link to=&quot;/15/RouterAuth/page1&quot;&gt;Page 1&lt;/Link&gt;</span><br><span class="line">          &lt;Link to=&quot;/15/RouterAuth/page2&quot;&gt;Page 2&lt;/Link&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">        &lt;div className=&quot;exp-15-page-container&quot;&gt;</span><br><span class="line">          &#123;/* */&#125;</span><br><span class="line">          &#123;routes.map((r) =&gt; (</span><br><span class="line">            &lt;Route path=&#123;r.path&#125; component=&#123;r.component&#125; /&gt;</span><br><span class="line">          ))&#125;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br></pre></td></tr></table></figure>
+<p>代码中核心的机制就在于我们根据登录状态，创建了不同的路由规则，这样就能在源头上对权限进行集中控制，避免用户未经授权就访问某些受保护的页面。</p>
+<p>同时呢，因为在相同的 URL 下进行了信息提示，那么也就更容易实现用户登录后还能返回原页面的功能。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1127.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/react/hooks/1127.html" itemprop="url">
+                  Hooks 在forms上的使用
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-27T16:20:02+08:00">
+                2021-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>应用思想就是在这个 Hook 去维护整个表单的状态，并提供根据名字去取值和设值的方法，从而方便表单在组件中的使用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line">// 包含验证功能validators 的hooks, 处理表单状态管理</span><br><span class="line">const useForm = (initialValues = &#123;&#125;, validators) =&gt; &#123;</span><br><span class="line">  const [values, setValues] = useState(initialValues);</span><br><span class="line">  // 定义了 errors 状态</span><br><span class="line">  const [errors, setErrors] = useState(&#123;&#125;);</span><br><span class="line"></span><br><span class="line">  const setFieldValue = useCallback(</span><br><span class="line">    (name, value) =&gt; &#123;</span><br><span class="line">      setValues((values) =&gt; (&#123;</span><br><span class="line">        ...values,</span><br><span class="line">        [name]: value,</span><br><span class="line">      &#125;));</span><br><span class="line"></span><br><span class="line">      // 如果存在验证函数，则调用验证用户输入</span><br><span class="line">      if (validators[name]) &#123;</span><br><span class="line">        const errMsg = validators[name](value);</span><br><span class="line">        setErrors((errors) =&gt; (&#123;</span><br><span class="line">          ...errors,</span><br><span class="line">          // 如果返回错误信息，则将其设置到 errors 状态，否则清空错误状态</span><br><span class="line">          [name]: errMsg || null,</span><br><span class="line">        &#125;));</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    [validators],</span><br><span class="line">  );</span><br><span class="line">  // 将 errors 状态也返回给调用者</span><br><span class="line">  return &#123; values, errors, setFieldValue &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 应用</span><br><span class="line"></span><br><span class="line">import &#123; useCallback &#125; from &quot;react&quot;;</span><br><span class="line">import useForm from &apos;./useForm&apos;;</span><br><span class="line"></span><br><span class="line">export default () =&gt; &#123;</span><br><span class="line">  const validators = useMemo(() =&gt; &#123;</span><br><span class="line">    return &#123;</span><br><span class="line">      name: (value) =&gt; &#123;</span><br><span class="line">        // 要求 name 的长度不得小于 2</span><br><span class="line">        if (value.length &lt; 2) return &quot;Name length should be no less than 2.&quot;;</span><br><span class="line">        return null;</span><br><span class="line">      &#125;,</span><br><span class="line">      email: (value) =&gt; &#123;</span><br><span class="line">        // 简单的实现一个 email 验证逻辑：必须包含 @ 符号。</span><br><span class="line">        if (!value.includes(&quot;@&quot;)) return &quot;Invalid email address&quot;;</span><br><span class="line">        return null;</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;, []);</span><br><span class="line">  // 使用 useForm 得到表单的状态管理逻辑</span><br><span class="line">  const &#123; values, errors, setFieldValue &#125; = useForm(&#123;&#125;, validators);</span><br><span class="line">  // 处理表单的提交事件</span><br><span class="line">  const handleSubmit = useCallback(</span><br><span class="line">    (evt) =&gt; &#123;</span><br><span class="line">      // 使用 preventDefault() 防止页面被刷新</span><br><span class="line">      evt.preventDefault();</span><br><span class="line">      console.log(values);</span><br><span class="line">    &#125;,</span><br><span class="line">    [values],</span><br><span class="line">  );</span><br><span class="line">  return (</span><br><span class="line">    &lt;form onSubmit=&#123;handleSubmit&#125;&gt;</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;label&gt;Name: &lt;/label&gt;</span><br><span class="line">        &lt;input</span><br><span class="line">          value=&#123;values.name || null&#125;</span><br><span class="line">          onChange=&#123;(evt) =&gt; setFieldValue(&quot;name&quot;, evt.target.value)&#125;</span><br><span class="line">        /&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;label&gt;Email:&lt;/label&gt;</span><br><span class="line">        &lt;input</span><br><span class="line">          value=&#123;values.email || null&#125;</span><br><span class="line">          onChange=&#123;(evt) =&gt; setFieldValue(&quot;email&quot;, evt.target.value)&#125;</span><br><span class="line">        /&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">      &lt;button type=&quot;submit&quot;&gt;Submit&lt;/button&gt;</span><br><span class="line">    &lt;/form&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>把表单的状态管理单独提取出来，成为一个可重用的 Hook。<br>这样在表单的实现组件中，就只需要更多地去关心 UI 的渲染，而无需关心状态是如何存储和管理的，从而方便表单组件的开发。</p>
+<p>Form 最为核心的机制就是我们将表单元素的所有状态提取出来，<br>这样表单就可以分为状态逻辑和 UI 展现逻辑，从而实现数据层和表现层的分离。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1126.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -894,687 +1568,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1117.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks/1117.html" itemprop="url">
-                  redux的基本使用
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-17T16:20:02+08:00">
-                2021-11-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="Redux-的三个基本概念"><a href="#Redux-的三个基本概念" class="headerlink" title="Redux 的三个基本概念"></a>Redux 的三个基本概念</h1><p>Redux 引入的概念其实并不多，主要就是三个：State、Action 和 Reducer。</p>
-<p>其中 State 即 Store，一般就是一个纯 JavaScript Object。<br>Action 也是一个 Object，用于描述发生的动作。<br>而 Reducer 则是一个函数，接收 Action 和 State 并作为参数，通过计算得到新的 Store。</p>
-<h1 id="如何在-React-中使用-Redux"><a href="#如何在-React-中使用-Redux" class="headerlink" title="如何在 React 中使用 Redux"></a>如何在 React 中使用 Redux</h1><h2 id="如何建立-Redux-和-React-的联系"><a href="#如何建立-Redux-和-React-的联系" class="headerlink" title="如何建立 Redux 和 React 的联系"></a>如何建立 Redux 和 React 的联系</h2><p>主要是两点：</p>
-<ol>
-<li>React 组件能够在依赖的 Store 的数据发生变化时，重新 Render；</li>
-<li>在 React 组件中，能够在某些时机去 dispatch 一个 action，从而触发 Store 的更新</li>
-</ol>
-<p>答案：<br>借助<b>react-redux</b> 这样一个工具库，工具库的作用就是建立一个桥梁，让 React 和 Redux 实现互通。</p>
-<p>在 react-redux 的实现中，为了确保需要绑定的组件能够访问到全局唯一的 Redux Store，<br>利用了 React 的 Context 机制去存放 Store 的信息。<br>通常我们会将这个 Context 作为整个 React 应用程序的根节点。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import React from &apos;react&apos;</span><br><span class="line">import ReactDOM from &apos;react-dom&apos;</span><br><span class="line"></span><br><span class="line">import &#123; Provider &#125; from &apos;react-redux&apos;</span><br><span class="line">import store from &apos;./store&apos;</span><br><span class="line"></span><br><span class="line">import App from &apos;./App&apos;</span><br><span class="line"></span><br><span class="line">const rootElement = document.getElementById(&apos;root&apos;)</span><br><span class="line">ReactDOM.render(</span><br><span class="line">  &lt;Provider store=&#123;store&#125;&gt;</span><br><span class="line">    &lt;App /&gt;</span><br><span class="line">  &lt;/Provider&gt;,</span><br><span class="line">  rootElement</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p>Hooks 的本质就是提供了让 React 组件能够绑定到某个可变的数据源的能力。<br>在这里，当 Hooks 用到 Redux 时可变的对象就是 Store，而 useSelector 则让一个组件能够在 Store 的某些数据发生变化时重新 render.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">import React from &apos;react&apos;</span><br><span class="line">import &#123; useSelector, useDispatch &#125; from &apos;react-redux&apos;</span><br><span class="line"></span><br><span class="line">export function Counter() &#123;</span><br><span class="line">  // 从 state 中获取当前的计数值</span><br><span class="line">  const count = useSelector(state =&gt; state.value)</span><br><span class="line"></span><br><span class="line">  // 获得当前 store 的 dispatch 方法</span><br><span class="line">  const dispatch = useDispatch()</span><br><span class="line"></span><br><span class="line">  // 在按钮的 click 时间中去分发 action 来修改 store</span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;button</span><br><span class="line">        onClick=&#123;() =&gt; dispatch(&#123; type: &apos;counter/incremented&apos; &#125;)&#125;</span><br><span class="line">      &gt;+&lt;/button&gt;</span><br><span class="line">      &lt;span&gt;&#123;count&#125;&lt;/span&gt;</span><br><span class="line">      &lt;button</span><br><span class="line">        onClick=&#123;() =&gt; dispatch(&#123; type: &apos;counter/decremented&apos; &#125;)&#125;</span><br><span class="line">      &gt;-&lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="使用-Redux-处理异步逻辑"><a href="#使用-Redux-处理异步逻辑" class="headerlink" title="使用 Redux 处理异步逻辑"></a>使用 Redux 处理异步逻辑</h2><p>借助中间件机制</p>
-<p>middleware 可以让你提供一个拦截器在 reducer 处理 action 之前被调用。<br>在这个拦截器中，你可以自由处理获得的 action。<br>无论是把这个 action 直接传递到 reducer，或者构建新的 action 发送到 reducer，都是可以的</p>
-<p>Middleware 正是在 Action 真正到达 Reducer 之前提供的一个额外处理 Action 的机会</p>
-<p>Redux 提供了 <b>redux-thunk</b> 这样一个中间件，它如果发现接受到的 action 是一个函数，那么就不会传递给 Reducer，<br>而是执行这个函数，并把 dispatch 作为参数传给这个函数，从而在这个函数中你可以自由决定何时，如何发送 Action。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">// 在创建 Redux Store 时指定了 redux-thunk 这个中间件</span><br><span class="line">import &#123; createStore, applyMiddleware &#125; from &apos;redux&apos;</span><br><span class="line">import thunkMiddleware from &apos;redux-thunk&apos;</span><br><span class="line">import rootReducer from &apos;./reducer&apos;</span><br><span class="line"></span><br><span class="line">const composedEnhancer = applyMiddleware(thunkMiddleware)</span><br><span class="line">const store = createStore(rootReducer, composedEnhancer)</span><br><span class="line"></span><br><span class="line">//dispatch action 时就可以 dispatch 一个函数用于来发送请求</span><br><span class="line"></span><br><span class="line">function fetchData() &#123;</span><br><span class="line">  return dispatch =&gt; &#123;</span><br><span class="line">    dispatch(&#123; type: &apos;FETCH_DATA_BEGIN&apos; &#125;);</span><br><span class="line">    fetch(&apos;/some-url&apos;).then(res =&gt; &#123;</span><br><span class="line">      dispatch(&#123; type: &apos;FETCH_DATA_SUCCESS&apos;, data: res &#125;);</span><br><span class="line">    &#125;).catch(err =&gt; &#123;</span><br><span class="line">      dispatch(&#123; type: &apos;FETCH_DATA_FAILURE&apos;, error: err &#125;);</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// dispatch action 时就可以 dispatch 一个函数用于来发送请求</span><br><span class="line">import fetchData from &apos;./fetchData&apos;;</span><br><span class="line"></span><br><span class="line">function DataList() &#123;</span><br><span class="line">  const dispatch = useDispatch();</span><br><span class="line">  // dispatch 了一个函数由 redux-thunk 中间件去执行</span><br><span class="line">  dispatch(fetchData());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>通过这种方式，我们就实现了异步请求逻辑的重用。那么这一套结合 redux-thunk 中间件的机制，我们就称之为异步 Action.</p>
-<h2 id="dispatch时可以传入其他参数"><a href="#dispatch时可以传入其他参数" class="headerlink" title="dispatch时可以传入其他参数"></a>dispatch时可以传入其他参数</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">function counterReducer(state = initialState, action) &#123;</span><br><span class="line">    switch (action.type) &#123;</span><br><span class="line">        case &apos;counter/incremented&apos;: return &#123;value: state.value + action.payload&#125;</span><br><span class="line">        case &apos;counter/decremented&apos;: return &#123;value: state.value - action.payload&#125;</span><br><span class="line">        default: return state</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">const incrementAction = &#123; type: &apos;counter/incremented&apos;, payload: 10 &#125;;</span><br><span class="line">store.dispatch(incrementAction); // 计数器加 10</span><br><span class="line">const decrementAction = &#123; type: &apos;counter/decremented&apos;, payload: 10 &#125;;</span><br><span class="line">store.dispatch(decrementAction); // 计数器减 10</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1116.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks/1116.html" itemprop="url">
-                  hooks 的典型应用场景
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-16T16:20:02+08:00">
-                2021-11-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="自定义hooks"><a href="#自定义hooks" class="headerlink" title="自定义hooks"></a>自定义hooks</h1><p>声明一个名字以 use 开头的函数, 并在函数中用到其他hooks。<br>Hooks 和普通函数在语义上的区别，就在于函数中有没有用到其它 Hooks（自定义或者内置，能够让组件刷新，或者去产生副作用），没有用到就是普通函数。</p>
-<p>典型的四个使用场景</p>
-<ol>
-<li>抽取业务逻辑；</li>
-<li>封装通用逻辑；</li>
-<li>监听浏览器状态；</li>
-<li>拆分复杂组件.</li>
-</ol>
-<h1 id="抽取业务逻辑"><a href="#抽取业务逻辑" class="headerlink" title="抽取业务逻辑"></a>抽取业务逻辑</h1><p>抽取具体业务逻辑到hooks中，暴露接口在组件中调用<br>一方面能让这个逻辑得到重用，另外一方面也能让代码更加语义化，并且易于理解和维护<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">// 实现计数器业务逻辑的拆分和重用</span><br><span class="line">import &#123; useState, useCallback &#125;from &apos;react&apos;;</span><br><span class="line"> </span><br><span class="line">function useCounter() &#123;</span><br><span class="line">  // 定义 count 这个 state 用于保存当前数值</span><br><span class="line">  const [count, setCount] = useState(0);</span><br><span class="line">  // 实现加 1 的操作</span><br><span class="line">  const increment = useCallback(() =&gt; setCount(count + 1), [count]);</span><br><span class="line">  // 实现减 1 的操作</span><br><span class="line">  const decrement = useCallback(() =&gt; setCount(count - 1), [count]);</span><br><span class="line">  // 重置计数器</span><br><span class="line">  const reset = useCallback(() =&gt; setCount(0), []);</span><br><span class="line">  </span><br><span class="line">  // 将业务逻辑的操作 export 出去供调用者使用</span><br><span class="line">  return &#123; count, increment, decrement, reset &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 应用</span><br><span class="line">import React from &apos;react&apos;;</span><br><span class="line"></span><br><span class="line">function Counter() &#123;</span><br><span class="line">  // 调用自定义 Hook</span><br><span class="line">  const &#123; count, increment, decrement, reset &#125; = useCounter();</span><br><span class="line"></span><br><span class="line">  // 渲染 UI</span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;button onClick=&#123;decrement&#125;&gt; - &lt;/button&gt;</span><br><span class="line">      &lt;p&gt;&#123;count&#125;&lt;/p&gt;</span><br><span class="line">      &lt;button onClick=&#123;increment&#125;&gt; + &lt;/button&gt;</span><br><span class="line">      &lt;button onClick=&#123;reset&#125;&gt; reset &lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h1 id="封装通用逻辑：useAsync"><a href="#封装通用逻辑：useAsync" class="headerlink" title="封装通用逻辑：useAsync"></a>封装通用逻辑：useAsync</h1><p>在每个需要异步请求的组件中，其实都需要重复相同的逻辑。<br>事实上，在处理这类请求的时候，模式都是类似的，通常都会遵循下面步骤：</p>
-<ol>
-<li>创建 data，loading，error 这 3 个 state；</li>
-<li>请求发出后，设置 loading state 为 true；</li>
-<li>请求成功后，将返回的数据放到某个 state 中，并将 loading state 设为 false；</li>
-<li>请求失败后，设置 error state 为 true，并将 loading state 设为 false。</li>
-</ol>
-<p>最后，基于 data、loading、error 这 3 个 state 的数据，<br>UI 就可以正确地显示数据，或者 loading、error 这些反馈给用户了。<br>所以，通过创建一个自定义 Hook，可以很好地将这样的逻辑提取出来，成为一个可重用的模块。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">import &#123; useState &#125; from &apos;react&apos;;</span><br><span class="line">// asyncFunction 真正发出请求的函数</span><br><span class="line">const useAsync = (asyncFunction) =&gt; &#123;</span><br><span class="line">  // 设置三个异步逻辑相关的 state</span><br><span class="line">  const [data, setData] = useState(null);</span><br><span class="line">  const [loading, setLoading] = useState(false);</span><br><span class="line">  const [error, setError] = useState(null);</span><br><span class="line">  // 定义一个 callback 用于执行异步逻辑 相当于声明一个请求的函数，在需要请求数据的情况下调用</span><br><span class="line">  const execute = useCallback(() =&gt; &#123;</span><br><span class="line">    // 请求开始时，设置 loading 为 true，清除已有数据和 error 状态</span><br><span class="line">    setLoading(true);</span><br><span class="line">    setData(null);</span><br><span class="line">    setError(null);</span><br><span class="line">    return asyncFunction()</span><br><span class="line">      .then((response) =&gt; &#123;</span><br><span class="line">        // 请求成功时，将数据写进 state，设置 loading 为 false</span><br><span class="line">        setData(response);</span><br><span class="line">        setLoading(false);</span><br><span class="line">      &#125;)</span><br><span class="line">      .catch((error) =&gt; &#123;</span><br><span class="line">        // 请求失败时，设置 loading 为 false，并设置错误状态</span><br><span class="line">        setError(error);</span><br><span class="line">        setLoading(false);</span><br><span class="line">      &#125;);</span><br><span class="line">  &#125;, [asyncFunction]);</span><br><span class="line"></span><br><span class="line">  return &#123; execute, loading, data, error &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 应用</span><br><span class="line"></span><br><span class="line">import React from &quot;react&quot;;</span><br><span class="line">import useAsync from &apos;./useAsync&apos;;</span><br><span class="line"></span><br><span class="line">export default function UserList() &#123;</span><br><span class="line">  // 通过 useAsync 这个函数，只需要提供异步逻辑的实现</span><br><span class="line">  const &#123;</span><br><span class="line">    execute: fetchUsers, // fetchUsers可以在需要请求的地方去使用</span><br><span class="line">    data: users, // 返回的数据可以直接拿来渲染ui</span><br><span class="line">    loading,</span><br><span class="line">    error,</span><br><span class="line">  &#125; = useAsync(async () =&gt; &#123;</span><br><span class="line">    const res = await fetch(&quot;https://reqres.in/api/users/&quot;);</span><br><span class="line">    const json = await res.json();</span><br><span class="line">    return json.data;</span><br><span class="line">  &#125;);</span><br><span class="line">  </span><br><span class="line">  return (</span><br><span class="line">    // 根据状态渲染 UI...</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>利用了 Hooks 能够管理 React 组件状态的能力，将一个组件中的某一部分状态独立出来，从而实现了通用逻辑的重用。</p>
-<h1 id="监听浏览器状态：useScroll"><a href="#监听浏览器状态：useScroll" class="headerlink" title="监听浏览器状态：useScroll"></a>监听浏览器状态：useScroll</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import &#123; useState, useEffect &#125; from &apos;react&apos;;</span><br><span class="line"></span><br><span class="line">// 获取横向，纵向滚动条位置</span><br><span class="line">const getPosition = () =&gt; &#123;</span><br><span class="line">  return &#123;</span><br><span class="line">    x: document.body.scrollLeft,</span><br><span class="line">    y: document.body.scrollTop,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line">const useScroll = () =&gt; &#123;</span><br><span class="line">  // 定一个 position 这个 state 保存滚动条位置</span><br><span class="line">  const [position, setPosition] = useState(getPosition());</span><br><span class="line">  useEffect(() =&gt; &#123;</span><br><span class="line">    const handler = () =&gt; &#123;</span><br><span class="line">      setPosition(getPosition(document));</span><br><span class="line">    &#125;;</span><br><span class="line">    // 监听 scroll 事件，更新滚动条位置</span><br><span class="line">    document.addEventListener(&quot;scroll&quot;, handler);</span><br><span class="line">    return () =&gt; &#123;</span><br><span class="line">      // 组件销毁时，取消事件监听</span><br><span class="line">      document.removeEventListener(&quot;scroll&quot;, handler);</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;, []);</span><br><span class="line">  return position;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 应用</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">import React, &#123; useCallback &#125; from &apos;react&apos;;</span><br><span class="line">import useScroll from &apos;./useScroll&apos;;</span><br><span class="line"></span><br><span class="line">function ScrollTop() &#123;</span><br><span class="line">  const &#123; y &#125; = useScroll();</span><br><span class="line"></span><br><span class="line">  const goTop = useCallback(() =&gt; &#123;</span><br><span class="line">    document.body.scrollTop = 0;</span><br><span class="line">  &#125;, []);</span><br><span class="line"></span><br><span class="line">  const style = &#123;</span><br><span class="line">    position: &quot;fixed&quot;,</span><br><span class="line">    right: &quot;10px&quot;,</span><br><span class="line">    bottom: &quot;10px&quot;,</span><br><span class="line">  &#125;;</span><br><span class="line">  // 当滚动条位置纵向超过 300 时，显示返回顶部按钮</span><br><span class="line">  if (y &gt; 300) &#123;</span><br><span class="line">    return (</span><br><span class="line">      &lt;button onClick=&#123;goTop&#125; style=&#123;style&#125;&gt;</span><br><span class="line">        Back to Top</span><br><span class="line">      &lt;/button&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">  // 否则不 render 任何 UI</span><br><span class="line">  return null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="拆分复杂组件"><a href="#拆分复杂组件" class="headerlink" title="拆分复杂组件"></a>拆分复杂组件</h1><p>拆分逻辑的目的不一定是为了重用，而可以是仅仅为了业务逻辑的隔离。</p>
-<p>把 Hooks 就看成普通的函数，能隔离的尽量去做隔离</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">import React, &#123; useEffect, useCallback, useMemo, useState &#125; from &quot;react&quot;;</span><br><span class="line">import &#123; Select, Table &#125; from &quot;antd&quot;;</span><br><span class="line">import _ from &quot;lodash&quot;;</span><br><span class="line">import useAsync from &quot;./useAsync&quot;;</span><br><span class="line"></span><br><span class="line">const endpoint = &quot;https://myserver.com/api/&quot;;</span><br><span class="line">const useArticles = () =&gt; &#123;</span><br><span class="line">  // 使用上面创建的 useAsync 获取文章列表</span><br><span class="line">  const &#123; execute, data, loading, error &#125; = useAsync(</span><br><span class="line">    useCallback(async () =&gt; &#123;</span><br><span class="line">      const res = await fetch(`$&#123;endpoint&#125;/posts`);</span><br><span class="line">      return await res.json();</span><br><span class="line">    &#125;, []),</span><br><span class="line">  );</span><br><span class="line">  // 执行异步调用</span><br><span class="line">  useEffect(() =&gt; execute(), [execute]);</span><br><span class="line">  // 返回语义化的数据结构</span><br><span class="line">  return &#123;</span><br><span class="line">    articles: data,</span><br><span class="line">    articlesLoading: loading,</span><br><span class="line">    articlesError: error,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line">const useCategories = () =&gt; &#123;</span><br><span class="line">  // 使用上面创建的 useAsync 获取分类列表</span><br><span class="line">  const &#123; execute, data, loading, error &#125; = useAsync(</span><br><span class="line">    useCallback(async () =&gt; &#123;</span><br><span class="line">      const res = await fetch(`$&#123;endpoint&#125;/categories`);</span><br><span class="line">      return await res.json();</span><br><span class="line">    &#125;, []),</span><br><span class="line">  );</span><br><span class="line">  // 执行异步调用</span><br><span class="line">  useEffect(() =&gt; execute(), [execute]);</span><br><span class="line"></span><br><span class="line">  // 返回语义化的数据结构</span><br><span class="line">  return &#123;</span><br><span class="line">    categories: data,</span><br><span class="line">    categoriesLoading: loading,</span><br><span class="line">    categoriesError: error,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line">const useCombinedArticles = (articles, categories) =&gt; &#123;</span><br><span class="line">  // 将文章数据和分类数据组合到一起</span><br><span class="line">  return useMemo(() =&gt; &#123;</span><br><span class="line">    // 如果没有文章或者分类数据则返回 null</span><br><span class="line">    if (!articles || !categories) return null;</span><br><span class="line">    return articles.map((article) =&gt; &#123;</span><br><span class="line">      return &#123;</span><br><span class="line">        ...article,</span><br><span class="line">        category: categories.find(</span><br><span class="line">          (c) =&gt; String(c.id) === String(article.categoryId),</span><br><span class="line">        ),</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;, [articles, categories]);</span><br><span class="line">&#125;;</span><br><span class="line">const useFilteredArticles = (articles, selectedCategory) =&gt; &#123;</span><br><span class="line">  // 实现按照分类过滤</span><br><span class="line">  return useMemo(() =&gt; &#123;</span><br><span class="line">    if (!articles) return null;</span><br><span class="line">    if (!selectedCategory) return articles;</span><br><span class="line">    return articles.filter((article) =&gt; &#123;</span><br><span class="line">      console.log(&quot;filter: &quot;, article.categoryId, selectedCategory);</span><br><span class="line">      return String(article?.category?.name) === String(selectedCategory);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;, [articles, selectedCategory]);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">const columns = [</span><br><span class="line">  &#123; dataIndex: &quot;title&quot;, title: &quot;Title&quot; &#125;,</span><br><span class="line">  &#123; dataIndex: [&quot;category&quot;, &quot;name&quot;], title: &quot;Category&quot; &#125;,</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line">export default function BlogList() &#123;</span><br><span class="line">  const [selectedCategory, setSelectedCategory] = useState(null);</span><br><span class="line">  // 获取文章列表</span><br><span class="line">  const &#123; articles, articlesError &#125; = useArticles();</span><br><span class="line">  // 获取分类列表</span><br><span class="line">  const &#123; categories, categoriesError &#125; = useCategories();</span><br><span class="line">  // 组合数据</span><br><span class="line">  const combined = useCombinedArticles(articles, categories);</span><br><span class="line">  // 实现过滤</span><br><span class="line">  const result = useFilteredArticles(combined, selectedCategory);</span><br><span class="line"></span><br><span class="line">  // 分类下拉框选项用于过滤</span><br><span class="line">  const options = useMemo(() =&gt; &#123;</span><br><span class="line">    const arr = _.uniqBy(categories, (c) =&gt; c.name).map((c) =&gt; (&#123;</span><br><span class="line">      value: c.name,</span><br><span class="line">      label: c.name,</span><br><span class="line">    &#125;));</span><br><span class="line">    arr.unshift(&#123; value: null, label: &quot;All&quot; &#125;);</span><br><span class="line">    return arr;</span><br><span class="line">  &#125;, [categories]);</span><br><span class="line"></span><br><span class="line">  // 如果出错，简单返回 Failed</span><br><span class="line">  if (articlesError || categoriesError) return &quot;Failed&quot;;</span><br><span class="line"></span><br><span class="line">  // 如果没有结果，说明正在加载</span><br><span class="line">  if (!result) return &quot;Loading...&quot;;</span><br><span class="line"></span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;Select</span><br><span class="line">        value=&#123;selectedCategory&#125;</span><br><span class="line">        onChange=&#123;(value) =&gt; setSelectedCategory(value)&#125;</span><br><span class="line">        options=&#123;options&#125;</span><br><span class="line">        style=&#123;&#123; width: &quot;200px&quot; &#125;&#125;</span><br><span class="line">        placeholder=&quot;Select a category&quot;</span><br><span class="line">      /&gt;</span><br><span class="line">      &lt;Table dataSource=&#123;result&#125; columns=&#123;columns&#125; /&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1115.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks/1115.html" itemprop="url">
-                  hooks 与 生命周期
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-15T16:20:02+08:00">
-                2021-11-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="单次执行函数"><a href="#单次执行函数" class="headerlink" title="单次执行函数"></a>单次执行函数</h1><p>利用 useRef 这个 Hook，我们可以实现一个 useSingleton 这样的一次性执行某段代码的自定义 Hook</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">import &#123; useRef &#125; from &apos;react&apos;;</span><br><span class="line"></span><br><span class="line">// 创建一个自定义 Hook 用于执行一次性代码</span><br><span class="line">function useSingleton(callback) &#123;</span><br><span class="line">  // 用一个 called ref 标记 callback 是否执行过</span><br><span class="line">  const called = useRef(false);</span><br><span class="line">  // 如果已经执行过，则直接返回</span><br><span class="line">  if (called.current) return;</span><br><span class="line">  // 第一次调用时直接执行</span><br><span class="line">  callBack();</span><br><span class="line">  // 设置标记为已执行过</span><br><span class="line">  called.current = true;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">import useSingleton from &apos;./useSingleton&apos;;</span><br><span class="line"></span><br><span class="line">const MyComp = () =&gt; &#123;</span><br><span class="line">  // 使用自定义 Hook</span><br><span class="line">  useSingleton(() =&gt; &#123;</span><br><span class="line">    console.log(&apos;这段代码只执行一次&apos;);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;My Component&lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h1 id="useEffect与class生命周期方法联系"><a href="#useEffect与class生命周期方法联系" class="headerlink" title="useEffect与class生命周期方法联系"></a>useEffect与class生命周期方法联系</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">useEffect(() =&gt; &#123;</span><br><span class="line">  // componentDidMount + componentDidUpdate</span><br><span class="line">  console.log(&apos;这里基本等价于 componentDidMount + componentDidUpdate&apos;);</span><br><span class="line">  return () =&gt; &#123;</span><br><span class="line">    // componentWillUnmount</span><br><span class="line">    console.log(&apos;这里基本等价于 componentWillUnmount&apos;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, [deps])</span><br></pre></td></tr></table></figure>
-<p>这个写法并没有完全等价于传统的这几个生命周期方法。主要有两个原因。</p>
-<p>一方面，useEffect(callback) 这个 Hook 接收的 callback，只有在依赖项变化时才被执行。<br>而传统的 componentDidUpdate 则一定会执行。<br>这样来看，Hook 的机制其实更具有语义化，<br>因为过去在 componentDidUpdate 中，我们通常都需要手动判断某个状态是否发生变化，然后再执行特定的逻辑。</p>
-<p>另一方面，<br>callback 返回的函数（一般用于清理工作）在下一次依赖项发生变化以及组件销毁之前执行，<br>而传统的 componentWillUnmount 只在组件销毁时才会执行。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1112.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks/1112.html" itemprop="url">
-                  react 自带的hooks
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-12T16:20:02+08:00">
-                2021-11-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="useCallback：缓存回调函数"><a href="#useCallback：缓存回调函数" class="headerlink" title="useCallback：缓存回调函数"></a>useCallback：缓存回调函数</h1><p>在 React 函数组件中，每一次 UI 的变化，都是通过重新执行整个函数来完成的</p>
-<p>如果组件中依赖的处理函数没有被useCallback做缓存处理，那么每次重新执行时都会被重新创建<br>那么依赖处理函数的组件就会因为处理函数更新进行重现渲染</p>
-<p>为避免频繁的重新渲染组件，useCallback的作用就是将函数缓存起来，<br>只有当函数逻辑中依赖的状态发生变化才会去重新生成，然后引起组件更新，<br>避免了依赖没有变化时的无效更新</p>
-<p>useCallback 可以减少不必要的渲染，主要体现在将回调函数作为属性传给某个组件。<br>如果每次都不一样就会造成组件的重新渲染。<br>但是如果确定子组件多次渲染也没有太大问题，特别是原生的组件，比如 button，<br>那么不用 useCallback 也问题不大。所以这和子组件的实现相关，和函数是否轻量无关。</p>
-<h1 id="useMemo：缓存计算的结果"><a href="#useMemo：缓存计算的结果" class="headerlink" title="useMemo：缓存计算的结果"></a>useMemo：缓存计算的结果</h1><p>同处理函数类似，如果组件中用到的数据A通过其他状态值计算得到，<br>在依赖值没有发生变化情况下，其实就不用重新计算，<br>即<br>如果某个数据是通过其它数据计算得到的，那么只有当用到的数据，也就是依赖的数据发生变化的时候，才应该需要重新计算<br>因此当组件因为其他原因刷新，进而重新执行函数，引起的重新计算是没有必要的</p>
-<p>可以实现这个功能的hooks就是useMemo,useMemo就是只有在依赖的状态值发生变化时才会去重新执行计算的过程<br>避免不必要的重新计算过程<br>同时，对于依赖数据A的组件来说，没有重新计算产生的新值，可以在一定程度上<b>避免子组件重复渲染</b>。</p>
-<p>如果将函数也看做一个状态值/变量的话，其实，useMemo可以实现useCallback的功能</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const myEventHandler = useMemo(() =&gt; &#123;</span><br><span class="line">  // 返回一个函数作为缓存结果</span><br><span class="line">  return () =&gt; &#123;</span><br><span class="line">    // 在这里进行事件处理</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, [dep1, dep2]);</span><br></pre></td></tr></table></figure>
-<p>二者的本质就是<br><b>建立了一个绑定某个结果到依赖数据的关系。只有当依赖变了，这个结果才需要被重新得到。</b></p>
-<h1 id="useRef：在多次渲染之间共享数据"><a href="#useRef：在多次渲染之间共享数据" class="headerlink" title="useRef：在多次渲染之间共享数据"></a>useRef：在多次渲染之间共享数据</h1><p>可以把 useRef 看作是在函数组件之外创建的一个容器空间<br>在这个容器上，我们可以通过唯一的 current 属设置一个值，从而在函数组件的多次渲染之间共享这个值</p>
-<p><b>使用 useRef 保存的数据一般是和 UI 的渲染无关的，因此当 ref 的值发生变化时，是不会触发组件的重新渲染的，</b><br>这也是 useRef 区别于 useState 的地方。<br>比如保存定时器句柄，在回调函数中关掉定时器，然后将ref.current 设置为null, 这个句柄没有在组件中被用到，所以不会引起重新渲染。<br>但如果用useState去保存句柄，将定时器关掉时，同时将state设置为null，即使没有被组件用到，也会引起重新组件渲染。</p>
-<p>useRef 还有一个重要的功能，就是保存某个 DOM 节点的引用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">function TextInputWithFocusButton() &#123;</span><br><span class="line">  const inputEl = useRef(null);</span><br><span class="line">  const onButtonClick = () =&gt; &#123;</span><br><span class="line">    // current 属性指向了真实的 input 这个 DOM 节点，从而可以调用 focus 方法</span><br><span class="line">    inputEl.current.focus();</span><br><span class="line">  &#125;;</span><br><span class="line">  return (</span><br><span class="line">    &lt;&gt;</span><br><span class="line">      &lt;input ref=&#123;inputEl&#125; type=&quot;text&quot; /&gt;</span><br><span class="line">      &lt;button onClick=&#123;onButtonClick&#125;&gt;Focus the input&lt;/button&gt;</span><br><span class="line">    &lt;/&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以看到 ref 这个属性提供了获得 DOM 节点的能力，并利用 useRef 保存了这个节点的应用</p>
-<h1 id="useContext：定义全局状态"><a href="#useContext：定义全局状态" class="headerlink" title="useContext：定义全局状态"></a>useContext：定义全局状态</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">const MyContext = React.createContext(initialValue);</span><br><span class="line"></span><br><span class="line">const themes = &#123;</span><br><span class="line">  light: &#123;</span><br><span class="line">    foreground: &quot;#000000&quot;,</span><br><span class="line">    background: &quot;#eeeeee&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  dark: &#123;</span><br><span class="line">    foreground: &quot;#ffffff&quot;,</span><br><span class="line">    background: &quot;#222222&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">// 创建一个 Theme 的 Context</span><br><span class="line"></span><br><span class="line">const ThemeContext = React.createContext(themes.light);</span><br><span class="line">function App() &#123;</span><br><span class="line">  // 整个应用使用 ThemeContext.Provider 作为根组件</span><br><span class="line">  return (</span><br><span class="line">    // 使用 themes.dark 作为当前 Context </span><br><span class="line">    &lt;ThemeContext.Provider value=&#123;themes.dark&#125;&gt;</span><br><span class="line">      &lt;Toolbar /&gt;</span><br><span class="line">    &lt;/ThemeContext.Provider&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 在 Toolbar 组件中使用一个会使用 Theme 的 Button</span><br><span class="line">function Toolbar(props) &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;ThemedButton /&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 在 Theme Button 中使用 useContext 来获取当前的主题</span><br><span class="line">function ThemedButton() &#123;</span><br><span class="line">  const theme = useContext(ThemeContext);</span><br><span class="line">  return (</span><br><span class="line">    &lt;button style=&#123;&#123;</span><br><span class="line">      background: theme.background,</span><br><span class="line">      color: theme.foreground</span><br><span class="line">    &#125;&#125;&gt;</span><br><span class="line">      I am styled by theme context!</span><br><span class="line">    &lt;/button&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Context 提供了一个方便在多个组件之间共享数据的机制。<br>不过需要注意的是，它的灵活性也是一柄双刃剑。<br>你或许已经发现，Context 相当于提供了一个定义 React 世界中全局变量的机制，<br>而全局变量则意味着两点：</p>
-<ol>
-<li>会让调试变得困难，因为你很难跟踪某个 Context 的变化究竟是如何产生的。</li>
-<li>让组件的复用变得困难，因为一个组件如果使用了某个 Context，它就必须确保被用到的地方一定有这个 Context 的 Provider 在其父组件的路径上。</li>
-</ol>
-<p>需要再三强调的是，Context 更多的是提供了一个强大的机制，<b> 让 React 应用具备定义全局的响应式数据的能力。</b></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1111.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks/1111.html" itemprop="url">
-                  如何保存组件状态和使用生命周期
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-11T16:20:02+08:00">
-                2021-11-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="那么什么样的值应该保存在-state-中呢？"><a href="#那么什么样的值应该保存在-state-中呢？" class="headerlink" title="那么什么样的值应该保存在 state 中呢？"></a>那么什么样的值应该保存在 state 中呢？</h1><p>在一个函数组件的多次渲染之间，这个 state 是共享的。<br>这是日常开发中需要经常思考的问题。通常来说，我们要遵循的一个原则就是：state 中永远不要保存可以通过计算得到的值。<br>比如说：</p>
-<ol>
-<li>从 props 传递过来的值。有时候 props 传递过来的值无法直接使用，而是要通过一定的计算后再在 UI 上展示，比如说排序。<br>那么我们要做的就是每次用的时候，都重新排序一下，或者利用某些 cache 机制，而不是将结果直接放到 state 里。</li>
-<li>从 URL 中读到的值。比如有时需要读取 URL 中的参数，把它作为组件的一部分状态。那么我们可以在每次需要用的时候从 URL 中读取，而不是读出来直接放到 state 里。</li>
-<li>从 cookie、localStorage 中读取的值。通常来说，也是每次要用的时候直接去读取，而不是读出来后放到 state 里。</li>
-</ol>
-<h1 id="useEffect执行"><a href="#useEffect执行" class="headerlink" title="useEffect执行"></a>useEffect执行</h1><p>useEffect 让我们能够在下面四种时机去执行一个回调函数产生副作用：</p>
-<ol>
-<li>每次 render 后执行：不提供第二个依赖项参数。比如useEffect(() =&gt; {})。</li>
-<li>仅第一次 render 后执行：提供一个空数组作为依赖项。比如useEffect(() =&gt; {}, [])。</li>
-<li>第一次以及依赖项发生变化后执行：提供依赖项数组。比如useEffect(() =&gt; {}, [deps])。</li>
-<li>组件 unmount 后执行：返回一个回调函数。比如useEffect() =&gt; { return () =&gt; {} }, [])。</li>
-</ol>
-<h1 id="定义依赖项注意点"><a href="#定义依赖项注意点" class="headerlink" title="定义依赖项注意点"></a>定义依赖项注意点</h1><p>那么在定义依赖项时，我们需要注意以下三点：</p>
-<ol>
-<li>依赖项中定义的变量一定是会在回调函数中用到的，否则声明依赖项其实是没有意义的。</li>
-<li>依赖项一般是一个常量数组，而不是一个变量。因为一般在创建 callback 的时候，你其实非常清楚其中要用到哪些依赖项了。</li>
-<li>React 会使用浅比较来对比依赖项是否发生了变化，所以要特别注意数组或者对象类型。<br>如果你是每次创建一个新对象，即使和之前的值是等价的，也会被认为是依赖项发生了变化。这是一个刚开始使用 Hooks 时很容易导致 Bug 的地方。</li>
-</ol>
-<h1 id="Hooks-的使用规则"><a href="#Hooks-的使用规则" class="headerlink" title="Hooks 的使用规则"></a>Hooks 的使用规则</h1><h2 id="只能在函数组件的顶级作用域使用"><a href="#只能在函数组件的顶级作用域使用" class="headerlink" title="只能在函数组件的顶级作用域使用"></a>只能在函数组件的顶级作用域使用</h2><p>第一，所有 Hook 必须要被执行到。第二，必须按顺序执行。</p>
-<p>所谓顶层作用域，就是 Hooks 不能在循环、条件判断或者嵌套函数内执行，而必须是在顶层。<br>同时 Hooks 在组件的多次渲染之间，必须按顺序被执行。<br>因为在 React 组件内部，其实是维护了一个对应组件的固定 Hooks 执行列表的，以便在多次渲染之间保持 Hooks 的状态，并做对比。<br>也不能在return语句后执行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">function MyComp() &#123;</span><br><span class="line">  const [count, setCount] = useState(0);</span><br><span class="line">  if (count &gt; 10) &#123;</span><br><span class="line">    // 错误：不能将 Hook 用在条件判断里</span><br><span class="line">    useEffect(() =&gt; &#123;</span><br><span class="line">      // ...</span><br><span class="line">    &#125;, [count])</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  // 这里可能提前返回组件渲染结果，后面就不能再用 Hooks 了</span><br><span class="line">  if (count === 0) &#123;</span><br><span class="line">    return &apos;No content&apos;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // 错误：不能将 Hook 放在可能的 return 之后</span><br><span class="line">  const [loading, setLoading] = useState(false);</span><br><span class="line">  </span><br><span class="line">  //...</span><br><span class="line">  return &lt;div&gt;&#123;count&#125;&lt;/div&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="Hooks-只能在函数组件或者其它-Hooks-中使用"><a href="#Hooks-只能在函数组件或者其它-Hooks-中使用" class="headerlink" title="Hooks 只能在函数组件或者其它 Hooks 中使用"></a>Hooks 只能在函数组件或者其它 Hooks 中使用</h2><p>如果一定要在 Class 组件中使用，那应该如何做呢？<br>其实有一个通用的机制，那就是利用高阶组件的模式，将 Hooks 封装成高阶组件，从而让类组件使用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">a.</span><br><span class="line">import React from &apos;react&apos;;</span><br><span class="line">import &#123; useWindowSize &#125; from &apos;../hooks/useWindowSize&apos;;</span><br><span class="line"></span><br><span class="line">export const withWindowSize = (Comp) =&gt; &#123;</span><br><span class="line">  return props =&gt; &#123;</span><br><span class="line">    const windowSize = useWindowSize();</span><br><span class="line">    return &lt;Comp windowSize=&#123;windowSize&#125; &#123;...props&#125; /&gt;;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">b.</span><br><span class="line">import React from &apos;react&apos;;</span><br><span class="line">import &#123; withWindowSize &#125; from &apos;./withWindowSize&apos;;</span><br><span class="line"></span><br><span class="line">class MyComp &#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    const &#123; windowSize &#125; = this.props;</span><br><span class="line">    // ...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 通过 withWindowSize 高阶组件给 MyComp 添加 windowSize 属性</span><br><span class="line">export default withWindowSize(MyComp);</span><br></pre></td></tr></table></figure>
-<p>小结<br>hooks使用时应包括这么三点：</p>
-<ol>
-<li>在 useEffect 的回调函数中使用的变量，都必须在依赖项中声明；</li>
-<li>Hooks 不能出现在条件语句或者循环中，也不能出现在 return 之后；</li>
-<li>Hooks 只能在函数组件或者自定义 Hooks 中使用。</li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/24/">24</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1613,7 +1611,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">240</span>
+              <span class="site-state-item-count">245</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1677,7 +1675,7 @@
         <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2024</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

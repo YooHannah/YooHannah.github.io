@@ -259,6 +259,688 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/designMode/basic.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/designMode/basic.html" itemprop="url">
+                  基础知识
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-03T16:37:09+08:00">
+                2018-11-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="一些有思想提醒作用的话"><a href="#一些有思想提醒作用的话" class="headerlink" title="一些有思想提醒作用的话"></a>一些有思想提醒作用的话</h1><p>把不变的部分隔离出来，把可变的部分封装起来</p>
+<p>多态最根本的作用就是通过把过程化的条件分支语句转化为对象的多态性，从而消除这些条件分支语句</p>
+<p>（每个对象应该做什么，已成为了该对象的一个方法，被安装在对象的内部，每个对象负责它们自己的行为，所以这些对象可以根据同一个消息，有条不紊的分别进行各自的工作  ====&gt; 将行为分布在各个对象中，并让对象各自负责自己的行为&lt;—面向对象设计优点）</p>
+<p>对象以方法的形式包含了过程，而闭包则是在过程中以环境的形式包含了数据</p>
+<h1 id="小知识点"><a href="#小知识点" class="headerlink" title="小知识点"></a>小知识点</h1><p>1.原型继承过程：<b>对象把请求委托给它的构造器的原型</b></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var A = function()&#123;&#125;;</span><br><span class="line">A.prototype = &#123;name:&apos;seven&apos;&#125;;</span><br><span class="line">var B = function()&#123;&#125;;</span><br><span class="line">B.color=&apos;red&apos;;</span><br><span class="line">B.prototype = new A();</span><br><span class="line">B.prototype.color = &apos;green&apos;</span><br><span class="line">var b = new B();</span><br><span class="line">console.log(b.name,b.color)</span><br><span class="line"></span><br><span class="line">//seven green</span><br></pre></td></tr></table></figure>
+<p>2.用new 调用构造器时，如果构造器显示返回了一个object类型的对象，那么此次运算结果最终会返回这个对象，而不是this；<br>  若不显示返回任何数据，或者是返回一个非对象类型的数据，则会正常返回this</p>
+<p>3.使用Dom 方法时，注意是否会造成this 丢失<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">	let getId = document.getElementById; //原来 getElementById this指向document</span><br><span class="line">	getId(&apos;DIV1&apos;) //现在指向window</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<p>4.使用call/apply时，如果第一个参数传入null，那么函数体内的this会指向window</p>
+<p>5.闭包作用：封装变量；延续局部变量寿命<br> 闭包和内存泄露有关系的地方是，使用闭包的同时比较容易形成循环引用，如果闭包的作用域链中保存着一些DOM节点，就比较可能造成内存泄露。因为IE浏览器中，由于BOM和DOM对象是使用C++以COM对象的方式实现的，而COM对象的垃圾收集机制采用引用计数策略，这时，如果两个对象之间形成了循环引用，那么这两个对象都无法被回收。</p>
+<p> 解决办法是将循环引用中的变量设为null，方便回收。</p>
+<h1 id="高阶函数一些例子"><a href="#高阶函数一些例子" class="headerlink" title="高阶函数一些例子"></a>高阶函数一些例子</h1><h2 id="一个单例模式"><a href="#一个单例模式" class="headerlink" title="一个单例模式"></a>一个单例模式</h2> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var getSingle = function(fn)&#123;</span><br><span class="line">	var ret;</span><br><span class="line">	return function()&#123;</span><br><span class="line">		return ret || (ret = fn.apply(this,arguments));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="AOP（切面编程）-实现"><a href="#AOP（切面编程）-实现" class="headerlink" title="AOP（切面编程） 实现"></a>AOP（切面编程） 实现</h2> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"> Function.prototype.before = function(beforeFn)&#123;</span><br><span class="line">	return ()=&gt;&#123;</span><br><span class="line">		beforeFn.apply(this,arguments);</span><br><span class="line">		return this.apply(this,arguments);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">Function.prototype.after = function(afterFn)&#123;</span><br><span class="line">	return ()=&gt;&#123;</span><br><span class="line">		this.apply(this,arguments);</span><br><span class="line">		afterFn.apply(this,arguments);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">var func = function ()&#123;console.log(2)&#125;</span><br><span class="line">func = func.before(()=&gt;&#123;console.log(1)&#125;).after(()=&gt;&#123;console.log(3)&#125;)</span><br><span class="line">func()</span><br><span class="line">//1</span><br><span class="line">//2</span><br><span class="line">//3</span><br></pre></td></tr></table></figure>
+<h2 id="部分求值-currying"><a href="#部分求值-currying" class="headerlink" title="部分求值 currying"></a>部分求值 currying</h2><p> 一个curring的函数首先会接受一些参数，接受了这些参数之后，该函数并不会立即求值，而是继续返回另外一个函数，刚才传入的参数在函数形成的闭包中被保存起来，待到函数被真正需要求值的时候，之前传入的所有参数都会被一次性用于求值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"> var currying = function(fn)&#123;</span><br><span class="line">	let args = [];</span><br><span class="line">	return function()&#123;</span><br><span class="line">		if(arguments.length === 0)&#123;</span><br><span class="line">			return fn.apply(this,args);</span><br><span class="line">		&#125;else&#123;</span><br><span class="line">			[].push.apply(args,arguments);</span><br><span class="line">			return arguments.callee;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line">var cost = (function()&#123;</span><br><span class="line">	var money = 0;</span><br><span class="line">	return function ()&#123;</span><br><span class="line">		for(var i = 0,l=arguments.length;i&lt;l;i++)&#123;</span><br><span class="line">			money += arguments[i];</span><br><span class="line">		&#125;</span><br><span class="line">		return money;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;)();</span><br><span class="line"></span><br><span class="line">var cost = currying(cost);</span><br><span class="line">cost(100);</span><br><span class="line">console.log(cost(200))</span><br><span class="line">console.log(cost())</span><br></pre></td></tr></table></figure>
+<h2 id="函数节流"><a href="#函数节流" class="headerlink" title="函数节流"></a>函数节流</h2><p>多次重复调用，按时间限制调用次数<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">var throttle = function(fn,interval)&#123;</span><br><span class="line">	var _self = fn,timer,firstTime = true;</span><br><span class="line">	return fucntion()&#123;</span><br><span class="line">		var args = arguments,_me = this;</span><br><span class="line">		if(fiestTime)&#123;</span><br><span class="line">			_self.apply(_me,args);</span><br><span class="line">			return firstTime = false;</span><br><span class="line">		&#125;</span><br><span class="line">		if(timer)&#123;</span><br><span class="line">			return false;</span><br><span class="line">		&#125;</span><br><span class="line">		timer = setTimeout(function()&#123;</span><br><span class="line">			clearTimeout(timer);</span><br><span class="line">			timer = null;</span><br><span class="line">			_self.apply(_me,args);</span><br><span class="line">		&#125;,interval||500)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="分时函数"><a href="#分时函数" class="headerlink" title="分时函数"></a>分时函数</h2><p>大批量数据要执行同一函数，分批次执行任务<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"> var timeChunk = function(ary,fn,count)&#123;</span><br><span class="line">	var obj,t;</span><br><span class="line">	var len = ary.length;</span><br><span class="line">	var start = function()&#123;</span><br><span class="line">		for(var i = 0;i&lt;Math.min(count||1,ary.length);i++)&#123;</span><br><span class="line">			var obj = ary.shift();</span><br><span class="line">			fn(obj);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	return function()&#123;</span><br><span class="line">		t=setInterval(function()&#123;</span><br><span class="line">			if(ary.length === 0)&#123;</span><br><span class="line">				return clearInterval(t)</span><br><span class="line">			&#125;</span><br><span class="line">			start();</span><br><span class="line">		&#125;,200)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="惰性加载函数"><a href="#惰性加载函数" class="headerlink" title="惰性加载函数"></a>惰性加载函数</h2> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"> var addEvent = function(elem,type,handler)&#123;</span><br><span class="line">	if(window.addEventListener)&#123;</span><br><span class="line">		addEvent = function(elem,type,handler)&#123;</span><br><span class="line">			elem.addEventListerner(type,handler,false)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;else if(window.attachEvent)&#123;</span><br><span class="line">		addEvent = function(elem,type,handler)&#123;</span><br><span class="line">			elem.attachEvent(&apos;on&apos;+type,handler)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	addEvent(elem,type,handler);</span><br><span class="line">&#125;</span><br><span class="line">//addEvent 在第一次进入条件分支之后，在函数内部会重写这个函数，重写之后的函数就是我们期望的函数，在下一次进入addEvent</span><br><span class="line">//函数时，addEvent函数不存在条件分支，无需再进行判断</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/angular/angularjsdirective.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/angular/angularjsdirective.html" itemprop="url">
+                  angularjs directive编写组件小结
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-30T07:37:09+08:00">
+                2018-08-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;edit-modal dismiss=&quot;dismiss()&quot; config=&quot;model.config&quot; after-save=&quot;model.afterSave()&quot; aaa=&quot;model.hello&quot;&gt;&lt;/edit-modal&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">export function editModalDirective() &#123;</span><br><span class="line">  return &#123;</span><br><span class="line">    restrict: &apos;E&apos;,</span><br><span class="line">    template: template,</span><br><span class="line">    controller: EditModalCtrl,</span><br><span class="line">    bindToController: true,</span><br><span class="line">    controllerAs: &apos;ctrl&apos;,</span><br><span class="line">    transclude: true,</span><br><span class="line">    scope: &#123;</span><br><span class="line">      dismiss: &apos;&amp;&apos;,</span><br><span class="line">      afterSave: &apos;&amp;&apos;,</span><br><span class="line">      config: &apos;=&apos;,</span><br><span class="line">    &#125;,</span><br><span class="line">    link: function(scope, ele, attrs) &#123;</span><br><span class="line">      if (scope.ctrl.config.type === &apos;Strategy&apos;) &#123;</span><br><span class="line">        if (scope.ctrl.config.type === &apos;Strategy&apos;) &#123;</span><br><span class="line">          ele[0].className += &apos;strategy&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      </span><br><span class="line">      </span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line">//在模块编译时注册指令</span><br><span class="line">coreModule.directive(&apos;editModal&apos;, editModalDirective);</span><br><span class="line">//参考：https://www.cnblogs.com/wangnuo/p/6305742.html</span><br></pre></td></tr></table></figure>
+<h2 id="link函数"><a href="#link函数" class="headerlink" title="link函数"></a>link函数</h2><p>link函数仅在编译时执行一次，三个参数：scope, ele, attrs</p>
+<h3 id="ele"><a href="#ele" class="headerlink" title="ele"></a>ele</h3><p>即是当前的指令DOM对象，因此可以在ele上绑定触发事件,</p>
+<p>但谨慎在数据上利用事件订阅触发机制进行事件绑定，</p>
+<p>因为如果在外层包react组件的情况下，可能会导致数据刷新，但没有事件绑定，从而无法触发事件</p>
+<p>注意在获取深层子dom时可能会获取不到</p>
+<h3 id="attrs"><a href="#attrs" class="headerlink" title="attrs"></a>attrs</h3><p>指ele所在dom上的属性集合,没有在scope属性中声明的属性也能看到</p>
+<p>但要注意，属性值就是标签上变量的名，不是标签上变量指代的值</p>
+<p>标签上属性赋值变量的值在参数scope中<br><img src="/image/attrs.png" alt="attrs"></p>
+<h3 id="scope"><a href="#scope" class="headerlink" title="scope"></a>scope</h3><p>link函数参数scope指向当前指令的作用域</p>
+<p>参数scope的ctrl属性（controllerAs属性的值）即EditModalCtrl</p>
+<p>因为这里配置了controller，bindToController，controllerAs，</p>
+<p>所以在scope属性中声明的属性(config)方法（dismiss,after）会被归并到controller中，会以ctrl的属性形式出现，</p>
+<p>即如果我想拿到属性scope中声明的config,可以这样：scope.ctrl.config</p>
+<p>同时可以在EditModalCtrl中访问获取config,即this.config</p>
+<p>另外如果没有在属性scope中声明的属性aaa，但在标签中进行了配置（aaa=”model.hello”），是无效的,ctrl上是不会有aaa属性的，即传递不进来</p>
+<p>因此可以在link函数中拿到父作用域传递过来的值，分情况进行不同处理<br><img src="/image/scope.png" alt="scope"></p>
+<h2 id="scope属性"><a href="#scope属性" class="headerlink" title="scope属性"></a>scope属性</h2><p>建立子域，声明所在标签的属性名，以及传值方式,controler存在情况下被合并</p>
+<h3 id><a href="#" class="headerlink" title="@"></a>@</h3><p>@ 在 directive 中使用 xxx 属性绑定父 scope 中的属性。当改变父 scope 中属性的值的时候，directive 会同步更新值，当改变 directive 的 scope 的属性值时，父 scope 无法同步更新值。使用&#123;&#123;&#125;&#125;引用绑定值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">app.controller(&quot;myController&quot;, function ($scope) &#123;</span><br><span class="line">        $scope.name = &quot;hello world&quot;;</span><br><span class="line">    &#125;).directive(&quot;isolatedDirective&quot;, function () &#123;</span><br><span class="line">        return &#123;</span><br><span class="line">            scope: &#123;</span><br><span class="line">                name: &quot;@&quot;</span><br><span class="line">            &#125;,</span><br><span class="line">            template: &apos;Say：&#123;&#123;name&#125;&#125; &lt;br&gt;改变隔离scope的name：&lt;input type=&quot;buttom&quot; value=&quot;&quot; ng-model=&quot;name&quot; class=&quot;ng-pristine ng-valid&quot;&gt;&apos;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;div ng-controller=&quot;myController&quot;&gt;</span><br><span class="line">   &lt;div class=&quot;result&quot;&gt;</span><br><span class="line">       &lt;div&gt;父scope：</span><br><span class="line">           &lt;div&gt;Say：&#123;&#123;name&#125;&#125;&lt;br&gt;改变父scope的name：&lt;input type=&quot;text&quot; value=&quot;&quot; ng-model=&quot;name&quot;/&gt;&lt;/div&gt;</span><br><span class="line">       &lt;/div&gt;</span><br><span class="line">       &lt;div&gt;隔离scope：</span><br><span class="line">           &lt;div isolated-directive name=&quot;&#123;&#123;name&#125;&#125;&quot;&gt;&lt;/div&gt;</span><br><span class="line">       &lt;/div&gt;</span><br><span class="line">        &lt;div&gt;隔离scope（不使用&#123;&#123;name&#125;&#125;）：</span><br><span class="line">             &lt;div isolated-directive name=&quot;name&quot;&gt;&lt;/div&gt;</span><br><span class="line">         &lt;/div&gt;</span><br><span class="line">   &lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<h3 id="-1"><a href="#-1" class="headerlink" title="="></a>=</h3><p>= 无论是改变父 scope 还是隔离 scope 里的属性，父 scope 和隔离 scope 都会同时更新属性值，因为它们是双向绑定的关系,使用“”引用绑定值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">app.controller(&quot;myController&quot;, function ($scope) &#123;</span><br><span class="line">        $scope.user = &#123;</span><br><span class="line">            name: &apos;hello&apos;,</span><br><span class="line">            id: 1</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;).directive(&quot;isolatedDirective&quot;, function () &#123;</span><br><span class="line">        return &#123;</span><br><span class="line">            scope: &#123;</span><br><span class="line">                user: &quot;=&quot;</span><br><span class="line">            &#125;,</span><br><span class="line">            template: &apos;Say：&#123;&#123;user.name&#125;&#125; &lt;br&gt;改变隔离scope的name：&lt;input type=&quot;buttom&quot; value=&quot;&quot; ng-model=&quot;user.name&quot;/&gt;&apos;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">&lt;div ng-controller=&quot;myController&quot;&gt;</span><br><span class="line">    &lt;div&gt;父scope：</span><br><span class="line">        &lt;div&gt;Say：&#123;&#123;user.name&#125;&#125;&lt;br&gt;改变父scope的name：&lt;input type=&quot;text&quot; value=&quot;&quot; ng-model=&quot;user.name&quot;/&gt;&lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div&gt;隔离scope：</span><br><span class="line">        &lt;div isolated-directive user=&quot;user&quot;&gt;&lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div&gt;隔离scope（使用&#123;&#123;name&#125;&#125;）：</span><br><span class="line">        &lt;div isolated-directive user=&quot;&#123;&#123;user&#125;&#125;&quot;&gt;&lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<h3 id="amp"><a href="#amp" class="headerlink" title="&amp;"></a>&amp;</h3><p>&amp; 用来绑定函数，在directive中调用父域中的函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"> app.controller(&quot;myController&quot;, function ($scope) &#123;</span><br><span class="line">        $scope.value = &quot;hello world&quot;;</span><br><span class="line">        $scope.click = function () &#123;</span><br><span class="line">            $scope.value = Math.random();</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;).directive(&quot;isolatedDirective&quot;, function () &#123;</span><br><span class="line">        return &#123;</span><br><span class="line">            scope: &#123;</span><br><span class="line">                action: &quot;&amp;&quot;</span><br><span class="line">            &#125;,</span><br><span class="line">            template: &apos;&lt;input type=&quot;button&quot; value=&quot;在directive中执行父scope定义的方法&quot; ng-click=&quot;action()&quot;/&gt;&apos;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    &lt;div  ng-controller=&quot;myController&quot;&gt;</span><br><span class="line">        &lt;div&gt;父scope：</span><br><span class="line">            &lt;div&gt;Say：&#123;&#123;value&#125;&#125;&lt;/div&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">        &lt;div&gt;隔离scope：</span><br><span class="line">            &lt;div isolated-directive action=&quot;click()&quot;&gt;&lt;/div&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+<p>参考： <a href="https://blog.coding.net/blog/angularjs-directive-isolate-scope?type=early" target="_blank" rel="noopener">https://blog.coding.net/blog/angularjs-directive-isolate-scope?type=early</a></p>
+<h2 id="transclude"><a href="#transclude" class="headerlink" title="transclude"></a>transclude</h2><p>类似于VUE的slot,但不如slot的灵活强，更倾向于定制插入，在固定位置插入</p>
+<h3 id="单点嵌入"><a href="#单点嵌入" class="headerlink" title="单点嵌入"></a>单点嵌入</h3><p>设置属性 transclude:true</p>
+<p>在模板中将 &lt;ng-transclude&gt;&lt;/ng-transclude&gt;放到要插入的位置</p>
+<p>应用时&lt;my-labe&gt;&lt;span&gt;1233&lt;/span&gt;&lt;/my-label&gt;;</p>
+<p>&lt;span&gt;1233&lt;/span&gt; 会自动插入&lt;ng-transclude&gt;&lt;/ng-transclude&gt;之间</p>
+<h3 id="多点嵌入"><a href="#多点嵌入" class="headerlink" title="多点嵌入"></a>多点嵌入</h3><p>设置属性 transclude ：{模板中flag:页面应用时标签名的驼峰式，}</p>
+<p>在模板中制定位置放置flag :&lt;div  ng-transclude=”flag”&gt;&lt;/div&gt;</p>
+<p>应用时 &lt;my-label&gt;&lt;my-title&gt;123&lt;/my-title&gt;&lt;/my-label&gt;</p>
+<p>123 会自动插入&lt;div  ng-transclude=”flag”&gt;&lt;/div&gt;之间</p>
+<p>参考：<a href="https://segmentfault.com/a/1190000004586636" target="_blank" rel="noopener">https://segmentfault.com/a/1190000004586636</a></p>
+<h3 id="scope绑定"><a href="#scope绑定" class="headerlink" title="scope绑定"></a>scope绑定</h3><p>使用transcludeFn给transclude进来的Dom手动制定scope,</p>
+<p>transcludeFn可来自compile，link的参数，或者controller的注入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">.directive(&quot;todo&quot;, function()&#123;</span><br><span class="line"></span><br><span class="line">    return &#123;</span><br><span class="line">        restrict:&quot;E&quot;,</span><br><span class="line">        transclude:&quot;true&quot;,</span><br><span class="line">        template:&quot;&lt;header&gt;&#123;&#123;header&#125;&#125;&lt;/header&gt;&lt;div&gt;&lt;span&gt;这里是自定义区域&lt;/span&gt;&lt;content-transclude&gt;&lt;/content-transclude&gt;&lt;/div&gt;&quot;</span><br><span class="line">        scope:&#123;</span><br><span class="line">            header:&quot;@&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        controller:[&quot;$transclude&quot;,function(transcludeFn)&#123;</span><br><span class="line">            this.transcludeFn = transcludeFn;</span><br><span class="line">        &#125;]</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">.directive(&quot;contentTransclude&quot;,funtion()&#123;</span><br><span class="line">    return &#123;</span><br><span class="line">        restrict:&quot;E&quot;,</span><br><span class="line">        require:&quot;^todo&quot;,</span><br><span class="line">        link:function(scope,element,attr,todoController)&#123;</span><br><span class="line">            todoController.transcludeFn(scope.$parent, function(transcludeContent)&#123;</span><br><span class="line">                element.append(transcludeContent);</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>参考：<a href="https://blog.csdn.net/shut1k/article/details/49848637" target="_blank" rel="noopener">https://blog.csdn.net/shut1k/article/details/49848637</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/v8.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/js/v8.html" itemprop="url">
+                  一点V8引擎知识
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-02T21:15:15+08:00">
+                2018-06-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>1.V8占用操作系统内存很少,为什么？<br>类似于体育场办演唱会，演唱会结束后，清完垃圾才能开下一场，<br>如果场子小，2小时搞定，如果场子大，人多产生垃圾多，清理时间就会变长<br>在64位操作系统中占用1.4G，32位操作系统中占0.7G<br>表面原因是JS设计之初是用于给浏览器跑脚本，脚本跑完一次就结束了，不需要长期运行占用内存，以上这些空间足够<br>实际原因是垃圾回收机制在进行时，会停掉正在运行的整个程序，回收结束后继续运行，<br>而一次小型垃圾回收几MB会消耗50ms，程序运行就会停止50ms<br>如果说给的内存太大，那么跑的程序肯定会多来，产生的垃圾也会随之增多，回收时间就变长，结果就会导致程序运行间歇性执行<br>这肯定是不能让人接受的</p>
+<p>2.垃圾回收算法<br>V8引擎将所占内存分成两块，<br>一个叫新生代空间，用于存放生命周期较短的变量，比如一个函数里的局部变量，函数运行完即释放<br>一个叫老生代空间，占引擎内存的90%以上，用于存放生命周期较长的变量，比如全局变量，从程序运行开始就存在</p>
+<p>新生代空间垃圾回收算法就是复制<br>新生代空间又分两部分，一个叫from一个叫to<br>回收时会将from中活着的变量复制到TO空间，然后将from空间清空，再将from和to空间内容对调<br>原理是用空间换取时间，有一半新生代空间处于空置状态，而对调减少了清理磁盘空间的过程，从而节省了时间</p>
+<p>老生代垃圾回收算法 就是标记删除整理<br>标记死掉的没有生命周期的变量，边删除标记的变量，边整理碎片（内存空间），将删除导致的磁盘碎片用活着的变量通过移动补齐</p>
+<p>3.新生代晋升老生代条件<br>新生代空间的变量经历过一次复制，即经过一次垃圾回收，而且TO空间已经使用了25%，那么这个变量就会被安排到老生代空间</p>
+<p>4.利用node查看内存情况<br> cmd 敲击node命令<br> 使用process.memoryUsage()查看，返回包含以下属性对象<br> rss:V8占用的总内存（占用比使用会多一些）<br> heapTotal:当前程序被分配到的总内存<br> heapUsed:当前程序使用的内存<br> external:调用的部分C++内存<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"> function getMB()&#123;</span><br><span class="line">  var mem = process.memoryUsage()</span><br><span class="line">  var format = function(bytes)&#123;</span><br><span class="line">    return (bytes/1024/1024).toFixed(2)+&apos;MB&apos;</span><br><span class="line">  &#125;</span><br><span class="line">  console.log(&apos;heapTotal:&apos;+format(mem.heapTotal)+&apos;      heapUsed:&apos;+format(mem.heapUsed))</span><br><span class="line">&#125;</span><br><span class="line">let a = ()=&gt;&#123;</span><br><span class="line">  let b = new Array(1024*1024)</span><br><span class="line">  return b</span><br><span class="line">&#125;</span><br><span class="line">let b = a() </span><br><span class="line">let d = a()</span><br><span class="line">let e = a()</span><br><span class="line">let f = a()</span><br><span class="line">let g = a()</span><br><span class="line">// let h = a()</span><br><span class="line">// let i = a()</span><br><span class="line">// let j = a()</span><br><span class="line">// let k = a()</span><br><span class="line">// let l = a()</span><br><span class="line">// let m = a()</span><br><span class="line">// let n = a()</span><br><span class="line">// let o = a()</span><br><span class="line">// let p = a()</span><br><span class="line">// let q = a()</span><br><span class="line">getMB()</span><br></pre></td></tr></table></figure></p>
+<p> 在cmd中转到文件所在目录，node 包含以上代码的js文件，即可打印内存使用情况</p>
+<p>5.优化内存技巧<br>尽量不要定义全局变量<br>全局变量记得销毁掉<br>用匿名自执行函数变全局为局部<br>尽量避免闭包</p>
+<p>在使用立即执行函数实现闭包时，<br>函数内代码，为同步操作时，占用内存与不使用闭包相同<br>但如果包含异步操作，则函数内用到的外界变量会一直处于被引用状态<br>得不到释放从而导致内存增加<br>解决：使用完释放；避免使用闭包</p>
+<p>6.导致内存泄露<br>滥用缓存</p>
+<p>js中导致内存泄露的常见场景<br>闭包函数<br>全局变量<br>对象属性循环使用<br>Dom节点删除时未解绑事件<br>Map和Set数据类型的数据属性直接删除，导致指向的数据没有被删除</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/aliyun.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/knowledge/aliyun.html" itemprop="url">
+                  阿里云服务器使用
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-01T21:42:37+08:00">
+                2018-05-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="购买云服务器"><a href="#购买云服务器" class="headerlink" title="购买云服务器"></a>购买云服务器</h2><p>按照网站指引，配置服务器相关参数，提交订单，付钱</p>
+<p>需要注意的是镜像就是将来在服务上安装的操作系统<br>如果这里选错，稍后还可以更换</p>
+<h2 id="更换镜像"><a href="#更换镜像" class="headerlink" title="更换镜像"></a>更换镜像</h2><p>相当于更换操作系统<br><a href="https://help.aliyun.com/document_detail/25436.html?spm=a2c4g.11186623.4.1.mKmERm" target="_blank" rel="noopener">更换操作系统</a><br><a href="https://help.aliyun.com/document_detail/50134.html?spm=a2c4g.11186623.6.672.mQB0bF" target="_blank" rel="noopener">更换系统盘(公共镜像)</a></p>
+<h2 id="部署阿里云"><a href="#部署阿里云" class="headerlink" title="部署阿里云"></a>部署阿里云</h2><p>在云端服务器搭建nodejs开发环境<br><a href="https://help.aliyun.com/document_detail/25425.html?spm=a2c4g.11186623.2.5.Hiallm" target="_blank" rel="noopener">远程连接ECS实例</a><br><a href="https://help.aliyun.com/document_detail/25426.html?spm=a2c4g.11186623.6.598.RIGXvB" target="_blank" rel="noopener">分盘</a><br><a href="https://help.aliyun.com/document_detail/50775.html?spm=a2c4g.11186623.6.758.RZeQeh" target="_blank" rel="noopener">部署Node.js项目（CentOS）</a><br><a href="https://blog.csdn.net/u014066037/article/details/70224780" target="_blank" rel="noopener">安装git(仅供参考)</a></p>
+<h2 id="部署自己的项目"><a href="#部署自己的项目" class="headerlink" title="部署自己的项目"></a>部署自己的项目</h2><p>安装好开发环境后就可以像在本地运行项目一样克隆项目运行项目</p>
+<h2 id="域名备案"><a href="#域名备案" class="headerlink" title="域名备案"></a>域名备案</h2><p>我们在购买域名后，还要对域名进行备案<br><a href="https://beian.aliyun.com/order/index?spm=5176.8087400.600752.3.389615c9UqjZyz" target="_blank" rel="noopener">域名备案系统</a><br>按照流程进行备案即可</p>
+<h2 id="http转https"><a href="#http转https" class="headerlink" title="http转https"></a>http转https</h2><p><a href="https://dc.console.aliyun.com/next/index#/domain/list/all-domain" target="_blank" rel="noopener">域名控制台</a></p>
+<p>我们需要购买云盾证书服务<br><a href="https://common-buy.aliyun.com/?spm=5176.7968328.911106.btn1.2f194ebfXX6t9Q&amp;commodityCode=cas#/buy" target="_blank" rel="noopener">购买页面</a><br>在专业版OV SSL下选择品牌Symantec,<br>然后保护类型选择1个域名<br>会发现证书类型出现‘免费型DV SSL’,选择这个就可以买到免费证书</p>
+<p>购买后根据申请流程填写资料等待流程走完就可以拿到证书<br>注意1.购买的域名在云解析DNS服务中又绑定，DNS会自动生成映射，2.选择系统生成CSR</p>
+<p>拿到证书后<br>在<a href="https://yundun.console.aliyun.com/?spm=5176.2020520163.aliyun_sidebar.19.22cf2b7auXL2bL&amp;p=cas#/cas/home" target="_blank" rel="noopener">CA证书管理页面</a>可以下载到xxxxx.key,xxxx.pem文件</p>
+<p>因为我这里用nodejs搭建服务器，所以只需将文件放入项目，修改项目文件为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">const Koa = require(&apos;koa&apos;);</span><br><span class="line">const fs = require(&apos;fs&apos;);</span><br><span class="line">const https = require(&apos;https&apos;);</span><br><span class="line">const http = require(&apos;http&apos;);</span><br><span class="line">var enforceHttps = require(&apos;koa-sslify&apos;);</span><br><span class="line"></span><br><span class="line">const app = new Koa();</span><br><span class="line"></span><br><span class="line">//将http请求强制转换成https请求</span><br><span class="line">app.use(enforceHttps());</span><br><span class="line"></span><br><span class="line">var options = &#123;</span><br><span class="line">    key: fs.readFileSync(&apos;./ssl/214645895910665.key&apos;),</span><br><span class="line">    cert: fs.readFileSync(&apos;./ssl/214645895910665.pem&apos;)</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">http.createServer(app.callback()).listen(80);</span><br><span class="line">https.createServer(options, app.callback()).listen(443);</span><br><span class="line">console.log(&apos;server is running....&apos;);</span><br></pre></td></tr></table></figure></p>
+<p>还要注意安全组有没有设置放行https的443端口<br>进入云服务器控制台<br>网络和安全下安全组, 点击配置规则, 进入规则列表<br>如果没有443端口，则点击添加安全组规则，端口设置为443即可</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/generator.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/js/generator.html" itemprop="url">
+                  异步函数generator和async
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-28T17:38:37+08:00">
+                2018-03-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="generator-yield-next"><a href="#generator-yield-next" class="headerlink" title="generator/yield/next"></a>generator/yield/next</h1><p>generator函数即生成器函数，可以理解为用于产生生成器的函数<br>yield 关键字是只能用于generator函数，作为异步断点，相当于continue+return功能<br>next 关键字是生成器用于执行生成器函数的关键字，<br>即每调用一次，执行到yield定义的语句，把yield 后面的表达式结果当做返回值返回来<br>如果调用时传递了参数，则覆盖上次yield 的结果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">function* helloworld()&#123;</span><br><span class="line">	yield &apos;hello&apos;;</span><br><span class="line">	yield &apos;world&apos;;</span><br><span class="line">	let aa = 0;</span><br><span class="line">	let a = yield aa++; //yield赋值不用小括号</span><br><span class="line">	console.log(a);</span><br><span class="line">	yield 123+1;</span><br><span class="line">	console.log(&apos;Hello&apos; + (yield 123)); //使用yield表达式用小括号</span><br><span class="line">	return &apos;endig&apos;;</span><br><span class="line">&#125;</span><br><span class="line">let obj = helloworld();//并不会执行generator函数，只是生成生成器</span><br><span class="line">obj.next();//&#123;value: &quot;hello&quot;, done: false&#125;</span><br><span class="line">obj.next();//&#123;value: &quot;world&quot;, done: false&#125;</span><br><span class="line">obj.next();//&#123;value: 0, done: false&#125;</span><br><span class="line">obj.next(&apos;456&apos;);// 456 &#123;value: 124, done: false&#125; 如果不传值的话，a的值为undefined</span><br><span class="line">obj.next();//&#123;value: 123, done: false&#125;</span><br><span class="line">obj.next();// Helloundefined &#123;value: &quot;endig&quot;, done: true&#125;; 不传参，yield返回undefined</span><br></pre></td></tr></table></figure></p>
+<p>next()是将yield表达式替换成一个值。<br>throw()是将yield表达式替换成一个return语句。<br>return()是将yield表达式替换成一个return语句。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">const g = function* (x, y) &#123;</span><br><span class="line">  let result = yield x + y;</span><br><span class="line">  return result;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">const gen = g(1, 2);</span><br><span class="line">gen.next(); // Object &#123;value: 3, done: false&#125;</span><br><span class="line"></span><br><span class="line">gen.next(1); // Object &#123;value: 1, done: true&#125;</span><br><span class="line">// 相当于将 let result = yield x + y</span><br><span class="line">// 替换成 let result = 1;</span><br><span class="line"></span><br><span class="line">gen.throw(new Error(&apos;出错了&apos;)); // Uncaught Error: 出错了</span><br><span class="line">// 相当于将 let result = yield x + y</span><br><span class="line">// 替换成 let result = throw(new Error(&apos;出错了&apos;));</span><br><span class="line"></span><br><span class="line">gen.return(2); // Object &#123;value: 2, done: true&#125;</span><br><span class="line">// 相当于将 let result = yield x + y</span><br><span class="line">// 替换成 let result = return 2;</span><br></pre></td></tr></table></figure></p>
+<p>如果yield表达式后面跟的是一个遍历器对象，需要在yield表达式后面加上星号，表明它返回的是一个遍历器对象。这被称为yield<em>表达式<br>yield</em>后面的 Generator 函数（没有return语句时），等同于在 Generator 函数内部，部署一个for…of循环。<br>for…of循环可以自动遍历Generator函数时生成的Iterator对象，且此时不再需要调用next方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">例1</span><br><span class="line">function* inner() &#123;</span><br><span class="line">  yield &apos;hello!&apos;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function* outer1() &#123;</span><br><span class="line">  yield &apos;open&apos;;</span><br><span class="line">  yield inner();</span><br><span class="line">  yield &apos;close&apos;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var gen = outer1()</span><br><span class="line">gen.next().value // &quot;open&quot;</span><br><span class="line">gen.next().value // 返回一个遍历器对象</span><br><span class="line">gen.next().value // &quot;close&quot;</span><br><span class="line"></span><br><span class="line">function* outer2() &#123;</span><br><span class="line">  yield &apos;open&apos;</span><br><span class="line">  yield* inner()</span><br><span class="line">  yield &apos;close&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var gen = outer2()</span><br><span class="line">gen.next().value // &quot;open&quot;</span><br><span class="line">gen.next().value // &quot;hello!&quot;</span><br><span class="line">gen.next().value // &quot;close&quot;</span><br><span class="line"></span><br><span class="line">例2</span><br><span class="line">let delegatedIterator = (function* () &#123;</span><br><span class="line">  yield &apos;Hello!&apos;;</span><br><span class="line">  yield &apos;Bye!&apos;;</span><br><span class="line">&#125;());</span><br><span class="line"></span><br><span class="line">let delegatingIterator = (function* () &#123;</span><br><span class="line">  yield &apos;Greetings!&apos;;</span><br><span class="line">  yield* delegatedIterator;</span><br><span class="line">  yield &apos;Ok, bye.&apos;;</span><br><span class="line">&#125;());</span><br><span class="line"></span><br><span class="line">for(let value of delegatingIterator) &#123;</span><br><span class="line">  console.log(value);</span><br><span class="line">&#125;</span><br><span class="line">// &quot;Greetings!</span><br><span class="line">// &quot;Hello!&quot;</span><br><span class="line">// &quot;Bye!&quot;</span><br><span class="line">// &quot;Ok, bye.&quot;</span><br></pre></td></tr></table></figure></p>
+<p>如果yield*后面跟着一个数组，由于数组原生支持遍历器，因此就会遍历数组成员。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">function* gen()&#123;</span><br><span class="line">  yield* [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">gen().next() // &#123; value:&quot;a&quot;, done:false &#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面代码中，yield命令后面如果不加星号，返回的是整个数组，加了星号就表示返回的是数组的遍历器对象。</p>
+<p>Generator 函数返回的遍历器对象，可以继承prototype,但不能当做普通构造函数,不会返回this<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">function* g() &#123;</span><br><span class="line">  this.a = 11;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let obj = g();</span><br><span class="line">obj.next();</span><br><span class="line">obj.a // undefined</span><br><span class="line">//可以进行改造</span><br><span class="line">//执行的是遍历器对象f，但是生成的对象实例是obj</span><br><span class="line">function* F() &#123;</span><br><span class="line">  this.a = 1;</span><br><span class="line">  yield this.b = 2;</span><br><span class="line">  yield this.c = 3;</span><br><span class="line">&#125;</span><br><span class="line">var f = F.call(F.prototype);</span><br><span class="line"></span><br><span class="line">f.next();  // Object &#123;value: 2, done: false&#125;</span><br><span class="line">f.next();  // Object &#123;value: 3, done: false&#125;</span><br><span class="line">f.next();  // Object &#123;value: undefined, done: true&#125;</span><br><span class="line"></span><br><span class="line">f.a // 1</span><br><span class="line">f.b // 2</span><br><span class="line">f.c // 3</span><br><span class="line"></span><br><span class="line">function* F() &#123;</span><br><span class="line">  this.a = 1;</span><br><span class="line">  yield this.b = 2;</span><br><span class="line">  yield this.c = 3;</span><br><span class="line">&#125;</span><br><span class="line">var f = F.call(F.prototype);</span><br><span class="line"></span><br><span class="line">f.next();  // Object &#123;value: 2, done: false&#125;</span><br><span class="line">f.next();  // Object &#123;value: 3, done: false&#125;</span><br><span class="line">f.next();  // Object &#123;value: undefined, done: true&#125;</span><br><span class="line"></span><br><span class="line">f.a // 1</span><br><span class="line">f.b // 2</span><br><span class="line">f.c // 3</span><br><span class="line">function* gen() &#123;</span><br><span class="line">  this.a = 1;</span><br><span class="line">  yield this.b = 2;</span><br><span class="line">  yield this.c = 3;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function F() &#123;</span><br><span class="line">  return gen.call(gen.prototype);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var f = new F();</span><br><span class="line"></span><br><span class="line">f.next();  // Object &#123;value: 2, done: false&#125;</span><br><span class="line">f.next();  // Object &#123;value: 3, done: false&#125;</span><br><span class="line">f.next();  // Object &#123;value: undefined, done: true&#125;</span><br><span class="line"></span><br><span class="line">f.a // 1</span><br><span class="line">f.b // 2</span><br><span class="line">f.c // 3</span><br></pre></td></tr></table></figure></p>
+<h2 id="实际应用"><a href="#实际应用" class="headerlink" title="实际应用"></a>实际应用</h2><h3 id="状态机"><a href="#状态机" class="headerlink" title="状态机"></a>状态机</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">var clock = function*() &#123;</span><br><span class="line">  while (true) &#123;</span><br><span class="line">    console.log(&apos;Tick!&apos;);</span><br><span class="line">    yield;</span><br><span class="line">    console.log(&apos;Tock!&apos;);</span><br><span class="line">    yield;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="异步操作的同步化写法"><a href="#异步操作的同步化写法" class="headerlink" title="异步操作的同步化写法"></a>异步操作的同步化写法</h3><p>IMPORTANT!!!</p>
+<p>Generator函数的暂停执行的效果，意味着可以把异步操作写在yield语句里面，等到调用next方法时再往后执行。这实际上等同于不需要写回调函数了，因为异步操作的后续操作可以放在yield语句下面，反正要等到调用next方法时再执行。所以，Generator函数的一个重要实际意义就是用来处理异步操作，改写回调函数。</p>
+<p>只有当yield后面跟的函数先执行完，无论执行体里面有多少异步回调，都要等所有回调先执行完，才会执行等号赋值，以及再后面的操作。这也是yield最大的特性。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">function request(url) &#123;</span><br><span class="line">  $.get(url, function(response)&#123;</span><br><span class="line">    it.next(response);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function* ajaxs() &#123;</span><br><span class="line">    console.log(yield request(&apos;a.html&apos;));</span><br><span class="line">    console.log(yield request(&apos;b.html&apos;));</span><br><span class="line">    console.log(yield request(&apos;c.html&apos;));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var it = ajaxs();</span><br><span class="line"></span><br><span class="line">it.next();</span><br><span class="line"></span><br><span class="line">// a.html</span><br><span class="line">// b.html</span><br><span class="line">// c.html</span><br></pre></td></tr></table></figure>
+<p>第1步：将所有异步代码的每一步都封装成一个普通的、可以有参数的函数，比如上面的request函数。上面例子三个异步代码却只定义了一个request函数,因为request函数能复用。如果不能复用的话，请老老实实定义三个普通函数，函数内容就是需要执行的异步代码。</p>
+<p>第2步：定义一个生成器函数，把流程写进去，完全的同步代码的写法。生成器函数可以有参数。</p>
+<p>第三步：定义一个变量，赋值为迭代器对象。迭代器对象可以加参数，参数通常将作为流程所需的初始值。</p>
+<p>第四步：变量名.next()。不要给这个next()传参数，传了也没用，因为它找不到上一个yield语句。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">//在上述每一步异步中间，都间隔3秒</span><br><span class="line">function request(url) &#123;</span><br><span class="line">  $.get(url, function(response)&#123;</span><br><span class="line">    it.next(response);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function sleep(time) &#123;</span><br><span class="line">  setTimeout(function() &#123;</span><br><span class="line">    console.log(&apos;I\&apos;m awake.&apos;);</span><br><span class="line">    it.next();</span><br><span class="line">  &#125;, time);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function* ajaxs(ur) &#123;</span><br><span class="line">    console.log(yield request(ur));</span><br><span class="line">    yield sleep(3000);</span><br><span class="line">    console.log(yield request(&apos;b.html&apos;));</span><br><span class="line">    yield sleep(3000);</span><br><span class="line">    console.log(yield request(&apos;c.html&apos;));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var it = ajaxs(&apos;a.html&apos;);</span><br><span class="line"></span><br><span class="line">it.next();</span><br></pre></td></tr></table></figure>
+<p><a href="https://www.jianshu.com/p/e0778b004596" target="_blank" rel="noopener">参考资料</a><br><a href="http://es6.ruanyifeng.com/#docs/generator" target="_blank" rel="noopener">参考资料</a></p>
+<h1 id="async-await"><a href="#async-await" class="headerlink" title="async/await"></a>async/await</h1><p>async 用于定义异步函数，相当于generator的*号,只不过async函数不需要像generator那样用next()去出发，只需要调用就能实现异步<br>await 用于async函数内部，作用是等待await 后面的异步流程结束后，执行asyn函数接下来的语句，相当于暂停符</p>
+<p>async返回promise对象，因此可以连接then()或者catch()继续进行异步操作或者捕获错误<br>async函数内部return语句返回的值，会成为then方法回调函数的参数。<br>async函数返回的 Promise 对象，必须等到内部所有await命令后面的 Promise 对象执行完，才会发生状态改变，<br>除非遇到return语句或者抛出错误。<br>也就是说，只有async函数内部的异步操作执行完，才会执行then方法指定的回调函数。</p>
+<p>正常情况下，await命令后面是一个 Promise 对象。如果不是，会被转成一个立即resolve的 Promise 对象。即可以等任意表达式的结果<br>因此 await 返回异步函数return的结果，或者异步函数返回的promise的resolve的参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">如果它等到的不是一个 Promise 对象，那 await 表达式的运算结果就是它等到的东西。</span><br><span class="line"></span><br><span class="line">如果它等到的是一个 Promise 对象，await 就忙起来了，它会阻塞后面的代码，等着 Promise 对象 resolve，然后得到 resolve 的值，作为 await 表达式的运算结果。</span><br></pre></td></tr></table></figure></p>
+<p>只要一个await语句后面的 Promise 变为reject，那么整个async函数都会中断执行。<br>解决中断执行的方法有两种，<br>一种是把await放在try…catch…里面,例5<br>另一种是给await的promise链接catch{},例6</p>
+<p>优化：如果两个异步操作没有任何联系，不存在继发关系，最好让他们同时触发 例8，例9</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br></pre></td><td class="code"><pre><span class="line">例1.</span><br><span class="line">async function lala(val)&#123;</span><br><span class="line">  let aa = await lili(val);</span><br><span class="line">  console.log(aa);//&apos;red&apos;</span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br><span class="line">function lili(val)&#123;</span><br><span class="line">	return new Promise((resolve,reject)=&gt;&#123;</span><br><span class="line">		resolve(&apos;red&apos;)</span><br><span class="line">&#125;)</span><br><span class="line">&#125;</span><br><span class="line">lala(&apos;kk&apos;).then(</span><br><span class="line">val=&gt;console.log(val),//0</span><br><span class="line">err=&gt;console.log(11111,err) //如果promise发生reject会传递到这里</span><br><span class="line">);</span><br><span class="line">例2.</span><br><span class="line">async function lala(val)&#123;</span><br><span class="line">  let aa = await lili(val);</span><br><span class="line">  let bb = await bebe(val);</span><br><span class="line">  console.log(aa);</span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br><span class="line">function lili(val)&#123;</span><br><span class="line">	return new Promise((resolve,reject)=&gt;&#123;</span><br><span class="line">		resolve(&apos;red&apos;)</span><br><span class="line">&#125;)</span><br><span class="line">&#125;</span><br><span class="line">function bebe(val)&#123;</span><br><span class="line">	return new Promise((resolve,reject)=&gt;&#123;</span><br><span class="line">		reject(&apos;err&apos;) //产生错误</span><br><span class="line">&#125;)</span><br><span class="line">&#125;</span><br><span class="line">lala(&apos;kk&apos;).then(</span><br><span class="line">val=&gt;console.log(val),</span><br><span class="line">err=&gt;console.log(11111,err) //11111 &quot;err&quot; 只会打印这一处</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">例3.</span><br><span class="line">async function f() &#123;</span><br><span class="line">  return await 123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">f().then(v =&gt; console.log(v))</span><br><span class="line"></span><br><span class="line">例4.</span><br><span class="line">async function f() &#123;</span><br><span class="line">  await Promise.reject(&apos;出错了&apos;);</span><br><span class="line">  await Promise.resolve(&apos;hello world&apos;); // 不会执行</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">例5.</span><br><span class="line">async function f() &#123;</span><br><span class="line">  try &#123;</span><br><span class="line">    await Promise.reject(&apos;出错了&apos;);</span><br><span class="line">  &#125; catch(e) &#123;</span><br><span class="line">  &#125;</span><br><span class="line">  return await Promise.resolve(&apos;hello world&apos;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">f()</span><br><span class="line">.then(v =&gt; console.log(v))</span><br><span class="line">// hello world</span><br><span class="line"></span><br><span class="line">例6，</span><br><span class="line">async function f() &#123;</span><br><span class="line">  await Promise.reject(&apos;出错了&apos;)</span><br><span class="line">    .catch(e =&gt; console.log(e));</span><br><span class="line">  return await Promise.resolve(&apos;hello world&apos;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">f()</span><br><span class="line">.then(v =&gt; console.log(v))</span><br><span class="line">// 出错了</span><br><span class="line">// hello world</span><br><span class="line"></span><br><span class="line">例7. //同例5例6</span><br><span class="line"></span><br><span class="line">async function myFunction() &#123;</span><br><span class="line">  try &#123;</span><br><span class="line">    await somethingThatReturnsAPromise();</span><br><span class="line">  &#125; catch (err) &#123;</span><br><span class="line">    console.log(err);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 另一种写法</span><br><span class="line"></span><br><span class="line">async function myFunction() &#123;</span><br><span class="line">  await somethingThatReturnsAPromise()</span><br><span class="line">  .catch(function (err) &#123;</span><br><span class="line">    console.log(err);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">例8</span><br><span class="line">//原来</span><br><span class="line">let foo = await getFoo();</span><br><span class="line">let bar = await getBar();</span><br><span class="line">//优化</span><br><span class="line">// 写法一</span><br><span class="line">let [foo, bar] = await Promise.all([getFoo(), getBar()]);</span><br><span class="line"></span><br><span class="line">// 写法二</span><br><span class="line">let fooPromise = getFoo();</span><br><span class="line">let barPromise = getBar();</span><br><span class="line">let foo = await fooPromise;</span><br><span class="line">let bar = await barPromise;</span><br><span class="line"></span><br><span class="line">例9</span><br><span class="line">async function logInOrder(urls) &#123;</span><br><span class="line">  // 并发读取远程URL</span><br><span class="line">  const textPromises = urls.map(async url =&gt; &#123;</span><br><span class="line">    const response = await fetch(url);</span><br><span class="line">    return response.text();</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  // 按次序输出</span><br><span class="line">  for (const textPromise of textPromises) &#123;</span><br><span class="line">    console.log(await textPromise);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href="http://es6.ruanyifeng.com/#docs/async" target="_blank" rel="noopener">参考资料</a><br><a href="https://segmentfault.com/a/1190000007535316" target="_blank" rel="noopener">相关资料</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/performance/optimization.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -882,642 +1564,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/render.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/knowledge/render.html" itemprop="url">
-                  各种框架框架的数据绑定机制
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-21T21:30:15+08:00">
-                2018-01-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="angular-js"><a href="#angular-js" class="headerlink" title="angular js"></a>angular js</h1><p>脏检查机制</p>
-<h1 id="react"><a href="#react" class="headerlink" title="react"></a>react</h1><p>虚拟DOM:react 在初始化的时候会render一颗dom树，当state/props发生改变的时候，render函数会再渲染出另外一棵树与之前的dom树进行对比，新渲染的树就是虚拟dom树<br>diff 算法:比较dom树时的算法，</p>
-<p>只会对同层节点进行比较；<br>父节点不同,不会再去比较子节点；</p>
-<p>同层比较时，遇到结点类型不同,比如结点顺序发生变化时<br>没有key属性的时候，自己以及自己以后的结点都会被删除,重新建；删除时，会卸载删除的结点以及以后的结点，再新建以后的结点<br>如果有key的话，则只会新增插入的结点，卸载被替换的结点 其他结点则只是update,不受影响；删除的话，只卸载删除的结点</p>
-<p>遇到结点类型相同，<br>要去比较属性是否相同，如果不同，则只替换属性,只进行update</p>
-<p>性能优化：避免不必要渲染<br>使用shouldComponentUpdate(),当这个方法返回true的时候，需要重新渲染，false的时候不需要（默认是true).<br>使用PureComponent组件，它会自动浅对比props/state，当两者相同的时候不渲染节点。<br>PureComponent只会浅比较，所以不适合用于深层嵌套的对象。<br>同时，PureComponent不仅仅会跳过自己的重新渲染，还会跳过它所有子节点的，所以要注意，用它的时候是最好没有子节点并且不依赖于global state的展示型组件。<br><img src="/image/reactlife.png" alt="reactlife"></p>
-<h1 id="vue1-0"><a href="#vue1-0" class="headerlink" title="vue1.0"></a>vue1.0</h1><p>单检查</p>
-<h1 id="vue2-0"><a href="#vue2-0" class="headerlink" title="vue2.0"></a>vue2.0</h1><p>虚拟DOM和diff算法</p>
-<p><img src="/image/vuelife.png" alt="vuelife"></p>
-<h1 id="检测数据变更的4中方法"><a href="#检测数据变更的4中方法" class="headerlink" title="检测数据变更的4中方法"></a>检测数据变更的4中方法</h1><p>手动触发绑定<br>脏检查机制<br>数据对象劫持,使用Object.defineProperty<br>使用proxy</p>
-<h1 id="三大框架对比"><a href="#三大框架对比" class="headerlink" title="三大框架对比"></a>三大框架对比</h1><p>1.数据检查更新原理不同<br>angularjs用脏检查<br>vue和react 使用diff算法<br>后两者效率更高</p>
-<p>2.构建组件使用来说<br>angularjs更需要遵守框架规则，相对比较严谨<br>而vue次之，具备自己的响应式机制，所以要遵循一定的规则<br>最开放的是react,可以从更底层去定义自己想要的组件，<br>也可能跟react定位有关，一个用于构建UI的js库<br>它是一个库<br>库和框架的区别就是<br>库是，你调用库，作为开发者你有主动权<br>框架是你被框架调用，作为开发者你要听框架的<br>缺点就是数据改变自己要写监听逻辑</p>
-<p>3.从使用场景上<br>angularjs和react都比较适合应用于大型网站开发<br>而vue小巧轻便，适合小项目开发</p>
-<p>4.从学习成本上<br>vue最低，从用人角度来说最好找人<br>然后由于angular的规范严谨，导致需要学习的文档较多，<br>学习成本显而易见<br>react的开发角度相对以上两个框架更加向下，<br>有点像写早期模板语言，加上JSX语言的引入，<br>所以学习成本自然也是不低的</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/performance/template.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/performance/template.html" itemprop="url">
-                  模板引擎前后端优缺点
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-04T23:03:15+08:00">
-                2018-01-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>模板引擎在后端<br>优点<br>在第一次请求时不需要发送请求数据的的HTTP，加载速度可能会快一些；<br>利于SEO;</p>
-<p>缺点<br>前端模板有改动，后端对应的模板页面也要改动；<br>如果页面有复杂JS，前端因为没有数据不方便调试，后端需要使用js进行修改；<br>服务器负载压力大</p>
-<p>模板引擎在前端<br>优点<br>前后端分离，后台只需要处理逻辑业务,提供接口，减少服务端压力;<br>前端修改方便；<br>可跨平台，兼容不同后端技术</p>
-<p>缺点<br>不利于SEO（搜索引擎无法抓取页面的数据，因为只是模板，没有数据内容）<br>JS有可能被用户禁用，数据安全性低</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/angular/ngsrc.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/angular/ngsrc.html" itemprop="url">
-                  ng-src
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-04T22:47:15+08:00">
-                2018-01-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="ng-src"><a href="#ng-src" class="headerlink" title="ng-src"></a>ng-src</h1><p>img 里面使用src=”{ { } }“会在页面一开始加载模板的时候，不会执行{ { } }，直接去请求资源，造成404错误<br>如果使用ng-src = “{ { } }“就会避免以上问题，ng-src会先去执行{ { } },得到资源地址后再去请求资源<br>ng-src 指令确保的 AngularJS 代码执行前不显示图片。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/performance/cache/serviceworker.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/performance/cache/serviceworker.html" itemprop="url">
-                  service worker
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-03T22:52:15+08:00">
-                2018-01-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>前端与后台代理服务器</p>
-<h2 id="主要方法"><a href="#主要方法" class="headerlink" title="主要方法"></a>主要方法</h2><p>fetch 事件/方法:service worker向后台发起HTTP请求的方法<br>fetch(url).then()</p>
-<p>message事件/方法:页面和service worker之间进行通信的方法;同一页面两个窗口之间通信（web worker线程)<br>postMessage发送消息;message接收消息</p>
-<p>caches API:处理缓存</p>
-<h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><p>注册 register<br>安装 install<br>激活 activation<br>更新 Update<br>service-worker.js文件更新被浏览器发现后，会进入waitting等待状态，当前页面依旧使用旧文件进行work，<br>直到当前页面关闭，旧版本文件的service worker才会被kill掉，新版本文件的service worker开始接管页面的缓存资源<br>新的service worker一开始接管就会触发activate事件，从而可以做一些上次老版本缓存的工作</p>
-<p>缓存的文件发生更新，可以在fetch 的时候，一边检查更新从而更新缓存，一边检查缓存然后fetch新资源给浏览器，<br>通过 promise 的 resolve 特性来决定谁快</p>
-<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><p>（https环境）<br>后台消息传递<br>网络代理，转发请求，伪造响应<br>离线缓存<br>消息推送</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line">//在项目入口/配置js文件 进行注册</span><br><span class="line">if (navigator.serviceWorker) &#123;</span><br><span class="line">    navigator.serviceWorker.register(&apos;service-worker.js&apos;).then(function(registration) &#123;</span><br><span class="line">        console.log(&apos;service worker 注册成功&apos;);</span><br><span class="line">    &#125;).catch(function (err) &#123;</span><br><span class="line">        console.log(&apos;servcie worker 注册失败&apos;)</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//service-worker.js 放在项目根目录下,service worker的执行代码</span><br><span class="line">var cacheFiles = [ //指定缓存的文件</span><br><span class="line">    &apos;about.js&apos;,</span><br><span class="line">    &apos;blog.js&apos;</span><br><span class="line">];</span><br><span class="line">self.addEventListener(&apos;install&apos;, function (evt) &#123; //在安装的时候就将指定文件存入cache storage中</span><br><span class="line">    evt.waitUntil(</span><br><span class="line">        caches.open(&apos;my-test-cahce-v1&apos;).then(function (cache) &#123; //使用caches api进行缓存操作</span><br><span class="line">            return cache.addAll(cacheFiles);</span><br><span class="line">        &#125;)</span><br><span class="line">    );</span><br><span class="line">&#125;);</span><br><span class="line">//页面fetch 资源时进行过滤</span><br><span class="line">self.addEventListener(&apos;fetch&apos;, function(event) &#123;</span><br><span class="line">  event.respondWith(</span><br><span class="line">    caches.match(event.request) //检查缓存是否有资源</span><br><span class="line">      .then(function(response) &#123;</span><br><span class="line">        if (response) &#123; //如果有直接返回</span><br><span class="line">          return response;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 因为 event.request 流已经在 caches.match 中使用过一次，</span><br><span class="line">        // 那么该流是不能再次使用的。我们只能得到它的副本，拿去使用。</span><br><span class="line">        var fetchRequest = event.request.clone();</span><br><span class="line"></span><br><span class="line">        // fetch 的通过信方式，得到 Request 对象，然后发送请求</span><br><span class="line">        return fetch(fetchRequest).then(</span><br><span class="line">          function(response) &#123;</span><br><span class="line">            // 检查是否成功</span><br><span class="line">            if(!response || response.status !== 200 || response.type !== &apos;basic&apos;) &#123;</span><br><span class="line">              return response;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            // 如果成功，该 response 一是要拿给浏览器渲染，而是要进行缓存。</span><br><span class="line">            // 由于 caches.put 使用的是文件的响应流，一旦使用，</span><br><span class="line">            // 那么返回的 response 就无法访问造成失败，所以，这里需要复制一份。</span><br><span class="line">            var responseToCache = response.clone();</span><br><span class="line"></span><br><span class="line">            caches.open(CACHE_NAME)</span><br><span class="line">              .then(function(cache) &#123;</span><br><span class="line">                cache.put(event.request, responseToCache);</span><br><span class="line">              &#125;);</span><br><span class="line"></span><br><span class="line">            return response;</span><br><span class="line">          &#125;</span><br><span class="line">        );</span><br><span class="line">      &#125;)</span><br><span class="line">    );</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">//service-worker.js文件更新删除之前版本文件缓存的资源</span><br><span class="line"></span><br><span class="line">self.addEventListener(&apos;activate&apos;, function(event) &#123;</span><br><span class="line"></span><br><span class="line">  var cacheWhitelist = [&apos;v1&apos;];</span><br><span class="line"></span><br><span class="line">  event.waitUntil(</span><br><span class="line">  // 遍历 caches 里所有缓存的 keys 值</span><br><span class="line">    caches.keys().then(function(cacheNames) &#123;</span><br><span class="line">      return Promise.all(</span><br><span class="line">        cacheNames.map(function(cacheName) &#123;</span><br><span class="line">          if (cacheWhitelist.includes(cacheName)) &#123;</span><br><span class="line">          // 删除 v1 版本缓存的文件</span><br><span class="line">            return caches.delete(cacheName);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">      );</span><br><span class="line">    &#125;)</span><br><span class="line">  );</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p><a href="https://segmentfault.com/a/1190000008050742" target="_blank" rel="noopener">相关文档</a><br><a href="https://www.villainhr.com/page/2016/09/25/%E5%89%8D%E7%AB%AF%20fetch%20%E9%80%9A%E4%BF%A1" target="_blank" rel="noopener">fetch 通信</a><br><a href="https://www.villainhr.com/page/2016/08/22/Web%20Worker" target="_blank" rel="noopener">web worker 语法</a><br><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Service_Worker_API" target="_blank" rel="noopener">Service Worker API</a></p>
-<p>遗留问题：fetch通信headers添加token字段,不生效</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/test/fiddler.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/test/fiddler.html" itemprop="url">
-                  调试
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-03T22:47:15+08:00">
-                2018-01-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="fiddler-使用"><a href="#fiddler-使用" class="headerlink" title="fiddler 使用"></a>fiddler 使用</h1><p>浏览器向服务器发送请求的拦截器</p>
-<h2 id="statistic"><a href="#statistic" class="headerlink" title="statistic"></a>statistic</h2><p>查看一次请求各阶段所发生的时间，HTTP performance<br><img src="/image/fiddler5.png" alt="fiddler5"></p>
-<h1 id="Inspectors"><a href="#Inspectors" class="headerlink" title="Inspectors"></a>Inspectors</h1><p>查看报文，上半部分是request,下半部分是response<br><img src="/image/fiddler4.png" alt="fiddler4"></p>
-<h2 id="AutoResponder"><a href="#AutoResponder" class="headerlink" title="AutoResponder"></a>AutoResponder</h2><p>拦截本来要发给真正服务器的指定请求,将本地资源作为response返回去<br><img src="/image/fiddler3.png" alt="fiddler3"><br>1.开启规则<br>2.添加规则<br>3.指定请求，若以EXACT：开头，要写完整的请求路径;模糊匹配的话就不要写EXACT：<br>4.指定作为response的本地路径资源地址<br>5.确认规则配置完毕</p>
-<h2 id="composer"><a href="#composer" class="headerlink" title="composer"></a>composer</h2><p>自己创建request 向服务器发送请求<br><img src="/image/fiddler2.png" alt="fiddler2"><br>配置好request后，点击excute按钮手动向服务器发送请求</p>
-<h2 id="Filters"><a href="#Filters" class="headerlink" title="Filters"></a>Filters</h2><p>只拦截指定的请求,其他请求不拦截，指定多个时用逗号隔开<br><img src="/image/fiddler1.png" alt="fiddler1"><br>填写指定请求时，编辑框为黄色，为未保存状态，点击右上角‘Changes not yet saved’确认配置完毕</p>
-<h1 id="谷歌浏览器调试常用"><a href="#谷歌浏览器调试常用" class="headerlink" title="谷歌浏览器调试常用"></a>谷歌浏览器调试常用</h1><h2 id="将respose进行json格式转换"><a href="#将respose进行json格式转换" class="headerlink" title="将respose进行json格式转换"></a>将respose进行json格式转换</h2><p>1.右键接口选择copy-&gt;copy response;<br>2.在console界面执行copy()函数<br>copy(   ctrl+v    )   回车<br>3.打开编辑器，新建一个文件，ctrl+v,就得到response 的json格式<br><img src="/image/debug1.gif" alt="debug1"></p>
-<h2 id="console使用"><a href="#console使用" class="headerlink" title="console使用"></a>console使用</h2><ol>
-<li><p>console.table(obj):将json数据以表格形式展示在控制台<br>例</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var animals = [</span><br><span class="line">    &#123; animal: &apos;Horse&apos;, name: &apos;Henry&apos;, age: 43 &#125;,</span><br><span class="line">    &#123; animal: &apos;Dog&apos;, name: &apos;Fred&apos;, age: 13 &#125;,</span><br><span class="line">    &#123; animal: &apos;Cat&apos;, name: &apos;Frodo&apos;, age: 18 &#125;</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line">console.table(animals);</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>使用 console.time() 和 console.timeEnd() 对循环做基准测试<br>例</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">console.time(&apos;Timer1&apos;);</span><br><span class="line"></span><br><span class="line">var items = [];</span><br><span class="line"></span><br><span class="line">for(var i = 0; i &lt; 100000; i++)&#123;</span><br><span class="line">   items.push(&#123;index: i&#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">console.timeEnd(&apos;Timer1&apos;);</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>最后会得到循环所用时间<br>Timer1：xxxxx ms</p>
-<ol start="3">
-<li>使用console.trace 跟踪调用栈<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">var car;</span><br><span class="line">var func1 = function() &#123;</span><br><span class="line">	func2();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var func2 = function() &#123;</span><br><span class="line">	func4();</span><br><span class="line">&#125;</span><br><span class="line">var func3 = function() &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var func4 = function() &#123;</span><br><span class="line">	car = new Car();</span><br><span class="line">	car.funcX();</span><br><span class="line">&#125;</span><br><span class="line">var Car = function() &#123;</span><br><span class="line">	this.brand = &apos;volvo&apos;;</span><br><span class="line">	this.color = &apos;red&apos;;</span><br><span class="line">	this.funcX = function() &#123;</span><br><span class="line">		this.funcY();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	this.funcY = function() &#123;</span><br><span class="line">		this.funcZ();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	this.funcZ = function() &#123;</span><br><span class="line">		console.trace(&apos;trace car&apos;)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">func1();</span><br><span class="line">结果如下：</span><br><span class="line">trace car</span><br><span class="line">Car.funcZ @ VM524:28</span><br><span class="line">Car.funcY @ VM524:24</span><br><span class="line">Car.funcX @ VM524:20</span><br><span class="line">func4 @ VM524:14</span><br><span class="line">func2 @ VM524:7</span><br><span class="line">func1 @ VM524:3</span><br><span class="line">(anonymous) @ VM524:31</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h2 id="调试js"><a href="#调试js" class="headerlink" title="调试js"></a>调试js</h2><p>在当前页面的js里面修改或添加代码后，ctrl+s 然后在页面触发更改的代码，即可进行调试<br>但要注意需要刷新才能执行到的代码，不能用这种方式进行调试</p>
-<h2 id="断点"><a href="#断点" class="headerlink" title="断点"></a>断点</h2><p>直接在代码序号上进行点击即添加了断点<br>取消断点就再点击断点<br>退出断点调试就点右上角<br><img src="/image/debug2.png" alt="debug2"><br>禁用断点<br><img src="/image/debug3.png" alt="debug3"><br>如果想知道当前断点上的变量值，只需要将鼠标放在变量上即可<br><a href="https://www.zybuluo.com/lxjwlt/note/434612" target="_blank" rel="noopener">相关链接</a><br><a href="http://www.cnblogs.com/Wayou/p/chrome-console-tips-and-tricks.html" target="_blank" rel="noopener">相关链接</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/24/">24</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1556,7 +1607,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">240</span>
+              <span class="site-state-item-count">245</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1620,7 +1671,7 @@
         <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2024</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
