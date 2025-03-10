@@ -259,6 +259,130 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/Binarytree.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/algorithm/Binarytree.html" itemprop="url">
+                  二叉树
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-11T10:14:37+08:00">
+                2017-02-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>定义：是n(n&gt;=0)个结点的有限集合，该集合或者为空集(空二叉树)，或者由一个<br>根节点和两颗不互相交的、分别称为根的左子树和右子树的二叉树<br>特点：<br>-每个结点最多有两颗子树，不存在度大于2的结点<br>-左右子树有顺序，次序不能颠倒，即使只有一颗子树也要区分它是左子树还是右子树</p>
+<h2 id="五种基本形态："><a href="#五种基本形态：" class="headerlink" title="五种基本形态："></a>五种基本形态：</h2><p>空二叉树<br>只有一个根节点<br>根结点只有左子树<br>根结点只有右子树<br>根结点既有左子树又有右子树</p>
+<h2 id="特殊二叉树"><a href="#特殊二叉树" class="headerlink" title="特殊二叉树"></a>特殊二叉树</h2><p>1.斜树：只有左子树或只有右子树<br>2.满二叉树：该二叉树中，如果所有分支结点都存在左子树和右子树，并且所有叶子都在同一层上<br>  –特点：<br>  1.叶子只能出现在最下一层<br>  2.非叶子结点的度一定是2<br>  3.在同样深度的二叉树中，满二叉树的节点个数一定最多，同时叶子也最多<br>3.完全二叉树：对一颗具有N个结点的二叉树按层序编号，如果编号为i(i&lt;=i&lt;=n)的结点与同样深度的满二叉树中编号为i的<br>结点位置完全相同，则这棵树称为完全二叉树<br>–特点：<br>1.叶子结点只能出现在最下两层<br>2.最下层的叶子一定集中在左部连续位置<br>3、倒数第二层，若有叶子结点，一定都在右部连续位置<br>4.如果结点度为1，则该结点只有左孩子<br>5.同样结点数的二叉树，完全二叉树的深度最小<br>满二叉树一定是完全二叉树，但完全二叉树不一定是满二叉树</p>
+<h1 id="二叉树存储结构"><a href="#二叉树存储结构" class="headerlink" title="二叉树存储结构"></a>二叉树存储结构</h1><h2 id="顺序结构"><a href="#顺序结构" class="headerlink" title="顺序结构"></a>顺序结构</h2><p>用数组存储，按层序遍历对比满二叉树顺序，没有结点的位置数组在该位置填空<br><img src="/image/btree1.png" alt="btree1"></p>
+<h2 id="二叉链表"><a href="#二叉链表" class="headerlink" title="二叉链表"></a>二叉链表</h2><p>每个结点包含一个数据域和两个指针域，两个指针分别指向该结点左右孩子结点<br><img src="/image/btree2.png" alt="btree2"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">typedef struct BiTNode</span><br><span class="line">&#123;</span><br><span class="line">ElemType data;</span><br><span class="line">struct BiTNode *lchild,*rchild;</span><br><span class="line">&#125;BiTNode,8BiTree;</span><br></pre></td></tr></table></figure></p>
+<h1 id="二叉树的遍历"><a href="#二叉树的遍历" class="headerlink" title="二叉树的遍历"></a>二叉树的遍历</h1><p><img src="/image/btree3.png" alt="btree3"><br>从根结点出发，按照某种次序访问二叉树中所有结点，使每个结点被访问一次且仅被访问一次<br>1.前序遍历：根左右<br>若二叉树为空，则空操作返回;否则先访问根结点，然后前序遍历左子树，再前序遍历右子树<br>a.先访问根结点，然后访问根结点的左孩子<br>b.将根结点的左孩子视作子树根结点,继续访问其左孩子，再以这个左孩子结点为根再访问其左孩子直到叶结点<br>c.访问完该叶结点后，再访问该叶结点双亲的右孩子，<br>d.如果没有右孩子，则该子树访问完毕，继续访问该结点双亲的双亲的右孩子，再以该右孩子为根继续从步骤a开始访问<br>核心：从整棵树的根结点开始，每次将左孩子看成子树根结点,从上到下，从左到右<br>ABDHIEJCFKG<br>2.中序遍历 ：左根右<br>若二叉树为空，则空操作返回;否则从根节点根结点开始(并不是先访问根结点)，然后中序遍历左子树，然后访问根结点，再中序遍历右子树<br>核心：无论什么级别的子树树都从最左端叶结点开始，按左孩子，双亲，右孩子顺序遍历，从下到上，从左到右<br>HDIBEJAFKCG<br>3.后序遍历 ：左右根<br>若二叉树为空，则空操作返回;否则从左到右先叶子结点的方式遍历左右子树，最后访问根结点<br>核心：从最左端叶结点开始，按左孩子，右孩子，双亲顺序遍历，从左到右，从下到上<br>HIDJEBKFGCA<br>4.层序遍历<br>若二叉树为空，则空操作返回;否则从根节点开始，按层依次往下，每层从左到右依次遍历</p>
+<h1 id="二叉树的性质"><a href="#二叉树的性质" class="headerlink" title="二叉树的性质"></a>二叉树的性质</h1><p>性质一：在二叉树的第i层上至多有2^(i-1)个结点(i&gt;=1)<br>性质二：深度为K的二叉树至多有2^K-1个结点(K&gt;=1)<br>性质三：对于任何一颗二叉树T，如果其终端结点数为n0,度为2的结点数为n2,则n0=n2+1<br>性质四：具有n个结点的完全二叉树的深度为log2n取下限加1<br>性质五：如果对一颗有n个结点的完全二叉树(其深度为log2n取下限加1)的结点按层序编号对任一结点i(1&lt;=i&lt;=n)有以下性质<br>        如果i=1,则结点i是二叉树的根，无双亲;如果i&gt;1，则其双亲是结点i/2取下限<br>        如果2i&gt;n,则结点i无左孩子(结点i为叶子结点);否则其左孩子是结点2i<br>        如果2i+1&gt;n,则结点i无右孩子(结点i为叶子结点);否则其右孩子是结点2i+1</p>
+<p>计算：<br>输出指定结点在该树中所在的层数<br><img src="/image/btree4.png" alt="btree4"><br>[未完成]<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">var str=&quot;AB DEC #&quot;;//约定前序遍历输入</span><br><span class="line">var btree = &#123;</span><br><span class="line">  data:&apos;&apos;,</span><br><span class="line">  lchild:&#123;&#125;,</span><br><span class="line">  rchild:&#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line">console.log(btree);</span><br><span class="line">function creatbtree(num,item)&#123;</span><br><span class="line">  console.log(str[num])</span><br><span class="line">  if(str[num]==&quot;#&quot;);</span><br><span class="line">  &#123;</span><br><span class="line">  return</span><br><span class="line">  &#125;</span><br><span class="line">  if(str[num] == &quot; &quot;)&#123;</span><br><span class="line">    item = null;</span><br><span class="line">  &#125;else&#123;</span><br><span class="line">    item.data = str[num];</span><br><span class="line">    num+=1;</span><br><span class="line">    item.lchild =&#123;</span><br><span class="line">      data:&apos;&apos;,</span><br><span class="line">      lchild:&#123;&#125;,</span><br><span class="line">      rchild:&#123;&#125;</span><br><span class="line">    &#125;  </span><br><span class="line">    creatbtree(num,item.lchild);</span><br><span class="line">    num+=1;</span><br><span class="line">    item.rchild =&#123;</span><br><span class="line">      data:&apos;&apos;,</span><br><span class="line">      lchild:&#123;&#125;,</span><br><span class="line">      rchild:&#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    creatbtree(num,item.rchild);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">creatbtree(0,btree);</span><br><span class="line">console.log(btree.rchild)</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/tree.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1490,127 +1614,6 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/stacklinked.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/algorithm/stacklinked.html" itemprop="url">
-                  逆波兰表达式/后缀表达式
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-02T11:48:37+08:00">
-                2017-02-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="栈的链式存储结构"><a href="#栈的链式存储结构" class="headerlink" title="栈的链式存储结构"></a>栈的链式存储结构</h1><h2 id="栈的链式存储结构-1"><a href="#栈的链式存储结构-1" class="headerlink" title="栈的链式存储结构"></a>栈的链式存储结构</h2><p><img src="/image/stack2.png" alt="stack2"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">typedef struct StackNode&#123;</span><br><span class="line">  ElemType data;          ##存放栈的数据</span><br><span class="line">  struct StackNode *next;</span><br><span class="line">&#125;StackNode,*LinkStackPtr;</span><br><span class="line">typedef struct LinkStack&#123;</span><br><span class="line">  LinkStackPrt top;        ##top指针</span><br><span class="line">  int count;               ##栈元素计数器</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="栈链的入栈操作"><a href="#栈链的入栈操作" class="headerlink" title="栈链的入栈操作"></a>栈链的入栈操作</h2><p>假设元素值e的新结点是s,top为栈顶指针<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Status Push(LinkStack *s,ElemType e)&#123;</span><br><span class="line">  LinkStackPtr p=(LinkStackPtr)malloc(sizeof(StackNode));</span><br><span class="line">  p-&gt;data = e;</span><br><span class="line">  p-&gt;next = s-&gt;top;</span><br><span class="line">  s-&gt;top = p;</span><br><span class="line">  s-&gt;count++;</span><br><span class="line">  <span class="keyword">return</span> OK;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="栈的出栈操作"><a href="#栈的出栈操作" class="headerlink" title="栈的出栈操作"></a>栈的出栈操作</h2><p>假设变量p用来存储要删除的栈顶结点，将栈顶指针下移一位，最后释放p<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Status Pop(LinkStack *s,ElemType e)&#123;</span><br><span class="line">  LinkStackPtr p;</span><br><span class="line">  <span class="keyword">if</span>(StackEmpty(*s))&#123;</span><br><span class="line">  <span class="keyword">return</span> ERROR;</span><br><span class="line">  &#125;</span><br><span class="line">  *e=s-&gt;top-&gt;data;</span><br><span class="line">  p=s-&gt;top;</span><br><span class="line">  s-&gt;top = s-&gt;top-&gt;next;</span><br><span class="line">  free(p);</span><br><span class="line">  s-&gt;count--;</span><br><span class="line">  <span class="keyword">return</span> OK;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h1 id="逆波兰表达式-后缀表达式"><a href="#逆波兰表达式-后缀表达式" class="headerlink" title="逆波兰表达式/后缀表达式"></a>逆波兰表达式/后缀表达式</h1><p>正常表达式–&gt;后缀表达式<br>（1-2)x(4+5）–&gt; 1 2 - 4 5 + x<br>1.计算后缀表达式<br>主要思想是判断字符是否为运算符，若为数字，则入栈，为运算符则连续出栈两次进行运算，再将运算结果入栈<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> list =[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="string">'-'</span>,<span class="string">'*'</span>,<span class="string">'+'</span>]</span><br><span class="line"><span class="keyword">var</span> stack = [];</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;list.length;i++)&#123;</span><br><span class="line">  <span class="keyword">if</span>(!<span class="built_in">isNaN</span>(list[i]))&#123;</span><br><span class="line">      stack.push(list[i]);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">       <span class="keyword">var</span> a = stack.pop();</span><br><span class="line">       <span class="keyword">var</span> b = stack.pop();</span><br><span class="line">       <span class="keyword">if</span>(list[i] ==<span class="string">"+"</span>)&#123;</span><br><span class="line">        stack.push(b+a);</span><br><span class="line">       &#125;<span class="keyword">else</span> <span class="keyword">if</span>(list[i] ==<span class="string">"-"</span>)&#123;</span><br><span class="line">        stack.push(b-a);</span><br><span class="line">       &#125;<span class="keyword">else</span> <span class="keyword">if</span>(list[i] ==<span class="string">"*"</span>)&#123;</span><br><span class="line">        stack.push(b*a);</span><br><span class="line">       &#125;<span class="keyword">else</span> <span class="keyword">if</span>(list[i] ==<span class="string">"/"</span>)&#123;</span><br><span class="line">        stack.push(b/a);</span><br><span class="line">       &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(stack);</span><br></pre></td></tr></table></figure></p>
-<p>2.计算表达式转后缀表达式<br>主要思路<br>1，表达式中参与运算的数字、运算符以及小括号分割，形成待处理数组<br>2，循环判断<br>  A.若字符为数字，入栈2，<br>  B.若字符为“+”、“-”，分情况讨论<br>（1）此时栈1为空，入栈；<br>（2）栈1不为空，将“（”左括号以上的符号从栈1 pop到栈2，“（”留          在栈1，处理完后，将“+”、“-”入栈1；<br>   C若字符为“）”，将“（”以上符号从栈1 pop到栈2，“（”也pop出来<br>     但不入栈2<br>   D若字符为“/”“*”“（”直接入栈2<br>   E其他情况，非法字符，抛出异常<br>3.将栈1元素pop到栈2；<br>栈2即后缀表达式<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/%E8%AE%A1%E7%AE%97%E5%BC%8F%E8%BD%AC%E5%90%8E%E7%BC%80%E8%A1%A8%E8%BE%BE%E5%BC%8F(%E6%A0%88%EF%BC%89.js" target="_blank" rel="noopener">代码链接</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/stack.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1733,7 +1736,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/Doublylinkedlist.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/stacklinked.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1758,8 +1761,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/algorithm/Doublylinkedlist.html" itemprop="url">
-                  双向循环链表
+                <a class="post-title-link" href="/post/algorithm/stacklinked.html" itemprop="url">
+                  逆波兰表达式/后缀表达式
                 </a>
               
             
@@ -1773,7 +1776,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-02T11:33:37+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-02T11:48:37+08:00">
                 2017-02-02
               </time>
             
@@ -1811,8 +1814,11 @@
       
         
           
-            <p>结构<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">typedef struct DualNode&#123;</span><br><span class="line">	ElemType data;</span><br><span class="line">	struct DualNode *prior;//前驱结点</span><br><span class="line">	struct DualNode *next;//后继结点</span><br><span class="line">&#125;DualNode,*DuLinkList;</span><br></pre></td></tr></table></figure></p>
-<p><img src="/image/doublylinklist1.png" alt="doublylinklist1"><br><img src="/image/doublylinklist2.png" alt="doublylinklist2"><br>双向链表插入<br><img src="/image/doublylinklist3.png" alt="doublylinklist3"><br>s-&gt;next = p;<br>s-&gt;prior = p-&gt;prior;<br>p-&gt;prior-&gt;next = s;<br>p-&gt;prior = s;<br>双向链表删除<br><img src="/image/doublylinklist4.png" alt="doublylinklist4"><br>p-&gt;prior-&gt;next = p-&gt;next;<br>p-&gt;next -&gt;prior = p-&gt;prior;<br>free(p)<br>小结<br>双向链表相对于单链表来说复杂一点，每个结点对了一个prior指针，在进行插入和删除时需要注意;<br>双向链表可以有效提高算法的时间性能，用空间换取时间</p>
+            <h1 id="栈的链式存储结构"><a href="#栈的链式存储结构" class="headerlink" title="栈的链式存储结构"></a>栈的链式存储结构</h1><h2 id="栈的链式存储结构-1"><a href="#栈的链式存储结构-1" class="headerlink" title="栈的链式存储结构"></a>栈的链式存储结构</h2><p><img src="/image/stack2.png" alt="stack2"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">typedef struct StackNode&#123;</span><br><span class="line">  ElemType data;          ##存放栈的数据</span><br><span class="line">  struct StackNode *next;</span><br><span class="line">&#125;StackNode,*LinkStackPtr;</span><br><span class="line">typedef struct LinkStack&#123;</span><br><span class="line">  LinkStackPrt top;        ##top指针</span><br><span class="line">  int count;               ##栈元素计数器</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="栈链的入栈操作"><a href="#栈链的入栈操作" class="headerlink" title="栈链的入栈操作"></a>栈链的入栈操作</h2><p>假设元素值e的新结点是s,top为栈顶指针<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Status Push(LinkStack *s,ElemType e)&#123;</span><br><span class="line">  LinkStackPtr p=(LinkStackPtr)malloc(sizeof(StackNode));</span><br><span class="line">  p-&gt;data = e;</span><br><span class="line">  p-&gt;next = s-&gt;top;</span><br><span class="line">  s-&gt;top = p;</span><br><span class="line">  s-&gt;count++;</span><br><span class="line">  <span class="keyword">return</span> OK;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="栈的出栈操作"><a href="#栈的出栈操作" class="headerlink" title="栈的出栈操作"></a>栈的出栈操作</h2><p>假设变量p用来存储要删除的栈顶结点，将栈顶指针下移一位，最后释放p<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Status Pop(LinkStack *s,ElemType e)&#123;</span><br><span class="line">  LinkStackPtr p;</span><br><span class="line">  <span class="keyword">if</span>(StackEmpty(*s))&#123;</span><br><span class="line">  <span class="keyword">return</span> ERROR;</span><br><span class="line">  &#125;</span><br><span class="line">  *e=s-&gt;top-&gt;data;</span><br><span class="line">  p=s-&gt;top;</span><br><span class="line">  s-&gt;top = s-&gt;top-&gt;next;</span><br><span class="line">  free(p);</span><br><span class="line">  s-&gt;count--;</span><br><span class="line">  <span class="keyword">return</span> OK;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="逆波兰表达式-后缀表达式"><a href="#逆波兰表达式-后缀表达式" class="headerlink" title="逆波兰表达式/后缀表达式"></a>逆波兰表达式/后缀表达式</h1><p>正常表达式–&gt;后缀表达式<br>（1-2)x(4+5）–&gt; 1 2 - 4 5 + x<br>1.计算后缀表达式<br>主要思想是判断字符是否为运算符，若为数字，则入栈，为运算符则连续出栈两次进行运算，再将运算结果入栈<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> list =[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="string">'-'</span>,<span class="string">'*'</span>,<span class="string">'+'</span>]</span><br><span class="line"><span class="keyword">var</span> stack = [];</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;list.length;i++)&#123;</span><br><span class="line">  <span class="keyword">if</span>(!<span class="built_in">isNaN</span>(list[i]))&#123;</span><br><span class="line">      stack.push(list[i]);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">       <span class="keyword">var</span> a = stack.pop();</span><br><span class="line">       <span class="keyword">var</span> b = stack.pop();</span><br><span class="line">       <span class="keyword">if</span>(list[i] ==<span class="string">"+"</span>)&#123;</span><br><span class="line">        stack.push(b+a);</span><br><span class="line">       &#125;<span class="keyword">else</span> <span class="keyword">if</span>(list[i] ==<span class="string">"-"</span>)&#123;</span><br><span class="line">        stack.push(b-a);</span><br><span class="line">       &#125;<span class="keyword">else</span> <span class="keyword">if</span>(list[i] ==<span class="string">"*"</span>)&#123;</span><br><span class="line">        stack.push(b*a);</span><br><span class="line">       &#125;<span class="keyword">else</span> <span class="keyword">if</span>(list[i] ==<span class="string">"/"</span>)&#123;</span><br><span class="line">        stack.push(b/a);</span><br><span class="line">       &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(stack);</span><br></pre></td></tr></table></figure></p>
+<p>2.计算表达式转后缀表达式<br>主要思路<br>1，表达式中参与运算的数字、运算符以及小括号分割，形成待处理数组<br>2，循环判断<br>  A.若字符为数字，入栈2，<br>  B.若字符为“+”、“-”，分情况讨论<br>（1）此时栈1为空，入栈；<br>（2）栈1不为空，将“（”左括号以上的符号从栈1 pop到栈2，“（”留          在栈1，处理完后，将“+”、“-”入栈1；<br>   C若字符为“）”，将“（”以上符号从栈1 pop到栈2，“（”也pop出来<br>     但不入栈2<br>   D若字符为“/”“*”“（”直接入栈2<br>   E其他情况，非法字符，抛出异常<br>3.将栈1元素pop到栈2；<br>栈2即后缀表达式<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/%E8%AE%A1%E7%AE%97%E5%BC%8F%E8%BD%AC%E5%90%8E%E7%BC%80%E8%A1%A8%E8%BE%BE%E5%BC%8F(%E6%A0%88%EF%BC%89.js" target="_blank" rel="noopener">代码链接</a></p>
 
           
         
@@ -1885,7 +1891,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">245</span>
+              <span class="site-state-item-count">246</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

@@ -259,6 +259,151 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/map&reduce.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/js/map&reduce.html" itemprop="url">
+                  数组的map和reduce
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-22T11:25:37+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="数组的map方法"><a href="#数组的map方法" class="headerlink" title="数组的map方法"></a>数组的map方法</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">let arr = [1,2,3,4,5];</span><br><span class="line">let arr1 = arr.map(function(val,index,arr)&#123;</span><br><span class="line">	console.log(val,index,arr)</span><br><span class="line">	return val+1</span><br><span class="line">&#125;)</span><br><span class="line">console.log(arr1)//[2, 3, 4, 5, 6]</span><br><span class="line">console.log(arr) //[1, 2, 3, 4, 5]</span><br></pre></td></tr></table></figure>
+<p>在map中可以传递一个函数，数组的每一项作为参数调用这个函数，然后返回根据该数组项得到的结果，每一个数组项返会一个结果，从而组成新的数组</p>
+<p>函数的参数有三个，第一项为数组按序传进的一个值，该值的index和数组本身</p>
+<p>整个结果产生新数组，原来数组不变</p>
+<h1 id="数组的reduce-方法"><a href="#数组的reduce-方法" class="headerlink" title="数组的reduce 方法"></a>数组的reduce 方法</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">例1.</span><br><span class="line">let arr = [1,2,3];</span><br><span class="line">let result = arr.reduce(function(preresult,item)&#123;</span><br><span class="line">	return preresult += item;</span><br><span class="line">&#125;,0)</span><br><span class="line">console.log(result)   //6</span><br><span class="line"></span><br><span class="line">例2.</span><br><span class="line">let result4 = arr.reduce(function(preresult,item)&#123;</span><br><span class="line">    preresult.name += item;</span><br><span class="line">	return preresult</span><br><span class="line">&#125;,&#123;name:0&#125;)</span><br><span class="line">console.log(result4); //&#123;name:6&#125;</span><br></pre></td></tr></table></figure>
+<p>reduce 用于对数组每一项进行累计计算，每一项计算结果作为参数参加数组下一项的计算,最终返回计算结果</p>
+<p>例1中单纯对数组每一项进行叠加处理，返回叠加结果<br>例2同样进行叠加只是叠加结果放在对象中返回</p>
+<p>reduce(callback(),initval)</p>
+<p>需要两个参数，一个是用于累计计算的callback函数，一个是初始值，见上两例</p>
+<p>callback()函数有四个参数依次为：</p>
+<p>preVal （上一次调用回调返回的值，或者是提供的初始值（initialValue））</p>
+<p>currentValue （数组中当前被处理的元素）</p>
+<p>index （当前元素在数组中的索引）</p>
+<p>array （调用 reduce 的数组）</p>
+<p>初始值会在第一次调用时当作回调函数callback的第一个参数使用</p>
+<p>希望返回值是什么类型的数据，初始值就要设置为什么样的类型，callback返回值也是该类型；或者说是在这里设置返回值的类型</p>
+<p>整个处理过程就是拿初始值initval和数组第一个值在callback里面进行处理，返回结果result,result当作callback的preval参数和数组第二个元素传入callback在处理，直到数组全部元素被处理完，返回一个最终处理结果</p>
+<p>高级应用<br>对对象数组元素进行累计计算<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">var reducers = &#123;  </span><br><span class="line">  totalInEuros : function(state, item) &#123;</span><br><span class="line">    return state.euros += item.price * 0.897424392;</span><br><span class="line">  &#125;,</span><br><span class="line">  totalInYen : function(state, item) &#123;</span><br><span class="line">    return state.yens += item.price * 113.852;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">var manageReducers = function(reducers) &#123;</span><br><span class="line">  return function(state, item) &#123;</span><br><span class="line">    return Object.keys(reducers).reduce(</span><br><span class="line">      function(nextState, key) &#123;</span><br><span class="line">        reducers[key](state, item);</span><br><span class="line">        return state;</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;&#125;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">var bigTotalPriceReducer = manageReducers(reducers);</span><br><span class="line">var initialState = &#123;euros:0, yens: 0&#125;;</span><br><span class="line">var items = [&#123;price: 10&#125;, &#123;price: 120&#125;, &#123;price: 1000&#125;];</span><br><span class="line">var totals = items.reduce(bigTotalPriceReducer, initialState);</span><br><span class="line">console.log(totals);</span><br><span class="line">//&#123;euros: 1014.08956296, yens: 128652.76&#125;</span><br></pre></td></tr></table></figure></p>
+<p>该例的目的是将对象数组items的元素属性price进行不同处理操作然后将结果分别保存到结果对象的属性中</p>
+<p>处理的关键是manageReducers返回的作为items callback的函数bigTotalPriceReducer，</p>
+<p>处理思路是items每用一个元素调用callback时,callback的处理过程是将这个元素作为参数调用reducers 对象里面设置的每一个处理函数,</p>
+<p>调用reducers处理函数的过程同样使用一个reduce方法进行处理</p>
+<p>Object.keys(obj)方法返回对象键值组成的数组</p>
+<p>当items的元素参加完reducers所有处理函数后,返回的结果参加下一个元素的计算最终返回结果</p>
+<p>扩展：</p>
+<p>1.在reduces中设置对items不同属性的计算，从而得到不同属性的结算结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">var reducers = &#123;  </span><br><span class="line">  totalInEuros : function(state, item) &#123;</span><br><span class="line">    return state.euros += item.p1;</span><br><span class="line">  &#125;,</span><br><span class="line">  totalInYen : function(state, item) &#123;</span><br><span class="line">    return state.yens += item.price * 113.852;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">var bigTotalPriceReducer = manageReducers(reducers);</span><br><span class="line">var initialState = &#123;euros:0, yens: 0&#125;;</span><br><span class="line">var items = [&#123;price: 10,p1:1&#125;, &#123;price: 120,p1:1&#125;, &#123;price: 1000,p1:1&#125;];</span><br><span class="line">var totals = items.reduce(bigTotalPriceReducer, initialState);</span><br><span class="line">console.log(totals);</span><br><span class="line">//&#123;euros: 3, yens: 128652.76&#125;</span><br></pre></td></tr></table></figure>
+<p>2.计算对象数组属性值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">var manageReducers = function(state, item) &#123;</span><br><span class="line">    return Object.keys(item).reduce(</span><br><span class="line">      function(nextState, key) &#123;</span><br><span class="line">        state[key] +=item[key];</span><br><span class="line">        return state;</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;&#125;</span><br><span class="line">    );</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">var initialState = &#123;price:0, p1: 0&#125;;</span><br><span class="line">var items = [&#123;price: 10,p1:1&#125;, &#123;price: 120,p1:1&#125;, &#123;price: 1000,p1:1&#125;];</span><br><span class="line">var totals = items.reduce(manageReducers, initialState);</span><br><span class="line">console.log(totals);</span><br><span class="line">//&#123;price: 1130, p1: 3&#125;</span><br></pre></td></tr></table></figure></p>
+<p><a href="https://segmentfault.com/a/1190000010731933" target="_blank" rel="noopener">参阅资料</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/designMode/js1.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -398,6 +543,132 @@
 <p>   事件优先级<br>   浏览器在绑定事件而不是JS在绑定事件</p>
 <p>   1.html标签绑定事件会被dom属性事件覆盖<br>   2.html标签优先执行，即使被属性事件覆盖，则执行被覆盖的属性事件<br>   3.仅有监听事件和属性事件时，按绑定顺序执行，即事件对象的冒泡事件可能会在捕获事件之前执行</p>
 <p>   event对象属性<br>   curentTarget:响应函数绑定的对象<br>   target:发生事件的对象</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/jquery.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/js/jquery.html" itemprop="url">
+                  一些jQuery知识
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-08T09:29:37+08:00">
+                2018-12-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>1.jquery对象与Element对象转换<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//Element对象转jquery对象</span><br><span class="line">var domObj = document.getElementById(&apos;id&apos;)</span><br><span class="line">var $obj = $(domObj)//jQuery对象</span><br><span class="line"></span><br><span class="line">//jquery对象转Element对象</span><br><span class="line">var $box = $(&apos;.box&apos;)</span><br><span class="line">var box = $box[0]</span><br></pre></td></tr></table></figure></p>
+<p>2.常用jQuery选择器接口<br>//传入对象 , 例$(document)，把传入的对象包装成jQuery对象<br>$(this} </p>
+<p>//传入函数 , 这个是在页面DOM文档加载完成后加载执行的，等效于在DOM加载完毕后执行了${document).ready()方 法。<br>$ (function (){})</p>
+<p>//传入字符串 ，査询D0M节点包装成jQuery对象<br>$(<em>.box</em>)</p>
+<p>//传入HTML字符串 创建DOM节点包装成jQuery对象<br>$(<em>&lt;div&gt;</em>) </p>
+<p>//空<br>$()创建jQuery对象</p>
+<p>3.如何把创建的Dom结点包装成jQuery对象<br>contetx.createElement创建DOM节点存储在数组中，调用merge方法把数组中存储的DOM节点的成员添加到jQuery实例对象上</p>
+<p>4.jQuery实例对象length属性作用<br>存储DOM节点的数组对象平滑地添加到jQuery实例对象上</p>
+<p>5.merge方法应用场景有哪些<br>合并数组<br>把数组成员合并在有length属性的对象上</p>
+<p>6.$(document).ready()与$(function(){})的关系<br>$(document).ready()是对document.DOMContentLoaded事件的封装<br>$(function(){})每次调用$()传入的参数会收集在readyList数组中，<br>当document.DOMContentLoaded事件触发时依次执行readyList中收集的处理函数</p>
 
           
         
@@ -577,132 +848,6 @@
 <p>   事件优先级<br>   浏览器在绑定事件而不是JS在绑定事件</p>
 <p>   1.html标签绑定事件会被dom属性事件覆盖<br>   2.html标签优先执行，即使被属性事件覆盖，则执行被覆盖的属性事件<br>   3.仅有监听事件和属性事件时，按绑定顺序执行，即事件对象的冒泡事件可能会在捕获事件之前执行</p>
 <p>   event对象属性<br>   curentTarget:响应函数绑定的对象<br>   target:发生事件的对象</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/jquery.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/js/jquery.html" itemprop="url">
-                  一些jQuery知识
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-08T09:29:37+08:00">
-                2018-12-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>1.jquery对象与Element对象转换<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//Element对象转jquery对象</span><br><span class="line">var domObj = document.getElementById(&apos;id&apos;)</span><br><span class="line">var $obj = $(domObj)//jQuery对象</span><br><span class="line"></span><br><span class="line">//jquery对象转Element对象</span><br><span class="line">var $box = $(&apos;.box&apos;)</span><br><span class="line">var box = $box[0]</span><br></pre></td></tr></table></figure></p>
-<p>2.常用jQuery选择器接口<br>//传入对象 , 例$(document)，把传入的对象包装成jQuery对象<br>$(this} </p>
-<p>//传入函数 , 这个是在页面DOM文档加载完成后加载执行的，等效于在DOM加载完毕后执行了${document).ready()方 法。<br>$ (function (){})</p>
-<p>//传入字符串 ，査询D0M节点包装成jQuery对象<br>$(<em>.box</em>)</p>
-<p>//传入HTML字符串 创建DOM节点包装成jQuery对象<br>$(<em>&lt;div&gt;</em>) </p>
-<p>//空<br>$()创建jQuery对象</p>
-<p>3.如何把创建的Dom结点包装成jQuery对象<br>contetx.createElement创建DOM节点存储在数组中，调用merge方法把数组中存储的DOM节点的成员添加到jQuery实例对象上</p>
-<p>4.jQuery实例对象length属性作用<br>存储DOM节点的数组对象平滑地添加到jQuery实例对象上</p>
-<p>5.merge方法应用场景有哪些<br>合并数组<br>把数组成员合并在有length属性的对象上</p>
-<p>6.$(document).ready()与$(function(){})的关系<br>$(document).ready()是对document.DOMContentLoaded事件的封装<br>$(function(){})每次调用$()传入的参数会收集在readyList数组中，<br>当document.DOMContentLoaded事件触发时依次执行readyList中收集的处理函数</p>
 
           
         
@@ -1538,149 +1683,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/course/router.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/course/router.html" itemprop="url">
-                  路由
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-04T21:08:37+08:00">
-                2018-12-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="为什么需要路由"><a href="#为什么需要路由" class="headerlink" title="为什么需要路由"></a>为什么需要路由</h1><p>1.单页应用需要进行页面切换<br>2.通过URL可以定位到页面<br>3.更有语义的组织资源</p>
-<h1 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h1><p>在组件容器里根据URL决定显示什么样的组件</p>
-<h1 id="REACT-router特性（和后端路由对比）"><a href="#REACT-router特性（和后端路由对比）" class="headerlink" title="REACT router特性（和后端路由对比）"></a>REACT router特性（和后端路由对比）</h1><p>1.声明式路由定义</p>
-<p>通过react组件标签进行声明，可以放在任何地方，不需要具体的路由表进行声明</p>
-<p>2.动态路由</p>
-<p>传统路由一旦配置了它就是一个配置文件，成为一个静态文件<br>而react router的路由是页面在render的时候才会被解析的，有相应路由的标记标签就是有相应的配置，没有标签就没有相应的配置</p>
-<h1 id="三种路由实现方式"><a href="#三种路由实现方式" class="headerlink" title="三种路由实现方式"></a>三种路由实现方式</h1><ol>
-<li><p>url路径：通过改变URl更改视图</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">import React from &quot;react&quot;;</span><br><span class="line">import &#123; BroswerRouter as Router, Route, Link &#125; from &quot;react-router-dom&quot;;</span><br><span class="line"></span><br><span class="line">const Home = () =&gt; &lt;h1&gt;Home&lt;/h1&gt;;</span><br><span class="line">const Hello = () =&gt; &lt;h1&gt;Hello&lt;/h1&gt;;</span><br><span class="line">const About = () =&gt; &lt;h1&gt;About Us&lt;/h1&gt;;</span><br><span class="line"></span><br><span class="line">export default class RouterSample extends React.PureComponent &#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    return (</span><br><span class="line">      &lt;Router&gt;</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">          &lt;ul id=&quot;menu&quot;&gt;</span><br><span class="line">            &lt;li&gt;</span><br><span class="line">              &lt;Link to=&quot;/home&quot;&gt;Home&lt;/Link&gt;</span><br><span class="line">            &lt;/li&gt;</span><br><span class="line">            &lt;li&gt;</span><br><span class="line">              &lt;Link to=&quot;/hello&quot;&gt;Hello&lt;/Link&gt;</span><br><span class="line">            &lt;/li&gt;</span><br><span class="line">            &lt;li&gt;</span><br><span class="line">              &lt;Link to=&quot;/about&quot;&gt;About&lt;/Link&gt;</span><br><span class="line">            &lt;/li&gt;</span><br><span class="line">          &lt;/ul&gt;</span><br><span class="line"></span><br><span class="line">          &lt;div id=&quot;page-container&quot;&gt;</span><br><span class="line">            &lt;Route path=&quot;/home&quot; component=&#123;Home&#125; /&gt;</span><br><span class="line">            &lt;Route path=&quot;/hello&quot; component=&#123;Hello&#125; /&gt;</span><br><span class="line">            &lt;Route path=&quot;/about&quot; component=&#123;About&#125; /&gt;</span><br><span class="line">          &lt;/div&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">      &lt;/Router&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>hash路由：使用Router 的HashRouter组件 进行路由容器包裹,切换路由时，<br>具体的路径会被放在URl的#后面，通过改变hash更变视图《兼容低版本浏览器》</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">import React from &quot;react&quot;;</span><br><span class="line">import &#123; HashRouter as Router, Route, Link &#125; from &quot;react-router-dom&quot;;</span><br><span class="line"></span><br><span class="line">const Home = () =&gt; &lt;h1&gt;Home&lt;/h1&gt;;</span><br><span class="line">const Hello = () =&gt; &lt;h1&gt;Hello&lt;/h1&gt;;</span><br><span class="line">const About = () =&gt; &lt;h1&gt;About Us&lt;/h1&gt;;</span><br><span class="line"></span><br><span class="line">export default class RouterSample extends React.PureComponent &#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    return (</span><br><span class="line">      &lt;Router&gt;</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">          &lt;ul id=&quot;menu&quot;&gt;</span><br><span class="line">            &lt;li&gt;</span><br><span class="line">              &lt;Link to=&quot;/home&quot;&gt;Home&lt;/Link&gt;</span><br><span class="line">            &lt;/li&gt;</span><br><span class="line">            &lt;li&gt;</span><br><span class="line">              &lt;Link to=&quot;/hello&quot;&gt;Hello&lt;/Link&gt;</span><br><span class="line">            &lt;/li&gt;</span><br><span class="line">            &lt;li&gt;</span><br><span class="line">              &lt;Link to=&quot;/about&quot;&gt;About&lt;/Link&gt;</span><br><span class="line">            &lt;/li&gt;</span><br><span class="line">          &lt;/ul&gt;</span><br><span class="line"></span><br><span class="line">          &lt;div id=&quot;page-container&quot;&gt;</span><br><span class="line">            &lt;Route path=&quot;/home&quot; component=&#123;Home&#125; /&gt;</span><br><span class="line">            &lt;Route path=&quot;/hello&quot; component=&#123;Hello&#125; /&gt;</span><br><span class="line">            &lt;Route path=&quot;/about&quot; component=&#123;About&#125; /&gt;</span><br><span class="line">          &lt;/div&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">      &lt;/Router&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>存路由：使用react-router 的MemoryRouter组件进行路由容器包裹，路由信息放在内存中管理，URL不变的情况下，即可进行视图切换</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">import React from &quot;react&quot;;</span><br><span class="line">import &#123; HashRouter as Router, Route, Link &#125; from &quot;react-router-dom&quot;;</span><br><span class="line">import &#123; MemoryRouter &#125; from &quot;react-router&quot;;</span><br><span class="line"></span><br><span class="line">const Home = () =&gt; &lt;h1&gt;Home&lt;/h1&gt;;</span><br><span class="line">const Hello = () =&gt; &lt;h1&gt;Hello&lt;/h1&gt;;</span><br><span class="line">const About = () =&gt; &lt;h1&gt;About Us&lt;/h1&gt;;</span><br><span class="line"></span><br><span class="line">export default class RouterSample extends React.PureComponent &#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    return (</span><br><span class="line">      &lt;MemoryRouter&gt;</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">          &lt;ul id=&quot;menu&quot;&gt;</span><br><span class="line">            &lt;li&gt;</span><br><span class="line">              &lt;Link to=&quot;/home&quot;&gt;Home&lt;/Link&gt;</span><br><span class="line">            &lt;/li&gt;</span><br><span class="line">            &lt;li&gt;</span><br><span class="line">              &lt;Link to=&quot;/hello&quot;&gt;Hello&lt;/Link&gt;</span><br><span class="line">            &lt;/li&gt;</span><br><span class="line">            &lt;li&gt;</span><br><span class="line">              &lt;Link to=&quot;/about&quot;&gt;About&lt;/Link&gt;</span><br><span class="line">            &lt;/li&gt;</span><br><span class="line">          &lt;/ul&gt;</span><br><span class="line"></span><br><span class="line">          &lt;div id=&quot;page-container&quot;&gt;</span><br><span class="line">            &lt;Route path=&quot;/home&quot; component=&#123;Home&#125; /&gt;</span><br><span class="line">            &lt;Route path=&quot;/hello&quot; component=&#123;Hello&#125; /&gt;</span><br><span class="line">            &lt;Route path=&quot;/about&quot; component=&#123;About&#125; /&gt;</span><br><span class="line">          &lt;/div&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">      &lt;/MemoryRouter&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>基于路由配置进行资源组织 好处</p>
-<p>1.实现业务逻辑的松耦合<br>2.易于扩展，重构和维护<br>3.路由层面实现Lazy Load</p>
-<h1 id="REACT-Router-API"><a href="#REACT-Router-API" class="headerlink" title="REACT Router API"></a>REACT Router API</h1><p>1.<link>:普通链接,会触发浏览器刷新<br>类似a标签，但是不会触发浏览器的刷新，点击时router会接管导航，对切换进行处理不会传递到浏览器，让其进行真正的页面切换<br>to属性代表链接到的URl的地址<br>2.<navlink>:类似 Link但是会添加当前选中状态<br>可以添加activeClassName属性，当当前链接符合to属性值时,显示相应的样式 还有其他属性，详情请看react-router文档<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;NavLink to=&quot;/faq&quot; activeClassName=&apos;selected&apos;&gt;FAQs&lt;/NavLink&gt;</span><br></pre></td></tr></table></figure></navlink></p>
-<p>3.<prompt>:满足条件时提示用户是否离开当前页面<br>切换页面时，跟用户提供一个确认的操作</prompt></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import &#123; Prompt &#125; from &quot;react-router&quot;;</span><br><span class="line">&lt;Prompt</span><br><span class="line">    when=&#123;formIsHalfFilledOut&#125;</span><br><span class="line">    message=&apos;Are you sure you want to leave&apos;</span><br><span class="line">/&gt;</span><br></pre></td></tr></table></figure>
-<p>4.<redirect>重定向当前页面,例如登录判断<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import &#123; Redirect,Route &#125; from &quot;react-router&quot;;</span><br><span class="line">&lt;Route exact path=&apos;/&apos; render=&#123;()=&gt;(</span><br><span class="line">    loggedIn?(</span><br><span class="line">    &lt;Redirect to=&apos;/dashboard&apos; /&gt;</span><br><span class="line">    ) : (</span><br><span class="line">        &lt;PublicHomePage/&gt;</span><br><span class="line">    )</span><br><span class="line">)&#125;/&gt;</span><br></pre></td></tr></table></figure></redirect></p>
-<p>5.<route>:路由配置的核心标记,路径匹配时显示对应组件<br>path：路由<br>component:相应要显示的组件<br>exact：是否精准配置path<br>多个route path都符合当前路由时，那相应组件都会进行显示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;Route exact path=&quot;/&quot; component=&#123;Home&#125; /&gt;</span><br></pre></td></tr></table></figure></route></p>
-<p>6.<switch>:只显示第一个匹配的路由<br>找到一个匹配的路径就只显示这个路径相应的组件，其他组件不显示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import &#123; Switch,Route &#125; from &quot;react-router&quot;;</span><br><span class="line">&lt;Switch&gt;</span><br><span class="line">&lt;Route path=&quot;/home&quot; component=&#123;Home&#125; /&gt;</span><br><span class="line">&lt;Route path=&quot;/hello&quot; component=&#123;Hello&#125; /&gt;</span><br><span class="line">&lt;Route path=&quot;/about&quot; component=&#123;About&#125; /&gt;</span><br><span class="line">&lt;Route component=&#123;Nomatch&#125; /&gt;</span><br><span class="line">&lt;/Switch&gt;</span><br></pre></td></tr></table></figure></switch></p>
-<h1 id="参数传递"><a href="#参数传递" class="headerlink" title="参数传递"></a>参数传递</h1><p>通过URL传递参数 :<route path="/topic/:id" ...><br>获取参数：this.props.match.params<br>页面状态尽量通过URl参数定义,方便页面间跳转时数据传递，否则需要将数据转化成组件内部state进行渲染，过程复杂</route></p>
-<h1 id="套嵌路由"><a href="#套嵌路由" class="headerlink" title="套嵌路由"></a>套嵌路由</h1><p>1.每个React组件都可以时路由容器<br>2.React Router的声明式语法可以方便的定义嵌套路由<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line">import React from &quot;react&quot;;</span><br><span class="line">import &#123;</span><br><span class="line">  BrowserRouter as Router,</span><br><span class="line">  Route,</span><br><span class="line">  Link</span><br><span class="line">&#125; from &quot;react-router-dom&quot;;</span><br><span class="line"></span><br><span class="line">const Category = (&#123; match &#125;) =&gt; (</span><br><span class="line">  &lt;h1&gt;Sub Category &#123;match.params.subId&#125;&lt;/h1&gt;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">const SubCategory = (&#123; match &#125;) =&gt; (</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;h1&gt;Category &#123;match.params.id&#125;&lt;/h1&gt;</span><br><span class="line"></span><br><span class="line">    &lt;ul id=&quot;menu&quot;&gt;</span><br><span class="line">      &lt;li&gt;</span><br><span class="line">        &lt;Link to=&#123;`/category/$&#123;match.params.id&#125;/sub/1`&#125;&gt;</span><br><span class="line">          Sub Category 1</span><br><span class="line">        &lt;/Link&gt;</span><br><span class="line">      &lt;/li&gt;</span><br><span class="line">      &lt;li&gt;</span><br><span class="line">        &lt;Link to=&#123;`/category/$&#123;match.params.id&#125;/sub/2`&#125;&gt;</span><br><span class="line">          Sub Category 2</span><br><span class="line">        &lt;/Link&gt;</span><br><span class="line">      &lt;/li&gt;</span><br><span class="line">      &lt;li&gt;</span><br><span class="line">        &lt;Link to=&#123;`/category/$&#123;match.params.id&#125;/sub/3`&#125;&gt;</span><br><span class="line">          Sub Category 3</span><br><span class="line">        &lt;/Link&gt;</span><br><span class="line">      &lt;/li&gt;</span><br><span class="line">    &lt;/ul&gt;</span><br><span class="line">    &lt;div id=&quot;page-container-2&quot;&gt;</span><br><span class="line">      &lt;Route</span><br><span class="line">        path=&quot;/category/:id/sub/:subId&quot;</span><br><span class="line">        component=&#123;Category&#125;</span><br><span class="line">      /&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">export default class NestedRoute extends React.PureComponent &#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    return (</span><br><span class="line">      &lt;Router&gt;</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">          &lt;ul id=&quot;menu&quot;&gt;</span><br><span class="line">            &lt;li&gt;</span><br><span class="line">              &lt;Link to=&quot;/category/1&quot;&gt;Category 1&lt;/Link&gt;</span><br><span class="line">            &lt;/li&gt;</span><br><span class="line">            &lt;li&gt;</span><br><span class="line">              &lt;Link to=&quot;/category/2&quot;&gt;Category 2&lt;/Link&gt;</span><br><span class="line">            &lt;/li&gt;</span><br><span class="line">            &lt;li&gt;</span><br><span class="line">              &lt;Link to=&quot;/category/3&quot;&gt;Category 3&lt;/Link&gt;</span><br><span class="line">            &lt;/li&gt;</span><br><span class="line">          &lt;/ul&gt;</span><br><span class="line"></span><br><span class="line">          &lt;div id=&quot;page-container&quot;&gt;</span><br><span class="line">            &lt;Route</span><br><span class="line">              path=&quot;/category/:id&quot;</span><br><span class="line">              component=&#123;SubCategory&#125;</span><br><span class="line">            /&gt;</span><br><span class="line">          &lt;/div&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">      &lt;/Router&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1724,7 +1726,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">245</span>
+              <span class="site-state-item-count">246</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
