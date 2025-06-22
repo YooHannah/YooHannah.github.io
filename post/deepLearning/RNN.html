@@ -113,7 +113,11 @@
 <meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/223.png">
 <meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/224.png">
 <meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/225.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/242.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/dinos3.png">
 <meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/226.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/clip.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/243.png">
 <meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/227.png">
 <meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/228.png">
 <meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/229.png">
@@ -128,7 +132,7 @@
 <meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/230.png">
 <meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/231.png">
 <meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/232.png">
-<meta property="og:updated_time" content="2025-03-10T12:47:20.777Z">
+<meta property="og:updated_time" content="2025-03-12T12:05:28.054Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RNN-循环神经网络">
 <meta name="twitter:description" content="循环神经网络（RNN, Recurrent Neural Network）是一类用于处理序列数据的神经网络，它与传统的前馈神经网络不同，具有“记忆”能力。RNN的特点是神经元之间的连接不仅仅是前向的，还包括了“循环”连接，这样可以把之前的输出作为当前的输入，从而捕捉到时间序列中不同时间点之间的依赖关系。 主要特点：序列数据处理：RNN擅长处理序列数据（例如文本、时间序列、语音等），可以在处理每个时">
@@ -414,10 +418,10 @@
 <h2 id="训练过程"><a href="#训练过程" class="headerlink" title="训练过程"></a>训练过程</h2><p>针对语言模型的训练过程，就一个训练样本来说<br>第一步就是进行分词，也就是token处理<br>这个过程就拿到一个训练样本的多个时间step, 一个词是一个x^t,<br>对于句尾符号一般用<eos> 或者也也用onehot表示<br>对于词典中没有出现的词，则一般用<unk> 表示，这样在训练和采样阶段可以针对不存在的词制定相应的处理策略，<br>比如是照常输出，还是跳过重新采样</unk></eos></p>
 <p>第二步开始训练<br>time step 训练的第一轮输入都是0向量，输出是字典里任意词语的的概率，即每个词都等概率<br>在后面的每一轮中，另x^t = y^(t-1)，那么y^~^t 计算的就是在前一轮基础上计算下个词y^t出现的概率，最终直到出现<eos> 句子结束</eos></p>
 <p><img src="/image/deepLearning/224.png" alt></p>
-<h2 id="采样"><a href="#采样" class="headerlink" title="采样"></a>采样</h2><p>就是根据y^~^t取出对应的词典里的词作为下一轮的输入，代替y^t<br>类似于训练过程，只不过在第二轮开始的输入，变成np.random.choice(y^~t), 根据计算过程的概率取词，接着预测下一个词<br>结束规则可以自行定义，如果词典中有<eos> 则碰到<eos>即可以结束采样，如果没有，可以定义一定数据，采样到一定数量的词后自行结束采样<br>这也相当于根据前面的词预测下一个词的过程<br>要尽量避免如果出现<unk>，出现的话则丢弃重新进行采样<br><img src="/image/deepLearning/225.png" alt></unk></eos></eos></p>
+<h2 id="采样"><a href="#采样" class="headerlink" title="采样"></a>采样</h2><p>就是根据y^~^t取出对应的词典里的词作为下一轮的输入，代替y^t<br>类似于训练过程，只不过在第二轮开始的输入，变成np.random.choice(y^~t), 根据计算过程的概率取词，接着预测下一个词<br>结束规则可以自行定义，如果词典中有<eos> 则碰到<eos>即可以结束采样，如果没有，可以定义一定数据，采样到一定数量的词后自行结束采样<br>这也相当于根据前面的词预测下一个词的过程<br>要尽量避免如果出现<unk>，出现的话则丢弃重新进行采样<br><img src="/image/deepLearning/225.png" alt><br><img src="/image/deepLearning/242.png" alt><br><img src="/image/deepLearning/dinos3.png" alt></unk></eos></eos></p>
 <h2 id="字母级语言模型"><a href="#字母级语言模型" class="headerlink" title="字母级语言模型"></a>字母级语言模型</h2><p>类似于上面word 级别的模型，只不过分词细化到每个字母，每个字母是一个时间序，字典就是26个英文字母加相关符号<br>优点是不会出现unk，<br>但是缺点是最终会得到太多太长的序列，捕捉句子中的依赖关系时(句子较前部分影响较后部分)不如word language model 能捕捉长范围范围内关系<br>另外训练计算成本高，<br>除非用于处理大量未知文本，未知词汇的应用，或者专有词汇的领域<br><img src="/image/deepLearning/226.png" alt></p>
 <p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/RecurrentNeuralNetwork/CharactersModel/index.py" target="_blank" rel="noopener">练习</a></p>
-<h1 id="梯度消失-amp-爆炸"><a href="#梯度消失-amp-爆炸" class="headerlink" title="梯度消失&amp;爆炸"></a>梯度消失&amp;爆炸</h1><p>如果出现梯度爆炸常见的处理办法就是进行<b>梯度修剪</b>(gradient clipping)<br>即如果梯度值超过某个阈值，则对其进行缩放，始终保证其在阈值范围内，详见上面【练习】</p>
+<h1 id="梯度消失-amp-爆炸"><a href="#梯度消失-amp-爆炸" class="headerlink" title="梯度消失&amp;爆炸"></a>梯度消失&amp;爆炸</h1><p>如果出现梯度爆炸常见的处理办法就是进行<b>梯度修剪</b>(gradient clipping)<br>即如果梯度值超过某个阈值，则对其进行缩放，始终保证其在阈值范围内，详见上面【练习】<br><img src="/image/deepLearning/clip.png" alt><br><img src="/image/deepLearning/243.png" alt></p>
 <p>对于梯度消失的影响，类似于深层网络，最终给到输出的权重y很难影响到靠前层的权重<br>对于RNN来说，梯度消失意味着后面层的输出误差很难影响前面层的计算，其实就是无法实现一个句子中的长范围影响</p>
 <p>下面是两种处理梯度消失的解决办法，主要通过引入记忆细胞进行长范围特征传递避免梯度消失</p>
 <h2 id="GRU-单元"><a href="#GRU-单元" class="headerlink" title="GRU 单元"></a>GRU 单元</h2><p>Gated Recurrent Unit (GRU) 门控循环单元<br>通过引入记忆细胞，存储前层数据特征，然后利用【更新门】逻辑决定是否将特征传递给后面数据实现长范围影响<br><img src="/image/deepLearning/227.png" alt><br>更新门是个sigmod 函数，即使无限接近0,在更新候选值时可以始终保持记忆细胞的值，从而实现深层传递，实现长范围影响，缓解梯度消失的问题<br>Γu：控制当前状态与前一时刻状态的融合程度。<br>Γr：决定前一时刻的记忆细胞信息保留多少在当前时刻的记忆细胞候选值中</p>
@@ -543,6 +547,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/post/knowledge/systemThinking.html" rel="prev" title="系统思考">
+                系统思考 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -607,7 +615,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">246</span>
+              <span class="site-state-item-count">247</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -624,7 +632,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
