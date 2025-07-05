@@ -1,0 +1,834 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="deepLearning,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="循环神经网络（RNN, Recurrent Neural Network）是一类用于处理序列数据的神经网络，它与传统的前馈神经网络不同，具有“记忆”能力。RNN的特点是神经元之间的连接不仅仅是前向的，还包括了“循环”连接，这样可以把之前的输出作为当前的输入，从而捕捉到时间序列中不同时间点之间的依赖关系。 主要特点：序列数据处理：RNN擅长处理序列数据（例如文本、时间序列、语音等），可以在处理每个时">
+<meta name="keywords" content="deepLearning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RNN-循环神经网络">
+<meta property="og:url" content="http://yoohannah.github.io/post/deepLearning/RNN.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="循环神经网络（RNN, Recurrent Neural Network）是一类用于处理序列数据的神经网络，它与传统的前馈神经网络不同，具有“记忆”能力。RNN的特点是神经元之间的连接不仅仅是前向的，还包括了“循环”连接，这样可以把之前的输出作为当前的输入，从而捕捉到时间序列中不同时间点之间的依赖关系。 主要特点：序列数据处理：RNN擅长处理序列数据（例如文本、时间序列、语音等），可以在处理每个时">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/211.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/209.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/212.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/213.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/214.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/215.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/216.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/217.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/218.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/221.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/222.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/233.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/234.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/219.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/220.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/210.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/223.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/224.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/225.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/242.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/dinos3.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/226.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/clip.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/243.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/227.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/228.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/229.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/LSTM_cell.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/235.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/236.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/237.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/238.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/239.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/240.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/241.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/230.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/231.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/232.png">
+<meta property="og:updated_time" content="2025-07-05T01:32:28.033Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RNN-循环神经网络">
+<meta name="twitter:description" content="循环神经网络（RNN, Recurrent Neural Network）是一类用于处理序列数据的神经网络，它与传统的前馈神经网络不同，具有“记忆”能力。RNN的特点是神经元之间的连接不仅仅是前向的，还包括了“循环”连接，这样可以把之前的输出作为当前的输入，从而捕捉到时间序列中不同时间点之间的依赖关系。 主要特点：序列数据处理：RNN擅长处理序列数据（例如文本、时间序列、语音等），可以在处理每个时">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/deepLearning/211.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/deepLearning/RNN.html">
+
+
+
+
+
+  <title> RNN-循环神经网络 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/deepLearning/RNN.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                RNN-循环神经网络
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-02-25T17:15:37+08:00">
+                2025-02-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>循环神经网络（RNN, Recurrent Neural Network）是一类用于处理序列数据的神经网络，它与传统的前馈神经网络不同，具有“记忆”能力。<br>RNN的特点是神经元之间的连接不仅仅是前向的，还包括了“循环”连接，这样可以把之前的输出作为当前的输入，从而捕捉到时间序列中不同时间点之间的依赖关系。</p>
+<p>主要特点：<br>序列数据处理：RNN擅长处理序列数据（例如文本、时间序列、语音等），可以在处理每个时间步时考虑之前的状态。<br>权重共享：RNN在不同时间步之间共享相同的权重参数，这使得它能够在不同的时间点上进行相似的计算。<br>记忆能力：通过循环结构，RNN可以保留以前输入的信息，帮助模型理解时间依赖性。</p>
+<p>常见序列数据处理任务：语音识别，乐谱生成，情绪分类，DNA序列分析，机器翻译，视频动作识别，名称实体识别<br><img src="/image/deepLearning/211.png" alt></p>
+<p>下面以名称实体识别为例，介绍一个多对多且输出序列长度等于输入序列长度的RNN架构工作原理</p>
+<h1 id="名称实体识别"><a href="#名称实体识别" class="headerlink" title="名称实体识别"></a>名称实体识别</h1><p>任务：识别文本中的实体，如人名、地名、组织机构名等<br>实现原理：</p>
+<ol>
+<li>准备一个字典，将单词映射为数字表示</li>
+<li>将输入句子中的每一个单词利用one-hot编码表示, 此时一个单词就是一个序列</li>
+<li>将所有序列输入到RNN中，RNN会对每个序列进行处理，输出结果</li>
+<li>每一个结果对应一个单词是否是名称实体</li>
+</ol>
+<h2 id="RNN-符号表示"><a href="#RNN-符号表示" class="headerlink" title="RNN 符号表示"></a>RNN 符号表示</h2><p><img src="/image/deepLearning/209.png" alt><br><img src="/image/deepLearning/212.png" alt></p>
+<h2 id="RNN-计算过程"><a href="#RNN-计算过程" class="headerlink" title="RNN 计算过程"></a>RNN 计算过程</h2><p>如果用简单卷积神经网络主要存在两个问题</p>
+<ol>
+<li>并不是所有输入或者所有输出的序列长度都不一致，如果都填充到一个最大值，会造成表示不友好的问题</li>
+<li>不能跨文本位置共享学习到的特征</li>
+<li>输入层巨大(单词数*10000)，会导致第一层的权重矩阵非常大<br><img src="/image/deepLearning/213.png" alt></li>
+</ol>
+<p>RNN 可以解决上述问题</p>
+<ol>
+<li>不同的问题中输入或者输出的序列长度可能不一致，RNN可以处理任意长度的序列</li>
+<li>学习到的特征值可以应用到不同位置的名称实体识别中，RNN可以学习到不同位置的特征值</li>
+</ol>
+<h3 id="循环过程"><a href="#循环过程" class="headerlink" title="循环过程"></a>循环过程</h3><p>如果从左到右读取单词，处理完第一个单词后，在处理第二个单词时，不仅需要将第二个单词作为输入，<br>也需要将第一个单词的输出作为输入，以此类推，直到处理完最后一个单词，拿到所有单词的输出后</p>
+<p><img src="/image/deepLearning/214.png" alt></p>
+<h3 id="向前传播"><a href="#向前传播" class="headerlink" title="向前传播"></a>向前传播</h3><p><img src="/image/deepLearning/215.png" alt><br><img src="/image/deepLearning/216.png" alt></p>
+<h3 id="向后传播"><a href="#向后传播" class="headerlink" title="向后传播"></a>向后传播</h3><p><img src="/image/deepLearning/217.png" alt><br><img src="/image/deepLearning/218.png" alt></p>
+<h3 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h3><h4 id="符号表示"><a href="#符号表示" class="headerlink" title="符号表示"></a>符号表示</h4><p><img src="/image/deepLearning/221.png" alt></p>
+<h4 id="关于输入的维度描述"><a href="#关于输入的维度描述" class="headerlink" title="关于输入的维度描述"></a>关于输入的维度描述</h4><p><img src="/image/deepLearning/222.png" alt></p>
+<h4 id="rnn-cell-vs-rnn-cell-forward"><a href="#rnn-cell-vs-rnn-cell-forward" class="headerlink" title="rnn cell vs rnn_cell_forward"></a>rnn cell vs rnn_cell_forward</h4><p>rnn cell 是一个函数，输入是x^t和a^(t-1)，输出是a^t<br>rnn cell forward 是一个函数，输入是a^t，输出是和y^t<br>下图是一个单个时间步的计算过程， 实线是rcc cell，虚线是rnn cell forward<br>这里是最基础的RNN单元的实现，后面会介绍降低梯度消失的RGU单元和LSTM单元<br><img src="/image/deepLearning/233.png" alt></p>
+<h4 id="recurrent-neural-network"><a href="#recurrent-neural-network" class="headerlink" title="recurrent neural network"></a>recurrent neural network</h4><p>循环神经网络的实现就是基于时间步数循环调用rnn cell 函数，rnn cell 里面的parameters参数对于每一个时间步都相同<br><img src="/image/deepLearning/234.png" alt></p>
+<blockquote>
+<p>Situations when this RNN will perform better:</p>
+<p>This will work well enough for some applications, but it suffers from the vanishing gradient problems.<br>The RNN works best when each output  𝑦̂ ⟨𝑡⟩  can be estimated using “local” context.<br>“Local” context refers to information that is close to the prediction’s time step  𝑡 .<br>More formally, local context refers to inputs  𝑥⟨𝑡′⟩  and predictions  𝑦̂ ⟨𝑡⟩  where  𝑡′  is close to  𝑡 .</p>
+</blockquote>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/RecurrentNeuralNetwork/StepByStep/index.py" target="_blank" rel="noopener">相关代码</a></p>
+<h1 id="不同的RNN架构"><a href="#不同的RNN架构" class="headerlink" title="不同的RNN架构"></a>不同的RNN架构</h1><p><img src="/image/deepLearning/219.png" alt><br><img src="/image/deepLearning/220.png" alt></p>
+<p>Music generation –&gt; 1 to many<br>Sentiment classification –&gt; many to 1<br>DNA sequence analysis –&gt; many to many<br>Machine translation –&gt; many to many Xt ===? Yt<br>Name entity recognition –&gt; many to many Xt === Yt</p>
+<p>Video activity recognition –&gt; many to many ????<br>Speech recognition –&gt; 1 to many ???<br>如果任务是从输入的时间序列映射到另一个时间序列（如语音转文本、逐帧动作识别），则属于多对多（Many-to-Many）。<br>如果任务是从整个序列映射到一个单一类别（如视频整体分类、语音情感识别），则属于多对一（Many-to-One）。<br><img src="/image/deepLearning/210.png" alt></p>
+<h1 id="语言模型-language-model"><a href="#语言模型-language-model" class="headerlink" title="语言模型(language model)"></a>语言模型(language model)</h1><p>本质上是在计算输出结果的概率是多大<br>比如输出一个句子，The apple and pear salad<br>那么这个概率代表的就是P(The)P(apple|The)P(and|The apple)…P(salad|The apple and pear salad)<br>其中P(and|The apple) 表示 第三个词在前两个词是 the apple 的情况下 是 and 的概率<br>因此评价一个语言模型的好坏标准就是对一个正常准确句子计算得到的概率高低，对正确句子计算的概率越高，说明模型准确度越高</p>
+<p><img src="/image/deepLearning/223.png" alt></p>
+<h2 id="训练过程"><a href="#训练过程" class="headerlink" title="训练过程"></a>训练过程</h2><p>针对语言模型的训练过程，就一个训练样本来说<br>第一步就是进行分词，也就是token处理<br>这个过程就拿到一个训练样本的多个时间step, 一个词是一个x^t,<br>对于句尾符号一般用<eos> 或者也也用onehot表示<br>对于词典中没有出现的词，则一般用<unk> 表示，这样在训练和采样阶段可以针对不存在的词制定相应的处理策略，<br>比如是照常输出，还是跳过重新采样</unk></eos></p>
+<p>第二步开始训练<br>time step 训练的第一轮输入都是0向量，输出是字典里任意词语的的概率，即每个词都等概率<br>在后面的每一轮中，另x^t = y^(t-1)，那么y^~^t 计算的就是在前一轮基础上计算下个词y^t出现的概率，最终直到出现<eos> 句子结束</eos></p>
+<p><img src="/image/deepLearning/224.png" alt></p>
+<h2 id="采样"><a href="#采样" class="headerlink" title="采样"></a>采样</h2><p>就是根据y^~^t取出对应的词典里的词作为下一轮的输入，代替y^t<br>类似于训练过程，只不过在第二轮开始的输入，变成np.random.choice(y^~t), 根据计算过程的概率取词，接着预测下一个词<br>结束规则可以自行定义，如果词典中有<eos> 则碰到<eos>即可以结束采样，如果没有，可以定义一定数据，采样到一定数量的词后自行结束采样<br>这也相当于根据前面的词预测下一个词的过程<br>要尽量避免如果出现<unk>，出现的话则丢弃重新进行采样<br><img src="/image/deepLearning/225.png" alt><br><img src="/image/deepLearning/242.png" alt><br><img src="/image/deepLearning/dinos3.png" alt></unk></eos></eos></p>
+<h2 id="字母级语言模型"><a href="#字母级语言模型" class="headerlink" title="字母级语言模型"></a>字母级语言模型</h2><p>类似于上面word 级别的模型，只不过分词细化到每个字母，每个字母是一个时间序，字典就是26个英文字母加相关符号<br>优点是不会出现unk，<br>但是缺点是最终会得到太多太长的序列，捕捉句子中的依赖关系时(句子较前部分影响较后部分)不如word language model 能捕捉长范围范围内关系<br>另外训练计算成本高，<br>除非用于处理大量未知文本，未知词汇的应用，或者专有词汇的领域<br><img src="/image/deepLearning/226.png" alt></p>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/RecurrentNeuralNetwork/CharactersModel/index.py" target="_blank" rel="noopener">练习</a></p>
+<h1 id="梯度消失-amp-爆炸"><a href="#梯度消失-amp-爆炸" class="headerlink" title="梯度消失&amp;爆炸"></a>梯度消失&amp;爆炸</h1><p>如果出现梯度爆炸常见的处理办法就是进行<b>梯度修剪</b>(gradient clipping)<br>即如果梯度值超过某个阈值，则对其进行缩放，始终保证其在阈值范围内，详见上面【练习】<br><img src="/image/deepLearning/clip.png" alt><br><img src="/image/deepLearning/243.png" alt></p>
+<p>对于梯度消失的影响，类似于深层网络，最终给到输出的权重y很难影响到靠前层的权重<br>对于RNN来说，梯度消失意味着后面层的输出误差很难影响前面层的计算，其实就是无法实现一个句子中的长范围影响</p>
+<p>下面是两种处理梯度消失的解决办法，主要通过引入记忆细胞进行长范围特征传递避免梯度消失</p>
+<h2 id="GRU-单元"><a href="#GRU-单元" class="headerlink" title="GRU 单元"></a>GRU 单元</h2><p>Gated Recurrent Unit (GRU) 门控循环单元<br>通过引入记忆细胞，存储前层数据特征，然后利用【更新门】逻辑决定是否将特征传递给后面数据实现长范围影响<br><img src="/image/deepLearning/227.png" alt><br>更新门是个sigmod 函数，即使无限接近0,在更新候选值时可以始终保持记忆细胞的值，从而实现深层传递，实现长范围影响，缓解梯度消失的问题<br>Γu：控制当前状态与前一时刻状态的融合程度。<br>Γr：决定前一时刻的记忆细胞信息保留多少在当前时刻的记忆细胞候选值中</p>
+<p>通过门控机制缓解梯度问题，但比 LSTM 稍弱</p>
+<h2 id="LSTM-long-short-term-memory-unit"><a href="#LSTM-long-short-term-memory-unit" class="headerlink" title="LSTM (long short term memory) unit"></a>LSTM (long short term memory) unit</h2><p>LSTM 循环单元 出现的比GRU 单元要早，相比GRU 单元更复杂<br>多了【遗忘门】和【输出门】<br>【更新门】现在决定当前输入信息有多少被存入细胞状态<br>【遗忘门】决定遗忘多少过去的信息<br>【输出门】决定细胞状态中的信息有多少影响当前的隐藏状态<br>激活值不再等于记忆细胞，而是由【输出门】和【记忆细胞】共同决定<br>LSTM 通过这三个门的组合，实现对信息的精确控制，使其能够有效处理长序列依赖问题<br><img src="/image/deepLearning/228.png" alt><br><img src="/image/deepLearning/229.png" alt></p>
+<p>通过细胞状态缓解梯度消失问题，更适用于长序列</p>
+<h3 id="LSTM-单元的具体实现"><a href="#LSTM-单元的具体实现" class="headerlink" title="LSTM 单元的具体实现"></a>LSTM 单元的具体实现</h3><h4 id="一个LSTM单元的具体实现"><a href="#一个LSTM单元的具体实现" class="headerlink" title="一个LSTM单元的具体实现"></a>一个LSTM单元的具体实现</h4><p><img src="/image/deepLearning/LSTM_cell.png" alt></p>
+<h4 id="各个状态和门的计算和解释"><a href="#各个状态和门的计算和解释" class="headerlink" title="各个状态和门的计算和解释"></a>各个状态和门的计算和解释</h4><p><img src="/image/deepLearning/235.png" alt><br><img src="/image/deepLearning/236.png" alt><br><img src="/image/deepLearning/237.png" alt><br><img src="/image/deepLearning/238.png" alt><br><img src="/image/deepLearning/239.png" alt><br><img src="/image/deepLearning/240.png" alt><br><img src="/image/deepLearning/241.png" alt></p>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/RecurrentNeuralNetwork/StepByStep/index.py" target="_blank" rel="noopener">相关代码</a></p>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/RecurrentNeuralNetwork/shakespearePoem/index.py" target="_blank" rel="noopener">字母级莎士比亚文学模型</a></p>
+<h2 id="GRU-单元-VS-LSTM-单元"><a href="#GRU-单元-VS-LSTM-单元" class="headerlink" title="GRU 单元 VS LSTM 单元"></a>GRU 单元 VS LSTM 单元</h2><h3 id="1-结构对比"><a href="#1-结构对比" class="headerlink" title="1. 结构对比"></a>1. 结构对比</h3><table>
+<thead>
+<tr>
+<th><strong>对比项</strong></th>
+<th><strong>GRU</strong></th>
+<th><strong>LSTM</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>门控机制</strong></td>
+<td>2 个门：更新门（Update Gate）、重置门（Reset Gate）</td>
+<td>3 个门：输入门（Input Gate）、遗忘门（Forget Gate）、输出门（Output Gate）</td>
+</tr>
+<tr>
+<td><strong>记忆单元</strong></td>
+<td>直接更新隐藏状态</td>
+<td>额外维护一个“细胞状态”</td>
+</tr>
+<tr>
+<td><strong>计算复杂度</strong></td>
+<td>相对较低</td>
+<td>计算量较大</td>
+</tr>
+<tr>
+<td><strong>参数数量</strong></td>
+<td>较少</td>
+<td>较多</td>
+</tr>
+<tr>
+<td><strong>梯度消失/爆炸</strong></td>
+<td>通过门控机制缓解梯度问题，但比 LSTM 稍弱</td>
+<td>通过细胞状态缓解梯度消失问题，更适用于长序列</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="2-对比分析"><a href="#2-对比分析" class="headerlink" title="2. 对比分析"></a>2. 对比分析</h3><table>
+<thead>
+<tr>
+<th><strong>对比项</strong></th>
+<th><strong>GRU</strong></th>
+<th><strong>LSTM</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>训练时间</strong></td>
+<td>更快（参数较少，计算量低）</td>
+<td>相对较慢（参数多，计算复杂）</td>
+</tr>
+<tr>
+<td><strong>表现效果</strong></td>
+<td>适用于中等长度依赖</td>
+<td>更擅长长序列依赖问题</td>
+</tr>
+<tr>
+<td><strong>内存占用</strong></td>
+<td>低（因参数少）</td>
+<td>高（因参数多）</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>机器翻译、语音识别、文本生成</td>
+<td>时间序列预测、长文本处理</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-应用场景"><a href="#3-应用场景" class="headerlink" title="3.应用场景"></a>3.应用场景</h3><p>GRU 适用于：<br>计算资源有限的设备（如移动端）<br>需要较快训练和推理的任务<br>语音识别、机器翻译等</p>
+<p>LSTM 适用于：<br>处理长序列依赖问题<br>需要更精细控制记忆存储的任务<br>生成式任务（如文本生成、音乐生成）</p>
+<p><a href="https://github.com/GeeeekExplorer/AndrewNg-Deep-Learning/blob/master/Sequence%20Models/Week%201/Building%20a%20Recurrent%20Neural%20Network%20-%20Step%20by%20Step/Building%20a%20Recurrent%20Neural%20Network%20-%20Step%20by%20Step%20Solution.ipynb" target="_blank" rel="noopener">更多– RNN 普通单元和LSTM单元的反向传播过程</a></p>
+<h1 id="双向RNN"><a href="#双向RNN" class="headerlink" title="双向RNN"></a>双向RNN</h1><p>先正向计算每个时间步的激活值，然后再反向(从最后一个时间步开始)计算一遍一遍激活值<br>每个时间步的最终计算值，由正反两次计算的激活值共同决定<br>主要用于解决，既要考虑前文又要考虑后文的模型判断<br>优点是可以预测句子中任意位置信息<br>缺点是需要完整的数据序列，才能预测任意位置，比如语音识别，需要等人说完完整的句子后才开始识别<br><img src="/image/deepLearning/230.png" alt><br><img src="/image/deepLearning/231.png" alt></p>
+<h1 id="深度循环网络-deep-RNN"><a href="#深度循环网络-deep-RNN" class="headerlink" title="深度循环网络 deep RNN"></a>深度循环网络 deep RNN</h1><p>使用基本RNN单元，GRU 单元，LSTM 单元构建的多层循环神经网络<br>常见的是三层，每层参数相同，<br>也可能有更深的架构但是在循环层上不在有联系<br>甚至有双向深度循环网络，但训练成本高，需要更多计算资源和时间<br><img src="/image/deepLearning/232.png" alt></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/deepLearning/" rel="tag"># deepLearning</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/deepLearning/ConvolutionalNeuralNetworks.html" rel="next" title="卷积神经网络">
+                <i class="fa fa-chevron-left"></i> 卷积神经网络
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/knowledge/systemThinking.html" rel="prev" title="系统思考">
+                系统思考 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">260</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#名称实体识别"><span class="nav-number">1.</span> <span class="nav-text">名称实体识别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#RNN-符号表示"><span class="nav-number">1.1.</span> <span class="nav-text">RNN 符号表示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RNN-计算过程"><span class="nav-number">1.2.</span> <span class="nav-text">RNN 计算过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#循环过程"><span class="nav-number">1.2.1.</span> <span class="nav-text">循环过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向前传播"><span class="nav-number">1.2.2.</span> <span class="nav-text">向前传播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向后传播"><span class="nav-number">1.2.3.</span> <span class="nav-text">向后传播</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#具体实现"><span class="nav-number">1.2.4.</span> <span class="nav-text">具体实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#符号表示"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">符号表示</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关于输入的维度描述"><span class="nav-number">1.2.4.2.</span> <span class="nav-text">关于输入的维度描述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#rnn-cell-vs-rnn-cell-forward"><span class="nav-number">1.2.4.3.</span> <span class="nav-text">rnn cell vs rnn_cell_forward</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#recurrent-neural-network"><span class="nav-number">1.2.4.4.</span> <span class="nav-text">recurrent neural network</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#不同的RNN架构"><span class="nav-number">2.</span> <span class="nav-text">不同的RNN架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#语言模型-language-model"><span class="nav-number">3.</span> <span class="nav-text">语言模型(language model)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#训练过程"><span class="nav-number">3.1.</span> <span class="nav-text">训练过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#采样"><span class="nav-number">3.2.</span> <span class="nav-text">采样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字母级语言模型"><span class="nav-number">3.3.</span> <span class="nav-text">字母级语言模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#梯度消失-amp-爆炸"><span class="nav-number">4.</span> <span class="nav-text">梯度消失&amp;爆炸</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GRU-单元"><span class="nav-number">4.1.</span> <span class="nav-text">GRU 单元</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LSTM-long-short-term-memory-unit"><span class="nav-number">4.2.</span> <span class="nav-text">LSTM (long short term memory) unit</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LSTM-单元的具体实现"><span class="nav-number">4.2.1.</span> <span class="nav-text">LSTM 单元的具体实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#一个LSTM单元的具体实现"><span class="nav-number">4.2.1.1.</span> <span class="nav-text">一个LSTM单元的具体实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#各个状态和门的计算和解释"><span class="nav-number">4.2.1.2.</span> <span class="nav-text">各个状态和门的计算和解释</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GRU-单元-VS-LSTM-单元"><span class="nav-number">4.3.</span> <span class="nav-text">GRU 单元 VS LSTM 单元</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-结构对比"><span class="nav-number">4.3.1.</span> <span class="nav-text">1. 结构对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-对比分析"><span class="nav-number">4.3.2.</span> <span class="nav-text">2. 对比分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-应用场景"><span class="nav-number">4.3.3.</span> <span class="nav-text">3.应用场景</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#双向RNN"><span class="nav-number">5.</span> <span class="nav-text">双向RNN</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#深度循环网络-deep-RNN"><span class="nav-number">6.</span> <span class="nav-text">深度循环网络 deep RNN</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

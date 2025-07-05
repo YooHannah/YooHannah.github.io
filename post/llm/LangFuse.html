@@ -1,0 +1,760 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="llm,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="维护一个生产级的 LLM 应用，我们需要做什么 各种指标监控与统计：访问记录、响应时长、Token 用量、计费等等 调试 Prompt 测试/验证系统的相关评估指标 数据集管理（便于回归测试） Prompt 版本管理（便于升级/回滚）  针对以上需求，目前有两个生产级 LLM App 维护平台 LangFuse: 开源 + SaaS（免费/付费），LangSmith 平替，可集成 LangChai">
+<meta name="keywords" content="llm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Langfuse">
+<meta property="og:url" content="http://yoohannah.github.io/post/llm/LangFuse.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="维护一个生产级的 LLM 应用，我们需要做什么 各种指标监控与统计：访问记录、响应时长、Token 用量、计费等等 调试 Prompt 测试/验证系统的相关评估指标 数据集管理（便于回归测试） Prompt 版本管理（便于升级/回滚）  针对以上需求，目前有两个生产级 LLM App 维护平台 LangFuse: 开源 + SaaS（免费/付费），LangSmith 平替，可集成 LangChai">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2025-07-05T06:12:23.868Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Langfuse">
+<meta name="twitter:description" content="维护一个生产级的 LLM 应用，我们需要做什么 各种指标监控与统计：访问记录、响应时长、Token 用量、计费等等 调试 Prompt 测试/验证系统的相关评估指标 数据集管理（便于回归测试） Prompt 版本管理（便于升级/回滚）  针对以上需求，目前有两个生产级 LLM App 维护平台 LangFuse: 开源 + SaaS（免费/付费），LangSmith 平替，可集成 LangChai">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/llm/LangFuse.html">
+
+
+
+
+
+  <title> Langfuse | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/llm/LangFuse.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Langfuse
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-07-28T17:17:37+08:00">
+                2024-07-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="维护一个生产级的-LLM-应用，我们需要做什么"><a href="#维护一个生产级的-LLM-应用，我们需要做什么" class="headerlink" title="维护一个生产级的 LLM 应用，我们需要做什么"></a>维护一个生产级的 LLM 应用，我们需要做什么</h2><ol>
+<li>各种指标监控与统计：访问记录、响应时长、Token 用量、计费等等</li>
+<li>调试 Prompt</li>
+<li>测试/验证系统的相关评估指标</li>
+<li>数据集管理（便于回归测试）</li>
+<li>Prompt 版本管理（便于升级/回滚）</li>
+</ol>
+<h2 id="针对以上需求，目前有两个生产级-LLM-App-维护平台"><a href="#针对以上需求，目前有两个生产级-LLM-App-维护平台" class="headerlink" title="针对以上需求，目前有两个生产级 LLM App 维护平台"></a>针对以上需求，目前有两个生产级 LLM App 维护平台</h2><ol>
+<li>LangFuse: 开源 + SaaS（免费/付费），LangSmith 平替，可集成 LangChain 也可直接对接 OpenAI API；</li>
+<li>LangSmith: LangChain 的官方平台，SaaS 服务（免费/付费），非开源，企业版支持私有部署；</li>
+</ol>
+<p>根据自己的技术栈，选择：</p>
+<ol>
+<li>LangFuse：开源平台，支持 LangChain 和原生 OpenAI API</li>
+<li>LangSmith: LangChain 的原始管理平台</li>
+<li>Prompt Flow：开源平台，支持 Semantic Kernel</li>
+</ol>
+<h2 id="LangFuse"><a href="#LangFuse" class="headerlink" title="LangFuse"></a>LangFuse</h2><p>开源，支持 LangChain 集成或原生 OpenAI API 集成</p>
+<p>官方网站：<a href="https://langfuse.com/" target="_blank" rel="noopener">https://langfuse.com/</a></p>
+<p>项目地址：<a href="https://github.com/langfuse" target="_blank" rel="noopener">https://github.com/langfuse</a></p>
+<p>文档地址：<a href="https://langfuse.com/docs" target="_blank" rel="noopener">https://langfuse.com/docs</a></p>
+<p>API文档：<a href="https://api.reference.langfuse.com/" target="_blank" rel="noopener">https://api.reference.langfuse.com/</a></p>
+<ol>
+<li>Python SDK:<br><a href="https://python.reference.langfuse.com/" target="_blank" rel="noopener">https://python.reference.langfuse.com/</a></li>
+<li><p>JS SDK:<br><a href="https://js.reference.langfuse.com/" target="_blank" rel="noopener">https://js.reference.langfuse.com/</a></p>
+</li>
+<li><p>通过官方云服务使用：</p>
+<ol>
+<li>注册: cloud.langfuse.com</li>
+<li>创建 API Key</li>
+</ol>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">LANGFUSE_SECRET_KEY=&quot;sk-lf-...&quot;</span><br><span class="line">LANGFUSE_PUBLIC_KEY=&quot;pk-lf-...&quot;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>通过 Docker 本地部署</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># Clone repository</span><br><span class="line">git clone https://github.com/langfuse/langfuse.git</span><br><span class="line">cd langfuse</span><br><span class="line"></span><br><span class="line"># Run server and db</span><br><span class="line">docker compose up -d</span><br><span class="line"></span><br><span class="line"># 在自己部署的系统中生成上述两个 KEY</span><br><span class="line"># 并在环境变量中指定服务地址</span><br><span class="line"></span><br><span class="line">LANGFUSE_SECRET_KEY=&quot;sk-lf-...&quot;</span><br><span class="line">LANGFUSE_PUBLIC_KEY=&quot;pk-lf-..&quot;</span><br><span class="line">LANGFUSE_HOST=&quot;http://localhost:3000&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="几个基本概念"><a href="#几个基本概念" class="headerlink" title="几个基本概念"></a>几个基本概念</h2><ol>
+<li>Trace 一般表示用户与系统的一次交互，其中记录输入、输出，也包括自定义的 metadata 比如用户名、session id 等；</li>
+<li>一个 trace 内部可以包含多个子过程，这里叫 observarions；</li>
+<li>Observation 可以是多个类型：<ol>
+<li>Event 是最基本的单元，用于记录一个 trace 中的每个事件；</li>
+<li>Span 表一个 trace 中的一个”耗时”的过程；</li>
+<li>Generation 是用于记录与 AI 模型交互的 span，例如：调用 embedding 模型、调用 LLM。</li>
+</ol>
+</li>
+<li>Observation 可以嵌套使用。</li>
+</ol>
+<h2 id="通过装饰器记录（上报）"><a href="#通过装饰器记录（上报）" class="headerlink" title="通过装饰器记录（上报）"></a>通过装饰器记录（上报）</h2><h3 id="observe-装饰器的参数"><a href="#observe-装饰器的参数" class="headerlink" title="observe() 装饰器的参数"></a>observe() 装饰器的参数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">def observe(</span><br><span class="line">    self,</span><br><span class="line">    *,</span><br><span class="line">    name: Optional[str] = None, # Trace 或 Span 的名称，默认为函数名</span><br><span class="line">    as_type: Optional[Literal[&apos;generation&apos;]] = None, # 将记录定义为 Observation (LLM 调用）</span><br><span class="line">    capture_input: bool = True, # 记录输入</span><br><span class="line">    capture_output: bool = True, # 记录输出</span><br><span class="line">    transform_to_string: Optional[Callable[[Iterable], str]] = None # 将输出转为 string</span><br><span class="line">) -&gt; Callable[[~F], ~F]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">from langfuse.decorators import observe</span><br><span class="line">from langfuse.openai import openai # OpenAI integration</span><br><span class="line"></span><br><span class="line">@observe()</span><br><span class="line">def run():</span><br><span class="line">    return openai.chat.completions.create(</span><br><span class="line">        model=&quot;gpt-3.5-turbo&quot;,</span><br><span class="line">        messages=[</span><br><span class="line">          &#123;&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;对我说Hello, World!&quot;&#125;</span><br><span class="line">        ],</span><br><span class="line">    ).choices[0].message.content</span><br><span class="line"></span><br><span class="line">print(run())</span><br></pre></td></tr></table></figure>
+<h3 id="通过-langfuse-context-记录-User-ID、Metadata-等"><a href="#通过-langfuse-context-记录-User-ID、Metadata-等" class="headerlink" title="通过 langfuse_context 记录 User ID、Metadata 等"></a>通过 langfuse_context 记录 User ID、Metadata 等</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from langfuse.decorators import observe, langfuse_context</span><br><span class="line">from langfuse.openai import openai # OpenAI integration</span><br><span class="line"></span><br><span class="line">@observe()</span><br><span class="line">def run():</span><br><span class="line">    langfuse_context.update_current_trace(</span><br><span class="line">        name=&quot;HelloWorld&quot;,</span><br><span class="line">        user_id=&quot;wzr&quot;,</span><br><span class="line">        metadata=&#123;&quot;test&quot;:&quot;test value&quot;&#125;</span><br><span class="line">    )</span><br><span class="line">    return openai.chat.completions.create(</span><br><span class="line">        model=&quot;gpt-3.5-turbo&quot;,</span><br><span class="line">        messages=[</span><br><span class="line">          &#123;&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;对我说Hello, World!&quot;&#125;</span><br><span class="line">        ],</span><br><span class="line">    ).choices[0].message.content</span><br><span class="line"></span><br><span class="line">print(run())</span><br></pre></td></tr></table></figure>
+<h3 id="通过-LangChain-的回调集成"><a href="#通过-LangChain-的回调集成" class="headerlink" title="通过 LangChain 的回调集成"></a>通过 LangChain 的回调集成</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">from langfuse.decorators import langfuse_context, observe</span><br><span class="line"></span><br><span class="line">@observe()</span><br><span class="line">def run():</span><br><span class="line">    langfuse_context.update_current_trace(</span><br><span class="line">            name=&quot;LangChainDemo&quot;,</span><br><span class="line">            user_id=&quot;wzr&quot;,</span><br><span class="line">        )</span><br><span class="line">    </span><br><span class="line">    # 获取当前 LangChain 回调处理器</span><br><span class="line">    langfuse_handler = langfuse_context.get_current_langchain_handler()</span><br><span class="line">    </span><br><span class="line">    return chain.invoke(input=&quot;AGIClass&quot;, config=&#123;&quot;callbacks&quot;: [langfuse_handler]&#125;)</span><br><span class="line"></span><br><span class="line">print(run())</span><br></pre></td></tr></table></figure>
+<h3 id="用-Trace-记录一个多次调用-LLM-的过程"><a href="#用-Trace-记录一个多次调用-LLM-的过程" class="headerlink" title="用 Trace 记录一个多次调用 LLM 的过程"></a>用 Trace 记录一个多次调用 LLM 的过程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">import uuid</span><br><span class="line">from langfuse.decorators import langfuse_context, observe</span><br><span class="line"></span><br><span class="line"># 主流程</span><br><span class="line">@observe()</span><br><span class="line">def verify_question(</span><br><span class="line">    question: str,</span><br><span class="line">    outlines: str,</span><br><span class="line">    question_list: list,</span><br><span class="line">    user_id: str,</span><br><span class="line">) -&gt; bool:</span><br><span class="line">    langfuse_context.update_current_trace(</span><br><span class="line">            name=&quot;AGIClassAssistant&quot;,</span><br><span class="line">            user_id=user_id,</span><br><span class="line">        )</span><br><span class="line">    langfuse_handler = langfuse_context.get_current_langchain_handler()</span><br><span class="line">    # 判断是否需要回答</span><br><span class="line">    if need_answer_chain.invoke(</span><br><span class="line">        &#123;&quot;user_input&quot;: question, &quot;outlines&quot;: outlines&#125;,</span><br><span class="line">        config=&#123;&quot;callbacks&quot;: [langfuse_handler]&#125;</span><br><span class="line">    ) == &apos;Y&apos;:</span><br><span class="line">        # 判断是否为重复问题</span><br><span class="line">        if is_duplicated_chain.invoke(</span><br><span class="line">            &#123;&quot;user_input&quot;: question,</span><br><span class="line">                &quot;question_list&quot;: &quot;\n&quot;.join(question_list)&#125;,</span><br><span class="line">            config=&#123;&quot;callbacks&quot;: [langfuse_handler]&#125;</span><br><span class="line">        ) == &apos;N&apos;:</span><br><span class="line">            question_list.append(question)</span><br><span class="line">            return True</span><br><span class="line">    return False</span><br></pre></td></tr></table></figure>
+<h3 id="用-Session-记录一个用户的多轮对话"><a href="#用-Session-记录一个用户的多轮对话" class="headerlink" title="用 Session 记录一个用户的多轮对话"></a>用 Session 记录一个用户的多轮对话</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@observe()</span><br><span class="line">def chat_one_turn(user_input, user_id, turn_id):</span><br><span class="line">    langfuse_context.update_current_trace(</span><br><span class="line">        name=f&quot;ChatTurn&#123;turn_id&#125;&quot;,</span><br><span class="line">        user_id=user_id,</span><br><span class="line">        session_id=&quot;chat-&quot;+now.strftime(&quot;%d/%m/%Y %H:%M:%S&quot;)</span><br><span class="line">    )</span><br><span class="line">    langfuse_handler = langfuse_context.get_current_langchain_handler()</span><br><span class="line">    messages.append(HumanMessage(content=user_input))</span><br><span class="line">    response = llm.invoke(messages, config=&#123;&quot;callbacks&quot;: [langfuse_handler]&#125;)</span><br><span class="line">    messages.append(response)</span><br><span class="line">    return response.content</span><br></pre></td></tr></table></figure>
+<h3 id="数据集与测试"><a href="#数据集与测试" class="headerlink" title="数据集与测试"></a>数据集与测试</h3><p>在线标注(在平台上进行标注)</p>
+<p>上传已有数据集</p>
+<p>定义评估函数</p>
+<p>运行测试</p>
+<p>Prompt 调优与回归测试</p>
+<h3 id="Prompt-版本管理"><a href="#Prompt-版本管理" class="headerlink" title="Prompt 版本管理"></a>Prompt 版本管理</h3><p>目前只支持 Langfuse 自己的 SDK</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># 按名称加载</span><br><span class="line">prompt = langfuse.get_prompt(&quot;need_answer_v1&quot;)</span><br><span class="line"></span><br><span class="line"># 按名称和版本号加载</span><br><span class="line">prompt = langfuse.get_prompt(&quot;need_answer_v1&quot;, version=2)</span><br><span class="line"></span><br><span class="line"># 对模板中的变量赋值</span><br><span class="line">compiled_prompt = prompt.compile(input=&quot;老师好&quot;, outlines=&quot;test&quot;)</span><br><span class="line"></span><br><span class="line">print(compiled_prompt)</span><br><span class="line"></span><br><span class="line"># 获取 config</span><br><span class="line"></span><br><span class="line">prompt = langfuse.get_prompt(&quot;need_answer_v1&quot;, version=5)</span><br><span class="line"></span><br><span class="line">print(prompt.config)</span><br></pre></td></tr></table></figure>
+<h3 id="如何比较两个句子的相似性：一些经典-NLP-的评测方法（选）"><a href="#如何比较两个句子的相似性：一些经典-NLP-的评测方法（选）" class="headerlink" title="如何比较两个句子的相似性：一些经典 NLP 的评测方法（选）"></a>如何比较两个句子的相似性：一些经典 NLP 的评测方法（选）</h3><p><span style="color: #F33232;">用途：比较llm 返回值和预期值，从而进行打分计算</span></p>
+<ol>
+<li>编辑距离：也叫莱文斯坦距离(Levenshtein),是针对二个字符串的差异程度的量化量测，量测方式是看至少需要多少次的处理才能将一个字符串变成另一个字符串。<ol>
+<li>具体计算过程是一个动态规划算法：<a href="https://zhuanlan.zhihu.com/p/164599274" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/164599274</a></li>
+<li>衡量两个句子的相似度时，可以以词为单位计算</li>
+</ol>
+</li>
+<li>BLEU Score:<ol>
+<li>计算输出与参照句之间的 n-gram 准确率（n=1…4）</li>
+<li>对短输出做惩罚</li>
+<li>在整个测试集上平均下述值</li>
+<li>函数库：<a href="https://www.nltk.org/_modules/nltk/translate/bleu_score.html" target="_blank" rel="noopener">https://www.nltk.org/_modules/nltk/translate/bleu_score.html</a></li>
+</ol>
+</li>
+<li>Rouge Score:<ol>
+<li>Rouge-N：将模型生成的结果和标准结果按 N-gram 拆分后，只计算召回率；</li>
+<li>Rouge-L: 利用了最长公共子序列（Longest Common Sequence）</li>
+<li>函数库：<a href="https://pypi.org/project/rouge-score/" target="_blank" rel="noopener">https://pypi.org/project/rouge-score/</a></li>
+<li>对比 BLEU 与 ROUGE：<ol>
+<li>BLEU 能评估流畅度，但指标偏向于较短的翻译结果（brevity penalty 没有想象中那么强）</li>
+<li>ROUGE 不管流畅度，所以只适合深度学习的生成模型：结果都是流畅的前提下，ROUGE 反应参照句中多少内容被生成的句子包含（召回）</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>METEOR: 另一个从机器翻译领域借鉴的指标。与 BLEU 相比，METEOR 考虑了更多的因素，如同义词匹配、词干匹配、词序等，因此它通常被认为是一个更全面的评价指标。<ol>
+<li>对语言学和语义词表有依赖，所以对语言依赖强。</li>
+</ol>
+</li>
+</ol>
+<p><span style="background-color: #7ABF36;">此类方法常用于对文本生成模型的自动化评估。实际使用中，我们通常更关注相对变化而不是绝对值（调优过程中指标是不是在变好）</span>。</p>
+<h3 id="基于-LLM-的测试方法"><a href="#基于-LLM-的测试方法" class="headerlink" title="基于 LLM 的测试方法"></a>基于 LLM 的测试方法</h3><p>LangFuse 集成了一些原生的基于 LLM 的自动测试标准。</p>
+<p>具体参考：<a href="https://langfuse.com/docs/scores/model-based-evals" target="_blank" rel="noopener">https://langfuse.com/docs/scores/model-based-evals</a></p>
+<p><strong>划重点：</strong>此类方法，对于用于评估的 LLM 自身能力有要求。需根据具体情况选择使用。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/llm/" rel="tag"># llm</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/llm/LangChain.html" rel="next" title="LangChain">
+                <i class="fa fa-chevron-left"></i> LangChain
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/llm/LangSmith.html" rel="prev" title="LangSmith">
+                LangSmith <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">260</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#维护一个生产级的-LLM-应用，我们需要做什么"><span class="nav-number">1.</span> <span class="nav-text">维护一个生产级的 LLM 应用，我们需要做什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#针对以上需求，目前有两个生产级-LLM-App-维护平台"><span class="nav-number">2.</span> <span class="nav-text">针对以上需求，目前有两个生产级 LLM App 维护平台</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LangFuse"><span class="nav-number">3.</span> <span class="nav-text">LangFuse</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#几个基本概念"><span class="nav-number">4.</span> <span class="nav-text">几个基本概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通过装饰器记录（上报）"><span class="nav-number">5.</span> <span class="nav-text">通过装饰器记录（上报）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#observe-装饰器的参数"><span class="nav-number">5.1.</span> <span class="nav-text">observe() 装饰器的参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过-langfuse-context-记录-User-ID、Metadata-等"><span class="nav-number">5.2.</span> <span class="nav-text">通过 langfuse_context 记录 User ID、Metadata 等</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过-LangChain-的回调集成"><span class="nav-number">5.3.</span> <span class="nav-text">通过 LangChain 的回调集成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用-Trace-记录一个多次调用-LLM-的过程"><span class="nav-number">5.4.</span> <span class="nav-text">用 Trace 记录一个多次调用 LLM 的过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用-Session-记录一个用户的多轮对话"><span class="nav-number">5.5.</span> <span class="nav-text">用 Session 记录一个用户的多轮对话</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据集与测试"><span class="nav-number">5.6.</span> <span class="nav-text">数据集与测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Prompt-版本管理"><span class="nav-number">5.7.</span> <span class="nav-text">Prompt 版本管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何比较两个句子的相似性：一些经典-NLP-的评测方法（选）"><span class="nav-number">5.8.</span> <span class="nav-text">如何比较两个句子的相似性：一些经典 NLP 的评测方法（选）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于-LLM-的测试方法"><span class="nav-number">5.9.</span> <span class="nav-text">基于 LLM 的测试方法</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

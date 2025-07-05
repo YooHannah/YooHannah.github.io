@@ -1,0 +1,723 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="llm,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="LLM 固有的局限性 🔗 LLM 的知识不是实时的 LLM 可能不知道你私有的领域/业务知识  RAG 通过给LLM 增加额外/专有知识文档，提高LLM 回答问题的准确性  搭建过程： 文档加载，并按一定条件切割成片段 将切割的文本片段灌入检索引擎 封装检索接口 构建调用流程：Query -&amp;gt; 检索 -&amp;gt; Prompt -&amp;gt; LLM -&amp;gt; 回复  关键字检索的局限性同一个">
+<meta name="keywords" content="llm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RAG">
+<meta property="og:url" content="http://yoohannah.github.io/post/llm/RAG.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="LLM 固有的局限性 🔗 LLM 的知识不是实时的 LLM 可能不知道你私有的领域/业务知识  RAG 通过给LLM 增加额外/专有知识文档，提高LLM 回答问题的准确性  搭建过程： 文档加载，并按一定条件切割成片段 将切割的文本片段灌入检索引擎 封装检索接口 构建调用流程：Query -&amp;gt; 检索 -&amp;gt; Prompt -&amp;gt; LLM -&amp;gt; 回复  关键字检索的局限性同一个">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoohannah.github.io/image/llmCourse/rag.svg">
+<meta property="og:updated_time" content="2025-07-05T06:13:07.298Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RAG">
+<meta name="twitter:description" content="LLM 固有的局限性 🔗 LLM 的知识不是实时的 LLM 可能不知道你私有的领域/业务知识  RAG 通过给LLM 增加额外/专有知识文档，提高LLM 回答问题的准确性  搭建过程： 文档加载，并按一定条件切割成片段 将切割的文本片段灌入检索引擎 封装检索接口 构建调用流程：Query -&amp;gt; 检索 -&amp;gt; Prompt -&amp;gt; LLM -&amp;gt; 回复  关键字检索的局限性同一个">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/llmCourse/rag.svg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/llm/RAG.html">
+
+
+
+
+
+  <title> RAG | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/llm/RAG.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                RAG
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-07-10T19:43:37+08:00">
+                2024-07-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="LLM-固有的局限性-🔗"><a href="#LLM-固有的局限性-🔗" class="headerlink" title="LLM 固有的局限性 🔗"></a><span style="color: black; font-weight: bold; font-size: 20px;">LLM 固有的局限性</span> <a href="https://learn.agiclass.cn/user/u15014137897/lab/tree/lecture-notes/05-rag-embeddings#2.1%E3%80%81LLM-%E5%9B%BA%E6%9C%89%E7%9A%84%E5%B1%80%E9%99%90%E6%80%A7" target="_blank" rel="noopener">🔗</a></h3><ol>
+<li><span style="font-size: 14px;">LLM 的知识不是实时的</span></li>
+<li><span style="font-size: 14px;">LLM 可能不知道你私有的领域/业务知识</span></li>
+</ol>
+<p>RAG 通过给LLM 增加额外/专有知识文档，提高LLM 回答问题的准确性</p>
+<p><img src="/image/llmCourse/rag.svg" alt="流程图"></p>
+<h3 id="搭建过程："><a href="#搭建过程：" class="headerlink" title="搭建过程："></a><span style="color: black; font-weight: bold; font-size: 20px;">搭建过程：</span></h3><ol>
+<li><span style="font-size: 14px;">文档加载，并按一定条件<strong>切割</strong>成片段</span></li>
+<li><span style="font-size: 14px;">将切割的文本片段灌入<strong>检索引擎</strong></span></li>
+<li><span style="font-size: 14px;">封装<strong>检索接口</strong></span></li>
+<li><span style="font-size: 14px;">构建<strong>调用流程</strong>：Query -&gt; 检索 -&gt; Prompt -&gt; LLM -&gt; 回复</span></li>
+</ol>
+<h3 id="关键字检索的局限性"><a href="#关键字检索的局限性" class="headerlink" title="关键字检索的局限性"></a><span style="color: black; font-weight: bold; font-size: 20px;">关键字检索的局限性</span></h3><p><span style="color: black; background-color: white; font-size: 14px;">同一个语义，用词不同，可能导致检索不到有效的结果</span></p>
+<p><span style="color: black; background-color: white; font-size: 14px;">解决办法===&gt; 向量检索</span></p>
+<h2 id="向量检索"><a href="#向量检索" class="headerlink" title="向量检索"></a><span style="color: black; font-weight: bold; font-size: 22px;">向量检索</span></h2><p><span style="color: black; background-color: white; font-size: 14px;">二维空间中的向量可以表示为(x,y) 表示从原点(0,0) 到点 (x,y) 的有向线段。</span></p>
+<p><span style="color: black; background-color: white; font-size: 14px;">以此类推，我可以用一组坐标 (x0，x1,…..xN) 表示一个𝑁 维空间中的向量，𝑁 叫向量的维度。</span></p>
+<h3 id="文本向量（Text-Embeddings）"><a href="#文本向量（Text-Embeddings）" class="headerlink" title="文本向量（Text Embeddings）"></a><span style="color: black; font-weight: bold; font-size: 20px;">文本向量（Text Embeddings）</span></h3><ol>
+<li><span style="font-size: 14px;">将文本转成一组 𝑁 维浮点数，即<strong>文本向量</strong>又叫 Embeddings</span></li>
+<li><span style="font-size: 14px;">向量之间可以计算距离，距离远近对应<strong>语义相似度</strong>大小</span></li>
+</ol>
+<h3 id="文本向量是怎么得到的-🔗"><a href="#文本向量是怎么得到的-🔗" class="headerlink" title="文本向量是怎么得到的 🔗"></a><span style="color: black; font-weight: bold; font-size: 20px;">文本向量是怎么得到的</span> <a href="https://learn.agiclass.cn/user/u15014137897/lab/tree/lecture-notes/05-rag-embeddings#4.1.2%E3%80%81%E6%96%87%E6%9C%AC%E5%90%91%E9%87%8F%E6%98%AF%E6%80%8E%E4%B9%88%E5%BE%97%E5%88%B0%E7%9A%84%EF%BC%88%E9%80%89%EF%BC%89" target="_blank" rel="noopener">🔗</a></h3><ol>
+<li><span style="font-size: 14px;">构建相关（正立）与不相关（负例）的句子对儿样本</span></li>
+<li><span style="font-size: 14px;">训练双塔式模型，让正例间的距离小，负例间的距离大</span></li>
+</ol>
+<h3 id="向量间的相似度计算"><a href="#向量间的相似度计算" class="headerlink" title="向量间的相似度计算"></a><span style="color: black; font-weight: bold; font-size: 20px;">向量间的相似度计算</span></h3><p><span style="color: black; background-color: white; font-size: 14px;">余弦距离 – 越大越相似</span></p>
+<p><span style="color: black; background-color: white; font-size: 14px;">欧氏距离 – 越小越相似</span></p>
+<p><span style="color: black; background-color: white; font-size: 14px;">向量数据库，是专门为向量检索设计的中间件</span></p>
+<p><span style="color: #1b5e20; font-weight: bold; font-size: 14px;">澄清几个关键概念：</span></p>
+<ol>
+<li><span style="font-size: 14px;">向量数据库的意义是快速的检索；</span></li>
+<li><span style="font-size: 14px;">向量数据库本身不生成向量，向量是由 Embedding 模型产生的；</span></li>
+<li><span style="font-size: 14px;">向量数据库与传统的关系型数据库是互补的，不是替代关系，在实际应用中根据实际需求经常同时使用。</span></li>
+</ol>
+<p><span style="color: #1b5e20; font-weight: bold; font-size: 14px;">划重点：</span></p>
+<ol>
+<li><span style="font-size: 14px;">不是每个 Embedding 模型都对余弦距离和欧氏距离同时有效</span></li>
+<li><span style="font-size: 14px;">哪种相似度计算有效要阅读模型的说明（通常都支持余弦距离计算）</span></li>
+</ol>
+<h3 id="优化方向"><a href="#优化方向" class="headerlink" title="优化方向"></a><span style="color: black; font-weight: bold; font-size: 20px;">优化方向</span></h3><h3 id="文本分割的粒度-🔗"><a href="#文本分割的粒度-🔗" class="headerlink" title="文本分割的粒度 🔗"></a><span style="color: black; font-weight: bold; font-size: 20px;">文本分割的粒度</span> <a href="https://learn.agiclass.cn/user/u15014137897/lab/workspaces/auto-Z/tree/lecture-notes/05-rag-embeddings/index.ipynb#5.1%E3%80%81%E6%96%87%E6%9C%AC%E5%88%86%E5%89%B2%E7%9A%84%E7%B2%92%E5%BA%A6" target="_blank" rel="noopener">🔗</a></h3><p><strong>缺陷</strong></p>
+<ol>
+<li><span style="font-size: 14px;">粒度太大可能导致检索不精准，粒度太小可能导致信息不全面</span></li>
+<li><span style="font-size: 14px;">问题的答案可能跨越两个片段</span></li>
+</ol>
+<p><span style="color: black; font-weight: bold; background-color: white; font-size: 14px;">改进</span><span style="color: black; background-color: white; font-size: 14px;">: 按一定粒度，部分重叠式的切割文本，使上下文更完整</span></p>
+<h3 id="检索后排序-🔗"><a href="#检索后排序-🔗" class="headerlink" title="检索后排序 🔗"></a><span style="color: black; font-weight: bold; font-size: 20px;">检索后排序</span> <a href="https://learn.agiclass.cn/user/u15014137897/lab/workspaces/auto-Z/tree/lecture-notes/05-rag-embeddings/index.ipynb#5.2%E3%80%81%E6%A3%80%E7%B4%A2%E5%90%8E%E6%8E%92%E5%BA%8F%EF%BC%88%E9%80%89%EF%BC%89" target="_blank" rel="noopener">🔗</a></h3><p><strong>问题</strong>: 有时，最合适的答案不一定排在检索的最前面</p>
+<p><strong>方案</strong>:</p>
+<ol>
+<li><span style="font-size: 14px;">检索时过招回一部分文本</span></li>
+<li><span style="font-size: 14px;">通过一个排序模型对 query 和 document 重新打分排序</span></li>
+</ol>
+<h3 id="混合检索（Hybrid-Search）"><a href="#混合检索（Hybrid-Search）" class="headerlink" title="混合检索（Hybrid Search）"></a><span style="color: black; font-weight: bold; font-size: 20px;">混合检索（Hybrid Search）</span></h3><p>在实际生产中，传统的关键字检索（稀疏表示）与向量检索（稠密表示）各有优劣。</p>
+<p>举个具体例子，比如文档中包含很长的专有名词，关键字检索往往更精准而向量检索容易引入概念混淆。</p>
+<p>有时候我们需要结合不同的检索算法，来达到比单一检索算法更优的效果。这就是<strong>混合检索</strong>。</p>
+<p>混合检索的核心是，综合文档 𝑑 在不同检索算法下的排序名次（rank），为其生成最终排序。</p>
+<p><span style="color: black; background-color: white; font-size: 14px;">一个最常用的算法叫 </span><span style="color: black; font-weight: bold; background-color: white; font-size: 14px;">Reciprocal Rank Fusion（RRF）</span></p>
+<h3 id="RAG-Fusion"><a href="#RAG-Fusion" class="headerlink" title="RAG-Fusion"></a><span style="color: black; font-weight: bold; font-size: 20px;">RAG-Fusion</span></h3><p><span style="color: black; background-color: white; font-size: 14px;">RAG-Fusion 就是利用了 RRF 的原理来提升检索的准确性。</span></p>
+<p><a href="https://github.com/Raudaschl/rag-fusion" target="_blank" rel="noopener">https://github.com/Raudaschl/rag-fusion</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/llm/" rel="tag"># llm</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/llm/aiCoding.html" rel="next" title="从AI编程认知AI">
+                <i class="fa fa-chevron-left"></i> 从AI编程认知AI
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/llm/AssistantsAPI.html" rel="prev" title="AssistantsAPI">
+                AssistantsAPI <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">260</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#LLM-固有的局限性-🔗"><span class="nav-number">1.</span> <span class="nav-text">LLM 固有的局限性 🔗</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#搭建过程："><span class="nav-number">2.</span> <span class="nav-text">搭建过程：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关键字检索的局限性"><span class="nav-number">3.</span> <span class="nav-text">关键字检索的局限性</span></a></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#向量检索"><span class="nav-number"></span> <span class="nav-text">向量检索</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文本向量（Text-Embeddings）"><span class="nav-number">1.</span> <span class="nav-text">文本向量（Text Embeddings）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文本向量是怎么得到的-🔗"><span class="nav-number">2.</span> <span class="nav-text">文本向量是怎么得到的 🔗</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向量间的相似度计算"><span class="nav-number">3.</span> <span class="nav-text">向量间的相似度计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优化方向"><span class="nav-number">4.</span> <span class="nav-text">优化方向</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文本分割的粒度-🔗"><span class="nav-number">5.</span> <span class="nav-text">文本分割的粒度 🔗</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#检索后排序-🔗"><span class="nav-number">6.</span> <span class="nav-text">检索后排序 🔗</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#混合检索（Hybrid-Search）"><span class="nav-number">7.</span> <span class="nav-text">混合检索（Hybrid Search）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RAG-Fusion"><span class="nav-number">8.</span> <span class="nav-text">RAG-Fusion</span></a></li></ol></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

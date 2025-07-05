@@ -1,0 +1,813 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="llm,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="Assistants APIhttps://platform.openai.com/docs/assistants/overview Assistants API 的主要能力已有能力：  创建和管理 assistant，每个 assistant 有独立的配置 支持无限长的多轮对话，对话历史保存在 OpenAI 的服务器上 通过自有向量数据库支持基于文件的 RAG 支持 Code Interpret">
+<meta name="keywords" content="llm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AssistantsAPI">
+<meta property="og:url" content="http://yoohannah.github.io/post/llm/AssistantsAPI.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="Assistants APIhttps://platform.openai.com/docs/assistants/overview Assistants API 的主要能力已有能力：  创建和管理 assistant，每个 assistant 有独立的配置 支持无限长的多轮对话，对话历史保存在 OpenAI 的服务器上 通过自有向量数据库支持基于文件的 RAG 支持 Code Interpret">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoohannah.github.io/image/llmCourse/assis1.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/llmCourse/assis2.png">
+<meta property="og:updated_time" content="2025-07-05T06:11:22.948Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AssistantsAPI">
+<meta name="twitter:description" content="Assistants APIhttps://platform.openai.com/docs/assistants/overview Assistants API 的主要能力已有能力：  创建和管理 assistant，每个 assistant 有独立的配置 支持无限长的多轮对话，对话历史保存在 OpenAI 的服务器上 通过自有向量数据库支持基于文件的 RAG 支持 Code Interpret">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/llmCourse/assis1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/llm/AssistantsAPI.html">
+
+
+
+
+
+  <title> AssistantsAPI | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/llm/AssistantsAPI.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                AssistantsAPI
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-07-13T10:43:37+08:00">
+                2024-07-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Assistants-API"><a href="#Assistants-API" class="headerlink" title="Assistants API"></a>Assistants API</h2><h3 id="https-platform-openai-com-docs-assistants-overview"><a href="#https-platform-openai-com-docs-assistants-overview" class="headerlink" title="https://platform.openai.com/docs/assistants/overview"></a><a href="https://platform.openai.com/docs/assistants/overview" target="_blank" rel="noopener">https://platform.openai.com/docs/assistants/overview</a></h3><p><img src="/image/llmCourse/assis1.png" alt></p>
+<h3 id="Assistants-API-的主要能力"><a href="#Assistants-API-的主要能力" class="headerlink" title="Assistants API 的主要能力"></a>Assistants API 的主要能力</h3><p>已有能力：</p>
+<ol>
+<li>创建和管理 assistant，每个 assistant 有独立的配置</li>
+<li>支持无限长的多轮对话，对话历史保存在 OpenAI 的服务器上</li>
+<li>通过自有向量数据库支持基于文件的 RAG</li>
+<li>支持 Code Interpreter<br>a. 在沙箱里编写并运行 Python 代码<br>b. 自我修正代码<br>c. 可传文件给 Code Interpreter</li>
+<li>支持 Function Calling</li>
+<li>支持在线调试的 Playground</li>
+</ol>
+<p>承诺未来会有的能力：</p>
+<ol>
+<li>支持 DALL·E</li>
+<li>支持图片消息</li>
+<li>支持自定义调整 RAG 的配置项</li>
+</ol>
+<p>收费：</p>
+<ol>
+<li>按 token 收费。无论多轮对话，还是 RAG，所有都按实际消耗的 token 收费</li>
+<li>如果对话历史过多超过大模型上下文窗口，会自动放弃最老的对话消息</li>
+<li>文件按数据大小和存放时长收费。1 GB <span style="font-weight:bold">向量存储</span> 一天收费 0.10 美元</li>
+<li>Code interpreter 跑一次 $0.03</li>
+</ol>
+<p><span style="color:#1b5e20">划重点：</span>使用 assistant 的意义之一，是可以隔离不同角色的 instruction 和 function 能力。<br>可以为每个应用，甚至应用中的每个有对话历史的使用场景，创建一个 assistant。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">assistant = client.beta.assistants.create(</span><br><span class="line">    name=&quot;Demo test&quot;,</span><br><span class="line">    instructions=&quot;你叫xxxx, 你负责xxxx&quot;,</span><br><span class="line">    model=&quot;gpt-4o&quot;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h3 id="管理-thread"><a href="#管理-thread" class="headerlink" title="管理 thread"></a>管理 thread</h3><p>Threads：</p>
+<ol>
+<li>Threads 里保存的是对话历史，即 messages</li>
+<li>一个 assistant 可以有多个 thread</li>
+<li>一个 thread 可以有无限条 message</li>
+<li>一个用户与 assistant 的多轮对话历史可以维护在一个 thread 里</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># 可以根据需要，自定义 `metadata`，比如创建 thread 时，把 thread 归属的用户信息存入。也可以不传</span><br><span class="line">thread = client.beta.threads.create(</span><br><span class="line">    metadata=&#123;&quot;fullname&quot;: &quot;xxx&quot;, &quot;username&quot;: &quot;hhh&quot;&#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">===&gt;&#123;</span><br><span class="line">    &quot;id&quot;: &quot;thread_ZO9PbLBA4sHJ1xrnKwhprusi&quot;,</span><br><span class="line">    &quot;created_at&quot;: 1718986823,</span><br><span class="line">    &quot;metadata&quot;: &#123;</span><br><span class="line">        &quot;fullname&quot;: &quot;xxx&quot;,</span><br><span class="line">        &quot;username&quot;: &quot;hhh&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;object&quot;: &quot;thread&quot;,</span><br><span class="line">    &quot;tool_resources&quot;: &#123;</span><br><span class="line">        &quot;code_interpreter&quot;: &#123;</span><br><span class="line">            &quot;file_ids&quot;: []</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;file_search&quot;: null</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Thread ID 如果保存下来，是可以在下次运行时继续对话的。<br>从 thread ID 获取 thread 对象的代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">thread = client.beta.threads.retrieve(thread.id)</span><br></pre></td></tr></table></figure>
+<p>此外，还有：</p>
+<ol>
+<li>threads.modify() 修改 thread 的 metadata和tool_resources</li>
+<li>threads.retrieve() 获取 thread</li>
+<li>threads.delete() 删除 thread。</li>
+</ol>
+<p>具体文档参考：<a href="https://platform.openai.com/docs/api-reference/threads" target="_blank" rel="noopener">https://platform.openai.com/docs/api-reference/threads</a></p>
+<h3 id="给-Threads-添加-Messages"><a href="#给-Threads-添加-Messages" class="headerlink" title="给 Threads 添加 Messages"></a>给 Threads 添加 Messages</h3><p>这里的 messages 结构要复杂一些：</p>
+<ol>
+<li>不仅有文本，还可以有图片和文件</li>
+<li>也有metadata</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">message = client.beta.threads.messages.create(</span><br><span class="line">    thread_id=thread.id,  # message 必须归属于一个 thread</span><br><span class="line">    role=&quot;user&quot;,          # 取值是 user 或者 assistant。但 assistant 消息会被自动加入，我们一般不需要自己构造</span><br><span class="line">    content=&quot;你都能做什么？&quot;,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">===&gt;&#123;</span><br><span class="line">    &quot;id&quot;: &quot;msg_P2lX3QL5arxOO8tg4JoAIrhb&quot;,</span><br><span class="line">    &quot;assistant_id&quot;: null,</span><br><span class="line">    &quot;attachments&quot;: [],</span><br><span class="line">    &quot;completed_at&quot;: null,</span><br><span class="line">    &quot;content&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;text&quot;: &#123;</span><br><span class="line">                &quot;annotations&quot;: [],</span><br><span class="line">                &quot;value&quot;: &quot;你都能做什么？&quot;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;type&quot;: &quot;text&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    ],</span><br><span class="line">    &quot;created_at&quot;: 1718887069,</span><br><span class="line">    &quot;incomplete_at&quot;: null,</span><br><span class="line">    &quot;incomplete_details&quot;: null,</span><br><span class="line">    &quot;metadata&quot;: &#123;&#125;,</span><br><span class="line">    &quot;object&quot;: &quot;thread.message&quot;,</span><br><span class="line">    &quot;role&quot;: &quot;user&quot;,</span><br><span class="line">    &quot;run_id&quot;: null,</span><br><span class="line">    &quot;status&quot;: null,</span><br><span class="line">    &quot;thread_id&quot;: &quot;thread_ZO9PbLBA4sHJ1xrnKwhprusi&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>还有如下函数：</p>
+<ol>
+<li>threads.messages.retrieve() 获取 message</li>
+<li>threads.messages.update() 更新 message 的 metadata</li>
+<li>threads.messages.list() 列出给定 thread 下的所有 messages</li>
+</ol>
+<p>具体文档参考：<a href="https://platform.openai.com/docs/api-reference/messages" target="_blank" rel="noopener">https://platform.openai.com/docs/api-reference/messages</a></p>
+<p>也可以在创建 thread 同时初始化一个 message 列表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">thread = client.beta.threads.create(</span><br><span class="line">    messages=[</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;role&quot;: &quot;user&quot;,</span><br><span class="line">            &quot;content&quot;: &quot;你好&quot;,</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;role&quot;: &quot;assistant&quot;,</span><br><span class="line">            &quot;content&quot;: &quot;有什么可以帮您？&quot;,</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;role&quot;: &quot;user&quot;,</span><br><span class="line">            &quot;content&quot;: &quot;你是谁？&quot;,</span><br><span class="line">        &#125;,</span><br><span class="line">    ]</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h3 id="开始-Run"><a href="#开始-Run" class="headerlink" title="开始 Run"></a>开始 Run</h3><ol>
+<li>用 run 把 assistant 和 thread 关联，进行对话</li>
+<li>一个 prompt 就是一次 run</li>
+</ol>
+<p>（执行一次run, 如果run 入参的thread 里面携带(有绑定)message 就相当于向LLM 进行一次提问）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">assistant_id = &quot;asst_ahXpE6toS71zFyq9h4iMIDj2&quot;  # 从 Playground 中拷贝</span><br><span class="line"></span><br><span class="line">run = client.beta.threads.runs.create_and_poll(</span><br><span class="line">    thread_id=thread.id,</span><br><span class="line">    assistant_id=assistant_id,</span><br><span class="line">)</span><br><span class="line">if run.status == &apos;completed&apos;:</span><br><span class="line">    messages = client.beta.threads.messages.list(</span><br><span class="line">        thread_id=thread.id</span><br><span class="line">    )</span><br><span class="line">    show_json(messages)</span><br><span class="line">else:</span><br><span class="line">    print(run.status)</span><br></pre></td></tr></table></figure>
+<p>Run 的底层是个异步调用，意味着它不等大模型处理完，就返回。我们通过 <span style="color: rgb(0, 0, 0);">run.status</span>了解大模型的工作进展情况，来判断下一步该干什么。</p>
+<p><span style="color: rgb(0, 0, 0);">run.status</span> 有的状态，和状态之间的转移关系如图。</p>
+<p><img src="/image/llmCourse/assis2.png" alt></p>
+<h3 id="流式运行"><a href="#流式运行" class="headerlink" title="流式运行"></a>流式运行</h3><ol>
+<li>创建回调函数</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">from typing_extensions import override</span><br><span class="line">from openai import AssistantEventHandler</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class EventHandler(AssistantEventHandler):</span><br><span class="line">    @override</span><br><span class="line">    def on_text_created(self, text) -&gt; None:</span><br><span class="line">        &quot;&quot;&quot;响应输出创建事件&quot;&quot;&quot;</span><br><span class="line">        print(f&quot;\nassistant &gt; &quot;, end=&quot;&quot;, flush=True)</span><br><span class="line"></span><br><span class="line">    @override</span><br><span class="line">    def on_text_delta(self, delta, snapshot):</span><br><span class="line">        &quot;&quot;&quot;响应输出生成的流片段&quot;&quot;&quot;</span><br><span class="line">        print(delta.value, end=&quot;&quot;, flush=True)</span><br></pre></td></tr></table></figure>
+<p><span style="color: rgb(0, 96, 100);">更多流中的 Event：</span> <a href="https://platform.openai.com/docs/api-reference/assistants-streaming/events" target="_blank" rel="noopener">https://platform.openai.com/docs/api-reference/assistants-streaming/events</a></p>
+<ol start="2">
+<li>运行 run</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># 添加新一轮的 user message</span><br><span class="line">message = client.beta.threads.messages.create(</span><br><span class="line">    thread_id=thread.id,</span><br><span class="line">    role=&quot;user&quot;,</span><br><span class="line">    content=&quot;你说什么？&quot;,</span><br><span class="line">)</span><br><span class="line"># 使用 stream 接口并传入 EventHandler</span><br><span class="line">with client.beta.threads.runs.stream(</span><br><span class="line">    thread_id=thread.id,</span><br><span class="line">    assistant_id=assistant_id,</span><br><span class="line">    event_handler=EventHandler(),</span><br><span class="line">) as stream:</span><br><span class="line">    stream.until_done()</span><br></pre></td></tr></table></figure>
+<p>还有如下函数：</p>
+<ol>
+<li>threads.runs.list() 列出 thread 归属的 run</li>
+<li>threads.runs.retrieve() 获取 run</li>
+<li>threads.runs.update() 修改 run 的 metadata</li>
+<li>threads.runs.cancel() 取消 <span style="color: rgb(0, 0, 0);">in_progress</span> 状态的 run</li>
+</ol>
+<p>具体文档参考：<a href="https://platform.openai.com/docs/api-reference/runs" target="_blank" rel="noopener">https://platform.openai.com/docs/api-reference/runs</a></p>
+<h2 id="使用-Tools"><a href="#使用-Tools" class="headerlink" title="使用 Tools"></a>使用 Tools</h2><h3 id="创建-Assistant-时声明-Code-Interpreter"><a href="#创建-Assistant-时声明-Code-Interpreter" class="headerlink" title="创建 Assistant 时声明 Code_Interpreter"></a>创建 Assistant 时声明 Code_Interpreter</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">如果用代码创建：</span><br><span class="line">assistant = client.beta.assistants.create(</span><br><span class="line">    name=&quot;Demo Assistant&quot;,</span><br><span class="line">    instructions=&quot;你是人工智能助手。你可以通过代码回答很多数学问题。&quot;,</span><br><span class="line">    tools=[&#123;&quot;type&quot;: &quot;code_interpreter&quot;&#125;],</span><br><span class="line">    model=&quot;gpt-4o&quot;</span><br><span class="line">)</span><br><span class="line">在回调中加入 code_interpreter 的事件响应</span><br><span class="line">class EventHandler(AssistantEventHandler):</span><br><span class="line">    @override</span><br><span class="line">    def on_text_created(self, text) -&gt; None:</span><br><span class="line">        &quot;&quot;&quot;响应输出创建事件&quot;&quot;&quot;</span><br><span class="line">        print(f&quot;\nassistant &gt; &quot;, end=&quot;&quot;, flush=True)</span><br><span class="line"></span><br><span class="line">    @override</span><br><span class="line">    def on_text_delta(self, delta, snapshot):</span><br><span class="line">        &quot;&quot;&quot;响应输出生成的流片段&quot;&quot;&quot;</span><br><span class="line">        print(delta.value, end=&quot;&quot;, flush=True)</span><br><span class="line"></span><br><span class="line">    @override</span><br><span class="line">    def on_tool_call_created(self, tool_call):</span><br><span class="line">        &quot;&quot;&quot;响应工具调用&quot;&quot;&quot;</span><br><span class="line">        print(f&quot;\nassistant &gt; &#123;tool_call.type&#125;\n&quot;, flush=True)</span><br><span class="line"></span><br><span class="line">    @override</span><br><span class="line">    def on_tool_call_delta(self, delta, snapshot):</span><br><span class="line">        &quot;&quot;&quot;响应工具调用的流片段&quot;&quot;&quot;</span><br><span class="line">        if delta.type == &apos;code_interpreter&apos;:</span><br><span class="line">            if delta.code_interpreter.input:</span><br><span class="line">                print(delta.code_interpreter.input, end=&quot;&quot;, flush=True)</span><br><span class="line">        if delta.code_interpreter.outputs:</span><br><span class="line">            print(f&quot;\n\noutput &gt;&quot;, flush=True)</span><br><span class="line">            for output in delta.code_interpreter.outputs:</span><br><span class="line">                if output.type == &quot;logs&quot;:</span><br><span class="line">                    print(f&quot;\n&#123;output.logs&#125;&quot;, flush=True)</span><br></pre></td></tr></table></figure>
+<p>发个 Code Interpreter 请求</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># 创建 thread</span><br><span class="line">thread = client.beta.threads.create()</span><br><span class="line"></span><br><span class="line"># 添加新一轮的 user message</span><br><span class="line">message = client.beta.threads.messages.create(</span><br><span class="line">    thread_id=thread.id,</span><br><span class="line">    role=&quot;user&quot;,</span><br><span class="line">    content=&quot;用代码计算 1234567 的平方根&quot;,</span><br><span class="line">)</span><br><span class="line"># 使用 stream 接口并传入 EventHandler</span><br><span class="line">with client.beta.threads.runs.stream(</span><br><span class="line">    thread_id=thread.id,</span><br><span class="line">    assistant_id=assistant_id,</span><br><span class="line">    event_handler=EventHandler(),</span><br><span class="line">) as stream:</span><br><span class="line">    stream.until_done()</span><br></pre></td></tr></table></figure>
+<h3 id="Code-Interpreter-操作文件"><a href="#Code-Interpreter-操作文件" class="headerlink" title="Code_Interpreter 操作文件"></a>Code_Interpreter 操作文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># 上传文件到 OpenAI</span><br><span class="line">file = client.files.create(</span><br><span class="line">    file=open(&quot;mydata.csv&quot;, &quot;rb&quot;),</span><br><span class="line">    purpose=&apos;assistants&apos;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># 创建 assistant</span><br><span class="line">my_assistant = client.beta.assistants.create(</span><br><span class="line">    name=&quot;CodeInterpreterWithFileDemo&quot;,</span><br><span class="line">    instructions=&quot;你是数据分析师，按要求分析数据。&quot;,</span><br><span class="line">    model=&quot;gpt-4o&quot;,</span><br><span class="line">    tools=[&#123;&quot;type&quot;: &quot;code_interpreter&quot;&#125;],</span><br><span class="line">    tool_resources=&#123;</span><br><span class="line">        &quot;code_interpreter&quot;: &#123;</span><br><span class="line">          &quot;file_ids&quot;: [file.id]  # 为 code_interpreter 关联文件</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>关于文件操作，还有如下函数：</p>
+<ol>
+<li>client.files.list() 列出所有文件</li>
+<li>client.files.retrieve() 获取文件对象</li>
+<li>client.files.delete() 删除文件</li>
+<li>client.files.content() 读取文件内容</li>
+</ol>
+<p>具体文档参考：<a href="https://platform.openai.com/docs/api-reference/files" target="_blank" rel="noopener">https://platform.openai.com/docs/api-reference/files</a></p>
+<h3 id="创建-Assistant-时声明-Function-calling"><a href="#创建-Assistant-时声明-Function-calling" class="headerlink" title="创建 Assistant 时声明 Function calling"></a>创建 Assistant 时声明 Function calling</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">assistant = client.beta.assistants.create(</span><br><span class="line">  instructions=&quot;你叫瓜瓜。你是AGI课堂的助手。你只回答跟AI大模型有关的问题。不要跟学生闲聊。每次回答问题前，你要拆解问题并输出一步一步的思考过程。&quot;,</span><br><span class="line">  model=&quot;gpt-4o&quot;,</span><br><span class="line">  tools=[&#123;</span><br><span class="line">    &quot;type&quot;: &quot;function&quot;,</span><br><span class="line">    &quot;function&quot;: &#123;</span><br><span class="line">      &quot;name&quot;: &quot;course_info&quot;,</span><br><span class="line">      &quot;description&quot;: &quot;用于查看具体课程信息，包括时间表，题目，讲师，等等。Function输入必须是一个合法的SQL表达式。&quot;,</span><br><span class="line">      &quot;parameters&quot;: &#123;</span><br><span class="line">        &quot;type&quot;: &quot;object&quot;,</span><br><span class="line">        &quot;properties&quot;: &#123;</span><br><span class="line">          &quot;query&quot;: &#123;</span><br><span class="line">            &quot;type&quot;: &quot;string&quot;,</span><br><span class="line">            &quot;description&quot;: &quot;SQL query extracting info to answer the user&apos;s question.\nSQL should be written using this database schema:\n\nCREATE TABLE Courses (\n\tid INT AUTO_INCREMENT PRIMARY KEY,\n\tcourse_date DATE NOT NULL,\n\tstart_time TIME NOT NULL,\n\tend_time TIME NOT NULL,\n\tcourse_name VARCHAR(255) NOT NULL,\n\tinstructor VARCHAR(255) NOT NULL\n);\n\nThe query should be returned in plain text, not in JSON.\nThe query should only contain grammars supported by SQLite.&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;required&quot;: [</span><br><span class="line">          &quot;query&quot;</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;]</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h3 id="两个无依赖的-function-会在一次请求中一起被调用"><a href="#两个无依赖的-function-会在一次请求中一起被调用" class="headerlink" title="两个无依赖的 function 会在一次请求中一起被调用"></a>两个无依赖的 function 会在一次请求中一起被调用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># 创建 thread</span><br><span class="line">thread = client.beta.threads.create()</span><br><span class="line"></span><br><span class="line"># 添加 user message</span><br><span class="line">message = client.beta.threads.messages.create(</span><br><span class="line">    thread_id=thread.id,</span><br><span class="line">    role=&quot;user&quot;,</span><br><span class="line">    content=&quot;Q1，Q2&quot;, ===&gt; 两个问题对应两个函数，一起被调用</span><br><span class="line">)</span><br><span class="line"># 使用 stream 接口并传入 EventHandler</span><br><span class="line">with client.beta.threads.runs.stream(</span><br><span class="line">    thread_id=thread.id,</span><br><span class="line">    assistant_id=assistant.id,</span><br><span class="line">    event_handler=EventHandler(),</span><br><span class="line">) as stream:</span><br><span class="line">    stream.until_done()</span><br></pre></td></tr></table></figure>
+<h2 id="创建-Assistant-时声明file-search"><a href="#创建-Assistant-时声明file-search" class="headerlink" title="创建 Assistant 时声明file_search"></a>创建 Assistant 时声明file_search</h2><p>tool.type 为file_search时相当于<strong>内置的 RAG 功能</strong></p>
+<h3 id="创建-Vector-Store，上传文件"><a href="#创建-Vector-Store，上传文件" class="headerlink" title="创建 Vector Store，上传文件"></a>创建 Vector Store，上传文件</h3><ol>
+<li>通过代码创建 Vector Store</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">vector_store = client.beta.vector_stores.create(</span><br><span class="line">  name=&quot;MyVectorStore&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">通过代码上传文件到 OpenAI 的存储空间</span><br><span class="line">file = client.files.create(</span><br><span class="line">  file=open(&quot;agiclass_intro.pdf&quot;, &quot;rb&quot;),</span><br><span class="line">  purpose=&quot;assistants&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">通过代码将文件添加到 Vector Store</span><br><span class="line">vector_store_file = client.beta.vector_stores.files.create(</span><br><span class="line">  vector_store_id=vector_store.id,</span><br><span class="line">  file_id=file.id</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">批量上传文件到 Vector Store</span><br><span class="line">files = [&apos;file1.pdf&apos;,&apos;file2.pdf&apos;]</span><br><span class="line"></span><br><span class="line">file_batch = client.beta.vector_stores.file_batches.upload_and_poll(</span><br><span class="line">    vector_store_id=vector_store.id,</span><br><span class="line">    files=[open(filename, &quot;rb&quot;) for filename in files]</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>Vector store 和 vector store file 也有对应的 list,retrieve 和 delete等操作。</p>
+<p>具体文档参考：</p>
+<ol>
+<li>Vector store: <a href="https://platform.openai.com/docs/api-reference/vector-stores" target="_blank" rel="noopener">https://platform.openai.com/docs/api-reference/vector-stores</a></li>
+<li>Vector store file: <a href="https://platform.openai.com/docs/api-reference/vector-stores-files" target="_blank" rel="noopener">https://platform.openai.com/docs/api-reference/vector-stores-files</a></li>
+<li>Vector store file 批量操作: <a href="https://platform.openai.com/docs/api-reference/vector-stores-file-batches" target="_blank" rel="noopener">https://platform.openai.com/docs/api-reference/vector-stores-file-batches</a></li>
+</ol>
+<h3 id="创建-Assistant-时声明-RAG-能力"><a href="#创建-Assistant-时声明-RAG-能力" class="headerlink" title="创建 Assistant 时声明 RAG 能力"></a>创建 Assistant 时声明 RAG 能力</h3><p>RAG 实际被当作一种 tool</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">assistant = client.beta.assistants.create(</span><br><span class="line">  instructions=&quot;你是个问答机器人，你根据给定的知识回答用户问题。&quot;,</span><br><span class="line">  model=&quot;gpt-4o&quot;,</span><br><span class="line">  tools=[&#123;&quot;type&quot;: &quot;file_search&quot;&#125;],</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>指定检索源</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">assistant = client.beta.assistants.update(</span><br><span class="line">  assistant_id=assistant.id,</span><br><span class="line">  tool_resources=&#123;&quot;file_search&quot;: &#123;&quot;vector_store_ids&quot;: [vector_store.id]&#125;&#125;,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>RAG 请求</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># 创建 thread</span><br><span class="line">thread = client.beta.threads.create()</span><br><span class="line"></span><br><span class="line"># 添加 user message</span><br><span class="line">message = client.beta.threads.messages.create(</span><br><span class="line">    thread_id=thread.id,</span><br><span class="line">    role=&quot;user&quot;,</span><br><span class="line">    content=&quot;AI⼤模型全栈⼯程师适合哪些人&quot;,</span><br><span class="line">)</span><br><span class="line"># 使用 stream 接口并传入 EventHandler</span><br><span class="line">with client.beta.threads.runs.stream(</span><br><span class="line">    thread_id=thread.id,</span><br><span class="line">    assistant_id=assistant_id,</span><br><span class="line">    event_handler=EventHandler(),</span><br><span class="line">) as stream:</span><br><span class="line">    stream.until_done()</span><br></pre></td></tr></table></figure>
+<h2 id="多个-Assistants-协作"><a href="#多个-Assistants-协作" class="headerlink" title="多个 Assistants 协作"></a>多个 Assistants 协作</h2><p><strong>划重点：</strong> 使用 assistant 的意义之一，是可以隔离不同角色的 instruction 和 function 能力。</p>
+<p>6顶思维帽实验</p>
+<h2 id="技术选型参考"><a href="#技术选型参考" class="headerlink" title="技术选型参考"></a>技术选型参考</h2><p><strong>GPTs 现状：</strong></p>
+<ol>
+<li>界面不可定制，不能集成进自己的产品</li>
+<li>只有 ChatGPT Plus/Team/Enterprise 用户才能访问</li>
+<li>未来开发者可以根据使用量获得报酬，北美先开始</li>
+<li>承诺会推出 Team/Enterprise 版的组织内部专属 GPTs</li>
+</ol>
+<p><strong>适合使用 Assistants API 的场景：</strong></p>
+<ol>
+<li>定制界面，或和自己的产品集成</li>
+<li>需要传大量文件</li>
+<li>服务国外用户，或国内 B 端客户</li>
+<li>数据保密性要求不高</li>
+<li>不差钱</li>
+</ol>
+<p><strong>适合使用原生 API 的场景：</strong></p>
+<ol>
+<li>需要极致调优</li>
+<li>追求性价比</li>
+<li>服务国外用户，或国内 B 端客户</li>
+<li>数据保密性要求不高</li>
+</ol>
+<p><strong>适合使用国产或开源大模型的场景：</strong></p>
+<ol>
+<li>服务国内用户</li>
+<li>数据保密性要求高</li>
+<li>压缩长期成本</li>
+<li>需要极致调优</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/llm/" rel="tag"># llm</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/llm/RAG.html" rel="next" title="RAG">
+                <i class="fa fa-chevron-left"></i> RAG
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/llm/LlamaIndex.html" rel="prev" title="llamaindex">
+                llamaindex <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">260</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Assistants-API"><span class="nav-number">1.</span> <span class="nav-text">Assistants API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#https-platform-openai-com-docs-assistants-overview"><span class="nav-number">1.1.</span> <span class="nav-text">https://platform.openai.com/docs/assistants/overview</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Assistants-API-的主要能力"><span class="nav-number">1.2.</span> <span class="nav-text">Assistants API 的主要能力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管理-thread"><span class="nav-number">1.3.</span> <span class="nav-text">管理 thread</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#给-Threads-添加-Messages"><span class="nav-number">1.4.</span> <span class="nav-text">给 Threads 添加 Messages</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开始-Run"><span class="nav-number">1.5.</span> <span class="nav-text">开始 Run</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#流式运行"><span class="nav-number">1.6.</span> <span class="nav-text">流式运行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-Tools"><span class="nav-number">2.</span> <span class="nav-text">使用 Tools</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建-Assistant-时声明-Code-Interpreter"><span class="nav-number">2.1.</span> <span class="nav-text">创建 Assistant 时声明 Code_Interpreter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Code-Interpreter-操作文件"><span class="nav-number">2.2.</span> <span class="nav-text">Code_Interpreter 操作文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建-Assistant-时声明-Function-calling"><span class="nav-number">2.3.</span> <span class="nav-text">创建 Assistant 时声明 Function calling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#两个无依赖的-function-会在一次请求中一起被调用"><span class="nav-number">2.4.</span> <span class="nav-text">两个无依赖的 function 会在一次请求中一起被调用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建-Assistant-时声明file-search"><span class="nav-number">3.</span> <span class="nav-text">创建 Assistant 时声明file_search</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建-Vector-Store，上传文件"><span class="nav-number">3.1.</span> <span class="nav-text">创建 Vector Store，上传文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建-Assistant-时声明-RAG-能力"><span class="nav-number">3.2.</span> <span class="nav-text">创建 Assistant 时声明 RAG 能力</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多个-Assistants-协作"><span class="nav-number">4.</span> <span class="nav-text">多个 Assistants 协作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#技术选型参考"><span class="nav-number">5.</span> <span class="nav-text">技术选型参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

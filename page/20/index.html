@@ -259,7 +259,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/sync.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/hash.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -284,8 +284,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/nodejs/sync.html" itemprop="url">
-                  同步/异步和使用
+                <a class="post-title-link" href="/post/algorithm/hash.html" itemprop="url">
+                  散列表(哈希表)
                 </a>
               
             
@@ -299,8 +299,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-11T09:31:15+08:00">
-                2017-03-11
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-09T18:21:37+08:00">
+                2017-04-09
               </time>
             
 
@@ -337,11 +337,10 @@
       
         
           
-            <h1 id="同步-异步"><a href="#同步-异步" class="headerlink" title="同步/异步"></a>同步/异步</h1><p>同步读取一个文件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//readfile.js</span></span><br><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line"><span class="keyword">var</span> data = fs.readFileSync(<span class="string">'file.txt'</span>,<span class="string">'utf-8'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(data);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'end.'</span>);</span><br><span class="line"><span class="comment">//执行</span></span><br><span class="line">$node readfile.js</span><br><span class="line">contents <span class="keyword">of</span> the file.</span><br><span class="line">end.</span><br></pre></td></tr></table></figure></p>
-<p>异步读取一个文件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//readfile.js</span></span><br><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line">fs.readFile(<span class="string">'file.txt'</span>,<span class="string">'utf-8'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">err,data</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (err) &#123;</span><br><span class="line">	  <span class="built_in">console</span>.log(err);</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">	  <span class="built_in">console</span>.log(data);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'end.'</span>);</span><br><span class="line"><span class="comment">//执行</span></span><br><span class="line">$node readfile.js</span><br><span class="line">end.</span><br><span class="line">contents <span class="keyword">of</span> the file.</span><br></pre></td></tr></table></figure></p>
-<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="node的REPL模式"><a href="#node的REPL模式" class="headerlink" title="node的REPL模式"></a>node的REPL模式</h2><p>即输入代码回车立即执行的模式<br>在command prompt中直接输入node进入该模式，连续两次Ctrl+C可退出</p>
-<h2 id="监视代码改动"><a href="#监视代码改动" class="headerlink" title="监视代码改动"></a>监视代码改动</h2><p>npm install -g supervisor //安装supervisor<br>supervisor app.js //代替node app.js，修改代码后自动终止进程并重启</p>
-<h2 id="包"><a href="#包" class="headerlink" title="包"></a>包</h2><p>把文件夹封装为一个模块，即所谓的包，包通常是一些模块的集合，在模块的基础上提供了更高层的抽象，相当于一些固定接口的函数库<br>包安装：作为工程运行，通过本地安装;如果要在命令行下使用,则使用全局模式安装</p>
+            <p>记录的存储位置 = f(关键字)<br>散列技术是在存储位置和它的关键字之间建立一个确定的对应关系f,使得每个关键字key对应一个存储位置f(key)<br>对应关系函数f称为散列函数(哈希函数)<br>采用三列技术将记录存储在一块连续的存储空间中，这块连续存储空间称为散列表(哈希表)</p>
+<h1 id="查找步骤"><a href="#查找步骤" class="headerlink" title="查找步骤"></a>查找步骤</h1><p>当存储记录时，通过散列函数计算出记录的散列地址<br>当查找记录时，通过散列函数计算记录的散列地址，并按此散列地址访问该记录<br>各记录之间没有任何关系<br>散列表适合1对1查找，不适合查找范围，也不适合关键字对应多个结果的查找<br>散列函数通过不同的关键字，计算出了相同地址，称之为冲突</p>
+<h1 id="构建散列函数"><a href="#构建散列函数" class="headerlink" title="构建散列函数"></a>构建散列函数</h1><p>散列函数原则=计算简单+分布均匀(散列地址)<br>直接定址法<br>取关键字的某个线性函数值为散列地址：f(key)=a*key+b<br>适合查找表小，key比较连续的情况，不常用<br>数字分析法<br>适合处理关键字位数比较大的情况<br>抽取关键字的某几位作为散列地址<br>平方取中法<br>平方取中法是将关键字平方之后取中间若干位数字作为散列地址<br>适合不知道关键字的分布，关键字位数不是很大的情况<br>折叠法<br>将关键字从左到右分割成位数相等的几部分，然后将这几部分叠加求和，并按散列表表长取后几位作为散列地址<br>除留余数法<br>f(key) = key mod p(p &lt;= m)<br>m为表长<br>这个方法不仅可以对关键字直接取模，也可以通过折叠、平方取中后再取模<br>p的取值是关键，最好接近m的最小质数<br>随机数法<br>选择一个随机数，取关键字的随机函数值为它的散列地址<br>f(key) = random(key)<br>random为随机函数，适合关键字长度不等的情况<br>选取方法时要考虑的因素：<br>计算散列地址所需时间<br>关键字长度<br>散列表大小<br>关键字分布情况<br>记录查找频率</p>
+<h1 id="处理散列冲突的方法"><a href="#处理散列冲突的方法" class="headerlink" title="处理散列冲突的方法"></a>处理散列冲突的方法</h1><p>开放定址法<br>一旦发生了冲突，就去寻找下一个空的散列地址，只要散列表足够大，空的散列地址总能找到，并将记录存入<br>1.线性探测法<br>fi(key) = (f(key)+di) mod m<br>其中di = 1,2,…,m-1<br>意思是，散列函数计算的地址已经被其他记录占据，就将散列函数计算的地址每次次加1到m-1的一个数,<br>再mod表长，将每次计算的结果当做新地址去探测有没有记录，如果没有就将该地址做为记录的地址<br>2.二次探测法<br>修改一次探测法di的取值<br>另di = 1^2,-1^2,2^2,-2^2,q^2,-q^2,其中q&lt;=m/2<br>3.随机探测法<br>对di采用随机函数计算得到<br>再散列函数法<br>fi(key) = RHi(key)(i=1,2,3,…k)<br>就是用第一个散列函数计算的地址发生冲突就换第二个散列函数，如果第二个也发生冲突，则换第三个，以此类推<br>链地址法<br>地址处不存放单一记录，而是存放记录的链表，记录1指向记录2，计算得到地址相同，就继续指下去<br>公共溢出区法<br>不发生冲突的关键字放在基本表，将发生冲突的记录依次存放在溢出表，<br>查找时基本表找不到时就去查溢出表，溢出表找不到再宣告失败</p>
 
           
         
@@ -380,7 +379,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/jssummary.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/multliwaysearchtree.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -405,8 +404,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/nodejs/jssummary.html" itemprop="url">
-                  js理解
+                <a class="post-title-link" href="/post/algorithm/multliwaysearchtree.html" itemprop="url">
+                  多路查找树
                 </a>
               
             
@@ -420,8 +419,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-11T08:23:09+08:00">
-                2017-03-11
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-08T20:59:37+08:00">
+                2017-04-08
               </time>
             
 
@@ -458,18 +457,10 @@
       
         
           
-            <h1 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h1><p>不通过花括号来界定，通过函数来定义，<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">	<span class="keyword">var</span> somevar = <span class="string">"value"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(somevar);<span class="comment">//value</span></span><br></pre></td></tr></table></figure></p>
-<p>在访问未定义的变量或定义了但没有初始化的变量时都会获得undefined<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> scope = <span class="string">"1111"</span>;</span><br><span class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(scope); <span class="comment">//undefined</span></span><br><span class="line">	<span class="keyword">var</span> scope = <span class="string">'f'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>作用域的嵌套关系在定义时确定，不在调用时确定<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> scope = <span class="string">"top"</span>;</span><br><span class="line"><span class="keyword">var</span> f1 = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(scope);</span><br><span class="line">&#125;;</span><br><span class="line">f1();<span class="comment">//top</span></span><br><span class="line"><span class="keyword">var</span> f2 = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> scope = <span class="string">'f2'</span>;</span><br><span class="line">	f1();</span><br><span class="line">&#125;;</span><br><span class="line">f2(); <span class="comment">//top</span></span><br></pre></td></tr></table></figure></p>
-<p>全局作用域是个对象，这个对象叫全局对象，nodejs是global对象，浏览器是window对象，包括<br>在最外层定义的变量<br>全局对象的属性<br>未用var定义直接赋值的变量</p>
-<h1 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h1><p>由函数(环境)及其封闭的自由变量组成的集合体，<br>可以想象成一个容器，里面包括一个函数和它用到的变量，每当想使用一次这个容器里的函数，就将这个容器复制一次给调用者：<br>1.不通调用者得到的容器相互隔离，没有关系，<br>2.被复制到调用者的函数，会自己形成一个独立的运行环境，每次调用完会根据变量性质，更新变量值,不会释放变量<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> generateClosuer = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> count = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">var</span> <span class="keyword">get</span> = function()&#123;</span><br><span class="line">    count++;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">get</span>;</span><br><span class="line">&#125;</span><br><span class="line">var counter1 = generateClosuer();</span><br><span class="line">var counter2 = generateClosuer();</span><br><span class="line">console.log(counter1()); //1</span><br><span class="line">console.log(counter1()); //2</span><br><span class="line">console.log(counter2()); //1</span><br><span class="line">console.log(counter1()); //3</span><br></pre></td></tr></table></figure></p>
-<h1 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h1><p>上下文对象即this指针，即被调用函数所处的环境，<br>上下文对象的作用是在一个函数内部引用调用它的对象本身。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">User</span>(<span class="params">name,url</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.name = name;</span><br><span class="line">	<span class="keyword">this</span>.url = url;</span><br><span class="line">	<span class="keyword">this</span>.diaplay = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> someuser = <span class="keyword">new</span> User(<span class="string">'byvoid'</span>,<span class="string">'http://www.byvoid.com'</span>);</span><br></pre></td></tr></table></figure></p>
-<p>创建someuser对象时，构造函数的this指调用它的someuser<br>函数类型的变量指向这个函数实体的一个引用，在引用之间赋值不会对对象产生复制行为。<br>我们可以通过函数的任何一个引用调用这个函数，但该函数的上下文即this不同<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> someuser = &#123;</span><br><span class="line">	name:<span class="string">'byvoid'</span>,</span><br><span class="line">	func: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> foo = &#123;</span><br><span class="line">	name:<span class="string">'foobar'</span></span><br><span class="line">&#125;;</span><br><span class="line">someuser.func();<span class="comment">//byvoid</span></span><br><span class="line">foo.func = someuser.func; <span class="comment">//引用someuser.func这个函数实体，其实就是someuser.func的代码内容</span></span><br><span class="line">foo.func();<span class="comment">//foobar this是foo</span></span><br><span class="line"></span><br><span class="line">name = <span class="string">'global'</span>;</span><br><span class="line">func = someuser.func;</span><br><span class="line">func();<span class="comment">//global</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="call-apply"><a href="#call-apply" class="headerlink" title="call/apply"></a>call/apply</h2><p>让其他对象调用本对象的方法<br>A对象名.函数属性名.call(B对象名,函数参数表(逗号隔开)); //B调用A的方法<br>A对象名.函数属性名.apply(B对象名,函数参数数组);//B调用A的方法</p>
-<h2 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h2><p>永久绑定函数的上下文，使其无论被谁调用，上下文都是固定的<br>A对象名.函数属性名.bind(B对象名,函数参数表(逗号隔开));<br>bind方法返回上下文为B对象的A对象的函数<br>如果在使用bind时，绑定了参数表，则在调用返回函数时，只需要传入未绑定的参数即可<br>注意不能重复绑定<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> someuser = &#123;</span><br><span class="line">	name:<span class="string">'byvoid'</span>,</span><br><span class="line">	func:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line"> &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> foo = &#123;</span><br><span class="line">	name:<span class="string">'foobar'</span></span><br><span class="line">&#125;;</span><br><span class="line">func = someuser.func.bind(foo);</span><br><span class="line">func();<span class="comment">//foobar</span></span><br><span class="line"></span><br><span class="line">func2 = func.bind(someuser);</span><br><span class="line">func2();<span class="comment">//foobar;</span></span><br></pre></td></tr></table></figure></p>
-<h2 id="原型"><a href="#原型" class="headerlink" title="原型"></a>原型</h2><p>构造函数创建属性<br>除非必须用构造函数闭包，否则尽量用原型定义成员函数<br>原型定义的成员是多个实例共享的，因此尽量在构造函数内定义一般成员尤其是对象或数组<br>原型链<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">function Foo()&#123;</span><br><span class="line">&#125;</span><br><span class="line">object.prototype.name = &apos;my object&apos;;</span><br><span class="line">Foo.prototype.name = &apos;Bar&apos;;</span><br><span class="line">var obj = new object();</span><br><span class="line">var foo = new Foo();</span><br><span class="line">console.log(obj.name);//my object</span><br><span class="line">console.log(foo.name);//Bar</span><br><span class="line">console.log(foo.__proto__.name);//Bar</span><br><span class="line">console.log(foo.__proto__.__proto__.name);//my object</span><br><span class="line">console.log(foo.__proto__.constructor.prototype.name);//Bar</span><br></pre></td></tr></table></figure></p>
-<p><img src="/image/typeof.png" alt="typeof"></p>
-<p>【广发证券nodejs应用](<a href="http://slides.com/loskael/node#/" target="_blank" rel="noopener">http://slides.com/loskael/node#/</a>)</p>
+            <p>特点：<br>每个结点的孩子可以多于两个，且每一个结点处可以存储多个元素<br>所有元素之间存在某种特定的排序关系<br>2-3树：每一个结点都具有两个或者三个孩子的多路查找树，所有叶子结点都在同一层次上<br>2结点：拥有两个孩子和一个元素，左子树包含元素小于结点元素，右子树则大于，要么有两个孩子，要么一个孩子也没有<br>3结点：拥有三个孩子两个元素，孩子和结点元素呈一定顺序，要么有三个孩子，要么一个孩子也没有<br>2-3-4树：每一个结点都具有两个或者三个孩子或四个孩子的多路查找树，所有叶子结点都在同一层次上<br>4结点：拥有四个个孩子三个元素，孩子和结点元素呈一定顺序，要么有四个孩子，要么一个孩子也没有</p>
+<h1 id="2-3树插入原理"><a href="#2-3树插入原理" class="headerlink" title="2-3树插入原理"></a>2-3树插入原理</h1><p>1.如果是一个空树，直接插入形成一个2结点，即根结点<br>2.插入到一个结构为2结点的叶子上，直接将该2结点转为3结点<br>3.插入到一个结构为3结点的叶子结点，而该叶子结点双亲为2结点，则将该双亲2结点扩展为3结点，将元素插进去<br>4.插入到一个结构为3结点的叶子结点，而其双亲也为3结点，则继续往上找其双亲的双亲是否为2结点，若是，则将该2结点扩展为3结点，将双亲的一个元素挪上去，将3结点的元素挪到双亲，然后插入元素<br>5.插入到一个结构为3结点的叶子结点，往上追溯到根结点也为3结点，则说明该子树已满，需要增加树的高度，即将树每个结点拆都分成2结点，从而保证，所有叶结点在统一层次</p>
+<h1 id="2-3树删除原理"><a href="#2-3树删除原理" class="headerlink" title="2-3树删除原理"></a>2-3树删除原理</h1><p>1.删除的元素位于结构为3结点的叶子上，直接删掉就好，3结点变2结点<br>2.删除元素位于结构为2结点的叶子上，<br>若双亲也为2结点结构，且双亲另一个孩子为3结点，则将元素删除后，左旋或右旋，将原来双亲移下来做孩子，将原来3结点一个元素移上去做双亲，另一个不动继续做孩子<br>若双亲为2结点结构，且双亲另一个孩子也为2结点,假设删除的是左子树的元素，则寻找双亲的双亲的直接后继元素来填充双亲的双亲的元素位置，将双亲的双亲的元素做双亲元素的孩子，将双亲元素移下来做孩子，将双亲原来的孩子移上去做双亲<br>若双亲是一个3结点结构，则将双亲一个元素移下来，3结点变2结点<br>若删除时，整颗树是一个满2叉树状态，则将树的深度变小，2结点变3结点<br>3.删除元素位于结构为2结点的双亲位置，若其右孩子为3结点则将其直接后继结点顶上去，3结点孩子变2结点<br>4.删除元素位于结构为3结点的双亲位置，若其直接前驱位于3结点结构，则将前驱顶上去，3结点变2结点<br>若其直接前驱位于2结点结构，则将前驱与直接后继合并为3结点，双亲变2结点</p>
+<h1 id="B树"><a href="#B树" class="headerlink" title="B树"></a>B树</h1><p>一种平衡的多路查找树，2-3树和2-3-4树都是B树的特例<br>把结点最大的孩子树数目称为B树的阶，因此2-3树是3阶B树，2-3-4树是4阶B树<br>一个m阶的B树有如下属性<br>如果根结点不是叶结点，则其至少有两颗子树<br>每一个非根的分支节点都有K-1个元素和K个孩子，其中K满足：m/2向上取整 &lt;= K &lt;= m<br>所有叶子结点都位于同一层次<br>每个分支结点包含元素个数，该结点各元素及其孩子的信息</p>
 
           
         
@@ -508,7 +499,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/MapTraversal.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/balancesortbtree.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -533,8 +524,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/algorithm/MapTraversal.html" itemprop="url">
-                  深度广度优先遍历+马踏棋盘算法
+                <a class="post-title-link" href="/post/algorithm/balancesortbtree.html" itemprop="url">
+                  平衡二叉排序树
                 </a>
               
             
@@ -548,8 +539,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-07T21:06:37+08:00">
-                2017-03-07
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-08T14:51:37+08:00">
+                2017-04-08
               </time>
             
 
@@ -586,13 +577,9 @@
       
         
           
-            <h1 id="深度优先遍历-深度优化搜索DFS"><a href="#深度优先遍历-深度优化搜索DFS" class="headerlink" title="深度优先遍历/深度优化搜索DFS"></a>深度优先遍历/深度优化搜索DFS</h1><p><img src="/image/Traversal1.png" alt="Traversal1"><br>右手原则：在没有碰到重复顶点的1情况下，分叉路口始终是向右手边走，没路过一个顶点就做一个记号</p>
-<p>主要思路是右手原则，把自己想象成从一个顶点出发的小人,每次选择下一步要走的路径时，就选择右手方向的路径，并给自己即将离开的顶点做一个已经遍历过的标记，直到碰到右手选择的路径将要到达的顶点是已经遍历过的顶点，这时则判断从右手方向开始的路径的终点顶点是否已遍历，若没有遍历，则选择该路径继续往下，若碰到所有路径终点顶点都是已经遍历过的，则沿到达该顶点的路径返回上一个顶点，检查上一顶点的其他路径顶点是否已经遍历，未遍历的话，则沿该路径走下去，即碰到所有路径顶点都遍历过则返回上一顶点，以此类推，直到返回起点顶点</p>
-<p>整个图的遍历过程算法上是一个递归的过程，遍历方式上类似于树的前序遍历<br><img src="/image/Traversal2.png" alt="Traversal2"><br>看蓝色的路径即顶点遍历过程<br>A-&gt;B-&gt;C-&gt;D-&gt;E-&gt;F-&gt;G-&gt;H (往回走，看红色路径顶点都已遍历过)-&gt;G-&gt;F-&gt;E-&gt;D-&gt;I-&gt;D-&gt;C-&gt;B-&gt;A</p>
-<p>编程思路：<br>遍历图的邻接矩阵，邻接矩阵建立时注意选择是使用右手原则还是左手原则，从起点开始遍历该顶点所在行，便利到非0值且对应的列顶点未访问过就开始遍历该列顶点对应顶点所在的行，同样遍历非0未遍历过的顶点，如果该行所有顶点都遍历过则返回上一顶点继续重复遍历找未遍历的顶点，直到返回起点位置<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/MapDeepTraversal.js" target="_blank" rel="noopener">代码链接</a></p>
-<h1 id="马踏棋盘问题"><a href="#马踏棋盘问题" class="headerlink" title="马踏棋盘问题"></a>马踏棋盘问题</h1><p>国际象棋的棋盘为8*8的方格棋盘，现将“马”放在任意指定的方格中，按照“马”走棋的规则将“马”进行移动<br>要求每个方格只能进入一次，最终使得“马”走遍棋盘64个方格</p>
-<p>一个位置最多有八种选择，如下<br><img src="/image/chess.png" alt="chess"><br><a href="https://github.com/YooHannah/algorithm/blob/master/C/checkerboard.c" target="_blank" rel="noopener">代码链接</a></p>
-<h1 id="图的广度优先遍历"><a href="#图的广度优先遍历" class="headerlink" title="图的广度优先遍历"></a>图的广度优先遍历</h1><p>主要思路：树的层序遍历<br>结构：队列<br>原则：右手原则<br>将复杂的图调整结构为层的形状，从最上一层结点唯一结点出发，入队列<br>遍历第二层，从与上一层结点相连的右手边的结点开始遍历，先将上一层相连的结点出队列，然后第二层结点入队列<br>以此类推，即在本层遍历时，先将与将要遍历的结点的上层结点出队列，然后将本层结点入队列，<br>遍历完一个上层结点的本层连接点，先将上层下一个结点出队列，在将上层下一个节点的本层链接点入队列<br>出队列顺序即遍历顺序<br><img src="/image/tug1.png" alt="tug1"><br>选定一个起点结点(A)，依次遍历与该结点相连结点(B、F)，每个结点遍历完后添加遍历标记，<br>再依次遍历刚刚遍历过的结点(先B后F)的相连结点(CIG、E),同样遍历完要加标记<br>以此类推，再遍历C的连接点D，G的连接点H<br><img src="/image/BreadthMaptraversal2.png" alt="BreadthMaptraversal2"><br>编程思路：<br>将每次遍历的结点入队列，每遍历完一层，出一次队列，出队列顺序即遍历顺序<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/BreadthMaptraversal.js" target="_blank" rel="noopener">代码链接</a></p>
+            <h1 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h1><p>首先得是一颗二叉排序树<br>左子树与右子树都是平衡二叉树<br>每个结点左子树与右子树的深度差的绝对值不能大于1<br>结点左子树深度减右子树深度的差叫做平衡因子BF，即|BF|&lt;=1，BF=-1/1/0<br>平衡二叉树就是一颗二叉树上所有结点的平衡因子的绝对值小于等于1 的树</p>
+<h1 id="关键操作"><a href="#关键操作" class="headerlink" title="关键操作"></a>关键操作</h1><p>左子树bf大于右子树bf，右旋<br>左子树bf小于右子树bf，左旋<br>左旋的子树的右子树若存在左子树，将该左子树做左旋子树根结点的右子树，左旋子树根结点做其右子树的左子树<br>右旋的子树的左子树若存在右子树，将该右子树做右旋子树根结点的左结点，右旋子树根结点做其左子树的右子树</p>
+<h1 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h1><p>现用以下数据构建平衡二叉树<br>3,2,1,4,5,6,7,10,9,8<br><img src="/image/balancebtree.png" alt="balance"><br>按照大于父节点做右子树小于父结点做左子树原则,将3,2,1构建树，当1进入树之后3的左子树深度2减右子树深度0大于1，以2为中心进行右旋，如图1<br>继续添加4和5，当5进入树之后，3的左右子树深度差为-2，断开2,3链接，将3,4,5,以4为中心左旋，再与2相连，如图2<br>继续添加6，当6进入树之后,这时2的bf为-2，以2的右子树根结点为中心左旋，此时1,2和3均为4的左子树，则将4的原左子树做新左子树的右子树，如图3<br>添加7,当7进入树之后,5的bf为-2，断开4,5链接，以6为中心左旋，再与4相连，如图4<br>添加10、9,当9进入树之后,6的bf为-2,断开6、7，因为10有左结点，先将9、10关系转换，让10做9孩子结点，然后以9为中心左旋，再与6相连,如图5<br>添加8,4、6的bf又变为-2,断开4、6,9的bf为1，因为将来要对6左旋，所以先将9右旋，使9的bf变成0或负值，再对6以7为中心左旋，如图6<br>最终结果如图7<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/balancebtree.js" target="_blank" rel="noopener">代码链接</a></p>
 
           
         
@@ -631,7 +618,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/es6.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/sortbtree.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -656,8 +643,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/js/es6.html" itemprop="url">
-                  ES6
+                <a class="post-title-link" href="/post/algorithm/sortbtree.html" itemprop="url">
+                  二叉排序树
                 </a>
               
             
@@ -671,8 +658,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-06T07:12:37+08:00">
-                2017-03-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-03T16:51:37+08:00">
+                2017-04-03
               </time>
             
 
@@ -709,351 +696,7 @@
       
         
           
-            <h1 id="let"><a href="#let" class="headerlink" title="let"></a>let</h1><p>1.let 声明的变量在let 命令所在的代码快内有效<br>2.不声明直接用变量或者先用再声明都会报错<br>3.暂时性死区:在变量声明之前就使用变量的代码块<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">暂时性死区的本质就是，只要一进入当前作用域，所要使用的变量就已经存在了，但是不可获取，只有等到声明变量的那一行代码出现，才可以获取和使用该变量。</span><br></pre></td></tr></table></figure></p>
-<p>4.不允许在同一级别块域内重复声明一个变量<br>5.let 声明的变量,外层代码块不受内层代码块的影响<br>—-外层作用域无法读取内层作用域的变量<br>—-内层作用域可以定义外层作用域的同名变量<br>6.块级作用域内声明的函数，行为类似于var声明的变量,仅在所在的代码块内有效</p>
-<h1 id="const"><a href="#const" class="headerlink" title="const"></a>const</h1><p>1.声明的同时进行复制<br>2.作用域特征同let<br>3.当声明的变量为对象或者数组时，只可以改变对象属性或数组元素的值，但不可以将变量重新赋值</p>
-<p>ES6 6种声明变量的方法：var、function、let、const、import、class<br>var命令和function命令声明的全局变量，依旧是顶层对象的属性;let命令、const命令、class命令声明的全局变量，不属于顶层对象的属性。</p>
-<h1 id="解构赋值"><a href="#解构赋值" class="headerlink" title="解构赋值"></a>解构赋值</h1><h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><p>1.‘模式匹配’，左右对应相等，变量取值由位置决定<br>2.当右边的数据量大于左边变量数，如果是单层数组，则依次匹配，多余形成数组赋给最后一个变量<br>—-如果变量组成多层数组，则依次匹配，剩余的舍弃<br>3.当右边小于左边变量数，多余的变量的值就等于undefined<br>4.可以提前给变量赋默认值，默认值可以是已声明的其他变量，<br>–注意给变量赋‘undefined’的值的时候，如果变量原来的值不严格等于‘===’undefined，将不会被赋值为undefined</p>
-<h2 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h2><p>1.对象的属性没有次序，变量必须与属性同名，才能取到正确的值，属性是匹配的标志<br>2.若变量与属性名不一致，则先找到同名属性，然后再赋给对应的变量。真正被赋值的是后者(变量)，而不是前者(属性)<br>3.如果在声明对象变量的时候为属性值的变量赋值，则相当于同时声明属性值的变量<br>4.进行套嵌赋值时，注意分清属性名和变量名，被赋值的是变量名，不是属性名<br>5.进行默认值赋值规则同数组，赋空不会生效<br>6.属性名表达式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">let arr = [1, 2, 3];</span><br><span class="line">let &#123;0 : first, [arr.length - 1] : last&#125; = arr;</span><br><span class="line">first // 1</span><br><span class="line">last // 3</span><br></pre></td></tr></table></figure></p>
-<p>数组arr的0键对应的值是1，[arr.length - 1]就是2键，对应的值是3</p>
-<h2 id="函数参数"><a href="#函数参数" class="headerlink" title="函数参数"></a>函数参数</h2><p>类似数组，但注意下面两种写法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">function move(&#123;x = 0, y = 0&#125; = &#123;&#125;) &#123;</span><br><span class="line">  return [x, y];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">move(&#123;x: 3, y: 8&#125;); // [3, 8]</span><br><span class="line">move(&#123;x: 3&#125;); // [3, 0]</span><br><span class="line">move(&#123;&#125;); // [0, 0]</span><br><span class="line">move(); // [0, 0]</span><br></pre></td></tr></table></figure></p>
-<p>为变量x和y赋值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">function move(&#123;x, y&#125; = &#123; x: 0, y: 0 &#125;) &#123;</span><br><span class="line">  return [x, y];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">move(&#123;x: 3, y: 8&#125;); // [3, 8]</span><br><span class="line">move(&#123;x: 3&#125;); // [3, undefined]</span><br><span class="line">move(&#123;&#125;); // [undefined, undefined]</span><br><span class="line">move(); // [0, 0]</span><br></pre></td></tr></table></figure></p>
-<p>为x,y的默认值赋值</p>
-<h2 id="字符串、数字、布尔"><a href="#字符串、数字、布尔" class="headerlink" title="字符串、数字、布尔"></a>字符串、数字、布尔</h2><p>字符串：字符串被转换成数组<br>数字/布尔：先转换成对象</p>
-<h1 id="字符串方法"><a href="#字符串方法" class="headerlink" title="字符串方法"></a>字符串方法</h1><table>
-<thead>
-<tr>
-<th>方法</th>
-<th style="text-align:right">es5/js</th>
-<th style="text-align:center">es6</th>
-<th>2017</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Unicode表示法</td>
-<td style="text-align:right">只限于\u0000——\uFFFF之间的字符</td>
-<td style="text-align:center">只要将码点放入大括号，就能正确解读该字符</td>
-<td></td>
-</tr>
-<tr>
-<td>charCodeAt</td>
-<td style="text-align:right">只会正确返回16位的UTF-16字符的码点</td>
-<td style="text-align:center"></td>
-<td></td>
-</tr>
-<tr>
-<td>codePointAt</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">会正确返回32位的UTF-16字符的码点</td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td style="text-align:right"></td>
-<td style="text-align:center"></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td style="text-align:right"></td>
-<td style="text-align:center"></td>
-<td></td>
-</tr>
-<tr>
-<td>String.fromCharCode</td>
-<td style="text-align:right">只会识别16位的UTF-16字符</td>
-<td style="text-align:center"></td>
-<td></td>
-</tr>
-<tr>
-<td>String.fromCodePoint</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">会会识别32位的UTF-16字符</td>
-<td></td>
-</tr>
-<tr>
-<td>for</td>
-<td style="text-align:right">不可以识别大于0xFFFF的码点</td>
-<td style="text-align:center"></td>
-<td></td>
-</tr>
-<tr>
-<td>for…of</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">可以识别大于0xFFFF的码点</td>
-<td></td>
-</tr>
-<tr>
-<td>charAt</td>
-<td style="text-align:right">不能识别码点大于0xFFFF的字符</td>
-<td style="text-align:center"></td>
-<td></td>
-</tr>
-<tr>
-<td>at</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">能识别码点大于0xFFFF的字符</td>
-<td></td>
-</tr>
-<tr>
-<td>normalize</td>
-<td style="text-align:right">‘\u01D1’===’\u004F\u030C’ //false</td>
-<td style="text-align:center">‘\u01D1’.normalize() === ‘\u004F\u030C’.normalize()// true</td>
-<td></td>
-</tr>
-<tr>
-<td>indexOf</td>
-<td style="text-align:right">确定一个字符串是否包含在另一个字符串中</td>
-<td style="text-align:center"></td>
-<td></td>
-</tr>
-<tr>
-<td>includes()</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">返回布尔值，表示是否找到了参数字符串</td>
-<td></td>
-</tr>
-<tr>
-<td>startsWith</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">返回布尔值，表示参数字符串是否在源字符串的头部</td>
-<td></td>
-</tr>
-<tr>
-<td>endsWith</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">返回布尔值，表示参数字符串是否在源字符串的尾部</td>
-<td></td>
-</tr>
-<tr>
-<td>repeat(n)</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">返回一个新字符串，表示将原字符串重复n次。</td>
-<td></td>
-</tr>
-<tr>
-<td>padStart()，padEnd()</td>
-<td style="text-align:right"></td>
-<td style="text-align:center"></td>
-<td>padStart()用于头部补全，padEnd()用于尾部补全</td>
-</tr>
-<tr>
-<td>模板字符串</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">反引号(`),保留空格和换行,变量名写在${}中</td>
-</tr>
-</tbody>
-</table>
-<h1 id="数值处理方法"><a href="#数值处理方法" class="headerlink" title="数值处理方法"></a>数值处理方法</h1><table>
-<thead>
-<tr>
-<th>方法</th>
-<th style="text-align:right">es5/js</th>
-<th style="text-align:center">es6</th>
-<th>2017</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>二进制和八进制表示法</td>
-<td style="text-align:right">在严格模式之中，八进制就不再允许使用前缀0表示</td>
-<td style="text-align:center">二进制0b或0B、八进制0o或0O</td>
-<td></td>
-</tr>
-<tr>
-<td>isFinite()/isNaN()</td>
-<td style="text-align:right">先调用Number()将非数值的值转为数值，再进行判断</td>
-<td style="text-align:center"></td>
-<td></td>
-</tr>
-<tr>
-<td>Number.isFinite()</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">检查一个数值是否为有限的,非数值一律返回false。</td>
-<td></td>
-</tr>
-<tr>
-<td>Number.isNaN()</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">检查一个值是否为NaN,非数值一律返回false。</td>
-<td></td>
-</tr>
-<tr>
-<td>parseInt()、parseFloat()</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">移植到Number对象上面，行为完全保持不变。</td>
-<td></td>
-</tr>
-<tr>
-<td>Number.isInteger()</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">判断一个值是否为整数</td>
-<td></td>
-</tr>
-<tr>
-<td>Number.EPSILON</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">极小的常量,为浮点数计算设置一个误差范围</td>
-<td></td>
-</tr>
-<tr>
-<td>Number.isSafeInteger</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">判断一个整数是否落在整数范围之内</td>
-<td></td>
-</tr>
-<tr>
-<td>Number.MAX_SAFE_INTEGER、Number.MIN_SAFE_INTEGER</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">表示整数范围的上下限</td>
-<td></td>
-</tr>
-<tr>
-<td>Math.trunc</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">去除一个数的小数部分，返回整数部分</td>
-<td></td>
-</tr>
-<tr>
-<td>Math.sign</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">判断一个数到底是正数、负数、还是零</td>
-<td></td>
-</tr>
-<tr>
-<td>Math.cbrt</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">计算一个数的立方根</td>
-<td></td>
-</tr>
-<tr>
-<td>Math.clz32</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">返回一个数的32位无符号整数形式有多少个前导0</td>
-<td></td>
-</tr>
-<tr>
-<td>Math.imul</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">返回两个数以32位带符号整数形式相乘的结果，返回的也是一个32位的带符号整数。</td>
-<td></td>
-</tr>
-<tr>
-<td>Math.fround</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">返回一个数的单精度浮点数形式</td>
-<td></td>
-</tr>
-<tr>
-<td>Math.hypot</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">返回所有参数的平方和的平方根</td>
-<td></td>
-</tr>
-<tr>
-<td>Math.expm1(x)</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">返回Math.exp(x) - 1</td>
-<td></td>
-</tr>
-<tr>
-<td>Math.log1p(x)</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">返回1 + x的自然对数</td>
-<td></td>
-</tr>
-<tr>
-<td>Math.log10(x)</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">返回以10为底的x的对数</td>
-<td></td>
-</tr>
-<tr>
-<td>Math.log2(x)</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">返回以2为底的x的对数</td>
-<td></td>
-</tr>
-<tr>
-<td>Math.sign()</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">判断一个值的正负</td>
-<td></td>
-</tr>
-<tr>
-<td>指数运算符(**)</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">指数运算符与Math.pow的实现不相同</td>
-<td></td>
-</tr>
-<tr>
-<td>Math.sinh(x)</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">返回x的双曲正弦</td>
-<td></td>
-</tr>
-<tr>
-<td>Math.cosh(x)</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">返回x的双曲余弦</td>
-<td></td>
-</tr>
-<tr>
-<td>Math.tanh(x)</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">返回x的双曲正切</td>
-<td></td>
-</tr>
-<tr>
-<td>Math.asinh(x)</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">返回x的反双曲正弦</td>
-<td></td>
-</tr>
-<tr>
-<td>Math.acosh(x)</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">返回x的反双曲余弦</td>
-<td></td>
-</tr>
-<tr>
-<td>Math.atanh(x)</td>
-<td style="text-align:right"></td>
-<td style="text-align:center">返回x的反双曲正切</td>
-</tr>
-</tbody>
-</table>
-<h1 id="深入理解es6笔记"><a href="#深入理解es6笔记" class="headerlink" title="深入理解es6笔记"></a>深入理解es6笔记</h1><h2 id="let-const"><a href="#let-const" class="headerlink" title="let/const"></a>let/const</h2><p>常量如果是对象，则对象中的值可以修改</p>
-<p>js引擎在扫描代码发现变量声明时，要么将它们提升至作用域顶部（var）,要么将声明放到TDZ(let/const)，访问TDZ中的变量会触发运行时错误，只有执行过变量声明语句后，变量才会从TDZ中移出，然后可正常访问。<br>TDZ在块作用域中，相对于let,const所在块作用域来说。<br>但在let声明的作用域外对该变量使用typeof不会报错<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">console.log(typeof val);</span><br><span class="line">if(condition) &#123;</span><br><span class="line">  let value = &apos;blue&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="字符串、正则表达式"><a href="#字符串、正则表达式" class="headerlink" title="字符串、正则表达式"></a>字符串、正则表达式</h2><p>在对字符串进行比较排序操作前，按照统一标准进行标准化<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">let normalized = values.map(function(text)&#123;</span><br><span class="line">  return text.normalize();// 默认NFC格式</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
-<p>正则表达式Y修饰符使用注意：<br>1.只有调用exec()和test()这些正则表达式对象的方法时才会涉及lastIndex属性，调用字符串方法，例如match(),则不会触发粘滞行为<br>2.对于粘滞正则表达式而言，如果使用^字符串来匹配字符串开端，只会从字符串的起始位置或多行模式的首行进行匹配。</p>
-<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><p>函数name属性不一定引用同名变量，他只是协助调试用的额外信息，所以不能使用name属性的值来获取对函数的引用</p>
-<p>js函数有两个不同的内部[[Call]]和[[Construct]]<br>当通过new关键字调用函数时，执行的是[[Construct]]函数，他负责创建一个被称作实例的新对象<br>然后在执行函数将this绑定到实例上;<br>如果不通过new关键字调用函数，则执行[[Call]]函数，从而直接执行代码中的函数体<br>具有[[Construct]]方法的函数被统称为构造函数。</p>
-<p>可以在函数内部使用new.target来判断是否在使用new 操作符调用函数，<br>以及判断是否被某个特定构造函数调用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">1.</span><br><span class="line">function Person(name)&#123;</span><br><span class="line">  if(typeof new.target !== &apos;undefined&apos;)&#123;</span><br><span class="line">    this.name = name;</span><br><span class="line">  &#125;else &#123;</span><br><span class="line">    throw new Error(&apos;必须通过new 操作符调用该函数&apos;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">2.</span><br><span class="line">function Person(name)&#123;</span><br><span class="line">  if(typeof new.target !== &apos;Person&apos;)&#123;</span><br><span class="line">    this.name = name;</span><br><span class="line">  &#125;else &#123;</span><br><span class="line">    throw new Error(&apos;必须通过new 操作符调用该函数&apos;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">function AnotherPerson(name)&#123;</span><br><span class="line">  Person.call(this,name)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var person = new Person(&apos;kely&apos;);</span><br><span class="line">var anotherPerson = new AnotherPerson(&apos;kely&apos;); // 抛出错误</span><br></pre></td></tr></table></figure></p>
-<p>如果箭头函数被非箭头函数包含，则this绑定的是最近一层非箭头函数的this;<br>否则this会被设置为全局对象</p>
-<h2 id="对象-1"><a href="#对象-1" class="headerlink" title="对象"></a>对象</h2><p>在使用===进行比较时，+0和-0得到结果相等；NaN和自身比较不相等<br>但可以使用Object.is()方法弥补<br>Object.js(+0,-0)得到false;<br>Object.js(NaN,NaN)得到true.</p>
-<p>Object.assign()方法不能将提供者的访问器属性复制到接收对象中<br>会被转变成接收对象中的一个数据属性。</p>
-<p>对象自有属性枚举顺序的基本规则是<br>1.所有数字键按升序排序<br>2.所有字符串键按照他们被加入对象的顺序排序<br>3.所有Symbol键按照他们被加入对象的顺序排序</p>
-<p>Super引用相当于指向对象原型的指针，实际上也就是Object.getPrototypeof(this)的值</p>
-<h2 id="解构"><a href="#解构" class="headerlink" title="解构"></a>解构</h2><p>获取数组副本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">let colors = [&apos;red&apos;,&apos;green&apos;];</span><br><span class="line"></span><br><span class="line">let [...cloneColor] = colors;</span><br></pre></td></tr></table></figure></p>
-<p>通过给解构参数提供默认值，将解构参数定义为可选的</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function setCookie(name, value ,&#123;secure,path,domain&#125;=&#123;&#125;)&#123;&#125;</span><br></pre></td></tr></table></figure>
-<p>为解构参数指定默认值</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">const setCookieDefaults = &#123;</span><br><span class="line">  secure: false,</span><br><span class="line">  path:&apos;/&apos;,</span><br><span class="line">  damin:&apos;example.com&apos;</span><br><span class="line">&#125;</span><br><span class="line">function setCookie(name,value,&#123;</span><br><span class="line">  secure = setCookieDefaults.secure,</span><br><span class="line">  path = setCookieDefaults.path,</span><br><span class="line">  domain = setCookieDefaults.domain</span><br><span class="line">&#125; = setCookieDeaults)</span><br></pre></td></tr></table></figure>
-<h2 id="Symbol"><a href="#Symbol" class="headerlink" title="Symbol"></a>Symbol</h2><p>使用Symbol.for()可以创建可共享的Symbol<br>使用Symbol.keyFor()可以在Symbol全局注册表中检索共享的Symbol<br>使用Symbol创建的Symbol属性不能用Symbol.keyFor()去查找</p>
-<p>Symbol类型的值不可以被转化为数字或者字符串</p>
-<p>Object.getOwnPropertySymbol()可以返回包含所有Symbol自有属性的数组</p>
-<p>一些特殊的Symbol值被用于暴露更多语言内部逻辑<br>主要使用思路就是通过这些特殊Symbol属性覆盖掉原始方法的响应方式<br>例如<br>给一个对象A定义<br>|属性|覆盖方法|被调用时机|<br>|—|—|—|<br>|Symbol.hasInstance|instanceOf|C instanceOf A|<br>|Symbol.toPrimitive|默认数字字符串转换值|A+’!’|<br>|Symbol.toStringTag|Object.prototype.toString(),Object.prototype.toString.call()方法时的返回值|A.toString或者Object.prototype.toString.call(A)|</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">1.</span><br><span class="line">默认模式只用于==，+及Date构造函数传递一个参数时，大多数操作使用字符串、数字模式</span><br><span class="line">function Temperature(degrees) &#123;</span><br><span class="line">  this.degerees = degrees;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Temperature.prototype[Symbol.toPrimitive] = function(hint)&#123;</span><br><span class="line">  switch(hint) &#123;</span><br><span class="line">    case &apos;string&apos; : return this.degerees+&apos;123&apos;</span><br><span class="line">    case &apos;number&apos;: return this.degerees</span><br><span class="line">    case &apos;default&apos;: return this.degerees+&apos; degrees&apos;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var freezing = new Temperature(32);</span><br><span class="line">console.log(freezing + &apos;!&apos;); // 32 degrees</span><br><span class="line">console.log(freezing/2);// 16</span><br><span class="line">console.log(String(freezing));// 32123</span><br><span class="line"></span><br><span class="line">2.Symbol.toString 的使用</span><br><span class="line">覆盖Object.prototype.toString</span><br><span class="line">function Person(name)&#123;</span><br><span class="line">  this.name = name</span><br><span class="line">&#125;</span><br><span class="line">Person.prototype[Symbol.toString] = &apos;Person&apos;</span><br><span class="line"></span><br><span class="line">Person.prototype.toString = function() &#123;</span><br><span class="line">  return this.name</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var me = new Person(&apos;ww&apos;);</span><br><span class="line"></span><br><span class="line">console.log(me.toString())// ww</span><br><span class="line">console.log(Object.prototype.toString.call(me)) // [object.Person]</span><br></pre></td></tr></table></figure>
-<p>用于覆盖正则表达式的方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">let hasLengthOf10 = &#123;</span><br><span class="line">  [Symbol.match]: function(value)&#123;return ...&#125;,</span><br><span class="line">  [Symbol.replace]: function(value,replacement)&#123;return 。。。&#125;,</span><br><span class="line">  [Symbol.search]: function(value)&#123;return ...&#125;,</span><br><span class="line">  [Symbol.split]: function(value)&#123;return ...&#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let str = &apos;hwrwrirrrk&apos;;</span><br><span class="line">console.log(str.match(hasLengthOf10))</span><br><span class="line">console.log(str.replace(hasLengthOf10))</span><br><span class="line">console.log(str.search(hasLengthOf10))</span><br><span class="line">console.log(str.split(hasLengthOf10))</span><br></pre></td></tr></table></figure></p>
-<h2 id="Set-和-Map"><a href="#Set-和-Map" class="headerlink" title="Set 和 Map"></a>Set 和 Map</h2><p>Set中如果存储对象的话，是强引用，只要Set实例中引用存在，垃圾回收机制就不能释放该对象的内存空间。<br>WeakSet 只存储对象弱引用，并且不可以存储原始值，如果集合中的弱引用是对象的唯一引用，则会被回收并释放相应内存<br>所以如果只需要跟踪对象引用，应该使用WeakSet集合而不是普通的Set集合。</p>
-<p>WeakMap集合中的键名必须是一个对象，如果使用非对象键名会报错：<br>集合中保存的是这些对象的弱引用，如果在弱引用之外不存在其他的强引用，<br>引擎的垃圾回收机制会自动回收这个对象，同时也会移除WeakMap集合中的键值对<br>但是只有集合的键名遵从这个规则，键名对应的值如果是一个对象，则保存的是对象的强引用，不会触发垃圾回收机制</p>
-<h2 id="数组方法"><a href="#数组方法" class="headerlink" title="数组方法"></a>数组方法</h2><p>find和findIndex方法都接受两个参数，一个是回调函数，<br>另一个是可选参数，用于指定回调函数中this的值</p>
-<p>fill 方法可以传入第二个和第三个参数用于只改变一部分值，分别指定开始索引和不包含结束索引</p>
-<h2 id="Proxy-和-Reflect"><a href="#Proxy-和-Reflect" class="headerlink" title="Proxy 和 Reflect"></a>Proxy 和 Reflect</h2><p>使用Proxy的陷阱方法，可以拦截对象的默认特性方法<br>对应的Reflect方法可以在proxy陷阱方法中重新使用对象的内减特性</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br></pre></td><td class="code"><pre><span class="line">let target = &#123;</span><br><span class="line">  name: &apos;target&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let proxy = new Proxy(target,&#123;</span><br><span class="line">  // set 写入一个属性时</span><br><span class="line">  // 代理目标对象target，要写入的键，要写入的值，proxy代理本身</span><br><span class="line">  set (trapTarget,key,value,receiver)&#123;</span><br><span class="line">    // 忽略不希望受到影响的已有属性</span><br><span class="line">    if(!trapTarget.hasOwnProperty(key))&#123;</span><br><span class="line">      if(isNaN(value))&#123;</span><br><span class="line">        throw new TypeError(&apos;属性必须是数字&apos;)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    // 添加属性</span><br><span class="line">    return Reflect.set(trapTarget,key,value,receiver);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // 读取一个属性时</span><br><span class="line">  // 代理目标对象，要读的键，代理对象本身</span><br><span class="line">  get(trapTarget,key,receiver) &#123;</span><br><span class="line">    if(!key in receiver)&#123;</span><br><span class="line">      throw new TypeError(&apos;属性&apos;+key+&apos;不存在&apos;)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return Reflect.get(trapTarget,key,receiver)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // 使用in操作符时</span><br><span class="line">  has(trapTarget,key)&#123;</span><br><span class="line">    if(key === &apos;value&apos;)&#123;</span><br><span class="line">      return false;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      return Reflect.has(trapTarget,key)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // 使用delete操作符删除对象属性时</span><br><span class="line">  deleteProperty(trapTarget,key)&#123;</span><br><span class="line">    if(key === &apos;value&apos;)&#123;</span><br><span class="line">      return false;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      return Reflect.deleteProperty(trapTarget,key)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // Object.getPrototypeOf(proxy)时</span><br><span class="line">  //区别</span><br><span class="line">  // Object.getPrototypeOf()如果传入值非对象会将参数强制转成对象</span><br><span class="line">  // Reflect.getPrototypeOf()如果传入非对象，则报错</span><br><span class="line">  getPrototypeOf(trapTarget) &#123;</span><br><span class="line">    // return null</span><br><span class="line">    return  Reflect.getPrototypeOf(trapTarget) //返回默认行为，但有上述区别</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // Object.setPrototypeOf(proxy, &#123;&#125;)时</span><br><span class="line">  // 区别</span><br><span class="line">  // Object.getPrototypeOf()操作失败就报错</span><br><span class="line">  // Reflect.setPrototypeOf()返回布尔来表示操作是否成功</span><br><span class="line">  setPrototypeOf(trapTarget,proto) &#123;</span><br><span class="line">    // return false</span><br><span class="line">    return  Reflect.setPrototypeOf(trapTarget,proto)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // Object.isExtensible(proxy)时，</span><br><span class="line">  // 返回布尔值，表示对象是否可扩展</span><br><span class="line">  // 区别</span><br><span class="line">  // Object.isExtensible() 传入非对象返回false</span><br><span class="line">  // Reflect.isExtensible() 传入非对象报错</span><br><span class="line">  isExtensible(trapTarget) &#123;</span><br><span class="line">    // return null</span><br><span class="line">    return  Reflect.isExtensible(trapTarget)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  // Object.preventExtension(proxy)时，</span><br><span class="line">  // 阻止对象扩展，返回布尔表示操作是否成功</span><br><span class="line">  // 区别</span><br><span class="line">  // Object.preventExtension()无论参数是否为对象都返回参数</span><br><span class="line">  // Reflect.preventExtension()参数非对象报错，否则根据操作是否成功返回布尔值</span><br><span class="line">  preventExtension(trapTarget) &#123;</span><br><span class="line">    // return null</span><br><span class="line">    return  Reflect.preventExtension(trapTarget) // 会转发到底层，target也会被阻止掉</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  // Object.defineProperty(proxy)时，</span><br><span class="line">  // 区别</span><br><span class="line">  // Object.defineProperty()返回第一个参数</span><br><span class="line">  // Reflect.defineProperty()根据操作是否成功返回布尔值</span><br><span class="line">  defineProperty(trapTarget,key,descriptor) &#123;</span><br><span class="line">    return  Reflect.defineProperty(trapTarget,key,descriptor)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // Object.getOwnPropertyDescriptor(proxy)时，</span><br><span class="line">  // 区别</span><br><span class="line">  // Object.getOwnPropertyDescriptor()传入非对象转成对象</span><br><span class="line">  // Reflect.getOwnPropertyDescriptor()传入非对象报错</span><br><span class="line">  getOwnPropertyDescriptor(trapTarget,key) &#123;</span><br><span class="line">    return  Reflect.getOwnPropertyDescriptor(trapTarget,key)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // 拦截内部方法[[OwnPropertyKeys]],</span><br><span class="line">  // Object.keys(),Object.getOwnPropertyName() （不含Symbol属性）</span><br><span class="line">  // Object.assign()（字符串和Symbol属性）,Object.getOwnPropertySymbols()（仅含Symbol属性）</span><br><span class="line">  //4个方法调用时会被拦截到，输出的数组再被以上4个方法处理返回</span><br><span class="line">  ownKeys(trapTarget) &#123;</span><br><span class="line">    return Reflect.ownKeys(trapTarget).filter(key=&gt;&#123;</span><br><span class="line">      return typeof key !== &apos;string&apos; || key[0] !== &apos;_&apos;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // 代理目标是一个函数才可以，函数被普通调用执行时会被拦截</span><br><span class="line">  // 代理目标函数，函数被调用时内部this值，传给函数的参数数组</span><br><span class="line">  apply(trapTarget,thisArg, argumentList) &#123;</span><br><span class="line">    return  Reflect.apply(trapTarget,thisArg, argumentList)</span><br><span class="line">  &#125;</span><br><span class="line">  // 通过这样操作，可以实现不用new 调用函数，实现new调用函数的效果</span><br><span class="line">  apply(trapTarget,thisArg, argumentList) &#123;</span><br><span class="line">    return  Reflect.construct(trapTarget,thisArg, argumentList)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // 代理目标是一个函数才可以，函数被new调用时会被拦截</span><br><span class="line">  // 代理目标函数，传给函数的参数数组</span><br><span class="line">   construct(trapTarget,argumentList) &#123;</span><br><span class="line">    return  Reflect.construct(trapTarget, argumentList)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">// proxy是可被插销的代理对象，调用revoke方法后，不能在通过proxy代理到target对象</span><br><span class="line">let &#123; proxy,revoke &#125; = Proxy.revocable(target,&#123;&#125;)</span><br><span class="line">revoke()</span><br></pre></td></tr></table></figure>
-<h2 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h2><p>用逗号将默认的本地名称与大括号包裹的非默认值分隔开,请记住，在import语句中，默认值必须排在非默认值之前。</p>
+            <p>将无序的数组，把首项当做根结点开始，按照比双亲结点小的做左子树，比双亲结点大的做右子树的规则<br>建立一颗二叉树，对二叉树进行中序遍历，即得到无序数组从小到大的排序<br>二叉排序树特点<br>—- 若它的左子树不为空，则左子树上所有结点的值均小于它的根结构的值<br>—- 若它的右子树不为空，则右子树上所有结点的值均大于它的根结构的值<br>—- 它的左右子树也分别为二叉排序树(递归)<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/SortingBtree.js" target="_blank" rel="noopener">代码链接</a></p>
 
           
         
@@ -1092,7 +735,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/js~~.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/indexsearch.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1117,8 +760,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/js/js~~.html" itemprop="url">
-                  js 的~~
+                <a class="post-title-link" href="/post/algorithm/indexsearch.html" itemprop="url">
+                  线性索引查找
                 </a>
               
             
@@ -1132,8 +775,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-06T07:12:37+08:00">
-                2017-03-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-03T16:38:37+08:00">
+                2017-04-03
               </time>
             
 
@@ -1170,8 +813,8 @@
       
         
           
-            <p>~~ 符号是一种类型转换符号，将参数转换成数据类型<br>~~true == 1<br>~~false == 0<br>~~”” == 0<br>~~[] == 0<br>~~undefined ==0<br>~~!undefined == 1<br>~~null == 0<br>~~!null == 1</p>
-<p>应用：计算大数相加<br>function add(a,b) {<br>  // 实现该函数<br>  var res=’’, c=0;<br>    a = a.split(‘’);<br>    b = b.split(‘’);<br>    while (a.length || b.length || c){<br>        c += ~~a.pop() + ~~b.pop();//对应位相加，加上前一位进位<br>        res = c % 10 + res;//去掉进位,累积拼接取对应位相加后的结果，<br>        c = c&gt;9;//本轮相加，有进位，c是1，没进位c是0<br>    }<br>    return res.replace(/^0+/,’’);//把开头0去掉<br>}</p>
+            <h1 id="稠密索引"><a href="#稠密索引" class="headerlink" title="稠密索引"></a>稠密索引</h1><p><img src="/image/index1.png" alt="index1"><br>索引表与数据表一对一，索引表的关键码是对应目标数据的提取，索引表有序，数据表无序</p>
+<h1 id="分块索引"><a href="#分块索引" class="headerlink" title="分块索引"></a>分块索引</h1><p><img src="/image/index2.png" alt="index2"><br>将整个数据表分块，取每块数据中最大值建立索引表，块间有序，块内无序</p>
 
           
         
@@ -1210,7 +853,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/ze.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/search.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1235,8 +878,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/js/ze.html" itemprop="url">
-                  正则表达式
+                <a class="post-title-link" href="/post/algorithm/search.html" itemprop="url">
+                  查找
                 </a>
               
             
@@ -1250,8 +893,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-06T07:05:37+08:00">
-                2017-03-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-02T19:24:37+08:00">
+                2017-04-02
               </time>
             
 
@@ -1288,11 +931,10 @@
       
         
           
-            <h1 id="判断邮箱格式"><a href="#判断邮箱格式" class="headerlink" title="判断邮箱格式"></a>判断邮箱格式</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var match = /.+@.+\.[a-zA-Z]&#123;2,4&#125;$/;</span><br><span class="line">match.test(变量)</span><br></pre></td></tr></table></figure>
-<h1 id="输入框input只允许输入数字"><a href="#输入框input只允许输入数字" class="headerlink" title="输入框input只允许输入数字"></a>输入框input只允许输入数字</h1><p>在input标签里添加：<br>onKeyUp=”value=value.replace(/[^\d]/g,’’)”</p>
-<p>以上方法input 限制了仅输入数字，但更换中文输入法之后还能输入出数字之外字符<br>解决办法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">html:</span><br><span class="line">  &lt;input type=&quot;text&quot;   class=&quot;form-control form-filter&quot; id=&quot;inputorp_i&quot; autocomplete=&quot;off&quot; ng-model=&quot;min_score&quot; placeholder=&quot;正整数&quot;&gt;</span><br><span class="line">  js:</span><br><span class="line"> var bind_name = &apos;input&apos;;</span><br><span class="line"> 　　 if (navigator.userAgent.indexOf(&quot;MSIE&quot;) != -1)&#123;</span><br><span class="line"> 　　 bind_name = &apos;propertychange&apos;;</span><br><span class="line"> 　　&#125;</span><br><span class="line"> 　　 $(&apos;#inputorp_i&apos;).bind(bind_name, function()&#123;</span><br><span class="line"> 　　clearNoNum(this);</span><br><span class="line"> 　　 &#125;)</span><br><span class="line"> $(&apos;#inputorp_i1&apos;).bind(bind_name, function()&#123;</span><br><span class="line"> 　　clearNoNum(this);</span><br><span class="line"> 　　 &#125;)</span><br><span class="line"> function clearNoNum(obj)</span><br><span class="line"></span><br><span class="line"> &#123;</span><br><span class="line"> //先把非数字的都替换掉，除了数字</span><br><span class="line"> obj.value = obj.value.replace(/[^\d]/g,&quot;&quot;);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
-<h1 id="判断输入值是否是url"><a href="#判断输入值是否是url" class="headerlink" title="判断输入值是否是url"></a>判断输入值是否是url</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"> javascript</span><br><span class="line">var match = /^((ht|f)tps?):\/\/[\w\-]+(\.[\w\-]+)+([\w\-\.,@?^=%&amp;:\/~\+#]*[\w\-\@?^=%&amp;\/~\+#])?$/;</span><br><span class="line">match.test(变量)</span><br></pre></td></tr></table></figure>
-<p><a href="http://www.cnblogs.com/zfc2201/archive/2012/12/18/2824107.html" target="_blank" rel="noopener">常用正则表达式</a></p>
+            <p>静态查找: 数据集合稳定，不需要添加，删除元素的查找操作<br>– 组织数据宜用线性表结构<br>– 如果要对关键字排序，折半查找算法或斐波那契查找算法<br>动态查找：数据集合在查找过程中需要同时添加或删除元素的查找操作<br>– 二叉排序树，散列表结构</p>
+<h1 id="顺序查找"><a href="#顺序查找" class="headerlink" title="顺序查找"></a>顺序查找</h1><p>顺序查找/线性查找:从第一个(或者最后一个)记录开始，逐个进行记录的关键字和给定值进行比较，若某个记录的关键字和给定值相等，则查找成功。<br>—如果查找了所有的记录仍然找不到与给定值相等的关键字，则查找不成功<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//方式一</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">search</span>(<span class="params">array,key</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> i;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;= array.length;i++)&#123;</span><br><span class="line">		<span class="keyword">if</span>(a[i] == key)&#123;</span><br><span class="line">			<span class="keyword">return</span> i;</span><br><span class="line">		&#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//方式二</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">search</span>(<span class="params">array,key</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> i= array.length;</span><br><span class="line">	a[<span class="number">0</span>] = key;</span><br><span class="line">	<span class="keyword">while</span>(a[i] != key)&#123;</span><br><span class="line">	  i--</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="插值查找-按比例查找"><a href="#插值查找-按比例查找" class="headerlink" title="插值查找(按比例查找)"></a>插值查找(按比例查找)</h1><p>查找方法类似于折半查找，只不过mid的值不再取low和high的中间值，<br>而是根据查找值在low和hight中间的大概位置确定mid<br>var mid = low +(high-low)*(num-list[low])/(list[high]-list[low]);<br>因此插值查找适用于有一定顺序规律的数组<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/Interpolationsearch.js" target="_blank" rel="noopener">代码链接</a></p>
+<h1 id="斐波那契查找-黄金查找"><a href="#斐波那契查找-黄金查找" class="headerlink" title="斐波那契查找(黄金查找)"></a>斐波那契查找(黄金查找)</h1><p>同样适用于有一定顺序规律的数组<br>在折半查找的基础上根据斐波那契数列进行分割。<br>在斐波那契数列找一个等于略大于查找表中元素个数的数F[k]，<br>将原查找表扩展为长度为F[k]-1(如果要补充元素，则补充重复最后一个元素，直到满足F[k]-1个元素)<br>进行斐波那契分割，即F[k]-1个元素分割为前半部分F[k-1]-1个元素，后半部分F[n-2]-1个元素，剩一个做mid<br>找出要查找的元素在那一部分并递归，直到找到。<br><img src="/image/fiobsearch.png" alt="fiobsearch"><br><a href="https://github.com/YooHannah/algorithm/blob/master/js/FibonacciSearch.js" target="_blank" rel="noopener">代码链接</a></p>
 
           
         
@@ -1331,7 +973,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/graphstruct.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/keypath.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1356,8 +998,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/algorithm/graphstruct.html" itemprop="url">
-                  图的存储结构
+                <a class="post-title-link" href="/post/algorithm/keypath.html" itemprop="url">
+                  关键路径
                 </a>
               
             
@@ -1371,8 +1013,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-01T21:59:30+08:00">
-                2017-03-01
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-02T19:15:37+08:00">
+                2017-04-02
               </time>
             
 
@@ -1409,245 +1051,7 @@
       
         
           
-            <h1 id="1-邻接矩阵"><a href="#1-邻接矩阵" class="headerlink" title="1.邻接矩阵"></a>1.邻接矩阵</h1><h2 id="1-无向图"><a href="#1-无向图" class="headerlink" title="1.无向图"></a>1.无向图</h2><p><img src="/image/graph1.png" alt="graph1"><br>一个一维数组存储图中顶点信息，</p>
-<table>
-<thead>
-<tr>
-<th>顶点数组</th>
-<th>v0</th>
-<th>v1</th>
-<th>v2</th>
-<th>v3</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>一个二维数组(邻接矩阵)存储图中边或弧的信息<br>0表示不存在顶点间的边，1表示顶点间存在边</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>v0</th>
-<th>v1</th>
-<th>v2</th>
-<th>v3</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>v0</td>
-<td>0</td>
-<td>1</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<td>v1</td>
-<td>1</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<td>v2</td>
-<td>1</td>
-<td>1</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<td>v3</td>
-<td>1</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-</tr>
-</tbody>
-</table>
-<p>无向图构成的邻接矩阵为对称矩阵，对角线值为0<br>—–顶点Vi在邻接矩阵中第i行(或第i列)的元素之和为该顶点的度<br>—–扫描矩阵中第i行元素，元素为1的列为顶点Vi的邻接点</p>
-<h2 id="2-有向图"><a href="#2-有向图" class="headerlink" title="2.有向图"></a>2.有向图</h2><p><img src="/image/graph2.png" alt="graph2"><br>一个一维数组存储图中顶点信息，</p>
-<table>
-<thead>
-<tr>
-<th>顶点数组</th>
-<th>v0</th>
-<th>v1</th>
-<th>v2</th>
-<th>v3</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>坐标[Vi][Vj]的值，1表示Vi指向Vj的弧存在，0表示不存在</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>v0</th>
-<th>v1</th>
-<th>v2</th>
-<th>v3</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>v0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<td>v1</td>
-<td>1</td>
-<td>0</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<td>v2</td>
-<td>1</td>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>v3</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-</tbody>
-</table>
-<p>第Vi列的元素之和为顶点Vi的入度<br>第Vi行的元素之和为顶点Vi的出度</p>
-<h2 id="3-网"><a href="#3-网" class="headerlink" title="3.网"></a>3.网</h2><p><img src="/image/tu3.png" alt="tu3"><br>邻接矩阵各元素的值不再用0/1表示，而是用权表示<br>顶点间若不存在弧，则用\infty无穷表示,顶点自己到自己的权为0</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>v0</th>
-<th>v1</th>
-<th>v2</th>
-<th>v3</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>v0</td>
-<td>0</td>
-<td>\infty</td>
-<td>\infty</td>
-<td>18</td>
-</tr>
-<tr>
-<td>v1</td>
-<td>8</td>
-<td>0</td>
-<td>2</td>
-<td>\infty</td>
-</tr>
-<tr>
-<td>v2</td>
-<td>4</td>
-<td>\infty</td>
-<td>0</td>
-<td>\infty</td>
-</tr>
-<tr>
-<td>v3</td>
-<td>\infty</td>
-<td>\infty</td>
-<td>\infty</td>
-<td>0</td>
-</tr>
-</tbody>
-</table>
-<h1 id="2-邻接表"><a href="#2-邻接表" class="headerlink" title="2.邻接表"></a>2.邻接表</h1><h2 id="无向图"><a href="#无向图" class="headerlink" title="无向图"></a>无向图</h2><p>顶点用一个一维数组存储<br>每个顶点Vi的所有邻接点构成一个线性表，由于个数不确定，用单链表来表示<br><img src="/image/tu4.png" alt="tu4"><br><img src="/image/tu5.png" alt="tu5"></p>
-<h2 id="有向图"><a href="#有向图" class="headerlink" title="有向图"></a>有向图</h2><p>把顶点当弧尾建立邻接表，邻接表长度就是该顶点出度<br><img src="/image/tu6.png" alt="tu6"><br>把顶点当弧头建的表叫逆邻接表，邻接表长度就是该顶点入度<br><img src="/image/tu7.png" alt="tu7"></p>
-<h2 id="网"><a href="#网" class="headerlink" title="网"></a>网</h2><p>在边表结点定义中再增加一个数据域来存储权值<br><img src="/image/tu8.png" alt="tu8"></p>
-<h1 id="3-十字链表-有向图"><a href="#3-十字链表-有向图" class="headerlink" title="3.十字链表(有向图)"></a>3.十字链表(有向图)</h1><p>顶点表结构</p>
-<p>|data|firstIn|firstOut|<br>data：顶点数据<br>firstIn:第一个入边表的指针<br>firstOut:第一个出边表的指针</p>
-<p>边表结点结构 表示以条边</p>
-<table>
-<thead>
-<tr>
-<th>tailVex</th>
-<th>headVex</th>
-<th>headLink</th>
-<th>tailLink</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p>tailVex:该弧起点的顶点在顶点表的下标<br>headVex:该弧终点的顶点在顶点表的下标<br>headLink:指向headVex的弧的指针<br>tailLink: 从tailVex出发的弧的指针<br><img src="/image/graph2.png" alt="graph2"><br><img src="/image/tu9.png" alt="tu9"></p>
-<h1 id="4-邻接多重表-无向表"><a href="#4-邻接多重表-无向表" class="headerlink" title="4.邻接多重表(无向表)"></a>4.邻接多重表(无向表)</h1><p>关注对象是图中的表不是顶点<br>|iVex|iLink|jVex|jLink|<br>iVex和jVex是与某条边依附的两个顶点在顶点表中的下标<br>iLink：指向依附顶点iVex的下一条边，<br>jLink：指向依附顶点jVex的下一条边，<br><img src="/image/tu10.png" alt="tu10"></p>
-<h1 id="5-边集数组"><a href="#5-边集数组" class="headerlink" title="5.边集数组"></a>5.边集数组</h1><p>由两个一维数组构成<br>一个是存储顶点的信息<br>另一个存储边的信息<br>边数组的每个数据元素由一条边的起点下标(begin)、终点下标(end)和权(weight)组成</p>
-<p><img src="/image/tu11.png" alt="tu11"></p>
-<table>
-<thead>
-<tr>
-<th>顶点数组</th>
-<th>v0</th>
-<th>v1</th>
-<th>v2</th>
-<th>v3</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>边数组</th>
-<th>begin</th>
-<th>end</th>
-<th>weight</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>edges[0]</td>
-<td>0</td>
-<td>3</td>
-<td>5</td>
-</tr>
-<tr>
-<td>edges[1]</td>
-<td>1</td>
-<td>0</td>
-<td>4</td>
-</tr>
-<tr>
-<td>edges[2]</td>
-<td>1</td>
-<td>2</td>
-<td>3</td>
-</tr>
-<tr>
-<td>edges[3]</td>
-<td>2</td>
-<td>0</td>
-<td>8</td>
-</tr>
-</tbody>
-</table>
+            <h1 id="关键路径"><a href="#关键路径" class="headerlink" title="关键路径"></a>关键路径</h1><p>AOE网：在一个表示工程的带权有向图中，用顶点表示事件，用有向边表示活动，用边上的权值表示活动的持续时间，<br>这种有向图的边表示活动的网，我们称之为AOE网(Activity On Edge Network)<br>始点/源点:AOE网中没有入边的顶点<br>终点/汇点:AOE网中没有出边的顶点<br><img src="/image/keypath.png" alt="keypath"><br>etv:时间最早发生时间,顶点的最早发生时间<br>ltv:事件最晚发生时间，每个顶点对应事件最晚需要开始的时间，如果超出此时间将会延误着整个工期<br>ete:活动最早开工时间，弧的最早发生时间<br>lte:活动最晚发生时间，不推迟工期的最晚开工时间<br>关键路径的目的是在规划工程各项活动执行的顺序时，找出关键的活动，保证工程不延期<br><img src="/image/keypath1.png" alt="keypath1"><br><img src="/image/keypath2.png" alt="keypath2"><br><a href="https://github.com/YooHannah/algorithm/blob/master/js/CriticalPath.js" target="_blank" rel="noopener">代码链接</a></p>
 
           
         
@@ -1686,7 +1090,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/performance/compatible_date.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/TopologySorting.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1711,8 +1115,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/performance/compatible_date.html" itemprop="url">
-                  日期格式兼容
+                <a class="post-title-link" href="/post/algorithm/TopologySorting.html" itemprop="url">
+                  拓扑排序
                 </a>
               
             
@@ -1726,8 +1130,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-26T21:14:37+08:00">
-                2017-02-26
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-02T19:14:37+08:00">
+                2017-04-02
               </time>
             
 
@@ -1764,9 +1168,9 @@
       
         
           
-            <h1 id="IE11-chrome-360-火狐兼容日期格式兼容"><a href="#IE11-chrome-360-火狐兼容日期格式兼容" class="headerlink" title="IE11/chrome/360/火狐兼容日期格式兼容"></a>IE11/chrome/360/火狐兼容日期格式兼容</h1><p> $scope.date= new Date().toLocaleDateString().replace(/\//g,’-‘);<br> 获取到的”year-month-day”格式支持/chrome/360/火狐，但到了IE11就变成”year年month月day”</p>
-<p> var date = new Date();<br> var y = date.getFullYear();<br> var m = date.getMonth()+1;<br> var d = date.getDate();<br> var day = date.getDay();<br> var dateString=y+”-“+m+”-“+d;<br> $scope.date= dateString;</p>
-<p> 这样获取的”year-month-day”格式支持以上四种浏览器</p>
+            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>DAG(Directed Acyclic)图/无环图：无环的有向图<br>‘活动’：所有的工程或者某种流程都可以分为的若干个小的工程或者阶段<br>AOV(Active On Vertex Network)网：在一个表示工程的有向图中，用顶点表示活动，用弧表示活动之间的优先关系<br>这样的有向图为顶点表示活动的网即AOV网<br>拓扑序列：设G=(V,E)是一个具有n个顶点的有向图，V中的顶点序列V1，V2，……Vn满足若从顶点Vi到Vj有一条路径，则在顶点序列中顶点Vi必在顶点Vj之前,我们称这样的顶点序列为一个拓扑序列,<br>拓扑排序：所谓的拓扑排序，其实就是对一个有向图构造拓扑序列的过程,保证活动是按一定顺序进行<br><img src="/image/tuopu1.png" alt="tuopu1"></p>
+<h1 id="对AOV网进行拓扑排序的方法和步骤"><a href="#对AOV网进行拓扑排序的方法和步骤" class="headerlink" title="对AOV网进行拓扑排序的方法和步骤"></a>对AOV网进行拓扑排序的方法和步骤</h1><p>——从AOV网中选择一个没有前驱的顶点(入度为0的顶点),并且输出它；<br>——从网中删去该顶点，并且删去从该顶点发出的全部有向边(将有向边终点入度减一)<br>——重复上述两步，直到剩余网中不再没有前驱的顶点为止。<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/TopologicalSort.js" target="_blank" rel="noopener">代码链接</a></p>
+<h1 id="算法时间复杂度"><a href="#算法时间复杂度" class="headerlink" title="算法时间复杂度"></a>算法时间复杂度</h1><p>对一个具有n个顶点，e条边的网来说，初始建立入度为0的顶点栈，要检查所有顶点一次，执行时间为O(n);<br>排序中，若AOV网无回路，则每个顶点入、出栈各一次，每个表结点被检查一次，因而执行时间是O(n+e);<br>因此整个算法时间复杂度是O(n+e)</p>
 
           
         
@@ -1805,7 +1209,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/angular/imgupload.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/shortestpath.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1830,8 +1234,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/angular/imgupload.html" itemprop="url">
-                  AngularJs自定义指令实现图片上传
+                <a class="post-title-link" href="/post/algorithm/shortestpath.html" itemprop="url">
+                  最短路径
                 </a>
               
             
@@ -1845,8 +1249,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-22T22:14:30+08:00">
-                2017-02-22
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-02T19:12:37+08:00">
+                2017-04-02
               </time>
             
 
@@ -1883,12 +1287,9 @@
       
         
           
-            <p>//定义file-Model指令的代码<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">MetronicApp.directive(<span class="string">'fileModel'</span>, [<span class="string">'$parse'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">$parse</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    restrict: <span class="string">'A'</span>,</span><br><span class="line">    link: <span class="function"><span class="keyword">function</span>(<span class="params">scope, element, attrs, ngModel</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">var</span> model = $parse(attrs.fileModel);</span><br><span class="line">      <span class="keyword">var</span> modelSetter = model.assign;</span><br><span class="line">      element.bind(<span class="string">'change'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">event</span>)</span>&#123;</span><br><span class="line">        scope.$apply(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">          modelSetter(scope, element[<span class="number">0</span>].files[<span class="number">0</span>]);</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">//附件预览</span></span><br><span class="line">           scope.file = (event.srcElement || event.target).files[<span class="number">0</span>];</span><br><span class="line">            scope.getFile();</span><br><span class="line">            <span class="keyword">this</span>.value = <span class="string">''</span>; <span class="comment">//清除已上传的文件，否则无法连续上传相同文件</span></span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line">])</span><br></pre></td></tr></table></figure></p>
-<p>//在HTML使用时的代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> &lt;div class=&quot;form-group&quot;&gt;</span><br><span class="line">    &lt;label class=&quot;control-label col-md-3&quot;&gt;图片上传&lt;/label&gt;</span><br><span class="line">     &lt;div class=&quot;col-md-9 fileinput&quot;&gt;</span><br><span class="line">         &lt;img src=&quot;&#123;&#123;detaildata.banner&#125;&#125;&quot; name=&quot;img&quot; style=&quot;width:40px;height: 40px;&quot;&gt;</span><br><span class="line">        &lt;span class=&quot;btn red btn-outline btn-file&quot; style=&quot;margin-left: 10px;margin-top:0px;&quot;&gt;</span><br><span class="line">        &lt;span class=&quot;fileinput-new&quot;&gt; 重新上传 &lt;/span&gt;</span><br><span class="line">        &lt;input type=&quot;hidden&quot;&gt;&lt;input id=&quot;upload&quot; type=&quot;file&quot; file-model=&quot;myFile&quot; name=&quot;...&quot; accept=&quot;image/*&quot; &gt;</span><br><span class="line">        &lt;/span&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
-<p>//Controller中上传图片时的js函数<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$scope.getFile = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">   <span class="keyword">var</span> postData = &#123;</span><br><span class="line">            fileName: $scope.file</span><br><span class="line">          &#125;;</span><br><span class="line">       fileReader.readAsDataUrl($rootScope.settings.url + <span class="string">""</span>, postData).success( <span class="function"><span class="keyword">function</span>(<span class="params">response</span>) </span>&#123;</span><br><span class="line">                $scope.detaildata.banner = response;</span><br><span class="line">        &#125;);</span><br><span class="line"> &#125;;</span><br></pre></td></tr></table></figure></p>
-<p> //定义fileReader服务的代码<br> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">angular.module(<span class="string">'MetronicApp'</span>)</span><br><span class="line">.factory(<span class="string">'fileReader'</span>, [<span class="string">"$http"</span>, <span class="function"><span class="keyword">function</span>(<span class="params">$http</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> readAsDataURL = <span class="function"><span class="keyword">function</span> (<span class="params">url, data</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> fd = <span class="keyword">new</span> FormData();</span><br><span class="line">          angular.forEach(data, <span class="function"><span class="keyword">function</span>(<span class="params">val, key</span>) </span>&#123;</span><br><span class="line">            fd.append(key, val);</span><br><span class="line">          &#125;);</span><br><span class="line">          <span class="keyword">var</span> args = &#123;</span><br><span class="line">            method: <span class="string">'POST'</span>,</span><br><span class="line">            url: url,</span><br><span class="line">            data: fd,</span><br><span class="line">            headers: &#123;<span class="string">'Content-Type'</span>: <span class="literal">undefined</span>&#125;,</span><br><span class="line">            transformRequest: angular.identity</span><br><span class="line">          &#125;;</span><br><span class="line">          <span class="keyword">return</span> $http(args);</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    readAsDataUrl: readAsDataURL</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;])</span><br></pre></td></tr></table></figure></p>
-<p>整个上传的过程，点击“重新上传”按钮，file-model指令绑定的change事件会检测本次选择的图片与上次是否为一致，不一致则会执行file-model定义时的代码<br> element.bind(‘change’, function(event){<br>        scope.$apply(function(){<br>          modelSetter(scope, element[0].files[0]);<br>        });<br>        //附件预览<br>           scope.file = (event.srcElement || event.target).files[0];      //给Controller 中$scope.file赋值<br>            scope.getFile();    //调用Controller 中 $scope.getFile();<br>          this.value = ‘’; //清除已上传的文件，否则无法连续上传相同文件<br>      });<br>控制器中的$scope.getFile()函数用到fileReader.readAsDataUrl函数上传图片给后台，这个函数在定义fileReader时被定义</p>
-<p>定义指令时，若没有清除已上传文件，连续多次上传时，将导致无法连续上传相同图片的bug.</p>
+            <p>网图：两个顶点经过的边上权值之和最少的路径<br>非网图：两个顶点之间经过的边数最少的路径<br>源点：路径起始的第一个顶点<br>终点：最后一个顶点<br><img src="/image/shortestpath1.png" alt="shortestpath1"></p>
+<h1 id="迪杰斯特拉-Dijkstra-算法"><a href="#迪杰斯特拉-Dijkstra-算法" class="headerlink" title="迪杰斯特拉(Dijkstra)算法"></a>迪杰斯特拉(Dijkstra)算法</h1><p>一个顶点到所有顶点的最短路径<br>主要思路：一步步求出它们之间顶点的最短路径，过程中都是基于已经求出的最短路径的基础上，求得更远顶点的最短路径<br>编程思路：类似于最小生成树普里姆算法<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/ShortestPath_Dijkstra.js" target="_blank" rel="noopener">代码链接</a></p>
+<h1 id="佛洛依德-Floyd-算法"><a href="#佛洛依德-Floyd-算法" class="headerlink" title="佛洛依德(Floyd)算法"></a>佛洛依德(Floyd)算法</h1><p>扩展版迪杰斯特拉(Dijkstra)算法，求图中所有结点到所有结点的最大路径，结果由二维数组展现<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/ShortestPath_Floyd.js" target="_blank" rel="noopener">代码链接</a><br><img src="/image/shortestpath2.png" alt="shortestpath2"></p>
 
           
         
@@ -1927,7 +1328,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/graph.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/MinimumTree.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1952,8 +1353,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/algorithm/graph.html" itemprop="url">
-                  图
+                <a class="post-title-link" href="/post/algorithm/MinimumTree.html" itemprop="url">
+                  最小生成树
                 </a>
               
             
@@ -1967,8 +1368,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-22T21:59:30+08:00">
-                2017-02-22
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-30T21:10:37+08:00">
+                2017-03-30
               </time>
             
 
@@ -2005,7 +1406,9 @@
       
         
           
-            <h1 id="图的定义"><a href="#图的定义" class="headerlink" title="图的定义"></a>图的定义</h1><p>图:由顶点的有穷非空集合和顶点之间边的集合组成，通常表示为：G(V,E),<br>     —-G表示一个图，V是图G中顶点的集合，E是图G中边的集合<br>|                | 线性表           | 树                |           图           |<br>| ————-  |:—————-:| —————–:|<br>| 数据元素       | 元素             | 结点              |           顶点         |<br>| 没有数据元素   | 空表             | 空树              | 不能没有顶点，有穷非空 |<br>| 数据元素间关系 | 相邻之间:线性关系| 相邻两层:层次关系 | 任意两个顶点之间都可能有关系顶点之间逻辑关系用边表示，边集可以是空的|<br>无向边：顶点Vi到Vj之间的边没有方向,用无序偶(Vi,Vj)表示<br>有向边/弧：顶点Vi到Vj之间的边有方向,用有序偶&lt;Vi,Vj&gt;表示,Vi称为弧尾，Vj称为弧头<br>简单图：在该类图结构中，不存在顶点到其自身的边(自己指向自己)且同一条边不重复出现<br>无向完全图:在该类图结构中，任意两个顶点之间都存在边，含n个顶点的无向完全图有n<em>(n-1)/2条边<br>有向完全图:在该类图结构中，任意两个顶点之间都存在方向互为相反的两条弧，含n个顶点的有向完全图有n</em>(n-1)条边<br>稀疏图：边或弧数小于n<em>logn(n是顶点的个数)<br>稠密图：边或弧数大于n</em>logn(n是顶点的个数)<br>权：图的边或弧带有的与它相关的数字<br>网：带权的图<br>子图：图G1(V1,E1),和G2(V2,E2),如果V2 \subseteq V1，E2 \subseteq E1 ,V2 属于 V1，E2 属于 E1则称G2为G1的子图<br><a href="http://blog.csdn.net/sanqima/article/details/48576361" target="_blank" rel="noopener">http://blog.csdn.net/sanqima/article/details/48576361</a><br>邻接点：无向图G=(V,E),如果边(V1,V2)属于E，则称顶点V1和V2互为邻接点，即V1和V2相邻接<br>——-边(V1,V2)依附于顶点V1和V2，或者说边(V1,V2)与顶点V1和V2相关联<br>顶点V的度：和顶点V相关联的边的数目，记为TD(V)<br>邻接：有向图G=(V,E),如果边&lt;V1,V2&gt;属于E，则称顶点V1邻接到顶点V2,顶点V2邻接自顶点V1<br>顶点V的入度:以顶点V为头的弧的数目，记为    ID(V)<br>顶点V的出度:以顶点V为尾的弧的数目，记为    OD(V)<br>TD(V) = ID(V) + OD(V);<br>路径:图G=(V,E)中从顶点V1到顶点V2的路线叫从顶点V1到顶点V2的路径，注意有向图和无向图的区别<br>路径的长度：路径上边/弧的数目<br>回路/环：第一个顶点和最后一个顶点相同的路径<br>简单路径：序列中顶点不重复出现的路径<br>简单回路/简单环:除了第一个顶点和最后一个顶点之外，其余顶点不重复出现的回路<br>连通：在无向图G中，如果顶点V1到顶点V2有路径则称V1和V2是连通的<br>连通图：图中任意两个顶点Vi和Vj都是连通的，则称G是连通图<br>连通分量：无向图中的极大连通子图<br>—-连通的子图<br>—-连通子图含有极大顶点数<br>—-具有极大顶点数的连通子图包含依附于这些顶点的所有边<br>强连通图：在该类有向图G中，每一对Vi到Vj都存在路径<br>强连通分量：有向图中的极大强连通子图<br>非强连通图有强连通分量，强连通分量不止属于强连通图<br>连通图的生成树：极小的连通子图，它含有图中全部n个顶点，但只有足以构成一棵树的n-1条边<br>有向树：如果一个有向图恰有一个顶点入度为0，其余顶点入度为1，则该图将生成有向树，从而构成森林</p>
+            <p>图的各结点连线间存在权值，寻找一种访问路径,使得访问各结点最终的路径的权值和最小，<br>最终访问路径和结点形成树的结构，即最小生成树</p>
+<h1 id="普里姆算法"><a href="#普里姆算法" class="headerlink" title="普里姆算法"></a>普里姆算法</h1><p><img src="/image/plim.png" alt="plim"><br>主要思路：研究对象为结点，以某顶点为起点，逐步找各个顶点上最小权值的边来构建最小生成树<br>编程思路：新建一数组，初始化为起点(最小生成树的根结点)在邻接矩阵所在行的权值<br>找到该组权值最小值,最小权值下标即要选择路径的终点，同时也是接下来要比较的邻接矩阵权值行的行号，<br>将该最小权值置0，然后将新建数组与矩阵权值行比较，<br>相同位置，矩阵行若小于新建数组值，就将新建数组值替换为矩阵行的值，<br>再次寻找新建数组中的最小权值，重复以上步骤<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/MinimumTreeofPlim.js" target="_blank" rel="noopener">代码链接</a></p>
+<h1 id="克鲁斯卡尔算法"><a href="#克鲁斯卡尔算法" class="headerlink" title="克鲁斯卡尔算法"></a>克鲁斯卡尔算法</h1><p><img src="/image/kluse.png" alt="kluse"><br>主要思路：研究对象为边，将边集数组从小到大排序，依次取边集数组的元素，判断边与边是否形成环路，不会形成则选择该边构建最小树<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/MinimumTreeofKruskal.js" target="_blank" rel="noopener">代码链接</a></p>
 
           
         
@@ -2039,7 +1442,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/19/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><span class="page-number current">20</span><a class="page-number" href="/page/21/">21</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><a class="extend next" rel="next" href="/page/21/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/19/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><span class="page-number current">20</span><a class="page-number" href="/page/21/">21</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/21/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2078,7 +1481,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">245</span>
+              <span class="site-state-item-count">260</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -2095,7 +1498,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-count">23</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

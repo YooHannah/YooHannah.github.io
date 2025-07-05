@@ -1,0 +1,735 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="llm,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="一些产品设计的思想划重点：  凡是重复脑力劳动都可以考虑 AI 化 凡是「输入和输出都是文本」的场景，都值得尝试用大模型提效  如何理解 AI 能编写程序如何理解 AI 能编写程序 编程能力是大模型各项能力的天花板  「编程」是目前大模型能力最强的垂直领域，甚至超越了对「自然语言」本身的处理能力。因为： 训练数据质量高 结果可衡量 编程语言无二义性 有论文 “The first model tha">
+<meta name="keywords" content="llm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从AI编程认知AI">
+<meta property="og:url" content="http://yoohannah.github.io/post/llm/aiCoding.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="一些产品设计的思想划重点：  凡是重复脑力劳动都可以考虑 AI 化 凡是「输入和输出都是文本」的场景，都值得尝试用大模型提效  如何理解 AI 能编写程序如何理解 AI 能编写程序 编程能力是大模型各项能力的天花板  「编程」是目前大模型能力最强的垂直领域，甚至超越了对「自然语言」本身的处理能力。因为： 训练数据质量高 结果可衡量 编程语言无二义性 有论文 “The first model tha">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2025-07-05T06:11:07.261Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从AI编程认知AI">
+<meta name="twitter:description" content="一些产品设计的思想划重点：  凡是重复脑力劳动都可以考虑 AI 化 凡是「输入和输出都是文本」的场景，都值得尝试用大模型提效  如何理解 AI 能编写程序如何理解 AI 能编写程序 编程能力是大模型各项能力的天花板  「编程」是目前大模型能力最强的垂直领域，甚至超越了对「自然语言」本身的处理能力。因为： 训练数据质量高 结果可衡量 编程语言无二义性 有论文 “The first model tha">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/llm/aiCoding.html">
+
+
+
+
+
+  <title> 从AI编程认知AI | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/llm/aiCoding.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                从AI编程认知AI
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-07-09T20:51:37+08:00">
+                2024-07-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="一些产品设计的思想"><a href="#一些产品设计的思想" class="headerlink" title="一些产品设计的思想"></a>一些产品设计的思想</h2><p><span style="color:#1b5e20;font-weight:bold">划重点：</span></p>
+<ol>
+<li>凡是重复脑力劳动都可以考虑 AI 化</li>
+<li>凡是「输入和输出都是文本」的场景，都值得尝试用大模型提效</li>
+</ol>
+<h2 id="如何理解-AI-能编写程序"><a href="#如何理解-AI-能编写程序" class="headerlink" title="如何理解 AI 能编写程序"></a>如何理解 AI 能编写程序</h2><p><a href="https://learn.agiclass.cn/user/u15014137897/lab/tree/lecture-notes/04-ai-programming/index.ipynb#%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3-AI-%E8%83%BD%E7%BC%96%E5%86%99%E7%A8%8B%E5%BA%8F" target="_blank" rel="noopener">如何理解 AI 能编写程序</a></p>
+<p><strong>编程能力是大模型各项能力的天花板</strong></p>
+<ul>
+<li>「编程」是目前大模型能力最强的垂直领域，甚至超越了对「自然语言」本身的处理能力。因为：<ul>
+<li>训练数据质量高</li>
+<li>结果可衡量</li>
+<li>编程语言无二义性</li>
+<li>有<a href="https://arxiv.org/pdf/2211.09110.pdf" target="_blank" rel="noopener">论文</a><ul>
+<li>“The first model that OpenAI gave us was a Python-only model,” Ziegler remembers. “Next we were delivered a JavaScript model and a multilingual model, and it turned out that the Javascript model had particular problems that the multilingual model did not. It actually came as a surprise to us that the multilingual model could perform so well. But each time, the models were just getting better and better, which was really exciting for GitHub Copilot’s progress.” –<a href="https://github.blog/2023-05-17-inside-github-working-with-the-llms-behind-github-copilot/" target="_blank" rel="noopener">Inside GitHub: Working with the LLMs behind GitHub Copilot</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>知道怎么用好 AI 编程，了解它的能力边界、使用场景，就能类比出在其他领域 AI 怎么落地，能力上限在哪<ul>
+<li><a href="https://github.blog/2023-09-06-how-to-build-an-enterprise-llm-application-lessons-from-github-copilot/" target="_blank" rel="noopener">How to build an enterprise LLM application: Lessons from GitHub Copilot</a></li>
+</ul>
+</li>
+</ul>
+<p><span style="color:#1b5e20;font-weight:bold">划重点：</span></p>
+<ol>
+<li>使用 AI 编程，除了解决编程问题以外，更重要是形成对 AI 的正确认知。</li>
+<li>数据质量决定 AI 的质量。</li>
+</ol>
+<h3 id="一些技巧"><a href="#一些技巧" class="headerlink" title="一些技巧"></a>一些技巧</h3><ol>
+<li>代码有了，再写注释，更省力</li>
+<li>改写当前代码，可另起一块新写，AI 补全得更准，完成后再删旧代码</li>
+<li>Cmd/Ctrl + → 只接受一个 token</li>
+<li>如果有旧代码希望被参考，就把代码文件在新 tab 页里打开</li>
+</ol>
+<p><span style="color:#1b5e20;font-weight:bold">产品设计经验：</span><span style="color:#1b5e20;background-color:#c8e6c9">在 chat 界面里用 @ 串联多个 agent 是一个常见的 AI 产品设计范式。</span></p>
+<p><span style="color:#1b5e20;font-weight:bold">产品设计经验：</span><span style="color:#1b5e20;background-color:#c8e6c9">让 AI 在不影响用户原有工作习惯的情况下切入使用场景，接受度最高。</span></p>
+<p><span style="color:#1b5e20;font-weight:bold">产品设计经验：流程化操作</span><span style="color:#1b5e20;background-color:#c8e6c9">步步都需要人工调整、确认</span></p>
+<p><span style="color:#1b5e20;font-weight:bold">落地经验：</span><span style="color:#1b5e20;background-color:#c8e6c9">只有可量化的结果，才能说服老板买单</span></p>
+<h2 id="GitHub-Copilot-基本原理"><a href="#GitHub-Copilot-基本原理" class="headerlink" title="GitHub Copilot 基本原理"></a>GitHub Copilot 基本原理</h2><h3 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h3><ul>
+<li>模型层：最初使用 OpenAI Codex 模型，它也是 GPT-3.5、GPT-4 的「一部分」。<br><a href="https://github.blog/2023-07-28-smarter-more-efficient-coding-github-copilot-goes-beyond-codex-with-improved-ai-model/" target="_blank" rel="noopener">现在已经完全升级，模型细节未知</a>。</li>
+<li>应用层： prompt engineering。Prompt 中包含：<br>a. 组织上下文：光标前和光标后的代码片段<br>b. 获取代码片段：其它相关代码片段。当前文件和其它打开的同语言文件 tab 里的代码被切成每个 60 行的片段，用<a href="https://zh.wikipedia.org/wiki/%E9%9B%85%E5%8D%A1%E5%B0%94%E6%8C%87%E6%95%B0" target="_blank" rel="noopener">Jaccard 相似度</a><ul>
+<li>为什么是打开的 tabs？</li>
+<li>多少个 tabs 是有效的呢？经验选择：20 个<br>c. 修饰相关上下文：被取用的代码片段的路径。<br>d. 优先级：根据一些代码常识判断补全输入内容的优先级<br>e. 补全格式：在函数定义、类定义、if-else 等之后，会补全整段代码，其它时候只补全当前行</li>
+</ul>
+</li>
+</ul>
+<p>有效性：</p>
+<ul>
+<li>Telemetry(远程遥测<a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">如何取消</a>)</li>
+<li>A/B Test</li>
+<li>智谱的度量方式</li>
+</ul>
+<h3 id="AI-能力定律："><a href="#AI-能力定律：" class="headerlink" title="AI 能力定律："></a>AI 能力定律：</h3><p>AI 能力的上限，是使用者的判断力</p>
+<p><span style="font-size:16px">AI 能力=min(AI 能力,使用者判断力)</span></p>
+<h3 id="AI-提效定律："><a href="#AI-提效定律：" class="headerlink" title="AI 提效定律："></a>AI 提效定律：</h3><p>AI 提升的效率，与使用者的判断力成正比，与生产力成反比</p>
+<p><span style="font-size:16px">效率提升幅度 = 使用者判断力/使用者生产力</span></p>
+<p>解读：</p>
+<ol>
+<li>使用者的判断力，是最重要的</li>
+<li>提升判断力，比提升实操能力更重要。所谓「眼高手低」者的福音</li>
+<li>广阔的视野是判断力的养料</li>
+</ol>
+<p><span style="color:#1b5e20;font-weight:bold">要点总结：</span></p>
+<ol>
+<li>通过天天使用，总结使用大模型的规律，认知：<strong>凡是「输入和输出都是文本」的场景，都值得尝试用大模型提效。</strong></li>
+<li>通过体验 GitHub Copilot，认知：<strong>AI 产品的打磨过程、落地和目前盈利产品如何打造</strong></li>
+<li>通过介绍原理，认知：<strong>AI 目前的上限，以及 AI 组织数据和达到上限的条件</strong></li>
+<li>对于 AI 产品如何反馈有效性，认知：<strong>AI 产品落地的有效性管理方法</strong></li>
+<li>通过介绍两大定律，认知：<strong>AI 幻觉不可消灭； AI 的能效；</strong></li>
+</ol>
+<p><span style="color:#1b5e20;font-weight:bold">以成功案例为例，理解基本原理，避免拍脑袋</span></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/llm/" rel="tag"># llm</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/llm/functionCalling.html" rel="next" title="Function Calling">
+                <i class="fa fa-chevron-left"></i> Function Calling
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/llm/RAG.html" rel="prev" title="RAG">
+                RAG <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">260</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一些产品设计的思想"><span class="nav-number">1.</span> <span class="nav-text">一些产品设计的思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何理解-AI-能编写程序"><span class="nav-number">2.</span> <span class="nav-text">如何理解 AI 能编写程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一些技巧"><span class="nav-number">2.1.</span> <span class="nav-text">一些技巧</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GitHub-Copilot-基本原理"><span class="nav-number">3.</span> <span class="nav-text">GitHub Copilot 基本原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#工作原理"><span class="nav-number">3.1.</span> <span class="nav-text">工作原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AI-能力定律："><span class="nav-number">3.2.</span> <span class="nav-text">AI 能力定律：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AI-提效定律："><span class="nav-number">3.3.</span> <span class="nav-text">AI 提效定律：</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

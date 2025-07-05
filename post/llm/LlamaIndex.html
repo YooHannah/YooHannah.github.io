@@ -1,0 +1,749 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="llm,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="LlamaIndex 简介LlamaIndex 是一个为开发「上下文增强」的大语言模型应用的框架（也就是 SDK）。上下文增强，泛指任何在私有或特定领域数据基础上应用大语言模型的情况。例如：  Question-Answering Chatbots (也就是 RAG) Document Understanding and Extraction （文档理解与信息抽取） Autonomous Agen">
+<meta name="keywords" content="llm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="llamaindex">
+<meta property="og:url" content="http://yoohannah.github.io/post/llm/LlamaIndex.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="LlamaIndex 简介LlamaIndex 是一个为开发「上下文增强」的大语言模型应用的框架（也就是 SDK）。上下文增强，泛指任何在私有或特定领域数据基础上应用大语言模型的情况。例如：  Question-Answering Chatbots (也就是 RAG) Document Understanding and Extraction （文档理解与信息抽取） Autonomous Agen">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2025-07-05T06:12:46.537Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="llamaindex">
+<meta name="twitter:description" content="LlamaIndex 简介LlamaIndex 是一个为开发「上下文增强」的大语言模型应用的框架（也就是 SDK）。上下文增强，泛指任何在私有或特定领域数据基础上应用大语言模型的情况。例如：  Question-Answering Chatbots (也就是 RAG) Document Understanding and Extraction （文档理解与信息抽取） Autonomous Agen">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/llm/LlamaIndex.html">
+
+
+
+
+
+  <title> llamaindex | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/llm/LlamaIndex.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                llamaindex
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-07-28T10:57:37+08:00">
+                2024-07-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="LlamaIndex-简介"><a href="#LlamaIndex-简介" class="headerlink" title="LlamaIndex 简介"></a>LlamaIndex 简介</h1><p>LlamaIndex 是一个为开发「<strong>上下文增强</strong>」的大语言模型应用的框架（也就是 SDK）。<strong>上下文增强</strong>，泛指任何在私有或特定领域数据基础上应用大语言模型的情况。例如：</p>
+<ol>
+<li>Question-Answering Chatbots (也就是 RAG)</li>
+<li>Document Understanding and Extraction （文档理解与信息抽取）</li>
+<li>Autonomous Agents that can perform research and take actions （智能体应用）</li>
+</ol>
+<p>LlamaIndex 有 Python 和 Typescript 两个版本，Python 版的文档相对更完善。</p>
+<ol>
+<li>Python 文档地址：<br><a href="https://docs.llamaindex.ai/en/stable/" target="_blank" rel="noopener">https://docs.llamaindex.ai/en/stable/</a></li>
+<li>Python API 接口文档：<br><a href="https://docs.llamaindex.ai/en/stable/api_reference/" target="_blank" rel="noopener">https://docs.llamaindex.ai/en/stable/api_reference/</a></li>
+<li>TS 文档地址：<br><a href="https://ts.llamaindex.ai/" target="_blank" rel="noopener">https://ts.llamaindex.ai/</a></li>
+<li>TS API 接口文档：<br><a href="https://ts.llamaindex.ai/api/" target="_blank" rel="noopener">https://ts.llamaindex.ai/api/</a></li>
+</ol>
+<p>LlamaIndex 是一个开源框架，Github 链接：<br><a href="https://github.com/run-llama" target="_blank" rel="noopener">https://github.com/run-llama</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install llama-index</span><br></pre></td></tr></table></figure>
+<h1 id="数据加载"><a href="#数据加载" class="headerlink" title="数据加载"></a>数据加载</h1><h2 id="加载本地数据"><a href="#加载本地数据" class="headerlink" title="加载本地数据"></a>加载本地数据</h2><p><code>SimpleDirectoryReader</code> 是一个简单的本地文件加载器。它会遍历指定目录，并根据文件扩展名自动加载文件（<strong>文本内容</strong>）。</p>
+<p>默认的 <code>PDFReader</code> 效果并不理想，我们可以更换文件加载器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pymupdf</span><br></pre></td></tr></table></figure>
+<p>更多的 PDF 加载器还有 <a href="https://llamahub.ai/l/readers/llama-index-readers-smart-pdf-loader?from=readers" target="_blank" rel="noopener">SmartPDFLoader</a> 和 <a href="https://llamahub.ai/l/readers/llama-index-readers-llama-parse?from=readers" target="_blank" rel="noopener">LlamaParse</a>, 二者都提供了更丰富的解析能力，包括解析章节与段落结构等。但不是 100%准确，偶有文字丢失或错位情况，建议根据自身需求详细测试评估。</p>
+<h2 id="Data-Connectors"><a href="#Data-Connectors" class="headerlink" title="Data Connectors"></a>Data Connectors</h2><p>对图像、视频、语音类文件，默认不会自动提取其中文字。如需提取, 需要对应读取器。</p>
+<p>处理更丰富的数据类型，并将其读取为 <code>Document</code> 的形式（text + metadata）。</p>
+<ol>
+<li>比如 加载飞书文档 pip install llama-index-readers-feishu-docs</li>
+<li>内置的<a href="https://llamahub.ai/l/readers/llama-index-readers-file" target="_blank" rel="noopener">文件加载器</a></li>
+<li>连接三方服务的<a href="https://docs.llamaindex.ai/en/stable/module_guides/loading/connector/modules/" target="_blank" rel="noopener">数据加载器</a></li>
+<li>更多加载器可以在 <a href="https://llamahub.ai/" target="_blank" rel="noopener">LlamaHub</a> 上找到</li>
+</ol>
+<h1 id="文本切分与解析（Chunking）"><a href="#文本切分与解析（Chunking）" class="headerlink" title="文本切分与解析（Chunking）"></a>文本切分与解析（Chunking）</h1><p>LlamaIndex 中，<code>Node</code> 被定义为一个文本的「chunk」。</p>
+<h2 id="使用-TextSplitters-对文本做切分"><a href="#使用-TextSplitters-对文本做切分" class="headerlink" title="使用 TextSplitters 对文本做切分"></a>使用 TextSplitters 对文本做切分</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">from llama_index.core.node_parser import TokenTextSplitter</span><br><span class="line">from llama_index.core import Document</span><br><span class="line">from llama_index.core.node_parser import TokenTextSplitter</span><br><span class="line"></span><br><span class="line">node_parser = TokenTextSplitter(</span><br><span class="line">    chunk_size=100,  # 每个 chunk 的最大长度</span><br><span class="line">    chunk_overlap=50  # chunk 之间重叠长度 </span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">nodes = node_parser.get_nodes_from_documents(</span><br><span class="line">    documents, show_progress=False</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">show_json(nodes[0])</span><br></pre></td></tr></table></figure>
+<p>LlamaIndex 提供了丰富的 <code>TextSplitter</code>，例如：</p>
+<ol>
+<li>SentenceSplitter: 在切分指定长度的 chunk 同时尽量保证句子边界不被切断；</li>
+<li>CodeSplitter: 根据 AST（编译器的抽象句法树）切分代码，保证代码功能片段完整；</li>
+<li>SemanticSplitterNodeParser: 根据语义相关性对将文本切分为片段</li>
+</ol>
+<h2 id="使用-NodeParsers-对有结构的文档做解析"><a href="#使用-NodeParsers-对有结构的文档做解析" class="headerlink" title="使用 NodeParsers 对有结构的文档做解析"></a>使用 NodeParsers 对有结构的文档做解析</h2><p>更多的 <code>NodeParser</code> 包括 <a href="https://docs.llamaindex.ai/en/stable/api_reference/node_parsers/html/" target="_blank" rel="noopener">HTMLNodeParser</a>，<a href="https://docs.llamaindex.ai/en/stable/api_reference/node_parsers/json/" target="_blank" rel="noopener">JSONNodeParser</a>等等。</p>
+<h1 id="索引（Indexing）与检索（Retrieval）"><a href="#索引（Indexing）与检索（Retrieval）" class="headerlink" title="索引（Indexing）与检索（Retrieval）"></a>索引（Indexing）与检索（Retrieval）</h1><p><strong>基础概念</strong>：在「检索」相关的上下文中，「索引」即 <code>index</code>， 通常是指为了实现快速检索而设计的特定「数据结构」。</p>
+<p><a href="https://en.wikipedia.org/wiki/Search_engine_indexing" target="_blank" rel="noopener">传统索引</a>、<a href="https://medium.com/kx-systems/vector-indexing-a-roadmap-for-vector-databases-65866f07daf5" target="_blank" rel="noopener">向量索引</a></p>
+<h2 id="向量检索"><a href="#向量检索" class="headerlink" title="向量检索"></a>向量检索</h2><ol>
+<li>SimpleVectorStore 直接在内存中构建一个 Vector Store 并建索引</li>
+</ol>
+<p>LlamaIndex 默认的 Embedding 模型是 <code>OpenAIEmbedding(model=&quot;text-embedding-ada-002&quot;)</code>。</p>
+<ol start="2">
+<li>使用自定义的 Vector Store，以 <code>Chroma</code> 为例：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install llama-index-vector-stores-chroma</span><br></pre></td></tr></table></figure>
+<h3 id="更多索引与检索方式"><a href="#更多索引与检索方式" class="headerlink" title="更多索引与检索方式"></a>更多索引与检索方式</h3><p>LlamaIndex 内置了丰富的检索机制，例如：</p>
+<p>关键字检索</p>
+<ol>
+<li><a href="https://docs.llamaindex.ai/en/stable/api_reference/retrievers/bm25/" target="_blank" rel="noopener">BM25Retriever</a>：基于 tokenizer 实现的 BM25 经典检索算</li>
+<li><a href="https://docs.llamaindex.ai/en/stable/api_reference/retrievers/keyword/#llama_index.core.indices.keyword_table.retrievers.KeywordTableGPTRetriever" target="_blank" rel="noopener">KeywordTableGPTRetriever</a>：使用 GPT 提取检索关键字</li>
+<li><a href="https://docs.llamaindex.ai/en/stable/api_reference/retrievers/keyword/#llama_index.core.indices.keyword_table.retrievers.KeywordTableSimpleRetriever" target="_blank" rel="noopener">KeywordTableSimpleRetriever</a>：使用正则表达式提取检索关键字</li>
+<li><a href="https://docs.llamaindex.ai/en/stable/api_reference/retrievers/keyword/#llama_index.core.indices.keyword_table.retrievers.KeywordTableRAKERetriever" target="_blank" rel="noopener">KeywordTableRAKERetriever</a>：使用<a href="https://pypi.org/project/rake-nltk/" target="_blank" rel="noopener">RAKE</a>算法提取检索关键字（有语言限制）</li>
+<li>RAG-Fusion <a href="https://docs.llamaindex.ai/en/stable/api_reference/retrievers/query_fusion/" target="_blank" rel="noopener">QueryFusionRetriever</a>﻿</li>
+</ol>
+<p>还支持 <a href="https://docs.llamaindex.ai/en/stable/api_reference/retrievers/knowledge_graph/" target="_blank" rel="noopener">KnowledgeGraph</a>、<a href="https://docs.llamaindex.ai/en/stable/api_reference/retrievers/sql/#llama_index.core.retrievers.SQLRetriever" target="_blank" rel="noopener">SQL</a>、<a href="https://docs.llamaindex.ai/en/stable/api_reference/retrievers/sql/#llama_index.core.retrievers.NLSQLRetriever" target="_blank" rel="noopener">Text-to-SQL</a> 等等</p>
+<h3 id="Ingestion-Pipeline-自定义数据处理流程"><a href="#Ingestion-Pipeline-自定义数据处理流程" class="headerlink" title="Ingestion Pipeline 自定义数据处理流程"></a>Ingestion Pipeline 自定义数据处理流程</h3><p>LlamaIndex 通过 <code>Transformations</code> 定义一个数据（<code>Documents</code>）的多步处理的流程（Pipeline）。 </p>
+<p>这个 Pipeline 的一个显著特点是，<strong>它的每个子步骤是可以缓存（cache）的</strong>，即如果该子步骤的输入与处理方法不变，重复调用时会直接从缓存中获取结果，而无需重新执行该子步骤，这样即节省时间也会节省 token （如果子步骤涉及大模型调用）。</p>
+<p>此外，也可以用远程的 Redis 或 MongoDB 等存储 <code>IngestionPipeline</code> 的缓存，具体参考官方文档：<a href="https://docs.llamaindex.ai/en/stable/module_guides/loading/ingestion_pipeline/#remote-cache-management" target="_blank" rel="noopener">Remote Cache Management</a>。</p>
+<p><code>IngestionPipeline</code> 也支持异步和并发调用，请参考官方文档：<a href="https://docs.llamaindex.ai/en/stable/module_guides/loading/ingestion_pipeline/#async-support" target="_blank" rel="noopener">Async Support</a>、<a href="https://docs.llamaindex.ai/en/stable/module_guides/loading/ingestion_pipeline/#parallel-processing" target="_blank" rel="noopener">Parallel Processing</a>。</p>
+<h2 id="检索后处理"><a href="#检索后处理" class="headerlink" title="检索后处理"></a>检索后处理</h2><p>LlamaIndex 的 <code>Node Postprocessors</code> 提供了一系列检索后处理模块。</p>
+<p>更多的 Rerank 及其它后处理方法，参考官方文档：<a href="https://docs.llamaindex.ai/en/stable/module_guides/querying/node_postprocessors/node_postprocessors/" target="_blank" rel="noopener">Node Postprocessor Modules</a>﻿</p>
+<h1 id="生成回复（QA-amp-Chat）"><a href="#生成回复（QA-amp-Chat）" class="headerlink" title="生成回复（QA &amp; Chat）"></a>生成回复（QA &amp; Chat）</h1><h2 id="单轮问答（Query-Engine）"><a href="#单轮问答（Query-Engine）" class="headerlink" title="单轮问答（Query Engine）"></a>单轮问答（Query Engine）</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">qa_engine = index.as_query_engine()</span><br><span class="line">response = qa_engine.query(&quot;Llama2 有多少参数?&quot;)</span><br><span class="line">print(response)</span><br></pre></td></tr></table></figure>
+<h3 id="流式输出"><a href="#流式输出" class="headerlink" title="流式输出"></a>流式输出</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">qa_engine = index.as_query_engine(streaming=True)</span><br><span class="line">response = qa_engine.query(&quot;Llama2 有多少参数?&quot;)</span><br><span class="line">response.print_response_stream()</span><br></pre></td></tr></table></figure>
+<h2 id="多轮对话（Chat-Engine）"><a href="#多轮对话（Chat-Engine）" class="headerlink" title="多轮对话（Chat Engine）"></a>多轮对话（Chat Engine）</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">chat_engine = index.as_chat_engine()</span><br><span class="line">response = chat_engine.chat(&quot;Llama2 有多少参数?&quot;)</span><br><span class="line">print(response)</span><br><span class="line"></span><br><span class="line">response = chat_engine.chat(&quot;How many at most?&quot;)</span><br><span class="line">print(response)</span><br></pre></td></tr></table></figure>
+<h3 id="流式输出-1"><a href="#流式输出-1" class="headerlink" title="流式输出"></a>流式输出</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">chat_engine = index.as_chat_engine()</span><br><span class="line">streaming_response = chat_engine.stream_chat(&quot;Llama 2有多少参数?&quot;)</span><br><span class="line">for token in streaming_response.response_gen:</span><br><span class="line">    print(token, end=&quot;&quot;)</span><br></pre></td></tr></table></figure>
+<h1 id="底层接口：Prompt、LLM-与-Embedding"><a href="#底层接口：Prompt、LLM-与-Embedding" class="headerlink" title="底层接口：Prompt、LLM 与 Embedding"></a>底层接口：Prompt、LLM 与 Embedding</h1><h2 id="Prompt-模板"><a href="#Prompt-模板" class="headerlink" title="Prompt 模板"></a>Prompt 模板</h2><p><code>PromptTemplate</code> 定义提示词模板</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">prompt = PromptTemplate(&quot;写一个关于&#123;topic&#125;的笑话&quot;)</span><br><span class="line"></span><br><span class="line">prompt.format(topic=&quot;小明&quot;)</span><br></pre></td></tr></table></figure>
+<p><code>ChatPromptTemplate</code> 定义多轮消息模板</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">from llama_index.core.llms import ChatMessage, MessageRole</span><br><span class="line">from llama_index.core import ChatPromptTemplate</span><br><span class="line"></span><br><span class="line">chat_text_qa_msgs = [</span><br><span class="line">    ChatMessage(</span><br><span class="line">        role=MessageRole.SYSTEM,</span><br><span class="line">        content=&quot;你叫&#123;name&#125;，你必须根据用户提供的上下文回答问题。&quot;,</span><br><span class="line">    ),</span><br><span class="line">    ChatMessage(</span><br><span class="line">        role=MessageRole.USER, </span><br><span class="line">        content=(</span><br><span class="line">            &quot;已知上下文：\n&quot; \</span><br><span class="line">            &quot;&#123;context&#125;\n\n&quot; \</span><br><span class="line">            &quot;问题：&#123;question&#125;&quot;</span><br><span class="line">        )</span><br><span class="line">    ),</span><br><span class="line">]</span><br><span class="line">text_qa_template = ChatPromptTemplate(chat_text_qa_msgs)</span><br><span class="line"></span><br><span class="line">print(</span><br><span class="line">    text_qa_template.format(</span><br><span class="line">        name=&quot;瓜瓜&quot;,</span><br><span class="line">        context=&quot;这是一个测试&quot;,</span><br><span class="line">        question=&quot;这是什么&quot;</span><br><span class="line">    )</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h2 id="语言模型"><a href="#语言模型" class="headerlink" title="语言模型"></a>语言模型</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from llama_index.llms.openai import OpenAI</span><br><span class="line"></span><br><span class="line">llm = OpenAI(temperature=0, model=&quot;gpt-4o&quot;)</span><br></pre></td></tr></table></figure>
+<h3 id="设置全局使用的语言模型"><a href="#设置全局使用的语言模型" class="headerlink" title="设置全局使用的语言模型"></a>设置全局使用的语言模型</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from llama_index.core import Settings</span><br><span class="line">Settings.llm = OpenAI(temperature=0, model=&quot;gpt-4o&quot;)</span><br></pre></td></tr></table></figure>
+<p>除 OpenAI 外，LlamaIndex 已集成多个大语言模型，包括云服务 API 和本地部署 API，详见官方文档：<a href="https://docs.llamaindex.ai/en/stable/module_guides/models/llms/modules/" target="_blank" rel="noopener">Available LLM integrations</a>﻿</p>
+<h2 id="Embedding-模型"><a href="#Embedding-模型" class="headerlink" title="Embedding 模型"></a>Embedding 模型</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">from llama_index.embeddings.openai import OpenAIEmbedding</span><br><span class="line">from llama_index.core import Settings</span><br></pre></td></tr></table></figure>
+<p><em>全局设定</em></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Settings.embed_model = OpenAIEmbedding(model=&quot;text-embedding-3-small&quot;, dimensions=512)</span><br></pre></td></tr></table></figure>
+<p>LlamaIndex 同样集成了多种 Embedding 模型，包括云服务 API 和开源模型（HuggingFace）等，详见<a href="https://docs.llamaindex.ai/en/stable/module_guides/models/embeddings/" target="_blank" rel="noopener">官方文档</a>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">基于 LlamaIndex 实现一个功能较完整的 RAG 系统</span><br></pre></td></tr></table></figure>
+<h1 id="LlamaIndex-的更多功能"><a href="#LlamaIndex-的更多功能" class="headerlink" title="LlamaIndex 的更多功能"></a>LlamaIndex 的更多功能</h1><ol>
+<li>智能体（Agent）开发框架：<br><a href="https://docs.llamaindex.ai/en/stable/module_guides/deploying/agents/" target="_blank" rel="noopener">https://docs.llamaindex.ai/en/stable/module_guides/deploying/agents/</a></li>
+<li>RAG 的评测：<br><a href="https://docs.llamaindex.ai/en/stable/module_guides/evaluating/" target="_blank" rel="noopener">https://docs.llamaindex.ai/en/stable/module_guides/evaluating/</a></li>
+<li>过程监控：<br><a href="https://docs.llamaindex.ai/en/stable/module_guides/observability/" target="_blank" rel="noopener">https://docs.llamaindex.ai/en/stable/module_guides/observability/</a></li>
+</ol>
+<p>以上内容涉及较多背景知识，暂时不在本课展开，相关知识会在后面课程中逐一详细讲解。</p>
+<p>此外，LlamaIndex 针对生产级的 RAG 系统中遇到的各个方面的细节问题，总结了很多高端技巧（<a href="https://docs.llamaindex.ai/en/stable/optimizing/production_rag/" target="_blank" rel="noopener">Advanced Topics</a>），对实战很有参考价值，非常推荐有能力的同学阅读。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/llm/" rel="tag"># llm</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/llm/AssistantsAPI.html" rel="next" title="AssistantsAPI">
+                <i class="fa fa-chevron-left"></i> AssistantsAPI
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/llm/LangChain.html" rel="prev" title="LangChain">
+                LangChain <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">260</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LlamaIndex-简介"><span class="nav-number">1.</span> <span class="nav-text">LlamaIndex 简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据加载"><span class="nav-number">2.</span> <span class="nav-text">数据加载</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#加载本地数据"><span class="nav-number">2.1.</span> <span class="nav-text">加载本地数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Data-Connectors"><span class="nav-number">2.2.</span> <span class="nav-text">Data Connectors</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文本切分与解析（Chunking）"><span class="nav-number">3.</span> <span class="nav-text">文本切分与解析（Chunking）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-TextSplitters-对文本做切分"><span class="nav-number">3.1.</span> <span class="nav-text">使用 TextSplitters 对文本做切分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-NodeParsers-对有结构的文档做解析"><span class="nav-number">3.2.</span> <span class="nav-text">使用 NodeParsers 对有结构的文档做解析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#索引（Indexing）与检索（Retrieval）"><span class="nav-number">4.</span> <span class="nav-text">索引（Indexing）与检索（Retrieval）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#向量检索"><span class="nav-number">4.1.</span> <span class="nav-text">向量检索</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#更多索引与检索方式"><span class="nav-number">4.1.1.</span> <span class="nav-text">更多索引与检索方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ingestion-Pipeline-自定义数据处理流程"><span class="nav-number">4.1.2.</span> <span class="nav-text">Ingestion Pipeline 自定义数据处理流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#检索后处理"><span class="nav-number">4.2.</span> <span class="nav-text">检索后处理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#生成回复（QA-amp-Chat）"><span class="nav-number">5.</span> <span class="nav-text">生成回复（QA &amp; Chat）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#单轮问答（Query-Engine）"><span class="nav-number">5.1.</span> <span class="nav-text">单轮问答（Query Engine）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#流式输出"><span class="nav-number">5.1.1.</span> <span class="nav-text">流式输出</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多轮对话（Chat-Engine）"><span class="nav-number">5.2.</span> <span class="nav-text">多轮对话（Chat Engine）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#流式输出-1"><span class="nav-number">5.2.1.</span> <span class="nav-text">流式输出</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#底层接口：Prompt、LLM-与-Embedding"><span class="nav-number">6.</span> <span class="nav-text">底层接口：Prompt、LLM 与 Embedding</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Prompt-模板"><span class="nav-number">6.1.</span> <span class="nav-text">Prompt 模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#语言模型"><span class="nav-number">6.2.</span> <span class="nav-text">语言模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#设置全局使用的语言模型"><span class="nav-number">6.2.1.</span> <span class="nav-text">设置全局使用的语言模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Embedding-模型"><span class="nav-number">6.3.</span> <span class="nav-text">Embedding 模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LlamaIndex-的更多功能"><span class="nav-number">7.</span> <span class="nav-text">LlamaIndex 的更多功能</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

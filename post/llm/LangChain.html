@@ -1,0 +1,837 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="llm,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="LangChain 也是一套面向大模型的开发框架（SDK）  LangChain 是 AGI 时代软件工程的一个探索和原型 学习 LangChain 要关注接口变更  LangChain 的核心组件 模型 I/O 封装 LLMs：大语言模型 Chat Models：一般基于 LLMs，但按对话结构重新封装 PromptTemple：提示词模板 OutputParser：解析输出   数据连接封装">
+<meta name="keywords" content="llm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LangChain">
+<meta property="og:url" content="http://yoohannah.github.io/post/llm/LangChain.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="LangChain 也是一套面向大模型的开发框架（SDK）  LangChain 是 AGI 时代软件工程的一个探索和原型 学习 LangChain 要关注接口变更  LangChain 的核心组件 模型 I/O 封装 LLMs：大语言模型 Chat Models：一般基于 LLMs，但按对话结构重新封装 PromptTemple：提示词模板 OutputParser：解析输出   数据连接封装">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2025-07-05T06:12:15.687Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LangChain">
+<meta name="twitter:description" content="LangChain 也是一套面向大模型的开发框架（SDK）  LangChain 是 AGI 时代软件工程的一个探索和原型 学习 LangChain 要关注接口变更  LangChain 的核心组件 模型 I/O 封装 LLMs：大语言模型 Chat Models：一般基于 LLMs，但按对话结构重新封装 PromptTemple：提示词模板 OutputParser：解析输出   数据连接封装">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/llm/LangChain.html">
+
+
+
+
+
+  <title> LangChain | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/llm/LangChain.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                LangChain
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-07-28T12:31:37+08:00">
+                2024-07-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>LangChain 也是一套面向大模型的开发框架（SDK）</p>
+<ol>
+<li>LangChain 是 AGI 时代软件工程的一个探索和原型</li>
+<li>学习 LangChain 要关注接口变更</li>
+</ol>
+<h2 id="LangChain-的核心组件"><a href="#LangChain-的核心组件" class="headerlink" title="LangChain 的核心组件"></a>LangChain 的核心组件</h2><ol>
+<li>模型 I/O 封装<ul>
+<li>LLMs：大语言模型</li>
+<li>Chat Models：一般基于 LLMs，但按对话结构重新封装</li>
+<li>PromptTemple：提示词模板</li>
+<li>OutputParser：解析输出</li>
+</ul>
+</li>
+<li>数据连接封装<ul>
+<li>Document Loaders：各种格式文件的加载器</li>
+<li>Document Transformers：对文档的常用操作，如：split, filter, translate, extract metadata, etc</li>
+<li>Text Embedding Models：文本向量化表示，用于检索等操作</li>
+<li>Verctorstores: （面向检索的）向量的存储</li>
+<li>Retrievers: 向量的检索</li>
+</ul>
+</li>
+<li>记忆封装<ul>
+<li>Memory：这里不是物理内存，从文本的角度，可以理解为”上文”、”历史记录”或者说”记忆力”的管理</li>
+</ul>
+</li>
+<li>架构封装<ul>
+<li>Chain：实现一个功能或者一系列顺序功能组合</li>
+<li>Agent：根据用户输入，自动规划执行步骤，自动选择每步需要的工具，最终完成用户指定的功能<ul>
+<li>Tools：调用外部功能的函数，例如：调 google 搜索、文件 I/O、Linux Shell 等等</li>
+<li>Toolkits：操作某软件的一组工具集，例如：操作 DB、操作 Gmail 等等</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Callbacks</li>
+</ol>
+<h2 id="模型-I-O-封装"><a href="#模型-I-O-封装" class="headerlink" title="模型 I/O 封装"></a>模型 I/O 封装</h2><p><span style="color: rgb(27, 94, 32); background-color: rgb(200, 230, 201);">通过模型封装，实现不同模型的统一接口调用</span></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">from langchain_openai import ChatOpenAI</span><br><span class="line">from langchain.schema import (</span><br><span class="line">    AIMessage,  # 等价于OpenAI接口中的assistant role</span><br><span class="line">    HumanMessage,  # 等价于OpenAI接口中的user role</span><br><span class="line">    SystemMessage  # 等价于OpenAI接口中的system role</span><br><span class="line">)</span><br><span class="line">from langchain_community.chat_models import QianfanChatEndpoint</span><br><span class="line">from langchain_core.messages import HumanMessage</span><br><span class="line"></span><br><span class="line">#  OpenAI 模型封装</span><br><span class="line">llm = ChatOpenAI(model=&quot;gpt-3.5-turbo&quot;)  # gpt-4o 默认是gpt-3.5-turbo</span><br><span class="line">response = llm.invoke(&quot;你是谁&quot;)</span><br><span class="line">print(response.content)</span><br><span class="line"></span><br><span class="line"># 多轮对话 Session 封装</span><br><span class="line">messages = [</span><br><span class="line">    SystemMessage(content=&quot;你是AGIClass的课程助理。&quot;),</span><br><span class="line">    HumanMessage(content=&quot;我是学员，我叫王卓然。&quot;),</span><br><span class="line">    AIMessage(content=&quot;欢迎！&quot;),</span><br><span class="line">    HumanMessage(content=&quot;我是谁&quot;)</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">ret = llm.invoke(messages)</span><br><span class="line"></span><br><span class="line">print(ret.content)</span><br><span class="line"></span><br><span class="line"># 国产模型 其它模型分装在 langchain_community 底包中</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line">llm = QianfanChatEndpoint(</span><br><span class="line">    qianfan_ak=os.getenv(&apos;ERNIE_CLIENT_ID&apos;),</span><br><span class="line">    qianfan_sk=os.getenv(&apos;ERNIE_CLIENT_SECRET&apos;)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">messages = [</span><br><span class="line">    HumanMessage(content=&quot;你是谁&quot;)</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">ret = llm.invoke(messages)</span><br><span class="line"></span><br><span class="line">print(ret.content)</span><br></pre></td></tr></table></figure>
+<h3 id="Prompt-模板封装"><a href="#Prompt-模板封装" class="headerlink" title="Prompt 模板封装"></a>Prompt 模板封装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from langchain.prompts import (</span><br><span class="line">    ChatPromptTemplate,</span><br><span class="line">    HumanMessagePromptTemplate,</span><br><span class="line">    SystemMessagePromptTemplate,</span><br><span class="line">    MessagesPlaceholder,</span><br><span class="line">    PromptTemplate</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<ol>
+<li>PromptTemplate 可以在模板中自定义变量</li>
+<li>ChatPromptTemplate 用模板表示的对话上下文</li>
+<li>MessagesPlaceholder 把多轮对话变成模板</li>
+<li>从文件加载 Prompt 模板: PromptTemplate.from_file</li>
+</ol>
+<p><span style="color: rgb(27, 94, 32); background-color: rgb(200, 230, 201);">把Prompt模板看作带有参数的函数</span></p>
+<h3 id="输出封装-OutputParser"><a href="#输出封装-OutputParser" class="headerlink" title="输出封装 OutputParser"></a>输出封装 OutputParser</h3><p>自动把 LLM 输出的字符串按指定格式加载。<br>LangChain 内置的 OutputParser 包括:</p>
+<ol>
+<li>ListParser</li>
+<li>DatetimeParser</li>
+<li>EnumParser</li>
+<li>JsonOutputParser</li>
+<li>PydanticParser</li>
+<li>XMLParser</li>
+</ol>
+<p>等等</p>
+<h3 id="Pydantic-JSON-Parser"><a href="#Pydantic-JSON-Parser" class="headerlink" title="Pydantic (JSON) Parser"></a>Pydantic (JSON) Parser</h3><p>自动根据 Pydantic 类的定义，生成输出的格式说明</p>
+<h3 id="Auto-Fixing-Parser"><a href="#Auto-Fixing-Parser" class="headerlink" title="Auto-Fixing Parser"></a>Auto-Fixing Parser</h3><p>利用 LLM 自动根据解析异常修复并重新解析</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ol>
+<li>LangChain 统一封装了各种模型的调用接口，包括补全型和对话型两种</li>
+<li>LangChain 提供了 PromptTemplate 类，可以自定义带变量的模板</li>
+<li>LangChain 提供了一些列输出解析器，用于将大模型的输出解析成结构化对象；额外带有自动修复功能。</li>
+<li>上述模型属于 LangChain 中较为优秀的部分；美中不足的是 OutputParser 自身的 Prompt 维护在代码中，耦合度较高。</li>
+</ol>
+<h2 id="数据连接封装"><a href="#数据连接封装" class="headerlink" title="数据连接封装"></a>数据连接封装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 文档加载器：Document Loaders</span><br><span class="line">from langchain_community.document_loaders import PyMuPDFLoader</span><br><span class="line"># 文档处理器 TextSplitter</span><br><span class="line">from langchain_text_splitters import RecursiveCharacterTextSplitter</span><br><span class="line"># 向量数据库与向量检索</span><br><span class="line">from langchain_openai import OpenAIEmbeddings</span><br><span class="line">from langchain_text_splitters import RecursiveCharacterTextSplitter</span><br><span class="line">from langchain_community.vectorstores import FAISS</span><br><span class="line">from langchain_openai import ChatOpenAI</span><br><span class="line">from langchain_community.document_loaders import PyMuPDFLoader</span><br></pre></td></tr></table></figure>
+<p><span style="color: rgb(0, 96, 100);">类似 LlamaIndex，LangChain 也提供了丰富的 <a href="https://python.langchain.com/v0.2/docs/how_to/#document-loaders" target="_blank" rel="noopener">Document Loaders</a> 和 <a href="https://python.langchain.com/v0.2/docs/how_to/#text-splitters" target="_blank" rel="noopener">Text Splitters</a>﻿</span></p>
+<h2 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h2><ol>
+<li>文档处理部分，建议在实际应用中详细测试后使用</li>
+<li>与向量数据库的链接部分本质是接口封装，向量数据库需要自己选型</li>
+</ol>
+<h2 id="记忆封装：Memory"><a href="#记忆封装：Memory" class="headerlink" title="记忆封装：Memory"></a>记忆封装：Memory</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 对话上下文：ConversationBufferMemory</span><br><span class="line">from langchain.memory import ConversationBufferMemory, ConversationBufferWindowMemory</span><br><span class="line"></span><br><span class="line"># 只保留一个窗口的上下文：ConversationBufferWindowMemory</span><br><span class="line">from langchain.memory import ConversationBufferWindowMemory</span><br><span class="line"></span><br><span class="line"># 通过 Token 数控制上下文长度：ConversationTokenBufferMemory</span><br><span class="line">from langchain.memory import ConversationTokenBufferMemory</span><br></pre></td></tr></table></figure>
+<h3 id="更多类型"><a href="#更多类型" class="headerlink" title="更多类型"></a>更多类型</h3><ol>
+<li>ConversationSummaryMemory: 对上下文做摘要<ul>
+<li><a href="https://python.langchain.com/docs/modules/memory/types/summary" target="_blank" rel="noopener">https://python.langchain.com/docs/modules/memory/types/summary</a>﻿</li>
+</ul>
+</li>
+<li>ConversationSummaryBufferMemory: 保存 Token 数限制内的上下文，对更早的做摘要<ul>
+<li><a href="https://python.langchain.com/docs/modules/memory/types/summary_buffer" target="_blank" rel="noopener">https://python.langchain.com/docs/modules/memory/types/summary_buffer</a>﻿</li>
+</ul>
+</li>
+<li>VectorStoreRetrieverMemory: 将 Memory 存储在向量数据库中，根据用户输入检索回最相关的部分<ul>
+<li><a href="https://python.langchain.com/docs/modules/memory/types/vectorstore_retriever_memory" target="_blank" rel="noopener">https://python.langchain.com/docs/modules/memory/types/vectorstore_retriever_memory</a>﻿</li>
+</ul>
+</li>
+</ol>
+<h3 id="小结-2"><a href="#小结-2" class="headerlink" title="小结"></a>小结</h3><ol>
+<li>LangChain 的 Memory 管理机制属于可用的部分，尤其是简单情况如按轮数或按 Token 数管理；</li>
+<li>对于复杂情况，它不一定是最优的实现，例如检索向量库方式，建议根据实际情况和效果评估；</li>
+<li>但是<strong>它对内存的各种维护方法的思路在实际生产中可以借鉴</strong>。</li>
+</ol>
+<p>LangChain Expression Language（LCEL）是一种声明式语言，可轻松组合不同的调用顺序构成 Chain。LCEL 自创立之初就被设计为能够支持将原型投入生产环境，<strong>无需代码更改</strong>，从最简单的”提示+LLM”链到最复杂的链（已有用户成功在生产环境中运行包含数百个步骤的 LCEL Chain）。</p>
+<p>LCEL 的一些亮点包括：</p>
+<ol>
+<li>流支持</li>
+<li>异步支持</li>
+<li>优化的并行执行</li>
+<li>重试和回退</li>
+<li>访问中间结果</li>
+<li>输入和输出模式</li>
+<li>无缝 LangSmith 跟踪集成</li>
+<li>无缝 LangServe 部署集成</li>
+</ol>
+<p>原文：<a href="https://python.langchain.com/docs/expression_language/" target="_blank" rel="noopener">https://python.langchain.com/docs/expression_language/</a>﻿</p>
+<h3 id="Pipeline-式调用-PromptTemplate-LLM-和-OutputParser"><a href="#Pipeline-式调用-PromptTemplate-LLM-和-OutputParser" class="headerlink" title="Pipeline 式调用 PromptTemplate, LLM 和 OutputParser"></a>Pipeline 式调用 PromptTemplate, LLM 和 OutputParser</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">from langchain_openai import ChatOpenAI</span><br><span class="line">from langchain.prompts import ChatPromptTemplate</span><br><span class="line">from langchain_core.output_parsers import StrOutputParser, PydanticOutputParser</span><br><span class="line">from langchain_core.runnables import RunnablePassthrough</span><br><span class="line">from langchain_core.pydantic_v1 import BaseModel, Field, validator</span><br><span class="line">from typing import List, Dict, Optional</span><br><span class="line">from enum import Enum</span><br><span class="line">import json</span><br><span class="line"></span><br><span class="line"># LCEL 表达式</span><br><span class="line">runnable = (</span><br><span class="line">    &#123;&quot;text&quot;: RunnablePassthrough()&#125; | prompt | model | parser</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># 直接运行</span><br><span class="line">ret = runnable.invoke(&quot;不超过100元的流量大的套餐有哪些&quot;)</span><br><span class="line"></span><br><span class="line"># 流式输出</span><br><span class="line">for s in runnable.stream(&quot;不超过100元的流量大的套餐有哪些&quot;):</span><br><span class="line">    print(s, end=&quot;&quot;)</span><br></pre></td></tr></table></figure>
+<p><strong><span style="color: rgb(27, 94, 32);">使用 LCEL 的价值，也就是 LangChain 的核心价值。</span></strong></p>
+<p><span style="color: rgb(27, 94, 32); background-color: rgb(200, 230, 201);">官方从不同角度给出了举例说明：</span><a href="https://python.langchain.com/docs/expression_language/why" target="_blank" rel="noopener">https://python.langchain.com/docs/expression_language/why</a>﻿</p>
+<h3 id="通过-LCEL，还可以实现"><a href="#通过-LCEL，还可以实现" class="headerlink" title="通过 LCEL，还可以实现"></a>通过 LCEL，还可以实现</h3><ol>
+<li>配置运行时变量：<a href="https://python.langchain.com/docs/expression_language/how_to/configure" target="_blank" rel="noopener">https://python.langchain.com/docs/expression_language/how_to/configure</a></li>
+<li>故障回退：<a href="https://python.langchain.com/docs/expression_language/how_to/fallbacks" target="_blank" rel="noopener">https://python.langchain.com/docs/expression_language/how_to/fallbacks</a></li>
+<li>并行调用：<a href="https://python.langchain.com/docs/expression_language/how_to/map" target="_blank" rel="noopener">https://python.langchain.com/docs/expression_language/how_to/map</a></li>
+<li>逻辑分支：<a href="https://python.langchain.com/docs/expression_language/how_to/routing" target="_blank" rel="noopener">https://python.langchain.com/docs/expression_language/how_to/routing</a></li>
+<li>调用自定义流式函数：<a href="https://python.langchain.com/docs/expression_language/how_to/generators" target="_blank" rel="noopener">https://python.langchain.com/docs/expression_language/how_to/generators</a></li>
+<li>链接外部 Memory：<a href="https://python.langchain.com/docs/expression_language/how_to/message_history" target="_blank" rel="noopener">https://python.langchain.com/docs/expression_language/how_to/message_history</a></li>
+</ol>
+<p>更多例子：<a href="https://python.langchain.com/docs/expression_language/cookbook/" target="_blank" rel="noopener">https://python.langchain.com/docs/expression_language/cookbook/</a>﻿</p>
+<h3 id="什么是智能体（Agent）"><a href="#什么是智能体（Agent）" class="headerlink" title="什么是智能体（Agent）"></a>什么是智能体（Agent）</h3><p>将大语言模型作为一个推理引擎, 给定一个任务，智能体自动生成完成任务所需的步骤，执行相应动作（例如选择并调用工具），直到任务完成。</p>
+<h3 id="先定义一些工具：Tools"><a href="#先定义一些工具：Tools" class="headerlink" title="先定义一些工具：Tools"></a>先定义一些工具：Tools</h3><ol>
+<li>可以是一个函数或三方 API</li>
+<li>也可以把一个 Chain 或者 Agent 的 run()作为一个 Tool</li>
+</ol>
+<h2 id="下载一个现有的-Prompt-模板"><a href="#下载一个现有的-Prompt-模板" class="headerlink" title="下载一个现有的 Prompt 模板"></a>下载一个现有的 Prompt 模板</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">react_prompt = hub.pull(&quot;hwchase17/react&quot;)</span><br><span class="line">print(react_prompt.template)</span><br></pre></td></tr></table></figure>
+<h2 id="直接定义执行执行调用"><a href="#直接定义执行执行调用" class="headerlink" title="直接定义执行执行调用"></a>直接定义执行执行调用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">from langchain_openai import ChatOpenAI</span><br><span class="line">from langchain.agents import AgentExecutor, create_react_agent</span><br><span class="line"></span><br><span class="line">llm = ChatOpenAI(model_name=&apos;gpt-4o&apos;, temperature=0, model_kwargs=&#123;&quot;seed&quot;:23&#125;)</span><br><span class="line"></span><br><span class="line"># 定义一个 agent: 需要大模型、工具集、和 Prompt 模板</span><br><span class="line">agent = create_react_agent(llm, tools, react_prompt)</span><br><span class="line"># 定义一个执行器：需要 agent 对象 和 工具集</span><br><span class="line">agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)</span><br><span class="line"></span><br><span class="line"># 执行</span><br><span class="line">agent_executor.invoke(&#123;&quot;input&quot;: &quot;2024年周杰伦的演唱会星期几&quot;&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="LangServe"><a href="#LangServe" class="headerlink" title="LangServe"></a>LangServe</h2><p>LangServe 用于将 Chain 或者 Runnable 部署成一个 REST API 服务。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 安装 LangServe</span><br><span class="line"># !pip install --upgrade &quot;langserve[all]&quot;</span><br><span class="line"></span><br><span class="line"># 也可以只安装一端</span><br><span class="line"># !pip install &quot;langserve[client]&quot;</span><br><span class="line"># !pip install &quot;langserve[server]&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="LangChain-js"><a href="#LangChain-js" class="headerlink" title="LangChain.js"></a>LangChain.js</h2><p>Python 版 LangChain 的姊妹项目，都是由 Harrison Chase 主理。</p>
+<p>项目地址：<a href="https://github.com/langchain-ai/langchainjs" target="_blank" rel="noopener">https://github.com/langchain-ai/langchainjs</a></p>
+<p>文档地址：<a href="https://js.langchain.com/docs/" target="_blank" rel="noopener">https://js.langchain.com/docs/</a></p>
+<p>特色：</p>
+<ol>
+<li>可以和 Python 版 LangChain 无缝对接</li>
+<li>抽象设计完全相同，概念一一对应</li>
+<li>所有对象序列化后都能跨语言使用，但 API 差别挺大，不过在努力对齐</li>
+</ol>
+<p>支持环境：</p>
+<ol>
+<li>Node.js (ESM and CommonJS) - 18.x, 19.x, 20.x</li>
+<li>Cloudflare Workers</li>
+<li>Vercel / Next.js (Browser, Serverless and Edge functions)</li>
+<li>Supabase Edge Functions</li>
+<li>Browser</li>
+<li>Deno</li>
+</ol>
+<p>安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install langchain</span><br></pre></td></tr></table></figure>
+<p>当前重点：</p>
+<ol>
+<li>追上 Python 版的能力（甚至为此做了一个基于 gpt-3.5-turbo 的代码翻译器）</li>
+<li>保持兼容尽可能多的环境</li>
+<li>对质量关注不多，随时间自然能解决</li>
+</ol>
+<h3 id="LangChain-与-LlamaIndex-的错位竞争"><a href="#LangChain-与-LlamaIndex-的错位竞争" class="headerlink" title="LangChain 与 LlamaIndex 的错位竞争"></a>LangChain 与 LlamaIndex 的错位竞争</h3><ol>
+<li>LangChain 侧重与 LLM 本身交互的封装<ul>
+<li>Prompt、LLM、Memory、OutputParser 等工具丰富</li>
+<li>在数据处理和 RAG 方面提供的工具相对粗糙</li>
+<li>主打 LCEL 流程封装</li>
+<li>配套 Agent、LangGraph 等智能体与工作流工具</li>
+<li>另有 LangServe 部署工具和 LangSmith 监控调试工具</li>
+</ul>
+</li>
+<li>LlamaIndex 侧重与数据交互的封装<ul>
+<li>数据加载、切割、索引、检索、排序等相关工具丰富</li>
+<li>Prompt、LLM 等底层封装相对单薄</li>
+<li>配套实现 RAG 相关工具</li>
+<li>有 Agent 相关工具，不突出</li>
+</ul>
+</li>
+<li>LlamaIndex 为 LangChain 提供了集成<ul>
+<li>在 LlamaIndex 中调用 LangChain 封装的 LLM 接口：<a href="https://docs.llamaindex.ai/en/stable/api_reference/llms/langchain/" target="_blank" rel="noopener">https://docs.llamaindex.ai/en/stable/api_reference/llms/langchain/</a></li>
+<li>将 LlamaIndex 的 Query Engine 作为 LangChain Agent 的工具：<a href="https://docs.llamaindex.ai/en/v0.10.17/community/integrations/using_with_langchain.html" target="_blank" rel="noopener">https://docs.llamaindex.ai/en/v0.10.17/community/integrations/using_with_langchain.html</a></li>
+<li>LangChain 也<em>曾经</em>集成过 LlamaIndex，目前相关接口仍在：<a href="https://api.python.langchain.com/en/latest/retrievers/langchain_community.retrievers.llama_index.LlamaIndexRetriever.html" target="_blank" rel="noopener">https://api.python.langchain.com/en/latest/retrievers/langchain_community.retrievers.llama_index.LlamaIndexRetriever.html</a></li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/llm/" rel="tag"># llm</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/llm/LlamaIndex.html" rel="next" title="llamaindex">
+                <i class="fa fa-chevron-left"></i> llamaindex
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/llm/LangFuse.html" rel="prev" title="Langfuse">
+                Langfuse <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">260</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#LangChain-的核心组件"><span class="nav-number">1.</span> <span class="nav-text">LangChain 的核心组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型-I-O-封装"><span class="nav-number">2.</span> <span class="nav-text">模型 I/O 封装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Prompt-模板封装"><span class="nav-number">2.1.</span> <span class="nav-text">Prompt 模板封装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输出封装-OutputParser"><span class="nav-number">2.2.</span> <span class="nav-text">输出封装 OutputParser</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pydantic-JSON-Parser"><span class="nav-number">2.3.</span> <span class="nav-text">Pydantic (JSON) Parser</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Auto-Fixing-Parser"><span class="nav-number">2.4.</span> <span class="nav-text">Auto-Fixing Parser</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">3.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据连接封装"><span class="nav-number">4.</span> <span class="nav-text">数据连接封装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结-1"><span class="nav-number">5.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#记忆封装：Memory"><span class="nav-number">6.</span> <span class="nav-text">记忆封装：Memory</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#更多类型"><span class="nav-number">6.1.</span> <span class="nav-text">更多类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结-2"><span class="nav-number">6.2.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pipeline-式调用-PromptTemplate-LLM-和-OutputParser"><span class="nav-number">6.3.</span> <span class="nav-text">Pipeline 式调用 PromptTemplate, LLM 和 OutputParser</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过-LCEL，还可以实现"><span class="nav-number">6.4.</span> <span class="nav-text">通过 LCEL，还可以实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是智能体（Agent）"><span class="nav-number">6.5.</span> <span class="nav-text">什么是智能体（Agent）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#先定义一些工具：Tools"><span class="nav-number">6.6.</span> <span class="nav-text">先定义一些工具：Tools</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下载一个现有的-Prompt-模板"><span class="nav-number">7.</span> <span class="nav-text">下载一个现有的 Prompt 模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#直接定义执行执行调用"><span class="nav-number">8.</span> <span class="nav-text">直接定义执行执行调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LangServe"><span class="nav-number">9.</span> <span class="nav-text">LangServe</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LangChain-js"><span class="nav-number">10.</span> <span class="nav-text">LangChain.js</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LangChain-与-LlamaIndex-的错位竞争"><span class="nav-number">10.1.</span> <span class="nav-text">LangChain 与 LlamaIndex 的错位竞争</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

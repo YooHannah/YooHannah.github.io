@@ -259,7 +259,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/reading/Poordaddyrichdaddy.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/commonjs.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -284,8 +284,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/reading/Poordaddyrichdaddy.html" itemprop="url">
-                  《穷爸爸富爸爸》摘抄
+                <a class="post-title-link" href="/post/nodejs/commonjs.html" itemprop="url">
+                  关于commonjs、MVC、模板引擎
                 </a>
               
             
@@ -299,8 +299,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-18T21:14:37+08:00">
-                2017-02-18
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-21T22:16:37+08:00">
+                2017-03-21
               </time>
             
 
@@ -337,42 +337,1369 @@
       
         
           
-            <ol>
-<li>富人买入资产，穷人只有支出，中产阶级购买自以为是资产的负债</li>
-<li>资产是能把钱放进你口袋里的东西，负债是把钱从你口袋里取走的东西</li>
-<li>为了财务安全，人们需要关注自己的事业，你的事业的重心是你的资产项，而不是你的的收入项。要知道资产与负债的区别，并且去买入资产。富人关心的焦点是资产而其他人关注的是收入。</li>
-<li>资产分类：<br>a.不需要我到场就可以正常运作的业务。我拥有他们，但由别人经营和管理。如果我必须在那里，那它就不是我的事业而是我的职业了<br>b.股票<br>c.债券<br>d.共同基金<br>e.能够产生收入的房地产<br>f.票据(收据)<br>g.版税，如音乐，手稿，专利<br>h.其他任何有价值，可产生收入或有增值潜力，并且有良好的销路的东西<br>5.</li>
-</ol>
-<table>
+            <h1 id="commonjs理解"><a href="#commonjs理解" class="headerlink" title="commonjs理解"></a>commonjs理解</h1><p>是一种编写API的标准，根据该标准写的API可以在任何支持JavaScript的环境中使用，尤其是可以满足服务端的应用<br>四个个关键词<br>modules：模块，外部用 JavaScript 封装，具有对外接口并有一定功能作用的一个文件<br>packages：包，多个module的集合，相当于提供了一些固定接口的函数库，提供更高层的的抽象<br>exports：模块对外的接口对象，在模块文件中编写的功能函数作为它的属性函数，不同写法，使用规则不一样<br>require：当我们要使用某个模块时，用来获取/加载模块接口的对象,获取模块的 exports 对象。</p>
+<h2 id="定义模块与使用"><a href="#定义模块与使用" class="headerlink" title="定义模块与使用"></a>定义模块与使用</h2><p>方式一：<br>定义<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">function Change(a) &#123;</span><br><span class="line">	a = 100;</span><br><span class="line">	console.log(a);</span><br><span class="line">&#125;;</span><br><span class="line">module.exports = Change;</span><br><span class="line">//定义子函数</span><br><span class="line">Change.childchange = function childchange(val)&#123;</span><br><span class="line">	console.log(val+20);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var change = require(&apos;../models/testchange.js&apos;);</span><br><span class="line">var a=10;</span><br><span class="line">var aa=change(a);//100</span><br><span class="line">console.log(a,aa);//10,100</span><br><span class="line">change.childchange(a);//30</span><br></pre></td></tr></table></figure></p>
+<p>方式二：<br>定义<br>同时定义多个同级函数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">exports.Change = function(a)&#123;</span><br><span class="line">	a = 100;</span><br><span class="line">	console.log(a);</span><br><span class="line">	return a;</span><br><span class="line">&#125;</span><br><span class="line">exports.add = function(a,b)&#123;</span><br><span class="line">	return a+b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var change = require(&apos;../models/testchange.js&apos;);</span><br><span class="line">var a=10;</span><br><span class="line">var aa=change.Change(a);//100</span><br><span class="line">console.log(a,aa);//10 100</span><br><span class="line">var b=change.add(a,20);</span><br><span class="line">console.log(b);//30</span><br></pre></td></tr></table></figure></p>
+<h1 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h1><p>MODEL-VIEW-CONTROLL，模型-视图-控制器，是一种软件的设计模式<br>模型:对象及其数据结构的实现，通常包含数据库的操作<br>视图：表示用户界面，在网站中通常就是HTML的组织结构<br>控制器：用于处理用户请求和数据流，复杂模型，将输出传递给视图<br><img src="/image/noun2.png" alt="noun2"></p>
+<h1 id="模板引擎"><a href="#模板引擎" class="headerlink" title="模板引擎"></a>模板引擎</h1><p>是一个生成HTML的工具<br>其功能是将页面模板和要显示的数据结合起来生成HTML页面<br>既可以运行在服务端又可以运行在客户端，<br>大多数时候它都在服务器端直接被解析为HTML，解析完后再传输给客户端<br>有时候也可以运行在客户端，即浏览器中<br>MVC架构中，模板引擎包含在服务器端，流程如下：<br>控制器得到用户请求后，从模型(原来页面)获取数据，调用模板引擎<br>模板引擎以数据(经过后台处理，要传递给客户端的)和页面模板为输入，生成HTML页面<br>返回给控制器，由控制器交会回给客户端<br><img src="/image/noun1.png" alt="noun1"></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/mongoDB.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/nodejs/mongoDB.html" itemprop="url">
+                  mongoDB使用
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-19T21:45:37+08:00">
+                2017-03-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><p>cmd到mongoDB的bin文件夹,执行<br>mongod –dbpath data文件夹路径（例：D:\MongoDB\data）//运行<br>再打开一个cmd,同样切目录到bin文件夹下,执行<br>mongo //连接到数据库</p>
+<h1 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h1><h2 id="基础命令"><a href="#基础命令" class="headerlink" title="基础命令"></a>基础命令</h2><p>use dbname    //名为dbname的数据库若存在就将当前数据库切换到该数据库，若不存在，则新建该数据库并切换至该数据库<br>db   //查看当前数据库<br>show dbs    //查看所有数据库,新建的库，在插入数据后才会显示<br>db.dropDatabase() //删除当前数据库,但用db查看当前库，还是被删的这个库<br>db.tablename.drop() //删除数据库中名为tablename的集合<br>db.tablename.insert({“key”:”value”}) //创建名为objectname的表(对象),并插入数据,批量操作时可以直接在shell里面写for循环<br>show tables //查看该库中所有表(对象)<br>db.tablename.find() //在仓库中查找名为tablename的表，如果有就会将表中内容打印出来<br>db.tablename.find({“key”:”value”}) //在tablename表中查找具体数据，注意格式<br><img src="/image/mongodb1.png" alt="mongodb1"><br>db.tablename.update({查找值},{替换值}) //将查找值所在的集合替换为替换值<br><img src="/image/mongodb2.png" alt="mongodb2"><br>db.tablename.remove({查找值}) //删除查找值所在对象的全部数据，若为空，则将整表清空<br><img src="/image/mongodb3.png" alt="mongodb3"></p>
+<h2 id="条件查找"><a href="#条件查找" class="headerlink" title="条件查找"></a>条件查找</h2><p>1.比较查询<br>将查找条件放在value部分，用{}括起来<br>下图查询条件为age大于”$gt”22, 大于等于”$gte”22, 小于”$lt”22, 小于等于”$lte”22, 不等于”$ne”20,等于20的查询格式<br><img src="/image/mongodb4.png" alt="mongodb4"><br>使用正则表达式匹配时同样将正则表达式放在value的位置，而且不用{}或者””包括，直接/开始/结束<br>2.逻辑查询<br>下图查询条件分别为且，或者$or,在氛围内$in,不在范围内$nin<br><img src="/image/mongodb5.png" alt="mongodb5"></p>
+<h2 id="局部修改"><a href="#局部修改" class="headerlink" title="局部修改"></a>局部修改</h2><p>$inc 属性不存在就创建并赋值，如果存在，就在原来的基础上增加要修改的值<br>$set 仅修改<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&gt; db.person.find()</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;58ccdcb002efa48d7589f2ae&quot;), &quot;name&quot; : &quot;jack&quot;, &quot;age&quot; : 20 &#125;</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;58ccdcb502efa48d7589f2af&quot;), &quot;name&quot; : &quot;joe&quot;, &quot;age&quot; : 25 &#125;</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;58ccdcd302efa48d7589f2b0&quot;), &quot;name&quot; : &quot;mark&quot;, &quot;age&quot; : 15 &#125;</span><br><span class="line">&gt; db.person.update(&#123;&quot;name&quot;:&quot;jack&quot;&#125;,&#123;$inc:&#123;&quot;age&quot;:10&#125;&#125;)</span><br><span class="line">WriteResult(&#123; &quot;nMatched&quot; : 1, &quot;nUpserted&quot; : 0, &quot;nModified&quot; : 1 &#125;)</span><br><span class="line">&gt; db.person.update(&#123;&quot;name&quot;:&quot;mark&quot;&#125;,&#123;$set:&#123;&quot;age&quot;:10&#125;&#125;)</span><br><span class="line">WriteResult(&#123; &quot;nMatched&quot; : 1, &quot;nUpserted&quot; : 0, &quot;nModified&quot; : 1 &#125;)</span><br><span class="line">&gt; db.person.find()</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;58ccdcb002efa48d7589f2ae&quot;), &quot;name&quot; : &quot;jack&quot;, &quot;age&quot; : 30 &#125;</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;58ccdcb502efa48d7589f2af&quot;), &quot;name&quot; : &quot;joe&quot;, &quot;age&quot; : 25 &#125;</span><br><span class="line">&#123; &quot;_id&quot; : ObjectId(&quot;58ccdcd302efa48d7589f2b0&quot;), &quot;name&quot; : &quot;mark&quot;, &quot;age&quot; : 10 &#125;</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure></p>
+<p>特殊情况：update的第一个参数不存在，即查找值不在person中，可以如下设置，将其新增<br>db.person.update({“name”:”jackson”},{$inc:{“age”:10}},true)<br>注意：update默认仅更新匹配得到的第一个集合，如果想更新全部匹配得到的结果，<br>可以将第四个参数设为true</p>
+<h2 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a>数据处理</h2><p>1.计数<br>db.person.count()  //获取person中数据条数<br>db.person.count({“age”:20}) // 获取person中age等于20的数据条数<br>2.统计<br>db.person.distinct(“age”) //获取person中所有age的值，重复的值只取一次<br>3.分组<br>db.person.group({<br>    “key”:{“age”:true},//按age分组，age相同的分一组<br>    “initial”:{“person”:[]}, //分组内容<br>    “$reduce”:function(cur,prev){ //符合分组条件，将该条数据放入该组集合中，cur指当前处理的该条数据，prev指上次函数的累计对象，第一次为initial的值。<br>        prev.person.push(cur.name);<br>    },<br>  “finalize”:function(out){//将一条数据划分到一组后执行的处理<br>  out.count = out.person.length;<br>  },<br>  “condition”:{“age”:{$lt:25}}//分组条件，对什么样的数据进行分组<br>})<br>4.映射<br>通过map对集合进行分组，通过reduce对分组结果进行处理，理解为复杂的重组处理，最后会生成一个全新的集合<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">var map = function()&#123;</span><br><span class="line">	emit(this.name,&#123;count:1&#125;);  //集合按照name分组，分组内容均为&#123;count：1&#125;</span><br><span class="line">&#125;</span><br><span class="line">var reduce = function(key,value)&#123;  //对分组结果进行处理</span><br><span class="line">	var result = &#123;count:0&#125;;</span><br><span class="line">	for(var i = 0;i&lt;value.length;i++)&#123;</span><br><span class="line">		result.count +=value[i].count;</span><br><span class="line">	&#125;</span><br><span class="line">	return result;</span><br><span class="line">&#125;</span><br><span class="line">db.person.mapReduce(map,reduce,&#123;&quot;out&quot;:&quot;collection&quot;&#125;)</span><br><span class="line">db.collection.find()</span><br></pre></td></tr></table></figure></p>
+<p>5.循环处理<br>可以将集合赋值给一个变量然后进行循环处理，<br>var list = db.person.find();<br>list.forEach(function(x){<br>    print(x.name):<br>})</p>
+<p>6.可以多操作查询<br>对person集合数据按name排序然后分页<br>var single=db.person.find().sort({“name”,1}).skip(2).limit(2);</p>
+<p>7.索引查询<br>建立索引：<br>db.person.ensureIndex({“name”:1}) //建立按照name进行排序的索引，1为升序，-1为降序<br>db.person.ensureIndex({“name”:1},{“unique”:true}) //建立唯一索引，集合中不能出现重复键值对<br>db.person.ensureIndex({“name”:1,”birthday”:1}) //组合索引<br>查询优化器做出的选择往往是最优的，因为我们做查询时，查询优化器会使用我们建立的这些索引来创建查询方案，<br>如果某一个先执行完则其他查询方案被close掉，这种方案会被mongodb保存起来，当然如果非要用自己指定的查询方案，这也是可以的，在mongodb中给我们提供了hint方法让我们可以暴力执行。<br>db.person.find({“name”:”jack”,”birthday”:”1998-3-2”}).hint({“name”:1,”birthday”:1})</p>
+<p>删除索引：<br>db.person.dropIndexes(“name_1”)</p>
+<h1 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h1><p>将数据库数据复制到多台服务器上，防止因为一台服务器死机而导致数据无法使用的问题出现<br>将安装文件复制到其他磁盘上，模拟不同的服务器<br>启动H盘上的mongodb，把该数据库指定为主数据库<br>H:\mongoDB\bin&gt;mongod –dbpath H:\mongoDB\data –master<br>启动D盘上的mongodb，把该数据库指定为从属数据库<br>D:\mongoDB\bin&gt;mongod –dbpath D:\mongoDB\data –port 8888 –slave –source=127.0.0.1:27017<br>更换端口为8888，source表示主数据库地址<br>2017-03-20T10:12:17.424+0800 I REPL     [replslave] syncing from host:127.0.0.1:<br>27017<br>然后分别打开主shell(mongo 127.0.0.1:27017)和从shell(mongo 127.0.0.1:8888)查看所有集合<br>show dbs<br>因为从服务器上的数据库是不允许进行读写操作,所以从shell中会报错<br><img src="/image/mongodb7.png" alt="mongodb7"><br>解决，先执行：rs.slaveOk()<br>现在主shell中更改数据，在从shell中查看，看是否进行了同步<br>但有可能因为服务连接状态问题导致数据内容不同<br><img src="/image/mongodb8.png" alt="mongodb8"></p>
+<h1 id="集群"><a href="#集群" class="headerlink" title="集群"></a>集群</h1><p>不设定特定主数据库，如果哪个数据库死机了，集群就会推选一个从属数据库作为主数据库顶上，实现自动修复的效果<br>1.建立集群，命名集群名为shopex,replSet让服务器知道shopex下有端口为3333的另一个数据库服务器<br>新打开cmd<br>H:\mongoDB\bin&gt;mongod –dbpath H:\mongoDB\data –port 2222 –replSet shopex/127.0.0.1:3333<br>2.打开端口为3333的另一个数据库服务器<br>新打开cmd<br>D:\mongoDB\bin&gt;mongod –dbpath D:\mongoDB\data –port 3333 –replSet shopex/127.0.0.1:2222<br>3.在admin集合中初始化“副本集”<br>新打开cmd,开启shell<br>H:\mongoDB\bin&gt;mongo 127.0.0.1:2222/admin<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&gt; db.runCommand(&#123;&quot;replSetInitiate&quot;:&#123;</span><br><span class="line">... &quot;_id&quot;:&quot;shopex&quot;,</span><br><span class="line">... &quot;members&quot;:[</span><br><span class="line">... &#123;</span><br><span class="line">... &quot;_id&quot;:1,</span><br><span class="line">... &quot;host&quot;:&quot;127.0.0.1:2222&quot;</span><br><span class="line">... &#125;,</span><br><span class="line">... &#123;</span><br><span class="line">... &quot;_id&quot;:2,</span><br><span class="line">... &quot;host&quot;:&quot;127.0.0.1:3333&quot;</span><br><span class="line">... &#125;</span><br><span class="line">... ]&#125;&#125;)</span><br><span class="line">&#123; &quot;ok&quot; : 1 &#125;</span><br></pre></td></tr></table></figure></p>
+<p>4.设置仲裁服务器<br>新打开cmd,开启服务<br>D:\mongoDB\bin&gt;mongod –dbpath F:\mongoDB\data –port 4444 –replSet shopex/127.0.0.1:2222<br>开启shell,设置及产看结果<br>H:\mongoDB\bin&gt;mongo 127.0.0.1:2222/admin<br>shopex:PRIMARY&gt; rs.addArb(“127.0.0.1:4444”)<br>{ “ok” : 1 }<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line">shopex:PRIMARY&gt; rs.status()</span><br><span class="line">&#123;</span><br><span class="line">        &quot;set&quot; : &quot;shopex&quot;,</span><br><span class="line">        &quot;date&quot; : ISODate(&quot;2017-03-20T05:55:12.742Z&quot;),</span><br><span class="line">        &quot;myState&quot; : 1,</span><br><span class="line">        &quot;term&quot; : NumberLong(1),</span><br><span class="line">        &quot;heartbeatIntervalMillis&quot; : NumberLong(2000),</span><br><span class="line">        &quot;optimes&quot; : &#123;</span><br><span class="line">                &quot;lastCommittedOpTime&quot; : &#123;</span><br><span class="line">                        &quot;ts&quot; : Timestamp(1489989307, 1),</span><br><span class="line">                        &quot;t&quot; : NumberLong(1)</span><br><span class="line">                &#125;,</span><br><span class="line">                &quot;appliedOpTime&quot; : &#123;</span><br><span class="line">                        &quot;ts&quot; : Timestamp(1489989307, 1),</span><br><span class="line">                        &quot;t&quot; : NumberLong(1)</span><br><span class="line">                &#125;,</span><br><span class="line">                &quot;durableOpTime&quot; : &#123;</span><br><span class="line">                        &quot;ts&quot; : Timestamp(1489989307, 1),</span><br><span class="line">                        &quot;t&quot; : NumberLong(1)</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;members&quot; : [</span><br><span class="line">                &#123;</span><br><span class="line">                        &quot;_id&quot; : 1,</span><br><span class="line">                        &quot;name&quot; : &quot;127.0.0.1:2222&quot;,</span><br><span class="line">                        &quot;health&quot; : 1,</span><br><span class="line">                        &quot;state&quot; : 1,</span><br><span class="line">                        &quot;stateStr&quot; : &quot;PRIMARY&quot;,</span><br><span class="line">                        &quot;uptime&quot; : 596,</span><br><span class="line">                        &quot;optime&quot; : &#123;</span><br><span class="line">                                &quot;ts&quot; : Timestamp(1489989307, 1),</span><br><span class="line">                                &quot;t&quot; : NumberLong(1)</span><br><span class="line">                        &#125;,</span><br><span class="line">                        &quot;optimeDate&quot; : ISODate(&quot;2017-03-20T05:55:07Z&quot;),</span><br><span class="line">                        &quot;electionTime&quot; : Timestamp(1489989026, 1),</span><br><span class="line">                        &quot;electionDate&quot; : ISODate(&quot;2017-03-20T05:50:26Z&quot;),</span><br><span class="line">                        &quot;configVersion&quot; : 2,</span><br><span class="line">                        &quot;self&quot; : true</span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                        &quot;_id&quot; : 2,</span><br><span class="line">                        &quot;name&quot; : &quot;127.0.0.1:3333&quot;,</span><br><span class="line">                        &quot;health&quot; : 1,</span><br><span class="line">                        &quot;state&quot; : 2,</span><br><span class="line">                        &quot;stateStr&quot; : &quot;SECONDARY&quot;,</span><br><span class="line">                        &quot;uptime&quot; : 296,</span><br><span class="line">                        &quot;optime&quot; : &#123;</span><br><span class="line">                                &quot;ts&quot; : Timestamp(1489989307, 1),</span><br><span class="line">                                &quot;t&quot; : NumberLong(1)</span><br><span class="line">                        &#125;,</span><br><span class="line">                        &quot;optimeDurable&quot; : &#123;</span><br><span class="line">                                &quot;ts&quot; : Timestamp(1489989307, 1),</span><br><span class="line">                                &quot;t&quot; : NumberLong(1)</span><br><span class="line">                        &#125;,</span><br><span class="line">                        &quot;optimeDate&quot; : ISODate(&quot;2017-03-20T05:55:07Z&quot;),</span><br><span class="line">                        &quot;optimeDurableDate&quot; : ISODate(&quot;2017-03-20T05:55:07Z&quot;),</span><br><span class="line">                        &quot;lastHeartbeat&quot; : ISODate(&quot;2017-03-20T05:55:11.766Z&quot;),</span><br><span class="line">                        &quot;lastHeartbeatRecv&quot; : ISODate(&quot;2017-03-20T05:55:10.786Z&quot;</span><br><span class="line">),</span><br><span class="line">                        &quot;pingMs&quot; : NumberLong(0),</span><br><span class="line">                        &quot;syncingTo&quot; : &quot;127.0.0.1:2222&quot;,</span><br><span class="line">                        &quot;configVersion&quot; : 2</span><br><span class="line">                &#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                        &quot;_id&quot; : 3,</span><br><span class="line">                        &quot;name&quot; : &quot;127.0.0.1:4444&quot;,</span><br><span class="line">                        &quot;health&quot; : 1,</span><br><span class="line">                        &quot;state&quot; : 7,</span><br><span class="line">                        &quot;stateStr&quot; : &quot;ARBITER&quot;,</span><br><span class="line">                        &quot;uptime&quot; : 44,</span><br><span class="line">                        &quot;lastHeartbeat&quot; : ISODate(&quot;2017-03-20T05:55:11.765Z&quot;),</span><br><span class="line">                        &quot;lastHeartbeatRecv&quot; : ISODate(&quot;2017-03-20T05:55:07.948Z&quot;</span><br><span class="line">),</span><br><span class="line">                        &quot;pingMs&quot; : NumberLong(0),</span><br><span class="line">                        &quot;configVersion&quot; : 2</span><br><span class="line">                &#125;</span><br><span class="line">        ],</span><br><span class="line">        &quot;ok&quot; : 1</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>现在如果关掉2222端口服务器，再打开，在执行rs.status(),可以看到2222的“stateStr”变成”SECONDARY”<br>“3333”的变成”PRIMARY”<br><a href="http://www.cnblogs.com/huangxincheng/archive/2012/02/29/2372699.html" target="_blank" rel="noopener">相关链接</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/prehensive.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/nodejs/prehensive.html" itemprop="url">
+                  开发小结
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-15T21:42:51+08:00">
+                2017-03-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="对于路由的理解"><a href="#对于路由的理解" class="headerlink" title="对于路由的理解"></a>对于路由的理解</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">官方定义：</span><br><span class="line">路由是指如何定义应用的端点（URIs）以及如何响应客户端的请求。</span><br><span class="line">路由是由一个 URI、HTTP 请求（GET、POST等）和若干个句柄组成，它的结构如下： app.METHOD(path, [callback...], callback)， app 是 express 对象的一个实例， METHOD 是一个 HTTP 请求方法， path 是服务器上的路径， callback 是当路由匹配时要执行的函数。</span><br></pre></td></tr></table></figure>
+<p>当浏览器向服务器发过来一个http请求时，会携带请求路径和请求方法,服务器根据发过来的路径和请求方法进行匹配,二者都匹配的话，就执行对应的回调函数<br>请求的目的在客户端看来可能多种多样，比如单纯的访问页面，重新获取页面数据，向后台传递数据，但是在服务端看来都是一样的处理方法，匹配路径和方法，进行回调函数，<br>即通过匹配执行相应的动作，比如<br>客户端想访问一个页面，回调函数就执行渲染页面的操作<br>客户端要传递数据给数据库，回调函数就获取传递的数据然后给到数据库<br>作用就像一个指南针，根据客户端不同的请求，执行不同的操作<br>但涉及到的具体操作（数据处理）可能会通过其他文件的处理函数来实现<br><a href="http://www.expressjs.com.cn/guide/routing.html" target="_blank" rel="noopener">官方文档</a></p>
+<h1 id="对于中间件的理解"><a href="#对于中间件的理解" class="headerlink" title="对于中间件的理解"></a>对于中间件的理解</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">官方定义</span><br><span class="line">中间件（Middleware） 是一个函数，它可以访问请求对象（request object (req)）, 响应对象（response object (res)）, 和 web 应用中处于请求-响应循环流程中的中间件，一般被命名为 next 的变量。</span><br><span class="line">中间件的功能包括：</span><br><span class="line">执行任何代码。</span><br><span class="line">修改请求和响应对象。</span><br><span class="line">终结请求-响应循环。</span><br><span class="line">调用堆栈中的下一个中间件。</span><br><span class="line">如果当前中间件没有终结请求-响应循环，则必须调用 next() 方法将控制权交给下一个中间件，否则请求就会挂起。</span><br></pre></td></tr></table></figure>
+<p>粗浅的理解为功能处理函数，比如路由匹配里的回调函数，根据功能和使用方式不同分成多种<br>1.应用级中间件， app.use() 和 app.METHOD()的回调函数<br>2.路由级中间件，var router = express.Router()， router.use() 或 router.VERB() 的回调函数<br>3.错误处理中间件，进行错误处理的的函数，参数与其他不同<br>4.内置中间件, express.static<br>5.第三方中间件,通过npm安装的模块，即我们使用的模块也算是中间件<br><a href="http://www.expressjs.com.cn/guide/using-middleware.html#middleware.application" target="_blank" rel="noopener">官方文档</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/Middleware.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/nodejs/Middleware.html" itemprop="url">
+                  对于一些模块的探究
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-15T21:32:51+08:00">
+                2017-03-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="express-session"><a href="#express-session" class="headerlink" title="express-session"></a>express-session</h1><p>用来提供会话支持，获取用户的会话对象,用来维护用户相关信息<br>当浏览器访问服务器并发送第一次请求时，服务器端会创建一个session对象，生成一个类似于key,value的键值对， 然后将key(cookie)返回到浏览器(客户)端，浏览器下次再访问时，携带key(cookie)，找到对应的session(value)。 客户的信息都保存在session中。<br>当客户访问其他页面时，可以判断客户的登录状态，做出提示，相当于登录拦截。<br>session可以和Redis或者数据库等结合做持久化操作，当服务器挂掉时也不会导致某些客户信息（购物车）丢失。</p>
+<h2 id="常用参数"><a href="#常用参数" class="headerlink" title="常用参数:"></a>常用参数:</h2><p>secret: 一个String类型的字符串，作为服务器端生成session的签名。<br>name: 返回客户端的key的名称，默认为connect.sid,也可以自己设置。<br>resave: (是否允许)当客户端并行发送多个请求时，其中一个请求在另一个请求结束时对session进行修改覆盖并保存。</p>
+<p>默认为true。但是(后续版本)有可能默认失效，所以最好手动添加。</p>
+<p>saveUninitialized: 初始化session时是否保存到存储。默认为true， 但是(后续版本)有可能默认失效，所以最好手动添加。</p>
+<p>cookie: 设置返回到前端key的属性，默认值为{ path: ‘/’, httpOnly: true, secure: false, maxAge: null }。</p>
+<h2 id="一些方法"><a href="#一些方法" class="headerlink" title="一些方法:"></a>一些方法:</h2><p>Session.destroy():删除session，当检测到客户端关闭时调用。</p>
+<p>Session.reload():当session有修改时，刷新session。</p>
+<p>Session.regenerate()：将已有session初始化。</p>
+<p>Session.save()：保存session。</p>
+<h1 id="connect-flash"><a href="#connect-flash" class="headerlink" title="connect-flash"></a>connect-flash</h1><p>官方解释<br>The flash is a special area of the session used for storing messages. Messages are written to the flash and cleared after being displayed to the user. The flash is typically used in combination with redirects, ensuring that the message is available to the next page that is to be rendered.</p>
+<p>即一个在session中存放临时信息的地方，显示给用户后,在渲染下一个页面前被清空</p>
+<h2 id="函数用法："><a href="#函数用法：" class="headerlink" title="函数用法："></a>函数用法：</h2><p>(1)如果传入的参数多于两个，那么首先获取第二个以及以后的参数，然后对第二个以后的参数进行format操作，最后把数据封装到req.session.flash中，同时返回<br>req.flash(‘info’, ‘email has been sent to %s.’, userName);<br>(2)如果传入的第二个参数是一个数组，那么把这个数组每一个元素封装到req.session.flash中，然后返回特定type的数据的长度<br>(3)如果仅仅传入了type则返回指定类型的数据，并把数据从req.session.flash中删除<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">req.flash(&apos;info&apos;, &apos;email re-sent&apos;);</span><br><span class="line">req.flash(&apos;info&apos;);// =&gt; [&apos;email sent&apos;, &apos;email re-sent&apos;]</span><br><span class="line">req.flash(&apos;info&apos;);// =&gt; []这时候info已经清空了</span><br></pre></td></tr></table></figure></p>
+<p>(4)如果用户没有传入任何参数那么返回的原来的局部变量保存到的req.session.flash对象,清空req.session.flash域</p>
+<h2 id="实际使用："><a href="#实际使用：" class="headerlink" title="实际使用："></a>实际使用：</h2><p>安装<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ npm install express-session //flash放在session中</span><br><span class="line">$ npm install connect-flash</span><br></pre></td></tr></table></figure></p>
+<p>配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var flash = require(&apos;connect-flash&apos;);</span><br><span class="line">var session = require(&apos;express-session&apos;);</span><br><span class="line">app.use(session(&#123; //一些参数配置</span><br><span class="line">  secret: params1,</span><br><span class="line">  key: params2,</span><br><span class="line">  cookie: &#123;maxAge: 60000&#125;,</span><br><span class="line">  resave: false,</span><br><span class="line">  saveUninitialized: true</span><br><span class="line">&#125;));</span><br><span class="line">app.use(flash());</span><br></pre></td></tr></table></figure></p>
+<p>使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">router.post(&apos;/login&apos;, function(req, res, next) &#123;</span><br><span class="line">  User.get(req.body.username,function(err,user)&#123;</span><br><span class="line">      if(!user || user.name === &apos;&apos;)&#123;</span><br><span class="line">        req.flash(&apos;error&apos;,&apos;用户不存在&apos;);</span><br><span class="line">        return res.redirect(&apos;login&apos;);</span><br><span class="line">      &#125;</span><br><span class="line">      if(req.body.password != user.password)&#123;</span><br><span class="line">        req.flash(&apos;error&apos;,&apos;密码不对&apos;);</span><br><span class="line">        return res.redirect(&apos;login&apos;);</span><br><span class="line">      &#125;</span><br><span class="line">      req.flash(&apos;info&apos;,&apos;登录成功&apos;);</span><br><span class="line">      res.redirect(&apos;login&apos;);</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>一般和redirect一起使用，保证在渲染下一个页面的时候数据可用</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/step.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/nodejs/step.html" itemprop="url">
+                  搭建博客步骤
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-12T21:33:37+08:00">
+                2017-03-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="搭建"><a href="#搭建" class="headerlink" title="搭建"></a>搭建</h1><p>如果全局安装express 使用npm install -g express 语句安装后，无法使用express命令<br>则先执行npm install express-generator -g<br>express在4.0之后，需要安装the executable（执行器express-generator）才能执行express命令<br>express –view=ejs microblog //在当前文件夹创建文件夹microblog，并在里面部署express<br>cd microblog //进入microblog<br>npm install //安装nodejs包<br>DEBUG=microblog:* npm start //运行<br>npm install -g supervisor //安装supervisor，监视代码改动<br>supervisor ./bin/www //运行，会提示输入rs重新开始，输入’rs’回车即可，<br>//这里就不用每次改完都去手动中断进程再重新开始</p>
+<h1 id="路由初步配置"><a href="#路由初步配置" class="headerlink" title="路由初步配置"></a>路由初步配置</h1><h2 id="匹配"><a href="#匹配" class="headerlink" title="匹配"></a>匹配</h2><p>打开app.js文件<br>var index = require(‘./routes/index’); //引入不同访问路径的回调函数所在文件<br>app.use(‘/‘, index); //为回调函数配置访问路径</p>
+<p>如果要建立分支路径，可以在回调函数文件中配置相应分支路径的回调函数<br>假如我想访问<a href="http://localhost:3000/users/111" target="_blank" rel="noopener">http://localhost:3000/users/111</a> 和 <a href="http://localhost:3000/users/id/111" target="_blank" rel="noopener">http://localhost:3000/users/id/111</a><br>首先在app.js中配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var users = require(&apos;./routes/users&apos;);</span><br><span class="line">app.use(&apos;/users&apos;, users);</span><br></pre></td></tr></table></figure></p>
+<p>然后配置routes路径下的users.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> router = express.Router();</span><br><span class="line"></span><br><span class="line"><span class="comment">/* GET users listing. */</span></span><br><span class="line">router.get(<span class="string">'/:id'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">  res.send(<span class="string">'USER:'</span>+req.params.id);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">router.get(<span class="string">'/id/:id'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">  res.send(<span class="string">'USERID:'</span>+req.params.id);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = router;</span><br></pre></td></tr></table></figure></p>
+<p>注意路径参数id的获取，在app.js配置时是访问路径的共有前缀，在users.js中获取的是分支前缀<br><a href="http://www.expressjs.com.cn/guide/using-middleware.html" target="_blank" rel="noopener">深入链接</a></p>
+<h2 id="控制权转移"><a href="#控制权转移" class="headerlink" title="控制权转移"></a>控制权转移</h2><p>express 处理路由规则时，会优先匹配先定义的陆游规则，后面的规则被屏蔽<br>通过调用回调函数的第三个参数next,可以将控制权转移到后面的规则<br>即执行完先定义的规则后会继续执行后面定义的规则<br><img src="/image/node1.png" alt="node1"></p>
+<h1 id="手动安装片段视图"><a href="#手动安装片段视图" class="headerlink" title="手动安装片段视图"></a>手动安装片段视图</h1><p>由于网站中多页面head和footer相同,所以要建立模板文件，然后让其他页面文件来来填充基于这种处理方法<br>express 4.x需要手动安装partials<br>npm install express-partials<br>在app.js中注册<br>var partials = require(‘express-partials’);<br>app.use(partials());</p>
+<h1 id="引入bootstrap-和-JQuery"><a href="#引入bootstrap-和-JQuery" class="headerlink" title="引入bootstrap 和 JQuery"></a>引入bootstrap 和 JQuery</h1><p>从<a href="http://twitter.github.com/bootstrap/下载bootstrap.zip" target="_blank" rel="noopener">http://twitter.github.com/bootstrap/下载bootstrap.zip</a>,<br>将 img 目录复制到工程 public 目录下，<br>将 bootstrap.css、bootstrap-responsive.css 复制到 public/stylesheets 中，<br>将 bootstrap.js 复制到 public/javascripts 目录中，<br>然后从<a href="http://jquery.com/下载一份最新版的" target="_blank" rel="noopener">http://jquery.com/下载一份最新版的</a> jquery.js 也放入 public/javascripts 目录中。</p>
+<h1 id="界面"><a href="#界面" class="headerlink" title="界面"></a>界面</h1><p>用.ejs文件当html文件,<br>ejs 的标签系统只有以下3种标签。<br> &lt;% code %&gt;： JavaScript 代码。<br> &lt;%= code %&gt;：显示替换过 HTML 特殊字符的内容。<br> &lt;%- code %&gt;：显示原始 HTML 内容。<br>新建layout.ejs 做模板文件 ，调整index.ejs内容做首页填充内容，访问 <a href="http://localhost:3000/" target="_blank" rel="noopener">http://localhost:3000/</a> 查看效果</p>
+<h1 id="MongoDB-数据库"><a href="#MongoDB-数据库" class="headerlink" title="MongoDB 数据库"></a>MongoDB 数据库</h1><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>选用 MongoDB 作为网站的数据库系统<br>在<a href="http://dl.mongodb.org/dl/win32/x86_64" target="_blank" rel="noopener">http://dl.mongodb.org/dl/win32/x86_64</a> 可下载安装包<br>遇到该步骤时，<br><img src="/image/mongodb.png" alt="mongodb.png"><br>选择custom可以自定义安装路径<br>安装完成后，在bin所在的文件夹，与bin同级建立data文件夹，然后cmd到bin文件夹，执行<br>mongod –dbpath data文件夹路径（例：D:\MongoDB\data）<br>执行完最后一行出现：<br>2017-03-12T13:16:29.286+0800 I NETWORK  [thread1] waiting for connections on por<br>t 27017<br>浏览器输入 <a href="http://localhost:27017/" target="_blank" rel="noopener">http://localhost:27017/</a> 可以看到显示信息为<br>It looks like you are trying to access MongoDB over HTTP on the native driver port.<br>说明安装完成</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>修改package.json,dependencies中增加  “mongodb”: “&gt;= 0.9.9”<br>npm install  //更新依赖模块<br>在与app.js同级目录下新建settings.js,内容如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  cookieSecret: <span class="string">'microblogYooHannah'</span>,</span><br><span class="line">  db: <span class="string">'microblog'</span>,</span><br><span class="line">  host: <span class="string">'localhost'</span>,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>新建models文件夹，并在里面新建文件db.js,内容如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> settings = <span class="built_in">require</span>(<span class="string">'../settings'</span>),</span><br><span class="line">    Db = <span class="built_in">require</span>(<span class="string">'mongodb'</span>).Db,</span><br><span class="line">    Connection = <span class="built_in">require</span>(<span class="string">'mongodb'</span>).Connection,</span><br><span class="line">    Server = <span class="built_in">require</span>(<span class="string">'mongodb'</span>).Server;</span><br><span class="line">    <span class="built_in">module</span>.exports = <span class="keyword">new</span> Db(settings.db, <span class="keyword">new</span> Server(settings.host, Connection.DEFAULT_PORT, &#123;&#125;), &#123;<span class="attr">safe</span>: <span class="literal">true</span>&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>修改package.json,dependencies中增加  “connect-mongo”: “&gt;= 0.1.7”<br>npm install更新依赖模块<br>修改app.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> MongoStore = <span class="built_in">require</span>(<span class="string">'connect-mongo'</span>);</span><br><span class="line"><span class="keyword">var</span> settings = <span class="built_in">require</span>(<span class="string">'./settings'</span>);</span><br><span class="line"></span><br><span class="line">app.use(express.session(&#123;</span><br><span class="line">  secret: settings.cookieSecret,</span><br><span class="line">  store: <span class="keyword">new</span> MongoStore(&#123;</span><br><span class="line">  db: settings.db</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;));</span><br></pre></td></tr></table></figure></p>
+<p>由于session不再绑定在express上，这里会报错，所以要单独安装session<br>npm install express-session<br>修改app.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> session    = <span class="built_in">require</span>(<span class="string">'express-session'</span>);</span><br><span class="line"><span class="keyword">var</span> MongoStore = <span class="built_in">require</span>(<span class="string">'connect-mongo'</span>)(session);</span><br><span class="line"><span class="keyword">var</span> settings = <span class="built_in">require</span>(<span class="string">'./settings'</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">app.use(session(&#123;</span><br><span class="line">  secret: settings.cookieSecret,</span><br><span class="line">  store: <span class="keyword">new</span> MongoStore(&#123;</span><br><span class="line">    url: <span class="string">'mongodb://localhost/db'</span><span class="comment">//链接数据库地址  </span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;));</span><br></pre></td></tr></table></figure></p>
+<p>如出现错误：<br>MongoError: failed to connect to server [localhost:27017] on first connect<br>可能是没有运行刚才安装的MongoDB,这时要回到cmd,执行<br>mongod –dbpath data文件夹路径（例：D:\MongoDB\data）<br>如出现以下提醒：<br>express-session deprecated undefined resave option;<br>express-session deprecated undefined saveUninitialized option;<br>则补充上这两个配置参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">app.use(session(&#123;</span><br><span class="line">  resave: false, //添加 resave 选项  </span><br><span class="line">  saveUninitialized: true, //添加 saveUninitialized 选项  </span><br><span class="line">&#125;));</span><br></pre></td></tr></table></figure></p>
+<h1 id="注册页面"><a href="#注册页面" class="headerlink" title="注册页面"></a>注册页面</h1><p>在view中新建reg.ejs,内容如下；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;form class=&quot;form-horizontal&quot; method=&quot;post&quot;&gt;</span><br><span class="line">  &lt;fieldset&gt;</span><br><span class="line">    &lt;legend&gt;用户注册&lt;/legend&gt;</span><br><span class="line">    &lt;div class=&quot;control-group&quot;&gt;</span><br><span class="line">      &lt;label class=&quot;control-label&quot; for=&quot;username&quot;&gt;用户名&lt;/label&gt;</span><br><span class="line">      &lt;div class=&quot;controls&quot;&gt;</span><br><span class="line">        &lt;input type=&quot;text&quot; class=&quot;input-xlarge&quot; id=&quot;username&quot; name=&quot;username&quot;&gt;</span><br><span class="line">        &lt;p class=&quot;help-block&quot;&gt;你的账户名称，用于登录和显示。 &lt;/p&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;control-group&quot;&gt;</span><br><span class="line">      &lt;label class=&quot;control-label&quot; for=&quot;password&quot;&gt;口令&lt;/label&gt;</span><br><span class="line">      &lt;div class=&quot;controls&quot;&gt;</span><br><span class="line">        &lt;input type=&quot;password&quot; class=&quot;input-xlarge&quot; id=&quot;password&quot; name=&quot;password&quot;&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;control-group&quot;&gt;</span><br><span class="line">      &lt;label class=&quot;control-label&quot; for=&quot;password-repeat&quot;&gt;重复输入口令&lt;/label&gt;</span><br><span class="line">      &lt;div class=&quot;controls&quot;&gt;</span><br><span class="line">        &lt;input type=&quot;password&quot; class=&quot;input-xlarge&quot; id=&quot;password-repeat&quot; name=&quot;password-repeat&quot;&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div class=&quot;form-actions&quot;&gt;</span><br><span class="line">      &lt;button type=&quot;submit&quot; class=&quot;btn btn-primary&quot;&gt;注册&lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/fieldset&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在app.js和routes/index中增加访问路径和响应函数<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//app.js</span></span><br><span class="line"><span class="keyword">var</span> router = <span class="built_in">require</span>(<span class="string">'./routes/index'</span>);<span class="comment">//路由</span></span><br><span class="line"><span class="keyword">var</span> app = express();</span><br><span class="line">app.use(<span class="string">'/'</span>, router);</span><br><span class="line">app.use(<span class="string">'/reg'</span>,router );</span><br><span class="line"></span><br><span class="line"><span class="comment">//routes/index.js</span></span><br><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> router = express.Router();</span><br><span class="line"></span><br><span class="line"><span class="comment">/* GET home page. */</span></span><br><span class="line">router.get(<span class="string">'/'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">  res.render(<span class="string">'index'</span>, &#123; <span class="attr">title</span>: <span class="string">'首页'</span> &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">router.get(<span class="string">'/reg'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">  res.render(<span class="string">'reg'</span>, &#123; <span class="attr">title</span>: <span class="string">'用户注册'</span> &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">router.post(<span class="string">'/reg'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line"><span class="comment">//检验用户两次输入的口令是否一致</span></span><br><span class="line">  <span class="keyword">if</span> (req.body[<span class="string">'password-repeat'</span>] != req.body[<span class="string">'password'</span>]) &#123;</span><br><span class="line">    req.flash(<span class="string">'error'</span>, <span class="string">'两次输入的口令不一致'</span>);</span><br><span class="line">    <span class="keyword">return</span> res.redirect(<span class="string">'/reg'</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//生成口令的散列值</span></span><br><span class="line">  <span class="keyword">var</span> md5 = crypto.createHash(<span class="string">'md5'</span>);</span><br><span class="line">  <span class="keyword">var</span> password = md5.update(req.body.password).digest(<span class="string">'base64'</span>);</span><br><span class="line">  <span class="keyword">var</span> newUser = <span class="keyword">new</span> User(&#123;</span><br><span class="line">    name: req.body.username,</span><br><span class="line">    password: password,</span><br><span class="line">  &#125;);</span><br><span class="line"><span class="comment">//检查用户名是否已经存在</span></span><br><span class="line">  User.get(newUser.name, <span class="function"><span class="keyword">function</span>(<span class="params">err, user</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (user)</span><br><span class="line">      err = <span class="string">'Username already exists.'</span>;</span><br><span class="line">    <span class="keyword">if</span> (err) &#123;</span><br><span class="line">      req.flash(<span class="string">'error'</span>, err);</span><br><span class="line">      <span class="keyword">return</span> res.redirect(<span class="string">'/reg'</span>);</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//如果不存在则新增用户</span></span><br><span class="line">    newUser.save(<span class="function"><span class="keyword">function</span>(<span class="params">err</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (err) &#123;</span><br><span class="line">        req.flash(<span class="string">'error'</span>, err);</span><br><span class="line">        <span class="keyword">return</span> res.redirect(<span class="string">'/reg'</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      req.session.user = newUser;</span><br><span class="line">      req.flash(<span class="string">'success'</span>, <span class="string">'注册成功'</span>);</span><br><span class="line">      res.redirect(<span class="string">'/'</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">module</span>.exports = router;</span><br></pre></td></tr></table></figure></p>
+<p>响应函数中的User是用户模型,在models中创建user.js，再引入到routes/index<br>响应函数会出现<br>1.title is not defined的问题<br>解决办法就是将views/layout.ejs的title换成locals.title<br>2.req.flash会报错说req.flash is not a function，则<br>npm install connect-flash<br>app.js修改：<br>var flash = require(‘connect-flash’);<br>app.use(flash());<br>这样所有的req就可以使用flash()函数<br>3.crypto没有被定义<br>npm install crypto<br>routes/index.js引入<br>var crypto = require(‘crypto’);</p>
+<h1 id="视图交互"><a href="#视图交互" class="headerlink" title="视图交互"></a>视图交互</h1><p>实现不同登录状态下页面呈现不同内容的功能，创建动态视图助手<br>app.js<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">app.use(function(req,res,next)&#123;</span><br><span class="line">  res.locals.user=req.session.user;</span><br><span class="line"></span><br><span class="line">  var err = req.flash(&apos;error&apos;);</span><br><span class="line">  var success = req.flash(&apos;success&apos;);</span><br><span class="line"></span><br><span class="line">  res.locals.error = err.length ? err : null;</span><br><span class="line">  res.locals.success = success.length ? success : null;</span><br><span class="line"></span><br><span class="line">  next();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>放在路由配置前面<br>接下来，修改 layout.ejs中的导航栏部分,为已登入用户和未登入用户显示不同的信息<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;ul class=&quot;nav&quot;&gt;</span><br><span class="line">&lt;li class=&quot;active&quot;&gt;&lt;a href=&quot;/&quot;&gt;首页&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">&lt;% if (!user) &#123; %&gt;</span><br><span class="line">&lt;li&gt;&lt;a href=&quot;/login&quot;&gt;登入&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">&lt;li&gt;&lt;a href=&quot;/reg&quot;&gt;注册&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">&lt;% &#125; else &#123; %&gt;</span><br><span class="line">&lt;li&gt;&lt;a href=&quot;/logout&quot;&gt;登出&lt;/a&gt;&lt;/li&gt;</span><br><span class="line">&lt;% &#125; %&gt;</span><br><span class="line">&lt;/ul&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在 container 中，&lt;%- body %&gt;之前加入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;% if (success) &#123; %&gt;</span><br><span class="line">&lt;div class=&quot;alert alert-success&quot;&gt;</span><br><span class="line">&lt;%= success %&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;% &#125; %&gt;</span><br><span class="line">&lt;% if (error) &#123; %&gt;</span><br><span class="line">&lt;div class=&quot;alert alert-error&quot;&gt;</span><br><span class="line">&lt;%= error %&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;% &#125; %&gt;</span><br></pre></td></tr></table></figure></p>
+<p>它的功能是页面通知。</p>
+<h1 id="登录登出操作-状态判断-建立微博模型，处理微博发表操作"><a href="#登录登出操作-状态判断-建立微博模型，处理微博发表操作" class="headerlink" title="登录登出操作,状态判断;建立微博模型，处理微博发表操作"></a>登录登出操作,状态判断;建立微博模型，处理微博发表操作</h1><p>同样建立连接路由，写响应函数</p>
+<h1 id="处理首页登录前后状态"><a href="#处理首页登录前后状态" class="headerlink" title="处理首页登录前后状态"></a>处理首页登录前后状态</h1><p>省略步骤可参考书籍<br><a href="https://github.com/YooHannah/NodejsofMicroblog" target="_blank" rel="noopener">代码详见</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/sync.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/nodejs/sync.html" itemprop="url">
+                  同步/异步和使用
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-11T09:31:15+08:00">
+                2017-03-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="同步-异步"><a href="#同步-异步" class="headerlink" title="同步/异步"></a>同步/异步</h1><p>同步读取一个文件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//readfile.js</span></span><br><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line"><span class="keyword">var</span> data = fs.readFileSync(<span class="string">'file.txt'</span>,<span class="string">'utf-8'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(data);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'end.'</span>);</span><br><span class="line"><span class="comment">//执行</span></span><br><span class="line">$node readfile.js</span><br><span class="line">contents <span class="keyword">of</span> the file.</span><br><span class="line">end.</span><br></pre></td></tr></table></figure></p>
+<p>异步读取一个文件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//readfile.js</span></span><br><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line">fs.readFile(<span class="string">'file.txt'</span>,<span class="string">'utf-8'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">err,data</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (err) &#123;</span><br><span class="line">	  <span class="built_in">console</span>.log(err);</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">	  <span class="built_in">console</span>.log(data);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'end.'</span>);</span><br><span class="line"><span class="comment">//执行</span></span><br><span class="line">$node readfile.js</span><br><span class="line">end.</span><br><span class="line">contents <span class="keyword">of</span> the file.</span><br></pre></td></tr></table></figure></p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><h2 id="node的REPL模式"><a href="#node的REPL模式" class="headerlink" title="node的REPL模式"></a>node的REPL模式</h2><p>即输入代码回车立即执行的模式<br>在command prompt中直接输入node进入该模式，连续两次Ctrl+C可退出</p>
+<h2 id="监视代码改动"><a href="#监视代码改动" class="headerlink" title="监视代码改动"></a>监视代码改动</h2><p>npm install -g supervisor //安装supervisor<br>supervisor app.js //代替node app.js，修改代码后自动终止进程并重启</p>
+<h2 id="包"><a href="#包" class="headerlink" title="包"></a>包</h2><p>把文件夹封装为一个模块，即所谓的包，包通常是一些模块的集合，在模块的基础上提供了更高层的抽象，相当于一些固定接口的函数库<br>包安装：作为工程运行，通过本地安装;如果要在命令行下使用,则使用全局模式安装</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/jssummary.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/nodejs/jssummary.html" itemprop="url">
+                  js理解
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-11T08:23:09+08:00">
+                2017-03-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h1><p>不通过花括号来界定，通过函数来定义，<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">	<span class="keyword">var</span> somevar = <span class="string">"value"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(somevar);<span class="comment">//value</span></span><br></pre></td></tr></table></figure></p>
+<p>在访问未定义的变量或定义了但没有初始化的变量时都会获得undefined<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> scope = <span class="string">"1111"</span>;</span><br><span class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(scope); <span class="comment">//undefined</span></span><br><span class="line">	<span class="keyword">var</span> scope = <span class="string">'f'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>作用域的嵌套关系在定义时确定，不在调用时确定<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> scope = <span class="string">"top"</span>;</span><br><span class="line"><span class="keyword">var</span> f1 = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(scope);</span><br><span class="line">&#125;;</span><br><span class="line">f1();<span class="comment">//top</span></span><br><span class="line"><span class="keyword">var</span> f2 = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> scope = <span class="string">'f2'</span>;</span><br><span class="line">	f1();</span><br><span class="line">&#125;;</span><br><span class="line">f2(); <span class="comment">//top</span></span><br></pre></td></tr></table></figure></p>
+<p>全局作用域是个对象，这个对象叫全局对象，nodejs是global对象，浏览器是window对象，包括<br>在最外层定义的变量<br>全局对象的属性<br>未用var定义直接赋值的变量</p>
+<h1 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h1><p>由函数(环境)及其封闭的自由变量组成的集合体，<br>可以想象成一个容器，里面包括一个函数和它用到的变量，每当想使用一次这个容器里的函数，就将这个容器复制一次给调用者：<br>1.不通调用者得到的容器相互隔离，没有关系，<br>2.被复制到调用者的函数，会自己形成一个独立的运行环境，每次调用完会根据变量性质，更新变量值,不会释放变量<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> generateClosuer = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> count = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">var</span> <span class="keyword">get</span> = function()&#123;</span><br><span class="line">    count++;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">get</span>;</span><br><span class="line">&#125;</span><br><span class="line">var counter1 = generateClosuer();</span><br><span class="line">var counter2 = generateClosuer();</span><br><span class="line">console.log(counter1()); //1</span><br><span class="line">console.log(counter1()); //2</span><br><span class="line">console.log(counter2()); //1</span><br><span class="line">console.log(counter1()); //3</span><br></pre></td></tr></table></figure></p>
+<h1 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h1><p>上下文对象即this指针，即被调用函数所处的环境，<br>上下文对象的作用是在一个函数内部引用调用它的对象本身。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">User</span>(<span class="params">name,url</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.name = name;</span><br><span class="line">	<span class="keyword">this</span>.url = url;</span><br><span class="line">	<span class="keyword">this</span>.diaplay = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> someuser = <span class="keyword">new</span> User(<span class="string">'byvoid'</span>,<span class="string">'http://www.byvoid.com'</span>);</span><br></pre></td></tr></table></figure></p>
+<p>创建someuser对象时，构造函数的this指调用它的someuser<br>函数类型的变量指向这个函数实体的一个引用，在引用之间赋值不会对对象产生复制行为。<br>我们可以通过函数的任何一个引用调用这个函数，但该函数的上下文即this不同<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> someuser = &#123;</span><br><span class="line">	name:<span class="string">'byvoid'</span>,</span><br><span class="line">	func: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> foo = &#123;</span><br><span class="line">	name:<span class="string">'foobar'</span></span><br><span class="line">&#125;;</span><br><span class="line">someuser.func();<span class="comment">//byvoid</span></span><br><span class="line">foo.func = someuser.func; <span class="comment">//引用someuser.func这个函数实体，其实就是someuser.func的代码内容</span></span><br><span class="line">foo.func();<span class="comment">//foobar this是foo</span></span><br><span class="line"></span><br><span class="line">name = <span class="string">'global'</span>;</span><br><span class="line">func = someuser.func;</span><br><span class="line">func();<span class="comment">//global</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="call-apply"><a href="#call-apply" class="headerlink" title="call/apply"></a>call/apply</h2><p>让其他对象调用本对象的方法<br>A对象名.函数属性名.call(B对象名,函数参数表(逗号隔开)); //B调用A的方法<br>A对象名.函数属性名.apply(B对象名,函数参数数组);//B调用A的方法</p>
+<h2 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h2><p>永久绑定函数的上下文，使其无论被谁调用，上下文都是固定的<br>A对象名.函数属性名.bind(B对象名,函数参数表(逗号隔开));<br>bind方法返回上下文为B对象的A对象的函数<br>如果在使用bind时，绑定了参数表，则在调用返回函数时，只需要传入未绑定的参数即可<br>注意不能重复绑定<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> someuser = &#123;</span><br><span class="line">	name:<span class="string">'byvoid'</span>,</span><br><span class="line">	func:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line"> &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> foo = &#123;</span><br><span class="line">	name:<span class="string">'foobar'</span></span><br><span class="line">&#125;;</span><br><span class="line">func = someuser.func.bind(foo);</span><br><span class="line">func();<span class="comment">//foobar</span></span><br><span class="line"></span><br><span class="line">func2 = func.bind(someuser);</span><br><span class="line">func2();<span class="comment">//foobar;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="原型"><a href="#原型" class="headerlink" title="原型"></a>原型</h2><p>构造函数创建属性<br>除非必须用构造函数闭包，否则尽量用原型定义成员函数<br>原型定义的成员是多个实例共享的，因此尽量在构造函数内定义一般成员尤其是对象或数组<br>原型链<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">function Foo()&#123;</span><br><span class="line">&#125;</span><br><span class="line">object.prototype.name = &apos;my object&apos;;</span><br><span class="line">Foo.prototype.name = &apos;Bar&apos;;</span><br><span class="line">var obj = new object();</span><br><span class="line">var foo = new Foo();</span><br><span class="line">console.log(obj.name);//my object</span><br><span class="line">console.log(foo.name);//Bar</span><br><span class="line">console.log(foo.__proto__.name);//Bar</span><br><span class="line">console.log(foo.__proto__.__proto__.name);//my object</span><br><span class="line">console.log(foo.__proto__.constructor.prototype.name);//Bar</span><br></pre></td></tr></table></figure></p>
+<p><img src="/image/typeof.png" alt="typeof"></p>
+<p>【广发证券nodejs应用](<a href="http://slides.com/loskael/node#/" target="_blank" rel="noopener">http://slides.com/loskael/node#/</a>)</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/MapTraversal.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/algorithm/MapTraversal.html" itemprop="url">
+                  深度广度优先遍历+马踏棋盘算法
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-07T21:06:37+08:00">
+                2017-03-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="深度优先遍历-深度优化搜索DFS"><a href="#深度优先遍历-深度优化搜索DFS" class="headerlink" title="深度优先遍历/深度优化搜索DFS"></a>深度优先遍历/深度优化搜索DFS</h1><p><img src="/image/Traversal1.png" alt="Traversal1"><br>右手原则：在没有碰到重复顶点的1情况下，分叉路口始终是向右手边走，没路过一个顶点就做一个记号</p>
+<p>主要思路是右手原则，把自己想象成从一个顶点出发的小人,每次选择下一步要走的路径时，就选择右手方向的路径，并给自己即将离开的顶点做一个已经遍历过的标记，直到碰到右手选择的路径将要到达的顶点是已经遍历过的顶点，这时则判断从右手方向开始的路径的终点顶点是否已遍历，若没有遍历，则选择该路径继续往下，若碰到所有路径终点顶点都是已经遍历过的，则沿到达该顶点的路径返回上一个顶点，检查上一顶点的其他路径顶点是否已经遍历，未遍历的话，则沿该路径走下去，即碰到所有路径顶点都遍历过则返回上一顶点，以此类推，直到返回起点顶点</p>
+<p>整个图的遍历过程算法上是一个递归的过程，遍历方式上类似于树的前序遍历<br><img src="/image/Traversal2.png" alt="Traversal2"><br>看蓝色的路径即顶点遍历过程<br>A-&gt;B-&gt;C-&gt;D-&gt;E-&gt;F-&gt;G-&gt;H (往回走，看红色路径顶点都已遍历过)-&gt;G-&gt;F-&gt;E-&gt;D-&gt;I-&gt;D-&gt;C-&gt;B-&gt;A</p>
+<p>编程思路：<br>遍历图的邻接矩阵，邻接矩阵建立时注意选择是使用右手原则还是左手原则，从起点开始遍历该顶点所在行，便利到非0值且对应的列顶点未访问过就开始遍历该列顶点对应顶点所在的行，同样遍历非0未遍历过的顶点，如果该行所有顶点都遍历过则返回上一顶点继续重复遍历找未遍历的顶点，直到返回起点位置<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/MapDeepTraversal.js" target="_blank" rel="noopener">代码链接</a></p>
+<h1 id="马踏棋盘问题"><a href="#马踏棋盘问题" class="headerlink" title="马踏棋盘问题"></a>马踏棋盘问题</h1><p>国际象棋的棋盘为8*8的方格棋盘，现将“马”放在任意指定的方格中，按照“马”走棋的规则将“马”进行移动<br>要求每个方格只能进入一次，最终使得“马”走遍棋盘64个方格</p>
+<p>一个位置最多有八种选择，如下<br><img src="/image/chess.png" alt="chess"><br><a href="https://github.com/YooHannah/algorithm/blob/master/C/checkerboard.c" target="_blank" rel="noopener">代码链接</a></p>
+<h1 id="图的广度优先遍历"><a href="#图的广度优先遍历" class="headerlink" title="图的广度优先遍历"></a>图的广度优先遍历</h1><p>主要思路：树的层序遍历<br>结构：队列<br>原则：右手原则<br>将复杂的图调整结构为层的形状，从最上一层结点唯一结点出发，入队列<br>遍历第二层，从与上一层结点相连的右手边的结点开始遍历，先将上一层相连的结点出队列，然后第二层结点入队列<br>以此类推，即在本层遍历时，先将与将要遍历的结点的上层结点出队列，然后将本层结点入队列，<br>遍历完一个上层结点的本层连接点，先将上层下一个结点出队列，在将上层下一个节点的本层链接点入队列<br>出队列顺序即遍历顺序<br><img src="/image/tug1.png" alt="tug1"><br>选定一个起点结点(A)，依次遍历与该结点相连结点(B、F)，每个结点遍历完后添加遍历标记，<br>再依次遍历刚刚遍历过的结点(先B后F)的相连结点(CIG、E),同样遍历完要加标记<br>以此类推，再遍历C的连接点D，G的连接点H<br><img src="/image/BreadthMaptraversal2.png" alt="BreadthMaptraversal2"><br>编程思路：<br>将每次遍历的结点入队列，每遍历完一层，出一次队列，出队列顺序即遍历顺序<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/BreadthMaptraversal.js" target="_blank" rel="noopener">代码链接</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/es6.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/js/es6.html" itemprop="url">
+                  ES6
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-06T07:12:37+08:00">
+                2017-03-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="let"><a href="#let" class="headerlink" title="let"></a>let</h1><p>1.let 声明的变量在let 命令所在的代码快内有效<br>2.不声明直接用变量或者先用再声明都会报错<br>3.暂时性死区:在变量声明之前就使用变量的代码块<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">暂时性死区的本质就是，只要一进入当前作用域，所要使用的变量就已经存在了，但是不可获取，只有等到声明变量的那一行代码出现，才可以获取和使用该变量。</span><br></pre></td></tr></table></figure></p>
+<p>4.不允许在同一级别块域内重复声明一个变量<br>5.let 声明的变量,外层代码块不受内层代码块的影响<br>—-外层作用域无法读取内层作用域的变量<br>—-内层作用域可以定义外层作用域的同名变量<br>6.块级作用域内声明的函数，行为类似于var声明的变量,仅在所在的代码块内有效</p>
+<h1 id="const"><a href="#const" class="headerlink" title="const"></a>const</h1><p>1.声明的同时进行复制<br>2.作用域特征同let<br>3.当声明的变量为对象或者数组时，只可以改变对象属性或数组元素的值，但不可以将变量重新赋值</p>
+<p>ES6 6种声明变量的方法：var、function、let、const、import、class<br>var命令和function命令声明的全局变量，依旧是顶层对象的属性;let命令、const命令、class命令声明的全局变量，不属于顶层对象的属性。</p>
+<h1 id="解构赋值"><a href="#解构赋值" class="headerlink" title="解构赋值"></a>解构赋值</h1><h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><p>1.‘模式匹配’，左右对应相等，变量取值由位置决定<br>2.当右边的数据量大于左边变量数，如果是单层数组，则依次匹配，多余形成数组赋给最后一个变量<br>—-如果变量组成多层数组，则依次匹配，剩余的舍弃<br>3.当右边小于左边变量数，多余的变量的值就等于undefined<br>4.可以提前给变量赋默认值，默认值可以是已声明的其他变量，<br>–注意给变量赋‘undefined’的值的时候，如果变量原来的值不严格等于‘===’undefined，将不会被赋值为undefined</p>
+<h2 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h2><p>1.对象的属性没有次序，变量必须与属性同名，才能取到正确的值，属性是匹配的标志<br>2.若变量与属性名不一致，则先找到同名属性，然后再赋给对应的变量。真正被赋值的是后者(变量)，而不是前者(属性)<br>3.如果在声明对象变量的时候为属性值的变量赋值，则相当于同时声明属性值的变量<br>4.进行套嵌赋值时，注意分清属性名和变量名，被赋值的是变量名，不是属性名<br>5.进行默认值赋值规则同数组，赋空不会生效<br>6.属性名表达式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">let arr = [1, 2, 3];</span><br><span class="line">let &#123;0 : first, [arr.length - 1] : last&#125; = arr;</span><br><span class="line">first // 1</span><br><span class="line">last // 3</span><br></pre></td></tr></table></figure></p>
+<p>数组arr的0键对应的值是1，[arr.length - 1]就是2键，对应的值是3</p>
+<h2 id="函数参数"><a href="#函数参数" class="headerlink" title="函数参数"></a>函数参数</h2><p>类似数组，但注意下面两种写法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">function move(&#123;x = 0, y = 0&#125; = &#123;&#125;) &#123;</span><br><span class="line">  return [x, y];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">move(&#123;x: 3, y: 8&#125;); // [3, 8]</span><br><span class="line">move(&#123;x: 3&#125;); // [3, 0]</span><br><span class="line">move(&#123;&#125;); // [0, 0]</span><br><span class="line">move(); // [0, 0]</span><br></pre></td></tr></table></figure></p>
+<p>为变量x和y赋值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">function move(&#123;x, y&#125; = &#123; x: 0, y: 0 &#125;) &#123;</span><br><span class="line">  return [x, y];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">move(&#123;x: 3, y: 8&#125;); // [3, 8]</span><br><span class="line">move(&#123;x: 3&#125;); // [3, undefined]</span><br><span class="line">move(&#123;&#125;); // [undefined, undefined]</span><br><span class="line">move(); // [0, 0]</span><br></pre></td></tr></table></figure></p>
+<p>为x,y的默认值赋值</p>
+<h2 id="字符串、数字、布尔"><a href="#字符串、数字、布尔" class="headerlink" title="字符串、数字、布尔"></a>字符串、数字、布尔</h2><p>字符串：字符串被转换成数组<br>数字/布尔：先转换成对象</p>
+<h1 id="字符串方法"><a href="#字符串方法" class="headerlink" title="字符串方法"></a>字符串方法</h1><table>
 <thead>
 <tr>
-<th style="text-align:center">拥有公司的富人</th>
-<th style="text-align:center">为公司工作的人</th>
+<th>方法</th>
+<th style="text-align:right">es5/js</th>
+<th style="text-align:center">es6</th>
+<th>2017</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">挣钱</td>
-<td style="text-align:center">挣钱</td>
+<td>Unicode表示法</td>
+<td style="text-align:right">只限于\u0000——\uFFFF之间的字符</td>
+<td style="text-align:center">只要将码点放入大括号，就能正确解读该字符</td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align:center">支出</td>
-<td style="text-align:center">缴税</td>
+<td>charCodeAt</td>
+<td style="text-align:right">只会正确返回16位的UTF-16字符的码点</td>
+<td style="text-align:center"></td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align:center">缴税</td>
-<td style="text-align:center">支出</td>
+<td>codePointAt</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">会正确返回32位的UTF-16字符的码点</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:right"></td>
+<td style="text-align:center"></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:right"></td>
+<td style="text-align:center"></td>
+<td></td>
+</tr>
+<tr>
+<td>String.fromCharCode</td>
+<td style="text-align:right">只会识别16位的UTF-16字符</td>
+<td style="text-align:center"></td>
+<td></td>
+</tr>
+<tr>
+<td>String.fromCodePoint</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">会会识别32位的UTF-16字符</td>
+<td></td>
+</tr>
+<tr>
+<td>for</td>
+<td style="text-align:right">不可以识别大于0xFFFF的码点</td>
+<td style="text-align:center"></td>
+<td></td>
+</tr>
+<tr>
+<td>for…of</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">可以识别大于0xFFFF的码点</td>
+<td></td>
+</tr>
+<tr>
+<td>charAt</td>
+<td style="text-align:right">不能识别码点大于0xFFFF的字符</td>
+<td style="text-align:center"></td>
+<td></td>
+</tr>
+<tr>
+<td>at</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">能识别码点大于0xFFFF的字符</td>
+<td></td>
+</tr>
+<tr>
+<td>normalize</td>
+<td style="text-align:right">‘\u01D1’===’\u004F\u030C’ //false</td>
+<td style="text-align:center">‘\u01D1’.normalize() === ‘\u004F\u030C’.normalize()// true</td>
+<td></td>
+</tr>
+<tr>
+<td>indexOf</td>
+<td style="text-align:right">确定一个字符串是否包含在另一个字符串中</td>
+<td style="text-align:center"></td>
+<td></td>
+</tr>
+<tr>
+<td>includes()</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回布尔值，表示是否找到了参数字符串</td>
+<td></td>
+</tr>
+<tr>
+<td>startsWith</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回布尔值，表示参数字符串是否在源字符串的头部</td>
+<td></td>
+</tr>
+<tr>
+<td>endsWith</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回布尔值，表示参数字符串是否在源字符串的尾部</td>
+<td></td>
+</tr>
+<tr>
+<td>repeat(n)</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回一个新字符串，表示将原字符串重复n次。</td>
+<td></td>
+</tr>
+<tr>
+<td>padStart()，padEnd()</td>
+<td style="text-align:right"></td>
+<td style="text-align:center"></td>
+<td>padStart()用于头部补全，padEnd()用于尾部补全</td>
+</tr>
+<tr>
+<td>模板字符串</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">反引号(`),保留空格和换行,变量名写在${}中</td>
 </tr>
 </tbody>
 </table>
-<p>=&gt;拥有由资产组成的公司</p>
-<ol start="6">
-<li>财商：<br>a.财务知识，会计，阅读理解数字的能力<br>b.投资策略<br>c.市场，供给，与需求<br>d.法律规章</li>
-<li>理财能手：<br>a.如何寻找其他人都忽视的机会<br>b.如何增加资金<br>c.怎样把精明的人组织起来</li>
-<li>管理技能：<br>a.对现金流的管理<br>b.对系统(你本人，时间及家庭)的管理<br>c.对人员的管理</li>
-<li>克服困难：恐惧心理、愤世嫉俗、懒惰、不良习惯、自负</li>
-<li>开发<br>我需要一个超现实的理由—-精神的力量<br>每天做出自己的选择—-选择的力量<br>慎重的选择朋友—-关系的力量<br>掌握一种模式，然后在学习一种模式—-快速学习的力量<br>首先支付自己—-自律的力量<br>给你的经纪人以优厚的报酬—-好建议的力量<br>用资产来购买奢侈品—-专注的力量<br>对英雄的崇拜—-神话的力量<br>先予后取—-给予的力量</li>
-</ol>
+<h1 id="数值处理方法"><a href="#数值处理方法" class="headerlink" title="数值处理方法"></a>数值处理方法</h1><table>
+<thead>
+<tr>
+<th>方法</th>
+<th style="text-align:right">es5/js</th>
+<th style="text-align:center">es6</th>
+<th>2017</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>二进制和八进制表示法</td>
+<td style="text-align:right">在严格模式之中，八进制就不再允许使用前缀0表示</td>
+<td style="text-align:center">二进制0b或0B、八进制0o或0O</td>
+<td></td>
+</tr>
+<tr>
+<td>isFinite()/isNaN()</td>
+<td style="text-align:right">先调用Number()将非数值的值转为数值，再进行判断</td>
+<td style="text-align:center"></td>
+<td></td>
+</tr>
+<tr>
+<td>Number.isFinite()</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">检查一个数值是否为有限的,非数值一律返回false。</td>
+<td></td>
+</tr>
+<tr>
+<td>Number.isNaN()</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">检查一个值是否为NaN,非数值一律返回false。</td>
+<td></td>
+</tr>
+<tr>
+<td>parseInt()、parseFloat()</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">移植到Number对象上面，行为完全保持不变。</td>
+<td></td>
+</tr>
+<tr>
+<td>Number.isInteger()</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">判断一个值是否为整数</td>
+<td></td>
+</tr>
+<tr>
+<td>Number.EPSILON</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">极小的常量,为浮点数计算设置一个误差范围</td>
+<td></td>
+</tr>
+<tr>
+<td>Number.isSafeInteger</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">判断一个整数是否落在整数范围之内</td>
+<td></td>
+</tr>
+<tr>
+<td>Number.MAX_SAFE_INTEGER、Number.MIN_SAFE_INTEGER</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">表示整数范围的上下限</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.trunc</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">去除一个数的小数部分，返回整数部分</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.sign</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">判断一个数到底是正数、负数、还是零</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.cbrt</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">计算一个数的立方根</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.clz32</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回一个数的32位无符号整数形式有多少个前导0</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.imul</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回两个数以32位带符号整数形式相乘的结果，返回的也是一个32位的带符号整数。</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.fround</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回一个数的单精度浮点数形式</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.hypot</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回所有参数的平方和的平方根</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.expm1(x)</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回Math.exp(x) - 1</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.log1p(x)</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回1 + x的自然对数</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.log10(x)</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回以10为底的x的对数</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.log2(x)</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回以2为底的x的对数</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.sign()</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">判断一个值的正负</td>
+<td></td>
+</tr>
+<tr>
+<td>指数运算符(**)</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">指数运算符与Math.pow的实现不相同</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.sinh(x)</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回x的双曲正弦</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.cosh(x)</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回x的双曲余弦</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.tanh(x)</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回x的双曲正切</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.asinh(x)</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回x的反双曲正弦</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.acosh(x)</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回x的反双曲余弦</td>
+<td></td>
+</tr>
+<tr>
+<td>Math.atanh(x)</td>
+<td style="text-align:right"></td>
+<td style="text-align:center">返回x的反双曲正切</td>
+</tr>
+</tbody>
+</table>
+<h1 id="深入理解es6笔记"><a href="#深入理解es6笔记" class="headerlink" title="深入理解es6笔记"></a>深入理解es6笔记</h1><h2 id="let-const"><a href="#let-const" class="headerlink" title="let/const"></a>let/const</h2><p>常量如果是对象，则对象中的值可以修改</p>
+<p>js引擎在扫描代码发现变量声明时，要么将它们提升至作用域顶部（var）,要么将声明放到TDZ(let/const)，访问TDZ中的变量会触发运行时错误，只有执行过变量声明语句后，变量才会从TDZ中移出，然后可正常访问。<br>TDZ在块作用域中，相对于let,const所在块作用域来说。<br>但在let声明的作用域外对该变量使用typeof不会报错<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">console.log(typeof val);</span><br><span class="line">if(condition) &#123;</span><br><span class="line">  let value = &apos;blue&apos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="字符串、正则表达式"><a href="#字符串、正则表达式" class="headerlink" title="字符串、正则表达式"></a>字符串、正则表达式</h2><p>在对字符串进行比较排序操作前，按照统一标准进行标准化<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">let normalized = values.map(function(text)&#123;</span><br><span class="line">  return text.normalize();// 默认NFC格式</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>正则表达式Y修饰符使用注意：<br>1.只有调用exec()和test()这些正则表达式对象的方法时才会涉及lastIndex属性，调用字符串方法，例如match(),则不会触发粘滞行为<br>2.对于粘滞正则表达式而言，如果使用^字符串来匹配字符串开端，只会从字符串的起始位置或多行模式的首行进行匹配。</p>
+<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><p>函数name属性不一定引用同名变量，他只是协助调试用的额外信息，所以不能使用name属性的值来获取对函数的引用</p>
+<p>js函数有两个不同的内部[[Call]]和[[Construct]]<br>当通过new关键字调用函数时，执行的是[[Construct]]函数，他负责创建一个被称作实例的新对象<br>然后在执行函数将this绑定到实例上;<br>如果不通过new关键字调用函数，则执行[[Call]]函数，从而直接执行代码中的函数体<br>具有[[Construct]]方法的函数被统称为构造函数。</p>
+<p>可以在函数内部使用new.target来判断是否在使用new 操作符调用函数，<br>以及判断是否被某个特定构造函数调用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">1.</span><br><span class="line">function Person(name)&#123;</span><br><span class="line">  if(typeof new.target !== &apos;undefined&apos;)&#123;</span><br><span class="line">    this.name = name;</span><br><span class="line">  &#125;else &#123;</span><br><span class="line">    throw new Error(&apos;必须通过new 操作符调用该函数&apos;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">2.</span><br><span class="line">function Person(name)&#123;</span><br><span class="line">  if(typeof new.target !== &apos;Person&apos;)&#123;</span><br><span class="line">    this.name = name;</span><br><span class="line">  &#125;else &#123;</span><br><span class="line">    throw new Error(&apos;必须通过new 操作符调用该函数&apos;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">function AnotherPerson(name)&#123;</span><br><span class="line">  Person.call(this,name)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var person = new Person(&apos;kely&apos;);</span><br><span class="line">var anotherPerson = new AnotherPerson(&apos;kely&apos;); // 抛出错误</span><br></pre></td></tr></table></figure></p>
+<p>如果箭头函数被非箭头函数包含，则this绑定的是最近一层非箭头函数的this;<br>否则this会被设置为全局对象</p>
+<h2 id="对象-1"><a href="#对象-1" class="headerlink" title="对象"></a>对象</h2><p>在使用===进行比较时，+0和-0得到结果相等；NaN和自身比较不相等<br>但可以使用Object.is()方法弥补<br>Object.js(+0,-0)得到false;<br>Object.js(NaN,NaN)得到true.</p>
+<p>Object.assign()方法不能将提供者的访问器属性复制到接收对象中<br>会被转变成接收对象中的一个数据属性。</p>
+<p>对象自有属性枚举顺序的基本规则是<br>1.所有数字键按升序排序<br>2.所有字符串键按照他们被加入对象的顺序排序<br>3.所有Symbol键按照他们被加入对象的顺序排序</p>
+<p>Super引用相当于指向对象原型的指针，实际上也就是Object.getPrototypeof(this)的值</p>
+<h2 id="解构"><a href="#解构" class="headerlink" title="解构"></a>解构</h2><p>获取数组副本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">let colors = [&apos;red&apos;,&apos;green&apos;];</span><br><span class="line"></span><br><span class="line">let [...cloneColor] = colors;</span><br></pre></td></tr></table></figure></p>
+<p>通过给解构参数提供默认值，将解构参数定义为可选的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function setCookie(name, value ,&#123;secure,path,domain&#125;=&#123;&#125;)&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>为解构参数指定默认值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">const setCookieDefaults = &#123;</span><br><span class="line">  secure: false,</span><br><span class="line">  path:&apos;/&apos;,</span><br><span class="line">  damin:&apos;example.com&apos;</span><br><span class="line">&#125;</span><br><span class="line">function setCookie(name,value,&#123;</span><br><span class="line">  secure = setCookieDefaults.secure,</span><br><span class="line">  path = setCookieDefaults.path,</span><br><span class="line">  domain = setCookieDefaults.domain</span><br><span class="line">&#125; = setCookieDeaults)</span><br></pre></td></tr></table></figure>
+<h2 id="Symbol"><a href="#Symbol" class="headerlink" title="Symbol"></a>Symbol</h2><p>使用Symbol.for()可以创建可共享的Symbol<br>使用Symbol.keyFor()可以在Symbol全局注册表中检索共享的Symbol<br>使用Symbol创建的Symbol属性不能用Symbol.keyFor()去查找</p>
+<p>Symbol类型的值不可以被转化为数字或者字符串</p>
+<p>Object.getOwnPropertySymbol()可以返回包含所有Symbol自有属性的数组</p>
+<p>一些特殊的Symbol值被用于暴露更多语言内部逻辑<br>主要使用思路就是通过这些特殊Symbol属性覆盖掉原始方法的响应方式<br>例如<br>给一个对象A定义<br>|属性|覆盖方法|被调用时机|<br>|—|—|—|<br>|Symbol.hasInstance|instanceOf|C instanceOf A|<br>|Symbol.toPrimitive|默认数字字符串转换值|A+’!’|<br>|Symbol.toStringTag|Object.prototype.toString(),Object.prototype.toString.call()方法时的返回值|A.toString或者Object.prototype.toString.call(A)|</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">1.</span><br><span class="line">默认模式只用于==，+及Date构造函数传递一个参数时，大多数操作使用字符串、数字模式</span><br><span class="line">function Temperature(degrees) &#123;</span><br><span class="line">  this.degerees = degrees;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Temperature.prototype[Symbol.toPrimitive] = function(hint)&#123;</span><br><span class="line">  switch(hint) &#123;</span><br><span class="line">    case &apos;string&apos; : return this.degerees+&apos;123&apos;</span><br><span class="line">    case &apos;number&apos;: return this.degerees</span><br><span class="line">    case &apos;default&apos;: return this.degerees+&apos; degrees&apos;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var freezing = new Temperature(32);</span><br><span class="line">console.log(freezing + &apos;!&apos;); // 32 degrees</span><br><span class="line">console.log(freezing/2);// 16</span><br><span class="line">console.log(String(freezing));// 32123</span><br><span class="line"></span><br><span class="line">2.Symbol.toString 的使用</span><br><span class="line">覆盖Object.prototype.toString</span><br><span class="line">function Person(name)&#123;</span><br><span class="line">  this.name = name</span><br><span class="line">&#125;</span><br><span class="line">Person.prototype[Symbol.toString] = &apos;Person&apos;</span><br><span class="line"></span><br><span class="line">Person.prototype.toString = function() &#123;</span><br><span class="line">  return this.name</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var me = new Person(&apos;ww&apos;);</span><br><span class="line"></span><br><span class="line">console.log(me.toString())// ww</span><br><span class="line">console.log(Object.prototype.toString.call(me)) // [object.Person]</span><br></pre></td></tr></table></figure>
+<p>用于覆盖正则表达式的方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">let hasLengthOf10 = &#123;</span><br><span class="line">  [Symbol.match]: function(value)&#123;return ...&#125;,</span><br><span class="line">  [Symbol.replace]: function(value,replacement)&#123;return 。。。&#125;,</span><br><span class="line">  [Symbol.search]: function(value)&#123;return ...&#125;,</span><br><span class="line">  [Symbol.split]: function(value)&#123;return ...&#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let str = &apos;hwrwrirrrk&apos;;</span><br><span class="line">console.log(str.match(hasLengthOf10))</span><br><span class="line">console.log(str.replace(hasLengthOf10))</span><br><span class="line">console.log(str.search(hasLengthOf10))</span><br><span class="line">console.log(str.split(hasLengthOf10))</span><br></pre></td></tr></table></figure></p>
+<h2 id="Set-和-Map"><a href="#Set-和-Map" class="headerlink" title="Set 和 Map"></a>Set 和 Map</h2><p>Set中如果存储对象的话，是强引用，只要Set实例中引用存在，垃圾回收机制就不能释放该对象的内存空间。<br>WeakSet 只存储对象弱引用，并且不可以存储原始值，如果集合中的弱引用是对象的唯一引用，则会被回收并释放相应内存<br>所以如果只需要跟踪对象引用，应该使用WeakSet集合而不是普通的Set集合。</p>
+<p>WeakMap集合中的键名必须是一个对象，如果使用非对象键名会报错：<br>集合中保存的是这些对象的弱引用，如果在弱引用之外不存在其他的强引用，<br>引擎的垃圾回收机制会自动回收这个对象，同时也会移除WeakMap集合中的键值对<br>但是只有集合的键名遵从这个规则，键名对应的值如果是一个对象，则保存的是对象的强引用，不会触发垃圾回收机制</p>
+<h2 id="数组方法"><a href="#数组方法" class="headerlink" title="数组方法"></a>数组方法</h2><p>find和findIndex方法都接受两个参数，一个是回调函数，<br>另一个是可选参数，用于指定回调函数中this的值</p>
+<p>fill 方法可以传入第二个和第三个参数用于只改变一部分值，分别指定开始索引和不包含结束索引</p>
+<h2 id="Proxy-和-Reflect"><a href="#Proxy-和-Reflect" class="headerlink" title="Proxy 和 Reflect"></a>Proxy 和 Reflect</h2><p>使用Proxy的陷阱方法，可以拦截对象的默认特性方法<br>对应的Reflect方法可以在proxy陷阱方法中重新使用对象的内减特性</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br></pre></td><td class="code"><pre><span class="line">let target = &#123;</span><br><span class="line">  name: &apos;target&apos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">let proxy = new Proxy(target,&#123;</span><br><span class="line">  // set 写入一个属性时</span><br><span class="line">  // 代理目标对象target，要写入的键，要写入的值，proxy代理本身</span><br><span class="line">  set (trapTarget,key,value,receiver)&#123;</span><br><span class="line">    // 忽略不希望受到影响的已有属性</span><br><span class="line">    if(!trapTarget.hasOwnProperty(key))&#123;</span><br><span class="line">      if(isNaN(value))&#123;</span><br><span class="line">        throw new TypeError(&apos;属性必须是数字&apos;)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    // 添加属性</span><br><span class="line">    return Reflect.set(trapTarget,key,value,receiver);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // 读取一个属性时</span><br><span class="line">  // 代理目标对象，要读的键，代理对象本身</span><br><span class="line">  get(trapTarget,key,receiver) &#123;</span><br><span class="line">    if(!key in receiver)&#123;</span><br><span class="line">      throw new TypeError(&apos;属性&apos;+key+&apos;不存在&apos;)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return Reflect.get(trapTarget,key,receiver)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // 使用in操作符时</span><br><span class="line">  has(trapTarget,key)&#123;</span><br><span class="line">    if(key === &apos;value&apos;)&#123;</span><br><span class="line">      return false;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      return Reflect.has(trapTarget,key)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // 使用delete操作符删除对象属性时</span><br><span class="line">  deleteProperty(trapTarget,key)&#123;</span><br><span class="line">    if(key === &apos;value&apos;)&#123;</span><br><span class="line">      return false;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      return Reflect.deleteProperty(trapTarget,key)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // Object.getPrototypeOf(proxy)时</span><br><span class="line">  //区别</span><br><span class="line">  // Object.getPrototypeOf()如果传入值非对象会将参数强制转成对象</span><br><span class="line">  // Reflect.getPrototypeOf()如果传入非对象，则报错</span><br><span class="line">  getPrototypeOf(trapTarget) &#123;</span><br><span class="line">    // return null</span><br><span class="line">    return  Reflect.getPrototypeOf(trapTarget) //返回默认行为，但有上述区别</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // Object.setPrototypeOf(proxy, &#123;&#125;)时</span><br><span class="line">  // 区别</span><br><span class="line">  // Object.getPrototypeOf()操作失败就报错</span><br><span class="line">  // Reflect.setPrototypeOf()返回布尔来表示操作是否成功</span><br><span class="line">  setPrototypeOf(trapTarget,proto) &#123;</span><br><span class="line">    // return false</span><br><span class="line">    return  Reflect.setPrototypeOf(trapTarget,proto)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // Object.isExtensible(proxy)时，</span><br><span class="line">  // 返回布尔值，表示对象是否可扩展</span><br><span class="line">  // 区别</span><br><span class="line">  // Object.isExtensible() 传入非对象返回false</span><br><span class="line">  // Reflect.isExtensible() 传入非对象报错</span><br><span class="line">  isExtensible(trapTarget) &#123;</span><br><span class="line">    // return null</span><br><span class="line">    return  Reflect.isExtensible(trapTarget)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  // Object.preventExtension(proxy)时，</span><br><span class="line">  // 阻止对象扩展，返回布尔表示操作是否成功</span><br><span class="line">  // 区别</span><br><span class="line">  // Object.preventExtension()无论参数是否为对象都返回参数</span><br><span class="line">  // Reflect.preventExtension()参数非对象报错，否则根据操作是否成功返回布尔值</span><br><span class="line">  preventExtension(trapTarget) &#123;</span><br><span class="line">    // return null</span><br><span class="line">    return  Reflect.preventExtension(trapTarget) // 会转发到底层，target也会被阻止掉</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  // Object.defineProperty(proxy)时，</span><br><span class="line">  // 区别</span><br><span class="line">  // Object.defineProperty()返回第一个参数</span><br><span class="line">  // Reflect.defineProperty()根据操作是否成功返回布尔值</span><br><span class="line">  defineProperty(trapTarget,key,descriptor) &#123;</span><br><span class="line">    return  Reflect.defineProperty(trapTarget,key,descriptor)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // Object.getOwnPropertyDescriptor(proxy)时，</span><br><span class="line">  // 区别</span><br><span class="line">  // Object.getOwnPropertyDescriptor()传入非对象转成对象</span><br><span class="line">  // Reflect.getOwnPropertyDescriptor()传入非对象报错</span><br><span class="line">  getOwnPropertyDescriptor(trapTarget,key) &#123;</span><br><span class="line">    return  Reflect.getOwnPropertyDescriptor(trapTarget,key)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // 拦截内部方法[[OwnPropertyKeys]],</span><br><span class="line">  // Object.keys(),Object.getOwnPropertyName() （不含Symbol属性）</span><br><span class="line">  // Object.assign()（字符串和Symbol属性）,Object.getOwnPropertySymbols()（仅含Symbol属性）</span><br><span class="line">  //4个方法调用时会被拦截到，输出的数组再被以上4个方法处理返回</span><br><span class="line">  ownKeys(trapTarget) &#123;</span><br><span class="line">    return Reflect.ownKeys(trapTarget).filter(key=&gt;&#123;</span><br><span class="line">      return typeof key !== &apos;string&apos; || key[0] !== &apos;_&apos;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // 代理目标是一个函数才可以，函数被普通调用执行时会被拦截</span><br><span class="line">  // 代理目标函数，函数被调用时内部this值，传给函数的参数数组</span><br><span class="line">  apply(trapTarget,thisArg, argumentList) &#123;</span><br><span class="line">    return  Reflect.apply(trapTarget,thisArg, argumentList)</span><br><span class="line">  &#125;</span><br><span class="line">  // 通过这样操作，可以实现不用new 调用函数，实现new调用函数的效果</span><br><span class="line">  apply(trapTarget,thisArg, argumentList) &#123;</span><br><span class="line">    return  Reflect.construct(trapTarget,thisArg, argumentList)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // 代理目标是一个函数才可以，函数被new调用时会被拦截</span><br><span class="line">  // 代理目标函数，传给函数的参数数组</span><br><span class="line">   construct(trapTarget,argumentList) &#123;</span><br><span class="line">    return  Reflect.construct(trapTarget, argumentList)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">// proxy是可被插销的代理对象，调用revoke方法后，不能在通过proxy代理到target对象</span><br><span class="line">let &#123; proxy,revoke &#125; = Proxy.revocable(target,&#123;&#125;)</span><br><span class="line">revoke()</span><br></pre></td></tr></table></figure>
+<h2 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h2><p>用逗号将默认的本地名称与大括号包裹的非默认值分隔开,请记住，在import语句中，默认值必须排在非默认值之前。</p>
 
           
         
@@ -411,7 +1738,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/iconfont.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/js~~.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -436,8 +1763,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/knowledge/iconfont.html" itemprop="url">
-                  阿里巴巴iconfont使用
+                <a class="post-title-link" href="/post/js/js~~.html" itemprop="url">
+                  js 的~~
                 </a>
               
             
@@ -451,8 +1778,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-18T10:41:51+08:00">
-                2017-02-18
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-06T07:12:37+08:00">
+                2017-03-06
               </time>
             
 
@@ -489,1019 +1816,8 @@
       
         
           
-            <p>1.登录<a href="http://iconfont.cn/plus/home/index?spm=a313x.7781069.1998910419.2.QImsN2" target="_blank" rel="noopener">http://iconfont.cn/plus/home/index?spm=a313x.7781069.1998910419.2.QImsN2</a> 进入搜索界面<br>2.通过输入关键字搜索自己想要的图标<br>3.将鼠标放到自己想要的图标会出现选择层，点击第一个购物车图标，添加入库<br>4.将所有想要的图标添加完后，点击右上角购物车图标打开项目添加页，点击“加入项目”右侧图标，为选择的图标新建项目,点确定<br><img src="/image/iconfont1.png" alt="iconfont1"><br><img src="/image/iconfont2.png" alt="iconfont2"><br>5.关闭项目添加页，点击导航栏的“图标管理”，进入“我的项目”栏目</p>
-<p><div><br> <img src="/image/iconfont3.png" style="width: 250px;height: 50px;margin-left: 20px" alt="图片名称" align="left"><br> <img src="/image/iconfont4.png" alt="图片名称" align="right" style="width: 150px;height: 60px;margin-top: -30px;margin-right: 80px"><br></div><br>6.使用图标到我们的HTML代码中，可以通过线上链接使用，也可以通过下载至本地使用</p>
-<h2 id="通过线上链接使用"><a href="#通过线上链接使用" class="headerlink" title="通过线上链接使用"></a>通过线上链接使用</h2><p>1.点击查看在线链接,复制代码到项目的静态资源的css文件中一般在src/assets/css路径下的文件<br>2.设置一个类icon，通过这个类的属性改变图标样式，同时在HTML中引用这个类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">.icon &#123;</span><br><span class="line">  font-family: &quot;iconfont&quot; !important;</span><br><span class="line">  font-style: normal;</span><br><span class="line">  display: inline-block;</span><br><span class="line">  vertical-align: middle;</span><br><span class="line">  background-size: 100% auto;</span><br><span class="line">  background-position: center;</span><br><span class="line">  -webkit-font-smoothing: asntialiased;</span><br><span class="line">  -webkit-text-stroke-width: 0.2px;</span><br><span class="line">  -moz-osx-font-smoothing: grayscale;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>3.在标签中添加icon类,在标签中间加入图标代码，例如：<i class="icon"> &#xe6ac; </i></p>
-<h2 id="下载至本地"><a href="#下载至本地" class="headerlink" title="下载至本地"></a>下载至本地</h2><p>1.点击下载至本地<br>2.将在线链接代码中用到的文件放到项目静态文件夹中，<br>3.将在线链接代码中文件的路径更改为项目中的文件路径，<br>4.其他步骤同线上路径<br>5.也可直接打开下载文件的IconFontDemo/assets/iconfont/的demo.html代码，看如何使用</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/git/gittrouble.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/git/gittrouble.html" itemprop="url">
-                  git问题处理
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-18T09:50:30+08:00">
-                2017-02-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/categories/" itemprop="url" rel="index">
-                    <span itemprop="name">categories</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="git-pull-更新代码出现问题"><a href="#git-pull-更新代码出现问题" class="headerlink" title="git pull 更新代码出现问题"></a>git pull 更新代码出现问题</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">There is no tracking information for the current branch.</span><br><span class="line">Please specify which branch you want to merge with.</span><br><span class="line">See git-pull(1) for details</span><br><span class="line"></span><br><span class="line">    git pull &lt;remote&gt; &lt;branch&gt;</span><br><span class="line"></span><br><span class="line">If you wish to set tracking information for this branch you can do so with:</span><br><span class="line"></span><br><span class="line">    git branch --set-upstream-to=origin/&lt;branch&gt; develop_hotfix</span><br></pre></td></tr></table></figure>
-<p>解决办法<br>git branch -D 分支名  ##删除本地待更新分支<br>git checkout 分支名 ##将待更新分支切回来<br>Git pull 再更新</p>
-<h1 id="git-remote-add-origin-遇到远程分支已存在的情况"><a href="#git-remote-add-origin-遇到远程分支已存在的情况" class="headerlink" title="git remote add origin 遇到远程分支已存在的情况"></a>git remote add origin 遇到远程分支已存在的情况</h1><p>解决办法<br>git remote rm origin ##先删除远程分支<br>git remote add origin 地址 ## 再修改远程仓库地址</p>
-<h1 id="git-push-遇到问题"><a href="#git-push-遇到问题" class="headerlink" title="git push 遇到问题"></a>git push 遇到问题</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fatal: unable to access &apos;https://github.com/YooHannah/WeiXindemo.git/&apos;: Failed to connect to github.com port 443: Timed out</span><br></pre></td></tr></table></figure>
-<p>解决办法<br>先删除远程分支 git remote rm origin<br>再将本地分支的上游分支设置为远程分支同时push<br>git push –set-upstream origin master<br>以后再执行git push 就不会出现报以上错误或一直没反应的状况</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">error:src refspec master does not match any</span><br></pre></td></tr></table></figure>
-<p>只进行了init,没有add和commit,本地版本库为空, 空只进行了init,目录不能提交 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">If no other git process is currently running, this probably means a</span><br><span class="line">git process crashed in this repository earlier. Make sure no other git</span><br><span class="line">process is running and remove the file manually to continue.</span><br></pre></td></tr></table></figure>
-<p>解决方法：<br>rm -f ./.git/index.lock </p>
-<h1 id="npm-运行项目错误"><a href="#npm-运行项目错误" class="headerlink" title="npm 运行项目错误"></a>npm 运行项目错误</h1><p>npm run dev error [npm ERR! code ELIFECYCLE]<br>node_modules安装问题，执行以下：<br>rm -rf node_modules rm package-lock.json npm cache clear –force npm install</p>
-<h1 id="git-merge-之后，git-commit-出现问题"><a href="#git-merge-之后，git-commit-出现问题" class="headerlink" title="git merge 之后，git commit 出现问题"></a>git merge 之后，git commit 出现问题</h1><p>husky &gt; pre-commit hook failed (add –no-verify to bypass)<br>git merge 之后，git commit 出现问题，解决：<br>出现这样的原因在于楼主使用了husky，并且配置了”precommit”: “npm run lint”<br>因此会在你git commit的时候执行npm run lint 也就是eslint –ext .js src test<br>如果报错的话，会返回非0，从而组织代码commit。<br>因此有两种方式解决：</p>
-<ol>
-<li>执行npm run lint， 根据提示修改错误，如果是其他人的报错，请求别人协助（推荐）</li>
-<li>git commit -m ‘’ -n 强制推送<br>3.更新远程分支列表<br>git remote update origin –prune</li>
-</ol>
-<h1 id="IE报vuex-requires-a-Promise-polyfill-in-this-browser问题解决"><a href="#IE报vuex-requires-a-Promise-polyfill-in-this-browser问题解决" class="headerlink" title="IE报vuex requires a Promise polyfill in this browser问题解决"></a>IE报vuex requires a Promise polyfill in this browser问题解决</h1><p>第一步： 安装 babel-polyfill 。 babel-polyfill可以模拟ES6使用的环境，可以使用ES6的所有新方法<br>npm install –save babel-polyfill<br>第二步： 在 Webpack/Browserify/Node中使用<br>在webpack.config.js文件中，使用<br>module.exports = {<br>entry: {<br>app: [“babel-polyfill”, “./src/main.js”]<br>}<br>};</p>
-<h1 id="git-分支处理"><a href="#git-分支处理" class="headerlink" title="git 分支处理"></a>git 分支处理</h1><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>A同学提交了两次代码，但在第二次提交代码前，B同学有提交自己的代码，并且在合并代码时，<br>将A同学第一次提交的代码merge丢弃了，导致A同学第一次代码无法合并到主分支</p>
-<h2 id="原理知识"><a href="#原理知识" class="headerlink" title="原理知识"></a>原理知识</h2><p>git reset 可以撤销commit命令的提交<br>git rebase 把分叉提交历史’整理’成一条直线<br>git stash 可以把工作现场’储藏起来’，等以后恢复现场后可以继续工作</p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>在分支代码处理时，A同学本地有主分支host(公共分支)和自己的本地分支local，<br>工作流程是<br>在自己本地分支local分支开发完毕后，<br>切换host分支，git pull 拉取远端分支更新后，<br>将本地分支local合并merge到host分支<br>然后git push到远端</p>
-<p>而B同学直接在本地的主分支(公共分支)开发，git push时冲突，<br>git pull 拉取远端A同学第一次的代码时，直接将代码变更进行了丢弃<br>然后push了自己的代码到远端分支</p>
-<p>A同学第二次提交时，并不知道B同学丢弃了自己第一次提交的代码，<br>在进行第二次提交时，在host上拉取远程更新之后，<br>继续合并推送最终结果就是自己的第一次代码丢失了</p>
-<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>利用A同学本地分支local没有合并远程分支的间隙,将A同学的两次提交保存下来，回到两次提交前的状态<br>然后拉取B同学的提交，再将A同学的两次提交拿出来进行合并，这样就可以实现三次提交都保存下来，再提交到远端</p>
-<p>在A同学的本地分支进行操作<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">1.在主分支host上取消第二次提交</span><br><span class="line">git reset --hard HEAD~1</span><br><span class="line"></span><br><span class="line">2.将远端第二次提交撤销掉,让分支保留在B同学提交的状态</span><br><span class="line">git push --force</span><br><span class="line"></span><br><span class="line">3.切换本地分支local,回滚版本到两次提交前</span><br><span class="line">git reset HEAD^^ </span><br><span class="line"></span><br><span class="line">4.保存两次提交 可以通过git stash list查看保存状态</span><br><span class="line">git stash </span><br><span class="line">git stash list</span><br><span class="line"></span><br><span class="line">5. 合并主分的B同学的提交到本地分支local,这时本地分支就有B同学的代码变更了</span><br><span class="line">6. 取出A同学的两次提交,与B同学代码进行提交</span><br><span class="line">git stash pop</span><br><span class="line">7. 切换主分支host,合并本地分支local,推送到远端</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/git/gituse.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/git/gituse.html" itemprop="url">
-                  git使用
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-15T16:56:09+08:00">
-                2017-02-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="链接虚拟机基本步骤"><a href="#链接虚拟机基本步骤" class="headerlink" title="链接虚拟机基本步骤"></a>链接虚拟机基本步骤</h1><p>1.打开git bash<br>2.执行命令“ssh root@环境地址” 例：ssh <a href="mailto:root@172.16.6.213" target="_blank" rel="noopener">root@172.16.6.213</a><br>3.输入对应密码<br>4.执行命令“cd 代码在该虚拟机的存放路径” 例：cd /usr/share/nginx/html/projrctname<br>5.git branch #查看本地分支<br>6.git checkout 分支名  #切换分支<br>7.git pull 更新代码</p>
-<h1 id="更新远程仓库地址"><a href="#更新远程仓库地址" class="headerlink" title="更新远程仓库地址"></a>更新远程仓库地址</h1><h2 id="命令行界面操作"><a href="#命令行界面操作" class="headerlink" title="命令行界面操作"></a>命令行界面操作</h2><p>显示当前远程仓库：git remote -v<br>删除当前远程仓库：git remote remove origin<br>添加新的远程仓库：git remote add origin 远程仓库地址<br><img src="/image/git1.png" alt="git1"></p>
-<h2 id="使用source-tree"><a href="#使用source-tree" class="headerlink" title="使用source tree"></a>使用source tree</h2><p>1.在 SourceTree 里打开对应的代码库。<br>2.点击右上角设置按钮<br><img src="/image/git2.png" alt="git2"><br>3.点击选择当前远程仓库路径,编辑和移除按钮恢复可用，点击“移除”<br>4.点击“新建”，“远程(仓库)名称”填入“origin”，“URL/路径”填入项目在Git服务器的地址<br>5.点击“确定”<br>6.点击设置页面”确定”<br><img src="/image/git3.png" alt="git3"></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/Huffman.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/algorithm/Huffman.html" itemprop="url">
-                  赫夫曼编码
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-12T15:33:37+08:00">
-                2017-02-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>赫夫曼编码可以构造出一种不等长的二进制，使编码后的电文长度最短，且保证不产生二义性</p>
-<h1 id="赫夫曼树"><a href="#赫夫曼树" class="headerlink" title="赫夫曼树"></a>赫夫曼树</h1><h2 id="相关定义"><a href="#相关定义" class="headerlink" title="相关定义"></a>相关定义</h2><p>权：树结点间的连线相关的数<br>结点的路径长度：从根结点到该结点的路径上的连接数<br>树的路径长度：树中每个叶子结点的路径长度之和<br>结点带权路径长度：结点的路径长度与结点权值的乘积<br>树的带权路径长度(WPL)：树中所有叶子结点的带权路径长度之和。    WPL越小,说明二叉树性能越优。</p>
-<h2 id="构造赫夫曼树"><a href="#构造赫夫曼树" class="headerlink" title="构造赫夫曼树"></a>构造赫夫曼树</h2><p>1.在森林中选出两颗根结点的权值最小的二叉树，权值小的放左边，权值大的放右边<br>2.合并两颗选出的二叉树：增加一个新结点n作为新二叉树的根，权值为左右孩子权值之和<br>3.回到森林中，选出权值最小的根结点，与刚刚形成的结点n比较，小的放左边，大的放右边<br>4.返回步骤二，直到森林中的树被选完</p>
-<p><div style="margin-bottom: 125px"><br> <img src="/image/tree7.png" style="width: 300px;height: 100px;" alt="图片名称" align="left"><br> <img src="/image/tree8.png" alt="图片名称" align="right" style="width: 300px;height: 180px;margin-top: -30px"><br></div></p>
-<h1 id="赫夫曼编码"><a href="#赫夫曼编码" class="headerlink" title="赫夫曼编码"></a>赫夫曼编码</h1><h2 id="一些名词"><a href="#一些名词" class="headerlink" title="一些名词"></a>一些名词</h2><p>定长编码：规定位数表示字符<br>变长编码：单个编码长度不一字，可以根据整体出现频率来调节<br>前缀码：没有任何码字是其他码字的前缀</p>
-<h2 id="赫夫曼编码思路"><a href="#赫夫曼编码思路" class="headerlink" title="赫夫曼编码思路"></a>赫夫曼编码思路</h2><p>1.根据输入字符串，统计字符出现次数，建立优先级队列<br>2.根据优先级队列建立输入字符串的赫夫曼树<br>3.遍历赫夫曼树，左1右0，建立字符编码表<br>4.编码encode:根据字符编码形成字符串编码<br>5.解码decode：根据编码字符串遍历赫夫曼树，左0右1，找到叶子结点的字符，从而解码字符。<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/heffman.js" target="_blank" rel="noopener">代码链接</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/angular/checkbox.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/angular/checkbox.html" itemprop="url">
-                  利用checkbox进行各种勾选
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-12T15:33:37+08:00">
-                2017-02-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="单选"><a href="#单选" class="headerlink" title="单选"></a>单选</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">html:</span><br><span class="line">&lt;div ng-repeat=&quot;item in labels track by $index&quot; style=&quot;padding-left: 50px&quot;&gt;</span><br><span class="line">  &lt;label class=&quot;mt-checkbox mt-checkbox-single mt-checkbox-outline&quot; &gt;&lt;input  type=&quot;checkbox&quot; ng-model=&quot;item.isSelected&quot; ng-click=&quot;updateSingelSelection($index,labels)&quot; /&gt;&lt;span&gt;&lt;/span&gt;&lt;/label&gt;</span><br><span class="line">  &lt;label&gt;&#123;&#123;item.name&#125;&#125;&lt;/label&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
-<p>val1为选定值的key,或者叫序号,val2为选项集合</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> $scope.updateSingelSelection = <span class="function"><span class="keyword">function</span>(<span class="params">val1, val2</span>) </span>&#123;</span><br><span class="line">  $scope.label = val2[val1];  												<span class="comment">//对选定的值做处理</span></span><br><span class="line">  angular.forEach(val2, <span class="function"><span class="keyword">function</span>(<span class="params">x, index</span>) </span>&#123;				 <span class="comment">//处理其他选项为未选状态</span></span><br><span class="line">    <span class="keyword">if</span> (val1 != index)</span><br><span class="line">      x.isSelected = <span class="literal">false</span>;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/image/checkbox1.png" alt="checkbox1"></p>
-<h1 id="多选"><a href="#多选" class="headerlink" title="多选"></a>多选</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;portlet-body dataTables_wrapper&quot; style=&quot;margin: -20px 20px 0px 20px;&quot; ng-if=&quot;detaildata.goods.length&gt;0&quot;&gt;</span><br><span class="line">	&lt;div class=&quot;table-scrollable&quot;&gt;</span><br><span class="line">		&lt;table class=&quot;table table-bordered table-hover no-footer&quot;&gt;</span><br><span class="line">			&lt;thead&gt;</span><br><span class="line">				&lt;tr role=&quot;row&quot; class=&quot;heading&quot;&gt;</span><br><span class="line">					&lt;th&gt;ID&lt;/th&gt;</span><br><span class="line">					&lt;th&gt;</span><br><span class="line">						&lt;label class=&quot;mt-checkbox mt-checkbox-single mt-checkbox-outline&quot;&gt;&lt;input type=&quot;checkbox&quot; ng-model=&quot;detaildata.goods.allchecked&quot; ng-change=&quot;selectall()&quot;/&gt;&lt;span&gt;&lt;/span&gt;&lt;/label&gt;</span><br><span class="line">					&lt;/th&gt;</span><br><span class="line">				&lt;/tr&gt;</span><br><span class="line">			&lt;/thead&gt;</span><br><span class="line">			&lt;tbody&gt;</span><br><span class="line">				&lt;tr role=&quot;row&quot; ng-repeat=&quot;item in detaildata.goods track by $index&quot;&gt;</span><br><span class="line">					&lt;td&gt;&#123;&#123;item.id&#125;&#125;&lt;/td&gt;</span><br><span class="line">					&lt;td&gt;</span><br><span class="line">						&lt;label class=&quot;mt-checkbox mt-checkbox-single mt-checkbox-outline&quot;&gt;&lt;input  type=&quot;checkbox&quot; ng-model=&quot;item.checked&quot; ng-click=&quot;UpdateSelection($index)&quot;/&gt;&lt;span&gt;&lt;/span&gt;&lt;/label&gt;</span><br><span class="line">					&lt;/td&gt;</span><br><span class="line">				&lt;/tr&gt;</span><br><span class="line">			&lt;/tbody&gt;</span><br><span class="line">		&lt;/table&gt;</span><br><span class="line">	&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"> $scope.UpdateSelection = function(index)&#123;</span><br><span class="line">    if($scope.detaildata.goods[index].checked)&#123;</span><br><span class="line"></span><br><span class="line">      tempdata2.push($scope.detaildata.goods[index]); 					//处理选中项</span><br><span class="line"></span><br><span class="line">      if(tempdata2.length == $scope.detaildata.goods.length)&#123;   //判断是否满足全选条件，						$scope.detaildata.goods.allchecked = true;                //满足则将全选按钮设置为勾选状态</span><br><span class="line">      &#125;else&#123;</span><br><span class="line">        $scope.detaildata.goods.allchecked = false;             //否则为未选状态</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">      $scope.alldata.goods[index].checked = false; //全选按钮设为</span><br><span class="line">      angular.forEach(tempdata2, function(list,num)&#123;</span><br><span class="line">        if($scope.detaildata.goods[index].deal_id == list.deal_id)&#123;</span><br><span class="line">         tempdata2.splice(num,1);</span><br><span class="line">         $scope.detaildata.goods.allchecked = false;</span><br><span class="line">         return;</span><br><span class="line">       &#125;</span><br><span class="line">     &#125;);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><div style="margin-bottom: 250px"><br> <img src="/image/checkbox2.png" style="width: 150px;height: 300px;margin-left: 80px" alt="图片名称" align="left"><br> <img src="/image/checkbox.png" alt="图片名称" align="right" style="width: 150px;height: 300px;margin-top: -30px;margin-right: 80px"><br></div></p>
-<h1 id="全选"><a href="#全选" class="headerlink" title="全选"></a>全选</h1><p>注意：若全选按钮放在表格里，那全选按钮的绑定值S也一定要是整个表格绑定值A的一个属性,即，A.S是全选按钮绑定值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">$scope.selectall = function()&#123;</span><br><span class="line"> if($scope.detaildata.goods.allchecked)&#123;</span><br><span class="line">  for(var i = 0;i &lt; $scope.detaildata.goods.length;i++)&#123;</span><br><span class="line">    $scope.detaildata.goods[i].checked = true;       //把每个备选项处理为已选状态</span><br><span class="line">    var num = 0;</span><br><span class="line">    for(var j = 0;j &lt; tempdata2.length;j++)&#123;</span><br><span class="line">      if($scope.detaildata.goods[i].deal_id != tempdata2[j].deal_id)&#123;</span><br><span class="line">        num = num+1;</span><br><span class="line">      &#125;else&#123;</span><br><span class="line">        num = num;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if(num == tempdata2.length)&#123;</span><br><span class="line">      tempdata2.push($scope.detaildata.goods[i]); //将所有为选择的数据处理到临时集合</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;else&#123;</span><br><span class="line">  for(var i = 0;i &lt; $scope.detaildata.goods.length;i++)&#123;</span><br><span class="line">    $scope.detaildata.goods[i].checked = false; //把每个备选项处理为未选状态</span><br><span class="line">  &#125;</span><br><span class="line">  tempdata2 = []; //清空临时集合</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h1 id="勾选方法提炼"><a href="#勾选方法提炼" class="headerlink" title="勾选方法提炼"></a>勾选方法提炼</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line">//表格勾选 tempdata勾选数据集合，data所有待选数据集合，status勾选状态，keyword数据标志属性</span><br><span class="line">APP.factory(&apos;selectAll&apos;, function()&#123;</span><br><span class="line">    //全选按钮的勾选</span><br><span class="line">  var allChoose = function (tempdata,data,status,keyword1,keyword2) &#123;</span><br><span class="line">        if(status)&#123;</span><br><span class="line">            for(var i = 0;i &lt; data.length;i++)&#123;</span><br><span class="line">              data[i].isSelected = true;       //把每个备选项处理为已选状态</span><br><span class="line">              var num = 0;</span><br><span class="line">              for(var j = 0;j &lt; tempdata.length;j++)&#123;</span><br><span class="line">                if(data[i][keyword1] != tempdata[j][keyword2])&#123;</span><br><span class="line">                  num = num+1;</span><br><span class="line">                &#125;else&#123;</span><br><span class="line">                  num = num;</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;</span><br><span class="line">              if(num == tempdata.length)&#123;</span><br><span class="line">                tempdata.push(data[i]); //将所有未选择的数据处理到临时集合</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;else&#123;</span><br><span class="line">            for(var i = 0;i &lt; data.length;i++)&#123;</span><br><span class="line">              data[i].isSelected = false; //把每个备选项处理为未选状态</span><br><span class="line">               angular.forEach(tempdata, function(item,num)&#123;</span><br><span class="line">                if(data[i][keyword1] == item[keyword2])&#123;</span><br><span class="line">                tempdata.splice(num,1);</span><br><span class="line">               &#125;</span><br><span class="line">             &#125;);</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">      return &#123;</span><br><span class="line">        &apos;tempdata&apos;:tempdata,</span><br><span class="line">        &apos;data&apos;:data</span><br><span class="line">       &#125;;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  //检查是否满足全选</span><br><span class="line">  var checkAll = function (tempdata,data,keyword1,keyword2) &#123;</span><br><span class="line">       var temp =0;</span><br><span class="line">        angular.forEach(data, function(item)&#123;</span><br><span class="line">          item.isSelected = false;</span><br><span class="line">          angular.forEach(tempdata, function(term)&#123;</span><br><span class="line">            if(item[keyword1] == term[keyword2])&#123;</span><br><span class="line">              item.isSelected = true;</span><br><span class="line">              temp +=1;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;);</span><br><span class="line">        &#125;);</span><br><span class="line">        if(temp == data.length)&#123;</span><br><span class="line">          return &#123;</span><br><span class="line">            &apos;allChecked&apos;:true,</span><br><span class="line">            &apos;data&apos;:data,</span><br><span class="line">            &apos;tempdata&apos;:tempdata</span><br><span class="line">           &#125;;</span><br><span class="line">        &#125;else&#123;</span><br><span class="line">          return &#123;</span><br><span class="line">            &apos;allChecked&apos;:false,</span><br><span class="line">            &apos;data&apos;:data,</span><br><span class="line">            &apos;tempdata&apos;:tempdata</span><br><span class="line">          &#125;;</span><br><span class="line">       &#125;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  //单项勾选</span><br><span class="line">  var UpdateSelection = function(tempdata,data,index,keyword1,keyword2)&#123;</span><br><span class="line">     if(data[index].isSelected)&#123; //添加选中</span><br><span class="line">            tempdata.push(data[index]);</span><br><span class="line">          &#125;else&#123;</span><br><span class="line">            angular.forEach(tempdata, function(item,num)&#123;</span><br><span class="line">              if(data[index][keyword1] == item[keyword2])&#123;</span><br><span class="line">               tempdata.splice(num,1);</span><br><span class="line">             &#125;</span><br><span class="line">           &#125;);</span><br><span class="line">          &#125;</span><br><span class="line">     return checkAll(tempdata,data,keyword1,keyword2)</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  //众多选项单选</span><br><span class="line">  var singleSelection = function (choseindex,data) &#123;</span><br><span class="line">      angular.forEach(data, function(x, index) &#123;</span><br><span class="line">          if (choseindex != index)</span><br><span class="line">            x.isSelected = false;</span><br><span class="line">        &#125;);</span><br><span class="line">      return data;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  return &#123;</span><br><span class="line">    &apos;allChoose&apos;: allChoose,</span><br><span class="line">    &apos;checkAll&apos;:checkAll,</span><br><span class="line">    &apos;UpdateSelection&apos;:UpdateSelection,</span><br><span class="line">    &apos;singleSelection&apos;:singleSelection</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/treetransform.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/algorithm/treetransform.html" itemprop="url">
-                  树、森林和二叉树的转换与遍历
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-12T14:38:37+08:00">
-                2017-02-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="树转化为二叉树"><a href="#树转化为二叉树" class="headerlink" title="树转化为二叉树"></a>树转化为二叉树</h1><div style="margin-bottom: 125px"><br> <img src="/image/tree3.png" style="width: 300px;height: 180px;" alt="图片名称" align="left"><br> <img src="/image/tree4.png" alt="图片名称" align="right" style="width: 300px;height: 180px;margin-top: -30px"><br></div>
-
-<p>1.在树中所有的兄弟结点之间加一连线<br>2.对每个结点，除了保留与其长子的连线外，去掉该结点与其他孩子的连线<br>3.调整位置结构（顺时针旋转一定角度），变成只有左子树的二叉树</p>
-<h1 id="森林转化为二叉树"><a href="#森林转化为二叉树" class="headerlink" title="森林转化为二叉树"></a>森林转化为二叉树</h1><p><div style="margin-bottom: 125px"><br><img src="/image/tree5.png" width="300" height="200" alt="图片名称" align="left"><br> <img src="/image/tree6.png" alt="图片名称" align="right" style="width: 300px;height: 180px;margin-top: -30px"><br> </div><br>1.先将森林中的每颗树变为二叉树<br>2.再将各二叉树的根结点视为兄弟从左至右连在一起<br>3调整位置结构，形成拥有左右子树的二叉树</p>
-<h1 id="二叉树转化树、森林"><a href="#二叉树转化树、森林" class="headerlink" title="二叉树转化树、森林"></a>二叉树转化树、森林</h1><p>1.若结点x是其双亲y的左孩子，则把x的右孩子，右孩子的右孩子，……，都与y用连线连起来<br>2.去掉所有双亲到右孩子之间的连线<br>注意：如二叉树有右孩子则将转化为森林，反之转化为普通树</p>
-<h1 id="树的遍历"><a href="#树的遍历" class="headerlink" title="树的遍历"></a>树的遍历</h1><p><img src="/image/tree3.png" alt="tree3"><br>1.先根遍历<br>先访问树的根结点，然后再依次先跟遍历每颗子树<br>ABEFCGDHIJ<br>2.后根遍历<br>先依次遍历每颗子树，然后再访问根结点<br>EFBGCHIJDA</p>
-<h1 id="森林遍历"><a href="#森林遍历" class="headerlink" title="森林遍历"></a>森林遍历</h1><p>1.前序遍历：按树的先根遍历<br>2.后续遍历：按树的后跟遍历</p>
-<p>小结：<br>树、森林的前根遍历和二叉树前序遍历结果相同，<br>树、森林的后根遍历和二叉树的中序遍历相同,<br>因此对于树、森林的遍历可以转化为二叉树的遍历</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/Cluebinarytree.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/algorithm/Cluebinarytree.html" itemprop="url">
-                  线索二叉树
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-11T17:47:37+08:00">
-                2017-02-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>节省叶子结点空指针浪费的空间，来记录该结点按遍历顺序的前驱后继<br>只有中序遍历满足每隔一个结点会出现一个浪费空间的结点</p>
-<p>结点由五个属性组成；{<br>  lchild:取决于ltag<br>  ltag:为0时，lchild指向该结点左孩子，为1时lchild指向该结点的前驱<br>  data:该结点数据<br>  rchild:取决于rtag<br>  rtag:为0时，rchild指向该结点右孩子，为1时rchild指向该结点的后继<br>}</p>
-<p><a href="https://github.com/YooHannah/algorithm/blob/master/js/btree.js" target="_blank" rel="noopener">代码链接</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/angular/plugin.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/angular/plugin.html" itemprop="url">
-                  小插件使用
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-11T10:24:37+08:00">
-                2017-02-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="ng-clip-angularjs点击复制插件"><a href="#ng-clip-angularjs点击复制插件" class="headerlink" title="ng-clip/angularjs点击复制插件"></a>ng-clip/angularjs点击复制插件</h1><p><a href="https://github.com/YooHannah/algorithm/blob/master/plugin/clipboard.min.js" target="_blank" rel="noopener">插件所需js文件链接</a><br>用法：<br>1.在将要使用的控制器里配置好插件文件<br>2.在HTML里用data-clipboard-text绑定要复制的值，并用class或者id绑定复制动作所在的标签<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;a  class=&quot;font-green-meadow clicopy&quot; data-clipboard-text=&quot;&#123;&#123;x.scan_url&#125;&#125;&quot; &gt;&lt;i class=&quot;fa fa-copy&quot;&gt;&lt;/i&gt; 复制扫描链接&lt;/a&gt;</span><br></pre></td></tr></table></figure></p>
-<p>3.在控制器里面初始化复制插件对象，并写回调函数<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//复制链接</span></span><br><span class="line">$scope.copy = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> clipboard = <span class="keyword">new</span> Clipboard(<span class="string">'.clicopy'</span>);</span><br><span class="line">    clipboard.on(<span class="string">'success'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">      toastr.success(<span class="string">'复制成功!'</span>,<span class="string">'成功'</span>);</span><br><span class="line">      e.clearSelection();</span><br><span class="line">       &#125;);</span><br><span class="line"></span><br><span class="line">      clipboard.on(<span class="string">'error'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">         toastr.error(<span class="string">'复制失败!'</span>,<span class="string">'失败'</span>);</span><br><span class="line">      &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">$scope.copy();</span><br></pre></td></tr></table></figure></p>
-<h1 id="md5-加密处理"><a href="#md5-加密处理" class="headerlink" title="md5  加密处理"></a>md5  加密处理</h1><p><a href="https://github.com/YooHannah/algorithm/blob/master/plugin/md5.js" target="_blank" rel="noopener">所需文件</a><br>用法：<br> var hash = hex_md5($scope.password);<br>其实加密文件就是一个算法文件，加密算法也分好多种，所以不同算法加密加载不同的算法文件即可<br>nodejs的Crypto模块是一个加密模块，也可用于加密处理<br><a href="http://www.thinksaas.cn/topics/0/35/35489.html" target="_blank" rel="noopener">相关链接</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/Binarytree.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/algorithm/Binarytree.html" itemprop="url">
-                  二叉树
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-11T10:14:37+08:00">
-                2017-02-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>定义：是n(n&gt;=0)个结点的有限集合，该集合或者为空集(空二叉树)，或者由一个<br>根节点和两颗不互相交的、分别称为根的左子树和右子树的二叉树<br>特点：<br>-每个结点最多有两颗子树，不存在度大于2的结点<br>-左右子树有顺序，次序不能颠倒，即使只有一颗子树也要区分它是左子树还是右子树</p>
-<h2 id="五种基本形态："><a href="#五种基本形态：" class="headerlink" title="五种基本形态："></a>五种基本形态：</h2><p>空二叉树<br>只有一个根节点<br>根结点只有左子树<br>根结点只有右子树<br>根结点既有左子树又有右子树</p>
-<h2 id="特殊二叉树"><a href="#特殊二叉树" class="headerlink" title="特殊二叉树"></a>特殊二叉树</h2><p>1.斜树：只有左子树或只有右子树<br>2.满二叉树：该二叉树中，如果所有分支结点都存在左子树和右子树，并且所有叶子都在同一层上<br>  –特点：<br>  1.叶子只能出现在最下一层<br>  2.非叶子结点的度一定是2<br>  3.在同样深度的二叉树中，满二叉树的节点个数一定最多，同时叶子也最多<br>3.完全二叉树：对一颗具有N个结点的二叉树按层序编号，如果编号为i(i&lt;=i&lt;=n)的结点与同样深度的满二叉树中编号为i的<br>结点位置完全相同，则这棵树称为完全二叉树<br>–特点：<br>1.叶子结点只能出现在最下两层<br>2.最下层的叶子一定集中在左部连续位置<br>3、倒数第二层，若有叶子结点，一定都在右部连续位置<br>4.如果结点度为1，则该结点只有左孩子<br>5.同样结点数的二叉树，完全二叉树的深度最小<br>满二叉树一定是完全二叉树，但完全二叉树不一定是满二叉树</p>
-<h1 id="二叉树存储结构"><a href="#二叉树存储结构" class="headerlink" title="二叉树存储结构"></a>二叉树存储结构</h1><h2 id="顺序结构"><a href="#顺序结构" class="headerlink" title="顺序结构"></a>顺序结构</h2><p>用数组存储，按层序遍历对比满二叉树顺序，没有结点的位置数组在该位置填空<br><img src="/image/btree1.png" alt="btree1"></p>
-<h2 id="二叉链表"><a href="#二叉链表" class="headerlink" title="二叉链表"></a>二叉链表</h2><p>每个结点包含一个数据域和两个指针域，两个指针分别指向该结点左右孩子结点<br><img src="/image/btree2.png" alt="btree2"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">typedef struct BiTNode</span><br><span class="line">&#123;</span><br><span class="line">ElemType data;</span><br><span class="line">struct BiTNode *lchild,*rchild;</span><br><span class="line">&#125;BiTNode,8BiTree;</span><br></pre></td></tr></table></figure></p>
-<h1 id="二叉树的遍历"><a href="#二叉树的遍历" class="headerlink" title="二叉树的遍历"></a>二叉树的遍历</h1><p><img src="/image/btree3.png" alt="btree3"><br>从根结点出发，按照某种次序访问二叉树中所有结点，使每个结点被访问一次且仅被访问一次<br>1.前序遍历：根左右<br>若二叉树为空，则空操作返回;否则先访问根结点，然后前序遍历左子树，再前序遍历右子树<br>a.先访问根结点，然后访问根结点的左孩子<br>b.将根结点的左孩子视作子树根结点,继续访问其左孩子，再以这个左孩子结点为根再访问其左孩子直到叶结点<br>c.访问完该叶结点后，再访问该叶结点双亲的右孩子，<br>d.如果没有右孩子，则该子树访问完毕，继续访问该结点双亲的双亲的右孩子，再以该右孩子为根继续从步骤a开始访问<br>核心：从整棵树的根结点开始，每次将左孩子看成子树根结点,从上到下，从左到右<br>ABDHIEJCFKG<br>2.中序遍历 ：左根右<br>若二叉树为空，则空操作返回;否则从根节点根结点开始(并不是先访问根结点)，然后中序遍历左子树，然后访问根结点，再中序遍历右子树<br>核心：无论什么级别的子树树都从最左端叶结点开始，按左孩子，双亲，右孩子顺序遍历，从下到上，从左到右<br>HDIBEJAFKCG<br>3.后序遍历 ：左右根<br>若二叉树为空，则空操作返回;否则从左到右先叶子结点的方式遍历左右子树，最后访问根结点<br>核心：从最左端叶结点开始，按左孩子，右孩子，双亲顺序遍历，从左到右，从下到上<br>HIDJEBKFGCA<br>4.层序遍历<br>若二叉树为空，则空操作返回;否则从根节点开始，按层依次往下，每层从左到右依次遍历</p>
-<h1 id="二叉树的性质"><a href="#二叉树的性质" class="headerlink" title="二叉树的性质"></a>二叉树的性质</h1><p>性质一：在二叉树的第i层上至多有2^(i-1)个结点(i&gt;=1)<br>性质二：深度为K的二叉树至多有2^K-1个结点(K&gt;=1)<br>性质三：对于任何一颗二叉树T，如果其终端结点数为n0,度为2的结点数为n2,则n0=n2+1<br>性质四：具有n个结点的完全二叉树的深度为log2n取下限加1<br>性质五：如果对一颗有n个结点的完全二叉树(其深度为log2n取下限加1)的结点按层序编号对任一结点i(1&lt;=i&lt;=n)有以下性质<br>        如果i=1,则结点i是二叉树的根，无双亲;如果i&gt;1，则其双亲是结点i/2取下限<br>        如果2i&gt;n,则结点i无左孩子(结点i为叶子结点);否则其左孩子是结点2i<br>        如果2i+1&gt;n,则结点i无右孩子(结点i为叶子结点);否则其右孩子是结点2i+1</p>
-<p>计算：<br>输出指定结点在该树中所在的层数<br><img src="/image/btree4.png" alt="btree4"><br>[未完成]<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">var str=&quot;AB DEC #&quot;;//约定前序遍历输入</span><br><span class="line">var btree = &#123;</span><br><span class="line">  data:&apos;&apos;,</span><br><span class="line">  lchild:&#123;&#125;,</span><br><span class="line">  rchild:&#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line">console.log(btree);</span><br><span class="line">function creatbtree(num,item)&#123;</span><br><span class="line">  console.log(str[num])</span><br><span class="line">  if(str[num]==&quot;#&quot;);</span><br><span class="line">  &#123;</span><br><span class="line">  return</span><br><span class="line">  &#125;</span><br><span class="line">  if(str[num] == &quot; &quot;)&#123;</span><br><span class="line">    item = null;</span><br><span class="line">  &#125;else&#123;</span><br><span class="line">    item.data = str[num];</span><br><span class="line">    num+=1;</span><br><span class="line">    item.lchild =&#123;</span><br><span class="line">      data:&apos;&apos;,</span><br><span class="line">      lchild:&#123;&#125;,</span><br><span class="line">      rchild:&#123;&#125;</span><br><span class="line">    &#125;  </span><br><span class="line">    creatbtree(num,item.lchild);</span><br><span class="line">    num+=1;</span><br><span class="line">    item.rchild =&#123;</span><br><span class="line">      data:&apos;&apos;,</span><br><span class="line">      lchild:&#123;&#125;,</span><br><span class="line">      rchild:&#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    creatbtree(num,item.rchild);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">creatbtree(0,btree);</span><br><span class="line">console.log(btree.rchild)</span><br></pre></td></tr></table></figure></p>
+            <p>~~ 符号是一种类型转换符号，将参数转换成数据类型<br>~~true == 1<br>~~false == 0<br>~~”” == 0<br>~~[] == 0<br>~~undefined ==0<br>~~!undefined == 1<br>~~null == 0<br>~~!null == 1</p>
+<p>应用：计算大数相加<br>function add(a,b) {<br>  // 实现该函数<br>  var res=’’, c=0;<br>    a = a.split(‘’);<br>    b = b.split(‘’);<br>    while (a.length || b.length || c){<br>        c += ~~a.pop() + ~~b.pop();//对应位相加，加上前一位进位<br>        res = c % 10 + res;//去掉进位,累积拼接取对应位相加后的结果，<br>        c = c&gt;9;//本轮相加，有进位，c是1，没进位c是0<br>    }<br>    return res.replace(/^0+/,’’);//把开头0去掉<br>}</p>
 
           
         
@@ -1535,7 +1851,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/20/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><span class="page-number current">21</span><a class="page-number" href="/page/22/">22</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><a class="extend next" rel="next" href="/page/22/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/20/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><span class="page-number current">21</span><a class="page-number" href="/page/22/">22</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/22/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1574,7 +1890,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">245</span>
+              <span class="site-state-item-count">260</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1591,7 +1907,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-count">23</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
