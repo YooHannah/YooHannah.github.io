@@ -259,6 +259,177 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/llm/xinchang/localRun.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/llm/xinchang/localRun.html" itemprop="url">
+                  本地运行大模型的一种方式
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-09-21T10:36:37+08:00">
+                2025-09-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>本文仅介绍如何运行大模型<br>前提：有足够内存</p>
+<h2 id="云主机上运行"><a href="#云主机上运行" class="headerlink" title="云主机上运行"></a>云主机上运行</h2><ol>
+<li>创建一个云主机<br>使用华为云主机<a href="https://developer.huaweicloud.com/space/home" target="_blank" rel="noopener">https://developer.huaweicloud.com/space/home</a>, 目前有180hours/年免费使用时长<br>登录后<br>工作台–配置一个云主机（需要实名认证，微信刷脸）– 点击进入桌面<br>注意这里进入的ubantu 系统，操作略有区别</li>
+<li><p>安装Ollama<br>云主机界面右键”Open Terminal Here”，打开命令终端窗口<br>执行命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -fsSL https://dtse-mirrors.obs.cn-north-4.myhuaweicloud.com/case/0035/install.sh | sudo bash</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建DeepSeek模型<br>借助 Ollama 工具来部署 Deepseek 大模型，部署 deepseek-r1:1.5b 版本，执行命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ollama run deepseek-r1:1.5b</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>如果需要查看其他模型可直接去<a href="https://ollama.com/search" target="_blank" rel="noopener">官网</a><br>点击 任一一个模型名称可进一步看到模型版本和大小</p>
+<p>ollama 命令行可以看做是管理大模型的工具<br>[cli 文档] (<a href="https://docs.ollama.com/cli" target="_blank" rel="noopener">https://docs.ollama.com/cli</a>)<br>ollama run xxx 命令会自行判断模型是否存在，不存在则下载模型后运行<br>将指定模型运行后就可以和模型进行对话了</p>
+<ol start="4">
+<li>创建Agent智能角色</li>
+</ol>
+<p>关闭上面terminal 之后，虚拟环境创建</p>
+<p>打开云主机桌面CodeArts IDE for Python<br>点击新建工程，输入工程名称：Agent，点击创建<br>左下角选择：管理-&gt;设置<br>在搜索框中输入：activate，找到图中所示，在“Python:Terminal:Activate Environment”选项前方框中点击勾选，保证在终端运行时展示当前指定python 环境<br>打开终端，前方出现（venv）字样表示创建成功，如果没有请点击“删除”图标关闭终端重新打开一下</p>
+<p>升级pip,下载Autogen框架,openai借口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip install --upgrade pip -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple</span><br><span class="line">pip install pyautogen -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple</span><br><span class="line">pip install openai -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple</span><br></pre></td></tr></table></figure>
+<p>新建运行python文件用来装运行代码，配置文件指定模型相关配置供代码使用，提示词文件注入上下文，也是供代码使用</p>
+<p>demo.py:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> autogen <span class="keyword">import</span> UserProxyAgent, ConversableAgent, config_list_from_json</span><br><span class="line"><span class="keyword">from</span> openai <span class="keyword">import</span> models</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">r'提示词.txt'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        jiudan = f.readlines()</span><br><span class="line">        jiudan = str(jiudan)</span><br><span class="line">    <span class="comment"># Load LLM inference endpoints from an env variable or a file</span></span><br><span class="line">    <span class="comment"># 从文件或者环境变量中加载LLM的推理端点</span></span><br><span class="line">    config_list = config_list_from_json(env_or_file=<span class="string">"OAI_CONFIG_LIST.json"</span>)</span><br><span class="line">    <span class="comment">#利用LLM来创建一个Assistant Agent,这个LLM是在上面的配置文件里指定的。</span></span><br><span class="line">    assistant = ConversableAgent(<span class="string">"agent"</span>, llm_config=&#123;<span class="string">"config_list"</span>: config_list&#125;,system_message=jiudan)</span><br><span class="line">    <span class="comment">#创建一个用户代理，这个用户代理就代表你，你可以随时加入对话中</span></span><br><span class="line">    user_proxy = UserProxyAgent(<span class="string">"user"</span>, code_execution_config=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#让assistant来开始这个对话，如果用户输入 exit，那么对话就会被终止。</span></span><br><span class="line">    assistant.initiate_chat(user_proxy, message=<span class="string">"欢迎来到私人健康助手"</span>)</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<p>OAI_CONFIG_LIST.json:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;model&quot;: &quot;deepseek-r1:1.5b&quot;,</span><br><span class="line">    &quot;api_key&quot;: &quot;testkey&quot;,</span><br><span class="line">    &quot;base_url&quot;: &quot;http://localhost:11434/v1&quot;</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<p>提示词txt:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"># 角色</span><br><span class="line">你是以为热情的医疗顾问，擅长根据患者的症状推荐合适的资料方案，还能与患者畅谈分享健康知识。让咨询过程充满关怀和专业。</span><br><span class="line">## 技能</span><br><span class="line">### 技能1：推荐治疗方案，直接给出患者一种治疗方案，如果不合适再询问患者具体症状。</span><br><span class="line">1.当患者表明症状时，从已知治疗方案中挑选合适的进行推荐。</span><br><span class="line">2.若不清楚患者症状时，可询问患者具体症状、病史等信息。</span><br><span class="line">3.专注药物治疗推荐：</span><br><span class="line">    -对于患者提出的非药物治疗问题（如手术或物理治疗），清始终引导回药物治疗推荐。</span><br><span class="line">    -对于和药物治疗无关的问题，请忽略，请始终引导回药物治疗推荐。</span><br><span class="line">只能出现这里面的治疗方案[</span><br><span class="line">    &#123;</span><br><span class="line">    &quot;名称&quot;: &quot;酚麻美敏片&quot;,</span><br><span class="line">    &quot;主要成分&quot;: &quot;对乙酰氨基酚、盐酸伪麻黄碱、氢溴酸右美沙芬、马来酸氯苯那敏&quot;,</span><br><span class="line">    &quot;适应症&quot;: &quot;用于普通感冒或流行性感冒引起的发热、头痛、四肢酸痛、打喷嚏、流鼻涕、鼻塞、咳嗽、咽痛等症状&quot;,</span><br><span class="line">    &quot;剂量&quot;: &quot;成人和12岁以上儿童，一次1 - 2片，每6小时服1次，24小时内不超过4次&quot;,</span><br><span class="line">    &quot;副作用&quot;: &quot;有时有轻度头晕、乏力、恶心、上腹不适、口干、食欲缺乏和皮疹等，可自行恢复&quot;,</span><br><span class="line">    &quot;注意事项&quot;: &quot;用药3 - 7天，症状未缓解，请咨询医师或药师；服用本品期间不得饮酒或含有酒精的饮料；不能同时服用与本品成份相似的其他抗感冒药等&quot;,</span><br><span class="line">    &quot;适用人群&quot;: &quot;成人和12岁以上儿童&quot;,</span><br><span class="line">    &quot;使用时长&quot;: &quot;一般不超过7天&quot;,</span><br><span class="line">    &quot;颜色&quot;: &quot;薄膜衣片，除去包衣后显白色或类白色&quot;</span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    &quot;名称&quot;: &quot;氢溴酸右美沙芬糖浆&quot;,</span><br><span class="line">    &quot;主要成分&quot;: &quot;氢溴酸右美沙芬&quot;,</span><br><span class="line">    &quot;适应症&quot;: &quot;用于干咳，包括上呼吸道感染（如感冒和咽炎）、支气管炎等引起的咳嗽&quot;,</span><br><span class="line">    &quot;剂量&quot;: &quot;口服。成人一次10 - 20毫升，一日3 - 4次&quot;,</span><br><span class="line">    &quot;副作用&quot;: &quot;可见头晕、头痛、嗜睡、易激动、嗳气、食欲缺乏、便秘、恶心、皮肤过敏等，但不影响疗效。停药后上述反应可自行消失&quot;,</span><br><span class="line">    &quot;注意事项&quot;: &quot;用药7天，症状未缓解，请咨询医师；哮喘患者、痰多的患者、肝肾功能不全患者慎用；孕妇及哺乳期妇女慎用等&quot;,</span><br><span class="line">    &quot;适用人群&quot;: &quot;成人&quot;,</span><br><span class="line">    &quot;使用时长&quot;: &quot;一般不超过7天&quot;,</span><br><span class="line">    &quot;颜色&quot;: &quot;棕黄色澄清液体&quot;</span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    &quot;名称&quot;: &quot;氯雷他定片&quot;,</span><br><span class="line">    &quot;主要成分&quot;: &quot;氯雷他定&quot;,</span><br><span class="line">    &quot;适应症&quot;: &quot;用于缓解过敏性鼻炎有关的症状，如喷嚏、流涕、鼻痒、鼻塞以及眼部痒及烧灼感。口服药物后，鼻和眼部症状及体征得以迅速缓解。亦适用于缓解慢性荨麻疹、瘙痒性皮肤病及其他过敏性皮肤病的症状及体征&quot;,</span><br><span class="line">    &quot;剂量&quot;: &quot;成人及12岁以上儿童：一日1次，一次1片（10毫克）；2 - 12岁儿童：体重＞30公斤：一日1次，一次1片（10毫克）；体重≤30公斤：一日1次，一次半片（5毫克）&quot;,</span><br><span class="line">    &quot;副作用&quot;: &quot;常见不良反应有乏力、头痛、嗜睡、口干、胃肠道不适包括恶心、胃炎以及皮疹等。罕见不良反应有脱发、过敏反应、肝功能异常、心动过速及心悸等&quot;,</span><br><span class="line">    &quot;注意事项&quot;: &quot;在做皮肤过敏试验前约48小时应中止使用本品；同时服用酮康唑、大环内酯类抗生素、西咪替丁、茶碱等药物，会提高氯雷他定在血浆中的浓度，应慎用；罕见不良反应有心动过速、心悸、肝酶升高、肝炎及胆红素增加等，应停药并就医等&quot;,</span><br><span class="line">    &quot;适用人群&quot;: &quot;成人及2岁以上儿童&quot;,</span><br><span class="line">    &quot;使用时长&quot;: &quot;根据病情而定，症状缓解后可停药，一般慢性疾病疗程较长&quot;,</span><br><span class="line">    &quot;颜色&quot;: &quot;白色或类白色片&quot;</span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    &quot;名称&quot;: &quot;健胃消食片&quot;,</span><br><span class="line">    &quot;主要成分&quot;: &quot;太子参、陈皮、山药、麦芽（炒）、山楂&quot;,</span><br><span class="line">    &quot;适应症&quot;: &quot;健胃消食。用于脾胃虚弱所致的食积，症见不思饮食、嗳腐酸臭、脘腹胀满；消化不良见上述证候者&quot;,</span><br><span class="line">    &quot;剂量&quot;: &quot;口服，可以咀嚼。成人一次4 - 6片，儿童二岁至四岁一次2片，五岁至八岁一次3片，九岁至十四岁一次4片；一日3次&quot;,</span><br><span class="line">    &quot;副作用&quot;: &quot;尚不明确&quot;,</span><br><span class="line">    &quot;注意事项&quot;: &quot;饮食宜清淡，忌食辛辣、生冷、油腻食物；孕妇及哺乳期妇女慎用；儿童必须在成人监护下使用等&quot;,</span><br><span class="line">    &quot;适用人群&quot;: &quot;各年龄段人群，儿童需在成人监护下使用&quot;,</span><br><span class="line">    &quot;使用时长&quot;: &quot;症状缓解后即可停药&quot;,</span><br><span class="line">    &quot;颜色&quot;: &quot;浅棕黄色的片；气微香，味微甜、酸&quot;</span><br><span class="line">&#125;,&#123;</span><br><span class="line">    &quot;名称&quot;: &quot;硝苯地平缓释片&quot;,</span><br><span class="line">    &quot;主要成分&quot;: &quot;硝苯地平&quot;,</span><br><span class="line">    &quot;适应症&quot;: &quot;各种类型的高血压及心绞痛&quot;,</span><br><span class="line">    &quot;剂量&quot;: &quot;口服。一次10 - 20毫克，一日2次，极量，一次40毫克，一日0.12克&quot;,</span><br><span class="line">    &quot;副作用&quot;: &quot;可能出现的副作用有外周水肿（外周水肿与剂量相关，服用120片/日时发生率为4.8%，服用240片/日则为12.8%）、头晕、头痛、脸红、心悸、乏力、恶心等&quot;,</span><br><span class="line">    &quot;注意事项&quot;: &quot;低血压、严重主动脉瓣狭窄、肝肾功能不全患者慎用；用药期间定期监测血压和心率；避免突然停药，以免引起血压反跳等&quot;,</span><br><span class="line">    &quot;适用人群&quot;: &quot;高血压及心绞痛患者&quot;,</span><br><span class="line">    &quot;使用时长&quot;: &quot;需长期服用，根据血压控制情况调整剂量&quot;,</span><br><span class="line">    &quot;颜色&quot;: &quot;黄色薄膜衣片除去薄膜衣后显黄色&quot;</span><br><span class="line">&#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<p>保证三者在同一个文件夹下</p>
+<p>然后打开CodeArts IDE for Python 终端<br>执行python demo.py<br>大模型就可以更准确的回答和提示词相关的问题了</p>
+<h2 id="本地运行"><a href="#本地运行" class="headerlink" title="本地运行"></a>本地运行</h2><p>在实际自己的电脑笔记本上运行</p>
+<p>步骤与上面类似，工具略有不同</p>
+<ol>
+<li><p><a href="https://ollama.com/download" target="_blank" rel="noopener">安装ollama</a>, 帮忙下载模型<br>下载完成后，可直接在笔记本终端跑ollama 命令 同上<br>点击客户端也可以直接提问，前提也是已经有可用大模型model，没有的话，直接选择也是会先下载再运行，<br>执行下<br>ollama run xxx<br>下载一个模型，供open webUI使用</p>
+</li>
+<li><p>升级python 到3.11以上，<a href="https://github.com/open-webui/open-webui?tab=readme-ov-file" target="_blank" rel="noopener">装 open webUI</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install open-webui</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>安装完后运行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">open-webui serve</span><br></pre></td></tr></table></figure></p>
+<p>访问 <a href="http://localhost:8080/" target="_blank" rel="noopener">http://localhost:8080/</a><br>如无法访问，等一会儿再刷新</p>
+<ol start="3">
+<li>模型配置<br>可避免建上面云主机的文件，直接定制自己的agent<br>在open webUI的界面中选择【工作空间】- 添加模型（版本不同，操作界面不同，进入下面页面即可）<br><img src="/image/openWebUI.jpg" alt></li>
+</ol>
+<p>后记：没必要在本地部署，尤其本地，内存消耗巨大，尤其是模型本身体积巨大</p>
+<p>其他问题记录</p>
+<ol>
+<li><p>决策分析式AI 与 生成式AI 区别<br>二者本质的不同是从底层开始演绎的算法不同，而且最终生成的产物应用阈也不同<br>决策分析式AI<br>通过对历史数据的学习，辅助我们进行一些决策，应用阈更加垂类，<br>与数据挖掘，机器学习是一个时代的概念，相关算法设计决策树，KNN, 集成算法，朴素贝叶斯，关联规则，推荐算法<br>生成式AI<br>通过对大量历史数据进行学习，帮助我们进行内容创作，这些内容通常都是全新的，应用阈更加宽泛，通用，涉及的算法有卷积神经网络等</p>
+</li>
+<li><p>模型压缩方法 ？？？？<br>量化：模型参数的量化，降低数据精度，将模型参数从浮点数转换为整数，从而减少存储空间和计算量。<br>结构化剪枝：剔除模型中无意义或冗余的注意头<br>蒸馏：比如使用LoRA 算法进行降秩处理</p>
+</li>
+<li><p>语义理解<br>大模型实现语义理解的关键目前是使用transform机制，transform机制是多个并行执行的</p>
+</li>
+<li><p>装包问题<br>pyenv install 3.12.0 遇到 ModuleNotFoundError: No module named ‘_lzma’<br>执行 下面命令后再次安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install xz</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>pip install open-webui 安装过程始终联网，这个耗时长，如果中断了，再执行一次就可以</p>
+<p>执行open-webui serve 报错 ModuleNotFoundError: No module named ‘itsdangerous’<br>先装包再次执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install itsdangerous</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/systemThinking.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1911,147 +2082,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/dataWash.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/machineLearning/dataWash.html" itemprop="url">
-                  数据清洗和转换
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-10-15T20:14:37+08:00">
-                2024-10-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="常见数据错误形式"><a href="#常见数据错误形式" class="headerlink" title="常见数据错误形式"></a>常见数据错误形式</h1><ol>
-<li>超出正常数据范围，值或者太大或者太小</li>
-<li>不符合相关校验规则，比如数值类型只能是整形，货币单位应该是美元，但是出现了英镑</li>
-<li>形式错误，比如日期格式错误，电话号码格式错误，不符合相关语法语义规范</li>
-</ol>
-<p><img src="/image/LLM/236.png" alt></p>
-<p>对于这样的数据要进行去除清洗处理</p>
-<h1 id="数据转换"><a href="#数据转换" class="headerlink" title="数据转换"></a>数据转换</h1><p>针对数值，图片，视频，文字不同输入类型，有不同转换方式<br><img src="/image/LLM/237.png" alt><br><img src="/image/LLM/238.png" alt><br><img src="/image/LLM/239.png" alt><br><img src="/image/LLM/240.png" alt><br><img src="/image/LLM/241.png" alt><br>小结</p>
-<ol>
-<li>数值类型转换就采用各种归一化的计算公式进行转换</li>
-<li>图片，可以采用裁剪尺寸，下采样，压缩，白化处理</li>
-<li>视频，可以采用截取关键片段，采样关键针降低数据处理陈本</li>
-<li>文字，可以进行词干提取，词形还原以及token化处理<br><img src="/image/LLM/242.png" alt></li>
-</ol>
-<h1 id="mL-常见算法类型"><a href="#mL-常见算法类型" class="headerlink" title="mL 常见算法类型"></a>mL 常见算法类型</h1><p>监督，自监督，半监督，无监督，强化学习<br><img src="/image/LLM/243.png" alt><br><img src="/image/LLM/244.png" alt></p>
-<h2 id="自监督相关概念"><a href="#自监督相关概念" class="headerlink" title="自监督相关概念"></a>自监督相关概念</h2><p><img src="/image/LLM/245.png" alt></p>
-<h2 id="决策树相关注意点"><a href="#决策树相关注意点" class="headerlink" title="决策树相关注意点"></a>决策树相关注意点</h2><p><img src="/image/LLM/246.png" alt><br><img src="/image/LLM/247.png" alt><br><img src="/image/LLM/248.png" alt></p>
-<h2 id="二分类评价指标"><a href="#二分类评价指标" class="headerlink" title="二分类评价指标"></a>二分类评价指标</h2><p><img src="/image/LLM/249.png" alt></p>
-<h2 id="复杂度解释or解释"><a href="#复杂度解释or解释" class="headerlink" title="复杂度解释or解释"></a>复杂度解释or解释</h2><p><img src="/image/LLM/250.png" alt><br><img src="/image/LLM/251.png" alt><br><img src="/image/LLM/252.png" alt><br><img src="/image/LLM/253.png" alt><br><img src="/image/LLM/254.png" alt></p>
-<p><a href="https://c.d2l.ai/stanford-cs329p/syllabus.html#data-i" target="_blank" rel="noopener">李沐机器学习ppt</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/27/">27</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2090,7 +2125,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">260</span>
+              <span class="site-state-item-count">261</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

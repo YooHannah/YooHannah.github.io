@@ -95,7 +95,7 @@
 <meta property="og:description" content="LLM 固有的局限性 🔗 LLM 的知识不是实时的 LLM 可能不知道你私有的领域/业务知识  RAG 通过给LLM 增加额外/专有知识文档，提高LLM 回答问题的准确性  搭建过程： 文档加载，并按一定条件切割成片段 将切割的文本片段灌入检索引擎 封装检索接口 构建调用流程：Query -&amp;gt; 检索 -&amp;gt; Prompt -&amp;gt; LLM -&amp;gt; 回复  关键字检索的局限性同一个">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoohannah.github.io/image/llmCourse/rag.svg">
-<meta property="og:updated_time" content="2025-07-05T06:13:07.298Z">
+<meta property="og:updated_time" content="2025-09-21T02:34:25.691Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RAG">
 <meta name="twitter:description" content="LLM 固有的局限性 🔗 LLM 的知识不是实时的 LLM 可能不知道你私有的领域/业务知识  RAG 通过给LLM 增加额外/专有知识文档，提高LLM 回答问题的准确性  搭建过程： 文档加载，并按一定条件切割成片段 将切割的文本片段灌入检索引擎 封装检索接口 构建调用流程：Query -&amp;gt; 检索 -&amp;gt; Prompt -&amp;gt; LLM -&amp;gt; 回复  关键字检索的局限性同一个">
@@ -337,7 +337,7 @@
       
 
       
-        <h3 id="LLM-固有的局限性-🔗"><a href="#LLM-固有的局限性-🔗" class="headerlink" title="LLM 固有的局限性 🔗"></a><span style="color: black; font-weight: bold; font-size: 20px;">LLM 固有的局限性</span> <a href="https://learn.agiclass.cn/user/u15014137897/lab/tree/lecture-notes/05-rag-embeddings#2.1%E3%80%81LLM-%E5%9B%BA%E6%9C%89%E7%9A%84%E5%B1%80%E9%99%90%E6%80%A7" target="_blank" rel="noopener">🔗</a></h3><ol>
+        <h3 id="LLM-固有的局限性-🔗"><a href="#LLM-固有的局限性-🔗" class="headerlink" title="LLM 固有的局限性 🔗"></a><span style="color: black; font-weight: bold; font-size: 20px;">LLM 固有的局限性</span> <a href="https://colab.research.google.com/github/YooHannah/algorithm/blob/master/llmCourese/05-rag-embeddings/index.ipynb#scrollTo=d5936819-e086-439c-822e-72ba4478c814" target="_blank" rel="noopener">🔗</a></h3><ol>
 <li><span style="font-size: 14px;">LLM 的知识不是实时的</span></li>
 <li><span style="font-size: 14px;">LLM 可能不知道你私有的领域/业务知识</span></li>
 </ol>
@@ -357,7 +357,7 @@
 <li><span style="font-size: 14px;">将文本转成一组 𝑁 维浮点数，即<strong>文本向量</strong>又叫 Embeddings</span></li>
 <li><span style="font-size: 14px;">向量之间可以计算距离，距离远近对应<strong>语义相似度</strong>大小</span></li>
 </ol>
-<h3 id="文本向量是怎么得到的-🔗"><a href="#文本向量是怎么得到的-🔗" class="headerlink" title="文本向量是怎么得到的 🔗"></a><span style="color: black; font-weight: bold; font-size: 20px;">文本向量是怎么得到的</span> <a href="https://learn.agiclass.cn/user/u15014137897/lab/tree/lecture-notes/05-rag-embeddings#4.1.2%E3%80%81%E6%96%87%E6%9C%AC%E5%90%91%E9%87%8F%E6%98%AF%E6%80%8E%E4%B9%88%E5%BE%97%E5%88%B0%E7%9A%84%EF%BC%88%E9%80%89%EF%BC%89" target="_blank" rel="noopener">🔗</a></h3><ol>
+<h3 id="文本向量是怎么得到的-🔗"><a href="#文本向量是怎么得到的-🔗" class="headerlink" title="文本向量是怎么得到的 🔗"></a><span style="color: black; font-weight: bold; font-size: 20px;">文本向量是怎么得到的</span> <a href="https://colab.research.google.com/github/YooHannah/algorithm/blob/master/llmCourese/05-rag-embeddings/index.ipynb#scrollTo=de84fb43-b02f-4089-9eda-d02f90359915" target="_blank" rel="noopener">🔗</a></h3><ol>
 <li><span style="font-size: 14px;">构建相关（正立）与不相关（负例）的句子对儿样本</span></li>
 <li><span style="font-size: 14px;">训练双塔式模型，让正例间的距离小，负例间的距离大</span></li>
 </ol>
@@ -375,13 +375,13 @@
 <li><span style="font-size: 14px;">不是每个 Embedding 模型都对余弦距离和欧氏距离同时有效</span></li>
 <li><span style="font-size: 14px;">哪种相似度计算有效要阅读模型的说明（通常都支持余弦距离计算）</span></li>
 </ol>
-<h3 id="优化方向"><a href="#优化方向" class="headerlink" title="优化方向"></a><span style="color: black; font-weight: bold; font-size: 20px;">优化方向</span></h3><h3 id="文本分割的粒度-🔗"><a href="#文本分割的粒度-🔗" class="headerlink" title="文本分割的粒度 🔗"></a><span style="color: black; font-weight: bold; font-size: 20px;">文本分割的粒度</span> <a href="https://learn.agiclass.cn/user/u15014137897/lab/workspaces/auto-Z/tree/lecture-notes/05-rag-embeddings/index.ipynb#5.1%E3%80%81%E6%96%87%E6%9C%AC%E5%88%86%E5%89%B2%E7%9A%84%E7%B2%92%E5%BA%A6" target="_blank" rel="noopener">🔗</a></h3><p><strong>缺陷</strong></p>
+<h3 id="优化方向"><a href="#优化方向" class="headerlink" title="优化方向"></a><span style="color: black; font-weight: bold; font-size: 20px;">优化方向</span></h3><h3 id="文本分割的粒度-🔗"><a href="#文本分割的粒度-🔗" class="headerlink" title="文本分割的粒度 🔗"></a><span style="color: black; font-weight: bold; font-size: 20px;">文本分割的粒度</span> <a href="https://colab.research.google.com/github/YooHannah/algorithm/blob/master/llmCourese/05-rag-embeddings/index.ipynb#scrollTo=99b07741-a60e-4927-b2f1-f037d6fce69c" target="_blank" rel="noopener">🔗</a></h3><p><strong>缺陷</strong></p>
 <ol>
 <li><span style="font-size: 14px;">粒度太大可能导致检索不精准，粒度太小可能导致信息不全面</span></li>
 <li><span style="font-size: 14px;">问题的答案可能跨越两个片段</span></li>
 </ol>
 <p><span style="color: black; font-weight: bold; background-color: white; font-size: 14px;">改进</span><span style="color: black; background-color: white; font-size: 14px;">: 按一定粒度，部分重叠式的切割文本，使上下文更完整</span></p>
-<h3 id="检索后排序-🔗"><a href="#检索后排序-🔗" class="headerlink" title="检索后排序 🔗"></a><span style="color: black; font-weight: bold; font-size: 20px;">检索后排序</span> <a href="https://learn.agiclass.cn/user/u15014137897/lab/workspaces/auto-Z/tree/lecture-notes/05-rag-embeddings/index.ipynb#5.2%E3%80%81%E6%A3%80%E7%B4%A2%E5%90%8E%E6%8E%92%E5%BA%8F%EF%BC%88%E9%80%89%EF%BC%89" target="_blank" rel="noopener">🔗</a></h3><p><strong>问题</strong>: 有时，最合适的答案不一定排在检索的最前面</p>
+<h3 id="检索后排序-🔗"><a href="#检索后排序-🔗" class="headerlink" title="检索后排序 🔗"></a><span style="color: black; font-weight: bold; font-size: 20px;">检索后排序</span> <a href="https://colab.research.google.com/github/YooHannah/algorithm/blob/master/llmCourese/05-rag-embeddings/index.ipynb#scrollTo=a5b4d28b-392f-4bec-8134-1f52659048be" target="_blank" rel="noopener">🔗</a></h3><p><strong>问题</strong>: 有时，最合适的答案不一定排在检索的最前面</p>
 <p><strong>方案</strong>:</p>
 <ol>
 <li><span style="font-size: 14px;">检索时过招回一部分文本</span></li>
@@ -504,7 +504,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">260</span>
+              <span class="site-state-item-count">261</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

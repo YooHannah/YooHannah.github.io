@@ -259,6 +259,133 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/sort.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/algorithm/sort.html" itemprop="url">
+                  排序
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-14T22:18:37+08:00">
+                2017-04-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>记录：在排序问题中，通常将数据元素称为记录<br>–输入一个记录集合，排序后输出也是一个记录集合<br>–将排序看成是线性表的一种操作<br>排序依据关键字之间的大小关系，那么对同一记录集合，针对不同的关键字进行排序，可以得到不同的序列</p>
+<h1 id="排序稳定性"><a href="#排序稳定性" class="headerlink" title="排序稳定性"></a>排序稳定性</h1><p>假设Ki=Kj(1&lt;=i&lt;=n,1&lt;=j&lt;=n,i!=j),且在排序前的序列中ri领先于rj(即i&lt;j)<br>–如果排序后ri仍领先于rj,则称所用排序方法是稳定的<br>–反之，若排序后rj仍领先于ri,则称所用排序方法是不稳定的<br>即原来值相同的两个值A和B,排序前A在B前面，排序后位置不变则说排序算法是稳定的，否则是不稳定的</p>
+<h1 id="影响排序算法性能的几个要素"><a href="#影响排序算法性能的几个要素" class="headerlink" title="影响排序算法性能的几个要素"></a>影响排序算法性能的几个要素</h1><p>时间性能(比较，移动)<br>辅助空间(存放临时变量)<br>算法的复杂性</p>
+<h1 id="冒泡排序算法n-2"><a href="#冒泡排序算法n-2" class="headerlink" title="冒泡排序算法n^2"></a>冒泡排序算法n^2</h1><p>两两相邻记录的关键字，如果反序则交换，直到没有反序记录为止<br>注意点：<br>– 每次比较相邻两个元素<br>– 如果有n个元素,比较n-1次，每次减少1次比较<br>– 从下往上比较，即从后往前比较<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/bubblesort.js" target="_blank" rel="noopener">代码链接</a></p>
+<h1 id="选择排序法n-2"><a href="#选择排序法n-2" class="headerlink" title="选择排序法n^2"></a>选择排序法n^2</h1><p>通过n-i次关键字间的比较，从n-i+1个记录中选出关键字最小的记录，并和第i(1=&lt;i&lt;=n)个记录交换<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/SelectSort.js" target="_blank" rel="noopener">代码链接</a></p>
+<h1 id="直接插入排序n-2"><a href="#直接插入排序n-2" class="headerlink" title="直接插入排序n^2"></a>直接插入排序n^2</h1><p>连续两个值比较若后面的比前面的小，就将后面的值移到比它大的值的前面<br>适用于记录本身就是有序的,记录数少<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/InsertSort.js" target="_blank" rel="noopener">代码链接</a></p>
+<h1 id="希尔排序n-logn"><a href="#希尔排序n-logn" class="headerlink" title="希尔排序n*logn"></a>希尔排序n*logn</h1><p>将所有元素按一定间隔f取出n/f个进行比较，再按顺序放回对应的位置，直到所有元素参与完比较之后，算完成一轮比较，<br>再改变间隔进行下一轮比较，直到间隔为1<br>可以将该处理方法套进冒泡、选择和直接插入的方法中<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/shellsort.js" target="_blank" rel="noopener">代码链接</a></p>
+<h1 id="堆排序n-logn"><a href="#堆排序n-logn" class="headerlink" title="堆排序n*logn"></a>堆排序n*logn</h1><p>大顶堆；每个结点大于等于其左右孩子的完全二叉树<br>小顶堆：每个结点小于等于其左右孩子的完全二叉树<br>各结点一定是堆中所有结点的最大或最小者，如果按照层序遍历方式给结点从1开始编号，则结点之间满足如下关系<br>大顶堆：Ki&gt;=K2i &amp;&amp; Ki&gt;=K2i+1<br>大顶堆：Ki&lt;=K2i &amp;&amp; Ki&lt;=K2i+1<br>其中(1&lt;=i&lt;=n/2取下限)<br>下标i与2i和2i+1是双亲和子女关系<br>堆排序：利用堆进行排序<br>– 将待排序的序列构造成一个大顶堆(从小到大)(或小顶堆(从大到小))<br>– 此时整个序列的最大值就是堆顶的根结点。将它移走(就是将其与堆数组的末尾元素交换，此时末尾元素就是最大值)<br>– 然后将剩余的n-1个序列重新构造成一个堆，这样就会得到n个元素中的此最大值<br>– 如此反复执行，便能得到一个有序序列了<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/HeapSort.js" target="_blank" rel="noopener">代码链接</a></p>
+<h1 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h1><p>将待排序数组每次一份为2，直到每一份的数组长度为1，<br>对拆分的两份结果排序合成一个新数组，参与下次下一次比较排序合并<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/MergeSort.js" target="_blank" rel="noopener">代码链接</a></p>
+<h1 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h1><p>每趟排序指定一个基准点，把比基准点小的元素放在基准点左边，比基准点大的元素放在基准点右边<br>再以基准点为界，把前面的数据(都比基准点小)和后面的数据(都比基准点大)按两部分的最小下标为基准准进行移动,<br>优化<br>选取基准点<br>不必要的交换<br>小数组时的排序方案(使用直接插入排序)<br>递归操作<br>尾递归：函数递归形式的调用出现在函数末尾，可以大大缩减栈空间<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/QuickSort.js" target="_blank" rel="noopener">代码链接</a></p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p><img src="/image/qsort.png" alt="qsort"><br>插入排序类:直接插入排序、希尔排序<br>选择排序类：选择排序、堆排序<br>交换排序类：冒泡排序、快速排序<br>归并排序类：归并排序<br><img src="/image/sort.png" alt="sort"></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/hash.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1319,130 +1446,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/MinimumTree.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/algorithm/MinimumTree.html" itemprop="url">
-                  最小生成树
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-30T21:10:37+08:00">
-                2017-03-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>图的各结点连线间存在权值，寻找一种访问路径,使得访问各结点最终的路径的权值和最小，<br>最终访问路径和结点形成树的结构，即最小生成树</p>
-<h1 id="普里姆算法"><a href="#普里姆算法" class="headerlink" title="普里姆算法"></a>普里姆算法</h1><p><img src="/image/plim.png" alt="plim"><br>主要思路：研究对象为结点，以某顶点为起点，逐步找各个顶点上最小权值的边来构建最小生成树<br>编程思路：新建一数组，初始化为起点(最小生成树的根结点)在邻接矩阵所在行的权值<br>找到该组权值最小值,最小权值下标即要选择路径的终点，同时也是接下来要比较的邻接矩阵权值行的行号，<br>将该最小权值置0，然后将新建数组与矩阵权值行比较，<br>相同位置，矩阵行若小于新建数组值，就将新建数组值替换为矩阵行的值，<br>再次寻找新建数组中的最小权值，重复以上步骤<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/MinimumTreeofPlim.js" target="_blank" rel="noopener">代码链接</a></p>
-<h1 id="克鲁斯卡尔算法"><a href="#克鲁斯卡尔算法" class="headerlink" title="克鲁斯卡尔算法"></a>克鲁斯卡尔算法</h1><p><img src="/image/kluse.png" alt="kluse"><br>主要思路：研究对象为边，将边集数组从小到大排序，依次取边集数组的元素，判断边与边是否形成环路，不会形成则选择该边构建最小树<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/MinimumTreeofKruskal.js" target="_blank" rel="noopener">代码链接</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/19/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><span class="page-number current">20</span><a class="page-number" href="/page/21/">21</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/21/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/19/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><span class="page-number current">20</span><a class="page-number" href="/page/21/">21</a><span class="space">&hellip;</span><a class="page-number" href="/page/27/">27</a><a class="extend next" rel="next" href="/page/21/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1481,7 +1489,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">260</span>
+              <span class="site-state-item-count">261</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

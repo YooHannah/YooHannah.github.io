@@ -259,6 +259,168 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/performance/webpackdetail.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/performance/webpackdetail.html" itemprop="url">
+                  webpack配置项
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-03T16:21:02+08:00">
+                2019-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>webpack在启动后会从Entry里配置的Moudule开始，递归解析Entry依赖的所有Module，每找到一个module,就会根据配置的loader去找对应的转换规则，<br>对Module进行转换后，在解析当前Module依赖的Module。这些模块会以Entry为单位进行分组，一个Entry及其所有依赖Module被分到一个组，也就是一个Chunk<br>最后，webpack会将所有Chunk转换成文件输出。webpack会在恰当的时机执行Plugin里定义的逻辑</p>
+<h1 id="entry"><a href="#entry" class="headerlink" title="entry"></a>entry</h1><p>入口，webpack执行构建的第一步将从Entry开始，可抽象成输入<br>配置：<br>方式1： 直接一个文件路径字符串：’./app/entry1’<br>方式2： 文件路径字符串数组：[‘./app/entry1’,’./app/entry2’]<br>方式3： 文件路径字符串对象：{A：’./app/entryA’,B:’./app/entryB’}<br>方式4： 函数，动态导出以上三种形式<br>方式1,2最后只会有一个文件会被导出，即导出一个Chunk,名为main<br>方式3导出多个Chunk,名称分别对应对象KEY值</p>
+<h1 id="output"><a href="#output" class="headerlink" title="output"></a>output</h1><p>输出结果，在webpack经过一系列处理并得到最终想要的代码后输出结果<br>配置：</p>
+<h2 id="filename"><a href="#filename" class="headerlink" title="filename"></a>filename</h2><p>输出文件名<br>方式1：静态，名字写死，如bundle.js，适用于只有一个导出Chunk，一个输出文件<br>方式2：利用Chunk内置变量，动态拼接生成文件名，例如’[name].js’<br>Chunk内置变量有：id,name,hash(name的hash,可指定长度，例如[hash:8]),chunkhash(chunk内容的hash)<br>相关：ExtractTextWebpackPlugin使用contenthash表示文件内容hash,但提取的内容为代码本身，不是一组模块组成的chunck内容</p>
+<h2 id="chunkFilename"><a href="#chunkFilename" class="headerlink" title="chunkFilename"></a>chunkFilename</h2><p>无具体入口的chunk输出的文件名<br>例如通过commonChunkPlugin生成的文件，或者使用import动态加载生成的文件等<br>因为都是chunk输出文件，所以内置变量同filename的chunk</p>
+<h2 id="path"><a href="#path" class="headerlink" title="path"></a>path</h2><p>输出文件的存放目录<br>配置：绝对路径的字符串<br>内置变量：仅有一个，hash,代表一次编译操作的hash值</p>
+<h2 id="publishPath"><a href="#publishPath" class="headerlink" title="publishPath"></a>publishPath</h2><p>配置发布到线上资源的URL前缀<br>配置：字符串<br>内置变量：仅有一个，hash,代表一次编译操作的hash值</p>
+<h2 id="crossOriginloading"><a href="#crossOriginloading" class="headerlink" title="crossOriginloading"></a>crossOriginloading</h2><p>配置异步插入的script标签的crossorign值<br>配置：<br>anonymous，默认，不带cookie<br>use-credentials,加载时，带cookie</p>
+<h2 id="library"><a href="#library" class="headerlink" title="library"></a>library</h2><p>导出库的名称,与libraryTarget配合使用<br>配置：字符串</p>
+<h2 id="libraryTarget"><a href="#libraryTarget" class="headerlink" title="libraryTarget"></a>libraryTarget</h2><p>以何种方式导出库<br>配置：以下字符串<br>‘var’|’commonjs’|’commonjs2’|’this’|’window’|’global’</p>
+<h2 id="libraryExport"><a href="#libraryExport" class="headerlink" title="libraryExport"></a>libraryExport</h2><p>在libraryTarget配置’commonjs’|’commonjs2’时，配置导出模块中哪些子模块被导出</p>
+<h1 id="module"><a href="#module" class="headerlink" title="module"></a>module</h1><p>模块处理规则</p>
+<h2 id="rules"><a href="#rules" class="headerlink" title="rules"></a>rules</h2><p>数组，每一项是处理同一类文件的相关配置对象</p>
+<h3 id="test"><a href="#test" class="headerlink" title="test"></a>test</h3><p>处理哪些文件，文件名命中规则，<br>配置：字符串</p>
+<h3 id="include"><a href="#include" class="headerlink" title="include"></a>include</h3><p>在什么目录范围内匹配<br>配置：字符串/字符串数组（每一项是或的关系，只要满足一个条件就会命中）</p>
+<h3 id="exclude"><a href="#exclude" class="headerlink" title="exclude"></a>exclude</h3><p>排除哪些目录范围，再匹配<br>配置：字符串/字符串数组（每一项是或的关系，只要满足一个条件就会命中）</p>
+<h3 id="use"><a href="#use" class="headerlink" title="use"></a>use</h3><p>配置loader<br>loader可以看作具有文件转换功能的翻译员，告诉webpack在遇到哪些文件时使用哪些loader去加载和转换<br>配置：数组，每一项可以是是字符串，或者对象<br>默认执行顺序为数组倒序执行，即最末尾先执行<br>字符串：loader名称<br>对象：对于该loader的一些相关配置</p>
+<h4 id="loader"><a href="#loader" class="headerlink" title="loader"></a>loader</h4><p>配置：字符串，loader名</p>
+<h4 id="option"><a href="#option" class="headerlink" title="option"></a>option</h4><p>配置：对象，给loader处理函数传入的参数</p>
+<h4 id="enforce"><a href="#enforce" class="headerlink" title="enforce"></a>enforce</h4><p>更改loader执行顺序<br>配置：<br>pre: 放在执行顺序最前面<br>post:放在执行顺序最后</p>
+<h2 id="noparse"><a href="#noparse" class="headerlink" title="noparse"></a>noparse</h2><p>功能类似于exclude,排除不需要进行接续处理的文件，<br>此类文件中不能采用模块化方式编写，即不应包含import,require,define等语句，<br>否则导致无法在浏览器下执行<br>配置：字符串，文件路径</p>
+<h2 id="parse"><a href="#parse" class="headerlink" title="parse"></a>parse</h2><p>更细粒度地配置哪些语法被解析，哪些不被解析，精确到语法层面<br>{cmd:false,commonjs:false….}</p>
+<h1 id="resolve"><a href="#resolve" class="headerlink" title="resolve"></a>resolve</h1><p>配置如何寻找模块对应的文件</p>
+<h2 id="alias"><a href="#alias" class="headerlink" title="alias"></a>alias</h2><p>通过将路径前缀指定别名，进行映射<br>配置：对象，key为别名，值为实际路径<br>例：{components：’./src/components’,…}</p>
+<p>第三方模块一般会包含两套代码<br>一套采用comonjs规范的模块代码，这些文件都放在lib目录下，以package.json中指定的react.js为模块入口<br>一套是将React所有相关代码打包好的完整代码放到一个单独文件中，这些代码没有采用模块化，可以直接执行，<br>其中非压缩文件（dist/xxx.js）用于开发环境，里面包含检查和警告的代码，压缩的代码(dist/xxx.min.js)用于线上环境<br>默认情况下，webpack会从入口文件./node_module/xxx/xxx.js开始递归解析和处理依赖的几十个文件，会是一个耗时操作<br>可以通过配置reaolve.alias,让webpack处理第三方库时，直接使用单独完整的xxx.min.js，从而跳过耗时的递归解析操作</p>
+<h2 id="mainFields"><a href="#mainFields" class="headerlink" title="mainFields"></a>mainFields</h2><p>决定优先使用第三方模块的哪份代码，按数组顺序查找，使用找到的第一份文件<br>默认值和target有关，<br>当target为web或者webwork时，值是[‘browser’,’module’,’main’]<br>当target为其他值时，值时[‘module’,’main’]<br>配置：第三方模块导出文件的关键字<br>例：[‘jsnext:main’,’brower’,’main’]</p>
+<h2 id="extensions"><a href="#extensions" class="headerlink" title="extensions"></a>extensions</h2><p>导入语句没有带文件后缀时，尝试寻找的后缀代表<br>配置：后缀字符串数组<br>例：[‘.ts’,’.js’,’json’]</p>
+<h2 id="modules"><a href="#modules" class="headerlink" title="modules"></a>modules</h2><p>去哪些目录下寻找第三方模块，<br>默认node_modules 含义是先去当前目录的./node_module目录下找，如果没有找到，就去上一级目录../node_module中去找<br>再没有就去../../node_module中找，一次类推<br>配置：字符串数组<br>例：[‘.src/components’,’node_modules’],<br>可以直接在页面中import ‘.src/components’里面的模块，不用再写相对路径</p>
+<h2 id="descriptionFiles"><a href="#descriptionFiles" class="headerlink" title="descriptionFiles"></a>descriptionFiles</h2><p>配置第三方模块名<br>配置：字符串数组</p>
+<h2 id="enforceExtension"><a href="#enforceExtension" class="headerlink" title="enforceExtension"></a>enforceExtension</h2><p>是否强制导入语句中必须带后缀<br>true:必须带<br>false:不用必须带</p>
+<h2 id="enforceModuleExtension"><a href="#enforceModuleExtension" class="headerlink" title="enforceModuleExtension"></a>enforceModuleExtension</h2><p>只对node_module文件夹下模块生效<br>通常设置false，与enforceExtension：true配合，兼容第三方模块，使用时不加后缀</p>
+<h1 id="plugin"><a href="#plugin" class="headerlink" title="plugin"></a>plugin</h1><p>扩展插件，在webpack构建流程中的特定时机注入扩展逻辑，来改变构建结果或者做一些自定义的操作<br>比如将css文件单独打包，或者抽离公共模块<br>不使用plugin处理css文件的原理大概是将CSS内容用JS字符串存储起来，在网页执行JS时，通过DOM操作，动态向HTML head标签里插入HTML style标签<br>使用plugin将css抽离，是从打包好的js文件再提取出来<br>配置：plugin实例数组，使用new操作符调用构造函数，同时将参数传递进去<br>例：[new commonsChunkPlugin({name:’common’})]</p>
+<h1 id="devServer"><a href="#devServer" class="headerlink" title="devServer"></a>devServer</h1><p>配置针对使用webpack-dev-server启动webpack时的一些配置，相当于配置webpack-dev-server<br>devServer 会启动一个http服务器，用于服务网页请求，<br>同时会启动webpack,将webpack构建的文件保存在内存中，在要访问输出的文件时，必须通过HTTP服务访问，<br>同时会开启webpack的监听模式，devServer会让webpack在构建出的js代码里注入一个代理客户端用于控制网页，<br>网页和devServer之间通过webSocket协议通信，以方便devServer主动向客户端发送命令，<br>devServer在收到来自webpack的文件变化通知时，通过注入的客户端控制自动刷新网页，做到实时预览。<br>1.由于devServer不会理会配置的output.path属性，所以获取打包文件时，应该依据HTTP获取，不再依据output.path获取<br>因此要注意使用devServer之后打包文件的获取路径要进行更改。<br>2.index.html因为脱离js模块化系统，webpack不知道它的存在，故，更改index.html，不会被监听到<br>3.除了通过重新刷新整个网页来实现预览，devServer还有一种被称作模块热替换的刷新技术。<br>模块热替换能做到在不重新加载整个网页的情况下，通过将已更新的模块替换老模块，再重新执行一次来实现实时预览。<br>模块热替换相对于默认的刷新机制能提供更快的响应速度和更好的开发体验。<br>可以在执行devServer时加上 –hot开启<br>4.启动webpack时，加上–devtool source-map 可生成souce-map，方便在浏览器中调试源代码</p>
+<p>配置<br>hot是否开启热加载(热替换)<br>模块热替换原理：<br>类似于自动刷新，都需要向要开发的网页中注入一个代理客户端来连接DevServer和网页，区别在于热替换时会多出三个用于热替换的文件<br>在发生文件变化时，会重新生成一个用于替换老模块的补丁文件，补丁文件中会包含新编译的代码，页面会使用新编译的代码<br>当子模块发生更新时，更新事件会一层一层向上传递，会从根组件传递到main.js,直到有某层文件接收了当前变化的模块，<br>就会去执行自定义的逻辑，如果事件一直往上抛，到最外层都没有文件接收它，则会直接刷新网页，<br>最直观的就是修改main.js时，会发生整个页面刷新<br>而对于.css文件，在使用style-loader处理时会注入用于接收CSS的代码，所以在修改.css文件时，会触发模块热替换</p>
+<p>inline<br>开启实现实时预览，自动刷新；<br>不开启，使用iframe方式运行开发的网页，需要去localhost:8080/webpack-dev-pack实时预览<br>historyApiFallback:用于H5History API单页应用开发<br>contentBase:devServer HTTP服务器文件根目录<br>headers:在HTTP响应中注入HTTP响应头<br>host:监听地址<br>port:监听端口<br>allowedHosts:只有HTTP请求的HOST在列表中才正常返回<br>disabledHostCheck:是否关闭用于DNS重新绑定的HTTP请求的HOST检查<br>https:是否运行在https上<br>clientloglevel:配置客户端日志等级</p>
+<h1 id="target"><a href="#target" class="headerlink" title="target"></a>target</h1><p>构建不同运行环境的代码</p>
+<h1 id="devtool"><a href="#devtool" class="headerlink" title="devtool"></a>devtool</h1><p>有很多选项可配置，选项之间可以随意组合<br>6个关键配置项：<br>eval:用eval语句包裹需要安装的模块<br>source-map:生成独立的Source Map文件<br>hidden：不在JS文件中指出 Source Map文件的位置，这样浏览器就不会自动加载Source Map<br>inline:将生成的Source Map转换成BASE64格式内嵌在JS文件中<br>cheap:在生成的Source Map文件中不会包含列信息，这样计算量更小，输出的Source Map文件更小，同时Loader输出的Source Map不会被采用<br>module:来自Loader的Source Map被简单的处理成每行一个模块</p>
+<h2 id="‘source-map’"><a href="#‘source-map’" class="headerlink" title="‘source-map’"></a>‘source-map’</h2><p>仅设置source-map会造成以下两个问题<br>1.会输出质量最高且最详细的Source Map，会造成构建速度缓慢，特别是开发过程中需要频繁修改时会增加等待时间<br>2.会将Source Map暴露，若构建发布到线上代码的Source Map暴露等于源码被泄露<br>解决：<br>1.开发环境下将dev-tool设置成cheap-module-eval-source-map,因为生成这种Source Map的速度最快，能加速构建，<br>在开发环境下不会做代码压缩，所以在Source Map中即使没有列信息，也不会影响断点调试<br>2.生产环境下将dev-tool设置成hidden-source-map,生成最详细的Source Map，但不会将Source Map暴露出去<br>在生产环境会做代码压缩，一个JS文件只有一行，所以需要列信息</p>
+<p>生产环境通常不会将Source Map上传到HTTP服务器让用户获取，而是上传到JS错误错误收集系统，<br>在错误收集系统上根据Source Map和收集到的JS运行错误堆栈，计算出错误所在源码位置</p>
+<h2 id="第三方模块"><a href="#第三方模块" class="headerlink" title="第三方模块"></a>第三方模块</h2><p>webpack是默认不会加载第三方模块附带的Source Map文件的，会在转换过程中生成Source Map，<br>为了让webpack加载这些第三方模块的Source Map，需要使用source-map-loader<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">rules:[&#123;</span><br><span class="line">	test:/\.js$/,</span><br><span class="line">	include:[path.resolve(root,&apos;node_module/some-component&apos;)],</span><br><span class="line">	//加载Source Map时计算量很大，因此要避免让该Loader处理过多的文件，不然会导致构建变慢</span><br><span class="line">	use:[source-map-loader],</span><br><span class="line">	//要将source-map-loader的执行顺序放到最前面，</span><br><span class="line">	//如果在source-map-loader之前有Loader转换了该JS文件，就会导致Source Map映射错误</span><br><span class="line">	enforce:&apos;pre&apos;</span><br><span class="line">	&#125;]</span><br></pre></td></tr></table></figure></p>
+<h1 id="watch"><a href="#watch" class="headerlink" title="watch"></a>watch</h1><p>是否开启监听文件变动模式</p>
+<h1 id="watchOption"><a href="#watchOption" class="headerlink" title="watchOption"></a>watchOption</h1><p>配置监听规则,在开启监听模式时，才有用</p>
+<p>ignore:不监听的文件/文件夹<br>aggregateTimeout:监听到变化发生后，等多少ms再去执行动作，截流，防止文件更新太快而导致重新编译的频率太快，默认为300ms<br>poll:判断文件是否发生变化是通过不停的询问系统指定文件有没有变化实现的，这里配置每秒询问多少次</p>
+<p>文件监听原理：<br>默认情况下，webpack会从配置的Entry文件出发，递归出Entry文件依赖的文件，将这些依赖的文件都加入到监听列表中，而不是监听整个项目目录下的文件<br>然后对列表中每个文件都定时执行检查，定时获取这个文件的最后编辑时间，每次都存下最新的最后编辑时间，如果发现当前获取的和最后编辑时间不一致，<br>就认为该文件发生了变化，watchOption.poll控制定时检查的周期<br>文件发生变化后并不会立刻告诉监听者，而是先缓存起来，收集一段时间的变化后，再一次性告诉监听者。watchOption.aggregateTimeout用于配置这个等待时间<br>这样做的目的就是在编辑代码过程可能会高频地输入文字，导致文件变化的时间高频发生，如果每次都重新执行构建，就会让构建卡死</p>
+<h1 id="externals"><a href="#externals" class="headerlink" title="externals"></a>externals</h1><p>配置哪些模块不用被打包</p>
+<h1 id="resolveloader"><a href="#resolveloader" class="headerlink" title="resolveloader"></a>resolveloader</h1><p>配置如何去寻找loader</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/loadingcount.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1420,134 +1582,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/renderfire.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/renderfire.html" itemprop="url">
-                  触发render
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-22T11:40:37+08:00">
-                2018-12-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在react中，触发render的有4条路径。</p>
-<p>以下假设shouldComponentUpdate都是按照默认返回true的方式。</p>
-<p>首次渲染Initial Render</p>
-<p>调用this.setState （并不是一次setState会触发一次render，React可能会合并操作，再一次性进行render）</p>
-<p>父组件发生更新（一般就是props发生改变，但是就算props没有改变或者父子组件之间没有数据交换也会触发render）</p>
-<p>调用this.forceUpdate</p>
-<p><a href="https://www.cnblogs.com/AnnieBabygn/p/6560833.html" target="_blank" rel="noopener">https://www.cnblogs.com/AnnieBabygn/p/6560833.html</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/10/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/12/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/10/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/27/">27</a><a class="extend next" rel="next" href="/page/12/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1586,7 +1625,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">260</span>
+              <span class="site-state-item-count">261</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

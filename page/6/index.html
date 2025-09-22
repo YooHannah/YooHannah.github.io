@@ -259,6 +259,126 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1127.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/react/hooks/1127.html" itemprop="url">
+                  Hooks 在forms上的使用
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-27T16:20:02+08:00">
+                2021-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>应用思想就是在这个 Hook 去维护整个表单的状态，并提供根据名字去取值和设值的方法，从而方便表单在组件中的使用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line">// 包含验证功能validators 的hooks, 处理表单状态管理</span><br><span class="line">const useForm = (initialValues = &#123;&#125;, validators) =&gt; &#123;</span><br><span class="line">  const [values, setValues] = useState(initialValues);</span><br><span class="line">  // 定义了 errors 状态</span><br><span class="line">  const [errors, setErrors] = useState(&#123;&#125;);</span><br><span class="line"></span><br><span class="line">  const setFieldValue = useCallback(</span><br><span class="line">    (name, value) =&gt; &#123;</span><br><span class="line">      setValues((values) =&gt; (&#123;</span><br><span class="line">        ...values,</span><br><span class="line">        [name]: value,</span><br><span class="line">      &#125;));</span><br><span class="line"></span><br><span class="line">      // 如果存在验证函数，则调用验证用户输入</span><br><span class="line">      if (validators[name]) &#123;</span><br><span class="line">        const errMsg = validators[name](value);</span><br><span class="line">        setErrors((errors) =&gt; (&#123;</span><br><span class="line">          ...errors,</span><br><span class="line">          // 如果返回错误信息，则将其设置到 errors 状态，否则清空错误状态</span><br><span class="line">          [name]: errMsg || null,</span><br><span class="line">        &#125;));</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    [validators],</span><br><span class="line">  );</span><br><span class="line">  // 将 errors 状态也返回给调用者</span><br><span class="line">  return &#123; values, errors, setFieldValue &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 应用</span><br><span class="line"></span><br><span class="line">import &#123; useCallback &#125; from &quot;react&quot;;</span><br><span class="line">import useForm from &apos;./useForm&apos;;</span><br><span class="line"></span><br><span class="line">export default () =&gt; &#123;</span><br><span class="line">  const validators = useMemo(() =&gt; &#123;</span><br><span class="line">    return &#123;</span><br><span class="line">      name: (value) =&gt; &#123;</span><br><span class="line">        // 要求 name 的长度不得小于 2</span><br><span class="line">        if (value.length &lt; 2) return &quot;Name length should be no less than 2.&quot;;</span><br><span class="line">        return null;</span><br><span class="line">      &#125;,</span><br><span class="line">      email: (value) =&gt; &#123;</span><br><span class="line">        // 简单的实现一个 email 验证逻辑：必须包含 @ 符号。</span><br><span class="line">        if (!value.includes(&quot;@&quot;)) return &quot;Invalid email address&quot;;</span><br><span class="line">        return null;</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;, []);</span><br><span class="line">  // 使用 useForm 得到表单的状态管理逻辑</span><br><span class="line">  const &#123; values, errors, setFieldValue &#125; = useForm(&#123;&#125;, validators);</span><br><span class="line">  // 处理表单的提交事件</span><br><span class="line">  const handleSubmit = useCallback(</span><br><span class="line">    (evt) =&gt; &#123;</span><br><span class="line">      // 使用 preventDefault() 防止页面被刷新</span><br><span class="line">      evt.preventDefault();</span><br><span class="line">      console.log(values);</span><br><span class="line">    &#125;,</span><br><span class="line">    [values],</span><br><span class="line">  );</span><br><span class="line">  return (</span><br><span class="line">    &lt;form onSubmit=&#123;handleSubmit&#125;&gt;</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;label&gt;Name: &lt;/label&gt;</span><br><span class="line">        &lt;input</span><br><span class="line">          value=&#123;values.name || null&#125;</span><br><span class="line">          onChange=&#123;(evt) =&gt; setFieldValue(&quot;name&quot;, evt.target.value)&#125;</span><br><span class="line">        /&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;label&gt;Email:&lt;/label&gt;</span><br><span class="line">        &lt;input</span><br><span class="line">          value=&#123;values.email || null&#125;</span><br><span class="line">          onChange=&#123;(evt) =&gt; setFieldValue(&quot;email&quot;, evt.target.value)&#125;</span><br><span class="line">        /&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">      &lt;button type=&quot;submit&quot;&gt;Submit&lt;/button&gt;</span><br><span class="line">    &lt;/form&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>把表单的状态管理单独提取出来，成为一个可重用的 Hook。<br>这样在表单的实现组件中，就只需要更多地去关心 UI 的渲染，而无需关心状态是如何存储和管理的，从而方便表单组件的开发。</p>
+<p>Form 最为核心的机制就是我们将表单元素的所有状态提取出来，<br>这样表单就可以分为状态逻辑和 UI 展现逻辑，从而实现数据层和表现层的分离。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1126.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1424,157 +1544,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1111.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks/1111.html" itemprop="url">
-                  如何保存组件状态和使用生命周期
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-11T16:20:02+08:00">
-                2021-11-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="那么什么样的值应该保存在-state-中呢？"><a href="#那么什么样的值应该保存在-state-中呢？" class="headerlink" title="那么什么样的值应该保存在 state 中呢？"></a>那么什么样的值应该保存在 state 中呢？</h1><p>在一个函数组件的多次渲染之间，这个 state 是共享的。<br>这是日常开发中需要经常思考的问题。通常来说，我们要遵循的一个原则就是：state 中永远不要保存可以通过计算得到的值。<br>比如说：</p>
-<ol>
-<li>从 props 传递过来的值。有时候 props 传递过来的值无法直接使用，而是要通过一定的计算后再在 UI 上展示，比如说排序。<br>那么我们要做的就是每次用的时候，都重新排序一下，或者利用某些 cache 机制，而不是将结果直接放到 state 里。</li>
-<li>从 URL 中读到的值。比如有时需要读取 URL 中的参数，把它作为组件的一部分状态。那么我们可以在每次需要用的时候从 URL 中读取，而不是读出来直接放到 state 里。</li>
-<li>从 cookie、localStorage 中读取的值。通常来说，也是每次要用的时候直接去读取，而不是读出来后放到 state 里。</li>
-</ol>
-<h1 id="useEffect执行"><a href="#useEffect执行" class="headerlink" title="useEffect执行"></a>useEffect执行</h1><p>useEffect 让我们能够在下面四种时机去执行一个回调函数产生副作用：</p>
-<ol>
-<li>每次 render 后执行：不提供第二个依赖项参数。比如useEffect(() =&gt; {})。</li>
-<li>仅第一次 render 后执行：提供一个空数组作为依赖项。比如useEffect(() =&gt; {}, [])。</li>
-<li>第一次以及依赖项发生变化后执行：提供依赖项数组。比如useEffect(() =&gt; {}, [deps])。</li>
-<li>组件 unmount 后执行：返回一个回调函数。比如useEffect() =&gt; { return () =&gt; {} }, [])。</li>
-</ol>
-<h1 id="定义依赖项注意点"><a href="#定义依赖项注意点" class="headerlink" title="定义依赖项注意点"></a>定义依赖项注意点</h1><p>那么在定义依赖项时，我们需要注意以下三点：</p>
-<ol>
-<li>依赖项中定义的变量一定是会在回调函数中用到的，否则声明依赖项其实是没有意义的。</li>
-<li>依赖项一般是一个常量数组，而不是一个变量。因为一般在创建 callback 的时候，你其实非常清楚其中要用到哪些依赖项了。</li>
-<li>React 会使用浅比较来对比依赖项是否发生了变化，所以要特别注意数组或者对象类型。<br>如果你是每次创建一个新对象，即使和之前的值是等价的，也会被认为是依赖项发生了变化。这是一个刚开始使用 Hooks 时很容易导致 Bug 的地方。</li>
-</ol>
-<h1 id="Hooks-的使用规则"><a href="#Hooks-的使用规则" class="headerlink" title="Hooks 的使用规则"></a>Hooks 的使用规则</h1><h2 id="只能在函数组件的顶级作用域使用"><a href="#只能在函数组件的顶级作用域使用" class="headerlink" title="只能在函数组件的顶级作用域使用"></a>只能在函数组件的顶级作用域使用</h2><p>第一，所有 Hook 必须要被执行到。第二，必须按顺序执行。</p>
-<p>所谓顶层作用域，就是 Hooks 不能在循环、条件判断或者嵌套函数内执行，而必须是在顶层。<br>同时 Hooks 在组件的多次渲染之间，必须按顺序被执行。<br>因为在 React 组件内部，其实是维护了一个对应组件的固定 Hooks 执行列表的，以便在多次渲染之间保持 Hooks 的状态，并做对比。<br>也不能在return语句后执行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">function MyComp() &#123;</span><br><span class="line">  const [count, setCount] = useState(0);</span><br><span class="line">  if (count &gt; 10) &#123;</span><br><span class="line">    // 错误：不能将 Hook 用在条件判断里</span><br><span class="line">    useEffect(() =&gt; &#123;</span><br><span class="line">      // ...</span><br><span class="line">    &#125;, [count])</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  // 这里可能提前返回组件渲染结果，后面就不能再用 Hooks 了</span><br><span class="line">  if (count === 0) &#123;</span><br><span class="line">    return &apos;No content&apos;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // 错误：不能将 Hook 放在可能的 return 之后</span><br><span class="line">  const [loading, setLoading] = useState(false);</span><br><span class="line">  </span><br><span class="line">  //...</span><br><span class="line">  return &lt;div&gt;&#123;count&#125;&lt;/div&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="Hooks-只能在函数组件或者其它-Hooks-中使用"><a href="#Hooks-只能在函数组件或者其它-Hooks-中使用" class="headerlink" title="Hooks 只能在函数组件或者其它 Hooks 中使用"></a>Hooks 只能在函数组件或者其它 Hooks 中使用</h2><p>如果一定要在 Class 组件中使用，那应该如何做呢？<br>其实有一个通用的机制，那就是利用高阶组件的模式，将 Hooks 封装成高阶组件，从而让类组件使用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">a.</span><br><span class="line">import React from &apos;react&apos;;</span><br><span class="line">import &#123; useWindowSize &#125; from &apos;../hooks/useWindowSize&apos;;</span><br><span class="line"></span><br><span class="line">export const withWindowSize = (Comp) =&gt; &#123;</span><br><span class="line">  return props =&gt; &#123;</span><br><span class="line">    const windowSize = useWindowSize();</span><br><span class="line">    return &lt;Comp windowSize=&#123;windowSize&#125; &#123;...props&#125; /&gt;;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">b.</span><br><span class="line">import React from &apos;react&apos;;</span><br><span class="line">import &#123; withWindowSize &#125; from &apos;./withWindowSize&apos;;</span><br><span class="line"></span><br><span class="line">class MyComp &#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    const &#123; windowSize &#125; = this.props;</span><br><span class="line">    // ...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 通过 withWindowSize 高阶组件给 MyComp 添加 windowSize 属性</span><br><span class="line">export default withWindowSize(MyComp);</span><br></pre></td></tr></table></figure>
-<p>小结<br>hooks使用时应包括这么三点：</p>
-<ol>
-<li>在 useEffect 的回调函数中使用的变量，都必须在依赖项中声明；</li>
-<li>Hooks 不能出现在条件语句或者循环中，也不能出现在 return 之后；</li>
-<li>Hooks 只能在函数组件或者自定义 Hooks 中使用。</li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/27/">27</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1613,7 +1587,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">260</span>
+              <span class="site-state-item-count">261</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

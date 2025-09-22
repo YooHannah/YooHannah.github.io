@@ -259,6 +259,152 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/historySearchDesign.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/knowledge/historySearchDesign.html" itemprop="url">
+                  历史记录功能设计
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-03T15:17:37+08:00">
+                2024-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>根据用户反馈，查询条件多个时，想要重新看一下上次的查询结果，操作比较繁琐，希望可以有历史查询的功能，将最近查询的n次记录可以找到，方便回溯问题</p>
+<h1 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h1><h2 id="前端"><a href="#前端" class="headerlink" title="前端"></a>前端</h2><p>在用户点击查询按钮的时候，将当前页面链接调接口保存起来，查询时链接会携带查询条件</p>
+<h1 id="后端"><a href="#后端" class="headerlink" title="后端"></a>后端</h1><h2 id="存储"><a href="#存储" class="headerlink" title="存储"></a>存储</h2><p>&#x20;历史记录需要跟用户身份做绑定，当前天级uv可达75人，不适宜用tcc或者wcc平台进行数据存储</p>
+<p>&#x20;所以需要申请资源进行数据存储</p>
+<p><strong>容量</strong></p>
+<p>&#x20;一个连接大小按照500Byte算，如果只保存最近10条记录，那么一个用户需要5000b ==&gt; 5kb</p>
+<p>目前平台用户数以1000为底计算,一开始平台会需要 5kb * 1000 ==&gt;5000kb ==&gt; 5mb</p>
+<p>(目前纯个人用户有530，加上以部门为单位申请的权限，各部门人数不确定)</p>
+<p>假设半年后用户量翻倍那么存储空间需要增加一倍也就是10MB</p>
+<p><strong>负载</strong></p>
+<p>目前平台日pv 350,日uv 50, 大致计算一个用户一天会访问页面7次，四舍五入假设1天会进行10次查询</p>
+<p>1个用户1天会进行10次数据库读写</p>
+<p>那整个平台1天平均会进行500次读写，高峰假设1000次读写(75四舍五入)</p>
+<p>平均 500 * 500 /(3600*24) ~~ 0.003kb/s 高峰1000*500/(3600*24) ~~~0.006kb/s</p>
+<p>很低</p>
+<h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><p>本来想如果数据库有数组的话，表结构就是用户id + 记录数组；</p>
+<p>没有的话，我现在想了两种方案，</p>
+<p>一个就是用字符串存这个数组，用户id + 记录数组字符串形式，相当于更新时要先获得这个字符串，转成数组后，看有没有10条，没有的话直接push,有的话，把时间最早的那条删除，push进数组，再转成字符串更新数据库，这样缺点就是展示的时候也得字符串转数组一下；</p>
+<p>另一种就是用户id只和一条记录存在一起，不用一个字符串存整个10条记录，更新的时候我去拿数据的时候拿整个用户id所有的，超过10条的话就用数据库删除方法把时间早的删除了，再存进去最新的</p>
+<p>看起来都挺麻烦</p>
+<p>而且在实际接入数据库的过程中，还要手动执行命令行产生model相关文件</p>
+<p>通过调研公司存储系统的各种方式，觉得redis可以更好的解决存储问题，redis支持List类型存储，</p>
+<p>而且LPUSH, LPOP,EXPIRE方法可以很好的帮助实现数据存取更新缓存等问题,省了数据库建表等过程</p>
+<h2 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h2><p>redis可以很好的支持数据删除，在更新数据的时候重新设置过期时间即可保证删除不活跃用户的记录</p>
+<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><p>申请redis服务，用户工号做redis的key值，key值的value即用户的查询历史记录list,</p>
+<p>写接口: 查记录，更新记录</p>
+<p>前端在点击查询的时候调接口更新记录</p>
+<h1 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h1><p><a href="https://bytedance.feishu.cn/wiki/wikcnfEUcTwW8A3bUUQNtqUlsUd" target="_blank" rel="noopener">存储系统对比 （草稿）Storage System Comparision（Draft）</a> #</p>
+<p><a href="https://bytedance.feishu.cn/wiki/wikcnKKISdh4ftbAj6FG24gAwCb" target="_blank" rel="noopener">数据结构与命令一览 List of data structure and commands</a> #</p>
+<p><a href="https://redis.io/commands" target="_blank" rel="noopener">https://redis.io/commands</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/mobxlearn.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1300,136 +1446,6 @@ message.postDate = new Date()
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/question.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks/question.html" itemprop="url">
-                  一些其他小问题
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-29T16:20:02+08:00">
-                2021-11-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>1.<br>在 useEffect 中如果使用了某些变量，却没有在依赖项中指定，会发生什么呢？</p>
-<p>依赖那里没有传任何参数的话，会每次render都执行。<br>依赖项有传值但是，有部分依赖没有传，那么没有传的那部分，数据即使变化也不会执行副作用。</p>
-<p>对于这节课中显示的 Blog 文章的例子，我们在 useEffect 中使用了 setBlogContent 这样一个函数，本质上它也是一个局部变量，那么这个函数需要被作为依赖项吗？为什么？</p>
-<p>函数应该是不会变化的，所以不需要监听。</p>
-<p>2.<br>useState 其实也是能够在组件的多次渲染之间共享数据的，那么在 useRef 的计时器例子中，能否用 state 去保存 window.setInterval() 返回的 timer 呢？</p>
-<p>可以，只是没有 useRef 更优，因为在更新 state 值后会导致重新渲染，而 ref 值发生变化时，是不会触发组件的重新渲染的，这也是 useRef 区别于 useState 的地方。</p>
-<p>3.<br>componentWillUnmount 近似的实现：组件销毁和文章 id 变化时执行。那么在函数组件中如果要实现严格的 componentWillUnmount，也就是只在组件销毁时执行，应该如何实现？\</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">useEffect(() =&gt; &#123;</span><br><span class="line">  return () =&gt; &#123;</span><br><span class="line">    // 这里只会在组件销毁前（componentWillUnmount）执行一次</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, [])</span><br></pre></td></tr></table></figure>
-<p>4.<br>每次调用 useArticle 这个 Hook 的时候都会触发副作用去获取数据。<br>但是有时候，我们希望在有些组件自动获取，但有的组件中需要点击某个按钮才去获取数据，那么你会如何设计这个 Hook？（可能这道题有一点难度。）</p>
-<p>useArticle Hook 可以提供一个参数，用来标记本地调用是否默认触发副作用去获取数据；对于点击按钮才触发请求的功能，可以在 Hook 中将获取数据的方法 retrn 出去，供外部自由调用。</p>
-<ol start="5">
-<li>Hook 一般都是使用的 useState 保存了状态数据，也就意味着状态的范围限定在组件内部，组件销毁后，数据就没了。那么如果希望数据直接缓存到全局状态，应该如何做呢？</li>
-</ol>
-<p>可以借助 redux，配合 useContext 等 api ，将状态数据存储至全局中。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1129.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1523,6 +1539,136 @@ message.postDate = new Date()
 <p>按需加载可以说是减少首屏加载时间最为有效的手段，它可以让用户在打开应用时，无需加载所有代码就能开始使用，从而提升用户体验。</p>
 <h1 id="使用-service-worker-缓存前端资源"><a href="#使用-service-worker-缓存前端资源" class="headerlink" title="使用 service worker 缓存前端资源"></a>使用 service worker 缓存前端资源</h1><p>和浏览器自动的资源缓存机制相比，Service Worker 加上 Cache Storage 这个缓存机制，具有更高的准确性和可靠性。</p>
 <p>因为它可以确保两点：<br>缓存永远不过期。你只要下载过一次，就永远不需要再重新下载，除非主动删除。<br>永远不会访问过期的资源。换句话说，如果发布了一个新版本，那么你可以通过版本化的一些机制，来确保用户访问到的一定是最新的资源。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/question.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/react/hooks/question.html" itemprop="url">
+                  一些其他小问题
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-29T16:20:02+08:00">
+                2021-11-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>1.<br>在 useEffect 中如果使用了某些变量，却没有在依赖项中指定，会发生什么呢？</p>
+<p>依赖那里没有传任何参数的话，会每次render都执行。<br>依赖项有传值但是，有部分依赖没有传，那么没有传的那部分，数据即使变化也不会执行副作用。</p>
+<p>对于这节课中显示的 Blog 文章的例子，我们在 useEffect 中使用了 setBlogContent 这样一个函数，本质上它也是一个局部变量，那么这个函数需要被作为依赖项吗？为什么？</p>
+<p>函数应该是不会变化的，所以不需要监听。</p>
+<p>2.<br>useState 其实也是能够在组件的多次渲染之间共享数据的，那么在 useRef 的计时器例子中，能否用 state 去保存 window.setInterval() 返回的 timer 呢？</p>
+<p>可以，只是没有 useRef 更优，因为在更新 state 值后会导致重新渲染，而 ref 值发生变化时，是不会触发组件的重新渲染的，这也是 useRef 区别于 useState 的地方。</p>
+<p>3.<br>componentWillUnmount 近似的实现：组件销毁和文章 id 变化时执行。那么在函数组件中如果要实现严格的 componentWillUnmount，也就是只在组件销毁时执行，应该如何实现？\</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">useEffect(() =&gt; &#123;</span><br><span class="line">  return () =&gt; &#123;</span><br><span class="line">    // 这里只会在组件销毁前（componentWillUnmount）执行一次</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, [])</span><br></pre></td></tr></table></figure>
+<p>4.<br>每次调用 useArticle 这个 Hook 的时候都会触发副作用去获取数据。<br>但是有时候，我们希望在有些组件自动获取，但有的组件中需要点击某个按钮才去获取数据，那么你会如何设计这个 Hook？（可能这道题有一点难度。）</p>
+<p>useArticle Hook 可以提供一个参数，用来标记本地调用是否默认触发副作用去获取数据；对于点击按钮才触发请求的功能，可以在 Hook 中将获取数据的方法 retrn 出去，供外部自由调用。</p>
+<ol start="5">
+<li>Hook 一般都是使用的 useState 保存了状态数据，也就意味着状态的范围限定在组件内部，组件销毁后，数据就没了。那么如果希望数据直接缓存到全局状态，应该如何做呢？</li>
+</ol>
+<p>可以借助 redux，配合 useContext 等 api ，将状态数据存储至全局中。</p>
 
           
         
@@ -1690,131 +1836,11 @@ message.postDate = new Date()
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1127.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks/1127.html" itemprop="url">
-                  Hooks 在forms上的使用
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-27T16:20:02+08:00">
-                2021-11-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>应用思想就是在这个 Hook 去维护整个表单的状态，并提供根据名字去取值和设值的方法，从而方便表单在组件中的使用。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line">// 包含验证功能validators 的hooks, 处理表单状态管理</span><br><span class="line">const useForm = (initialValues = &#123;&#125;, validators) =&gt; &#123;</span><br><span class="line">  const [values, setValues] = useState(initialValues);</span><br><span class="line">  // 定义了 errors 状态</span><br><span class="line">  const [errors, setErrors] = useState(&#123;&#125;);</span><br><span class="line"></span><br><span class="line">  const setFieldValue = useCallback(</span><br><span class="line">    (name, value) =&gt; &#123;</span><br><span class="line">      setValues((values) =&gt; (&#123;</span><br><span class="line">        ...values,</span><br><span class="line">        [name]: value,</span><br><span class="line">      &#125;));</span><br><span class="line"></span><br><span class="line">      // 如果存在验证函数，则调用验证用户输入</span><br><span class="line">      if (validators[name]) &#123;</span><br><span class="line">        const errMsg = validators[name](value);</span><br><span class="line">        setErrors((errors) =&gt; (&#123;</span><br><span class="line">          ...errors,</span><br><span class="line">          // 如果返回错误信息，则将其设置到 errors 状态，否则清空错误状态</span><br><span class="line">          [name]: errMsg || null,</span><br><span class="line">        &#125;));</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    [validators],</span><br><span class="line">  );</span><br><span class="line">  // 将 errors 状态也返回给调用者</span><br><span class="line">  return &#123; values, errors, setFieldValue &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 应用</span><br><span class="line"></span><br><span class="line">import &#123; useCallback &#125; from &quot;react&quot;;</span><br><span class="line">import useForm from &apos;./useForm&apos;;</span><br><span class="line"></span><br><span class="line">export default () =&gt; &#123;</span><br><span class="line">  const validators = useMemo(() =&gt; &#123;</span><br><span class="line">    return &#123;</span><br><span class="line">      name: (value) =&gt; &#123;</span><br><span class="line">        // 要求 name 的长度不得小于 2</span><br><span class="line">        if (value.length &lt; 2) return &quot;Name length should be no less than 2.&quot;;</span><br><span class="line">        return null;</span><br><span class="line">      &#125;,</span><br><span class="line">      email: (value) =&gt; &#123;</span><br><span class="line">        // 简单的实现一个 email 验证逻辑：必须包含 @ 符号。</span><br><span class="line">        if (!value.includes(&quot;@&quot;)) return &quot;Invalid email address&quot;;</span><br><span class="line">        return null;</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;, []);</span><br><span class="line">  // 使用 useForm 得到表单的状态管理逻辑</span><br><span class="line">  const &#123; values, errors, setFieldValue &#125; = useForm(&#123;&#125;, validators);</span><br><span class="line">  // 处理表单的提交事件</span><br><span class="line">  const handleSubmit = useCallback(</span><br><span class="line">    (evt) =&gt; &#123;</span><br><span class="line">      // 使用 preventDefault() 防止页面被刷新</span><br><span class="line">      evt.preventDefault();</span><br><span class="line">      console.log(values);</span><br><span class="line">    &#125;,</span><br><span class="line">    [values],</span><br><span class="line">  );</span><br><span class="line">  return (</span><br><span class="line">    &lt;form onSubmit=&#123;handleSubmit&#125;&gt;</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;label&gt;Name: &lt;/label&gt;</span><br><span class="line">        &lt;input</span><br><span class="line">          value=&#123;values.name || null&#125;</span><br><span class="line">          onChange=&#123;(evt) =&gt; setFieldValue(&quot;name&quot;, evt.target.value)&#125;</span><br><span class="line">        /&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;label&gt;Email:&lt;/label&gt;</span><br><span class="line">        &lt;input</span><br><span class="line">          value=&#123;values.email || null&#125;</span><br><span class="line">          onChange=&#123;(evt) =&gt; setFieldValue(&quot;email&quot;, evt.target.value)&#125;</span><br><span class="line">        /&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">      &lt;button type=&quot;submit&quot;&gt;Submit&lt;/button&gt;</span><br><span class="line">    &lt;/form&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>把表单的状态管理单独提取出来，成为一个可重用的 Hook。<br>这样在表单的实现组件中，就只需要更多地去关心 UI 的渲染，而无需关心状态是如何存储和管理的，从而方便表单组件的开发。</p>
-<p>Form 最为核心的机制就是我们将表单元素的所有状态提取出来，<br>这样表单就可以分为状态逻辑和 UI 展现逻辑，从而实现数据层和表现层的分离。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/27/">27</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1853,7 +1879,7 @@ message.postDate = new Date()
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">260</span>
+              <span class="site-state-item-count">261</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

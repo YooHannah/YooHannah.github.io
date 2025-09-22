@@ -259,6 +259,218 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/llm/LangFuse.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/llm/LangFuse.html" itemprop="url">
+                  Langfuse
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-07-28T17:17:37+08:00">
+                2024-07-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="维护一个生产级的-LLM-应用，我们需要做什么"><a href="#维护一个生产级的-LLM-应用，我们需要做什么" class="headerlink" title="维护一个生产级的 LLM 应用，我们需要做什么"></a>维护一个生产级的 LLM 应用，我们需要做什么</h2><ol>
+<li>各种指标监控与统计：访问记录、响应时长、Token 用量、计费等等</li>
+<li>调试 Prompt</li>
+<li>测试/验证系统的相关评估指标</li>
+<li>数据集管理（便于回归测试）</li>
+<li>Prompt 版本管理（便于升级/回滚）</li>
+</ol>
+<h2 id="针对以上需求，目前有两个生产级-LLM-App-维护平台"><a href="#针对以上需求，目前有两个生产级-LLM-App-维护平台" class="headerlink" title="针对以上需求，目前有两个生产级 LLM App 维护平台"></a>针对以上需求，目前有两个生产级 LLM App 维护平台</h2><ol>
+<li>LangFuse: 开源 + SaaS（免费/付费），LangSmith 平替，可集成 LangChain 也可直接对接 OpenAI API；</li>
+<li>LangSmith: LangChain 的官方平台，SaaS 服务（免费/付费），非开源，企业版支持私有部署；</li>
+</ol>
+<p>根据自己的技术栈，选择：</p>
+<ol>
+<li>LangFuse：开源平台，支持 LangChain 和原生 OpenAI API</li>
+<li>LangSmith: LangChain 的原始管理平台</li>
+<li>Prompt Flow：开源平台，支持 Semantic Kernel</li>
+</ol>
+<h2 id="LangFuse"><a href="#LangFuse" class="headerlink" title="LangFuse"></a>LangFuse</h2><p>开源，支持 LangChain 集成或原生 OpenAI API 集成</p>
+<p>官方网站：<a href="https://langfuse.com/" target="_blank" rel="noopener">https://langfuse.com/</a></p>
+<p>项目地址：<a href="https://github.com/langfuse" target="_blank" rel="noopener">https://github.com/langfuse</a></p>
+<p>文档地址：<a href="https://langfuse.com/docs" target="_blank" rel="noopener">https://langfuse.com/docs</a></p>
+<p>API文档：<a href="https://api.reference.langfuse.com/" target="_blank" rel="noopener">https://api.reference.langfuse.com/</a></p>
+<ol>
+<li>Python SDK:<br><a href="https://python.reference.langfuse.com/" target="_blank" rel="noopener">https://python.reference.langfuse.com/</a></li>
+<li><p>JS SDK:<br><a href="https://js.reference.langfuse.com/" target="_blank" rel="noopener">https://js.reference.langfuse.com/</a></p>
+</li>
+<li><p>通过官方云服务使用：</p>
+<ol>
+<li>注册: cloud.langfuse.com</li>
+<li>创建 API Key</li>
+</ol>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">LANGFUSE_SECRET_KEY=&quot;sk-lf-...&quot;</span><br><span class="line">LANGFUSE_PUBLIC_KEY=&quot;pk-lf-...&quot;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>通过 Docker 本地部署</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># Clone repository</span><br><span class="line">git clone https://github.com/langfuse/langfuse.git</span><br><span class="line">cd langfuse</span><br><span class="line"></span><br><span class="line"># Run server and db</span><br><span class="line">docker compose up -d</span><br><span class="line"></span><br><span class="line"># 在自己部署的系统中生成上述两个 KEY</span><br><span class="line"># 并在环境变量中指定服务地址</span><br><span class="line"></span><br><span class="line">LANGFUSE_SECRET_KEY=&quot;sk-lf-...&quot;</span><br><span class="line">LANGFUSE_PUBLIC_KEY=&quot;pk-lf-..&quot;</span><br><span class="line">LANGFUSE_HOST=&quot;http://localhost:3000&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="几个基本概念"><a href="#几个基本概念" class="headerlink" title="几个基本概念"></a>几个基本概念</h2><ol>
+<li>Trace 一般表示用户与系统的一次交互，其中记录输入、输出，也包括自定义的 metadata 比如用户名、session id 等；</li>
+<li>一个 trace 内部可以包含多个子过程，这里叫 observarions；</li>
+<li>Observation 可以是多个类型：<ol>
+<li>Event 是最基本的单元，用于记录一个 trace 中的每个事件；</li>
+<li>Span 表一个 trace 中的一个”耗时”的过程；</li>
+<li>Generation 是用于记录与 AI 模型交互的 span，例如：调用 embedding 模型、调用 LLM。</li>
+</ol>
+</li>
+<li>Observation 可以嵌套使用。</li>
+</ol>
+<h2 id="通过装饰器记录（上报）"><a href="#通过装饰器记录（上报）" class="headerlink" title="通过装饰器记录（上报）"></a>通过装饰器记录（上报）</h2><h3 id="observe-装饰器的参数"><a href="#observe-装饰器的参数" class="headerlink" title="observe() 装饰器的参数"></a>observe() 装饰器的参数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">def observe(</span><br><span class="line">    self,</span><br><span class="line">    *,</span><br><span class="line">    name: Optional[str] = None, # Trace 或 Span 的名称，默认为函数名</span><br><span class="line">    as_type: Optional[Literal[&apos;generation&apos;]] = None, # 将记录定义为 Observation (LLM 调用）</span><br><span class="line">    capture_input: bool = True, # 记录输入</span><br><span class="line">    capture_output: bool = True, # 记录输出</span><br><span class="line">    transform_to_string: Optional[Callable[[Iterable], str]] = None # 将输出转为 string</span><br><span class="line">) -&gt; Callable[[~F], ~F]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">from langfuse.decorators import observe</span><br><span class="line">from langfuse.openai import openai # OpenAI integration</span><br><span class="line"></span><br><span class="line">@observe()</span><br><span class="line">def run():</span><br><span class="line">    return openai.chat.completions.create(</span><br><span class="line">        model=&quot;gpt-3.5-turbo&quot;,</span><br><span class="line">        messages=[</span><br><span class="line">          &#123;&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;对我说Hello, World!&quot;&#125;</span><br><span class="line">        ],</span><br><span class="line">    ).choices[0].message.content</span><br><span class="line"></span><br><span class="line">print(run())</span><br></pre></td></tr></table></figure>
+<h3 id="通过-langfuse-context-记录-User-ID、Metadata-等"><a href="#通过-langfuse-context-记录-User-ID、Metadata-等" class="headerlink" title="通过 langfuse_context 记录 User ID、Metadata 等"></a>通过 langfuse_context 记录 User ID、Metadata 等</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from langfuse.decorators import observe, langfuse_context</span><br><span class="line">from langfuse.openai import openai # OpenAI integration</span><br><span class="line"></span><br><span class="line">@observe()</span><br><span class="line">def run():</span><br><span class="line">    langfuse_context.update_current_trace(</span><br><span class="line">        name=&quot;HelloWorld&quot;,</span><br><span class="line">        user_id=&quot;wzr&quot;,</span><br><span class="line">        metadata=&#123;&quot;test&quot;:&quot;test value&quot;&#125;</span><br><span class="line">    )</span><br><span class="line">    return openai.chat.completions.create(</span><br><span class="line">        model=&quot;gpt-3.5-turbo&quot;,</span><br><span class="line">        messages=[</span><br><span class="line">          &#123;&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;对我说Hello, World!&quot;&#125;</span><br><span class="line">        ],</span><br><span class="line">    ).choices[0].message.content</span><br><span class="line"></span><br><span class="line">print(run())</span><br></pre></td></tr></table></figure>
+<h3 id="通过-LangChain-的回调集成"><a href="#通过-LangChain-的回调集成" class="headerlink" title="通过 LangChain 的回调集成"></a>通过 LangChain 的回调集成</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">from langfuse.decorators import langfuse_context, observe</span><br><span class="line"></span><br><span class="line">@observe()</span><br><span class="line">def run():</span><br><span class="line">    langfuse_context.update_current_trace(</span><br><span class="line">            name=&quot;LangChainDemo&quot;,</span><br><span class="line">            user_id=&quot;wzr&quot;,</span><br><span class="line">        )</span><br><span class="line">    </span><br><span class="line">    # 获取当前 LangChain 回调处理器</span><br><span class="line">    langfuse_handler = langfuse_context.get_current_langchain_handler()</span><br><span class="line">    </span><br><span class="line">    return chain.invoke(input=&quot;AGIClass&quot;, config=&#123;&quot;callbacks&quot;: [langfuse_handler]&#125;)</span><br><span class="line"></span><br><span class="line">print(run())</span><br></pre></td></tr></table></figure>
+<h3 id="用-Trace-记录一个多次调用-LLM-的过程"><a href="#用-Trace-记录一个多次调用-LLM-的过程" class="headerlink" title="用 Trace 记录一个多次调用 LLM 的过程"></a>用 Trace 记录一个多次调用 LLM 的过程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">import uuid</span><br><span class="line">from langfuse.decorators import langfuse_context, observe</span><br><span class="line"></span><br><span class="line"># 主流程</span><br><span class="line">@observe()</span><br><span class="line">def verify_question(</span><br><span class="line">    question: str,</span><br><span class="line">    outlines: str,</span><br><span class="line">    question_list: list,</span><br><span class="line">    user_id: str,</span><br><span class="line">) -&gt; bool:</span><br><span class="line">    langfuse_context.update_current_trace(</span><br><span class="line">            name=&quot;AGIClassAssistant&quot;,</span><br><span class="line">            user_id=user_id,</span><br><span class="line">        )</span><br><span class="line">    langfuse_handler = langfuse_context.get_current_langchain_handler()</span><br><span class="line">    # 判断是否需要回答</span><br><span class="line">    if need_answer_chain.invoke(</span><br><span class="line">        &#123;&quot;user_input&quot;: question, &quot;outlines&quot;: outlines&#125;,</span><br><span class="line">        config=&#123;&quot;callbacks&quot;: [langfuse_handler]&#125;</span><br><span class="line">    ) == &apos;Y&apos;:</span><br><span class="line">        # 判断是否为重复问题</span><br><span class="line">        if is_duplicated_chain.invoke(</span><br><span class="line">            &#123;&quot;user_input&quot;: question,</span><br><span class="line">                &quot;question_list&quot;: &quot;\n&quot;.join(question_list)&#125;,</span><br><span class="line">            config=&#123;&quot;callbacks&quot;: [langfuse_handler]&#125;</span><br><span class="line">        ) == &apos;N&apos;:</span><br><span class="line">            question_list.append(question)</span><br><span class="line">            return True</span><br><span class="line">    return False</span><br></pre></td></tr></table></figure>
+<h3 id="用-Session-记录一个用户的多轮对话"><a href="#用-Session-记录一个用户的多轮对话" class="headerlink" title="用 Session 记录一个用户的多轮对话"></a>用 Session 记录一个用户的多轮对话</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@observe()</span><br><span class="line">def chat_one_turn(user_input, user_id, turn_id):</span><br><span class="line">    langfuse_context.update_current_trace(</span><br><span class="line">        name=f&quot;ChatTurn&#123;turn_id&#125;&quot;,</span><br><span class="line">        user_id=user_id,</span><br><span class="line">        session_id=&quot;chat-&quot;+now.strftime(&quot;%d/%m/%Y %H:%M:%S&quot;)</span><br><span class="line">    )</span><br><span class="line">    langfuse_handler = langfuse_context.get_current_langchain_handler()</span><br><span class="line">    messages.append(HumanMessage(content=user_input))</span><br><span class="line">    response = llm.invoke(messages, config=&#123;&quot;callbacks&quot;: [langfuse_handler]&#125;)</span><br><span class="line">    messages.append(response)</span><br><span class="line">    return response.content</span><br></pre></td></tr></table></figure>
+<h3 id="数据集与测试"><a href="#数据集与测试" class="headerlink" title="数据集与测试"></a>数据集与测试</h3><p>在线标注(在平台上进行标注)</p>
+<p>上传已有数据集</p>
+<p>定义评估函数</p>
+<p>运行测试</p>
+<p>Prompt 调优与回归测试</p>
+<h3 id="Prompt-版本管理"><a href="#Prompt-版本管理" class="headerlink" title="Prompt 版本管理"></a>Prompt 版本管理</h3><p>目前只支持 Langfuse 自己的 SDK</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># 按名称加载</span><br><span class="line">prompt = langfuse.get_prompt(&quot;need_answer_v1&quot;)</span><br><span class="line"></span><br><span class="line"># 按名称和版本号加载</span><br><span class="line">prompt = langfuse.get_prompt(&quot;need_answer_v1&quot;, version=2)</span><br><span class="line"></span><br><span class="line"># 对模板中的变量赋值</span><br><span class="line">compiled_prompt = prompt.compile(input=&quot;老师好&quot;, outlines=&quot;test&quot;)</span><br><span class="line"></span><br><span class="line">print(compiled_prompt)</span><br><span class="line"></span><br><span class="line"># 获取 config</span><br><span class="line"></span><br><span class="line">prompt = langfuse.get_prompt(&quot;need_answer_v1&quot;, version=5)</span><br><span class="line"></span><br><span class="line">print(prompt.config)</span><br></pre></td></tr></table></figure>
+<h3 id="如何比较两个句子的相似性：一些经典-NLP-的评测方法（选）"><a href="#如何比较两个句子的相似性：一些经典-NLP-的评测方法（选）" class="headerlink" title="如何比较两个句子的相似性：一些经典 NLP 的评测方法（选）"></a>如何比较两个句子的相似性：一些经典 NLP 的评测方法（选）</h3><p><span style="color: #F33232;">用途：比较llm 返回值和预期值，从而进行打分计算</span></p>
+<ol>
+<li>编辑距离：也叫莱文斯坦距离(Levenshtein),是针对二个字符串的差异程度的量化量测，量测方式是看至少需要多少次的处理才能将一个字符串变成另一个字符串。<ol>
+<li>具体计算过程是一个动态规划算法：<a href="https://zhuanlan.zhihu.com/p/164599274" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/164599274</a></li>
+<li>衡量两个句子的相似度时，可以以词为单位计算</li>
+</ol>
+</li>
+<li>BLEU Score:<ol>
+<li>计算输出与参照句之间的 n-gram 准确率（n=1…4）</li>
+<li>对短输出做惩罚</li>
+<li>在整个测试集上平均下述值</li>
+<li>函数库：<a href="https://www.nltk.org/_modules/nltk/translate/bleu_score.html" target="_blank" rel="noopener">https://www.nltk.org/_modules/nltk/translate/bleu_score.html</a></li>
+</ol>
+</li>
+<li>Rouge Score:<ol>
+<li>Rouge-N：将模型生成的结果和标准结果按 N-gram 拆分后，只计算召回率；</li>
+<li>Rouge-L: 利用了最长公共子序列（Longest Common Sequence）</li>
+<li>函数库：<a href="https://pypi.org/project/rouge-score/" target="_blank" rel="noopener">https://pypi.org/project/rouge-score/</a></li>
+<li>对比 BLEU 与 ROUGE：<ol>
+<li>BLEU 能评估流畅度，但指标偏向于较短的翻译结果（brevity penalty 没有想象中那么强）</li>
+<li>ROUGE 不管流畅度，所以只适合深度学习的生成模型：结果都是流畅的前提下，ROUGE 反应参照句中多少内容被生成的句子包含（召回）</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>METEOR: 另一个从机器翻译领域借鉴的指标。与 BLEU 相比，METEOR 考虑了更多的因素，如同义词匹配、词干匹配、词序等，因此它通常被认为是一个更全面的评价指标。<ol>
+<li>对语言学和语义词表有依赖，所以对语言依赖强。</li>
+</ol>
+</li>
+</ol>
+<p><span style="background-color: #7ABF36;">此类方法常用于对文本生成模型的自动化评估。实际使用中，我们通常更关注相对变化而不是绝对值（调优过程中指标是不是在变好）</span>。</p>
+<h3 id="基于-LLM-的测试方法"><a href="#基于-LLM-的测试方法" class="headerlink" title="基于 LLM 的测试方法"></a>基于 LLM 的测试方法</h3><p>LangFuse 集成了一些原生的基于 LLM 的自动测试标准。</p>
+<p>具体参考：<a href="https://langfuse.com/docs/scores/model-based-evals" target="_blank" rel="noopener">https://langfuse.com/docs/scores/model-based-evals</a></p>
+<p><strong>划重点：</strong>此类方法，对于用于评估的 LLM 自身能力有要求。需根据具体情况选择使用。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/llm/LangChain.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1089,7 +1301,7 @@
       
         
           
-            <h3 id="LLM-固有的局限性-🔗"><a href="#LLM-固有的局限性-🔗" class="headerlink" title="LLM 固有的局限性 🔗"></a><span style="color: black; font-weight: bold; font-size: 20px;">LLM 固有的局限性</span> <a href="https://learn.agiclass.cn/user/u15014137897/lab/tree/lecture-notes/05-rag-embeddings#2.1%E3%80%81LLM-%E5%9B%BA%E6%9C%89%E7%9A%84%E5%B1%80%E9%99%90%E6%80%A7" target="_blank" rel="noopener">🔗</a></h3><ol>
+            <h3 id="LLM-固有的局限性-🔗"><a href="#LLM-固有的局限性-🔗" class="headerlink" title="LLM 固有的局限性 🔗"></a><span style="color: black; font-weight: bold; font-size: 20px;">LLM 固有的局限性</span> <a href="https://colab.research.google.com/github/YooHannah/algorithm/blob/master/llmCourese/05-rag-embeddings/index.ipynb#scrollTo=d5936819-e086-439c-822e-72ba4478c814" target="_blank" rel="noopener">🔗</a></h3><ol>
 <li><span style="font-size: 14px;">LLM 的知识不是实时的</span></li>
 <li><span style="font-size: 14px;">LLM 可能不知道你私有的领域/业务知识</span></li>
 </ol>
@@ -1109,7 +1321,7 @@
 <li><span style="font-size: 14px;">将文本转成一组 𝑁 维浮点数，即<strong>文本向量</strong>又叫 Embeddings</span></li>
 <li><span style="font-size: 14px;">向量之间可以计算距离，距离远近对应<strong>语义相似度</strong>大小</span></li>
 </ol>
-<h3 id="文本向量是怎么得到的-🔗"><a href="#文本向量是怎么得到的-🔗" class="headerlink" title="文本向量是怎么得到的 🔗"></a><span style="color: black; font-weight: bold; font-size: 20px;">文本向量是怎么得到的</span> <a href="https://learn.agiclass.cn/user/u15014137897/lab/tree/lecture-notes/05-rag-embeddings#4.1.2%E3%80%81%E6%96%87%E6%9C%AC%E5%90%91%E9%87%8F%E6%98%AF%E6%80%8E%E4%B9%88%E5%BE%97%E5%88%B0%E7%9A%84%EF%BC%88%E9%80%89%EF%BC%89" target="_blank" rel="noopener">🔗</a></h3><ol>
+<h3 id="文本向量是怎么得到的-🔗"><a href="#文本向量是怎么得到的-🔗" class="headerlink" title="文本向量是怎么得到的 🔗"></a><span style="color: black; font-weight: bold; font-size: 20px;">文本向量是怎么得到的</span> <a href="https://colab.research.google.com/github/YooHannah/algorithm/blob/master/llmCourese/05-rag-embeddings/index.ipynb#scrollTo=de84fb43-b02f-4089-9eda-d02f90359915" target="_blank" rel="noopener">🔗</a></h3><ol>
 <li><span style="font-size: 14px;">构建相关（正立）与不相关（负例）的句子对儿样本</span></li>
 <li><span style="font-size: 14px;">训练双塔式模型，让正例间的距离小，负例间的距离大</span></li>
 </ol>
@@ -1127,13 +1339,13 @@
 <li><span style="font-size: 14px;">不是每个 Embedding 模型都对余弦距离和欧氏距离同时有效</span></li>
 <li><span style="font-size: 14px;">哪种相似度计算有效要阅读模型的说明（通常都支持余弦距离计算）</span></li>
 </ol>
-<h3 id="优化方向"><a href="#优化方向" class="headerlink" title="优化方向"></a><span style="color: black; font-weight: bold; font-size: 20px;">优化方向</span></h3><h3 id="文本分割的粒度-🔗"><a href="#文本分割的粒度-🔗" class="headerlink" title="文本分割的粒度 🔗"></a><span style="color: black; font-weight: bold; font-size: 20px;">文本分割的粒度</span> <a href="https://learn.agiclass.cn/user/u15014137897/lab/workspaces/auto-Z/tree/lecture-notes/05-rag-embeddings/index.ipynb#5.1%E3%80%81%E6%96%87%E6%9C%AC%E5%88%86%E5%89%B2%E7%9A%84%E7%B2%92%E5%BA%A6" target="_blank" rel="noopener">🔗</a></h3><p><strong>缺陷</strong></p>
+<h3 id="优化方向"><a href="#优化方向" class="headerlink" title="优化方向"></a><span style="color: black; font-weight: bold; font-size: 20px;">优化方向</span></h3><h3 id="文本分割的粒度-🔗"><a href="#文本分割的粒度-🔗" class="headerlink" title="文本分割的粒度 🔗"></a><span style="color: black; font-weight: bold; font-size: 20px;">文本分割的粒度</span> <a href="https://colab.research.google.com/github/YooHannah/algorithm/blob/master/llmCourese/05-rag-embeddings/index.ipynb#scrollTo=99b07741-a60e-4927-b2f1-f037d6fce69c" target="_blank" rel="noopener">🔗</a></h3><p><strong>缺陷</strong></p>
 <ol>
 <li><span style="font-size: 14px;">粒度太大可能导致检索不精准，粒度太小可能导致信息不全面</span></li>
 <li><span style="font-size: 14px;">问题的答案可能跨越两个片段</span></li>
 </ol>
 <p><span style="color: black; font-weight: bold; background-color: white; font-size: 14px;">改进</span><span style="color: black; background-color: white; font-size: 14px;">: 按一定粒度，部分重叠式的切割文本，使上下文更完整</span></p>
-<h3 id="检索后排序-🔗"><a href="#检索后排序-🔗" class="headerlink" title="检索后排序 🔗"></a><span style="color: black; font-weight: bold; font-size: 20px;">检索后排序</span> <a href="https://learn.agiclass.cn/user/u15014137897/lab/workspaces/auto-Z/tree/lecture-notes/05-rag-embeddings/index.ipynb#5.2%E3%80%81%E6%A3%80%E7%B4%A2%E5%90%8E%E6%8E%92%E5%BA%8F%EF%BC%88%E9%80%89%EF%BC%89" target="_blank" rel="noopener">🔗</a></h3><p><strong>问题</strong>: 有时，最合适的答案不一定排在检索的最前面</p>
+<h3 id="检索后排序-🔗"><a href="#检索后排序-🔗" class="headerlink" title="检索后排序 🔗"></a><span style="color: black; font-weight: bold; font-size: 20px;">检索后排序</span> <a href="https://colab.research.google.com/github/YooHannah/algorithm/blob/master/llmCourese/05-rag-embeddings/index.ipynb#scrollTo=a5b4d28b-392f-4bec-8134-1f52659048be" target="_blank" rel="noopener">🔗</a></h3><p><strong>问题</strong>: 有时，最合适的答案不一定排在检索的最前面</p>
 <p><strong>方案</strong>:</p>
 <ol>
 <li><span style="font-size: 14px;">检索时过招回一部分文本</span></li>
@@ -1267,7 +1479,7 @@
 <li>凡是重复脑力劳动都可以考虑 AI 化</li>
 <li>凡是「输入和输出都是文本」的场景，都值得尝试用大模型提效</li>
 </ol>
-<h2 id="如何理解-AI-能编写程序"><a href="#如何理解-AI-能编写程序" class="headerlink" title="如何理解 AI 能编写程序"></a>如何理解 AI 能编写程序</h2><p><a href="https://learn.agiclass.cn/user/u15014137897/lab/tree/lecture-notes/04-ai-programming/index.ipynb#%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3-AI-%E8%83%BD%E7%BC%96%E5%86%99%E7%A8%8B%E5%BA%8F" target="_blank" rel="noopener">如何理解 AI 能编写程序</a></p>
+<h2 id="如何理解-AI-能编写程序"><a href="#如何理解-AI-能编写程序" class="headerlink" title="如何理解 AI 能编写程序"></a>如何理解 AI 能编写程序</h2><p><a href="https://github.com/YooHannah/algorithm/blob/master/llmCourese/04-ai-programming/index.ipynb" target="_blank" rel="noopener">如何理解 AI 能编写程序</a></p>
 <p><strong>编程能力是大模型各项能力的天花板</strong></p>
 <ul>
 <li>「编程」是目前大模型能力最强的垂直领域，甚至超越了对「自然语言」本身的处理能力。因为：<ul>
@@ -2246,157 +2458,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/historySearchDesign.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/knowledge/historySearchDesign.html" itemprop="url">
-                  历史记录功能设计
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-03T15:17:37+08:00">
-                2024-03-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>根据用户反馈，查询条件多个时，想要重新看一下上次的查询结果，操作比较繁琐，希望可以有历史查询的功能，将最近查询的n次记录可以找到，方便回溯问题</p>
-<h1 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h1><h2 id="前端"><a href="#前端" class="headerlink" title="前端"></a>前端</h2><p>在用户点击查询按钮的时候，将当前页面链接调接口保存起来，查询时链接会携带查询条件</p>
-<h1 id="后端"><a href="#后端" class="headerlink" title="后端"></a>后端</h1><h2 id="存储"><a href="#存储" class="headerlink" title="存储"></a>存储</h2><p>&#x20;历史记录需要跟用户身份做绑定，当前天级uv可达75人，不适宜用tcc或者wcc平台进行数据存储</p>
-<p>&#x20;所以需要申请资源进行数据存储</p>
-<p><strong>容量</strong></p>
-<p>&#x20;一个连接大小按照500Byte算，如果只保存最近10条记录，那么一个用户需要5000b ==&gt; 5kb</p>
-<p>目前平台用户数以1000为底计算,一开始平台会需要 5kb * 1000 ==&gt;5000kb ==&gt; 5mb</p>
-<p>(目前纯个人用户有530，加上以部门为单位申请的权限，各部门人数不确定)</p>
-<p>假设半年后用户量翻倍那么存储空间需要增加一倍也就是10MB</p>
-<p><strong>负载</strong></p>
-<p>目前平台日pv 350,日uv 50, 大致计算一个用户一天会访问页面7次，四舍五入假设1天会进行10次查询</p>
-<p>1个用户1天会进行10次数据库读写</p>
-<p>那整个平台1天平均会进行500次读写，高峰假设1000次读写(75四舍五入)</p>
-<p>平均 500 * 500 /(3600*24) ~~ 0.003kb/s 高峰1000*500/(3600*24) ~~~0.006kb/s</p>
-<p>很低</p>
-<h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><p>本来想如果数据库有数组的话，表结构就是用户id + 记录数组；</p>
-<p>没有的话，我现在想了两种方案，</p>
-<p>一个就是用字符串存这个数组，用户id + 记录数组字符串形式，相当于更新时要先获得这个字符串，转成数组后，看有没有10条，没有的话直接push,有的话，把时间最早的那条删除，push进数组，再转成字符串更新数据库，这样缺点就是展示的时候也得字符串转数组一下；</p>
-<p>另一种就是用户id只和一条记录存在一起，不用一个字符串存整个10条记录，更新的时候我去拿数据的时候拿整个用户id所有的，超过10条的话就用数据库删除方法把时间早的删除了，再存进去最新的</p>
-<p>看起来都挺麻烦</p>
-<p>而且在实际接入数据库的过程中，还要手动执行命令行产生model相关文件</p>
-<p>通过调研公司存储系统的各种方式，觉得redis可以更好的解决存储问题，redis支持List类型存储，</p>
-<p>而且LPUSH, LPOP,EXPIRE方法可以很好的帮助实现数据存取更新缓存等问题,省了数据库建表等过程</p>
-<h2 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h2><p>redis可以很好的支持数据删除，在更新数据的时候重新设置过期时间即可保证删除不活跃用户的记录</p>
-<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><p>申请redis服务，用户工号做redis的key值，key值的value即用户的查询历史记录list,</p>
-<p>写接口: 查记录，更新记录</p>
-<p>前端在点击查询的时候调接口更新记录</p>
-<h1 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h1><p><a href="https://bytedance.feishu.cn/wiki/wikcnfEUcTwW8A3bUUQNtqUlsUd" target="_blank" rel="noopener">存储系统对比 （草稿）Storage System Comparision（Draft）</a> #</p>
-<p><a href="https://bytedance.feishu.cn/wiki/wikcnKKISdh4ftbAj6FG24gAwCb" target="_blank" rel="noopener">数据结构与命令一览 List of data structure and commands</a> #</p>
-<p><a href="https://redis.io/commands" target="_blank" rel="noopener">https://redis.io/commands</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/27/">27</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2435,7 +2501,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">260</span>
+              <span class="site-state-item-count">261</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
