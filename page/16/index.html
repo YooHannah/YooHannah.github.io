@@ -259,6 +259,132 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/performance/cache/serviceworker.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/performance/cache/serviceworker.html" itemprop="url">
+                  service worker
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-03T22:52:15+08:00">
+                2018-01-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>前端与后台代理服务器</p>
+<h2 id="主要方法"><a href="#主要方法" class="headerlink" title="主要方法"></a>主要方法</h2><p>fetch 事件/方法:service worker向后台发起HTTP请求的方法<br>fetch(url).then()</p>
+<p>message事件/方法:页面和service worker之间进行通信的方法;同一页面两个窗口之间通信（web worker线程)<br>postMessage发送消息;message接收消息</p>
+<p>caches API:处理缓存</p>
+<h2 id="生命周期"><a href="#生命周期" class="headerlink" title="生命周期"></a>生命周期</h2><p>注册 register<br>安装 install<br>激活 activation<br>更新 Update<br>service-worker.js文件更新被浏览器发现后，会进入waitting等待状态，当前页面依旧使用旧文件进行work，<br>直到当前页面关闭，旧版本文件的service worker才会被kill掉，新版本文件的service worker开始接管页面的缓存资源<br>新的service worker一开始接管就会触发activate事件，从而可以做一些上次老版本缓存的工作</p>
+<p>缓存的文件发生更新，可以在fetch 的时候，一边检查更新从而更新缓存，一边检查缓存然后fetch新资源给浏览器，<br>通过 promise 的 resolve 特性来决定谁快</p>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><p>（https环境）<br>后台消息传递<br>网络代理，转发请求，伪造响应<br>离线缓存<br>消息推送</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line">//在项目入口/配置js文件 进行注册</span><br><span class="line">if (navigator.serviceWorker) &#123;</span><br><span class="line">    navigator.serviceWorker.register(&apos;service-worker.js&apos;).then(function(registration) &#123;</span><br><span class="line">        console.log(&apos;service worker 注册成功&apos;);</span><br><span class="line">    &#125;).catch(function (err) &#123;</span><br><span class="line">        console.log(&apos;servcie worker 注册失败&apos;)</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//service-worker.js 放在项目根目录下,service worker的执行代码</span><br><span class="line">var cacheFiles = [ //指定缓存的文件</span><br><span class="line">    &apos;about.js&apos;,</span><br><span class="line">    &apos;blog.js&apos;</span><br><span class="line">];</span><br><span class="line">self.addEventListener(&apos;install&apos;, function (evt) &#123; //在安装的时候就将指定文件存入cache storage中</span><br><span class="line">    evt.waitUntil(</span><br><span class="line">        caches.open(&apos;my-test-cahce-v1&apos;).then(function (cache) &#123; //使用caches api进行缓存操作</span><br><span class="line">            return cache.addAll(cacheFiles);</span><br><span class="line">        &#125;)</span><br><span class="line">    );</span><br><span class="line">&#125;);</span><br><span class="line">//页面fetch 资源时进行过滤</span><br><span class="line">self.addEventListener(&apos;fetch&apos;, function(event) &#123;</span><br><span class="line">  event.respondWith(</span><br><span class="line">    caches.match(event.request) //检查缓存是否有资源</span><br><span class="line">      .then(function(response) &#123;</span><br><span class="line">        if (response) &#123; //如果有直接返回</span><br><span class="line">          return response;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // 因为 event.request 流已经在 caches.match 中使用过一次，</span><br><span class="line">        // 那么该流是不能再次使用的。我们只能得到它的副本，拿去使用。</span><br><span class="line">        var fetchRequest = event.request.clone();</span><br><span class="line"></span><br><span class="line">        // fetch 的通过信方式，得到 Request 对象，然后发送请求</span><br><span class="line">        return fetch(fetchRequest).then(</span><br><span class="line">          function(response) &#123;</span><br><span class="line">            // 检查是否成功</span><br><span class="line">            if(!response || response.status !== 200 || response.type !== &apos;basic&apos;) &#123;</span><br><span class="line">              return response;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            // 如果成功，该 response 一是要拿给浏览器渲染，而是要进行缓存。</span><br><span class="line">            // 由于 caches.put 使用的是文件的响应流，一旦使用，</span><br><span class="line">            // 那么返回的 response 就无法访问造成失败，所以，这里需要复制一份。</span><br><span class="line">            var responseToCache = response.clone();</span><br><span class="line"></span><br><span class="line">            caches.open(CACHE_NAME)</span><br><span class="line">              .then(function(cache) &#123;</span><br><span class="line">                cache.put(event.request, responseToCache);</span><br><span class="line">              &#125;);</span><br><span class="line"></span><br><span class="line">            return response;</span><br><span class="line">          &#125;</span><br><span class="line">        );</span><br><span class="line">      &#125;)</span><br><span class="line">    );</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">//service-worker.js文件更新删除之前版本文件缓存的资源</span><br><span class="line"></span><br><span class="line">self.addEventListener(&apos;activate&apos;, function(event) &#123;</span><br><span class="line"></span><br><span class="line">  var cacheWhitelist = [&apos;v1&apos;];</span><br><span class="line"></span><br><span class="line">  event.waitUntil(</span><br><span class="line">  // 遍历 caches 里所有缓存的 keys 值</span><br><span class="line">    caches.keys().then(function(cacheNames) &#123;</span><br><span class="line">      return Promise.all(</span><br><span class="line">        cacheNames.map(function(cacheName) &#123;</span><br><span class="line">          if (cacheWhitelist.includes(cacheName)) &#123;</span><br><span class="line">          // 删除 v1 版本缓存的文件</span><br><span class="line">            return caches.delete(cacheName);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">      );</span><br><span class="line">    &#125;)</span><br><span class="line">  );</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><a href="https://segmentfault.com/a/1190000008050742" target="_blank" rel="noopener">相关文档</a><br><a href="https://www.villainhr.com/page/2016/09/25/%E5%89%8D%E7%AB%AF%20fetch%20%E9%80%9A%E4%BF%A1" target="_blank" rel="noopener">fetch 通信</a><br><a href="https://www.villainhr.com/page/2016/08/22/Web%20Worker" target="_blank" rel="noopener">web worker 语法</a><br><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Service_Worker_API" target="_blank" rel="noopener">Service Worker API</a></p>
+<p>遗留问题：fetch通信headers添加token字段,不生效</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/test/fiddler.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1459,123 +1585,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/EventEmitter.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/EventEmitter.html" itemprop="url">
-                  实现一个 EventEmitter
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-21T21:07:02+08:00">
-                2017-10-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="实现一个-EventEmitter"><a href="#实现一个-EventEmitter" class="headerlink" title="实现一个 EventEmitter"></a>实现一个 EventEmitter</h1><p>EventEmitter 模块，它是一个类，它的实例具有以下几个方法：on、emit、off：<br>on(eventName, func)：监听 eventName 事件，事件触发的时候调用 func 函数。<br>emit(eventName, arg1, arg2, arg3…)：触发 eventName 事件，并且把参数 arg1, arg2, arg3… 传给事件处理函数。<br>off(eventName, func)：停止监听某个事件。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">class EventEmitter &#123;</span><br><span class="line">  /* TODO */</span><br><span class="line">  constructor() &#123;</span><br><span class="line">    this.listeners = [];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  on(eventName, func)&#123;</span><br><span class="line">    for(let i=0;i&lt;this.listeners.length;i++)&#123;</span><br><span class="line">      if(this.listeners[i].name === eventName)&#123;</span><br><span class="line">          this.listeners[i].funcs.push(func);</span><br><span class="line">          return</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    this.listeners.push(&#123;</span><br><span class="line">      name:eventName,</span><br><span class="line">      funcs:[]</span><br><span class="line">    &#125;)</span><br><span class="line">    this.listeners[this.listeners.length-1].funcs.push(func)</span><br><span class="line">  &#125;</span><br><span class="line">  emit(eventName, ...args)&#123;</span><br><span class="line">    for(let j=0;j&lt;this.listeners.length;j++)&#123;</span><br><span class="line">        if(this.listeners[j].name === eventName)&#123;</span><br><span class="line">            for(let k =0;k&lt;this.listeners[j].funcs.length;k++)&#123;</span><br><span class="line">              this.listeners[j].funcs[k](args)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  off(eventName, func)&#123;</span><br><span class="line">      for(let j=0;j&lt;this.listeners.length;j++)&#123;</span><br><span class="line">        if(this.listeners[j].name === eventName)&#123;</span><br><span class="line">          if(func == undefined)&#123; //整个事件不再监听</span><br><span class="line">            this.listeners.splice(j,1);</span><br><span class="line">           &#125;</span><br><span class="line">          for(let k =0;k&lt;this.listeners[j].funcs.length;k++)&#123;</span><br><span class="line">                if(func === this.listeners[j].funcs[k])&#123;</span><br><span class="line">                  this.listeners[j].funcs.splice(k,1);</span><br><span class="line">                  return</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const emitter = new EventEmitter()</span><br><span class="line">const sayHi = (name) =&gt; console.log(`Hello $&#123;name&#125;`)</span><br><span class="line">const sayHi2 = (name) =&gt; console.log(`Good night, $&#123;name&#125;`)</span><br><span class="line"></span><br><span class="line">emitter.on(&apos;hi&apos;, sayHi)</span><br><span class="line">emitter.on(&apos;hi&apos;, sayHi2)</span><br><span class="line">emitter.on(&apos;hi2&apos;, sayHi)</span><br><span class="line">emitter.on(&apos;hi2&apos;, sayHi2)</span><br><span class="line">emitter.emit(&apos;hi&apos;, &apos;ScriptOJ&apos;)</span><br><span class="line">// =&gt; Hello ScriptOJ</span><br><span class="line">// =&gt; Good night, ScriptOJ</span><br><span class="line"></span><br><span class="line">emitter.off(&apos;hi&apos;, sayHi)</span><br><span class="line">emitter.emit(&apos;hi&apos;, &apos;ScriptOJ&apos;)</span><br><span class="line">emitter.emit(&apos;hi2&apos;, &apos;ScriptOJ&apos;)</span><br><span class="line"></span><br><span class="line">const emitter2 = new EventEmitter()</span><br><span class="line">emitter2.on(&apos;hi&apos;, (name, age) =&gt; &#123;</span><br><span class="line">  console.log(`I am $&#123;name&#125;, and I am $&#123;age&#125; years old`)</span><br><span class="line">&#125;)</span><br><span class="line">emitter2.emit(&apos;hi&apos;, &apos;Jerry&apos;, 12)</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1619,7 +1628,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">261</span>
+              <span class="site-state-item-count">262</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

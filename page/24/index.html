@@ -259,6 +259,127 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/loopqueue.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/algorithm/loopqueue.html" itemprop="url">
+                  循环队列
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-02T12:47:37+08:00">
+                2017-02-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="假溢出"><a href="#假溢出" class="headerlink" title="假溢出"></a>假溢出</h1><p><img src="/image/queue9.png" alt="queue9"><br>循环队列的容量是固定的，并且它的对头和队尾指针都可以随着元素出入队列而发生改变，<br>这样循环队列逻辑上就好像是一个环形存储空间,但在实际内存中，是不可能有真正的环形存储区的，<br>我们只是用顺序表模拟逻辑上的循环<br>因此,为防止发生假溢出,当我们采用循环队列时,front和rear不断加1,即使超出了地址范围，<br>也会自动从头开始,判断溢出，可采用取模处理<br>(rear+1)%QueueSize<br>(front+1)%QueueSize<br>取模即取余数，取得的值永远不会大于除数</p>
+<h1 id="定义一个循环队列"><a href="#定义一个循环队列" class="headerlink" title="定义一个循环队列"></a>定义一个循环队列</h1><p><img src="/image/queue12.png" alt="queue12"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># define MAXSIZE 100</span><br><span class="line">typedef struct&#123;</span><br><span class="line">	ElemType *base;	##存放内存分配基地址，也可以用数组存放</span><br><span class="line">	int front;</span><br><span class="line">	int rear;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="初始化一个循环队列"><a href="#初始化一个循环队列" class="headerlink" title="初始化一个循环队列"></a>初始化一个循环队列</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">initQueue(cyclQueue *q)&#123;</span><br><span class="line">	q-&gt;base = (ElemType *)malloc(MAXSIZE sizeof(ElemType));</span><br><span class="line">	if(!q-&gt;base)&#123;</span><br><span class="line">	exit(0);</span><br><span class="line">	&#125;</span><br><span class="line">	q-&gt;front = q-&gt;rear = 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="入队列操作"><a href="#入队列操作" class="headerlink" title="入队列操作"></a>入队列操作</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">insertQueue(cyclQueue *q,ElemType e)&#123;</span><br><span class="line">	if((q-&gt;rear+1)%MAXSIZE == q-&gt;front)&#123;</span><br><span class="line">	return;	##队列已满</span><br><span class="line">	&#125;</span><br><span class="line">	q-&gt;base[q-&gt;rear] = e;</span><br><span class="line">	q-&gt;rear = (q-&gt;rear+1)%MAXSIZE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="出队列操作"><a href="#出队列操作" class="headerlink" title="出队列操作"></a>出队列操作</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DeleteQueue(cyclQueue *q,ElemType e)&#123;</span><br><span class="line">	if(q-&gt;rear == q-&gt;front)&#123;</span><br><span class="line">	return;	##队列为空</span><br><span class="line">	&#125;</span><br><span class="line">	*e = q-&gt;base[q-&gt;front];</span><br><span class="line">	q-&gt;front = (q-&gt;front+1)%MAXSIZE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/Recursion.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1410,125 +1531,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/Staticlinkedlist.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/algorithm/Staticlinkedlist.html" itemprop="url">
-                  静态链表
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-02T10:06:37+08:00">
-                2017-02-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>用数组描述的链表叫做静态链表<br>这种描述方法叫做游标实现法<br><img src="/image/staticlinklist1.png" alt="staticlinklist1"><br>Staticlinklist是一个容量为maxsize大的数组，数组每一项是一个结构struct，<br>这个结构包含两项，数据data和游标cur<br>整个数组的第一项(下标为0)和最后一项（下标为maxsize-1）的数据部分不存放数据<br>把未使用的数组元素（数据部分为空称为备用链表<br>约定：<br>——第一项的游标指向数组中除收尾两项外的项中，第一个数据部分为空的项，即首项游标为该项的下标/备用链表第一个结点的下标;<br>——尾项游标指向第一个有数据的元素 相当于头结点作用<br>——其他元素游标等于其指向的元素位于数组中的下标<br>——数据元素的最后一项的游标等于首项下标0,即指向备用链表开始结点</p>
-<p>初始化静态链表相当于初始化数组<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Status InitList(StatixLinkList space)</span><br><span class="line">&#123;</span><br><span class="line">	int i;</span><br><span class="line">	for(i =0;i&lt;MAXSIZE-1;i++)&#123;</span><br><span class="line">		space[MAXSIZE-1].cur = 0;</span><br><span class="line">		return OK;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><a href="https://github.com/YooHannah/algorithm/blob/master/C/%E9%9D%99%E6%80%81%E9%93%BE%E8%A1%A8.c" target="_blank" rel="noopener">链表插入，删除，求长度 代码链接</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1572,7 +1574,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">261</span>
+              <span class="site-state-item-count">262</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

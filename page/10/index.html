@@ -259,6 +259,126 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/calcApprence.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/knowledge/calcApprence.html" itemprop="url">
+                  两个css问题解决
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-28T22:58:58+08:00">
+                2019-11-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="子元素-position-fixed-，但宽度要和父元素一致"><a href="#子元素-position-fixed-，但宽度要和父元素一致" class="headerlink" title="子元素 position:fixed ，但宽度要和父元素一致"></a>子元素 position:fixed ，但宽度要和父元素一致</h1><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>父元素宽度随屏幕大小变化，而且margin-left有一个固定值，假设为320px<br>子元素position:fixed<br>如果直接设置子元素宽度为100%<br>则会导致子元素有320px的宽度在可视区域外<br><img src="/image/calc.png" alt="calc.png"></p>
+<h2 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h2><p>css3的函数calc() 可以用来计算属性值<br>特点：<br>1.浏览器解析calc()结果还是calc(),不会计算参数表达式的值，<br>  意味着浏览器中的值可以更加灵活，能够响应视口的改变，即实际渲染结果始终调用calc计算结果<br>2.可以使用加减乘除，可以套嵌使用，即calc参数表达式中可以包含calc函数调用<br>3.可以进行不同单位间的计算,可以混合绝对单位(如百分比与视口单元)与相对单元(比如像素)<br>应用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">1.居中</span><br><span class="line">//居中设置原来</span><br><span class="line">.center &#123;</span><br><span class="line">  position: absolute</span><br><span class="line">  top: 50%;</span><br><span class="line">  left: 50%;</span><br><span class="line">  marging-top: -150px;</span><br><span class="line">  margin-left: -150px;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//使用calc</span><br><span class="line">.center &#123;</span><br><span class="line">  position: absolute</span><br><span class="line">  top: calc(50% - 150px);</span><br><span class="line">  left: calc(50% - 150px);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">2.设置字体，在页面上的任何文本，将会根据视口自动缩放，</span><br><span class="line">相同比例的视口总会显示相同的文本数量，不管视口的真实尺寸是多少。</span><br><span class="line">html &#123;  </span><br><span class="line">    font-size: calc(100vw / 30);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">width:calc(100%-320px)</span><br></pre></td></tr></table></figure>
+<h1 id="input样式兼容"><a href="#input样式兼容" class="headerlink" title="input样式兼容"></a>input样式兼容</h1><p>在safari浏览器中给input设置样式不能直接被使用，会依旧使用浏览器默认样式，<br>此时需要给样式添加<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-webkit-appearance: none;/*去除系统默认appearance的样式*/</span><br><span class="line">line-height: normal;</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/proxy.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1580,126 +1700,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/reactNativeCreat.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/knowledge/reactNativeCreat.html" itemprop="url">
-                  react Native 环境配置
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-04T22:50:37+08:00">
-                2019-03-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>其实按照官网一步一步来就好了，也不用翻墙，基本上，就是耗时间<br>我配置的是window android环境<br><a href="https://reactnative.cn/docs/getting-started.html" target="_blank" rel="noopener">中文文档</a><br>1.安装node<br>可以直接使用nvm安装，但版本必须是8.<em>或者10.</em><br>带来的问题是，nvm切换版本后，npm可能找不到，可以直接用全局安装的yarn代替<br><a href="http://yuanhehe.cn/2017/06/11/npm-%E4%B8%8E-Yarn-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%AF%B9%E6%AF%94/" target="_blank" rel="noopener">npm 与 Yarn 常用命令对比</a><br>或者直接将npm文件夹从能用的版本移到不能用的版本</p>
-<p>2.python2<br>官网说不支持Python3.X,因为很早之前安装的python没管，今天一看是3.*，能跑起来</p>
-<p>3.JDK<br><a href="https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html" target="_blank" rel="noopener">下载地址</a><br>我下载的这个<br><img src="/image/native1.png" alt="native1"><br>安装过程注意，jdk和jre使用不同文件夹<br><a href="https://jingyan.baidu.com/article/6dad5075d1dc40a123e36ea3.html" target="_blank" rel="noopener">安装与环境配置</a><br>4.Android Studio<br>按文档步骤安装好后，需要先创建项目再创建虚拟机<br>构建虚拟机过程文档应该需要翻墙，但其实可以直接百度<br><a href="https://jingyan.baidu.com/article/3aed632edf252e701080911f.html" target="_blank" rel="noopener">构建虚拟机</a><br>相当于在PC上调试<br>5.链接真机测试<br>数据线链接手机和电脑，在git里跑’react-native run-android’<br>遇到的问题<br>1.第一次跑时，出现：unable to load script from assets<br> 解决如下：<br> 第一步：在Android/app/src/main目录下创建一个空的assets文件夹。<br> 第二步：执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/</span><br></pre></td></tr></table></figure></p>
-<p>再重新跑react-native run-android<br>2.摇晃手机reload 后：could not connect to development sever<br>华为手机andorid版本较低,4.*<br>点击dev setting，选择Debug server host&amp;port for device,填入PC电脑的IP地址和端口号<br>3.引入使用native-nivigation和react-native-gesture-handler后运行报错<br>settings file ‘E:\git\mobileApp\android\settings.gradle’: 3: unexpected char: ‘\’ @ line 3, column 1<br>解决： android下setiing.gradle,’\’换成‘/’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">project(&apos;:react-native-gesture-handler&apos;).projectDir = new File(rootProject.projectDir, &apos;../node_modules/react-native-gesture-handler/android&apos;)</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1743,7 +1743,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">261</span>
+              <span class="site-state-item-count">262</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

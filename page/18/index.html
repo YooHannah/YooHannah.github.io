@@ -259,6 +259,145 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/var.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/js/var.html" itemprop="url">
+                  变量提升
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-09T22:02:37+08:00">
+                2017-08-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>一个变量的生成需要经历 创建、初始化、赋值三个阶段<br>let 的「创建」过程被提升了，但是初始化没有提升。<br>var 的「创建」和「初始化」都被提升了。<br>function 的「创建」「初始化」和「赋值」都被提升了。<br>const，其实 const 和 let 只有一个区别，那就是 const 只有「创建」和「初始化」，没有「赋值」过程。<br><a href="https://zhuanlan.zhihu.com/p/28140450" target="_blank" rel="noopener">let</a><br>1、<br>假设有如下代码：</p>
+<p>function fn(){<br>  var x = 1<br>  var y = 2<br>}<br>fn()</p>
+<p>在执行 fn 时，会有以下过程（不完全）：</p>
+<p>进入 fn，为 fn 创建一个环境。<br>找到 fn 中所有用 var 声明的变量，在这个环境中「创建」这些变量（即 x 和 y）。<br>将这些变量「初始化」为 undefined。<br>开始执行代码<br>x = 1 将 x 变量「赋值」为 1<br>y = 2 将 y 变量「赋值」为 2<br>也就是说 var 声明会在代码执行之前就将「创建变量，并将其初始化为 undefined」。</p>
+<p>这就解释了为什么在 var x = 1 之前 console.log(x) 会得到 undefined。</p>
+<p>2、<br>fn2()</p>
+<p>function fn2(){<br>  console.log(2)<br>}<br>JS 引擎会有一下过程：</p>
+<p>找到所有用 function 声明的变量，在环境中「创建」这些变量。<br>将这些变量「初始化」并「赋值」为 function(){ console.log(2) }。<br>开始执行代码 fn2()<br>也就是说 function 声明会在代码执行之前就「创建、初始化并赋值」<br>3、<br>{<br>  let x = 1<br>  x = 2<br>}<br>只看 {} 里面的过程：</p>
+<p>找到所有用 let 声明的变量，在环境中「创建」这些变量<br>开始执行代码（注意现在还没有初始化）<br>执行 x = 1，将 x 「初始化」为 1（这并不是一次赋值，如果代码是 let x，就将 x 初始化为 undefined）<br>执行 x = 2，对 x 进行「赋值」<br>这就解释了为什么在 let x 之前使用 x 会报错：</p>
+<p>let x = ‘global’<br>{<br>  console.log(x) // Uncaught ReferenceError: x is not defined<br>  let x = 1<br>}<br>原因有两个</p>
+<p>console.log(x) 中的 x 指的是下面的 x，而不是全局的 x<br>执行 log 时 x 还没「初始化」，所以不能使用（也就是所谓的暂时死区）</p>
+<p>补充<br>1.<br>在进入一个执行环境后，先把 var 和 function 声明的变量前置， 再去顺序执行代码<br>是 var 声明在前还是 function 声明的在前？按先来后到，同名覆盖。当然如果一个变量已经有值，再 var 是无效的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">var fn</span><br><span class="line">function fn()&#123;&#125;</span><br><span class="line"></span><br><span class="line">console.log(fn)  //function</span><br><span class="line"></span><br><span class="line">function fn()&#123;&#125;</span><br><span class="line">var fn   //已经声明过 fn， 再 var 无效，并不会重置为 undefined</span><br><span class="line"></span><br><span class="line">console.log(fn)  //function</span><br></pre></td></tr></table></figure></p>
+<p>2.<br>函数在执行的过程中，先从自己内部找变量<br>如果找不到，再从创建当前函数所在的作用域去找, 以此往上<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">var a = 1</span><br><span class="line">function fn1()&#123;</span><br><span class="line">  function fn2()&#123;</span><br><span class="line">    console.log(a)</span><br><span class="line">  &#125;</span><br><span class="line">  var a = 2</span><br><span class="line">  return fn2</span><br><span class="line">&#125;</span><br><span class="line">var fn = fn1()</span><br><span class="line">fn() //输出多少 2</span><br><span class="line">////////////////////////////////</span><br><span class="line">var a = 1</span><br><span class="line">function fn1()&#123;</span><br><span class="line">  var a = 2</span><br><span class="line">  return fn2</span><br><span class="line">&#125;</span><br><span class="line">function fn2()&#123;</span><br><span class="line">  console.log(a)</span><br><span class="line">&#125;</span><br><span class="line">var fn = fn1()</span><br><span class="line">fn() //输出多少 1</span><br></pre></td></tr></table></figure></p>
+<h1 id="相关"><a href="#相关" class="headerlink" title="相关"></a>相关</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var a = &#123;n:1&#125;;</span><br><span class="line">var b = a;</span><br><span class="line">a.x = a = &#123;n:2&#125;;</span><br><span class="line">console.log(a)//&#123;n:2&#125;</span><br><span class="line">console.log(b)//&#123;n:1,x:&#123;n:2&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>a.x = a = {n:2};执行顺序</p>
+<ol>
+<li>a.x,这时a,b指向{n:1},增加x,属性，但值为undefined，即这时a,b为{n:1,x:undefined}</li>
+</ol>
+<p>2.a={n:2},a这时指向{n:2},b依然为{n:1,x:undefined}</p>
+<p>3.a.x = a;这时的x是{n:1,x:undefined}中的x,指向a,此时a指向{n:2}</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a==1 &amp;&amp; a==2 &amp;&amp; a==3</span><br></pre></td></tr></table></figure>
+<p>可能为true<br>关键在于==在比较两端之前会调用对象的valueof,toString等方法，只要a对象中的toString方法有递增值返回就可以实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const a = &#123;</span><br><span class="line">  i: 1,</span><br><span class="line">  toString: function () &#123;</span><br><span class="line">    return a.i++;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>立即执行函数的目的<br>造出一个函数作用域，防止污染全局变量<br>ES 6 新语法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">let name</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/aboutthis.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1416,133 +1555,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/JQuery_data.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/js/JQuery_data.html" itemprop="url">
-                  探究jQuery.data
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-30T13:43:02+08:00">
-                2017-07-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>jQuery.data用于处理标签数据绑定</p>
-<h1 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h1><p>1.赋值</p>
-<p>a.使用js<br>$(‘’).data(key,value); 一次赋值一个，value可以是任意js数据类型,包括Array 或者 Object<br>$(‘’).data(obj);一次赋值多个或者更新多个或者新增多个</p>
-<p>b.使用HTML标签属性<br>利用H5 标签的’data-‘属性添加键值对<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div data-role=&quot;page&quot; data-last-value=&quot;43&quot; data-hidden=&quot;true&quot; data-options=&apos;&#123;&quot;name&quot;:&quot;John&quot;&#125;&apos;&gt;&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
-<p>2.取值<br>$(‘’).data(key);获取key对应的数据值<br>$(‘’).data(); 一次性获取绑定在$(‘’)上的所有数据对象</p>
-<p>3.删除<br>$(‘’).removeData(key);</p>
-<h1 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h1><p>a. &lt;object&gt;（除非是Flash插件），&lt;applet&gt; 或 &lt;embed&gt;&gt; 三个标签不能使用.data方法</p>
-<p>b. 通过”data-“属性建立的标签数据，获取时注意<br>data-last-value=”43” ==&gt; $(‘div’).data(‘lastValue’)<br>data-options=’{“name”:”John”}’ ==&gt; $(“div”).data(“options”).name -&gt;John<br>取到的值会自动转化为js的数据类型</p>
-<p>c. $(‘’).data()被赋值到js变量A后，之后对$(‘’)进行数据处理，A的内容会进行同步变动，<br>如果更改A的内容，$(‘’).data()也会同步更改<br>但如果$(‘’).data()的值被用到了html里面,HTML里面的值不会变动</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">  &lt;style&gt;</span><br><span class="line">  div &#123; <span class="attr">color</span>:blue; &#125;</span><br><span class="line">  span &#123; <span class="attr">color</span>:red; &#125;</span><br><span class="line">  &lt;<span class="regexp">/style&gt;</span></span><br><span class="line"><span class="regexp">  &lt;script src="http:/</span><span class="regexp">/cdn.bootcss.com/</span>jquery/<span class="number">1.11</span><span class="number">.2</span>/jquery.min.js<span class="string">"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="string">&lt;/head&gt;</span></span><br><span class="line"><span class="string">&lt;body&gt;</span></span><br><span class="line"><span class="string">  &lt;div&gt;</span></span><br><span class="line"><span class="string">    The values stored were</span></span><br><span class="line"><span class="string">    &lt;span&gt;&lt;/span&gt;</span></span><br><span class="line"><span class="string">    and</span></span><br><span class="line"><span class="string">    &lt;span&gt;&lt;/span&gt;</span></span><br><span class="line"><span class="string">  &lt;/div&gt;</span></span><br><span class="line"><span class="string">&lt;script&gt;</span></span><br><span class="line"><span class="string">$("</span>div<span class="string">").data("</span>test<span class="string">", &#123; first: 16, last: "</span>pizza!<span class="string">" &#125;);</span></span><br><span class="line"><span class="string">$("</span>span:first<span class="string">").text($("</span>div<span class="string">").data("</span>test<span class="string">").first);</span></span><br><span class="line"><span class="string">$("</span>span:last<span class="string">").text($("</span>div<span class="string">").data("</span>test<span class="string">").last);</span></span><br><span class="line"><span class="string">//页面输出 The values stored were 16 and pizza!</span></span><br><span class="line"><span class="string">  var temp = $("</span>div<span class="string">").data();</span></span><br><span class="line"><span class="string">  console.log(temp);</span></span><br><span class="line"><span class="string">  $("</span>div<span class="string">").data(&#123; first: 25, last: "</span>pizza!<span class="string">" ,test:&#123;last:'fruit'&#125;&#125;);</span></span><br><span class="line"><span class="string">  // $("</span>span:first<span class="string">").text($("</span>div<span class="string">").data("</span>first<span class="string">"));</span></span><br><span class="line"><span class="string">  // $("</span>span:last<span class="string">").text($("</span>div<span class="string">").data("</span>test<span class="string">").last); </span></span><br><span class="line"><span class="string">  //如果没有以上两句页面不会发生任何变化，添加后</span></span><br><span class="line"><span class="string">  //页面输出 The values stored were 25 and fruit</span></span><br><span class="line"><span class="string">  console.log(temp);//temp与$("</span>div<span class="string">").data()保持一致</span></span><br><span class="line"><span class="string">  console.log($("</span>div<span class="string">").data())</span></span><br><span class="line"><span class="string">  temp.child = 'Jack';</span></span><br><span class="line"><span class="string">  console.log($("</span>div<span class="string">").data()) //增加一项&#123;child: "</span>Jack<span class="string">"&#125;</span></span><br><span class="line"><span class="string">  $("</span>div<span class="string">").removeData("</span>blah<span class="string">");//删除没有的属性不会报错</span></span><br><span class="line"><span class="string">  $("</span>div<span class="string">").removeData("</span>child<span class="string">");</span></span><br><span class="line"><span class="string">   console.log(temp);</span></span><br><span class="line"><span class="string">&lt;/script&gt;</span></span><br><span class="line"><span class="string">&lt;/body&gt;</span></span><br><span class="line"><span class="string">&lt;/html&gt;</span></span><br></pre></td></tr></table></figure>
-<p><a href="https://github.com/YooHannah/algorithm/blob/master/plugin/data.js" target="_blank" rel="noopener">JQuery.data源码解析</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1586,7 +1598,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">261</span>
+              <span class="site-state-item-count">262</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

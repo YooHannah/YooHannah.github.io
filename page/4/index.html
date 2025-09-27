@@ -259,6 +259,143 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/llm/LangSmith.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/llm/LangSmith.html" itemprop="url">
+                  LangSmith
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-07-28T17:52:37+08:00">
+                2024-07-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="LangSmith"><a href="#LangSmith" class="headerlink" title="LangSmith"></a>LangSmith</h2><ol>
+<li><p>安装 LangSmith</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install --upgrade langsmith</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>注册账号，并申请一个 <code>LANGCHAIN_API_KEY</code></p>
+</li>
+<li><p>在环境变量中设置以下值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export LANGCHAIN_TRACING_V2=true</span><br><span class="line">export LANGCHAIN_PROJECT=YOUR_PROJECT_NAME #自定义项目名称（可选）</span><br><span class="line">export LANGCHAIN_API_KEY=LANGCHAIN_API_KEY # LangChain API Key</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>程序中的调用将自动被记录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import os</span><br><span class="line">from datetime import datetime</span><br><span class="line">os.environ[&quot;LANGCHAIN_TRACING_V2&quot;] = &quot;true&quot;</span><br><span class="line">os.environ[&quot;LANGCHAIN_PROJECT&quot;] = &quot;hello-world-&quot;+datetime.now().strftime(&quot;%d/%m/%Y %H:%M:%S&quot;)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="基本功能"><a href="#基本功能" class="headerlink" title="基本功能"></a>基本功能</h3><ol>
+<li>Traces</li>
+<li>LLM Calls</li>
+<li>Monitor</li>
+<li>Playground</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">from langchain.prompts import (</span><br><span class="line">    ChatPromptTemplate,</span><br><span class="line">    HumanMessagePromptTemplate,</span><br><span class="line">)</span><br><span class="line">from langchain_core.output_parsers import StrOutputParser</span><br><span class="line">from langchain_openai import ChatOpenAI</span><br><span class="line">from langchain_core.runnables import RunnablePassthrough</span><br><span class="line"></span><br><span class="line">model = ChatOpenAI(model=&quot;gpt-3.5-turbo&quot;)</span><br><span class="line"></span><br><span class="line">prompt = ChatPromptTemplate.from_messages([</span><br><span class="line">    HumanMessagePromptTemplate.from_template(&quot;Say hello to &#123;input&#125;!&quot;)</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line"># 定义输出解析器</span><br><span class="line">parser = StrOutputParser()</span><br><span class="line"></span><br><span class="line">chain = (</span><br><span class="line">    &#123;&quot;input&quot;: RunnablePassthrough()&#125;</span><br><span class="line">    | prompt</span><br><span class="line">    | model</span><br><span class="line">    | parser</span><br><span class="line">)</span><br><span class="line">chain.invoke(&quot;王卓然&quot;)</span><br></pre></td></tr></table></figure>
+<h3 id="在线标注-在平台上进行标注"><a href="#在线标注-在平台上进行标注" class="headerlink" title="在线标注(在平台上进行标注)"></a>在线标注(在平台上进行标注)</h3><p>上传已有数据集<br>定义评估函数<br>运行测试  </p>
+<h3 id="基于-LLM-的评估函数"><a href="#基于-LLM-的评估函数" class="headerlink" title="基于 LLM 的评估函数"></a>基于 LLM 的评估函数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://docs.smith.langchain.com/evaluation/faq/evaluator-implementations</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/llm/LangFuse.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2095,369 +2232,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/compressMethod.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/knowledge/compressMethod.html" itemprop="url">
-                  关于报文压缩方法的探究
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-03T18:16:37+08:00">
-                2024-03-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="问题发现"><a href="#问题发现" class="headerlink" title="问题发现"></a>问题发现</h1><p>项目中需要对大数据量请求时间进行缩短优化的工作，优化过程中发现，浏览器响应报文压缩方法为br的情况会比gzip的时间要长11-13s，具体表现如下</p>
-<p>服务端响应用时45s</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YmZmZTIyZmEzZWRkZDQ2OGZmODc5YmM5ZmJkMGM0ZGRfUGF4OE1qUElncThDQXd6SkpqVWFNY3g1MDNTcXBTdUlfVG9rZW46TW5namJPWnZ1b2F2MWZ4VFRQUmNuVXRnbk9oXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>但是浏览器<strong>等</strong>服务端返回却花了58s</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=OWNkYzA0ODEyYTlmMmE3ZTQ4OGM2MTc3ZDAwZTY2MzZfS3VBYVlKNDcwWTgxSklXSTRqQVdkcW1UZHd6NWR4STJfVG9rZW46Tm80M2I4Smd2b0pmamV4QkhGdWMxU3JXbmxlXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NTBiZTE2NDk3ZDg1YWFmYTQ0OTM3ODYwNGZhZjIzODlfOEtIaGNvbXc4NXhDbWNHbG1oWmtXSXVaWTBKa2tRNmFfVG9rZW46RUhlV2J1UWRqb3JUN094WWRoMWNCaE5ibmJoXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>这样浏览器就会比服务器响应<strong>多等</strong>了58-45= <strong>13s</strong>，不是很正常</p>
-<p>现在直接拿浏览器请求的cUrl 发起请求</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ODcyYjM3NTk3MjMxYzRiNzUyYzY3MDI3ZGIyY2Y1MmFfaEJFVDNmUHFxUXlzckgxUTV5dXZ5cFZBZUhpN1Jpck5fVG9rZW46QkVpV2JrWVBlb05kYlh4R0NnNmNyQWtHbncyXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ZDU4ZDI1YjUzOWFmYTZkOWU0Y2U5NGJiOTJhZGMxODBfN3lDakIwSklNVnRMbmxCc2JaZkgzYzRLbzIwQW9RUThfVG9rZW46SzdCT2JVekpYb3VwcWd4VjM4SGNMcDBJbmZkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NmQ2NjE1NDk2M2NlNzMyNDkyNDgzNWE5ZDY4Yzk1YzFfWEZFVDVDZVpjSVVQMjkzbHRqZk96TFhpVDAxcGxYYktfVG9rZW46TXJiZGJCOG9zb1N4eFp4WUFlRmMwRjJobkpkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>可以看到非浏览器请求的响应使用了gzip压缩，总用时48s, 服务端用时46s, 耗时差2s</p>
-<p>可见使用gzip压缩算法耗时是远优于br压缩的</p>
-<h1 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h1><p>想办法禁用掉br压缩方法</p>
-<ol>
-<li>指定service Mesh压缩方法</li>
-</ol>
-<p>第一步，检查服务集群是否开启了service mesh，开启后指定才有效</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NDQ0OGQ2OWUxZDJlNGViNTJkMDMyY2I1M2Q0YjJkOWJfcms4d0dMb0ZSSnlJYk9Nb2pVWVl4a1dDMlJwellPNTVfVG9rZW46QWdNNmJXU1gzb2ljUGZ4S1ZzUWNJTUVhbjJyXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>第二步，直接在【通用流量平台-&gt;稳定性管理】指定压缩方法</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YmQwYjNiODQ2YTQ2MDM1Nzg5OGJjN2I1YzE3M2Y3NzNfM2pRbTJvOTRVblpFWDg1V3FTeUlyVkRBUWZkZ2NLT2NfVG9rZW46VlVvZWJ4NGU3bzFDd2d4blpab2M1OHdibjNkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>Service mesh 在指定压缩方法后，会对所有请求按指定的压缩算法进行压缩，不管content-length 大小，也不管上游是否已经指定了其他压缩方法，简单粗暴，适合快速解决问题</p>
-<ol>
-<li>TLB + 项目配置</li>
-</ol>
-<p>该方法是在探究原因过程中发现，过程比较曲折，需要排查修改两个地方，着急解决问题不适宜</p>
-<ol>
-<li>确认下自己的服务是否为node服务且有使用koa-compress插件(<strong>注意排查框架是否有默认注入</strong>)，需要将br 压缩算法关闭，具体关闭形式可能因框架不同配置姿势不同，但可以参考下插件<a href="https://github.com/koajs/compress" target="_blank" rel="noopener">官方配置</a></li>
-<li>关闭TLB 路由Ngnix默认br 压缩算法配置，禁止使用br算法</li>
-</ol>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MjE0NjZiZDAwOWViMmJmYjgwYjgzZmRhMWU5OGZmNzdfQUtKenJndjJZMmQySXdvdFlyRUFoeFVPNWZGSzRFSEtfVG9rZW46Q05TdmJMQml0b0NFQkd4aWx0bmNnYUZEbkZoXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>虽然复杂，但是方案会比方法一更合理一些</p>
-<h2 id="为什么不在发起请求时直接更改accept-encoding？"><a href="#为什么不在发起请求时直接更改accept-encoding？" class="headerlink" title="为什么不在发起请求时直接更改accept-encoding？"></a>为什么不在发起请求时直接更改accept-encoding？</h2><p>解决这个问题的另一条途径就是从源头，请求发起端就去掉相关br的设置，也就是更改accept-encoding, 让它不包含br，如果客户端不支持br 压缩，那请求响应自然是不能使用br 压缩的，但是天有不测风云，accept-encoding 是一个不能通过代码去修改的请求报文(<a href="https://developer.mozilla.org/zh-CN/docs/Glossary/Forbidden_header_name" target="_blank" rel="noopener">详见</a>)，所以这条路是行不通的。</p>
-<h1 id="这到底是怎么回事？"><a href="#这到底是怎么回事？" class="headerlink" title="这到底是怎么回事？"></a>这到底是怎么回事？</h1><p>虽然使用方法一可以快速彻底的解决掉问题，但是不应用方法一时，可以发现的一个明显问题就是不同请求的压缩方法不同，而且存在不使用压缩方法的情况，这就激起了作者尘封已久的好奇心，到底是谁在指定content-encoding呢？</p>
-<p>接下来就需要看一下从服务端到客户端，到底是哪个环节在决定content-encoding</p>
-<h2 id="Koa-compress"><a href="#Koa-compress" class="headerlink" title="Koa-compress"></a>Koa-compress</h2><p>鉴于本人node服务项目基于ACE1.X构建，在搜索代码进行排查时，并没有在配置文件中搜到相关的配置，重新查阅框架文档的时候，才注意到框架有进行<a href="https://iesfe.bytedance.net/ace-v1/fullstack/basic/middleware/#compress" target="_blank" rel="noopener">默认注入</a>，这就从服务端源头找到了一个会更改content-encoding的地方，俗话说，灯下黑，不过如此。</p>
-<p>既然有使用koa-compress, 而且<a href="https://github.com/koajs/compress/tree/master/lib" target="_blank" rel="noopener">源码</a>不是很复杂，那就简单探索下它的压缩原理</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YTgyZTg5MmY1NWUyMTYzNGQ1NzUxZTBiM2EzYjk4N2ZfdGRzZ3lxQW1iVTdER21JYUxzQm9iWGFGbjFlSnA4bERfVG9rZW46SUVBMGJmaWJKb2xGQkh4U0JXM2NVYmVBbkNMXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>查看源码可知，当content-length大于1024b时，会根据Accept-encoding进行压缩</p>
-<p>在Accept-Encoding值是’gzip, deflate, br’情况下</p>
-<p>压缩方法的选择逻辑就是accept-encoding有br 会优先使用br，如果br被禁用就使用gzip</p>
-<p>由于默认注入时，没有指定压缩阈值，所以当我们的请求数据过大, 大于1024b时，自然就会触发koa-compress进行br压缩，也就是说上面问题的出现，罪魁祸首就是koa-compress</p>
-<p>但是当数据量小于1024b时，又会出现br，甚至不进行压缩又是怎么回事呢？</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NTk5ZjMxMTIwOTgwMTc3YzY5MjRmMjRkYjMyNDdlOGRfMHA4SlJNbDdaalBzQ1dWSXhuQXNJcXZJQTFjV2U3b0NfVG9rZW46VHBDSGJDNWZ0b2VxUW14cnFJWWNXa0ZnbkdnXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ZDIyZTAwZjdkYmI1YTg1OWY3OGFlOTI4MzFhOWVmNzdfMmFlZGZ4S25DekNnUzhSZTB4Z2NDUVY3dVpZMWs5SFpfVG9rZW46VmV1V2JlNnZzb2hHald4M0RGTWNMYk1hbk1nXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<h3 id="whisle插曲"><a href="#whisle插曲" class="headerlink" title="whisle插曲"></a>whisle插曲</h3><p>在排查过程中，相同条件请求，在本地开启whistle代理，通过域名进行本地访问，出现了响应始终是gzip 的情况，这对于大于1024b的响应就不对了，按上面koa-compress逻辑，应该是br才对</p>
-<p>经过在http\://localhost:8899/#network 抓包，可以发现whistle给本地服务的请求报文accept-encoding是不带br的</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=OWVkMWNjYzMwZDE2N2ExMjNmNzFkOTk2NTgyM2U4YWJfZ1BYSnFNUGNZVkpvaGVRamZaenp0b2hKZHFqOEt2TU1fVG9rZW46UWxDRmIwT1Vqb3ViY2R4VFQwcGNDMDlwbnNiXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>经过与whistle开发者请教(<a href="https://github.com/avwo/whistle/issues/950" target="_blank" rel="noopener">issue</a>)，whistle确实会篡改我们的报文，把accept-encoding中的br 去掉，这样就实现了响应始终是gzip压缩的效果，因此，在本地的测试推荐大家直接使用localhost访问，避免代理的干扰</p>
-<p>以下在本地进行的测试也均是在关闭代理情况下进行</p>
-<h2 id="TLB"><a href="#TLB" class="headerlink" title="TLB"></a>TLB</h2><p>根据请求响应链路，响应从node服务返回后，会依次经过Mesh, TLB然后到浏览器</p>
-<p>由于mesh 在不指定压缩算法的情况下是<strong>不参与</strong>压缩的，所以对于小于1024的数据压缩，矛头指向了TLB</p>
-<p>在开始验证前，先来了解下TLB的压缩原理<a href="https://bytedance.feishu.cn/docx/CgO6dfGYOo86eYxILLPcMc2MnRc" target="_blank" rel="noopener">TLB压缩问题oncall排查手册</a></p>
-<p>文中对我们比较重要的信息是这部分</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YjZmMDE3ZmJjNzYxNThjZjk5Mzc2MDBlNmVkYjk4YzRfODVpZm9jSDFKUnUwUUJzZ2hVbnIyZEJoa3lZZWo4Z2ZfVG9rZW46QVFRTWJpRXJSb0dKTHF4d25qY2NaaHpTblJkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>文中配置与tlb同学确认后就是默认配置，这样对于我们验证就有了参照物</p>
-<p>在关掉koa-compress 的br 压缩后，我进行了如下实验</p>
-<ol>
-<li>构造响应不同content-length的接口</li>
-<li>分别通过本地localhost 访问，域名访问，以及关掉tlb 的br 压缩后再通过域名访问以上接口（保证经过tlb）</li>
-</ol>
-<p>得到如下结果（no表示不压缩）</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">content-length</th>
-<th style="text-align:left">localhost:3000</th>
-<th style="text-align:left">域名访问</th>
-<th style="text-align:left">tlb 设置 brotli = off</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">117</td>
-<td style="text-align:left">no</td>
-<td style="text-align:left">no</td>
-<td style="text-align:left">no</td>
-</tr>
-<tr>
-<td style="text-align:left">152</td>
-<td style="text-align:left">no</td>
-<td style="text-align:left">br</td>
-<td style="text-align:left">no</td>
-</tr>
-<tr>
-<td style="text-align:left">204</td>
-<td style="text-align:left">no</td>
-<td style="text-align:left">br</td>
-<td style="text-align:left">gzip</td>
-</tr>
-<tr>
-<td style="text-align:left">958</td>
-<td style="text-align:left">no</td>
-<td style="text-align:left">br</td>
-<td style="text-align:left">gzip</td>
-</tr>
-<tr>
-<td style="text-align:left">1208</td>
-<td style="text-align:left">gzip</td>
-<td style="text-align:left">gzip</td>
-<td style="text-align:left">gzip</td>
-</tr>
-</tbody>
-</table>
-<p>从koa-compress 压缩原理我们可以知道从服务端响应的数据，大于1024采用gzip，小于则不压缩</p>
-<p>所以本地访问是符合预期的</p>
-<p>经过域名访问，我们可以看到小于1024大于150的响应被用br进行压缩了, 符合br 大于150就压缩</p>
-<p>当把tlb 上nginx的br开启指令关掉，我们可以看到小于1024大于200的响应被用gzip压缩了，符合gzip 大于200就压缩的逻辑</p>
-<p>再看大于1024的最后一行，当服务端已经指定content-encoding的时候，tlb 是不会进行压缩的，会沿用上游指定压缩算法</p>
-<p>综上看来，<strong>TLB 会在上游响应未指定content-encoding的时候进行小于1M响应数据的压缩, 默认大于150b时会使用br压缩，大于200b且禁用br情况下才会使用gzip，如果上游指定了content-encoding, 就沿用上游压缩算法</strong></p>
-<p>至此，响应报文的content-encoding 来源我们搞清楚了，接下来回到解决办法一，验证下service mesh指定压缩方法后报文变化</p>
-<h3 id="集群插曲"><a href="#集群插曲" class="headerlink" title="集群插曲"></a>集群插曲</h3><p>虽然<a href="https://bytedance.feishu.cn/docx/CgO6dfGYOo86eYxILLPcMc2MnRc" target="_blank" rel="noopener">文档</a>中指令是默认指令，但不并是<strong>所有</strong>TLB集群的默认Ngnix 配置，如果出现了与上述结论异常的情况，需要邀请TLB 的同学帮忙查一下域名依赖的<strong>TLB 集群</strong>是否就是文档中的默认配置（因为只有TLB同学有权限可以查）</p>
-<p>比如，相同600B请求，Boe 环境是br压缩，但是线上则变成了gzip</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ZjFjMTkwMTg2NzkzNDA3MDZmOTZlNGEzMGYzOTc2OGVfdFY3ZUhMN0tIU2lFdTRuaDFDbzl6bWNOTEtDUEwyRWtfVG9rZW46RERKdmI0azFPbzJQdjd4TkpNQ2NDd2JobmVkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YzE1YWJjZTNjZWNhNDA4NDk0ODNjNjg0MTNlMGFlMTRfVmJ1VVA0M1pMZm5hQ0hqcDJQOVVwd3lwZUFlUm5rUHpfVG9rZW46VTVoeGJlNXhsb3g2SWN4SXBZbmNFakxGbmtBXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>按上面的结论，服务器不会对小于1024的请求进行压缩，经过tlb 默认配置会使用br，boe 环境是正常的，线上是不正常的，经过排查发现，线上tlb 依赖的<strong>集群默认</strong>配置没有开启br ，所以再走默认配置会进行gzip压缩</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MzQzNDk5NGQyMDc0YTE4NzA1MGU5YzJkN2ZlOGM2MDlfNGtDdVNGYTUxMTdBUUR2em9aS1lpcERXN3FsNFFqRkhfVG9rZW46R2VlZWJ0TTU0b2VxcWN4OXNtM2MyQ0hibmZkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YzUzZGYyNDkyOTE4YjQxZGVhMWU3ZDIyZmNlYWYwNjNfdzNvWUtFT0U4amcyeXdTT3U5TE51UlJoVFlPS1pFTDVfVG9rZW46SUZPY2JtamJ6b0RmQ014YWtjdmM2UWJSbjBlXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<h3 id="Cloud-IDE"><a href="#Cloud-IDE" class="headerlink" title="Cloud IDE"></a>Cloud IDE</h3><p>这里需要注意一点的是，上面我们在发现小于1024的压缩算法异常时，访问的是cloud IDE 上启动项目后帮我们生成的域名，我们在本地请求接口是没有进行压缩的，也就是说cloud IDE生成的域名是有经过TLB的，而且其集群默认开启了br压缩</p>
-<h2 id="Service-Mesh"><a href="#Service-Mesh" class="headerlink" title="Service Mesh"></a>Service Mesh</h2><p>实验条件(复现问题)：</p>
-<p>TLB nginx 不禁用br</p>
-<p>不禁用koa=compress的br压缩算法</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">content-length</th>
-<th style="text-align:left">localhost:3000</th>
-<th style="text-align:left">域名访问</th>
-<th style="text-align:left">域名访问</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">117</td>
-<td style="text-align:left">no</td>
-<td style="text-align:left">no</td>
-<td style="text-align:left">gzip</td>
-</tr>
-<tr>
-<td style="text-align:left">152</td>
-<td style="text-align:left">no</td>
-<td style="text-align:left">br</td>
-<td style="text-align:left">gzip</td>
-</tr>
-<tr>
-<td style="text-align:left">204</td>
-<td style="text-align:left">no</td>
-<td style="text-align:left">br</td>
-<td style="text-align:left">gzip</td>
-</tr>
-<tr>
-<td style="text-align:left">958</td>
-<td style="text-align:left">no</td>
-<td style="text-align:left">br</td>
-<td style="text-align:left">gzip</td>
-</tr>
-<tr>
-<td style="text-align:left">1208</td>
-<td style="text-align:left">br</td>
-<td style="text-align:left">br</td>
-<td style="text-align:left">gzip</td>
-</tr>
-</tbody>
-</table>
-<p>我们从浏览器发起请求</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=M2IyNDRhOTRhNDk3Yzg3ZWMxOWY2NWQ1NWQzYjYzZDNfWWVyY2toZjFxWDJqRlE4aGtOM25BRE5XQTU3cEpjVGNfVG9rZW46VlhJSmJDOUhtb01GREp4UzJHSmNzaTdzbkpiXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>在最后一个中间件打印响应头，说明服务器没有参与数据压缩 (可以通过设置priority让中间件在最后一个执行)</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YTJlNTA3NzA4ZTA2YjcxZjE1ZDNjMmE5ZjEzYWU1YTFfcFlUVGhlMHFyb2JwQ1JGNVRvTklaMWd1WDJoSGg2ektfVG9rZW46Wk4wMWIyUFhDb2Z6UXV4dGVUS2NqSXprbklkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>然后通过监听端口报文</p>
-<p>tcpdump -i eth0 port 3000 -nn</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MzAwZDkxZjUxNWQ1YWUwNGZkNzQyZmY3ZTA5MjgwNDhfYWM5TEZTZWZvQXpRTEpoT2xOdGZRU1FISmZZUFZwSFFfVG9rZW46WGdPdWJwdzZMb2ZTd1Z4NzRPRWNvOFdSbkVjXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>基本上通过上述表现我们基本上是可以判断是mesh 进行了压缩</p>
-<p>但是，我们现在监听的是3000配置端口(其他服务监听实例输出的端口)</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NjRjYTJiYTI1NzBmMWRlOGYzNDMxOTQ2Y2Q3MmNkYzBfMGtXMzc2c3NVQW9jUmVoNXZoV0RQVHhGOW5YZ2JqemFfVG9rZW46UGE2T2JqVjVJb2JnTDl4NXdJbGNZSG9sbjFjXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>如果3000端口吐出来的是经过了mesh的话，那通信的结构应该是这样</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NTc5NDRmMzRjOGY5MzkwZTQ3MTY0NGNhNjhlNzBiN2FfYjViaDYyRkNLVXdSZk9WeDkwS3ZYcnJGYVllZG0zOXJfVG9rZW46WHJjU2JVbHY0b2l1alJ4eVlZdWNrUzNHbkh6XzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p><strong>往深了想一下，上面的判断逻辑并不是非常精确</strong></p>
-<ol>
-<li>node 最后吐出来的数据的header 可能跟我们上面在最后一个中间件打印的header并不同，也就是说我们在最后一个中间件打印的header 并不是最终实例吐出数据的header，有一些 header 是会在最后吐数据的时候装的</li>
-<li>Gzip 的请求头真的是mesh 加上去的吗？实例和mesh 之间不会还有其他服务？</li>
-</ol>
-<p>要解决上面两个疑问，就要想办法去抓取一下mesh 接收的数据，也就是服务吐给mesh的数据</p>
-<h3 id="抓取mesh-socket"><a href="#抓取mesh-socket" class="headerlink" title="抓取mesh socket"></a>抓取mesh socket</h3><p>当给服务开启mesh 服务时，mesh 会给环境注入一些<a href="https://bytedance.feishu.cn/wiki/wikcnNBQTrQvvto4XpAtlgDtbvh" target="_blank" rel="noopener">环境变量</a></p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MGQyNDk2YzM4Y2ZkNTcyMTVhOGQ2ZGQ4NThlNzMyODNfaUlEV3htRTNEZVRCWEZxVXhZR0JMVEd3dTBLQ1dDUUxfVG9rZW46SWN4cWJWdHZib2JLaEN4STY4VmM1RnRObktjXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ZGNiZjlhY2U5NDkzZjI5NjYwN2NkNGRiZWY5MDIxNjVfRmNwb1VDVFRVRWZ6bjRKWksxZlEwd2lFb2w3SlVxREVfVG9rZW46WndZWGI0aGg3bzFJaUp4ZVBzUGNxWmtyblhnXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>其中SERVICE_MESH_HTTP_EGRESS_ADDR 这个变量对应的地址就是服务交给mesh 转发的数据</p>
-<p>即服务会往这个地址吐数据，然后再由mesh从这里转发再吐出去</p>
-<p>那我们接下来就要想办法去读这个socket</p>
-<p><a href="https://plantegg.github.io/2018/01/01/%E9%80%9A%E8%BF%87tcpdump%E5%AF%B9Unix%20Socket%20%E8%BF%9B%E8%A1%8C%E6%8A%93%E5%8C%85%E8%A7%A3%E6%9E%90/" target="_blank" rel="noopener">通过tcpdump对Unix Domain Socket 进行抓包解析</a></p>
-<p>当我打算用curl 命令去执行相关方法时，却发现没有相应地址的socket</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MTBlNWU4ZTVhNGUxZmFhNmY4NzBhMTRhMmQxYzk2ODZfVlgzRHdpZGVGbTllQnBXaVZZNVlyaTFyajRyOTBXYVdfVG9rZW46UGE3dmJIZGJlb25YVHJ4OUFaOWNaWFlGbmxUXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>ok，拉mesh 同学onCall 说这种情况是因为服务器和mesh之间不是用的uds通信，用的ip PORT通信</p>
-<p><a href="https://bytedance.feishu.cn/wiki/wikcn4bvZsBkZMpUVC2WQ0lUzPg#OqPeFE" target="_blank" rel="noopener">ByteMesh HTTP 出流量接入</a></p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YTk1YzA0YjJmNmYxODc4ZDcwMjcxMDY2MzY3MTg1OWJfcVVsa2M1WUFxN3dtelJnQzJTbHJZNTI3cVpjWGtya3JfVG9rZW46SHJUemJRV2xwbzFrdWx4QWRDSWN1NEVvblZoXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<h3 id="抓取PORT-9507"><a href="#抓取PORT-9507" class="headerlink" title="抓取PORT 9507"></a>抓取PORT 9507</h3><p>&#x20;那我现在需要找到MESH_EGRESS_PORT具体是什么</p>
-<p>无论是通过打印环境变量</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NTM3NTkyNGJhZmIxOWVhNTcyZmFkODhhMDJmZmFmNzlfcXk2dkRFZ3E3SUtKWVFVTkQ4ZkR2c3ZVNUw4VDBZS3dfVG9rZW46UmN3QWJ0Y0l2b1lqT2d4MWhnbGNScUJnbm1iXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>还是通过 cat /proc/\${pid}/environ 查看配置文件，以及通过查看监听端口</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ZTkxMWI0YTIxYzJkOWI4NzgxNjdlNzg1N2Q0MmU2MDdfSU1MRnNDRjFLdDNya0t6bWFoMzB0Yk5uREhlSjVZVkJfVG9rZW46SlpVZ2IwR0pVbzlSbnp4RkpoQ2NtbWVSbkJoXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>基本都确定lookback通信的port 是9507</p>
-<p>Ok 那我们再回到用tcpdump 抓包的方式,会发现什么也抓不到</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ZTA2ZGY0ZmY5MTA0YWRmZDUwM2Y4ZWRmYzllMmUxNTdfMW9zdGE2bVp0cWMyWnpJYnhnSUNyYXZwQW16VXRISW1fVG9rZW46TE5URmJFY0g1b3ZyYkx4SkRlVmNJWFJWbkdjXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>陷入死胡同, 那就是说没有数据包经过mesh 接收数据的端口</p>
-<h3 id="重新认识Service-Mesh"><a href="#重新认识Service-Mesh" class="headerlink" title="重新认识Service Mesh"></a>重新认识Service Mesh</h3><h4 id="入流量"><a href="#入流量" class="headerlink" title="入流量"></a>入流量</h4><p>我们之前是通过入流量开启压缩算法的</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ODJjMTdiYmU4MjExZmJiMGFmYjlkYzYyZDM5NTg1NTNfeDNjR2dwYm9neHR6OVNhOGs5eTVWMXhibkg5TWIzVE5fVG9rZW46UFFvdmJieDBtb2tiMUV4ZURmaWMxVGI1blhnXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>入流量在整个通信链路中的作用是这样的</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MzYwYjFhOTE5YWUyM2M1MjU0NGU1NTIwODQ0NTJlNTJfTVcxUFZTcHpGM2U2a1YyUHJ2cHZJdkZ0NUNkbm5nc3BfVG9rZW46STFERGJzY2dXb3dRVGV4WExWbWNLQXVvbnVEXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>&#x20;所以现在需要抓取的是入流量的端口<a href="https://bytedance.feishu.cn/wiki/wikcntxkGyIyWhfQ2ZZiqCmOj4c" target="_blank" rel="noopener">ByteMesh WebSocket &amp; HTTP/1.1 &amp; HTTP/2协议接入约定</a></p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NmY1NDM1ODcyNDZiNDJhMjk3YTIxMjEyODJlMTIzNDNfVnlvM1hRMEVwY0RzRW0xYXFXR3hjUTdlWUNBNkowclhfVG9rZW46R2d6T2I3ZURjb0l3NEd4VHNsYmNzMnpubmRkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>需要找到MESH_INGRESS_PORT 通过查看pid 下面 environ 文件可以看到port 为3000，也就是配置端口</p>
-<p>然后尝试监听 <a href="https://www.cnblogs.com/zgq123456/articles/10251860.html" target="_blank" rel="noopener">https://www.cnblogs.com/zgq123456/articles/10251860.html</a></p>
-<p>tcpdump -i any -A -s 0 ‘tcp port 3000 and (((ip[2:2] - ((ip[0]&amp;0xf)&lt;&lt;2)) - ((tcp[12]&amp;0xf0)&gt;&gt;2)) != 0)’</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NTk1NjI5ZTgzMjBlZjQ0MmY3MjNkZTM2OWI0NzRmZTBfQ1ZJM3JCcFhvamFaOGhrZXNGT0w2MUd6cVFRcnY5d2RfVG9rZW46R2tKTGJQRmlob2JqSjh4dWFLYWM1QmtjbmdkXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=NGU2ZWI0MzMzN2MxYWIwNjU0NDgzMTc1NTc2MmEyNWZfTDdvSmpVNk9xbXFpQmJFTFBNbTdsV3ZLZXRQa29JcVpfVG9rZW46WGp2NmJCeUhJbzlGMUl4UDFEZWNjTlpzbnhiXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>这一次看到了报文的整个变化过程如上两图</p>
-<h4 id="出流量"><a href="#出流量" class="headerlink" title="出流量"></a>出流量</h4><p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MGQ3YjQ2NGZhZDU2NzY0MTRkNmRlZDAxN2FlNzRjODlfNVJIOW11d1cyWlFNZ1JYQWVMZ2t2WWw5dWg3VENlTDFfVG9rZW46WXlVa2J4R1Fsb1Jva0F4RktMZGNjWW5WbnNmXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MGQyOGI1OGFhNjlmNDlhZThkZWJjZWY1ZjVmMDNlMThfeUxHQ0w2anc5Zjc4MTU4RUlKOW1qS2NTYWJoUFlrRkNfVG9rZW46V2Y0S2JCVHZ1b2Nndml4TTB2a2NvSUtDbjhnXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>通过给服务开启出流量代理，可以看到两种通信地址</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YjIxMDQzZjNjNTE5ZTEyYTcxMjU4NTY1NTRkMWRmZDFfRmZBRWYwc2RnT0xMUkVrZ01DNmw1NmNhUjJ0QWxUNmVfVG9rZW46Vk5BbWJzVHR5b3JnUVh4SjYwS2NSREUwbkxnXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>SERVICE_MESH_EGRESS_ADDR 即如果node 跟下游服务通信会走dsl 通信</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=OTg1NmYwMDdmNTJjNjk2MTNkNTVkYWM4M2MwYmIzYTJfZVR5VFFxNXNGM2REaXppZkpwQ1BlOWpranA3S2RRWnlfVG9rZW46STl1Y2JUUEhjb2FwcjJ4VVA3c2M1U2JIbkllXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>MESH_EGRESS_PORT 即如果node 发起http 请求会通过这个端口与mesh 进行http 通信，过程同上面入流量过程</p>
-<h5 id="看一下UDS报文长啥样"><a href="#看一下UDS报文长啥样" class="headerlink" title="看一下UDS报文长啥样"></a>看一下UDS报文长啥样</h5><p>还是参考这篇<a href="https://plantegg.github.io/2018/01/01/%E9%80%9A%E8%BF%87tcpdump%E5%AF%B9Unix%20Socket%20%E8%BF%9B%E8%A1%8C%E6%8A%93%E5%8C%85%E8%A7%A3%E6%9E%90/" target="_blank" rel="noopener">文章</a>的方法</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=OTExN2NmOGE1ZDQ2MmU4ODllMzdmZWUxNzE0MjNlY2JfZ2hua29rcnN3WnFKSXY5SDZrWmViZ0t5U0RIdTBFZ1VfVG9rZW46QkhyWGJjZ2JRbzJDajN4V1ZtaGN6TXZYbmFiXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<ol>
-<li>为方便后续指令执行，切到rpc.egress.sock所在文件夹，</li>
-</ol>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ZTM0YTFmNTRkOTQwMzY2ZWUyMzdlODA4MGViYzlkNGNfWVQ2Y3FWRk5LVU93Y2xmWGEzeUU3V1pwYWd4aHlCOVpfVG9rZW46T252V2JVRGs3b29sSUh4dzRNN2NrSWNLbnFmXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=MGE2ZDE0ZmYxMjA1ODU1MWQyN2RhNjc5YjUzZWJmYzFfQ2w0eGpCN3F4SHFDUTROdjFZWGtqeDkwb042YW5NbTZfVG9rZW46R3B3SWJQbm9Tb3lvN2V4T0kxOWNnWHozbk9nXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<ol>
-<li>将给到rpc.egress.sock 的数据转发到 8089</li>
-</ol>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YmY1YTlkYTI3ZWFhZGM0NDZlMWIzYzM1YzExN2NjMzdfa0NISWFuZDEyeHVqR281ZzJybWRzdE55V2lsb2FPUEdfVG9rZW46UmNtQ2JZeUdob3AwVWt4SEpJWWNWQ1c1blVlXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<ol>
-<li>用curl 发起请求，并用tcpdump 对8089进行抓包</li>
-</ol>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=OTljZjM4MjdmYjRhZmFmZmJlZmE4M2ZkNjU5NDYyYWFfcUQ5QXc1cEdwMGNpZmxTdngxVG5ZaUV2VVFoZW1rWXlfVG9rZW46QlZkbGJUR0tOb2ZCVnJ4bkdGM2NnVUlKbnpoXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>注意使用curl –-unix-socket /rpc.egress.sock 时 如果不支持–-unix-socket 参数，需要使用apt-get 升级curl 版本，如无法升级，可能是linux 版本不再维护，可尝试替换基础镜像(指定高版本linux 的)进行部署后再测试 虽然位于rpc.egress.sock 所在文件夹下执行，但是前面的/ 不能省</p>
-<p>先用tcpdump -i any -netvv port 8089 看看能不能</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=ZDYzMGQxYTI3OWRjZTljYjZiMmE4ZjkxYjIzMWRkY2Ffd0lOelN3Sk9COFc0TjRhSWhxamxqNmZSTGVleFNEampfVG9rZW46SGo0U2I3MjBUb2hxRUt4SnZMVmM0aGJxbjRlXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<p>加上-A -s , ===&gt; tcpdump -i any -A -s 0 -netvv port 8089 看看具体报文</p>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=N2MxNTE1ZjliYTE4ZDNhYzUzNTVmMzk3NjBmODg4MGVfc0hxdFdkTjJJRU04QVMwbURUVWNzSGZ0a1BOaDZrZDZfVG9rZW46Wk15S2J3WTZqb2RMZmp4UVBFTGNmaDdhblRmXzE3MDcyMDIyODI6MTcwNzIwNTg4Ml9WNA" alt></p>
-<h1 id="知识收获"><a href="#知识收获" class="headerlink" title="知识收获"></a>知识收获</h1><h2 id="cUrl"><a href="#cUrl" class="headerlink" title="cUrl"></a>cUrl</h2><p>cUrl <a href="https://curl.se/docs/manual.html" target="_blank" rel="noopener">命令相关参数</a></p>
-<p>-v/–verbose 用于打印更多信息，包括发送的请求信息</p>
-<p>-o /dev/null 把输出写到该文件中，保留远程文件的文件名</p>
-<p>-w ‘%{size_download}\n’ 获取下载大小</p>
-<p>--unix-socket 测试socket 地址，注意要求curl 版本7.50+，如果webshell 不支持，需要考虑更换tce基础镜像</p>
-<h2 id="常用linux命令"><a href="#常用linux命令" class="headerlink" title="常用linux命令"></a>常用linux命令</h2><h3 id="tcpdump"><a href="#tcpdump" class="headerlink" title="tcpdump"></a>tcpdump</h3><p>tcpdump -i eth0 port 3000 -nn</p>
-<p>tcpdump -i eth0 -nn -vv</p>
-<p>tcpdump -i lo -nn -vv</p>
-<p><a href="https://www.cnblogs.com/zgq123456/articles/10251860.html" target="_blank" rel="noopener">https://www.cnblogs.com/zgq123456/articles/10251860.html</a></p>
-<h3 id="查看"><a href="#查看" class="headerlink" title="查看"></a>查看</h3><p>lsof -i | grep LISTEN</p>
-<p>ps -le</p>
-<p>ps -ef | grep node</p>
-<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>apt/apt-get update</p>
-<p>apt/apt-get install 包名</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2501,7 +2275,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">261</span>
+              <span class="site-state-item-count">262</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

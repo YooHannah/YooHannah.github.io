@@ -259,6 +259,144 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1128.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/react/hooks/1128.html" itemprop="url">
+                  重新认识路由
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-28T16:20:02+08:00">
+                2021-11-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>路由管理，就是让你的页面能够根据 URL 的变化进行页面的切换，这是前端应用中一个非常重要的机制</p>
+<p>路由的核心逻辑就是根据 URL 路径这个状态，来决定在主内容区域显示什么组件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">// 自定义路由</span><br><span class="line">const MyRouter = (&#123; children &#125;) =&gt; &#123;</span><br><span class="line">  const routes = _.keyBy(</span><br><span class="line">    children.map((c) =&gt; c.props),</span><br><span class="line">    &quot;path&quot;,</span><br><span class="line">  );</span><br><span class="line">  const [hash] = useHash();</span><br><span class="line">  const Page = routes[hash.replace(&quot;#&quot;, &quot;&quot;)]?.component;</span><br><span class="line">  // 如果路由不存在就返回 Not found.</span><br><span class="line">  return Page ? &lt;Page /&gt; : &quot;Not found.&quot;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">const Route = () =&gt; null;</span><br><span class="line"></span><br><span class="line">// 应用</span><br><span class="line">function SamplePages &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;div className=&quot;sample-pages&quot;&gt;</span><br><span class="line">      &#123;/* 定义了侧边导航栏 */&#125;</span><br><span class="line">      &lt;div className=&quot;sider&quot;&gt;</span><br><span class="line">        &lt;a href=&quot;#page1&quot;&gt;Page 1&lt;/a&gt;</span><br><span class="line">        &lt;a href=&quot;#page2&quot;&gt;Page 2&lt;/a&gt;</span><br><span class="line">        &lt;a href=&quot;#page3&quot;&gt;Page 3&lt;/a&gt;</span><br><span class="line">        &lt;a href=&quot;#page4&quot;&gt;Page 4&lt;/a&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">      &lt;div className=&quot;exp-15-page-container&quot;&gt;</span><br><span class="line">        &#123;/* 定义路由配置 */&#125;</span><br><span class="line">        &lt;MyRouter&gt;</span><br><span class="line">          &lt;Route path=&quot;page1&quot; component=&#123;Page1&#125; /&gt;</span><br><span class="line">          &lt;Route path=&quot;page2&quot; component=&#123;Page2&#125; /&gt;</span><br><span class="line">          &lt;Route path=&quot;page3&quot; component=&#123;Page3&#125; /&gt;</span><br><span class="line">          &lt;Route path=&quot;page4&quot; component=&#123;Page4&#125; /&gt;</span><br><span class="line">        &lt;/MyRouter&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h1 id="使用React-Router"><a href="#使用React-Router" class="headerlink" title="使用React Router"></a>使用React Router</h1><h2 id="简单应用"><a href="#简单应用" class="headerlink" title="简单应用"></a>简单应用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">// 从 react-router-dom 引入路由框架提供的一些组件</span><br><span class="line">import &#123; BrowserRouter, Switch, Route, Link &#125; from &quot;react-router-dom&quot;;</span><br><span class="line">// 引入了两个课程示例页面</span><br><span class="line">import Counter from &quot;./01/Counter&quot;;</span><br><span class="line">import UserList from &quot;./01/UserList&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 使用数组定义了页面组件和导航的标题，从而方便下面的渲染逻辑</span><br><span class="line">const routes = [</span><br><span class="line">  [&quot;01 Counter&quot;, Counter],</span><br><span class="line">  [&quot;01 UserList&quot;, UserList],</span><br><span class="line">];</span><br><span class="line">function App() &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;BrowserRouter&gt;</span><br><span class="line">      &lt;div className=&quot;app&quot;&gt;</span><br><span class="line">        &lt;ul className=&quot;sider&quot;&gt;</span><br><span class="line">          &#123;routes.map(([label]) =&gt; (</span><br><span class="line">            &lt;li&gt;</span><br><span class="line">              &lt;Link to=&#123;`/$&#123;label.replace(&quot; &quot;, &quot;/&quot;)&#125;`&#125;&gt;&#123;label&#125;&lt;/Link&gt;</span><br><span class="line">            &lt;/li&gt;</span><br><span class="line">          ))&#125;</span><br><span class="line">        &lt;/ul&gt;</span><br><span class="line">        &lt;div id=&quot;pageContainer&quot; className=&quot;page-container&quot;&gt;</span><br><span class="line">          &lt;Switch&gt;</span><br><span class="line">            &#123;routes.map(([label, Component]) =&gt; (</span><br><span class="line">              &lt;Route key=&#123;label&#125; path=&#123;`/$&#123;label.replace(&quot; &quot;, &quot;/&quot;)&#125;`&#125;&gt;</span><br><span class="line">                &lt;Component /&gt;</span><br><span class="line">              &lt;/Route&gt;</span><br><span class="line">            ))&#125;</span><br><span class="line">            &#123;/* 定义一个默认的路由 */&#125;</span><br><span class="line">            &lt;Route path=&quot;/&quot; exact&gt;</span><br><span class="line">              &lt;h1&gt;Welcome!&lt;/h1&gt;</span><br><span class="line">            &lt;/Route&gt;</span><br><span class="line">            &lt;Route path=&quot;*&quot;&gt;Page not found.&lt;/Route&gt;</span><br><span class="line">          &lt;/Switch&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/BrowserRouter&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>相关组件作用</p>
+<p>BrowserRouter：标识用标准的 URL 路径去管理路由，比如 /my-page1 这样的标准 URL 路径。<br>除此之外，还有 MemoryRouter，表示通过内存管理路由；<br>HashRouter，标识通过 hash 管理路由。<br>自己实现的例子其实就是用的 hash 来实现路由。</p>
+<p>Link：定义一个导航链接，点击时可以无刷新地改变页面 URL，从而实现 React Router 控制的导航。</p>
+<p>Route: 定义一条路由规则，可以指定匹配的路径、要渲染的内容等等。</p>
+<p>Switch：在默认情况下，所有匹配的 Route 节点都会被展示，但是 Switch 标记可以保证只有第一个匹配到的路由才会被渲染。</p>
+<p><a href="https://v5.reactrouter.com/web/guides/quick-start" target="_blank" rel="noopener">react router</a></p>
+<h2 id="使用嵌套路由：实现二级导航页面"><a href="#使用嵌套路由：实现二级导航页面" class="headerlink" title="使用嵌套路由：实现二级导航页面"></a>使用嵌套路由：实现二级导航页面</h2><p>需要路由框架具备两个能力：</p>
+<p>能够模糊匹配。比如 /page1/general 、/page1/profile 这样两个路由，需要都能匹配到 Page1 这样一个组件。<br>然后 Page1 内部呢，再根据 general 和 profile 这两个子路由决定展示哪个具体的页面。</p>
+<p>Route 能够嵌套使用。在我们自定义 Route 的例子中，Route 组件仅用于收集路由定义的信息，不渲染任何内容。<br>如果需要路由能嵌套使用，那就意味着需要在 Route 下还能嵌套使用 Route。而这在 React Router 是提供支持的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import &#123; BrowserRouter, Route, Link &#125; from &quot;react-router-dom&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">const Page1 = () =&gt; &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;div className=&quot;exp-15-page1&quot;&gt;</span><br><span class="line">      &lt;div className=&quot;exp-15-page1-header&quot;&gt;</span><br><span class="line">        &lt;Link to=&quot;/page1/general&quot;&gt;General&lt;/Link&gt;</span><br><span class="line">        &lt;Link to=&quot;/page1/profile&quot;&gt;Profile&lt;/Link&gt;</span><br><span class="line">        &lt;Link to=&quot;/page1/settings&quot;&gt;Settings&lt;/Link&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">      &lt;div className=&quot;exp-15-page1-content&quot;&gt;</span><br><span class="line">        &lt;Route path=&quot;/page1/general&quot;&gt;General Page&lt;/Route&gt;</span><br><span class="line">        &lt;Route path=&quot;/page1/profile&quot;&gt;Profile Page&lt;/Route&gt;</span><br><span class="line">        &lt;Route path=&quot;/page1/settings&quot;&gt;Settings Page&lt;/Route&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;;</span><br><span class="line">const Page2 = () =&gt; &quot;Page 2&quot;;</span><br><span class="line">const Page3 = () =&gt; &quot;Page 3&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">function NestedRouting() &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;BrowserRouter&gt;</span><br><span class="line">      &lt;h1&gt;Nested Routing&lt;/h1&gt;</span><br><span class="line">      &lt;div className=&quot;exp-15-nested-routing&quot;&gt;</span><br><span class="line">        &lt;div className=&quot;exp-15-sider&quot;&gt;</span><br><span class="line">          &lt;Link to=&quot;/page1&quot;&gt;Page 1&lt;/Link&gt;</span><br><span class="line">          &lt;Link to=&quot;/page2&quot;&gt;Page 2&lt;/Link&gt;</span><br><span class="line">          &lt;Link to=&quot;/page3&quot;&gt;Page 3&lt;/Link&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">        &lt;div className=&quot;exp-15-page-container&quot;&gt;</span><br><span class="line">          &lt;Route path=&quot;/page1&quot;&gt;&lt;Page1 /&gt;&lt;/Route&gt;</span><br><span class="line">          &lt;Route path=&quot;/page2&quot;&gt;&lt;Page2 /&gt;&lt;/Route&gt;</span><br><span class="line">          &lt;Route path=&quot;/page3&quot;&gt;&lt;Page3 /&gt;&lt;/Route&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/BrowserRouter&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="在-URL-中保存页面状态（页面参数）"><a href="#在-URL-中保存页面状态（页面参数）" class="headerlink" title="在 URL 中保存页面状态（页面参数）"></a>在 URL 中保存页面状态（页面参数）</h2><p>在url携带页面相关信息，将页面的一些状态存放到 URL 中，<br>一方面可以提升用户体验，另一方面也可以简化页面之间的交互。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;Route path=&quot;/tabs-page/:activeTab&quot; component=&#123;TabsPage&#125; /&gt;</span><br><span class="line"></span><br><span class="line">import &#123; useCallback &#125; from &quot;react&quot;;</span><br><span class="line">import &#123; Tabs, Table &#125; from &quot;antd&quot;;</span><br><span class="line">import &#123; useHistory, useParams &#125; from &quot;react-router-dom&quot;;</span><br><span class="line">import data from &quot;../10/data&quot;;</span><br><span class="line">import &#123; useSearchParam &#125; from &quot;react-use&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">const &#123; TabPane &#125; = Tabs;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">export default () =&gt; &#123;</span><br><span class="line">  // 通过 React Router 的 API 获取 activeTab 这个参数信息</span><br><span class="line">  const &#123; activeTab = &quot;users&quot; &#125; = useParams();</span><br><span class="line">  // 通过查询字符串获取当前的页码信息</span><br><span class="line">  const page = parseInt(useSearchParam(&quot;page&quot;), 10) || 1;</span><br><span class="line">  </span><br><span class="line">  // 通过 React Router 提供的 history 对象来操作 URL</span><br><span class="line">  const history = useHistory();</span><br><span class="line">  const handleTabChange = useCallback(</span><br><span class="line">    (tab) =&gt; history.push(`/15/TabsPage/$&#123;tab&#125;`),</span><br><span class="line">    [history],</span><br><span class="line">  );</span><br><span class="line">  // 定义表格的翻页功能</span><br><span class="line">  const pagination = &#123;</span><br><span class="line">    pageSize: 3,</span><br><span class="line">    current: page,</span><br><span class="line">    onChange: (p) =&gt; &#123;</span><br><span class="line">      history.push(`/15/TabsPage/$&#123;activeTab&#125;?page=$&#123;p&#125;`);</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;;</span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;h1&gt;Tabs Page&lt;/h1&gt;</span><br><span class="line">      &lt;Tabs activeKey=&#123;activeTab&#125; onChange=&#123;handleTabChange&#125;&gt;</span><br><span class="line">        &lt;TabPane tab=&quot;Users&quot; key=&quot;users&quot;&gt;</span><br><span class="line">          &lt;Table</span><br><span class="line">            dataSource=&#123;data&#125;</span><br><span class="line">            columns=&#123;[</span><br><span class="line">              &#123; dataIndex: &quot;name&quot;, title: &quot;User Name&quot; &#125;,</span><br><span class="line">              &#123; dataIndex: &quot;city&quot;, title: &quot;City&quot; &#125;,</span><br><span class="line">            ]&#125;</span><br><span class="line">            pagination=&#123;pagination&#125;</span><br><span class="line">          /&gt;</span><br><span class="line">        &lt;/TabPane&gt;</span><br><span class="line">        &lt;TabPane tab=&quot;Jobs&quot; key=&quot;jobs&quot;&gt;</span><br><span class="line">          &lt;Table</span><br><span class="line">            dataSource=&#123;data&#125;</span><br><span class="line">            columns=&#123;[&#123; dataIndex: &quot;job&quot;, title: &quot;Job Title&quot; &#125;]&#125;</span><br><span class="line">            pagination=&#123;pagination&#125;</span><br><span class="line">          /&gt;</span><br><span class="line">        &lt;/TabPane&gt;</span><br><span class="line">      &lt;/Tabs&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意</p>
+<p>这里遵循了唯一数据源的原则，避免定义中间状态去存储 tab 和页码的信息，而是直接去操作 URL，这样可以让代码逻辑更加清晰和直观。</p>
+<h2 id="路由层面实现权限控制"><a href="#路由层面实现权限控制" class="headerlink" title="路由层面实现权限控制"></a>路由层面实现权限控制</h2><p>利用前端路由的动态特性。路由是通过 JSX 以声明式的方式去定义的，这就意味着路由的定义规则是可以根据条件进行变化的，也就是所谓的动态路由。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">import &#123; useState &#125; from &quot;react&quot;;</span><br><span class="line">import &#123; Button &#125; from &quot;antd&quot;;</span><br><span class="line">import &#123; Route, Link &#125; from &quot;react-router-dom&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 定义了两个示例页面组件</span><br><span class="line">const Page1 = () =&gt; &quot;Page 1&quot;;</span><br><span class="line">const Page2 = () =&gt; &quot;Page 2&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 定义了一个组件用户展示未登录状态</span><br><span class="line">const UnauthedPage = () =&gt; (</span><br><span class="line">  &lt;span style=&#123;&#123; color: &quot;red&quot; &#125;&#125;&gt;Unauthorized, please log in first.&lt;/span&gt;</span><br><span class="line">);</span><br><span class="line">export default () =&gt; &#123;</span><br><span class="line">  // 模拟用户是否登录的状态，通过一个按钮进行切换</span><br><span class="line">  const [loggedIn, setLoggedIn] = useState(false);</span><br><span class="line">  </span><br><span class="line">  // 定义了两套路由，一套用于登录后，一套用于未登录状态</span><br><span class="line">  const routes = loggedIn</span><br><span class="line">    ? [</span><br><span class="line">        &#123;</span><br><span class="line">          path: &quot;/15/RouterAuth&quot;,</span><br><span class="line">          component: Page1,</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          path: &quot;/15/RouterAuth/page1&quot;,</span><br><span class="line">          component: Page1,</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          path: &quot;/15/RouterAuth/page2&quot;,</span><br><span class="line">          component: Page2,</span><br><span class="line">        &#125;,</span><br><span class="line">      ]</span><br><span class="line">      // 如果未登录，那么对于所有 /15/RouterAuth 开头的路径，显示未授权页面</span><br><span class="line">    : [&#123; path: &quot;/15/RouterAuth&quot;, component: UnauthedPage &#125;];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;h1&gt;Router Auth&lt;/h1&gt;</span><br><span class="line">      &lt;Button</span><br><span class="line">        type=&#123;loggedIn ? &quot;primary&quot; : &quot;&quot;&#125;</span><br><span class="line">        onClick=&#123;() =&gt; setLoggedIn((v) =&gt; !v)&#125;</span><br><span class="line">      &gt;</span><br><span class="line">        &#123;loggedIn ? &quot;Log Out&quot; : &quot;Log In&quot;&#125;</span><br><span class="line">      &lt;/Button&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">      &lt;div className=&quot;exp-15-router-auth&quot;&gt;</span><br><span class="line">        &lt;div className=&quot;exp-15-sider&quot;&gt;</span><br><span class="line">          &lt;Link to=&quot;/15/RouterAuth/page1&quot;&gt;Page 1&lt;/Link&gt;</span><br><span class="line">          &lt;Link to=&quot;/15/RouterAuth/page2&quot;&gt;Page 2&lt;/Link&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">        &lt;div className=&quot;exp-15-page-container&quot;&gt;</span><br><span class="line">          &#123;/* */&#125;</span><br><span class="line">          &#123;routes.map((r) =&gt; (</span><br><span class="line">            &lt;Route path=&#123;r.path&#125; component=&#123;r.component&#125; /&gt;</span><br><span class="line">          ))&#125;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br></pre></td></tr></table></figure>
+<p>代码中核心的机制就在于我们根据登录状态，创建了不同的路由规则，这样就能在源头上对权限进行集中控制，避免用户未经授权就访问某些受保护的页面。</p>
+<p>同时呢，因为在相同的 URL 下进行了信息提示，那么也就更容易实现用户登录后还能返回原页面的功能。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1127.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1407,143 +1545,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1112.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks/1112.html" itemprop="url">
-                  react 自带的hooks
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-12T16:20:02+08:00">
-                2021-11-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="useCallback：缓存回调函数"><a href="#useCallback：缓存回调函数" class="headerlink" title="useCallback：缓存回调函数"></a>useCallback：缓存回调函数</h1><p>在 React 函数组件中，每一次 UI 的变化，都是通过重新执行整个函数来完成的</p>
-<p>如果组件中依赖的处理函数没有被useCallback做缓存处理，那么每次重新执行时都会被重新创建<br>那么依赖处理函数的组件就会因为处理函数更新进行重现渲染</p>
-<p>为避免频繁的重新渲染组件，useCallback的作用就是将函数缓存起来，<br>只有当函数逻辑中依赖的状态发生变化才会去重新生成，然后引起组件更新，<br>避免了依赖没有变化时的无效更新</p>
-<p>useCallback 可以减少不必要的渲染，主要体现在将回调函数作为属性传给某个组件。<br>如果每次都不一样就会造成组件的重新渲染。<br>但是如果确定子组件多次渲染也没有太大问题，特别是原生的组件，比如 button，<br>那么不用 useCallback 也问题不大。所以这和子组件的实现相关，和函数是否轻量无关。</p>
-<h1 id="useMemo：缓存计算的结果"><a href="#useMemo：缓存计算的结果" class="headerlink" title="useMemo：缓存计算的结果"></a>useMemo：缓存计算的结果</h1><p>同处理函数类似，如果组件中用到的数据A通过其他状态值计算得到，<br>在依赖值没有发生变化情况下，其实就不用重新计算，<br>即<br>如果某个数据是通过其它数据计算得到的，那么只有当用到的数据，也就是依赖的数据发生变化的时候，才应该需要重新计算<br>因此当组件因为其他原因刷新，进而重新执行函数，引起的重新计算是没有必要的</p>
-<p>可以实现这个功能的hooks就是useMemo,useMemo就是只有在依赖的状态值发生变化时才会去重新执行计算的过程<br>避免不必要的重新计算过程<br>同时，对于依赖数据A的组件来说，没有重新计算产生的新值，可以在一定程度上<b>避免子组件重复渲染</b>。</p>
-<p>如果将函数也看做一个状态值/变量的话，其实，useMemo可以实现useCallback的功能</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const myEventHandler = useMemo(() =&gt; &#123;</span><br><span class="line">  // 返回一个函数作为缓存结果</span><br><span class="line">  return () =&gt; &#123;</span><br><span class="line">    // 在这里进行事件处理</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, [dep1, dep2]);</span><br></pre></td></tr></table></figure>
-<p>二者的本质就是<br><b>建立了一个绑定某个结果到依赖数据的关系。只有当依赖变了，这个结果才需要被重新得到。</b></p>
-<h1 id="useRef：在多次渲染之间共享数据"><a href="#useRef：在多次渲染之间共享数据" class="headerlink" title="useRef：在多次渲染之间共享数据"></a>useRef：在多次渲染之间共享数据</h1><p>可以把 useRef 看作是在函数组件之外创建的一个容器空间<br>在这个容器上，我们可以通过唯一的 current 属设置一个值，从而在函数组件的多次渲染之间共享这个值</p>
-<p><b>使用 useRef 保存的数据一般是和 UI 的渲染无关的，因此当 ref 的值发生变化时，是不会触发组件的重新渲染的，</b><br>这也是 useRef 区别于 useState 的地方。<br>比如保存定时器句柄，在回调函数中关掉定时器，然后将ref.current 设置为null, 这个句柄没有在组件中被用到，所以不会引起重新渲染。<br>但如果用useState去保存句柄，将定时器关掉时，同时将state设置为null，即使没有被组件用到，也会引起重新组件渲染。</p>
-<p>useRef 还有一个重要的功能，就是保存某个 DOM 节点的引用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">function TextInputWithFocusButton() &#123;</span><br><span class="line">  const inputEl = useRef(null);</span><br><span class="line">  const onButtonClick = () =&gt; &#123;</span><br><span class="line">    // current 属性指向了真实的 input 这个 DOM 节点，从而可以调用 focus 方法</span><br><span class="line">    inputEl.current.focus();</span><br><span class="line">  &#125;;</span><br><span class="line">  return (</span><br><span class="line">    &lt;&gt;</span><br><span class="line">      &lt;input ref=&#123;inputEl&#125; type=&quot;text&quot; /&gt;</span><br><span class="line">      &lt;button onClick=&#123;onButtonClick&#125;&gt;Focus the input&lt;/button&gt;</span><br><span class="line">    &lt;/&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>可以看到 ref 这个属性提供了获得 DOM 节点的能力，并利用 useRef 保存了这个节点的应用</p>
-<h1 id="useContext：定义全局状态"><a href="#useContext：定义全局状态" class="headerlink" title="useContext：定义全局状态"></a>useContext：定义全局状态</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">const MyContext = React.createContext(initialValue);</span><br><span class="line"></span><br><span class="line">const themes = &#123;</span><br><span class="line">  light: &#123;</span><br><span class="line">    foreground: &quot;#000000&quot;,</span><br><span class="line">    background: &quot;#eeeeee&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  dark: &#123;</span><br><span class="line">    foreground: &quot;#ffffff&quot;,</span><br><span class="line">    background: &quot;#222222&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">// 创建一个 Theme 的 Context</span><br><span class="line"></span><br><span class="line">const ThemeContext = React.createContext(themes.light);</span><br><span class="line">function App() &#123;</span><br><span class="line">  // 整个应用使用 ThemeContext.Provider 作为根组件</span><br><span class="line">  return (</span><br><span class="line">    // 使用 themes.dark 作为当前 Context </span><br><span class="line">    &lt;ThemeContext.Provider value=&#123;themes.dark&#125;&gt;</span><br><span class="line">      &lt;Toolbar /&gt;</span><br><span class="line">    &lt;/ThemeContext.Provider&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 在 Toolbar 组件中使用一个会使用 Theme 的 Button</span><br><span class="line">function Toolbar(props) &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;ThemedButton /&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 在 Theme Button 中使用 useContext 来获取当前的主题</span><br><span class="line">function ThemedButton() &#123;</span><br><span class="line">  const theme = useContext(ThemeContext);</span><br><span class="line">  return (</span><br><span class="line">    &lt;button style=&#123;&#123;</span><br><span class="line">      background: theme.background,</span><br><span class="line">      color: theme.foreground</span><br><span class="line">    &#125;&#125;&gt;</span><br><span class="line">      I am styled by theme context!</span><br><span class="line">    &lt;/button&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Context 提供了一个方便在多个组件之间共享数据的机制。<br>不过需要注意的是，它的灵活性也是一柄双刃剑。<br>你或许已经发现，Context 相当于提供了一个定义 React 世界中全局变量的机制，<br>而全局变量则意味着两点：</p>
-<ol>
-<li>会让调试变得困难，因为你很难跟踪某个 Context 的变化究竟是如何产生的。</li>
-<li>让组件的复用变得困难，因为一个组件如果使用了某个 Context，它就必须确保被用到的地方一定有这个 Context 的 Provider 在其父组件的路径上。</li>
-</ol>
-<p>需要再三强调的是，Context 更多的是提供了一个强大的机制，<b> 让 React 应用具备定义全局的响应式数据的能力。</b></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1587,7 +1588,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">261</span>
+              <span class="site-state-item-count">262</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

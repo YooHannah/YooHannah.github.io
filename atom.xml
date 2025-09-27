@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoohannah.github.io/"/>
-  <updated>2025-09-22T01:08:45.205Z</updated>
+  <updated>2025-09-27T12:09:10.814Z</updated>
   <id>http://yoohannah.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>本地运行大模型的一些选择 &amp; 指令和图形化微调</title>
+    <link href="http://yoohannah.github.io/post/llm/xinchang/LocalChoose.html"/>
+    <id>http://yoohannah.github.io/post/llm/xinchang/LocalChoose.html</id>
+    <published>2025-09-27T02:36:37.000Z</published>
+    <updated>2025-09-27T12:09:10.814Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="业务场景分类"><a href="#业务场景分类" class="headerlink" title="业务场景分类"></a>业务场景分类</h1><p>文本处理：LLM（自然语言处理）</p><p>视频图片：计算机视觉</p><p>混合模型：文本、图片、视频、音频。</p><h1 id="任务类型"><a href="#任务类型" class="headerlink" title="任务类型"></a>任务类型</h1><p>训练任务：通常是数据量较大，导致计算量也比较大。并行度也高。对资源消耗比较大。对时效性没有太大要求。<br>推理任务：是使用已有大模型对现有情况处理，数据量通常不大，所以资源消耗没那么大。通常要求处理速度快。</p><h1 id="硬件选择"><a href="#硬件选择" class="headerlink" title="硬件选择"></a>硬件选择</h1><p>服务器：要评估业务的资源使用情况来具体配置<br>国产化GPU：昇腾<br>国产化CPU：华为、海光<br>操作系统：Linux、欧拉、麒麟</p><p>还要考虑以上4者之间的兼容性。</p><h1 id="计算资源"><a href="#计算资源" class="headerlink" title="计算资源"></a>计算资源</h1><p>全部使用GPU： 耗费高，适用于中大型企业，<br>GPU+CPU的组合：适用于 中小企业部署，如果用CPU 替换GPU, 所用CPU 数量将是原理GPU 数量的两倍。</p><p>华为云 - 工作台 - AI NOTEBOOK 支持使用<a href="https://developer.huaweicloud.com/space/devportal/notebook-tool" target="_blank" rel="noopener">NPU</a> 进行训练<br><img src="/image/LlamaFactory7.jpg" alt><br>阿里云 - MODEScope - My Notebook  支持使用<a href="https://modelscope.cn/my/mynotebook" target="_blank" rel="noopener">GPU</a><br><img src="/image/LlamaFactory8.jpg" alt></p><h1 id="模型选择-模型类型"><a href="#模型选择-模型类型" class="headerlink" title="模型选择/模型类型"></a>模型选择/模型类型</h1><p>L0：通用场景的模型，但是通常精度不高</p><p>L1：进行微调以后的模型，可以适用某一个特定的领域</p><p>微调方式：代码、命令行、图形化界面</p><p>L2：只专注某个功能的模型，如：代码生成</p><h1 id="借助LLAMAFactory-进行微调"><a href="#借助LLAMAFactory-进行微调" class="headerlink" title="借助LLAMAFactory 进行微调"></a>借助LLAMAFactory 进行微调</h1><p><a href="https://github.com/hiyouga/LLaMA-Factory?tab=readme-ov-file#installation" target="_blank" rel="noopener">LLAMAFactory</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/hiyouga/LLaMA-Factory.git</span><br><span class="line"></span><br><span class="line">cd LLaMA-Factory</span><br><span class="line"></span><br><span class="line">pip install -e &quot;.[torch,metrics]&quot; </span><br><span class="line"></span><br><span class="line"># 如遇版本冲突可尝试用下面的命令</span><br><span class="line"></span><br><span class="line">pip install --no-deps -e .</span><br><span class="line"># </span><br><span class="line">llamafactory-cli version</span><br><span class="line"></span><br><span class="line"># 方式一： 启动webui，通过页面配置进行微调</span><br><span class="line">llamafactory-cli webui</span><br><span class="line"></span><br><span class="line"># 方式二： 命令行进行微调 llamafactory-cli train 配置文件路径，文件和界面作用一样，只不过用key=value进行配置</span><br><span class="line"></span><br><span class="line">llamafactory-cli train examples/train_lora/llama3_lora_sft.yaml </span><br><span class="line"># 安装nvitop 查看内存使用情况</span><br><span class="line">pip install nvitop</span><br><span class="line">nvitop -m auto</span><br></pre></td></tr></table></figure></p><p>用界面调试<br><img src="/image/LlamaFactory1.jpg" alt></p><p><img src="/image/LlamaFactory2.jpg" alt></p><p>用命令行调试<br><img src="/image/LlamaFactory3.jpg" alt><br><img src="/image/LlamaFactory4.jpg" alt></p><p>nvitop 查看内存<br><img src="/image/LlamaFactory5.jpg" alt></p><h2 id="指定数据集"><a href="#指定数据集" class="headerlink" title="指定数据集"></a>指定数据集</h2><p>配置文件：data/dataset_info.json</p><p>数据集都放在data文件夹下面，通过配置dataset_info.json文件，可以更新界面上数据集选项<br>也可以根据界面上数据集选项生成规则对命令行调用的文件进行配置</p><p>训练后大模型产物一般会存放在save文件夹中，或者根据配置的输出路径进行存放</p><p><img src="/image/LlamaFactory6.jpg" alt></p><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>微调训练：包括以下几部分配置：<br>微调训练的阶段：预训练、指令微调、强化学习等等；<br>微调使用的数据集：数据集的格式、路径、验证集的比例等等；<br>关键微调参数：在我们之前教程中重点学习的：学习率、训练轮数、批量 大小等等；<br>LoRA 参数：当使用 Lora 微调时需要配置的一些特殊参数；<br>RLHF 参数：当训练阶段为强化学习时需要配置的一些特殊参数；<br>特殊优化参数：当选择使用 GaLore、APOLLO 和 BAdam 优化器时需要配置的一些参数；<br>SwanLab 参数：一款开源的模型训练跟踪与可视化工具；</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;业务场景分类&quot;&gt;&lt;a href=&quot;#业务场景分类&quot; class=&quot;headerlink&quot; title=&quot;业务场景分类&quot;&gt;&lt;/a&gt;业务场景分类&lt;/h1&gt;&lt;p&gt;文本处理：LLM（自然语言处理）&lt;/p&gt;
+&lt;p&gt;视频图片：计算机视觉&lt;/p&gt;
+&lt;p&gt;混合模型：文本、图片、视
+      
+    
+    </summary>
+    
+    
+      <category term="llm" scheme="http://yoohannah.github.io/tags/llm/"/>
+    
+  </entry>
   
   <entry>
     <title>本地运行大模型的一种方式</title>
@@ -463,29 +488,6 @@
       
         &lt;p&gt;通过判断高方差和高偏差的大小可以判断模型的性能问题&lt;br&gt;一般有以下两个性能问题&lt;br&gt;高偏差意味着模型欠拟合&lt;br&gt;高方差意味着模型过拟合&lt;/p&gt;
 &lt;p&gt;高偏差的情况下，&lt;br&gt;Jtrain 值会比较大，且Jtrain和Jcv 值相近&lt;br&gt;也就是说Jtrain 较高对应
-      
-    
-    </summary>
-    
-    
-      <category term="machineLearning" scheme="http://yoohannah.github.io/tags/machineLearning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>一些其他的概念</title>
-    <link href="http://yoohannah.github.io/post/machineLearning/advanceOpt.html"/>
-    <id>http://yoohannah.github.io/post/machineLearning/advanceOpt.html</id>
-    <published>2024-09-25T08:27:37.000Z</published>
-    <updated>2024-11-27T09:37:11.851Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="Adam-Algorithm"><a href="#Adam-Algorithm" class="headerlink" title="Adam Algorithm"></a>Adam Algorithm</h1><p>一种加快模型学习的优化算法<br> 可以自动调节学习率的大小，使模型更快的朝梯度下降的方向学习<br> <img src="/image/LLM/96.png" alt><br> <img src="/image/LLM/97.png" alt><br> <img src="/image/LLM/98.png" alt></p><h1 id="卷积层"><a href="#卷积层" class="headerlink" title="卷积层"></a>卷积层</h1><p> 之前讨论的神经网络中的中间层，都依赖上一层所有的输出进行计算<br> Each neuron output is a function of<br> all the activation outputs of the previous layer.<br> 有一种计算方案是只选取上一层的部分数据计算本层的输出<br> 这种layer 被称为卷积层（Convolutional Layer）<br> 优点有两个<br> 一个是可以加快计算，<br> 另外一个是可以减少需要的训练数据</p><p>  <img src="/image/LLM/99.png" alt></p><h1 id="降低预测结果错误率"><a href="#降低预测结果错误率" class="headerlink" title="降低预测结果错误率"></a>降低预测结果错误率</h1><p>拿到训练模型后，如果遇到一个不可接受的错误输出，可以通过以下方式进行重新调整<br><img src="/image/LLM/100.png" alt></p><p>更常见的方式是用诊断的方式评估模型好坏<br>在训练前将数据分成两组，<br>一组用于模型训练，称为训练组<br>另一组用于测试训练得到的模型，称为测试组</p><p>比如对于过拟合的情况<br>将数据分成两组<br><img src="/image/LLM/101.png" alt><br>分别计算训练组和测试组的损失函数<br><img src="/image/LLM/102.png" alt><br>对于训练组数据的损失函数肯定会更小<br>要关注的是测试数据的损失函数，值越小，说明越近真实的值，说明模型越好<br>上面是线性回归模型，下面是对于分类问题的损失函数计算<br><img src="/image/LLM/103.png" alt></p><p><img src="/image/LLM/104.png" alt></p><p>如果需要在多个模型间进行选择，可以在一开始的时候将数据分成三组<br>训练组，交叉验证组，测试组</p><p>同样计算基于交叉验证组数据的损失函数，值越小说明越符合实际数据<br>主要作用是用于选择模型，比如挑出最合适的多项式</p><p>然后再使用测试组数据进行泛化错误的测试</p><p><img src="/image/LLM/105.png" alt><br><img src="/image/LLM/106.png" alt><br><img src="/image/LLM/107.png" alt><br><img src="/image/LLM/108.png" alt></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;Adam-Algorithm&quot;&gt;&lt;a href=&quot;#Adam-Algorithm&quot; class=&quot;headerlink&quot; title=&quot;Adam Algorithm&quot;&gt;&lt;/a&gt;Adam Algorithm&lt;/h1&gt;&lt;p&gt;一种加快模型学习的优化算法&lt;br&gt; 可以自动
       
     
     </summary>
