@@ -96,13 +96,19 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoohannah.github.io/image/LlamaFactory7.jpg">
 <meta property="og:image" content="http://yoohannah.github.io/image/LlamaFactory8.jpg">
+<meta property="og:image" content="http://yoohannah.github.io/image/LlamaFactory13.jpg">
+<meta property="og:image" content="http://yoohannah.github.io/image/LlamaFactory6.jpg">
 <meta property="og:image" content="http://yoohannah.github.io/image/LlamaFactory1.jpg">
 <meta property="og:image" content="http://yoohannah.github.io/image/LlamaFactory2.jpg">
+<meta property="og:image" content="http://yoohannah.github.io/image/LlamaFactory11.jpg">
 <meta property="og:image" content="http://yoohannah.github.io/image/LlamaFactory3.jpg">
 <meta property="og:image" content="http://yoohannah.github.io/image/LlamaFactory4.jpg">
 <meta property="og:image" content="http://yoohannah.github.io/image/LlamaFactory5.jpg">
-<meta property="og:image" content="http://yoohannah.github.io/image/LlamaFactory6.jpg">
-<meta property="og:updated_time" content="2025-09-27T12:09:10.814Z">
+<meta property="og:image" content="http://yoohannah.github.io/image/LlamaFactory14.jpg">
+<meta property="og:image" content="http://yoohannah.github.io/image/LlamaFactory10.jpg">
+<meta property="og:image" content="http://yoohannah.github.io/image/LlamaFactory9.jpg">
+<meta property="og:image" content="http://yoohannah.github.io/image/LlamaFactory12.jpg">
+<meta property="og:updated_time" content="2025-10-18T09:18:05.772Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="本地运行大模型的一些选择 &amp; 指令和图形化微调">
 <meta name="twitter:description" content="业务场景分类文本处理：LLM（自然语言处理） 视频图片：计算机视觉 混合模型：文本、图片、视频、音频。 任务类型训练任务：通常是数据量较大，导致计算量也比较大。并行度也高。对资源消耗比较大。对时效性没有太大要求。推理任务：是使用已有大模型对现有情况处理，数据量通常不大，所以资源消耗没那么大。通常要求处理速度快。 硬件选择服务器：要评估业务的资源使用情况来具体配置国产化GPU：昇腾国产化CPU：华为">
@@ -356,16 +362,31 @@
 <p>L1：进行微调以后的模型，可以适用某一个特定的领域</p>
 <p>微调方式：代码、命令行、图形化界面</p>
 <p>L2：只专注某个功能的模型，如：代码生成</p>
-<h1 id="借助LLAMAFactory-进行微调"><a href="#借助LLAMAFactory-进行微调" class="headerlink" title="借助LLAMAFactory 进行微调"></a>借助LLAMAFactory 进行微调</h1><p><a href="https://github.com/hiyouga/LLaMA-Factory?tab=readme-ov-file#installation" target="_blank" rel="noopener">LLAMAFactory</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/hiyouga/LLaMA-Factory.git</span><br><span class="line"></span><br><span class="line">cd LLaMA-Factory</span><br><span class="line"></span><br><span class="line">pip install -e &quot;.[torch,metrics]&quot; </span><br><span class="line"></span><br><span class="line"># 如遇版本冲突可尝试用下面的命令</span><br><span class="line"></span><br><span class="line">pip install --no-deps -e .</span><br><span class="line"># </span><br><span class="line">llamafactory-cli version</span><br><span class="line"></span><br><span class="line"># 方式一： 启动webui，通过页面配置进行微调</span><br><span class="line">llamafactory-cli webui</span><br><span class="line"></span><br><span class="line"># 方式二： 命令行进行微调 llamafactory-cli train 配置文件路径，文件和界面作用一样，只不过用key=value进行配置</span><br><span class="line"></span><br><span class="line">llamafactory-cli train examples/train_lora/llama3_lora_sft.yaml </span><br><span class="line"># 安装nvitop 查看内存使用情况</span><br><span class="line">pip install nvitop</span><br><span class="line">nvitop -m auto</span><br></pre></td></tr></table></figure></p>
-<p>用界面调试<br><img src="/image/LlamaFactory1.jpg" alt></p>
-<p><img src="/image/LlamaFactory2.jpg" alt></p>
-<p>用命令行调试<br><img src="/image/LlamaFactory3.jpg" alt><br><img src="/image/LlamaFactory4.jpg" alt></p>
-<p>nvitop 查看内存<br><img src="/image/LlamaFactory5.jpg" alt></p>
+<h1 id="借助LLAMAFactory-进行微调"><a href="#借助LLAMAFactory-进行微调" class="headerlink" title="借助LLAMAFactory 进行微调"></a>借助LLAMAFactory 进行微调</h1><p><a href="https://github.com/hiyouga/LLaMA-Factory?tab=readme-ov-file#installation" target="_blank" rel="noopener">LLAMAFactory</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/hiyouga/LLaMA-Factory.git</span><br><span class="line"></span><br><span class="line">cd LLaMA-Factory</span><br><span class="line"></span><br><span class="line">pip install -e &quot;.[torch,metrics]&quot; </span><br><span class="line"></span><br><span class="line"># 如遇版本冲突可尝试用下面的命令</span><br><span class="line"></span><br><span class="line">pip install --no-deps -e .</span><br><span class="line"># </span><br><span class="line">llamafactory-cli version</span><br><span class="line"></span><br><span class="line"># 方式一： 启动webui，通过页面配置进行微调</span><br><span class="line">llamafactory-cli webui</span><br><span class="line"></span><br><span class="line"># 方式二： 命令行进行微调 llamafactory-cli train 配置文件路径，文件和界面作用一样，只不过用key=value进行配置</span><br><span class="line"></span><br><span class="line">llamafactory-cli train examples/train_lora/llama3_lora_sft.yaml </span><br><span class="line"></span><br><span class="line"># 安装nvitop 查看内存使用情况</span><br><span class="line"></span><br><span class="line">pip install nvitop</span><br><span class="line">nvitop -m auto</span><br></pre></td></tr></table></figure></p>
 <h2 id="指定数据集"><a href="#指定数据集" class="headerlink" title="指定数据集"></a>指定数据集</h2><p>配置文件：data/dataset_info.json</p>
-<p>数据集都放在data文件夹下面，通过配置dataset_info.json文件，可以更新界面上数据集选项<br>也可以根据界面上数据集选项生成规则对命令行调用的文件进行配置</p>
+<p>数据集都放在data文件夹下面，通过配置dataset_info.json文件，可以更新界面上数据集选项<br>也可以根据界面上数据集选项生成规则对命令行调用的文件进行配置<br><img src="/image/LlamaFactory13.jpg" alt></p>
 <p>训练后大模型产物一般会存放在save文件夹中，或者根据配置的输出路径进行存放</p>
 <p><img src="/image/LlamaFactory6.jpg" alt></p>
+<h3 id="用界面调试"><a href="#用界面调试" class="headerlink" title="用界面调试"></a>用界面调试</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 方式一： 启动webui，通过页面配置进行微调</span><br><span class="line">llamafactory-cli webui</span><br></pre></td></tr></table></figure>
+<p>模型下载源可指定<a href="https://modelscope.cn/models" target="_blank" rel="noopener">modelScope</a>，或者<a href="https://huggingface.co/models" target="_blank" rel="noopener">HuggingFace</a> 里面的模型,避免下载到本地</p>
+<p><img src="/image/LlamaFactory1.jpg" alt></p>
+<p><img src="/image/LlamaFactory2.jpg" alt></p>
+<h3 id="用命令行调试"><a href="#用命令行调试" class="headerlink" title="用命令行调试"></a>用命令行调试</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 方式二： 命令行进行微调 llamafactory-cli train 配置文件路径，文件和界面作用一样，只不过用key=value进行配置</span><br><span class="line"></span><br><span class="line">llamafactory-cli train examples/train_lora/llama3_lora_sft.yaml</span><br></pre></td></tr></table></figure>
+<p>通过修改配置文件达到使用界面一样的配置效果<br><img src="/image/LlamaFactory11.jpg" alt><br><img src="/image/LlamaFactory3.jpg" alt><br><img src="/image/LlamaFactory4.jpg" alt></p>
+<p>nvitop 查看内存<br><img src="/image/LlamaFactory5.jpg" alt></p>
+<h2 id="调试完成"><a href="#调试完成" class="headerlink" title="调试完成"></a>调试完成</h2><p>不管通过命令行调试还是通过界面调试，都可以通过查看日志判断是否完成调试或者拍错排查<br><img src="/image/LlamaFactory14.jpg" alt></p>
+<h2 id="模型保存、模型导出"><a href="#模型保存、模型导出" class="headerlink" title="模型保存、模型导出"></a>模型保存、模型导出</h2><h3 id="通过界面保存"><a href="#通过界面保存" class="headerlink" title="通过界面保存"></a>通过界面保存</h3><p><img src="/image/LlamaFactory10.jpg" alt><br>注意看保存到文件下面的几个关键文件有没有<br><img src="/image/LlamaFactory9.jpg" alt></p>
+<p>保存后需要可用ollama 命令行查看是否正常导出<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ollama show --modelfile Qwen2.5:0.5B</span><br></pre></td></tr></table></figure></p>
+<h3 id="通过命令行保存"><a href="#通过命令行保存" class="headerlink" title="通过命令行保存"></a>通过命令行保存</h3><p>修改examples/merge_lora 文件夹下对应文件，指定模型现存位置和导出位置<br><img src="/image/LlamaFactory12.jpg" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// 运行命令导出</span><br><span class="line">llamafactory-cli export examples/merge_lora/llama3_lora_sft.yaml</span><br><span class="line"></span><br><span class="line">// 查看模型相关信息，进一步确保模型正确导出</span><br><span class="line"></span><br><span class="line">ollama show --modelfile Qwen2.5:0.5B</span><br><span class="line"></span><br><span class="line">// 安装压缩命令行，对模型进行压缩</span><br><span class="line">sudo add-apt-repository multiverse   </span><br><span class="line">sudo apt update</span><br><span class="line">sudo apt installsudo apt install unrar rar</span><br><span class="line"></span><br><span class="line">// 把导出的模型进行压缩</span><br><span class="line">rar a -r Qwen3-8rar a -r Qwen3-8B_lora_sft.rar ./output/Qwen3-8B_lora_sft/                                                        se</span><br></pre></td></tr></table></figure>
+<h2 id="模型使用"><a href="#模型使用" class="headerlink" title="模型使用"></a>模型使用</h2><p>通过界面的形式模型在本地不用下载<br>通过命令行模型在本地使用要先下载到本地<br>下载后进行解压</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 切换到导出模型的文件夹执行[部署]命令</span><br><span class="line">ollama create qwen2.5-wt0.5b -f Modelfile</span><br><span class="line">// 出现”success”表示模型部署成功。</span><br></pre></td></tr></table></figure>
+<p>部署模型后可以就可以通过open-webui 进行使用了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">open-webui server</span><br></pre></td></tr></table></figure>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>微调训练：包括以下几部分配置：<br>微调训练的阶段：预训练、指令微调、强化学习等等；<br>微调使用的数据集：数据集的格式、路径、验证集的比例等等；<br>关键微调参数：在我们之前教程中重点学习的：学习率、训练轮数、批量 大小等等；<br>LoRA 参数：当使用 Lora 微调时需要配置的一些特殊参数；<br>RLHF 参数：当训练阶段为强化学习时需要配置的一些特殊参数；<br>特殊优化参数：当选择使用 GaLore、APOLLO 和 BAdam 优化器时需要配置的一些参数；<br>SwanLab 参数：一款开源的模型训练跟踪与可视化工具；</p>
+<p>LLM模型选择<br>成本<br>本身训练语言是否中文（中文选国内）<br>模型大小<br>硬件兼容性</p>
+<p>数据准备<br>数据不同格式训练不同模型<br>重复数据删除 否则增加训练时长</p>
+<p>comfyui</p>
 
       
     </div>
@@ -407,6 +428,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/llm/xinchang/fineTuning.html" rel="prev" title="xxx">
+                xxx <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -472,7 +497,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">262</span>
+              <span class="site-state-item-count">263</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -531,7 +556,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#业务场景分类"><span class="nav-number">1.</span> <span class="nav-text">业务场景分类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#任务类型"><span class="nav-number">2.</span> <span class="nav-text">任务类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#硬件选择"><span class="nav-number">3.</span> <span class="nav-text">硬件选择</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计算资源"><span class="nav-number">4.</span> <span class="nav-text">计算资源</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模型选择-模型类型"><span class="nav-number">5.</span> <span class="nav-text">模型选择/模型类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#借助LLAMAFactory-进行微调"><span class="nav-number">6.</span> <span class="nav-text">借助LLAMAFactory 进行微调</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#指定数据集"><span class="nav-number">6.1.</span> <span class="nav-text">指定数据集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">6.2.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#业务场景分类"><span class="nav-number">1.</span> <span class="nav-text">业务场景分类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#任务类型"><span class="nav-number">2.</span> <span class="nav-text">任务类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#硬件选择"><span class="nav-number">3.</span> <span class="nav-text">硬件选择</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计算资源"><span class="nav-number">4.</span> <span class="nav-text">计算资源</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模型选择-模型类型"><span class="nav-number">5.</span> <span class="nav-text">模型选择/模型类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#借助LLAMAFactory-进行微调"><span class="nav-number">6.</span> <span class="nav-text">借助LLAMAFactory 进行微调</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#指定数据集"><span class="nav-number">6.1.</span> <span class="nav-text">指定数据集</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#用界面调试"><span class="nav-number">6.1.1.</span> <span class="nav-text">用界面调试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用命令行调试"><span class="nav-number">6.1.2.</span> <span class="nav-text">用命令行调试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调试完成"><span class="nav-number">6.2.</span> <span class="nav-text">调试完成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型保存、模型导出"><span class="nav-number">6.3.</span> <span class="nav-text">模型保存、模型导出</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#通过界面保存"><span class="nav-number">6.3.1.</span> <span class="nav-text">通过界面保存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过命令行保存"><span class="nav-number">6.3.2.</span> <span class="nav-text">通过命令行保存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型使用"><span class="nav-number">6.4.</span> <span class="nav-text">模型使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">6.5.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
             
 
           </div>

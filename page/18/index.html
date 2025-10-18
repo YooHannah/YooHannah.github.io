@@ -259,6 +259,139 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/test/Karmatest.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/test/Karmatest.html" itemprop="url">
+                  Karma test
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-12T23:54:02+08:00">
+                2017-08-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Karma-test"><a href="#Karma-test" class="headerlink" title="Karma test"></a>Karma test</h1><p>Karma是由Google团队开发的一套前端测试运行框架。它不同于测试框架（例如jasmine，mocha等），运行在这些测试框架之上。主要完成以下工作：<br>Karma启动一个web服务器，生成包含js源代码和js测试脚本的页面；<br>运行浏览器加载页面，并显示测试的结果；<br>如果开启检测，则当文件有修改时，执行继续执行以上过程。</p>
+<h1 id="搭建测试环境"><a href="#搭建测试环境" class="headerlink" title="搭建测试环境"></a>搭建测试环境</h1><p>npm install -g karma-cli //让全局都可以运行karma的命令行,命令行工具<br>npm i karma –save-dev //只在当前项目中使用karma<br>npm install //安装项目的依赖 package.json<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&quot;devDependencies&quot;: &#123;</span><br><span class="line">    &quot;karma&quot;: &quot;^1.7.0&quot;,</span><br><span class="line">    &quot;karma-chrome-launcher&quot;: &quot;^2.2.0&quot;,</span><br><span class="line">    &quot;karma-mocha&quot;: &quot;^1.3.0&quot;,</span><br><span class="line">    &quot;mocha&quot;: &quot;^3.5.0&quot;,</span><br><span class="line">    &quot;should&quot;: &quot;^11.2.1&quot;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>karma init //在cmd中运行该命令,构建karma.conf.js文件,运行后会询问相关问题然后生成karma.conf.js文件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">Which testing framework <span class="keyword">do</span> you want to use ?</span><br><span class="line">Press tab to list possible options. Enter to move to the next question.</span><br><span class="line">&gt; mocha <span class="comment">//选择要使用的框架,不能直接输入,是选择题,点击键盘箭头可更改选项</span></span><br><span class="line"></span><br><span class="line">Do you want to use Require.js ?</span><br><span class="line">This will add Require.js plugin.</span><br><span class="line">Press tab to list possible options. Enter to move to the next question.</span><br><span class="line">&gt; no  <span class="comment">//是否add Require.js plugin</span></span><br><span class="line"></span><br><span class="line">Do you want to capture any browsers automatically ?</span><br><span class="line">Press tab to list possible options. Enter empty string to move to the next quest</span><br><span class="line">ion.</span><br><span class="line">&gt; Chrome <span class="comment">//选择用哪个浏览器打开测试页，也是选择题，不能输入</span></span><br><span class="line">&gt;</span><br><span class="line"></span><br><span class="line">What is the location <span class="keyword">of</span> your source and test files ?</span><br><span class="line">You can use glob patterns, eg. <span class="string">"js/*.js"</span> or <span class="string">"test/**/*Spec.js"</span>.</span><br><span class="line">Enter empty string to move to the next question.</span><br><span class="line">&gt; src<span class="comment">/*.js  //添加要测试的代码的路径，不是测试用例代码的路径，同时，代码中用到的其他文件也在这里同时添加，</span></span><br><span class="line"><span class="comment">11 08 2017 15:03:13.822:WARN [init]: There is no file matching this pattern.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">&gt; //	回车可以切换下一行继续添加，连续回车进入下一个问题</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Should any of the files included by the previous patterns be excluded ?</span></span><br><span class="line"><span class="comment">You can use glob patterns, eg. "**/</span>*.swp<span class="string">".</span></span><br><span class="line"><span class="string">Enter empty string to move to the next question.</span></span><br><span class="line"><span class="string">&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Do you want Karma to watch all the files and run the tests on change ?</span></span><br><span class="line"><span class="string">Press tab to list possible options.</span></span><br><span class="line"><span class="string">&gt; yes //是否跟所有文件自动开启测试</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Config file generated at "</span>G:\css\homework1\karma.conf.js<span class="string">".</span></span><br></pre></td></tr></table></figure></p>
+<p>karma.conf.js文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">module.exports = function(config) &#123;</span><br><span class="line">  config.set(&#123;</span><br><span class="line"></span><br><span class="line">    // base path that will be used to resolve all patterns (eg. files, exclude)</span><br><span class="line">    basePath: &apos;&apos;,//根路径，后面配置的基本所有相对路径都会根据这个路径来构造。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // frameworks to use 使用到的框架</span><br><span class="line">    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter</span><br><span class="line">    frameworks: [&apos;mocha&apos;],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // list of files / patterns to load in the browser  将会在浏览器里面执行的代码</span><br><span class="line">    files: [</span><br><span class="line">      &apos;node_modules/should/should.js&apos;,</span><br><span class="line">      &apos;js/*.js&apos;,</span><br><span class="line">      &apos;quz/*.js&apos;,</span><br><span class="line">      &apos;test/*.js&apos;</span><br><span class="line">    ],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // list of files to exclude 需要从 files 中排除掉的文件</span><br><span class="line">    exclude: [</span><br><span class="line">    ],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // preprocess matching files before serving them to the browser需要做预处理的文件，以及这些文件对应的预处理器。</span><br><span class="line">    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor</span><br><span class="line">    preprocessors: &#123;////此处就可以将 coffee 、 ES6 等代码转换一下。</span><br><span class="line">        &apos;js/*.js&apos;: [&apos;coverage&apos;],//测试覆盖率</span><br><span class="line">        &apos;quz/*.js&apos;: [&apos;coverage&apos;]//测试覆盖率</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // test results reporter to use 测试结果报告器</span><br><span class="line">    // possible values: &apos;dots&apos;, &apos;progress&apos;</span><br><span class="line">    // available reporters: https://npmjs.org/browse/keyword/karma-reporter</span><br><span class="line">    reporters: [&apos;progress&apos;, &apos;coverage&apos;],</span><br><span class="line"></span><br><span class="line">     // 覆盖率报告器配置</span><br><span class="line">    coverageReporter: &#123;</span><br><span class="line">      type : &apos;lcov&apos;, //html格式会生成html文件，lcov格式可以和coveralls结合生成coveralls徽章</span><br><span class="line">      dir : &apos;coverage/&apos;</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    // web server port 服务器端口号</span><br><span class="line">    port: 9876,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // enable / disable colors in the output (reporters and logs)</span><br><span class="line">    colors: true,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // level of logging 日志级别</span><br><span class="line">    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG</span><br><span class="line">    logLevel: config.LOG_INFO,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // enable / disable watching file and executing tests whenever any file changes 启用/禁用监视文件变化重新执行测试的功能</span><br><span class="line">    autoWatch: true,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // start these browsers 使用的浏览器</span><br><span class="line">    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher</span><br><span class="line">    browsers: [&apos;Chrome&apos;],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    // Continuous Integration mode true测试一次就结束,false测试完一直处于测试状态</span><br><span class="line">    // if true, Karma captures browsers, runs the tests and exits</span><br><span class="line">    singleRun: true,</span><br><span class="line"></span><br><span class="line">    // Concurrency level</span><br><span class="line">    // how many browser should be started simultaneous</span><br><span class="line">    concurrency: Infinity</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="集成测试Travis-CI"><a href="#集成测试Travis-CI" class="headerlink" title="集成测试Travis CI"></a>集成测试Travis CI</h1><p><a href="/post/knowledge/TravishCI.html">Travish CI使用</a><br>通过Travis CI测试我们可以获得一个测试通过的标志<a href="https://travis-ci.org/YooHannah/homework1" target="_blank" rel="noopener"><img src="https://travis-ci.org/YooHannah/homework1.svg?branch=develop" alt="Build Status"></a>，可以将它放在github仓库readme.md文件里面<br><img src="/image/coverage1.png" alt="coverage1"><br>更改链接中branch的值可以获得对应分支的测试结果</p>
+<h1 id="测试代码覆盖率-Coverage"><a href="#测试代码覆盖率-Coverage" class="headerlink" title="测试代码覆盖率 Coverage"></a>测试代码覆盖率 Coverage</h1><p>衡量测试脚本的质量–代码覆盖率:测试中运行到的代码占所有代码的比率</p>
+<p>安装测试覆盖率工具<br>npm i –save-dev karma-coverage</p>
+<p>修改配置文件karma.conf.js<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// modified</span><br><span class="line">preprocessors: &#123;</span><br><span class="line">    &apos;src/**/*.js&apos;: [&apos;coverage&apos;], //要测试的功能代码路径：[&apos;coverage&apos;]   多个文件夹就逗号隔开，按格式写下去</span><br><span class="line">    &apos;js/*.js&apos;: [&apos;coverage&apos;],</span><br><span class="line">    &apos;quz/*.js&apos;: [&apos;coverage&apos;]</span><br><span class="line">&#125;,</span><br><span class="line"></span><br><span class="line">//modified</span><br><span class="line">reporters: [&apos;progress&apos;, &apos;coverage&apos;],</span><br><span class="line"></span><br><span class="line">// add</span><br><span class="line">coverageReporter: &#123;</span><br><span class="line">  type : &apos;html&apos;,</span><br><span class="line">  dir : &apos;coverage/&apos;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure></p>
+<p>运行karma start,会新增coverage文件夹,里面只有一个浏览器名的文件夹，里面是根据preprocessors添加的路径生成对应的文件夹和其他文件，<br>其他文件里面有index.html文件，是整个测试的测试报告，文件夹里是每个文件的覆盖测试结果和代码具体的覆盖情况</p>
+<p>注意：如果不想将测试结果上传github,记得更改.gitignore文件，将coverage文件夹忽略掉</p>
+<h1 id="获取覆盖率标志"><a href="#获取覆盖率标志" class="headerlink" title="获取覆盖率标志"></a>获取覆盖率标志</h1><p>github 仓库经常会看到这个标志<br><img src="/image/coverage2.png" alt="coverage2"><br>就是说项目的测试覆盖率是91%，要获取这个标志我们需要将测试覆盖率放到<a href="https://coveralls.io" target="_blank" rel="noopener">Coveralls</a>上</p>
+<p>安装 coveralls方便我们在Travis CI上测试完之后将结果上传<br>npm i coveralls –save-dev</p>
+<p>更改karma.conf.js<br>coverageReporter: {<br>  type : ‘lcov’, //将html改为lcov<br>  dir : ‘coverage/‘<br>},<br>接下来操作步骤可以有两种<br>方法一：<br>仅更改 package.json文件,不保留测试命令karma start<br>更改package.json的scripts<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123;</span><br><span class="line">    &quot;test&quot;: &quot;./node_modules/karma/bin/karma start --browsers Firefox --single-run &amp;&amp; find coverage -name lcov.info -print0 | xargs -0 cat | ./node_modules/coveralls/bin/coveralls.js &amp;&amp; rm -rf ./coverage&quot;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>方法二：<br>更改package.json文件,保留测试命令karma start<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123;</span><br><span class="line">		&quot;test&quot;: &quot;karma start&quot;,</span><br><span class="line">    &quot;report&quot;: &quot;find coverage -name lcov.info -print0 | xargs -0 cat | ./node_modules/coveralls/bin/coveralls.js &amp;&amp; rm -rf ./coverage&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>也要更改.travis.yml文件，添加以下语句<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">after_success:</span><br><span class="line">  - &quot;npm run report&quot;</span><br></pre></td></tr></table></figure></p>
+<p>然后push代码，等Travi CI 完成测试后，我们可以在<a href="https://coveralls.io" target="_blank" rel="noopener">Coveralls</a>上获取标志,<br>在总的测试结果那个页面不是具体某次提交的页面获取<br><img src="/image/coverage3.png" alt="coverage3"><br>点击EMBED可以获取不同格式的标志代码，<br>复制粘贴MARKDOWN 格式可以放在readme.md文件中直接使用</p>
+<p>相关链接：<br><a href="https://csbun.github.io/blog/2015/11/karma/" target="_blank" rel="noopener">使用 Karma 在真实浏览器上测试</a><br><a href="https://segmentfault.com/a/1190000006895064" target="_blank" rel="noopener">前端单元测试之Karma环境搭建</a><br><a href="https://imweb.io/topic/5833d14cf8a1d5546059a301" target="_blank" rel="noopener">前端自动化测试解决方案探析</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/var.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1437,124 +1570,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/angular/angularjsfilterEmoji.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/angular/angularjsfilterEmoji.html" itemprop="url">
-                  Angularjs 利用图片更换emoji表情
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-01T06:46:02+08:00">
-                2017-08-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在某些浏览器中,emoji表情不能正常显示,只能显示原始状态如下<br><img src="/image/emoji1.png" alt="erroremoji"><br>为使表情正常显示，这里利用转码方法将emoji符号用图片替换<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//对数据$scope.data.remark做表情替换处理,$scope.data.remark是包含emoji符号的字符串</span></span><br><span class="line">    <span class="keyword">var</span> str=$scope.data.remark;</span><br><span class="line">    str=str.replace(rep,<span class="function"><span class="keyword">function</span>(<span class="params">code</span>) </span>&#123; <span class="comment">//code即匹配到的emoji符号,对该符号通过_escapeToUtf32(code)转码,得到对应图片名,然后图片替换</span></span><br><span class="line">     <span class="keyword">return</span> <span class="string">'&lt;img class="emoji" style="vertical-align:middle" src="assets/img/emoji/'</span>+_escapeToUtf32(code) + <span class="string">'.png"&gt;'</span>;</span><br><span class="line">    &#125;)</span><br><span class="line">    $scope.data.remark = str;</span><br><span class="line"></span><br><span class="line"><span class="comment">//用emoji符号的unicode码匹配emoji符号,例如270c匹配 victory hand符号</span></span><br><span class="line"> <span class="keyword">var</span> rep =<span class="regexp">/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]|\u270c|\u261d/g</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//emoji 表情转码</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span>  <span class="title">_escapeToUtf32</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> escaped = [],</span><br><span class="line">      unicodeCodes = _convertStringToUnicodeCodePoints(str),</span><br><span class="line">      i = <span class="number">0</span>,</span><br><span class="line">      l = unicodeCodes.length,</span><br><span class="line">      hex;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (; i &lt; l; i++) &#123;</span><br><span class="line">      hex = unicodeCodes[i].toString(<span class="number">16</span>);</span><br><span class="line">      escaped.push(<span class="string">'0000'</span>.substr(hex.length) + hex);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> escaped.join(<span class="string">'-'</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">function</span> <span class="title">_convertStringToUnicodeCodePoints</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> surrogate1st = <span class="number">0</span>,</span><br><span class="line">      unicodeCodes = [],</span><br><span class="line">      i = <span class="number">0</span>,</span><br><span class="line">      l = str.length;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (; i &lt; l; i++) &#123;</span><br><span class="line">      <span class="keyword">var</span> utf16Code = str.charCodeAt(i);</span><br><span class="line">      <span class="keyword">if</span> (surrogate1st != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (utf16Code &gt;= <span class="number">0xDC00</span> &amp;&amp; utf16Code &lt;= <span class="number">0xDFFF</span>) &#123;</span><br><span class="line">          <span class="keyword">var</span> surrogate2nd = utf16Code,</span><br><span class="line">            unicodeCode = (surrogate1st - <span class="number">0xD800</span>) * (<span class="number">1</span> &lt;&lt; <span class="number">10</span>) + (<span class="number">1</span> &lt;&lt; <span class="number">16</span>) + (surrogate2nd - <span class="number">0xDC00</span>);</span><br><span class="line">          unicodeCodes.push(unicodeCode);</span><br><span class="line">        &#125;</span><br><span class="line">        surrogate1st = <span class="number">0</span>;</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (utf16Code &gt;= <span class="number">0xD800</span> &amp;&amp; utf16Code &lt;= <span class="number">0xDBFF</span>) &#123;</span><br><span class="line">        surrogate1st = utf16Code;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        unicodeCodes.push(utf16Code);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> unicodeCodes;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Angularjs对字符串里面的html标签不会按照HTML去解析,会当做字符串显示,</span></span><br><span class="line"><span class="comment">//所以这里需要对字符串进行过滤，使字符串里面的标签能按照html解析</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//新建过滤器trust2Html,这里使用$sce方法</span></span><br><span class="line">app.filter(<span class="string">'trust2Html'</span>, [<span class="string">'$sce'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">$sce</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">val</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> $sce.trustAsHtml(val);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;])</span><br><span class="line"></span><br><span class="line"><span class="comment">//在页面里面显示经过图片替换的含emoji符号的字符串</span></span><br><span class="line">&lt;label ng-bind-html=<span class="string">"data.remark|trust2Html"</span>&gt;&lt;<span class="regexp">/label&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>替换后结果<br><img src="/image/emoji2.png" alt="exactemoji"><br><a href="https://apps.timwhitlock.info/emoji/tables/unicode#block-6a-additional-emoticons" target="_blank" rel="noopener">Emoji Unicode Tables</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1598,7 +1613,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">262</span>
+              <span class="site-state-item-count">263</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

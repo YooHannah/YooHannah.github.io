@@ -259,6 +259,139 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/biasVariance.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/machineLearning/biasVariance.html" itemprop="url">
+                  高偏差和高方差
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-09-27T17:39:37+08:00">
+                2024-09-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>通过判断高方差和高偏差的大小可以判断模型的性能问题<br>一般有以下两个性能问题<br>高偏差意味着模型欠拟合<br>高方差意味着模型过拟合</p>
+<p>高偏差的情况下，<br>Jtrain 值会比较大，且Jtrain和Jcv 值相近<br>也就是说Jtrain 较高对应的训练数据的拟合度本身就不够</p>
+<p>高方差的情况下，<br>Jcv 会远大于Jtrain, Jtrain 值可能比较小<br>就是说模型对训练数据很拟合，但是对交叉验证数据不够拟合</p>
+<p>也有高方差和高偏差两个问题同时存在的情况<br>Jtrain 值会比较大，且Jcv 远大于Jtrain,<br>这种情况意味着模型可能对一些数据过拟合，对一些数据又存在欠拟合</p>
+<p><img src="/image/LLM/109.png" alt></p>
+<h1 id="正则化参数𝜆-对模型的影响"><a href="#正则化参数𝜆-对模型的影响" class="headerlink" title="正则化参数𝜆 对模型的影响"></a>正则化参数𝜆 对模型的影响</h1><p>如果𝜆偏大会导致Jtrain 偏大，出现欠拟合<br>(想象𝜆现在是一个非常大的数值，为使Jtrain 最小，就会让w值逐渐趋近0, 最终模型无限接近b)<br>如果𝜆偏小会导致Jtrain 偏小，但是Jcv 偏大，出现过拟合<br>(想象𝜆现在无限趋近于0，或者直接等于0， 那么要使Jtrain 最小，w取值就得变大，多项式就会被保留，最终模型出现过拟合)<br>如果𝜆取值适中就可以实现Jtrain和Jcv 值都偏低，模型适当拟合的效果<br><img src="/image/LLM/110.png" alt></p>
+<h2 id="𝜆-如何取值"><a href="#𝜆-如何取值" class="headerlink" title="𝜆 如何取值"></a>𝜆 如何取值</h2><p>通过选取不同 𝜆 带入计算最小损失函数，用得到的(w,b)值计算Jcv, 选取多组Jcv 中 最小值的(w,b)进行Jtest 计算，<br><img src="/image/LLM/111.png" alt></p>
+<h2 id="𝜆-趋势图"><a href="#𝜆-趋势图" class="headerlink" title="𝜆 趋势图"></a>𝜆 趋势图</h2><p>𝜆 对于误差的影响趋势和多项式对误差的影响趋势呈镜像关系<br>𝜆 值从小到大，Jtrain 从小到大，模型从过拟合到欠拟合<br>多项式平方数从小到大，Jtrain 从大到小， 模型从欠拟合到过拟合<br><img src="/image/LLM/112.png" alt></p>
+<h1 id="建立性能基准线来判断模型性能"><a href="#建立性能基准线来判断模型性能" class="headerlink" title="建立性能基准线来判断模型性能"></a>建立性能基准线来判断模型性能</h1><p>计算基准线与Jtrain 的差A， A 如果偏大说明模型存在高偏差欠拟合问题<br>计算Jtrain 与 Jcv 的差B，B 如果偏大说明存在高方差过拟合问题<br>如果A 大于B 说明存在高偏差，欠拟合<br>如果A 小于B 说明存在高方差，过拟合<br>如果A 和 B 数值接近，说明 高偏差和高方差同时存在<br><img src="/image/LLM/115.png" alt><br>基准线可以来自<br>人类的测试水平<br>竞争算法的性能水平<br>基于过程经验判断的水平<br><img src="/image/LLM/114.png" alt><br>以 语音识别为例<br><img src="/image/LLM/113.png" alt></p>
+<h1 id="学习曲线"><a href="#学习曲线" class="headerlink" title="学习曲线"></a>学习曲线</h1><p>Jtrain 和Jcv 随 训练集大小m变化的趋势曲线被称为学习曲线</p>
+<p>一般情况下，<br>Jtrain 会随m 变大逐渐变大，因为为了拟合更多数据，数据比一定会散落在曲线上，误差累加起来数值会变大<br>Jcv 会随m 变大逐渐变小，因为更多的数据可以展示更多的情况，是模型拟合度更高，对于Jcv 计算就是越小<br><img src="/image/LLM/116.png" alt></p>
+<p>但是对于存在高偏差的模型，增加样本数量并不一定能对模型拟合产生多大帮助，<br>因为高偏差模型具备欠拟合特点，随样本数增加损失函数也会增加，且相对基本线误差依然存在<br><img src="/image/LLM/117.png" alt></p>
+<p>对于存在高方差的模型，增加样本数量可以起到一定帮助<br>因为高方差模型具体过拟合特点，会将增加的样本继续拟合到自己的训练模型中，相当容纳近了更多的数据情况<br>可以更好的拟合实际的情况<br><img src="/image/LLM/118.png" alt></p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>高偏差和高方差的一些解决方案<br><img src="/image/LLM/119.png" alt></p>
+<h1 id="神经网络中的应用"><a href="#神经网络中的应用" class="headerlink" title="神经网络中的应用"></a>神经网络中的应用</h1><p>神经网络是低偏差的模型，<br>在训练过程中如果Jtrain 过大可以使用更大的神经网络，缺点就是运算速度会变低且会增加研发成本<br>在Jtrain 基本与基准线相差不大时计算Jvc，如果Jvc 过大可以增加数据样本重新回到模型计算<br>经过上面不断重复的过程，最终得到合适的模型参数<br><img src="/image/LLM/120.png" alt><br>只要数据规则化做的合适，大型神经网络总是会比小型神经网络表现好一些<br><img src="/image/LLM/121.png" alt><br>在tensorFlow 中，可以在构建layer 时传入规则化参数<br><img src="/image/LLM/122.png" alt></p>
+<h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><p>练习多项式，正则化参数𝜆，训练数据个数m, 神经网络层数<br><a href="https://colab.research.google.com/github/kaieye/2022-Machine-Learning-Specialization/blob/main/Advanced%20Learning%20Algorithms/week3/8.Practice%20Lab%20Advice%20for%20applying%20machine%20learning/C2_W3_Assignment.ipynb#scrollTo=3tnHtCF35uzg" target="_blank" rel="noopener">链接</a></p>
+<p>The simple model is a bit better in the training set than the regularized model but it worse in the cross validation set.</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/advanceOpt.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1431,123 +1564,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/llm/transformer.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/llm/transformer.html" itemprop="url">
-                  transformer
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-08-03T15:15:37+08:00">
-                2024-08-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>to do<br>整理书中知识点</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1591,7 +1607,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">262</span>
+              <span class="site-state-item-count">263</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
