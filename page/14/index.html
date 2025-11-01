@@ -259,6 +259,154 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/course/thinking.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/react/course/thinking.html" itemprop="url">
+                  开发思想
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-04T21:01:37+08:00">
+                2018-12-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><a href="https://codesandbox.io/s/6n20nrzlxz" target="_blank" rel="noopener">源码</a><br><a href="https://github.com/supnate/react-geek-time" target="_blank" rel="noopener">git仓库</a></p>
+<h1 id="传统框架存在问题"><a href="#传统框架存在问题" class="headerlink" title="传统框架存在问题"></a>传统框架存在问题</h1><p>1.传统 UI操作关注太多细节<br>DOM API 繁多，需要手动调用，且要经过多步骤进行更新<br>react 解决办法：始终整体‘刷新’页面 ，无需关心细节，（不管谁是哪部分新增或更改的，根据现在状态整体刷新页面）</p>
+<p>2.应用程序状态分散在各处f难以追踪和维护<br>传统数据模型存在问题：传统 MVC结构复杂，难以扩展和维护<br>react 解决办法：Flux 单向数据流</p>
+<p>创建组件<br>1.创建静态 UI<br>2.考虑组件的状态组成 ：是由state内部维护还是用外部传进来的props维护<br>3.考虑组件的交互方式：内部进行了操作，如何告知/把状态暴露到父组件</p>
+<h1 id="受控组件VS非受控组件"><a href="#受控组件VS非受控组件" class="headerlink" title="受控组件VS非受控组件"></a>受控组件VS非受控组件</h1><p>受控组件: 表单元素状态由使用者维护<br>组件发生变化，利用onchange将状态给到到父组件（使用者），父组件更新状态，再通过props传递状态给组件，组件重新渲染</p>
+<p>非受控组件:表单元素状态 DOM自身维护</p>
+<h1 id="创建原则：单一职责原则"><a href="#创建原则：单一职责原则" class="headerlink" title="创建原则：单一职责原则"></a>创建原则：单一职责原则</h1><p>1.每个组件只做一件事<br>2.如果组件变得复杂，那么应该拆分成小组件<br>   拆分成小组件好处：<br>   a.降低复杂度；<br>   b.提高性能，如果一个组件足够大之后，任何一种状态变化，都会引起整个组件刷新，<br>拆分成小组件后，未涉及到的小组件，没有状态变化，就不会刷新</p>
+<h1 id="数据状态管理：DRY（Don’t-Repeat-Yourself）原则"><a href="#数据状态管理：DRY（Don’t-Repeat-Yourself）原则" class="headerlink" title="数据状态管理：DRY（Don’t Repeat Yourself）原则"></a>数据状态管理：DRY（Don’t Repeat Yourself）原则</h1><p>1.能计算得到的状态就不要单独存储 :<br>2.组件尽量无状态，所需数据通过 props 获取</p>
+<h1 id="JSX"><a href="#JSX" class="headerlink" title="JSX"></a>JSX</h1><p>本质：不是模板语言，而是一种语法糖(相当于使用React.createElement创建组件)<br>优点：<br>1.声明式创建界面的直观（可以使用自定义和原生标签直接进行创建，方便构建UI）<br>2.代码动态创建界面的灵活 （节点的创建，属性更改，消失完全可以向写JS一样进行操作）<br>3.无需学习新的模板语言（JS+JSX特性）<br>约定：自定义组件以大写字母开头<br>1.react 认为小写的 tag是原生 dom 节点,如 div<br>2.大写字母开头为自定义组件<br>3.JSX 标记可以直接使用属性语法，例如&lt;meau.Item /&gt;，使用属性语法，可以不以大写字母开头<br>JSX防注入攻击<br>React DOM 在渲染之前默认会 过滤 所有传入的值。它可以确保你的应用不会被注入攻击。<br>所有的内容在渲染之前都被转换成了字符串。这样可以有效地防止 XSS(跨站脚本) 攻击</p>
+<h1 id="生命周期方法"><a href="#生命周期方法" class="headerlink" title="生命周期方法"></a>生命周期方法</h1><p>constructor<br>js标准类的构造函数<br>1.用于初始化内部状态，很少使用（初始化工作一般会在其他声明周期内使用）<br>2.唯一可以直接修改state的地方(可以这么写this.state.xxx = ‘abc’)</p>
+<p>getDerivedStateFromProps<br>react 16.3新引入的API<br>从属性props初始化内部状态state<br>1.当 state 需要从 props 初始化时使用<br>2.尽量不要使用：维护两者状态一致性会增加复杂度<br>    如果state需要从props获得，一般使用props可以通过动态计算得到，如果用state进行单独存储，就有必要时刻维护二者的一致性<br>    维护一致性则增加了复杂度，容易出BUG<br>3.每次 render都会调用<br>    该方代替原来的componentwillreceiveProps方法<br>4.典型场景:表单控件获取默认值<br>    初始值来自props,用户输入后为用户输入的值</p>
+<p>componentDidMount<br>1.UI渲染完成后调用<br>2.只执行一次<br>3.典型场景:获取外部资源（只需要获取一次资源）</p>
+<p>componentWillUnmount<br>1.组件移除时被调用<br>2.典型场景：资源释放</p>
+<p>getSnapshotBeforeUpdate<br>1.在页面 render之前调用，state 已更新<br>2.典型场景：获取 render之前的 DOM 状态</p>
+<p>componentDidUpdate<br>捕获每一次更新<br>1.每次 UI 更新时被调用<br>2.典型场景:页面需要根据 props 变化重新获取数据</p>
+<p>shouldComponentUpdate<br>1.组件决定 Virtual DOM是否要重绘<br>2.一般可以由 PureComponent 自动实现<br>3.典型场景:细节性能优化</p>
+<p>在react 16.3中去掉的方法有<br>componentWillMount<br>componentWillReceive<br>componentWillUpdate</p>
+<p>状态更新可能是异步的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//此代码可能无法更新计数器</span><br><span class="line">this.setState(&#123;</span><br><span class="line">  counter: this.state.counter + this.props.increment,</span><br><span class="line">&#125;);</span><br><span class="line">//更改为以下写法即可</span><br><span class="line">this.setState((prevState, props) =&gt; (&#123;</span><br><span class="line">  counter: prevState.counter + props.increment</span><br><span class="line">&#125;));</span><br></pre></td></tr></table></figure></p>
+<p>1.算法复杂度O(n):通过广度优先分层比较/遍历实现线性算法</p>
+<p>2.虚拟 DOM如何计算 diff<br>虚拟 DOM的两个假设<br>a.组件的 DOM结构是相对稳定的<br>b.类型相同的兄弟节点可以被唯一标识<br>根结点比较<br>属性变化及顺序：利用标识调整位置<br>节点类型发生变化：删除原有结点，构建新类型结点<br>节点跨层移动：删除原有结点，在应有（新）位置构建相同类型新结点</p>
+<p>3.key属性的作用：提高性能</p>
+<h1 id="组件复用设计模式"><a href="#组件复用设计模式" class="headerlink" title="组件复用设计模式"></a>组件复用设计模式</h1><p>1.高阶组件</p>
+<p>传入原始组件，结合生命周期创建一些额外的功能，然后附加到原始组件上，返回增加功能后的原始组件<br>额外的功能一般都是一些通用的功能，避免在原始组建上增加额外功能<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">import React from &quot;react&quot;;</span><br><span class="line"></span><br><span class="line">export default function withTimer(WrappedComponent) &#123;</span><br><span class="line">  return class extends React.Component &#123;</span><br><span class="line">    state = &#123; time: new Date() &#125;;</span><br><span class="line">    componentDidMount() &#123;</span><br><span class="line">      this.timerID = setInterval(() =&gt; this.tick(), 1000);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    componentWillUnmount() &#123;</span><br><span class="line">      clearInterval(this.timerID);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    tick() &#123;</span><br><span class="line">      this.setState(&#123;</span><br><span class="line">        time: new Date()</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    render() &#123;</span><br><span class="line">      return &lt;WrappedComponent time=&#123;this.state.time&#125; &#123;...this.props&#125; /&gt;;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2.函数子组件</p>
+<p>将子组件以函数返回值形式作为children属性传入原始组件，在原始组件中，在需要显示原始组件的地方执行函数，<br>或者在合适的生命周期中执行函数拿到多个子组件，再决定在什么位置显示不同的子组件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">//写法一</span><br><span class="line">&lt;Mouse children=&#123;mouse =&gt; (</span><br><span class="line">  &lt;p&gt;The mouse position is &#123;mouse.x&#125;, &#123;mouse.y&#125;&lt;/p&gt;</span><br><span class="line">)&#125;/&gt;</span><br><span class="line">//写法二</span><br><span class="line">&lt;Mouse&gt;</span><br><span class="line">  &#123;mouse =&gt; (</span><br><span class="line">    &lt;p&gt;The mouse position is &#123;mouse.x&#125;, &#123;mouse.y&#125;&lt;/p&gt;</span><br><span class="line">  )&#125;</span><br><span class="line">&lt;/Mouse&gt;</span><br><span class="line"></span><br><span class="line">//在原始组件应用子组件</span><br><span class="line">class Mouse extends React.Component&#123;</span><br><span class="line">    render()&#123;</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">            &#123;this.props.children(&#123;x:50,y:100&#125;)&#125;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="context-API"><a href="#context-API" class="headerlink" title="context API"></a>context API</h1><p>应用场景：全局性的一些字段，如theme的切换<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">import React from &quot;react&quot;;</span><br><span class="line"></span><br><span class="line">const enStrings = &#123;</span><br><span class="line">  submit: &quot;Submit&quot;,</span><br><span class="line">  cancel: &quot;Cancel&quot;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">const cnStrings = &#123;</span><br><span class="line">  submit: &quot;提交&quot;,</span><br><span class="line">  cancel: &quot;取消&quot;</span><br><span class="line">&#125;;</span><br><span class="line">//传入原始数据/默认值，创建context</span><br><span class="line">const LocaleContext = React.createContext(enStrings);</span><br><span class="line"></span><br><span class="line">class LocaleProvider extends React.Component &#123;</span><br><span class="line">  state = &#123; locale: cnStrings &#125;;</span><br><span class="line">  toggleLocale = () =&gt; &#123;</span><br><span class="line">    const locale =</span><br><span class="line">      this.state.locale === enStrings</span><br><span class="line">        ? cnStrings</span><br><span class="line">        : enStrings;</span><br><span class="line">    this.setState(&#123; locale &#125;);</span><br><span class="line">  &#125;;</span><br><span class="line">  render() &#123;</span><br><span class="line">    return (</span><br><span class="line">      // context的 Provider属性是一个组件，包裹需要用到context数据子组件的组件，其value值为相应在子组件中需要用到的数据</span><br><span class="line">      &lt;LocaleContext.Provider value=&#123;this.state.locale&#125;&gt;</span><br><span class="line">        &lt;button onClick=&#123;this.toggleLocale&#125;&gt;</span><br><span class="line">          切换语言</span><br><span class="line">        &lt;/button&gt;</span><br><span class="line">        &#123;this.props.children&#125;</span><br><span class="line">      &lt;/LocaleContext.Provider&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class LocaledButtons extends React.Component &#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    return (</span><br><span class="line">    //context的 Consumer属性也是一个组件，包裹需要使用context数据的子组件,</span><br><span class="line">      &lt;LocaleContext.Consumer&gt;</span><br><span class="line">        &#123;locale =&gt; (//local 即Context.Provider 的value值</span><br><span class="line">          &lt;div&gt;</span><br><span class="line">            &lt;button&gt;&#123;locale.cancel&#125;&lt;/button&gt;</span><br><span class="line">            &amp;nbsp;&lt;button&gt;&#123;locale.submit&#125;&lt;/button&gt;</span><br><span class="line">          &lt;/div&gt;</span><br><span class="line">        )&#125;</span><br><span class="line">      &lt;/LocaleContext.Consumer&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export default () =&gt; (</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &lt;LocaleProvider&gt;</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;br /&gt;</span><br><span class="line">        &lt;LocaledButtons /&gt;//使用context数据的组件必须为Provider组件的子组件，</span><br><span class="line">      &lt;/div&gt;</span><br><span class="line">    &lt;/LocaleProvider&gt;</span><br><span class="line">    &lt;LocaledButtons /&gt;//如果子组件在Context.Provider形成组件的外面使用，则只会应用默认数据，不会随Value属性发生变化</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
+<h1 id="为什么需要脚手架"><a href="#为什么需要脚手架" class="headerlink" title="为什么需要脚手架"></a>为什么需要脚手架</h1><p>react:进行UI开发<br>redux:进行状态的管理<br>react/router:进行路由的管理<br>babel:把最新的js特性翻译成兼容浏览器的旧的JS语法<br>webpack:进行打包<br>eslint:语法检查<br>因而需要引入以上几个技术栈的几十个个package,不但要了解，还要知道如何让进行相应的配置<br>在开启一个项目时，配置过程做完一次基本/只要实现一次，就基本可以复用，用来再开启新项目<br>所以为方便开发，用脚手架实现配置过程</p>
+<p>脚手架有：<br>Create React App 基础（webpack,）<br>Rekit 开源项目<br>Codesandbox 在线开发工具<br>dva 蚂蚁金服的一套脚手架工具</p>
+<h1 id="为什么需要打包"><a href="#为什么需要打包" class="headerlink" title="为什么需要打包"></a>为什么需要打包</h1><p>1.编译ES6语法特性，编译JSX（保证浏览器可以兼容执行）<br>2.整合资源，例如图片，Less/Sass，svg<br>3.优化代码体积(对变量名进行缩短，去除注释，去除空格，去除不必要的变量等等)</p>
+<p>webpack<br>将项目中所有资源进行整合，将每种资源（js，png，sass…）使用插件的方式载入对应的Loader,<br>loader能够决定自己支持什么样的语法，loader的输出是可以执行的js语言，可以兼容多平台多版本浏览器<br>可以部署的语言</p>
+<p>打包注意事项<br>1.设置nodejs环境为production<br>开发环境可能需要检查输入的参数的类型，语法，拼写等问题，但生产环境不需要</p>
+<p>2.禁用开发时专用代码，比如logger<br>打包时可以根据环境判断决定是否执行一定的代码，所以开发用到的代码在打包时不应被打到生产环境，要做区分<br>3.设置应用根路径<br>告诉应用到哪里获取地址</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/designMode/command.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1359,159 +1507,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/angular/angularjsdirective.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/angular/angularjsdirective.html" itemprop="url">
-                  angularjs directive编写组件小结
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-30T07:37:09+08:00">
-                2018-08-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;edit-modal dismiss=&quot;dismiss()&quot; config=&quot;model.config&quot; after-save=&quot;model.afterSave()&quot; aaa=&quot;model.hello&quot;&gt;&lt;/edit-modal&gt;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">export function editModalDirective() &#123;</span><br><span class="line">  return &#123;</span><br><span class="line">    restrict: &apos;E&apos;,</span><br><span class="line">    template: template,</span><br><span class="line">    controller: EditModalCtrl,</span><br><span class="line">    bindToController: true,</span><br><span class="line">    controllerAs: &apos;ctrl&apos;,</span><br><span class="line">    transclude: true,</span><br><span class="line">    scope: &#123;</span><br><span class="line">      dismiss: &apos;&amp;&apos;,</span><br><span class="line">      afterSave: &apos;&amp;&apos;,</span><br><span class="line">      config: &apos;=&apos;,</span><br><span class="line">    &#125;,</span><br><span class="line">    link: function(scope, ele, attrs) &#123;</span><br><span class="line">      if (scope.ctrl.config.type === &apos;Strategy&apos;) &#123;</span><br><span class="line">        if (scope.ctrl.config.type === &apos;Strategy&apos;) &#123;</span><br><span class="line">          ele[0].className += &apos;strategy&apos;;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      </span><br><span class="line">      </span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line">//在模块编译时注册指令</span><br><span class="line">coreModule.directive(&apos;editModal&apos;, editModalDirective);</span><br><span class="line">//参考：https://www.cnblogs.com/wangnuo/p/6305742.html</span><br></pre></td></tr></table></figure>
-<h2 id="link函数"><a href="#link函数" class="headerlink" title="link函数"></a>link函数</h2><p>link函数仅在编译时执行一次，三个参数：scope, ele, attrs</p>
-<h3 id="ele"><a href="#ele" class="headerlink" title="ele"></a>ele</h3><p>即是当前的指令DOM对象，因此可以在ele上绑定触发事件,</p>
-<p>但谨慎在数据上利用事件订阅触发机制进行事件绑定，</p>
-<p>因为如果在外层包react组件的情况下，可能会导致数据刷新，但没有事件绑定，从而无法触发事件</p>
-<p>注意在获取深层子dom时可能会获取不到</p>
-<h3 id="attrs"><a href="#attrs" class="headerlink" title="attrs"></a>attrs</h3><p>指ele所在dom上的属性集合,没有在scope属性中声明的属性也能看到</p>
-<p>但要注意，属性值就是标签上变量的名，不是标签上变量指代的值</p>
-<p>标签上属性赋值变量的值在参数scope中<br><img src="/image/attrs.png" alt="attrs"></p>
-<h3 id="scope"><a href="#scope" class="headerlink" title="scope"></a>scope</h3><p>link函数参数scope指向当前指令的作用域</p>
-<p>参数scope的ctrl属性（controllerAs属性的值）即EditModalCtrl</p>
-<p>因为这里配置了controller，bindToController，controllerAs，</p>
-<p>所以在scope属性中声明的属性(config)方法（dismiss,after）会被归并到controller中，会以ctrl的属性形式出现，</p>
-<p>即如果我想拿到属性scope中声明的config,可以这样：scope.ctrl.config</p>
-<p>同时可以在EditModalCtrl中访问获取config,即this.config</p>
-<p>另外如果没有在属性scope中声明的属性aaa，但在标签中进行了配置（aaa=”model.hello”），是无效的,ctrl上是不会有aaa属性的，即传递不进来</p>
-<p>因此可以在link函数中拿到父作用域传递过来的值，分情况进行不同处理<br><img src="/image/scope.png" alt="scope"></p>
-<h2 id="scope属性"><a href="#scope属性" class="headerlink" title="scope属性"></a>scope属性</h2><p>建立子域，声明所在标签的属性名，以及传值方式,controler存在情况下被合并</p>
-<h3 id><a href="#" class="headerlink" title="@"></a>@</h3><p>@ 在 directive 中使用 xxx 属性绑定父 scope 中的属性。当改变父 scope 中属性的值的时候，directive 会同步更新值，当改变 directive 的 scope 的属性值时，父 scope 无法同步更新值。使用&#123;&#123;&#125;&#125;引用绑定值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">app.controller(&quot;myController&quot;, function ($scope) &#123;</span><br><span class="line">        $scope.name = &quot;hello world&quot;;</span><br><span class="line">    &#125;).directive(&quot;isolatedDirective&quot;, function () &#123;</span><br><span class="line">        return &#123;</span><br><span class="line">            scope: &#123;</span><br><span class="line">                name: &quot;@&quot;</span><br><span class="line">            &#125;,</span><br><span class="line">            template: &apos;Say：&#123;&#123;name&#125;&#125; &lt;br&gt;改变隔离scope的name：&lt;input type=&quot;buttom&quot; value=&quot;&quot; ng-model=&quot;name&quot; class=&quot;ng-pristine ng-valid&quot;&gt;&apos;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;div ng-controller=&quot;myController&quot;&gt;</span><br><span class="line">   &lt;div class=&quot;result&quot;&gt;</span><br><span class="line">       &lt;div&gt;父scope：</span><br><span class="line">           &lt;div&gt;Say：&#123;&#123;name&#125;&#125;&lt;br&gt;改变父scope的name：&lt;input type=&quot;text&quot; value=&quot;&quot; ng-model=&quot;name&quot;/&gt;&lt;/div&gt;</span><br><span class="line">       &lt;/div&gt;</span><br><span class="line">       &lt;div&gt;隔离scope：</span><br><span class="line">           &lt;div isolated-directive name=&quot;&#123;&#123;name&#125;&#125;&quot;&gt;&lt;/div&gt;</span><br><span class="line">       &lt;/div&gt;</span><br><span class="line">        &lt;div&gt;隔离scope（不使用&#123;&#123;name&#125;&#125;）：</span><br><span class="line">             &lt;div isolated-directive name=&quot;name&quot;&gt;&lt;/div&gt;</span><br><span class="line">         &lt;/div&gt;</span><br><span class="line">   &lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
-<h3 id="-1"><a href="#-1" class="headerlink" title="="></a>=</h3><p>= 无论是改变父 scope 还是隔离 scope 里的属性，父 scope 和隔离 scope 都会同时更新属性值，因为它们是双向绑定的关系,使用“”引用绑定值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">app.controller(&quot;myController&quot;, function ($scope) &#123;</span><br><span class="line">        $scope.user = &#123;</span><br><span class="line">            name: &apos;hello&apos;,</span><br><span class="line">            id: 1</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;).directive(&quot;isolatedDirective&quot;, function () &#123;</span><br><span class="line">        return &#123;</span><br><span class="line">            scope: &#123;</span><br><span class="line">                user: &quot;=&quot;</span><br><span class="line">            &#125;,</span><br><span class="line">            template: &apos;Say：&#123;&#123;user.name&#125;&#125; &lt;br&gt;改变隔离scope的name：&lt;input type=&quot;buttom&quot; value=&quot;&quot; ng-model=&quot;user.name&quot;/&gt;&apos;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">&lt;div ng-controller=&quot;myController&quot;&gt;</span><br><span class="line">    &lt;div&gt;父scope：</span><br><span class="line">        &lt;div&gt;Say：&#123;&#123;user.name&#125;&#125;&lt;br&gt;改变父scope的name：&lt;input type=&quot;text&quot; value=&quot;&quot; ng-model=&quot;user.name&quot;/&gt;&lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div&gt;隔离scope：</span><br><span class="line">        &lt;div isolated-directive user=&quot;user&quot;&gt;&lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;div&gt;隔离scope（使用&#123;&#123;name&#125;&#125;）：</span><br><span class="line">        &lt;div isolated-directive user=&quot;&#123;&#123;user&#125;&#125;&quot;&gt;&lt;/div&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
-<h3 id="amp"><a href="#amp" class="headerlink" title="&amp;"></a>&amp;</h3><p>&amp; 用来绑定函数，在directive中调用父域中的函数</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"> app.controller(&quot;myController&quot;, function ($scope) &#123;</span><br><span class="line">        $scope.value = &quot;hello world&quot;;</span><br><span class="line">        $scope.click = function () &#123;</span><br><span class="line">            $scope.value = Math.random();</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;).directive(&quot;isolatedDirective&quot;, function () &#123;</span><br><span class="line">        return &#123;</span><br><span class="line">            scope: &#123;</span><br><span class="line">                action: &quot;&amp;&quot;</span><br><span class="line">            &#125;,</span><br><span class="line">            template: &apos;&lt;input type=&quot;button&quot; value=&quot;在directive中执行父scope定义的方法&quot; ng-click=&quot;action()&quot;/&gt;&apos;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    &lt;div  ng-controller=&quot;myController&quot;&gt;</span><br><span class="line">        &lt;div&gt;父scope：</span><br><span class="line">            &lt;div&gt;Say：&#123;&#123;value&#125;&#125;&lt;/div&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">        &lt;div&gt;隔离scope：</span><br><span class="line">            &lt;div isolated-directive action=&quot;click()&quot;&gt;&lt;/div&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
-<p>参考： <a href="https://blog.coding.net/blog/angularjs-directive-isolate-scope?type=early" target="_blank" rel="noopener">https://blog.coding.net/blog/angularjs-directive-isolate-scope?type=early</a></p>
-<h2 id="transclude"><a href="#transclude" class="headerlink" title="transclude"></a>transclude</h2><p>类似于VUE的slot,但不如slot的灵活强，更倾向于定制插入，在固定位置插入</p>
-<h3 id="单点嵌入"><a href="#单点嵌入" class="headerlink" title="单点嵌入"></a>单点嵌入</h3><p>设置属性 transclude:true</p>
-<p>在模板中将 &lt;ng-transclude&gt;&lt;/ng-transclude&gt;放到要插入的位置</p>
-<p>应用时&lt;my-labe&gt;&lt;span&gt;1233&lt;/span&gt;&lt;/my-label&gt;;</p>
-<p>&lt;span&gt;1233&lt;/span&gt; 会自动插入&lt;ng-transclude&gt;&lt;/ng-transclude&gt;之间</p>
-<h3 id="多点嵌入"><a href="#多点嵌入" class="headerlink" title="多点嵌入"></a>多点嵌入</h3><p>设置属性 transclude ：{模板中flag:页面应用时标签名的驼峰式，}</p>
-<p>在模板中制定位置放置flag :&lt;div  ng-transclude=”flag”&gt;&lt;/div&gt;</p>
-<p>应用时 &lt;my-label&gt;&lt;my-title&gt;123&lt;/my-title&gt;&lt;/my-label&gt;</p>
-<p>123 会自动插入&lt;div  ng-transclude=”flag”&gt;&lt;/div&gt;之间</p>
-<p>参考：<a href="https://segmentfault.com/a/1190000004586636" target="_blank" rel="noopener">https://segmentfault.com/a/1190000004586636</a></p>
-<h3 id="scope绑定"><a href="#scope绑定" class="headerlink" title="scope绑定"></a>scope绑定</h3><p>使用transcludeFn给transclude进来的Dom手动制定scope,</p>
-<p>transcludeFn可来自compile，link的参数，或者controller的注入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">.directive(&quot;todo&quot;, function()&#123;</span><br><span class="line"></span><br><span class="line">    return &#123;</span><br><span class="line">        restrict:&quot;E&quot;,</span><br><span class="line">        transclude:&quot;true&quot;,</span><br><span class="line">        template:&quot;&lt;header&gt;&#123;&#123;header&#125;&#125;&lt;/header&gt;&lt;div&gt;&lt;span&gt;这里是自定义区域&lt;/span&gt;&lt;content-transclude&gt;&lt;/content-transclude&gt;&lt;/div&gt;&quot;</span><br><span class="line">        scope:&#123;</span><br><span class="line">            header:&quot;@&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        controller:[&quot;$transclude&quot;,function(transcludeFn)&#123;</span><br><span class="line">            this.transcludeFn = transcludeFn;</span><br><span class="line">        &#125;]</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">.directive(&quot;contentTransclude&quot;,funtion()&#123;</span><br><span class="line">    return &#123;</span><br><span class="line">        restrict:&quot;E&quot;,</span><br><span class="line">        require:&quot;^todo&quot;,</span><br><span class="line">        link:function(scope,element,attr,todoController)&#123;</span><br><span class="line">            todoController.transcludeFn(scope.$parent, function(transcludeContent)&#123;</span><br><span class="line">                element.append(transcludeContent);</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
-<p>参考：<a href="https://blog.csdn.net/shut1k/article/details/49848637" target="_blank" rel="noopener">https://blog.csdn.net/shut1k/article/details/49848637</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1555,7 +1550,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">263</span>
+              <span class="site-state-item-count">264</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

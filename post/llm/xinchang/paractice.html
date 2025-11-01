@@ -1,0 +1,692 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="llm,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="文生视频 找到相似图片，通过文心一言生成图片提示词 将提示词替换下面代码, 在jupyter notebook中运行可以得到5张图片  123456789101112131415161718192021222324252627282930313233343536373839404142434445import jsonimport osimport dashscopefrom dashscope">
+<meta name="keywords" content="llm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一些实操的步骤">
+<meta property="og:url" content="http://yoohannah.github.io/post/llm/xinchang/paractice.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="文生视频 找到相似图片，通过文心一言生成图片提示词 将提示词替换下面代码, 在jupyter notebook中运行可以得到5张图片  123456789101112131415161718192021222324252627282930313233343536373839404142434445import jsonimport osimport dashscopefrom dashscope">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoohannah.github.io/image/xinchangnote.jpg">
+<meta property="og:updated_time" content="2025-11-01T08:57:56.515Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一些实操的步骤">
+<meta name="twitter:description" content="文生视频 找到相似图片，通过文心一言生成图片提示词 将提示词替换下面代码, 在jupyter notebook中运行可以得到5张图片  123456789101112131415161718192021222324252627282930313233343536373839404142434445import jsonimport osimport dashscopefrom dashscope">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/xinchangnote.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/llm/xinchang/paractice.html">
+
+
+
+
+
+  <title> 一些实操的步骤 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/llm/xinchang/paractice.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                一些实操的步骤
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-11-01T10:36:37+08:00">
+                2025-11-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="文生视频"><a href="#文生视频" class="headerlink" title="文生视频"></a>文生视频</h1><ol>
+<li>找到相似图片，通过<a href="https://chat.baidu.com/search?isShowHello=1&amp;pd=csaitab&amp;setype=csaitab&amp;extParamsJson=%7B%22enter_type%22%3A%22home_tab%22%7D" target="_blank" rel="noopener">文心一言</a>生成图片提示词</li>
+<li>将提示词替换下面代码, 在jupyter notebook中运行可以得到5张图片</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">import json</span><br><span class="line">import os</span><br><span class="line">import dashscope</span><br><span class="line">from dashscope import MultiModalConversation</span><br><span class="line"></span><br><span class="line"># 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1</span><br><span class="line">dashscope.base_http_api_url = &apos;https://dashscope.aliyuncs.com/api/v1&apos;</span><br><span class="line"></span><br><span class="line">messages = [</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;role&quot;: &quot;user&quot;,</span><br><span class="line">        &quot;content&quot;: [</span><br><span class="line">            &#123;&quot;text&quot;: &quot;一张充满秋日氛围的摄影图，画面中心是一片金黄的枫叶，叶脉清晰、边缘略带枯黄斑点，阳光从画面右侧洒下，形成耀眼的光斑与柔和的光线；背景是暖色调的树木（树叶呈橙红渐变），远处有朦胧的建筑轮廓；整体风格自然写实，光线明亮且带暖调，营造出宁静又诗意的秋日氛围，细节上突出枫叶的质感与光影层次。&quot;&#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"># 若没有配置环境变量，请用百炼API Key将下行替换为：api_key=&quot;sk-xxx&quot;</span><br><span class="line"># 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key</span><br><span class="line">api_key = &quot;xxxxx&quot;</span><br><span class="line">for  i in range(0,5):</span><br><span class="line">    response = MultiModalConversation.call(</span><br><span class="line">        api_key=api_key,</span><br><span class="line">        model=&quot;qwen-image-plus&quot;,</span><br><span class="line">        messages=messages,</span><br><span class="line">        result_format=&apos;message&apos;,</span><br><span class="line">        stream=False,</span><br><span class="line">        watermark=True,</span><br><span class="line">        prompt_extend=True,</span><br><span class="line">        negative_prompt=&apos;&apos;,</span><br><span class="line">        size=&apos;1328*1328&apos;</span><br><span class="line">    )</span><br><span class="line">    </span><br><span class="line">    if response.status_code == 200:</span><br><span class="line">        print(json.dumps(response, ensure_ascii=False))</span><br><span class="line">        import requests</span><br><span class="line">        url = json.dumps(response, ensure_ascii=False)</span><br><span class="line">        reponse = requests.get(url=response.output.choices[0].message.content[0][&apos;image&apos;])</span><br><span class="line">        with open(&apos;./ad50000&apos;+str(i)+&apos;.png&apos;,&apos;wb&apos;) as f:</span><br><span class="line">            f.write(reponse.content)</span><br><span class="line">    else:</span><br><span class="line">        print(f&quot;HTTP返回码：&#123;response.status_code&#125;&quot;)</span><br><span class="line">        print(f&quot;错误码：&#123;response.code&#125;&quot;)</span><br><span class="line">        print(f&quot;错误信息：&#123;response.message&#125;&quot;)</span><br><span class="line">        print(&quot;请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code&quot;)</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>将图片上传到度加-<a href="https://aigc.baidu.com/promptMake/video" target="_blank" rel="noopener">视频生成</a>，生成依据图片生成的视频</li>
+</ol>
+<h1 id="商品评论分析"><a href="#商品评论分析" class="headerlink" title="商品评论分析"></a>商品评论分析</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br></pre></td><td class="code"><pre><span class="line"># Python3.8以上</span><br><span class="line">pip install pydantic==2.5.3 -i https://mirrors.aliyun.com/pypi/simple/</span><br><span class="line">pip install  langchain-core==0.1.45 -i https://mirrors.aliyun.com/pypi/simple/</span><br><span class="line">pip install langchain==0.1.16 -i https://mirrors.aliyun.com/pypi/simple/</span><br><span class="line">pip install  dashscope==1.24.7 -i https://mirrors.aliyun.com/pypi/simple/</span><br><span class="line"></span><br><span class="line">#导入库</span><br><span class="line">import os</span><br><span class="line">import pandas as pd</span><br><span class="line">from typing import List, Optional</span><br><span class="line">from langchain_core.pydantic_v1 import BaseModel, Field</span><br><span class="line">from langchain_core.utils.function_calling import convert_to_openai_tool</span><br><span class="line">from dashscope import Generation</span><br><span class="line">import dashscope</span><br><span class="line">from langchain.tools.render import render_text_description</span><br><span class="line">import warnings</span><br><span class="line">warnings.filterwarnings(&apos;ignore&apos;)</span><br><span class="line"></span><br><span class="line"># 1.初始化大模型环境</span><br><span class="line"></span><br><span class="line"># 使用大模型类型</span><br><span class="line">os.environ[&quot;DASHSCOPE_API_KEY&quot;] = &quot;https://dashscope.aliyuncs.com/compatible-mode/v1&quot;</span><br><span class="line"></span><br><span class="line">dashscope.api_key = &quot;xxx&quot; // 阿里云百炼 https://bailian.console.aliyun.com/?tab=model#/api-key</span><br><span class="line"></span><br><span class="line">from typing import Optional</span><br><span class="line"></span><br><span class="line">from langchain_core.pydantic_v1 import BaseModel, Field</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class Person(BaseModel):</span><br><span class="line">    &quot;&quot;&quot;Information about a person.&quot;&quot;&quot;</span><br><span class="line">    name: Optional[str] = Field(default=None, description=&quot;The name of the person&quot;)</span><br><span class="line">    hair_color: Optional[str] = Field(default=None, description=&quot;The color of the peron&apos;s hair if known&quot;)</span><br><span class="line">    height_in_meters: Optional[str] = Field(default=None, description=&quot;Height measured in meters&quot;)</span><br><span class="line"></span><br><span class="line">2.读取数据</span><br><span class="line"></span><br><span class="line">df=pd.read_excel(r&quot;./原始数据.xlsx&quot;)</span><br><span class="line"></span><br><span class="line">df.head(2)</span><br><span class="line">df[df[&quot;Rating&quot;]&lt;2].groupby(&quot;Clothing_ID&quot;).size().sort_values().tail(10) # 评分低于2的最多的10条数据</span><br><span class="line"></span><br><span class="line">3.筛选数据</span><br><span class="line">re_862=df[(df[&quot;Rating&quot;]&lt;2)&amp;(df[&quot;Clothing_ID&quot;]==862)].Review_Text.dropna(axis=0,how=any).tolist() // 去掉Review_Text 缺省的数据</span><br><span class="line"></span><br><span class="line">4.大模型处理</span><br><span class="line"></span><br><span class="line"># 定义问题类别</span><br><span class="line">class clothing(BaseModel):</span><br><span class="line">    Fabric_problems: Optional[str] = Field(default=None, description=&quot;Fabric problems: noticeable holes, loose threads, pilling, or abnormal color fading and shrinkage&quot;)</span><br><span class="line">    Workmanship_defects: Optional[str] = Field(default=None, description=&quot;Workmanship defects: poor stitching, excessive loose threads, easily detachable buttons, etc&quot;)</span><br><span class="line">    Size_discrepancies : Optional[str] = Field(default=None, description=&quot;Size discrepancies: the actual product size differs from the described dimensions, leading to ill-fitting garments.&quot;)</span><br><span class="line">    Uncomfortable_wear : Optional[str] = Field(default=None, description=&quot;non-breathable fabrics, irritation against the skin, or discomfort during wear.&quot;)</span><br><span class="line">    Fit_design: Optional[str] = Field(default=None, description=&quot;Fit and design: unsuitable cut, not conforming to ergonomics, or unflattering when worn&quot;)</span><br><span class="line">    Appearance_Discrepancies: Optional[str] = Field(default=None, description=&quot;Mismatch between the product received and online images in terms of style or color.&quot;)</span><br><span class="line">    After_Sales: Optional[str] = Field(default=None, description=&quot;Unsatisfactory customer service attitude or response efficiency.&quot;)</span><br><span class="line">    Value_Money: Optional[str] = Field(default=None, description=&quot;Consumers feel that the price does not align with the actual quality or value of the product, perceiving it as overpriced.&quot;)</span><br><span class="line"></span><br><span class="line">class Data_yun(BaseModel):</span><br><span class="line">    &quot;&quot;&quot;提取负面信息&quot;&quot;&quot;</span><br><span class="line">    comment: List[clothing]</span><br><span class="line"></span><br><span class="line"># 封装请求数据</span><br><span class="line">def prompt_yun(ct):</span><br><span class="line">    system_prompt=&quot;您是提取算法专家。仅从文本中提取相关信息。如果您不知道要求提取的属性值，则为属性值返回 null。首先抽取出用户评价中的抱怨点，然后对这些点进行分类，然后调用工具输出&quot;</span><br><span class="line">    prompt=[&#123;&quot;content&quot;:system_prompt,&quot;role&quot;:&quot;system&quot;&#125;,\</span><br><span class="line">            &#123;&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;The material is cheap&quot;&#125;,\</span><br><span class="line">            &#123;&apos;role&apos;: &apos;assistant&apos;, &apos;content&apos;: &apos;&apos;, &apos;tool_calls_ids&apos;: [&#123;&apos;function&apos;: &#123;&apos;name&apos;: &apos;Data_yun&apos;, &apos;arguments&apos;: </span><br><span class="line">                                                                              &apos;&#123;&quot;comment&quot;: [&#123;&quot;Fabric_problems&quot;: &quot;The material is cheap&quot;,&quot;Size_discrepancies&quot;: &quot;is made for women with long torso and shorter shoulders&quot;&#125;]&#125;&apos;&#125;&#125;]&#125;]</span><br><span class="line">    prompt.append(&#123;&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:ct&#125;)</span><br><span class="line">    return prompt</span><br><span class="line"></span><br><span class="line"># 向大模型提问</span><br><span class="line">def get_response_1t(mess):</span><br><span class="line">    response = Generation.call(</span><br><span class="line">        model=&apos;qwen-plus&apos;,</span><br><span class="line">        messages=mess,</span><br><span class="line">        tools=[convert_to_openai_tool(Data_yun)],</span><br><span class="line">        result_format=&apos;message&apos;, # 将输出设置为message形式</span><br><span class="line">    )</span><br><span class="line">    return response</span><br><span class="line"></span><br><span class="line">5.处理单个评论，进行模型能力测试</span><br><span class="line"></span><br><span class="line">text = re_862[1]</span><br><span class="line">p_y = prompt_yun(text)</span><br><span class="line">res = get_response_1t(p_y)</span><br><span class="line"></span><br><span class="line">res.output.choices[0].message[&quot;tool_calls&quot;][0][&apos;function&apos;][&apos;arguments&apos;]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">6.循环处理所有数据</span><br><span class="line"></span><br><span class="line">import time</span><br><span class="line">import numpy as np</span><br><span class="line">for i in re_862:</span><br><span class="line">    time.sleep(0)</span><br><span class="line">    text = i</span><br><span class="line">    if text is np.nan:</span><br><span class="line">        print(&quot;数据为空值&quot;)</span><br><span class="line">    else:</span><br><span class="line">        p_y=prompt_yun(text)</span><br><span class="line">        res=get_response_1t(p_y)</span><br><span class="line">        print(res.output.choices[0].message[&quot;tool_calls&quot;][0][&apos;function&apos;][&apos;arguments&apos;])</span><br><span class="line">        print(&apos;-&apos;*20)</span><br></pre></td></tr></table></figure>
+<h1 id="推荐算法1"><a href="#推荐算法1" class="headerlink" title="推荐算法1"></a>推荐算法1</h1><p><img src="/image/xinchangnote.jpg" alt></p>
+<p><strong>算法(模型)</strong>: 建模就是在使用某个算法。</p>
+<p><strong>关联算法</strong>: 可以实现商品的推荐。</p>
+<p><strong>电商</strong>: 购买了手机就推荐手机壳。</p>
+<p><strong>美团(小象超市)</strong>: 土豆、黄瓜、鸡蛋、面包、椰子水。—&gt;你历史的购物数据进行关联分析来推荐。</p>
+<p><strong>关联算法的阈值</strong>:</p>
+<p><strong>项集</strong>: 每个事物就是一个项集。(土豆、黄瓜、鸡蛋、面包、椰子水)</p>
+<p><strong>支持度</strong>: 满足最小支持度阈值时就认为数据(项集)之间存在关联规则。可以是多项集之间存在关联规则。0.2  3/5=0.6    牛奶和面包出现的次数/总记录数</p>
+<p>001:(牛奶、面包、啤酒、鸡蛋)<br>002:(方便面、面包、火腿肠)<br>003:(牛奶、面包、火腿肠)<br>004:(牛奶、面包、啤酒)<br>005:(矿泉水、面包、啤酒)</p>
+<p>手机和手机壳之间有关联系，还是手机壳和手机之间有关联系呢</p>
+<p><strong>置信度</strong>: 确定事物之间的关联关系的。0.8<br>面包和牛奶之间的置信度: 面包和牛奶同时出现的次数/面包出现的次数, 3/5=0.6<br>牛奶和面包之间的置信度: 牛奶和面包同时出现的次数/牛奶出现的次数 3/3=1</p>
+<p><strong>apriori算法</strong><br>如果事物不满足频繁一项集那么也就一定不满足频繁二项集，以此类推</p>
+<p>牛奶、面包、啤酒、鸡蛋、火腿肠、矿泉水、方便面</p>
+<p>牛奶: 0.6  面包: 1  啤酒: 0.6  鸡蛋0.2  火腿肠: 0.4  矿泉水: 0.2  方便面: 0.2</p>
+<p>牛奶: 面包: 0.6  牛奶: 啤酒: 0.4  牛奶: 鸡蛋: 0.2  面包: 啤酒: 0.6  面包: 鸡蛋: 0.2  啤酒: 鸡蛋: 0.2</p>
+<p><strong>fp-tree</strong>: 将事物的关联规则加载成一个树形结构</p>
+<p>面包: 5</p>
+<p>牛奶: 3  啤酒: 3  火腿肠: 1</p>
+<p>火腿肠: 1</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">import warnings</span><br><span class="line">warnings.filterwarnings(&quot;ignore&quot;)</span><br><span class="line"></span><br><span class="line">1.读取数据</span><br><span class="line"></span><br><span class="line">df = pd.read_csv(&apos;./fruit_purchases1.csv&apos;,sep=&apos;;&apos;)</span><br><span class="line">df.head()</span><br><span class="line"></span><br><span class="line">2.数据预处理</span><br><span class="line"></span><br><span class="line">df_mtix = df[&apos;购买水果&apos;].map(lambda line:line.replace(&apos; &apos;,&apos;&apos;).split(&apos;,&apos;))</span><br><span class="line">或者</span><br><span class="line">list_all_f  = []</span><br><span class="line">for x in df[&apos;购买水果&apos;]：</span><br><span class="line"> list_all_f.append(x.split(&apos;,&apos;))</span><br><span class="line"></span><br><span class="line">from mlxtend.preprocessing import TransactionEncoder</span><br><span class="line"></span><br><span class="line">model_te = TransactionEncoder()  # 设置参数</span><br><span class="line">df_te = model_te.fit_transform(df_mtix)  # 应用到数据上</span><br><span class="line">df_te = pd.DataFrame(data=df_te,columns=model_te.columns_)  # 转型</span><br><span class="line"></span><br><span class="line">3.关联规则建模</span><br><span class="line">from mlxtend.frequent_patterns import fpmax,fpgrowth,apriori // 不同的计算置信度的算法</span><br><span class="line"></span><br><span class="line">model_apriori = apriori(df=df_te,min_support=0.2,use_colnames=True)</span><br><span class="line"># model_fpmax = fpmax(df=df_te,min_support=0.1,use_colnames=True)</span><br><span class="line"># model_fpgrowth = fpgrowth(df=df_te,min_support=0.1,use_colnames=True)</span><br><span class="line"></span><br><span class="line">4.association_rules 函数来找出关联规则</span><br><span class="line">from mlxtend.frequent_patterns import association_rules</span><br><span class="line"></span><br><span class="line">rules = association_rules(df=model_apriori,metric=&apos;confidence&apos;,min_threshold=0.8)</span><br><span class="line">rules</span><br><span class="line"></span><br><span class="line">5. 推荐---当用户购买了某个水果后应推荐什么其他的水果</span><br><span class="line"></span><br><span class="line">buyfruit = input(&apos;现已经买了什么水果&apos;)</span><br><span class="line"></span><br><span class="line">lists = rules[rules[&apos;antecedents&apos;] == &#123;buyfruit&#125;][&apos;consequents&apos;].values</span><br><span class="line">print(&apos;用户购买了&apos;+ buyfruit + &apos;推荐&apos;, lists)</span><br><span class="line"></span><br><span class="line">后续策略</span><br><span class="line">去重</span><br><span class="line">如果是一个任何关联都没有的水果，可以推荐support 最高的，购买次数最多的项集</span><br></pre></td></tr></table></figure>
+<h1 id="推荐算法2"><a href="#推荐算法2" class="headerlink" title="推荐算法2"></a>推荐算法2</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 想要向某个用户去推荐音乐：</span><br><span class="line">    计算处用户和哪些用户相似，在将和用户相似的用户听过的音乐，并且是用户没用听过的音乐，推荐给用户。</span><br><span class="line">    张三：李四、王五   音乐：1 2 3 4 5 6</span><br><span class="line">    李四：音乐：1  5  6  7  8 </span><br><span class="line">    王五：音乐：2  4  7  9</span><br><span class="line">    向张三推荐：7  8  9</span><br><span class="line">1.计算用户之间的相似度：</span><br><span class="line">2.相似的用户听过的音乐；</span><br><span class="line">3.相似用户听过的音乐哪些是用户没有听过的的；</span><br><span class="line">4.推荐 --&gt;</span><br><span class="line"></span><br><span class="line"># 导入pandas和numpy库</span><br><span class="line">import pandas as pd</span><br><span class="line">import numpy as np</span><br><span class="line"># 读取数据集</span><br><span class="line">user_artists = pd.read_csv(&apos;./music/user_artists.dat&apos;, sep=&apos;\t&apos;) # 优用&quot;t&apos;分隔符读取user artists.dat文件</span><br><span class="line">artists = pd.read_csv(&apos;./music/artists.dat&apos;, sep=&apos;\t&apos;, usecols=[&apos;id&apos;, &apos;name&apos;]) # 使用t分隔符读取artists.dat文件，仅读取id和name列</span><br><span class="line">user_artists</span><br><span class="line"></span><br><span class="line"># 去除不必要的列</span><br><span class="line"># user_artists = user_artists.drop([&apos;weight&apos;], axis=1)# 删除user _artists中的weight列</span><br><span class="line"></span><br><span class="line">artists.head()</span><br><span class="line"></span><br><span class="line">artists[&apos;id&apos;] =artists[&apos;id&apos;].astype(np.int64)</span><br><span class="line"></span><br><span class="line">6.将user_artists和artists两个DataFrame进行合并，以user_artists中的artistID和artists中的id为键值进行连接。</span><br><span class="line"># 合并数据集</span><br><span class="line">data = pd.merge(user_artists, artists, left_on=&apos;artistID&apos;, right_on=&apos;id&apos;) # 将user_artists 和 artists 合并</span><br><span class="line">data = data.drop([&apos;id&apos;, &apos;artistID&apos;], axis=1) # 删除data 中的id 和artistID 列</span><br><span class="line">data</span><br><span class="line"></span><br><span class="line">7.去除评分次数少于50次的音乐和用户。</span><br><span class="line">counts = data[&apos;userID&apos;].value_counts() # 计算每个用户的评分次数</span><br><span class="line">data = data[data[&apos;userID&apos;].isin(counts[counts &gt;= 50].index)] # 去除评分次数少于50 次的用户</span><br><span class="line"></span><br><span class="line">counts = data[&apos;name&apos;].value_counts() # 计算每个音乐的评分次数</span><br><span class="line">data = data[data[&apos;name&apos;].isin(counts[counts &gt;= 50].index)] # 去除评分次数少于50 次的音乐</span><br><span class="line"></span><br><span class="line"># 将音乐和用户ID 转换为数字</span><br><span class="line">name_to_index = &#123;&#125; # 创建 name_to_index 字典</span><br><span class="line">index_to_name = &#123;&#125; # 创建index_to_name 字典</span><br><span class="line">for i, name in enumerate(data[&apos;name&apos;].unique()): # 遍历 data 中的name 列</span><br><span class="line">    name_to_index[name] = i # 将name 映射到数字</span><br><span class="line">    index_to_name[i] = name # 将数字映射到name</span><br><span class="line">    </span><br><span class="line">user_id_to_index = &#123;&#125; # 创建user_id_to_index 字典</span><br><span class="line">index_to_user_id = &#123;&#125; # 创建index_to_user_id 字典</span><br><span class="line">for i, user_id in enumerate(data[&apos;userID&apos;].unique()): # 遍历data 中的userID 列</span><br><span class="line">    user_id_to_index[user_id] = i # 将user_id 映射到数字</span><br><span class="line">    index_to_user_id[i] = user_id # 将数字映射到user_id</span><br><span class="line">data[&apos;name_index&apos;] = data[&apos;name&apos;].apply(lambda x: name_to_index[x]) # 将data 中的 name 映射到数字</span><br><span class="line">data[&apos;user_index&apos;] = data[&apos;userID&apos;].apply(lambda x: user_id_to_index[x]) # 将data 中的 user_id 映射到数字</span><br><span class="line"># # 构建用户-音乐评分矩阵</span><br><span class="line">n_users = len(user_id_to_index) # 获取用户数量</span><br><span class="line">n_artists = len(name_to_index) # 获取音乐数量</span><br><span class="line">ratings_matrix = np.zeros((n_users, n_artists)) # 创建用户-音乐评分矩阵</span><br><span class="line">ratings_matrix</span><br><span class="line"></span><br><span class="line">8.将data中的评分填入用户-音乐评分矩阵，使得ratingsmatrix的输出为。</span><br><span class="line">for row in data.itertuples(): # 遍历data</span><br><span class="line">    ratings_matrix[row[5], row[4]] = row[2] # 将data 中的评分填入用户-音乐评分矩阵</span><br><span class="line">    print(row)</span><br><span class="line">ratings_matrix</span><br><span class="line">#     print(row)</span><br><span class="line"># 计算用户之间的相似度</span><br><span class="line">from sklearn.metrics.pairwise import cosine_similarity # 导入sklearn 库中的余弦相似度计算函数</span><br><span class="line">user_similarity = cosine_similarity(ratings_matrix) # 计算用户之间的相似度</span><br><span class="line"># 为用户推荐音乐</span><br><span class="line">user_index = 0 # 设置用户索引</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">9.获取与用户最相似的用户索引similar users(不包括自己)，使得similar users的输出为:</span><br><span class="line">similar_users = np.argsort(-user_similarity[user_index])[1:] # 获取与用户索引为0 的用户最相似的用户索引</span><br><span class="line">similar_users  </span><br><span class="line">recommended_artists=[]# 创建推荐音乐列表</span><br><span class="line"></span><br><span class="line">10.填补以下程序，获取相似用户评分的音乐索引artists_rated。</span><br><span class="line"></span><br><span class="line">for i in similar_users: # 遍历相似用户索引</span><br><span class="line">    artists_rated = np.where(ratings_matrix[i] &gt; 0)[0] # 获取相似用户评分的音乐索引</span><br><span class="line">    for j in artists_rated: # 遍历音乐索引</span><br><span class="line">        if ratings_matrix[user_index][j] == 0: #用户未评分</span><br><span class="line">            recommended_artists.append((j, ratings_matrix[i][j])) # 将音乐加入推荐音乐列表</span><br><span class="line">recommended_artists = sorted(recommended_artists, key=lambda x: x[1], reverse=True)[:10] # 筛选出推荐音乐中的前10 首</span><br><span class="line">for artist in recommended_artists: # 遍历推荐音乐</span><br><span class="line">#     print(artists[artists[&apos;name&apos;] == index_to_name[artist[0]]][&apos;name&apos;].values[0]) # 打印推荐音乐</span><br><span class="line">    print(index_to_name.get(artist[0]))</span><br><span class="line">#     print(artist)</span><br><span class="line"></span><br><span class="line">artists[artists[&apos;name&apos;] == index_to_name[artist[0]]][&apos;name&apos;].values[0]</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/llm/" rel="tag"># llm</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/llm/xinchang/fineTuning.html" rel="next" title="进行模型训练的其他方式">
+                <i class="fa fa-chevron-left"></i> 进行模型训练的其他方式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">264</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#文生视频"><span class="nav-number">1.</span> <span class="nav-text">文生视频</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#商品评论分析"><span class="nav-number">2.</span> <span class="nav-text">商品评论分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#推荐算法1"><span class="nav-number">3.</span> <span class="nav-text">推荐算法1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#推荐算法2"><span class="nav-number">4.</span> <span class="nav-text">推荐算法2</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

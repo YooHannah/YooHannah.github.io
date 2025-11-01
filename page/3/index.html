@@ -259,6 +259,151 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/MachineLearningDevelopmentProcess.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/machineLearning/MachineLearningDevelopmentProcess.html" itemprop="url">
+                  机器学习开发过程
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-09-29T16:39:37+08:00">
+                2024-09-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="/image/LLM/123.png" alt></p>
+<p>整个开发过程是一个选择框架，训练模型，诊断模型循环的过程</p>
+<h1 id="错误分析"><a href="#错误分析" class="headerlink" title="错误分析"></a>错误分析</h1><p>除了从高偏差高误差角度对模型进行分析外，还可以对mcv 产生错误分类的角度对模型进行分析<br><img src="/image/LLM/125.png" alt></p>
+<p>可以从交叉验证集测试产生的错误中进行分析<br>通过将错误进行归类统计，找出对模型影响比例较大的错误和比例较小的错误<br>从而调整模型训练的方向，已解决上面遇到的问题<br><img src="/image/LLM/124.png" alt></p>
+<p>如果交叉验证集产生错误的数据比较庞大，可以选择进行随机抽取一定小批量的数据进行错误分类，以节省人力</p>
+<h1 id="添加数据"><a href="#添加数据" class="headerlink" title="添加数据"></a>添加数据</h1><p>通过引入更多数据完善模型的判断，更关注通过注入的数据引发的对模型的训练结果的影响</p>
+<h2 id="数据增强"><a href="#数据增强" class="headerlink" title="数据增强"></a>数据增强</h2><p>Augmentation: modifying an existing training example to create a new training example.<br>在原有数据基础上，通过添加特定种类的噪声，形成新的测试数据，从而完善特定种类的错误判断<br>对于图片和音频数据都适用<br><img src="/image/LLM/126.png" alt><br>但是对添加随机或者无意义噪声产生的数据进行训练，对于模型训练不会有多大帮助</p>
+<h2 id="数据合成"><a href="#数据合成" class="headerlink" title="数据合成"></a>数据合成</h2><p>Synthesis: using artificial data inputs to create a new training example.<br>直接由计算机合成训练过程中使用的数据，通常用于计算机视觉训练的场景<br><img src="/image/LLM/127.png" alt></p>
+<h1 id="迁移学习"><a href="#迁移学习" class="headerlink" title="迁移学习"></a>迁移学习</h1><p>在已有大模型训练结果基础上，通过修改输出层结果使之符合自己使用场景的训练方法<br>好处是，在数据有限的情况下，可以直接使用输出层之前的参数开始训练，减少自己从头开始训练的工作</p>
+<p>例如下面这个使用1000+分类的训练识别数字0-9的模型，只是在输出层将1000+ 输出改成10种输出，在此基础上开始训练<br><img src="/image/LLM/128.png" alt><br>一般训练步骤为下载相同输入(文本的下载文本的，音视频的下载音视频的)的预训练模型，然后用自己的数据进行训练(fine tuning)<br><img src="/image/LLM/129.png" alt></p>
+<h1 id="完整开发流程"><a href="#完整开发流程" class="headerlink" title="完整开发流程"></a>完整开发流程</h1><p><img src="/image/LLM/130.png" alt></p>
+<h2 id="部署阶段"><a href="#部署阶段" class="headerlink" title="部署阶段"></a>部署阶段</h2><p>通常应用层跟模型通过Api 进行通信，用户输入x， 模型返回预测值y^<br>软件工程师需要注意</p>
+<ol>
+<li>尽可能的保障低成本的计算出具有可靠性和有效性的预测结果</li>
+<li>可以进行大规模用户扩展使用</li>
+<li>在用户隐私允许同意的情况下进行日志记录输入和输出</li>
+<li>对模型进行系统监控，比如根据上面日志的记录，计算出因为当前数据变化导致计算结果不准时，判断是否让模型进行进一步优化</li>
+<li>保障模型更新，在上一步进行模型优化后要保证能够将老的模型替换成新模型</li>
+</ol>
+<p><img src="/image/LLM/131.png" alt></p>
+<h1 id="避免道德偏见伦理问题"><a href="#避免道德偏见伦理问题" class="headerlink" title="避免道德偏见伦理问题"></a>避免道德偏见伦理问题</h1><ol>
+<li>建议多元化(多背景，多种族)团队，上线前进行头脑风暴，探索可能对弱势群体造成伤害的可能</li>
+<li>参考行业标准</li>
+<li>上线前通过技术诊断产生的伤害可能性，从而决策是否可以上线</li>
+<li>制定延缓计划，上线后观测可能产生的伤害，及时进行回滚处理<br><img src="/image/LLM/132.png" alt></li>
+</ol>
+<h1 id="二分类错误度量"><a href="#二分类错误度量" class="headerlink" title="二分类错误度量"></a>二分类错误度量</h1><p>在对倾斜数据集(y=1 和y = 0 所占比例不是5:5)进行训练时，<br>判断模型预测结果好坏通常交叉验证集的数据计算精确率和召回率两个指标衡量<br><img src="/image/LLM/133.png" alt><br>如果二者都趋近0或1时，说明当前的模型不是一个有用的模型，一直在打印0或1<br>只有二者值都很大时，才说明算法是有用的</p>
+<p>精确率表示实际上y = 1的可能性<br>召回率表示模型计算出y = 1 的可能性</p>
+<h2 id="对于精确率和召回率的衡量"><a href="#对于精确率和召回率的衡量" class="headerlink" title="对于精确率和召回率的衡量"></a>对于精确率和召回率的衡量</h2><p>一种是通过设置阈值大小去权衡二者，从而进行取舍<br>提高阈值，会增加精度，降低召回率<br>降低阈值，会降低精度，提高召回率<br><img src="/image/LLM/134.png" alt><br>另外一种是使用F1 score分数(调和平均数)，自动计算出最佳的精度和召回率，从而选择对应的算法<br><img src="/image/LLM/135.png" alt></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/biasVariance.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1447,123 +1592,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/llm/funtuning.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/llm/funtuning.html" itemprop="url">
-                  funtuning
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-08-03T15:18:37+08:00">
-                2024-08-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>跑测试<br>重新听</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1607,7 +1635,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">263</span>
+              <span class="site-state-item-count">264</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

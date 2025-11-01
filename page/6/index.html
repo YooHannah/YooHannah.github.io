@@ -389,6 +389,137 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1129.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/react/hooks/1129.html" itemprop="url">
+                  如何提升应用打开速度
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-29T16:20:02+08:00">
+                2021-11-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="使用-import-语句，定义按需加载的起始模块"><a href="#使用-import-语句，定义按需加载的起始模块" class="headerlink" title="使用 import 语句，定义按需加载的起始模块"></a>使用 import 语句，定义按需加载的起始模块</h1><p>对于这个需求，ECMA Script 标准有一个提案，专门用于动态加载模块，语法是 import(someModule)。<br>注意，这里的 import 和我们一般用于引入模块的静态声明方式不同，比如 import something from ‘somemodule’ 。<br>但这里的 import 是作为一个函数动态运行的，这个 import() 函数会返回一个 Promise。<br>这样，在模块加载成功后，就可以在 Promise 的 then 回调函数中去使用这个模块了。</p>
+<p>虽然这只是一个提案，并没有成为标准，但是 Webpack 等打包工具利用了这样的语法去定义代码的分包。</p>
+<p>也就是说，Webpack 实现了这样的语法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">function ProfilePage() &#123;</span><br><span class="line">  // 定义一个 state 用于存放需要加载的组件</span><br><span class="line">  const [RealPage, setRealPage] = useState(null);</span><br><span class="line">  </span><br><span class="line">  // 根据路径动态加载真正的组件实现</span><br><span class="line">  import(&apos;./RealProfilePage&apos;).then((comp) =&gt; &#123;</span><br><span class="line">    setRealPage(Comp);</span><br><span class="line">  &#125;);</span><br><span class="line">  // 如果组件未加载则显示 Loading 状态</span><br><span class="line">  if (!RealPage) return &apos;Loading....&apos;;</span><br><span class="line">  </span><br><span class="line">  // 组件加载成功后则将其渲染到界面</span><br><span class="line">  return &lt;RealPage /&gt;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>import() 这个语句完全是由 Webpack 进行处理的。</p>
+<p>按需加载的实现原理：Webpack 利用了动态 import 语句，自动实现了整个应用的拆包。<br>而在实际开发中，其实并不需要关心 Webpack 是如何做到的，<br>而只需要考虑：该在哪个位置使用 import 语句去定义动态加载的拆分点。</p>
+<p>总体需要采用的策略是：按业务模块为目标去做隔离，尽量在每个模块的起始页面去定义这个拆分点。</p>
+<p><b>react-loadable</b>，专门用于 React 组件的按需加载。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import Loadable from &quot;react-loadable&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 创建一个显示加载状态的组件</span><br><span class="line">function Loading(&#123; error &#125;) &#123;</span><br><span class="line">  return error ? &apos;Failed&apos; : &apos;Loading&apos;;</span><br><span class="line">&#125;</span><br><span class="line">// 创建加载器组件</span><br><span class="line">const HelloLazyLoad = Loadable(&#123;</span><br><span class="line">  loader: () =&gt; import(&quot;./RealHelloLazyLoad&quot;),</span><br><span class="line">  loading: Loading,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>可以看到 Loadable 这个高阶组件主要就是两个 API。</p>
+<p>loader：用于传入一个加载器回调，在组件渲染到页面时被执行。<br>在这个回调函数中，我们只需要直接使用 import 语句去加载需要的模块就可以了。</p>
+<p>loading：表示用于显示加载状态的组件。在模块加载完成之前，加载器就会渲染这个组件。<br>如果模块加载失败，那么 react-loadable 会将 errors 属性传递给 Loading 组件，方便你根据错误状态来显示不同的信息给用户。</p>
+<p>按需加载可以说是减少首屏加载时间最为有效的手段，它可以让用户在打开应用时，无需加载所有代码就能开始使用，从而提升用户体验。</p>
+<h1 id="使用-service-worker-缓存前端资源"><a href="#使用-service-worker-缓存前端资源" class="headerlink" title="使用 service worker 缓存前端资源"></a>使用 service worker 缓存前端资源</h1><p>和浏览器自动的资源缓存机制相比，Service Worker 加上 Cache Storage 这个缓存机制，具有更高的准确性和可靠性。</p>
+<p>因为它可以确保两点：<br>缓存永远不过期。你只要下载过一次，就永远不需要再重新下载，除非主动删除。<br>永远不会访问过期的资源。换句话说，如果发布了一个新版本，那么你可以通过版本化的一些机制，来确保用户访问到的一定是最新的资源。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1128.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1416,143 +1547,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/react/hooks/1116.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/react/hooks/1116.html" itemprop="url">
-                  hooks 的典型应用场景
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-11-16T16:20:02+08:00">
-                2021-11-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="自定义hooks"><a href="#自定义hooks" class="headerlink" title="自定义hooks"></a>自定义hooks</h1><p>声明一个名字以 use 开头的函数, 并在函数中用到其他hooks。<br>Hooks 和普通函数在语义上的区别，就在于函数中有没有用到其它 Hooks（自定义或者内置，能够让组件刷新，或者去产生副作用），没有用到就是普通函数。</p>
-<p>典型的四个使用场景</p>
-<ol>
-<li>抽取业务逻辑；</li>
-<li>封装通用逻辑；</li>
-<li>监听浏览器状态；</li>
-<li>拆分复杂组件.</li>
-</ol>
-<h1 id="抽取业务逻辑"><a href="#抽取业务逻辑" class="headerlink" title="抽取业务逻辑"></a>抽取业务逻辑</h1><p>抽取具体业务逻辑到hooks中，暴露接口在组件中调用<br>一方面能让这个逻辑得到重用，另外一方面也能让代码更加语义化，并且易于理解和维护<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">// 实现计数器业务逻辑的拆分和重用</span><br><span class="line">import &#123; useState, useCallback &#125;from &apos;react&apos;;</span><br><span class="line"> </span><br><span class="line">function useCounter() &#123;</span><br><span class="line">  // 定义 count 这个 state 用于保存当前数值</span><br><span class="line">  const [count, setCount] = useState(0);</span><br><span class="line">  // 实现加 1 的操作</span><br><span class="line">  const increment = useCallback(() =&gt; setCount(count + 1), [count]);</span><br><span class="line">  // 实现减 1 的操作</span><br><span class="line">  const decrement = useCallback(() =&gt; setCount(count - 1), [count]);</span><br><span class="line">  // 重置计数器</span><br><span class="line">  const reset = useCallback(() =&gt; setCount(0), []);</span><br><span class="line">  </span><br><span class="line">  // 将业务逻辑的操作 export 出去供调用者使用</span><br><span class="line">  return &#123; count, increment, decrement, reset &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 应用</span><br><span class="line">import React from &apos;react&apos;;</span><br><span class="line"></span><br><span class="line">function Counter() &#123;</span><br><span class="line">  // 调用自定义 Hook</span><br><span class="line">  const &#123; count, increment, decrement, reset &#125; = useCounter();</span><br><span class="line"></span><br><span class="line">  // 渲染 UI</span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;button onClick=&#123;decrement&#125;&gt; - &lt;/button&gt;</span><br><span class="line">      &lt;p&gt;&#123;count&#125;&lt;/p&gt;</span><br><span class="line">      &lt;button onClick=&#123;increment&#125;&gt; + &lt;/button&gt;</span><br><span class="line">      &lt;button onClick=&#123;reset&#125;&gt; reset &lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h1 id="封装通用逻辑：useAsync"><a href="#封装通用逻辑：useAsync" class="headerlink" title="封装通用逻辑：useAsync"></a>封装通用逻辑：useAsync</h1><p>在每个需要异步请求的组件中，其实都需要重复相同的逻辑。<br>事实上，在处理这类请求的时候，模式都是类似的，通常都会遵循下面步骤：</p>
-<ol>
-<li>创建 data，loading，error 这 3 个 state；</li>
-<li>请求发出后，设置 loading state 为 true；</li>
-<li>请求成功后，将返回的数据放到某个 state 中，并将 loading state 设为 false；</li>
-<li>请求失败后，设置 error state 为 true，并将 loading state 设为 false。</li>
-</ol>
-<p>最后，基于 data、loading、error 这 3 个 state 的数据，<br>UI 就可以正确地显示数据，或者 loading、error 这些反馈给用户了。<br>所以，通过创建一个自定义 Hook，可以很好地将这样的逻辑提取出来，成为一个可重用的模块。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">import &#123; useState &#125; from &apos;react&apos;;</span><br><span class="line">// asyncFunction 真正发出请求的函数</span><br><span class="line">const useAsync = (asyncFunction) =&gt; &#123;</span><br><span class="line">  // 设置三个异步逻辑相关的 state</span><br><span class="line">  const [data, setData] = useState(null);</span><br><span class="line">  const [loading, setLoading] = useState(false);</span><br><span class="line">  const [error, setError] = useState(null);</span><br><span class="line">  // 定义一个 callback 用于执行异步逻辑 相当于声明一个请求的函数，在需要请求数据的情况下调用</span><br><span class="line">  const execute = useCallback(() =&gt; &#123;</span><br><span class="line">    // 请求开始时，设置 loading 为 true，清除已有数据和 error 状态</span><br><span class="line">    setLoading(true);</span><br><span class="line">    setData(null);</span><br><span class="line">    setError(null);</span><br><span class="line">    return asyncFunction()</span><br><span class="line">      .then((response) =&gt; &#123;</span><br><span class="line">        // 请求成功时，将数据写进 state，设置 loading 为 false</span><br><span class="line">        setData(response);</span><br><span class="line">        setLoading(false);</span><br><span class="line">      &#125;)</span><br><span class="line">      .catch((error) =&gt; &#123;</span><br><span class="line">        // 请求失败时，设置 loading 为 false，并设置错误状态</span><br><span class="line">        setError(error);</span><br><span class="line">        setLoading(false);</span><br><span class="line">      &#125;);</span><br><span class="line">  &#125;, [asyncFunction]);</span><br><span class="line"></span><br><span class="line">  return &#123; execute, loading, data, error &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 应用</span><br><span class="line"></span><br><span class="line">import React from &quot;react&quot;;</span><br><span class="line">import useAsync from &apos;./useAsync&apos;;</span><br><span class="line"></span><br><span class="line">export default function UserList() &#123;</span><br><span class="line">  // 通过 useAsync 这个函数，只需要提供异步逻辑的实现</span><br><span class="line">  const &#123;</span><br><span class="line">    execute: fetchUsers, // fetchUsers可以在需要请求的地方去使用</span><br><span class="line">    data: users, // 返回的数据可以直接拿来渲染ui</span><br><span class="line">    loading,</span><br><span class="line">    error,</span><br><span class="line">  &#125; = useAsync(async () =&gt; &#123;</span><br><span class="line">    const res = await fetch(&quot;https://reqres.in/api/users/&quot;);</span><br><span class="line">    const json = await res.json();</span><br><span class="line">    return json.data;</span><br><span class="line">  &#125;);</span><br><span class="line">  </span><br><span class="line">  return (</span><br><span class="line">    // 根据状态渲染 UI...</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>利用了 Hooks 能够管理 React 组件状态的能力，将一个组件中的某一部分状态独立出来，从而实现了通用逻辑的重用。</p>
-<h1 id="监听浏览器状态：useScroll"><a href="#监听浏览器状态：useScroll" class="headerlink" title="监听浏览器状态：useScroll"></a>监听浏览器状态：useScroll</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import &#123; useState, useEffect &#125; from &apos;react&apos;;</span><br><span class="line"></span><br><span class="line">// 获取横向，纵向滚动条位置</span><br><span class="line">const getPosition = () =&gt; &#123;</span><br><span class="line">  return &#123;</span><br><span class="line">    x: document.body.scrollLeft,</span><br><span class="line">    y: document.body.scrollTop,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line">const useScroll = () =&gt; &#123;</span><br><span class="line">  // 定一个 position 这个 state 保存滚动条位置</span><br><span class="line">  const [position, setPosition] = useState(getPosition());</span><br><span class="line">  useEffect(() =&gt; &#123;</span><br><span class="line">    const handler = () =&gt; &#123;</span><br><span class="line">      setPosition(getPosition(document));</span><br><span class="line">    &#125;;</span><br><span class="line">    // 监听 scroll 事件，更新滚动条位置</span><br><span class="line">    document.addEventListener(&quot;scroll&quot;, handler);</span><br><span class="line">    return () =&gt; &#123;</span><br><span class="line">      // 组件销毁时，取消事件监听</span><br><span class="line">      document.removeEventListener(&quot;scroll&quot;, handler);</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;, []);</span><br><span class="line">  return position;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 应用</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">import React, &#123; useCallback &#125; from &apos;react&apos;;</span><br><span class="line">import useScroll from &apos;./useScroll&apos;;</span><br><span class="line"></span><br><span class="line">function ScrollTop() &#123;</span><br><span class="line">  const &#123; y &#125; = useScroll();</span><br><span class="line"></span><br><span class="line">  const goTop = useCallback(() =&gt; &#123;</span><br><span class="line">    document.body.scrollTop = 0;</span><br><span class="line">  &#125;, []);</span><br><span class="line"></span><br><span class="line">  const style = &#123;</span><br><span class="line">    position: &quot;fixed&quot;,</span><br><span class="line">    right: &quot;10px&quot;,</span><br><span class="line">    bottom: &quot;10px&quot;,</span><br><span class="line">  &#125;;</span><br><span class="line">  // 当滚动条位置纵向超过 300 时，显示返回顶部按钮</span><br><span class="line">  if (y &gt; 300) &#123;</span><br><span class="line">    return (</span><br><span class="line">      &lt;button onClick=&#123;goTop&#125; style=&#123;style&#125;&gt;</span><br><span class="line">        Back to Top</span><br><span class="line">      &lt;/button&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">  // 否则不 render 任何 UI</span><br><span class="line">  return null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="拆分复杂组件"><a href="#拆分复杂组件" class="headerlink" title="拆分复杂组件"></a>拆分复杂组件</h1><p>拆分逻辑的目的不一定是为了重用，而可以是仅仅为了业务逻辑的隔离。</p>
-<p>把 Hooks 就看成普通的函数，能隔离的尽量去做隔离</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">import React, &#123; useEffect, useCallback, useMemo, useState &#125; from &quot;react&quot;;</span><br><span class="line">import &#123; Select, Table &#125; from &quot;antd&quot;;</span><br><span class="line">import _ from &quot;lodash&quot;;</span><br><span class="line">import useAsync from &quot;./useAsync&quot;;</span><br><span class="line"></span><br><span class="line">const endpoint = &quot;https://myserver.com/api/&quot;;</span><br><span class="line">const useArticles = () =&gt; &#123;</span><br><span class="line">  // 使用上面创建的 useAsync 获取文章列表</span><br><span class="line">  const &#123; execute, data, loading, error &#125; = useAsync(</span><br><span class="line">    useCallback(async () =&gt; &#123;</span><br><span class="line">      const res = await fetch(`$&#123;endpoint&#125;/posts`);</span><br><span class="line">      return await res.json();</span><br><span class="line">    &#125;, []),</span><br><span class="line">  );</span><br><span class="line">  // 执行异步调用</span><br><span class="line">  useEffect(() =&gt; execute(), [execute]);</span><br><span class="line">  // 返回语义化的数据结构</span><br><span class="line">  return &#123;</span><br><span class="line">    articles: data,</span><br><span class="line">    articlesLoading: loading,</span><br><span class="line">    articlesError: error,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line">const useCategories = () =&gt; &#123;</span><br><span class="line">  // 使用上面创建的 useAsync 获取分类列表</span><br><span class="line">  const &#123; execute, data, loading, error &#125; = useAsync(</span><br><span class="line">    useCallback(async () =&gt; &#123;</span><br><span class="line">      const res = await fetch(`$&#123;endpoint&#125;/categories`);</span><br><span class="line">      return await res.json();</span><br><span class="line">    &#125;, []),</span><br><span class="line">  );</span><br><span class="line">  // 执行异步调用</span><br><span class="line">  useEffect(() =&gt; execute(), [execute]);</span><br><span class="line"></span><br><span class="line">  // 返回语义化的数据结构</span><br><span class="line">  return &#123;</span><br><span class="line">    categories: data,</span><br><span class="line">    categoriesLoading: loading,</span><br><span class="line">    categoriesError: error,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line">const useCombinedArticles = (articles, categories) =&gt; &#123;</span><br><span class="line">  // 将文章数据和分类数据组合到一起</span><br><span class="line">  return useMemo(() =&gt; &#123;</span><br><span class="line">    // 如果没有文章或者分类数据则返回 null</span><br><span class="line">    if (!articles || !categories) return null;</span><br><span class="line">    return articles.map((article) =&gt; &#123;</span><br><span class="line">      return &#123;</span><br><span class="line">        ...article,</span><br><span class="line">        category: categories.find(</span><br><span class="line">          (c) =&gt; String(c.id) === String(article.categoryId),</span><br><span class="line">        ),</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;, [articles, categories]);</span><br><span class="line">&#125;;</span><br><span class="line">const useFilteredArticles = (articles, selectedCategory) =&gt; &#123;</span><br><span class="line">  // 实现按照分类过滤</span><br><span class="line">  return useMemo(() =&gt; &#123;</span><br><span class="line">    if (!articles) return null;</span><br><span class="line">    if (!selectedCategory) return articles;</span><br><span class="line">    return articles.filter((article) =&gt; &#123;</span><br><span class="line">      console.log(&quot;filter: &quot;, article.categoryId, selectedCategory);</span><br><span class="line">      return String(article?.category?.name) === String(selectedCategory);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;, [articles, selectedCategory]);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">const columns = [</span><br><span class="line">  &#123; dataIndex: &quot;title&quot;, title: &quot;Title&quot; &#125;,</span><br><span class="line">  &#123; dataIndex: [&quot;category&quot;, &quot;name&quot;], title: &quot;Category&quot; &#125;,</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line">export default function BlogList() &#123;</span><br><span class="line">  const [selectedCategory, setSelectedCategory] = useState(null);</span><br><span class="line">  // 获取文章列表</span><br><span class="line">  const &#123; articles, articlesError &#125; = useArticles();</span><br><span class="line">  // 获取分类列表</span><br><span class="line">  const &#123; categories, categoriesError &#125; = useCategories();</span><br><span class="line">  // 组合数据</span><br><span class="line">  const combined = useCombinedArticles(articles, categories);</span><br><span class="line">  // 实现过滤</span><br><span class="line">  const result = useFilteredArticles(combined, selectedCategory);</span><br><span class="line"></span><br><span class="line">  // 分类下拉框选项用于过滤</span><br><span class="line">  const options = useMemo(() =&gt; &#123;</span><br><span class="line">    const arr = _.uniqBy(categories, (c) =&gt; c.name).map((c) =&gt; (&#123;</span><br><span class="line">      value: c.name,</span><br><span class="line">      label: c.name,</span><br><span class="line">    &#125;));</span><br><span class="line">    arr.unshift(&#123; value: null, label: &quot;All&quot; &#125;);</span><br><span class="line">    return arr;</span><br><span class="line">  &#125;, [categories]);</span><br><span class="line"></span><br><span class="line">  // 如果出错，简单返回 Failed</span><br><span class="line">  if (articlesError || categoriesError) return &quot;Failed&quot;;</span><br><span class="line"></span><br><span class="line">  // 如果没有结果，说明正在加载</span><br><span class="line">  if (!result) return &quot;Loading...&quot;;</span><br><span class="line"></span><br><span class="line">  return (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &lt;Select</span><br><span class="line">        value=&#123;selectedCategory&#125;</span><br><span class="line">        onChange=&#123;(value) =&gt; setSelectedCategory(value)&#125;</span><br><span class="line">        options=&#123;options&#125;</span><br><span class="line">        style=&#123;&#123; width: &quot;200px&quot; &#125;&#125;</span><br><span class="line">        placeholder=&quot;Select a category&quot;</span><br><span class="line">      /&gt;</span><br><span class="line">      &lt;Table dataSource=&#123;result&#125; columns=&#123;columns&#125; /&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1596,7 +1590,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">263</span>
+              <span class="site-state-item-count">264</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

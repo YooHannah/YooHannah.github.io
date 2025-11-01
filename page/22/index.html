@@ -259,6 +259,134 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/nodejs/jssummary.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/nodejs/jssummary.html" itemprop="url">
+                  js理解
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-11T08:23:09+08:00">
+                2017-03-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h1><p>不通过花括号来界定，通过函数来定义，<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">	<span class="keyword">var</span> somevar = <span class="string">"value"</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(somevar);<span class="comment">//value</span></span><br></pre></td></tr></table></figure></p>
+<p>在访问未定义的变量或定义了但没有初始化的变量时都会获得undefined<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> scope = <span class="string">"1111"</span>;</span><br><span class="line"><span class="keyword">var</span> f = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(scope); <span class="comment">//undefined</span></span><br><span class="line">	<span class="keyword">var</span> scope = <span class="string">'f'</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>作用域的嵌套关系在定义时确定，不在调用时确定<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> scope = <span class="string">"top"</span>;</span><br><span class="line"><span class="keyword">var</span> f1 = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(scope);</span><br><span class="line">&#125;;</span><br><span class="line">f1();<span class="comment">//top</span></span><br><span class="line"><span class="keyword">var</span> f2 = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> scope = <span class="string">'f2'</span>;</span><br><span class="line">	f1();</span><br><span class="line">&#125;;</span><br><span class="line">f2(); <span class="comment">//top</span></span><br></pre></td></tr></table></figure></p>
+<p>全局作用域是个对象，这个对象叫全局对象，nodejs是global对象，浏览器是window对象，包括<br>在最外层定义的变量<br>全局对象的属性<br>未用var定义直接赋值的变量</p>
+<h1 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h1><p>由函数(环境)及其封闭的自由变量组成的集合体，<br>可以想象成一个容器，里面包括一个函数和它用到的变量，每当想使用一次这个容器里的函数，就将这个容器复制一次给调用者：<br>1.不通调用者得到的容器相互隔离，没有关系，<br>2.被复制到调用者的函数，会自己形成一个独立的运行环境，每次调用完会根据变量性质，更新变量值,不会释放变量<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> generateClosuer = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> count = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">var</span> <span class="keyword">get</span> = function()&#123;</span><br><span class="line">    count++;</span><br><span class="line">    <span class="keyword">return</span> count;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">get</span>;</span><br><span class="line">&#125;</span><br><span class="line">var counter1 = generateClosuer();</span><br><span class="line">var counter2 = generateClosuer();</span><br><span class="line">console.log(counter1()); //1</span><br><span class="line">console.log(counter1()); //2</span><br><span class="line">console.log(counter2()); //1</span><br><span class="line">console.log(counter1()); //3</span><br></pre></td></tr></table></figure></p>
+<h1 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h1><p>上下文对象即this指针，即被调用函数所处的环境，<br>上下文对象的作用是在一个函数内部引用调用它的对象本身。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">User</span>(<span class="params">name,url</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.name = name;</span><br><span class="line">	<span class="keyword">this</span>.url = url;</span><br><span class="line">	<span class="keyword">this</span>.diaplay = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> someuser = <span class="keyword">new</span> User(<span class="string">'byvoid'</span>,<span class="string">'http://www.byvoid.com'</span>);</span><br></pre></td></tr></table></figure></p>
+<p>创建someuser对象时，构造函数的this指调用它的someuser<br>函数类型的变量指向这个函数实体的一个引用，在引用之间赋值不会对对象产生复制行为。<br>我们可以通过函数的任何一个引用调用这个函数，但该函数的上下文即this不同<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> someuser = &#123;</span><br><span class="line">	name:<span class="string">'byvoid'</span>,</span><br><span class="line">	func: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line">&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> foo = &#123;</span><br><span class="line">	name:<span class="string">'foobar'</span></span><br><span class="line">&#125;;</span><br><span class="line">someuser.func();<span class="comment">//byvoid</span></span><br><span class="line">foo.func = someuser.func; <span class="comment">//引用someuser.func这个函数实体，其实就是someuser.func的代码内容</span></span><br><span class="line">foo.func();<span class="comment">//foobar this是foo</span></span><br><span class="line"></span><br><span class="line">name = <span class="string">'global'</span>;</span><br><span class="line">func = someuser.func;</span><br><span class="line">func();<span class="comment">//global</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="call-apply"><a href="#call-apply" class="headerlink" title="call/apply"></a>call/apply</h2><p>让其他对象调用本对象的方法<br>A对象名.函数属性名.call(B对象名,函数参数表(逗号隔开)); //B调用A的方法<br>A对象名.函数属性名.apply(B对象名,函数参数数组);//B调用A的方法</p>
+<h2 id="bind"><a href="#bind" class="headerlink" title="bind"></a>bind</h2><p>永久绑定函数的上下文，使其无论被谁调用，上下文都是固定的<br>A对象名.函数属性名.bind(B对象名,函数参数表(逗号隔开));<br>bind方法返回上下文为B对象的A对象的函数<br>如果在使用bind时，绑定了参数表，则在调用返回函数时，只需要传入未绑定的参数即可<br>注意不能重复绑定<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> someuser = &#123;</span><br><span class="line">	name:<span class="string">'byvoid'</span>,</span><br><span class="line">	func:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="keyword">this</span>.name);</span><br><span class="line"> &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> foo = &#123;</span><br><span class="line">	name:<span class="string">'foobar'</span></span><br><span class="line">&#125;;</span><br><span class="line">func = someuser.func.bind(foo);</span><br><span class="line">func();<span class="comment">//foobar</span></span><br><span class="line"></span><br><span class="line">func2 = func.bind(someuser);</span><br><span class="line">func2();<span class="comment">//foobar;</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="原型"><a href="#原型" class="headerlink" title="原型"></a>原型</h2><p>构造函数创建属性<br>除非必须用构造函数闭包，否则尽量用原型定义成员函数<br>原型定义的成员是多个实例共享的，因此尽量在构造函数内定义一般成员尤其是对象或数组<br>原型链<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">function Foo()&#123;</span><br><span class="line">&#125;</span><br><span class="line">object.prototype.name = &apos;my object&apos;;</span><br><span class="line">Foo.prototype.name = &apos;Bar&apos;;</span><br><span class="line">var obj = new object();</span><br><span class="line">var foo = new Foo();</span><br><span class="line">console.log(obj.name);//my object</span><br><span class="line">console.log(foo.name);//Bar</span><br><span class="line">console.log(foo.__proto__.name);//Bar</span><br><span class="line">console.log(foo.__proto__.__proto__.name);//my object</span><br><span class="line">console.log(foo.__proto__.constructor.prototype.name);//Bar</span><br></pre></td></tr></table></figure></p>
+<p><img src="/image/typeof.png" alt="typeof"></p>
+<p>【广发证券nodejs应用](<a href="http://slides.com/loskael/node#/" target="_blank" rel="noopener">http://slides.com/loskael/node#/</a>)</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/MapTraversal.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1938,127 +2066,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/iconfont.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/knowledge/iconfont.html" itemprop="url">
-                  阿里巴巴iconfont使用
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-18T10:41:51+08:00">
-                2017-02-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>1.登录<a href="http://iconfont.cn/plus/home/index?spm=a313x.7781069.1998910419.2.QImsN2" target="_blank" rel="noopener">http://iconfont.cn/plus/home/index?spm=a313x.7781069.1998910419.2.QImsN2</a> 进入搜索界面<br>2.通过输入关键字搜索自己想要的图标<br>3.将鼠标放到自己想要的图标会出现选择层，点击第一个购物车图标，添加入库<br>4.将所有想要的图标添加完后，点击右上角购物车图标打开项目添加页，点击“加入项目”右侧图标，为选择的图标新建项目,点确定<br><img src="/image/iconfont1.png" alt="iconfont1"><br><img src="/image/iconfont2.png" alt="iconfont2"><br>5.关闭项目添加页，点击导航栏的“图标管理”，进入“我的项目”栏目</p>
-<p><div><br> <img src="/image/iconfont3.png" style="width: 250px;height: 50px;margin-left: 20px" alt="图片名称" align="left"><br> <img src="/image/iconfont4.png" alt="图片名称" align="right" style="width: 150px;height: 60px;margin-top: -30px;margin-right: 80px"><br></div><br>6.使用图标到我们的HTML代码中，可以通过线上链接使用，也可以通过下载至本地使用</p>
-<h2 id="通过线上链接使用"><a href="#通过线上链接使用" class="headerlink" title="通过线上链接使用"></a>通过线上链接使用</h2><p>1.点击查看在线链接,复制代码到项目的静态资源的css文件中一般在src/assets/css路径下的文件<br>2.设置一个类icon，通过这个类的属性改变图标样式，同时在HTML中引用这个类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">.icon &#123;</span><br><span class="line">  font-family: &quot;iconfont&quot; !important;</span><br><span class="line">  font-style: normal;</span><br><span class="line">  display: inline-block;</span><br><span class="line">  vertical-align: middle;</span><br><span class="line">  background-size: 100% auto;</span><br><span class="line">  background-position: center;</span><br><span class="line">  -webkit-font-smoothing: asntialiased;</span><br><span class="line">  -webkit-text-stroke-width: 0.2px;</span><br><span class="line">  -moz-osx-font-smoothing: grayscale;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>3.在标签中添加icon类,在标签中间加入图标代码，例如：<i class="icon"> &#xe6ac; </i></p>
-<h2 id="下载至本地"><a href="#下载至本地" class="headerlink" title="下载至本地"></a>下载至本地</h2><p>1.点击下载至本地<br>2.将在线链接代码中用到的文件放到项目静态文件夹中，<br>3.将在线链接代码中文件的路径更改为项目中的文件路径，<br>4.其他步骤同线上路径<br>5.也可直接打开下载文件的IconFontDemo/assets/iconfont/的demo.html代码，看如何使用</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2102,7 +2109,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">263</span>
+              <span class="site-state-item-count">264</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
