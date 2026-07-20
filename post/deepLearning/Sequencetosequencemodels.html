@@ -1,0 +1,731 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="deepLearning,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="Sequence to Sequence Models输入为一个序列，输出为另一个序列 比如语言翻译  根据图片内容生成对其语言描述  机器翻译过程可以看做是一个有条件的语言模型 找到最合适的翻译结果Y 的过程，就是计算在 x 输入情况下得到Y的概率P，使P达到最大值的过程 相关练习上述过程更适合直接获取到整个句子Y后，对整个句子的适配度进行概率计算，而不是用贪心算法，依次根据上一个词的内容找到最">
+<meta name="keywords" content="deepLearning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sequence to Sequence Models">
+<meta property="og:url" content="http://yoohannah.github.io/post/deepLearning/Sequencetosequencemodels.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="Sequence to Sequence Models输入为一个序列，输出为另一个序列 比如语言翻译  根据图片内容生成对其语言描述  机器翻译过程可以看做是一个有条件的语言模型 找到最合适的翻译结果Y 的过程，就是计算在 x 输入情况下得到Y的概率P，使P达到最大值的过程 相关练习上述过程更适合直接获取到整个句子Y后，对整个句子的适配度进行概率计算，而不是用贪心算法，依次根据上一个词的内容找到最">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-1.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-2.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-3.jpg">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-4.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-5.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-6.jpg">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-7.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-8.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-9.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-10.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-11.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-12.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-13.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-14.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-15.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-16.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-17.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-18.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-19.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-20.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-21.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-22.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-23.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-24.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-25.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-26.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-27.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-28.png">
+<meta property="og:updated_time" content="2026-07-20T11:55:38.746Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Sequence to Sequence Models">
+<meta name="twitter:description" content="Sequence to Sequence Models输入为一个序列，输出为另一个序列 比如语言翻译  根据图片内容生成对其语言描述  机器翻译过程可以看做是一个有条件的语言模型 找到最合适的翻译结果Y 的过程，就是计算在 x 输入情况下得到Y的概率P，使P达到最大值的过程 相关练习上述过程更适合直接获取到整个句子Y后，对整个句子的适配度进行概率计算，而不是用贪心算法，依次根据上一个词的内容找到最">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/deepLearning/seq2seq-1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/deepLearning/Sequencetosequencemodels.html">
+
+
+
+
+
+  <title> Sequence to Sequence Models | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/deepLearning/Sequencetosequencemodels.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Sequence to Sequence Models
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-07-17T15:15:37+08:00">
+                2026-07-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Sequence-to-Sequence-Models"><a href="#Sequence-to-Sequence-Models" class="headerlink" title="Sequence to Sequence Models"></a>Sequence to Sequence Models</h1><p>输入为一个序列，输出为另一个序列</p>
+<p>比如语言翻译</p>
+<p><img src="/image/deepLearning/seq2seq-1.png" alt></p>
+<p>根据图片内容生成对其语言描述</p>
+<p><img src="/image/deepLearning/seq2seq-2.png" alt></p>
+<p>机器翻译过程可以看做是一个有条件的语言模型<br><img src="/image/deepLearning/seq2seq-3.jpg" alt></p>
+<p>找到最合适的翻译结果Y 的过程，就是计算在 x 输入情况下得到Y的概率P，使P达到最大值的过程</p>
+<p><img src="/image/deepLearning/seq2seq-4.png" alt><br><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/NeuralMachineTranslation/Neural_machine_translation_with_attention_v4a.ipynb" target="_blank" rel="noopener">相关练习</a><br>上述过程更适合直接获取到整个句子Y后，对整个句子的适配度进行概率计算，而不是用贪心算法，<br>依次根据上一个词的内容找到最匹配的下一个词之后，再最终对整个句子进行概率运算，<br>因为单个词语查找最合适下一个词语的概率，是计算量非常大的，另外词语的高频性可能会影响句子整体的适配性<br>比如下面句1 比句2 翻译的效果更好<br>但是句1和句2 在用贪心算法获取过程中更可能得到句2，因为得到相同的前两个词语之后，going 出现的频率大于visiting</p>
+<p><img src="/image/deepLearning/seq2seq-5.png" alt></p>
+<p>贪心算法的缺点是，在获取到当前词语之后，会根据当前词语，获取下一个词语，然后获取下一个词语，直到获取到整个句子.</p>
+<h1 id="集束搜索算法"><a href="#集束搜索算法" class="headerlink" title="集束搜索算法"></a>集束搜索算法</h1><p>集束搜索算法（beam search algorithm）: 在获取当前词语之后，会获取当前词语的概率最大的k个词语，然后获取下一个词语，直到获取到整个句子<br>相当于同时进行集束宽度（eg. B=3）个贪心算法，然后再每一步的n*3 个结果中寻找概率最大前B 个结果，然后进行下一步.n 是当前词汇库中的词汇数<br>这样就比贪心算法可能得到更多的可能性</p>
+<p><img src="/image/deepLearning/seq2seq-6.jpg" alt><br><img src="/image/deepLearning/seq2seq-7.png" alt><br><img src="/image/deepLearning/seq2seq-8.png" alt></p>
+<h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><p>当前的概率计算存在以下问题</p>
+<ol>
+<li>概率值都是小于1的值，多项相乘时，项数越多，值越小，对于计算来说，能存储的极小值有限，容易出现数据下溢</li>
+<li>基于问题1，项越多概率越小，导致模型为使概率值最大，尽可能生成短句子，从而天然倾向生成较短的句子，不倾向生成长句子</li>
+<li>对于长句生成本身不友好<br><img src="/image/deepLearning/seq2seq-9.png" alt></li>
+</ol>
+<p>对于集束宽度的选择<br>实际生产为10个左右，大于100的基本就可以算做太多了<br>large B 可以得到更好的结果，但是训练时间会变长<br>small B 会得到差的结果，但是训练时间会变短</p>
+<p>虽然集束搜索算法不如深度或者广度优先搜索算法的准确性高，不能保证找到最准确的值，但是计算速度会比二者快</p>
+<h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><p>通常增加测试数据集或者增加集束搜索宽度，一般都会是效果更好<br>但判别是RNN过程有错误，还是集束搜索算法搜索过程有错误可以更根本的解决训练异常问题</p>
+<p>如果人工翻译结果概率大于算法得出的句子的概率，即集束算法没有找到使概率最大的正确的句子，问题出在解码查找过程<br>相反，在本身人工翻译结果好于算法结果的情况下，如果人工翻译结果概率还是小于算法得出的句子的概率，说明RNN过程有错误</p>
+<p><img src="/image/deepLearning/seq2seq-10.png" alt="img"></p>
+<h1 id="bleu-算法"><a href="#bleu-算法" class="headerlink" title="bleu 算法"></a>bleu 算法</h1><p>类似图像识别可以用对错一个确定的数值判断推测结果，这里用bleu 算法得到的指数来评估翻译结果好坏<br>用来计算评估机器翻译结果的指数，从而评估翻译好坏<br>翻译越接近人类翻译，指数分数越高<br>具备双语评估，且具有人类评估结果替补性</p>
+<p><img src="/image/deepLearning/seq2seq-11.png" alt="img"><br><img src="/image/deepLearning/seq2seq-12.png" alt="img"></p>
+<p>短翻译容易获得高精度的评判结果，为了降低这种误差，引入BP 惩罚参数进行更精准效果计算<br><img src="/image/deepLearning/seq2seq-13.png" alt="img"></p>
+<h1 id="注意力机制"><a href="#注意力机制" class="headerlink" title="注意力机制"></a>注意力机制</h1><p>之前涉及的机器翻译是使用两个rnn 结构，先编码后解码（编码后将信息存在激活函数中），一次性读取整个句子会之后再整体翻译<br>这样对于特别长的句子来说不太现实，即需要处理的入参特别长，随着句子长度增加，bleu 指数会有明显下降<br>且不符合人类翻译习惯，人类翻译更倾向于，读一段翻译一段，这样只关注一整段文字里面的一小段句子<br><img src="/image/deepLearning/seq2seq-14.png" alt="img"><br>注意力机制在编码阶段会生成一系列输入单词的特征信息（单词本身和它周围词的特征），<br>在生成翻译结果时，根据输入句子中每个单词对该翻译结果单词的影响权重（注意力权重）和已经翻译出的单词两个信息共同计算出当前单词的翻译结果<br><img src="/image/deepLearning/seq2seq-15.png" alt="img"></p>
+<p>具体计算过程<br><img src="/image/deepLearning/seq2seq-16.png" alt="img"><br><img src="/image/deepLearning/seq2seq-17.png" alt="img"><br>更多应用，日期格式转换</p>
+<p><img src="/image/deepLearning/seq2seq-18.png" alt="img"></p>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><p>语音识别，输入变成每一帧的语音音频, 1秒有1000帧的话，输入就会是1000个数据，相当于上面1000个单词<br><img src="/image/deepLearning/seq2seq-19.png" alt="img"><br><img src="/image/deepLearning/seq2seq-20.png" alt="img"><br>触发词识别<br><img src="/image/deepLearning/seq2seq-21.png" alt="img"></p>
+<h1 id="transformer"><a href="#transformer" class="headerlink" title="transformer"></a>transformer</h1><p>对于循环神经网络来说，rnn, Lstm 处理连续输入信息会要求神经网络越来越复杂<br><img src="/image/deepLearning/seq2seq-22.png" alt="img"></p>
+<p>将注意力机制中RNN 过程用CNN 卷积 同时处理多个单词的过程就是transformer 架构</p>
+<p>transformer 架构的模型两个关键点</p>
+<ol>
+<li>自注意力机制 — 带着句子上下文情况下特征计算</li>
+<li>多头注意机制 — 自注意力机制循环过程，产生多种可能性</li>
+</ol>
+<p><img src="/image/deepLearning/seq2seq-23.png" alt="img"></p>
+<h2 id="自注意力机制"><a href="#自注意力机制" class="headerlink" title="自注意力机制"></a>自注意力机制</h2><p>计算输入单词的注意力值</p>
+<p><img src="/image/deepLearning/seq2seq-24.png" alt="img"><br><img src="/image/deepLearning/seq2seq-25.png" alt="img"></p>
+<h2 id="多头注意力机制"><a href="#多头注意力机制" class="headerlink" title="多头注意力机制"></a>多头注意力机制</h2><p>在自注意力机制基础上，同时并计算其他多个问题的注意力值<br>通过并行同时获取多个单词之间的不同维度的含义关系<br><img src="/image/deepLearning/seq2seq-26.png" alt="img"></p>
+<h2 id="transform-网络"><a href="#transform-网络" class="headerlink" title="transform 网络"></a>transform 网络</h2><p><img src="/image/deepLearning/seq2seq-27.png" alt="img"><br>有时候使用mask multi-head attention 进行训练<br>在有准确输入输出情况下，<br>在解码阶段，将输入值从正确输出结果里一次掩盖后几个单词，假设还没有推理出来，仅推理出了前几个单词<br>查看能否正确预测出序列中的下一个单词<br><img src="/image/deepLearning/seq2seq-28.png" alt="img"></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/deepLearning/" rel="tag"># deepLearning</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/deepLearning/Embedding.html" rel="next" title="Embedding 词嵌入">
+                <i class="fa fa-chevron-left"></i> Embedding 词嵌入
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">266</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Sequence-to-Sequence-Models"><span class="nav-number">1.</span> <span class="nav-text">Sequence to Sequence Models</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#集束搜索算法"><span class="nav-number">2.</span> <span class="nav-text">集束搜索算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#优化"><span class="nav-number">2.1.</span> <span class="nav-text">优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题分析"><span class="nav-number">2.2.</span> <span class="nav-text">问题分析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bleu-算法"><span class="nav-number">3.</span> <span class="nav-text">bleu 算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#注意力机制"><span class="nav-number">4.</span> <span class="nav-text">注意力机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#应用"><span class="nav-number">4.1.</span> <span class="nav-text">应用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#transformer"><span class="nav-number">5.</span> <span class="nav-text">transformer</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#自注意力机制"><span class="nav-number">5.1.</span> <span class="nav-text">自注意力机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多头注意力机制"><span class="nav-number">5.2.</span> <span class="nav-text">多头注意力机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#transform-网络"><span class="nav-number">5.3.</span> <span class="nav-text">transform 网络</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

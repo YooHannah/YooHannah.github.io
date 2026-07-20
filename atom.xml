@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoohannah.github.io/"/>
-  <updated>2026-07-16T14:25:53.181Z</updated>
+  <updated>2026-07-20T11:55:38.746Z</updated>
   <id>http://yoohannah.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Sequence to Sequence Models</title>
+    <link href="http://yoohannah.github.io/post/deepLearning/Sequencetosequencemodels.html"/>
+    <id>http://yoohannah.github.io/post/deepLearning/Sequencetosequencemodels.html</id>
+    <published>2026-07-17T07:15:37.000Z</published>
+    <updated>2026-07-20T11:55:38.746Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Sequence-to-Sequence-Models"><a href="#Sequence-to-Sequence-Models" class="headerlink" title="Sequence to Sequence Models"></a>Sequence to Sequence Models</h1><p>输入为一个序列，输出为另一个序列</p><p>比如语言翻译</p><p><img src="/image/deepLearning/seq2seq-1.png" alt></p><p>根据图片内容生成对其语言描述</p><p><img src="/image/deepLearning/seq2seq-2.png" alt></p><p>机器翻译过程可以看做是一个有条件的语言模型<br><img src="/image/deepLearning/seq2seq-3.jpg" alt></p><p>找到最合适的翻译结果Y 的过程，就是计算在 x 输入情况下得到Y的概率P，使P达到最大值的过程</p><p><img src="/image/deepLearning/seq2seq-4.png" alt><br><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/NeuralMachineTranslation/Neural_machine_translation_with_attention_v4a.ipynb" target="_blank" rel="noopener">相关练习</a><br>上述过程更适合直接获取到整个句子Y后，对整个句子的适配度进行概率计算，而不是用贪心算法，<br>依次根据上一个词的内容找到最匹配的下一个词之后，再最终对整个句子进行概率运算，<br>因为单个词语查找最合适下一个词语的概率，是计算量非常大的，另外词语的高频性可能会影响句子整体的适配性<br>比如下面句1 比句2 翻译的效果更好<br>但是句1和句2 在用贪心算法获取过程中更可能得到句2，因为得到相同的前两个词语之后，going 出现的频率大于visiting</p><p><img src="/image/deepLearning/seq2seq-5.png" alt></p><p>贪心算法的缺点是，在获取到当前词语之后，会根据当前词语，获取下一个词语，然后获取下一个词语，直到获取到整个句子.</p><h1 id="集束搜索算法"><a href="#集束搜索算法" class="headerlink" title="集束搜索算法"></a>集束搜索算法</h1><p>集束搜索算法（beam search algorithm）: 在获取当前词语之后，会获取当前词语的概率最大的k个词语，然后获取下一个词语，直到获取到整个句子<br>相当于同时进行集束宽度（eg. B=3）个贪心算法，然后再每一步的n*3 个结果中寻找概率最大前B 个结果，然后进行下一步.n 是当前词汇库中的词汇数<br>这样就比贪心算法可能得到更多的可能性</p><p><img src="/image/deepLearning/seq2seq-6.jpg" alt><br><img src="/image/deepLearning/seq2seq-7.png" alt><br><img src="/image/deepLearning/seq2seq-8.png" alt></p><h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><p>当前的概率计算存在以下问题</p><ol><li>概率值都是小于1的值，多项相乘时，项数越多，值越小，对于计算来说，能存储的极小值有限，容易出现数据下溢</li><li>基于问题1，项越多概率越小，导致模型为使概率值最大，尽可能生成短句子，从而天然倾向生成较短的句子，不倾向生成长句子</li><li>对于长句生成本身不友好<br><img src="/image/deepLearning/seq2seq-9.png" alt></li></ol><p>对于集束宽度的选择<br>实际生产为10个左右，大于100的基本就可以算做太多了<br>large B 可以得到更好的结果，但是训练时间会变长<br>small B 会得到差的结果，但是训练时间会变短</p><p>虽然集束搜索算法不如深度或者广度优先搜索算法的准确性高，不能保证找到最准确的值，但是计算速度会比二者快</p><h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><p>通常增加测试数据集或者增加集束搜索宽度，一般都会是效果更好<br>但判别是RNN过程有错误，还是集束搜索算法搜索过程有错误可以更根本的解决训练异常问题</p><p>如果人工翻译结果概率大于算法得出的句子的概率，即集束算法没有找到使概率最大的正确的句子，问题出在解码查找过程<br>相反，在本身人工翻译结果好于算法结果的情况下，如果人工翻译结果概率还是小于算法得出的句子的概率，说明RNN过程有错误</p><p><img src="/image/deepLearning/seq2seq-10.png" alt="img"></p><h1 id="bleu-算法"><a href="#bleu-算法" class="headerlink" title="bleu 算法"></a>bleu 算法</h1><p>类似图像识别可以用对错一个确定的数值判断推测结果，这里用bleu 算法得到的指数来评估翻译结果好坏<br>用来计算评估机器翻译结果的指数，从而评估翻译好坏<br>翻译越接近人类翻译，指数分数越高<br>具备双语评估，且具有人类评估结果替补性</p><p><img src="/image/deepLearning/seq2seq-11.png" alt="img"><br><img src="/image/deepLearning/seq2seq-12.png" alt="img"></p><p>短翻译容易获得高精度的评判结果，为了降低这种误差，引入BP 惩罚参数进行更精准效果计算<br><img src="/image/deepLearning/seq2seq-13.png" alt="img"></p><h1 id="注意力机制"><a href="#注意力机制" class="headerlink" title="注意力机制"></a>注意力机制</h1><p>之前涉及的机器翻译是使用两个rnn 结构，先编码后解码（编码后将信息存在激活函数中），一次性读取整个句子会之后再整体翻译<br>这样对于特别长的句子来说不太现实，即需要处理的入参特别长，随着句子长度增加，bleu 指数会有明显下降<br>且不符合人类翻译习惯，人类翻译更倾向于，读一段翻译一段，这样只关注一整段文字里面的一小段句子<br><img src="/image/deepLearning/seq2seq-14.png" alt="img"><br>注意力机制在编码阶段会生成一系列输入单词的特征信息（单词本身和它周围词的特征），<br>在生成翻译结果时，根据输入句子中每个单词对该翻译结果单词的影响权重（注意力权重）和已经翻译出的单词两个信息共同计算出当前单词的翻译结果<br><img src="/image/deepLearning/seq2seq-15.png" alt="img"></p><p>具体计算过程<br><img src="/image/deepLearning/seq2seq-16.png" alt="img"><br><img src="/image/deepLearning/seq2seq-17.png" alt="img"><br>更多应用，日期格式转换</p><p><img src="/image/deepLearning/seq2seq-18.png" alt="img"></p><h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><p>语音识别，输入变成每一帧的语音音频, 1秒有1000帧的话，输入就会是1000个数据，相当于上面1000个单词<br><img src="/image/deepLearning/seq2seq-19.png" alt="img"><br><img src="/image/deepLearning/seq2seq-20.png" alt="img"><br>触发词识别<br><img src="/image/deepLearning/seq2seq-21.png" alt="img"></p><h1 id="transformer"><a href="#transformer" class="headerlink" title="transformer"></a>transformer</h1><p>对于循环神经网络来说，rnn, Lstm 处理连续输入信息会要求神经网络越来越复杂<br><img src="/image/deepLearning/seq2seq-22.png" alt="img"></p><p>将注意力机制中RNN 过程用CNN 卷积 同时处理多个单词的过程就是transformer 架构</p><p>transformer 架构的模型两个关键点</p><ol><li>自注意力机制 — 带着句子上下文情况下特征计算</li><li>多头注意机制 — 自注意力机制循环过程，产生多种可能性</li></ol><p><img src="/image/deepLearning/seq2seq-23.png" alt="img"></p><h2 id="自注意力机制"><a href="#自注意力机制" class="headerlink" title="自注意力机制"></a>自注意力机制</h2><p>计算输入单词的注意力值</p><p><img src="/image/deepLearning/seq2seq-24.png" alt="img"><br><img src="/image/deepLearning/seq2seq-25.png" alt="img"></p><h2 id="多头注意力机制"><a href="#多头注意力机制" class="headerlink" title="多头注意力机制"></a>多头注意力机制</h2><p>在自注意力机制基础上，同时并计算其他多个问题的注意力值<br>通过并行同时获取多个单词之间的不同维度的含义关系<br><img src="/image/deepLearning/seq2seq-26.png" alt="img"></p><h2 id="transform-网络"><a href="#transform-网络" class="headerlink" title="transform 网络"></a>transform 网络</h2><p><img src="/image/deepLearning/seq2seq-27.png" alt="img"><br>有时候使用mask multi-head attention 进行训练<br>在有准确输入输出情况下，<br>在解码阶段，将输入值从正确输出结果里一次掩盖后几个单词，假设还没有推理出来，仅推理出了前几个单词<br>查看能否正确预测出序列中的下一个单词<br><img src="/image/deepLearning/seq2seq-28.png" alt="img"></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;Sequence-to-Sequence-Models&quot;&gt;&lt;a href=&quot;#Sequence-to-Sequence-Models&quot; class=&quot;headerlink&quot; title=&quot;Sequence to Sequence Models&quot;&gt;&lt;/a&gt;Seque
+      
+    
+    </summary>
+    
+    
+      <category term="deepLearning" scheme="http://yoohannah.github.io/tags/deepLearning/"/>
+    
+  </entry>
   
   <entry>
     <title>Embedding 词嵌入</title>
@@ -463,30 +486,6 @@
       
         &lt;h1 id=&quot;异常检测&quot;&gt;&lt;a href=&quot;#异常检测&quot; class=&quot;headerlink&quot; title=&quot;异常检测&quot;&gt;&lt;/a&gt;异常检测&lt;/h1&gt;&lt;p&gt;异常检测是机器学习中一个重要的概念，它是指在数据中检测出不符合预期的数据点，以便及时发现和处理异常情况。&lt;/p&gt;
 &lt;h2 i
-      
-    
-    </summary>
-    
-    
-      <category term="machineLearning" scheme="http://yoohannah.github.io/tags/machineLearning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Kmeans 聚类算法</title>
-    <link href="http://yoohannah.github.io/post/machineLearning/Kmeans.html"/>
-    <id>http://yoohannah.github.io/post/machineLearning/Kmeans.html</id>
-    <published>2024-10-02T16:37:37.000Z</published>
-    <updated>2024-10-17T03:41:22.950Z</updated>
-    
-    <content type="html"><![CDATA[<p>无监督学习算法一</p><h1 id="什么是聚类"><a href="#什么是聚类" class="headerlink" title="什么是聚类"></a>什么是聚类</h1><p>将输入数据分成多个类别，每个类别包含一组相似的数据点的过程就是聚类，分好的类被称为cluster</p><h1 id="聚类算法k-means处理过程"><a href="#聚类算法k-means处理过程" class="headerlink" title="聚类算法k-means处理过程"></a>聚类算法k-means处理过程</h1><ol><li>随机选择k个点作为初始的中心点, 计算每个点到中心点的距离，将每个点分配到距离最近的中心点所属的类别中</li><li>计算每个类别的中心点(平均值)，并更新中心点，重复步骤1</li><li>直到中心点不再变化，或者达到最大迭代次数</li></ol><h2 id="具体实现-伪代码"><a href="#具体实现-伪代码" class="headerlink" title="具体实现(伪代码)"></a>具体实现(伪代码)</h2><p><img src="/image/LLM/157.png" alt><br><img src="/image/LLM/158.png" alt></p><h2 id="成本函数"><a href="#成本函数" class="headerlink" title="成本函数"></a>成本函数</h2><p><img src="/image/LLM/159.png" alt><br><img src="/image/LLM/160.png" alt></p><h2 id="如何初始化中心点"><a href="#如何初始化中心点" class="headerlink" title="如何初始化中心点"></a>如何初始化中心点</h2><p>随机选择k个点作为初始的中心点（k小于m），计算最终中心点和损失函数<br>重复N次，选择损失函数最小的中心点作为最终的中心点<br><img src="/image/LLM/161.png" alt></p><h2 id="如何选择K的数量"><a href="#如何选择K的数量" class="headerlink" title="如何选择K的数量"></a>如何选择K的数量</h2><p>取决后续如何使用分类好的集群数据<br><img src="/image/LLM/163.png" alt><br><img src="/image/LLM/162.png" alt></p><p><a href="https://github.com/kaieye/2022-Machine-Learning-Specialization/blob/main/Unsupervised%20learning%20recommenders%20reinforcement%20learning/week1/2%20Practice%20Lab1/C3_W1_KMeans_Assignment.ipynb" target="_blank" rel="noopener">压缩图像应用</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;无监督学习算法一&lt;/p&gt;
-&lt;h1 id=&quot;什么是聚类&quot;&gt;&lt;a href=&quot;#什么是聚类&quot; class=&quot;headerlink&quot; title=&quot;什么是聚类&quot;&gt;&lt;/a&gt;什么是聚类&lt;/h1&gt;&lt;p&gt;将输入数据分成多个类别，每个类别包含一组相似的数据点的过程就是聚类，分好的类被称为c
       
     
     </summary>
