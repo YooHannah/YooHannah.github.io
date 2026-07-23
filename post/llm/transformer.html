@@ -86,18 +86,41 @@
 
 
 
-<meta name="description" content="to do整理书中知识点">
+<meta name="description" content="本篇文档由浅入深的方式逐步说明transformer的实现原理不做更深入的公式的解析详见 什么是模型模型就是一个数学公式，所谓大模型，就是拥有n多个大量参数的复杂的数学公式 对于分类问题：给定一组输入数据，经过一系列数学公式计算后，输出n个概率，分别代表该用户对话属于某分类的概率确定数学公式过程就是寻找参数过程比如具备线性关系的数据，可以假设公式如下，然后寻找a,和 b 两个参数：1、公式：y =">
 <meta name="keywords" content="llm">
 <meta property="og:type" content="article">
 <meta property="og:title" content="transformer">
 <meta property="og:url" content="http://yoohannah.github.io/post/llm/transformer.html">
 <meta property="og:site_name" content="My Little World">
-<meta property="og:description" content="to do整理书中知识点">
+<meta property="og:description" content="本篇文档由浅入深的方式逐步说明transformer的实现原理不做更深入的公式的解析详见 什么是模型模型就是一个数学公式，所谓大模型，就是拥有n多个大量参数的复杂的数学公式 对于分类问题：给定一组输入数据，经过一系列数学公式计算后，输出n个概率，分别代表该用户对话属于某分类的概率确定数学公式过程就是寻找参数过程比如具备线性关系的数据，可以假设公式如下，然后寻找a,和 b 两个参数：1、公式：y =">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2025-09-02T01:52:28.521Z">
+<meta property="og:image" content="http://yoohannah.github.io/image/llmCourse/neturenet1.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/llmCourse/neturenet2.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/llmCourse/neturenet3.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/llmCourse/neturenet4.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/llmCourse/neturenet5.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/llmCourse/neturenet6.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/llmCourse/neturenet8.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/llmCourse/neturenet7.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/llmCourse/neturenet9.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/llmCourse/neturenet10.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/llmCourse/neturenet11.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/llmCourse/neturenet12.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/llmCourse/neturenet13.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/llmCourse/neturenet14.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/llmCourse/neturenet15.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/llmCourse/neturenet16.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/llmCourse/neturenet17.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/llmCourse/neturenet18.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/llmCourse/neturenet19.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/llmCourse/neturenet21.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/llmCourse/neturenet20.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/llmCourse/neturenet22.png">
+<meta property="og:updated_time" content="2026-07-23T12:15:50.653Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="transformer">
-<meta name="twitter:description" content="to do整理书中知识点">
+<meta name="twitter:description" content="本篇文档由浅入深的方式逐步说明transformer的实现原理不做更深入的公式的解析详见 什么是模型模型就是一个数学公式，所谓大模型，就是拥有n多个大量参数的复杂的数学公式 对于分类问题：给定一组输入数据，经过一系列数学公式计算后，输出n个概率，分别代表该用户对话属于某分类的概率确定数学公式过程就是寻找参数过程比如具备线性关系的数据，可以假设公式如下，然后寻找a,和 b 两个参数：1、公式：y =">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/llmCourse/neturenet1.png">
 
 
 
@@ -335,7 +358,32 @@
       
 
       
-        <p>to do<br>整理书中知识点</p>
+        <p>本篇文档由浅入深的方式逐步说明transformer的实现原理<br>不做更深入的公式的解析<a href="https://yoohannah.github.io/post/deepLearning/Sequencetosequencemodels.html">详见</a></p>
+<h1 id="什么是模型"><a href="#什么是模型" class="headerlink" title="什么是模型"></a>什么是模型</h1><p>模型就是一个数学公式，所谓大模型，就是拥有n多个大量参数的复杂的数学公式</p>
+<p>对于分类问题：给定一组输入数据，经过一系列数学公式计算后，输出n个概率，分别代表该用户对话属于某分类的概率<br>确定数学公式过程就是寻找参数过程<br>比如具备线性关系的数据，可以假设公式如下，然后寻找a,和 b 两个参数：<br>1、公式：y = ax + b<br>2、参数：a = 50， b = -100</p>
+<p>如果有多个维度来代表输入信息(由单个值演变成向量)，每个维度对结果的影响程度不同，则不同维度前的参数大小就不同，进而演变成常见的权重，从而尽可能计算出精确的结果，这种计算需要借助计算机实现</p>
+<h1 id="神经网络"><a href="#神经网络" class="headerlink" title="神经网络"></a>神经网络</h1><p>输入向量x和输出向量y之间，增加了一层z向量，<br>并且用上述格式的计算公式去计算z向量和y向量中的每一个数值的结构 就成为神经网络</p>
+<p>不同神经网络的层数和每层结构节点数一般不同，一般由开发者针对不同场景进行设计测试来寻找最佳方案<br><img src="/image/llmCourse/neturenet1.png" alt><br><img src="/image/llmCourse/neturenet2.png" alt><br><img src="/image/llmCourse/neturenet3.png" alt><br><img src="/image/llmCourse/neturenet4.png" alt><br><img src="/image/llmCourse/neturenet5.png" alt><br><img src="/image/llmCourse/neturenet6.png" alt><br><img src="/image/llmCourse/neturenet8.png" alt></p>
+<p>对于上述图片识别的例子，中间z层相当于在进行边缘计算，再通过进行大批量数字图片的训练，找出相同数字的边缘数字特点，从而控制激活函数的参数，最终给出0-9的数字的识别概率</p>
+<p><img src="/image/llmCourse/neturenet7.png" alt></p>
+<p>在x层和y层之间，加入多层z向量，用以提取更深层特征，这种多层结构，叫做深度神经网络<br>而通过计算机完成大规模数学计算以找到相对更优的w参数组合的过程，就叫做机器学习，也就是我们所说的模型训练。</p>
+<h1 id="transformer"><a href="#transformer" class="headerlink" title="transformer"></a>transformer</h1><h2 id="tokenization-文本变成Token"><a href="#tokenization-文本变成Token" class="headerlink" title="tokenization - 文本变成Token"></a>tokenization - 文本变成Token</h2><p>通过将文字进一步切割成基础单位的语义信息，可以帮助模型进行更好的处理<br>⽐如：”subword”这个词，可以拆分成”sub”和”word”两个⼦词，”sub”是⼀个通⽤的前缀可以和其他组合词的”sub”前缀合并，这样⼤模型将会学会使⽤”sub”前缀。类似的，”encoded”可以拆解为”encod”+”ed”，“encoding”可以拆解为“encod”+”ing”，这样两个词的核⼼部分”encod”被提取出来了，⽽且还得到时态信息。<br>子词的处理方式，会让一段内容的Token数量多于单词数量</p>
+<p>对于不同语种的分词形式不同分词模型的结果很可能差异较大，根本原因在于底层分词机制的不同</p>
+<h2 id="Embedding-Token变成向量"><a href="#Embedding-Token变成向量" class="headerlink" title="Embedding - Token变成向量"></a>Embedding - Token变成向量</h2><h3 id="one-hot编码"><a href="#one-hot编码" class="headerlink" title="one-hot编码"></a>one-hot编码</h3><p>one-hot编码:将每个Token映射为向量，向量的维度为Token数量，向量的值全为0，只有对应Token的索引为1<br><img src="/image/llmCourse/neturenet9.png" alt><br>one-hot的一些问题</p>
+<p>1、维度过高，过于稀疏：<br>容纳3000个汉字就需要3000个3000维向量，容纳5000个汉字则需要5000个5000维向量；<br>2、没有体现出“距离”概念：<br>如果两个字之间的意思相近，那两个对应的向量求“距离”的时候，就应该更相近；<br><br><img src="/image/llmCourse/neturenet10.png" alt><br>3、没有数学或逻辑关系：<br>最好能满足：国王 - 男人 + 女人 = 女王 <br><br></p>
+<p>解决：将Token映射为embedding向量</p>
+<h3 id="Embedding"><a href="#Embedding" class="headerlink" title="Embedding"></a>Embedding</h3><p><a href="https://yoohannah.github.io/post/deepLearning/Embedding.html">详见</a><br>我们可以通过一个模型把一个Token变成一个Embedding向量、把一个单词变成一个Embedding向量、把一句话变成一个Embedding向量、把一张图变成一个Embedding向量</p>
+<p>这样在模型训练的时候，就可以根据输入值本身维度信息，根据相似度信息(距离远近)，进行相关关联信息(亲密关系，是不是经常一起搭配使用，同时出现频率如何)提取，即语义提取，从而进行结果预测</p>
+<p>几个Embedding模型<br>1、Word2Vec：Google在2013年提出的概念，也是一个预训练模型<br>2、OpenAI Embedding Models : OpenAI的API</p>
+<h2 id="Transformer-Encoder-amp-Decoder"><a href="#Transformer-Encoder-amp-Decoder" class="headerlink" title="Transformer Encoder &amp; Decoder"></a>Transformer Encoder &amp; Decoder</h2><h3 id="RNN-Encoder-amp-Decoder"><a href="#RNN-Encoder-amp-Decoder" class="headerlink" title="RNN Encoder &amp; Decoder"></a>RNN Encoder &amp; Decoder</h3><p>以RNN为核心的Encoder Decoder<br>将输入句子进行编码，编码后的结果作为解码器的输入，解码器进行解码，最终得到结果<br>Encoder一般用来做分析(语义分析，输入是否在Rag资料里面，翻译前后语义是否一致)，Decoder一般用来做生成<br><img src="/image/llmCourse/neturenet11.png" alt><br>从图中可以看出，只用最后一次生成的向量代表了之前的所有信息，加权求和过程中，前置文字的信息必然权重越来越小，未免会造成语义丢失，且处理过程循环依次进行，导致计算效率下降，解码结果的精确度也会随句子变长而下降</p>
+<p>因此基于rnn 的编解码模型存在如下问题</p>
+<p>1、信息丢失<br>2、无法处理较长句子<br>3、不能并行计算</p>
+<h3 id="Attention-Encoder-amp-Decoder"><a href="#Attention-Encoder-amp-Decoder" class="headerlink" title="Attention Encoder &amp; Decoder"></a>Attention Encoder &amp; Decoder</h3><p>tansformer 采用 自注意力机制进行编解码，从而规避以上问题<br><img src="/image/llmCourse/neturenet12.png" alt></p>
+<h4 id="Attention-注意力机制"><a href="#Attention-注意力机制" class="headerlink" title="Attention 注意力机制"></a>Attention 注意力机制</h4><p><img src="/image/llmCourse/neturenet13.png" alt><br>根据一个输入的维度和已有数据的相关系数计算其他维度数据<br><img src="/image/llmCourse/neturenet14.png" alt><br>根据多个维度的数据和相关系数，计算多个维度的数据<br><img src="/image/llmCourse/neturenet15.png" alt><br><img src="/image/llmCourse/neturenet16.png" alt><br>如果是一段文字用多维度表示，输入也是多维度信息，那么，多维度信息之间也用相关系数联系，就可以实现推理计算<br><img src="/image/llmCourse/neturenet17.png" alt></p>
+<h4 id="自注意力机制"><a href="#自注意力机制" class="headerlink" title="自注意力机制"></a>自注意力机制</h4><p>上述注意力机制的QKV的值都换成基于输入自身，视角变成输入的一个字和其他每个字之间的相似度，就相当于在计算一句话中的这个字与这段话中其他字的相关性情况，<a href="https://yoohannah.github.io/post/deepLearning/Sequencetosequencemodels.html">详见</a><br><img src="/image/llmCourse/neturenet18.png" alt><br>跑一遍相当于计算句子中每个字与句子中其他字之间的相似性，一个向量代表2个字之间的相似性<br>再将两个字之间的相似性作为输入再计算一遍，相当于每个向量拥有4个字的相似性，一个向量代表4个字之间的相似性<br>多循环几次，一个向量就可以尽可能涵盖一个句子中尽可能多的语义信息，方便后续进行decode<br><img src="/image/llmCourse/neturenet19.png" alt></p>
+<h4 id="解码器"><a href="#解码器" class="headerlink" title="解码器"></a>解码器</h4><p>通过自注意机制处理后的embedding可以携带更多语义信息进行推测解码<br>每次解码的时候包含的输入是上一步的输出和编码的所有信息，因此，解码器的输入是上一步的输出，输出是下一步的输入<br><img src="/image/llmCourse/neturenet21.png" alt><br><img src="/image/llmCourse/neturenet20.png" alt><br>对于多头注意力机制，<a href="https://yoohannah.github.io/post/deepLearning/Sequencetosequencemodels.html">详见</a><br>既然模型解码阶段都要进行自注意机制，那么，编码阶段的自注意力机制流程可以直接放在解码器的预测值处理阶段进行<br>整体流程本来就是在预测下一个字是什么，即续写，所以，当代大语言模型一般采用纯解码器的架构进行文字推测生成<br><img src="/image/llmCourse/neturenet22.png" alt></p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>transformer 架构通过自注意力机制处理embedding后的文字信息，这样在推测解码阶段天然形成了语音关联信息，即解码前相关的语义信息解码器是可以直接拿到的，后续就是根据语义相关性大小进行概率计算<br>因此，如果prompt中的内容越多，即相关主题语义的信息量越大，解码器在推测时倾向于获取相应主题的语义文字的概率越大，准确率越高</p>
+<p>to do<br>整理书中知识点</p>
 
       
     </div>
@@ -427,8 +475,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
           <p class="site-author-name" itemprop="name">YooHannah</p>
@@ -486,6 +543,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是模型"><span class="nav-number">1.</span> <span class="nav-text">什么是模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#神经网络"><span class="nav-number">2.</span> <span class="nav-text">神经网络</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#transformer"><span class="nav-number">3.</span> <span class="nav-text">transformer</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#tokenization-文本变成Token"><span class="nav-number">3.1.</span> <span class="nav-text">tokenization - 文本变成Token</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Embedding-Token变成向量"><span class="nav-number">3.2.</span> <span class="nav-text">Embedding - Token变成向量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#one-hot编码"><span class="nav-number">3.2.1.</span> <span class="nav-text">one-hot编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Embedding"><span class="nav-number">3.2.2.</span> <span class="nav-text">Embedding</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Transformer-Encoder-amp-Decoder"><span class="nav-number">3.3.</span> <span class="nav-text">Transformer Encoder &amp; Decoder</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RNN-Encoder-amp-Decoder"><span class="nav-number">3.3.1.</span> <span class="nav-text">RNN Encoder &amp; Decoder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Attention-Encoder-amp-Decoder"><span class="nav-number">3.3.2.</span> <span class="nav-text">Attention Encoder &amp; Decoder</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Attention-注意力机制"><span class="nav-number">3.3.2.1.</span> <span class="nav-text">Attention 注意力机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自注意力机制"><span class="nav-number">3.3.2.2.</span> <span class="nav-text">自注意力机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解码器"><span class="nav-number">3.3.2.3.</span> <span class="nav-text">解码器</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#小结"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
     </div>

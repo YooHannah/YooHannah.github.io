@@ -539,135 +539,6 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/test/assert.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/test/assert.html" itemprop="url">
-                  断言语句assert
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-12T23:54:02+08:00">
-                2017-08-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>测试用例里面的一种判断语句</p>
-<p>在mocha中需要require<br>var assert = require(‘assert’)</p>
-<p>参数一般有三个<br>value 待判断的值<br>expected 要和value进行比较的值，看二者是否相等或者不相等,如果没有expected，则是在判断value的值是否为真<br>message 判断结果为错误时,抛出来的错误提醒语句，如果 message 参数为 undefined，则赋予默认的错误信息。</p>
-<p>assert(value[, message]) 同assert.ok()<br>assert.ok(value[, message]) value如果不为真值,抛出一个带有 message 属性的 AssertionError</p>
-<p>assert.fail(message) 抛出错误信息message</p>
-<p>assert.fail(actual, expected, message, operator) 根据参数抛出相应错误信息<br>如果 message 不存在，则错误信息会被设为 actual 的值加分隔符 operator 再加 expected 的值。 否则，错误信息为 message 的值,operator没有的话，默认为!=</p>
-<p>assert.ifError(value) 如果 value 为真，则抛出 value,如果为假，则测试通过</p>
-<p>assert.equal(actual, expected[, message])      使用相等运算符（==）测试 actual 参数与 expected 参数是否相等。<br>assert.deepEqual(actual, expected[, message])  测试 actual 参数与 expected 参数是否深度相等。 原始值使用 相等运算符（==）比较，只比较可枚举的自身属性。<br>深度相等意味着子对象的可枚举的自身属性也会被比较<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">const obj1 = &#123;</span><br><span class="line">  a: &#123;</span><br><span class="line">    b: 1</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">const obj3 = &#123;</span><br><span class="line">  a: &#123;</span><br><span class="line">    b: 1</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">const obj4 = Object.create(obj1);</span><br><span class="line">assert.deepEqual(obj1, obj4);</span><br><span class="line">// 抛出 AssertionError: &#123; a: &#123; b: 1 &#125; &#125; deepEqual &#123;&#125;</span><br><span class="line">// 原型会被忽略</span><br><span class="line">assert.deepEqual(obj1, obj3);</span><br><span class="line">// 通过，两个对象相等</span><br></pre></td></tr></table></figure></p>
-<p>assert.deepStrictEqual(actual, expected[, message])<br>大多数情况下与 assert.deepEqual() 一样，但有三个例外：</p>
-<p>原始值使用 全等运算符（===）比较。使用SameValueZero比较法来比较设置的值及映射的键（也就意味不用考虑caveats）。<br>对象的 原型 也使用 全等运算符 比较。<br>对象的类型标签应该相同。</p>
-<p>assert.notEqual(actual, expected[, message])              使用 不等运算符（!=）测试是否不相等。<br>assert.notDeepEqual(actual, expected[, message])          测试是否不深度相等。 与 assert.deepEqual() 相反。<br>assert.notStrictEqual(actual, expected[, message])        使用 不全等运算符（!==）测试是否不全等。<br>assert.notDeepStrictEqual(actual, expected[, message])    测试是否不深度全等。 与 assert.deepStrictEqual() 相反。</p>
-<p>assert.throws(block[, error][, message])   期望 block 函数抛出错误error，如果block(function)抛出error的错误，则测试通过<br>error 可以是构造函数、正则表达式、或自定义的验证函数。</p>
-<p>assert.doesNotThrow(block[, error][, message])  断言 block 函数不会抛出错误<br>当 assert.doesNotThrow() 被调用时，它会立即调用 block 函数。<br>如果抛出错误且错误类型与 error 参数指定的相同，则抛出 AssertionError。 如果错误类型不相同，或 error 参数是 undefined，则错误会被抛回给调用者。<br>如果block不抛出错误，则测试通过</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/test/Karmatest.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -763,6 +634,135 @@
 <p>也要更改.travis.yml文件，添加以下语句<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">after_success:</span><br><span class="line">  - &quot;npm run report&quot;</span><br></pre></td></tr></table></figure></p>
 <p>然后push代码，等Travi CI 完成测试后，我们可以在<a href="https://coveralls.io" target="_blank" rel="noopener">Coveralls</a>上获取标志,<br>在总的测试结果那个页面不是具体某次提交的页面获取<br><img src="/image/coverage3.png" alt="coverage3"><br>点击EMBED可以获取不同格式的标志代码，<br>复制粘贴MARKDOWN 格式可以放在readme.md文件中直接使用</p>
 <p>相关链接：<br><a href="https://csbun.github.io/blog/2015/11/karma/" target="_blank" rel="noopener">使用 Karma 在真实浏览器上测试</a><br><a href="https://segmentfault.com/a/1190000006895064" target="_blank" rel="noopener">前端单元测试之Karma环境搭建</a><br><a href="https://imweb.io/topic/5833d14cf8a1d5546059a301" target="_blank" rel="noopener">前端自动化测试解决方案探析</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/test/assert.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/test/assert.html" itemprop="url">
+                  断言语句assert
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-12T23:54:02+08:00">
+                2017-08-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>测试用例里面的一种判断语句</p>
+<p>在mocha中需要require<br>var assert = require(‘assert’)</p>
+<p>参数一般有三个<br>value 待判断的值<br>expected 要和value进行比较的值，看二者是否相等或者不相等,如果没有expected，则是在判断value的值是否为真<br>message 判断结果为错误时,抛出来的错误提醒语句，如果 message 参数为 undefined，则赋予默认的错误信息。</p>
+<p>assert(value[, message]) 同assert.ok()<br>assert.ok(value[, message]) value如果不为真值,抛出一个带有 message 属性的 AssertionError</p>
+<p>assert.fail(message) 抛出错误信息message</p>
+<p>assert.fail(actual, expected, message, operator) 根据参数抛出相应错误信息<br>如果 message 不存在，则错误信息会被设为 actual 的值加分隔符 operator 再加 expected 的值。 否则，错误信息为 message 的值,operator没有的话，默认为!=</p>
+<p>assert.ifError(value) 如果 value 为真，则抛出 value,如果为假，则测试通过</p>
+<p>assert.equal(actual, expected[, message])      使用相等运算符（==）测试 actual 参数与 expected 参数是否相等。<br>assert.deepEqual(actual, expected[, message])  测试 actual 参数与 expected 参数是否深度相等。 原始值使用 相等运算符（==）比较，只比较可枚举的自身属性。<br>深度相等意味着子对象的可枚举的自身属性也会被比较<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">const obj1 = &#123;</span><br><span class="line">  a: &#123;</span><br><span class="line">    b: 1</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">const obj3 = &#123;</span><br><span class="line">  a: &#123;</span><br><span class="line">    b: 1</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">const obj4 = Object.create(obj1);</span><br><span class="line">assert.deepEqual(obj1, obj4);</span><br><span class="line">// 抛出 AssertionError: &#123; a: &#123; b: 1 &#125; &#125; deepEqual &#123;&#125;</span><br><span class="line">// 原型会被忽略</span><br><span class="line">assert.deepEqual(obj1, obj3);</span><br><span class="line">// 通过，两个对象相等</span><br></pre></td></tr></table></figure></p>
+<p>assert.deepStrictEqual(actual, expected[, message])<br>大多数情况下与 assert.deepEqual() 一样，但有三个例外：</p>
+<p>原始值使用 全等运算符（===）比较。使用SameValueZero比较法来比较设置的值及映射的键（也就意味不用考虑caveats）。<br>对象的 原型 也使用 全等运算符 比较。<br>对象的类型标签应该相同。</p>
+<p>assert.notEqual(actual, expected[, message])              使用 不等运算符（!=）测试是否不相等。<br>assert.notDeepEqual(actual, expected[, message])          测试是否不深度相等。 与 assert.deepEqual() 相反。<br>assert.notStrictEqual(actual, expected[, message])        使用 不全等运算符（!==）测试是否不全等。<br>assert.notDeepStrictEqual(actual, expected[, message])    测试是否不深度全等。 与 assert.deepStrictEqual() 相反。</p>
+<p>assert.throws(block[, error][, message])   期望 block 函数抛出错误error，如果block(function)抛出error的错误，则测试通过<br>error 可以是构造函数、正则表达式、或自定义的验证函数。</p>
+<p>assert.doesNotThrow(block[, error][, message])  断言 block 函数不会抛出错误<br>当 assert.doesNotThrow() 被调用时，它会立即调用 block 函数。<br>如果抛出错误且错误类型与 error 参数指定的相同，则抛出 AssertionError。 如果错误类型不相同，或 error 参数是 undefined，则错误会被抛回给调用者。<br>如果block不抛出错误，则测试通过</p>
 
           
         
