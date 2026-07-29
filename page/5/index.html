@@ -259,6 +259,179 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/llm/RAG.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/llm/RAG.html" itemprop="url">
+                  RAG
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-07-10T19:43:37+08:00">
+                2024-07-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="LLM-固有的局限性-🔗"><a href="#LLM-固有的局限性-🔗" class="headerlink" title="LLM 固有的局限性 🔗"></a><span style="color: black; font-weight: bold; font-size: 20px;">LLM 固有的局限性</span> <a href="https://colab.research.google.com/github/YooHannah/algorithm/blob/master/llmCourese/05-rag-embeddings/index.ipynb#scrollTo=d5936819-e086-439c-822e-72ba4478c814" target="_blank" rel="noopener">🔗</a></h3><ol>
+<li><span style="font-size: 14px;">LLM 的知识不是实时的</span></li>
+<li><span style="font-size: 14px;">LLM 可能不知道你私有的领域/业务知识</span></li>
+</ol>
+<p>RAG 通过给LLM 增加额外/专有知识文档，提高LLM 回答问题的准确性</p>
+<p><img src="/image/llmCourse/rag.svg" alt="流程图"></p>
+<h3 id="搭建过程："><a href="#搭建过程：" class="headerlink" title="搭建过程："></a><span style="color: black; font-weight: bold; font-size: 20px;">搭建过程：</span></h3><ol>
+<li><span style="font-size: 14px;">文档加载，并按一定条件<strong>切割</strong>成片段</span></li>
+<li><span style="font-size: 14px;">将切割的文本片段灌入<strong>检索引擎</strong></span></li>
+<li><span style="font-size: 14px;">封装<strong>检索接口</strong></span></li>
+<li><span style="font-size: 14px;">构建<strong>调用流程</strong>：Query -&gt; 检索 -&gt; Prompt -&gt; LLM -&gt; 回复</span></li>
+</ol>
+<h3 id="关键字检索的局限性"><a href="#关键字检索的局限性" class="headerlink" title="关键字检索的局限性"></a><span style="color: black; font-weight: bold; font-size: 20px;">关键字检索的局限性</span></h3><p><span style="color: black; background-color: white; font-size: 14px;">同一个语义，用词不同，可能导致检索不到有效的结果</span></p>
+<p><span style="color: black; background-color: white; font-size: 14px;">解决办法===&gt; 向量检索</span></p>
+<h2 id="向量检索"><a href="#向量检索" class="headerlink" title="向量检索"></a><span style="color: black; font-weight: bold; font-size: 22px;">向量检索</span></h2><p><span style="color: black; background-color: white; font-size: 14px;">二维空间中的向量可以表示为(x,y) 表示从原点(0,0) 到点 (x,y) 的有向线段。</span></p>
+<p><span style="color: black; background-color: white; font-size: 14px;">以此类推，我可以用一组坐标 (x0，x1,…..xN) 表示一个𝑁 维空间中的向量，𝑁 叫向量的维度。</span></p>
+<h3 id="文本向量（Text-Embeddings）"><a href="#文本向量（Text-Embeddings）" class="headerlink" title="文本向量（Text Embeddings）"></a><span style="color: black; font-weight: bold; font-size: 20px;">文本向量（Text Embeddings）</span></h3><ol>
+<li><span style="font-size: 14px;">将文本转成一组 𝑁 维浮点数，即<strong>文本向量</strong>又叫 Embeddings</span></li>
+<li><span style="font-size: 14px;">向量之间可以计算距离，距离远近对应<strong>语义相似度</strong>大小</span></li>
+</ol>
+<h3 id="文本向量是怎么得到的-🔗"><a href="#文本向量是怎么得到的-🔗" class="headerlink" title="文本向量是怎么得到的 🔗"></a><span style="color: black; font-weight: bold; font-size: 20px;">文本向量是怎么得到的</span> <a href="https://colab.research.google.com/github/YooHannah/algorithm/blob/master/llmCourese/05-rag-embeddings/index.ipynb#scrollTo=de84fb43-b02f-4089-9eda-d02f90359915" target="_blank" rel="noopener">🔗</a></h3><ol>
+<li><span style="font-size: 14px;">构建相关（正立）与不相关（负例）的句子对儿样本</span></li>
+<li><span style="font-size: 14px;">训练双塔式模型，让正例间的距离小，负例间的距离大</span></li>
+</ol>
+<h3 id="向量间的相似度计算"><a href="#向量间的相似度计算" class="headerlink" title="向量间的相似度计算"></a><span style="color: black; font-weight: bold; font-size: 20px;">向量间的相似度计算</span></h3><p><span style="color: black; background-color: white; font-size: 14px;">余弦距离 – 越大越相似</span></p>
+<p><span style="color: black; background-color: white; font-size: 14px;">欧氏距离 – 越小越相似</span></p>
+<p><span style="color: black; background-color: white; font-size: 14px;">向量数据库，是专门为向量检索设计的中间件</span></p>
+<p><span style="color: #1b5e20; font-weight: bold; font-size: 14px;">澄清几个关键概念：</span></p>
+<ol>
+<li><span style="font-size: 14px;">向量数据库的意义是快速的检索；</span></li>
+<li><span style="font-size: 14px;">向量数据库本身不生成向量，向量是由 Embedding 模型产生的；</span></li>
+<li><span style="font-size: 14px;">向量数据库与传统的关系型数据库是互补的，不是替代关系，在实际应用中根据实际需求经常同时使用。</span></li>
+</ol>
+<p><span style="color: #1b5e20; font-weight: bold; font-size: 14px;">划重点：</span></p>
+<ol>
+<li><span style="font-size: 14px;">不是每个 Embedding 模型都对余弦距离和欧氏距离同时有效</span></li>
+<li><span style="font-size: 14px;">哪种相似度计算有效要阅读模型的说明（通常都支持余弦距离计算）</span></li>
+</ol>
+<h3 id="优化方向"><a href="#优化方向" class="headerlink" title="优化方向"></a><span style="color: black; font-weight: bold; font-size: 20px;">优化方向</span></h3><h3 id="文本分割的粒度-🔗"><a href="#文本分割的粒度-🔗" class="headerlink" title="文本分割的粒度 🔗"></a><span style="color: black; font-weight: bold; font-size: 20px;">文本分割的粒度</span> <a href="https://colab.research.google.com/github/YooHannah/algorithm/blob/master/llmCourese/05-rag-embeddings/index.ipynb#scrollTo=99b07741-a60e-4927-b2f1-f037d6fce69c" target="_blank" rel="noopener">🔗</a></h3><p><strong>缺陷</strong></p>
+<ol>
+<li><span style="font-size: 14px;">粒度太大可能导致检索不精准，粒度太小可能导致信息不全面</span></li>
+<li><span style="font-size: 14px;">问题的答案可能跨越两个片段</span></li>
+</ol>
+<p><span style="color: black; font-weight: bold; background-color: white; font-size: 14px;">改进</span><span style="color: black; background-color: white; font-size: 14px;">: 按一定粒度，部分重叠式的切割文本，使上下文更完整</span></p>
+<h3 id="检索后排序-🔗"><a href="#检索后排序-🔗" class="headerlink" title="检索后排序 🔗"></a><span style="color: black; font-weight: bold; font-size: 20px;">检索后排序</span> <a href="https://colab.research.google.com/github/YooHannah/algorithm/blob/master/llmCourese/05-rag-embeddings/index.ipynb#scrollTo=a5b4d28b-392f-4bec-8134-1f52659048be" target="_blank" rel="noopener">🔗</a></h3><p><strong>问题</strong>: 有时，最合适的答案不一定排在检索的最前面</p>
+<p><strong>方案</strong>:</p>
+<ol>
+<li><span style="font-size: 14px;">检索时过招回一部分文本</span></li>
+<li><span style="font-size: 14px;">通过一个排序模型对 query 和 document 重新打分排序</span></li>
+</ol>
+<h3 id="混合检索（Hybrid-Search）"><a href="#混合检索（Hybrid-Search）" class="headerlink" title="混合检索（Hybrid Search）"></a><span style="color: black; font-weight: bold; font-size: 20px;">混合检索（Hybrid Search）</span></h3><p>在实际生产中，传统的关键字检索（稀疏表示）与向量检索（稠密表示）各有优劣。</p>
+<p>举个具体例子，比如文档中包含很长的专有名词，关键字检索往往更精准而向量检索容易引入概念混淆。</p>
+<p>有时候我们需要结合不同的检索算法，来达到比单一检索算法更优的效果。这就是<strong>混合检索</strong>。</p>
+<p>混合检索的核心是，综合文档 𝑑 在不同检索算法下的排序名次（rank），为其生成最终排序。</p>
+<p><span style="color: black; background-color: white; font-size: 14px;">一个最常用的算法叫 </span><span style="color: black; font-weight: bold; background-color: white; font-size: 14px;">Reciprocal Rank Fusion（RRF）</span></p>
+<h3 id="RAG-Fusion"><a href="#RAG-Fusion" class="headerlink" title="RAG-Fusion"></a><span style="color: black; font-weight: bold; font-size: 20px;">RAG-Fusion</span></h3><p><span style="color: black; background-color: white; font-size: 14px;">RAG-Fusion 就是利用了 RRF 的原理来提升检索的准确性。</span></p>
+<p><a href="https://github.com/Raudaschl/rag-fusion" target="_blank" rel="noopener">https://github.com/Raudaschl/rag-fusion</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/llm/aiCoding.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2067,149 +2240,6 @@ message.postDate = new Date()
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/product.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/knowledge/product.html" itemprop="url">
-                  学习关于产品的一些思维
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2022-09-03T17:57:25+08:00">
-                2022-09-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>产品经理决策力工具</p>
-<p>象限法：<br>把想做的事情拆成两个指标去做<br>让这个两个指标做xy轴<br>在xy轴包围的空间内，分成四个象限<br>把要做的事情按照xy轴的值分布在四个象限中<br>然后决定要在四个象限中寻找最优解</p>
-<p>假设思维: 把未来要做的事情一步一步的假设出来<br>用户思维： 用使用者的思维设计功能</p>
-<p>产品路线图roadmap4个核心要素</p>
-<ol>
-<li>里程碑是要有意义的</li>
-<li>跟各个方向的工作协同进行</li>
-<li>可能不是串行的而是并行的，需要准备多种方案</li>
-<li>基于产品框架</li>
-</ol>
-<p>五张图说明产品</p>
-<ol>
-<li>核心功能体验图，主要功能的流程图</li>
-<li>模块图，将功能具体的实现划分不同模块，即可以概览具备的的功能，也方便进行任务分配</li>
-<li>功能树，一个模块具体具备的功能内容，相当于再细分</li>
-<li>页面关系图，页面的操作流程，可以跟功能树对比查看是否有功能遗漏，上面提到的模块功能树都会最终落到页面上</li>
-<li>交互设计图，不是最重要的，但要有自解释性，每个人都能看懂</li>
-</ol>
-<p>用户留存率—-&gt; 指标之王<br>算法</p>
-<ol>
-<li>新增留存率 所有新用户中有多少比例下个时间周期会出现</li>
-<li>活跃留存率 所有用户中（活跃用户），包括新用户，有多少比例会在下个时间周期出现，即有多少人会成为下个周期的活跃用户<br>统计分析<br>用户活跃度<br>cohort， 横纵都是第1-n周<br>每一行代表当前周用户留存率再往后几周的留存率请款<br>每一列代表当前周中，阁用户留存率情况，可以看到每周留存率在这一周的变化情况<br>对角线从左上到右下，上面数据表示次周留存率，如果呈下降趋势，说明产品在新客中粘性在下降，留存率整体在下降<br>将对角线数据处理形成折线图可直观看到用户留存趋势</li>
-</ol>
-<p>RFM,用户贡献值（下了多少单，总消费金额…），根据用户贡献值可采取不同的营销策略</p>
-<p>DAU,WAU,MAU,日、周、月活跃用户，一般让DAY/MAU的值作为一个用户粘性的指标<br>以DAY/MAU为y轴，DAU为x轴，形成折线趋势图，让趋势保持稳定上升是一个产品的发展方向</p>
-<p>如何提升留存？<br>不要去想现有总用户如何去留存，去观察哪些用户值得留存，想办法让这些用户实现留存提升</p>
-<p>设计一套CRM系统<br>CRM系统： 维护公司与客户关系 ===&gt; 用户运营战略执行系统</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2253,7 +2283,7 @@ message.postDate = new Date()
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">266</span>
+              <span class="site-state-item-count">267</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

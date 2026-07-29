@@ -1,0 +1,994 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="llm,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="本篇文章简要介绍 基于 CopilotKit 生成式UI框架主要用于解决 llm agent 响应结果的可视化展示问题llm 产出如果不加以修饰绘制，用户看到的就只是普通文本，尤其对于一些数据类文本，缺少可视化能力再丰富一些，可能会输出markdown格式 进行一定规则的渲染，能力依然有限，不如前端组件渲染丰富CopilotKit 框架 基于AG-UI 协议，将前端展示组件库直接绑定到agent，">
+<meta name="keywords" content="llm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CopilotKit 生成式UI框架">
+<meta property="og:url" content="http://yoohannah.github.io/post/llm/copilotkit.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="本篇文章简要介绍 基于 CopilotKit 生成式UI框架主要用于解决 llm agent 响应结果的可视化展示问题llm 产出如果不加以修饰绘制，用户看到的就只是普通文本，尤其对于一些数据类文本，缺少可视化能力再丰富一些，可能会输出markdown格式 进行一定规则的渲染，能力依然有限，不如前端组件渲染丰富CopilotKit 框架 基于AG-UI 协议，将前端展示组件库直接绑定到agent，">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2026-07-29T12:51:15.185Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CopilotKit 生成式UI框架">
+<meta name="twitter:description" content="本篇文章简要介绍 基于 CopilotKit 生成式UI框架主要用于解决 llm agent 响应结果的可视化展示问题llm 产出如果不加以修饰绘制，用户看到的就只是普通文本，尤其对于一些数据类文本，缺少可视化能力再丰富一些，可能会输出markdown格式 进行一定规则的渲染，能力依然有限，不如前端组件渲染丰富CopilotKit 框架 基于AG-UI 协议，将前端展示组件库直接绑定到agent，">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/llm/copilotkit.html">
+
+
+
+
+
+  <title> CopilotKit 生成式UI框架 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/llm/copilotkit.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                CopilotKit 生成式UI框架
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-07-29T20:37:37+08:00">
+                2026-07-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本篇文章简要介绍 基于 CopilotKit 生成式UI框架<br>主要用于解决 llm agent 响应结果的可视化展示问题<br>llm 产出如果不加以修饰绘制，用户看到的就只是普通文本，尤其对于一些数据类文本，缺少可视化能力<br>再丰富一些，可能会输出markdown格式 进行一定规则的渲染，能力依然有限，不如前端组件渲染丰富<br>CopilotKit 框架 基于AG-UI 协议，将前端展示组件库直接绑定到agent，作为tool 供agent 调使用，直接产生可视化展示结果</p>
+<h1 id="Generative-UI"><a href="#Generative-UI" class="headerlink" title="Generative UI"></a>Generative UI</h1><blockquote>
+<p>Render your agent’s state, progress, outputs, and tool calls with custom UI components in real-time. Bridges the gap between AI agents and user interfaces.</p>
+</blockquote>
+<p>生成式UI就是丰富agent 响应结果的动态UI, 可以让agent 生成可交互式界面 按照可生成范围大小可以分成三类</p>
+<ol>
+<li>生成式UI 全控式，agent 只能在注册的指定几个组件范围内根据用户指令判断是否要使用，不能自定义组件</li>
+<li>生成式UI 声明式，agent 可以在注册的一堆组件(相当于给agent一个组件库)中选取组件使用，也可以组装几个组件形成固定布局并进行注册，触发后直接根据数据渲染组件即可，也是不能自定义组件</li>
+<li>生成式UI 开放式，agent 不注册任何组件，可以直接连接外部组件的mcp协议，实现组件的动态加载和使用，跨出了指定组件库的束缚，对于指定场景需求可以直接调用更复杂精细的匹配度更高的组件</li>
+</ol>
+<p>下面CopilotKit 框架会按开放程度依次介绍</p>
+<h1 id="AG-UI-协议"><a href="#AG-UI-协议" class="headerlink" title="AG-UI 协议"></a>AG-UI 协议</h1><blockquote>
+<p>AG-UI is an open, lightweight, event-based protocol that standardizes how AI agents connect to user-facing applications.</p>
+<p>AG-UI is designed to be the general-purpose, bi-directional connection between a user-facing application and any agentic backend.</p>
+<p>Built for simplicity and flexibility, it standardizes how agent state, UI intents, and user interactions flow between your model/agent runtime and user-facing frontend applications—to allow application developers to ship reliable, debuggable, user‑friendly agentic features fast while focusing on application needs and avoiding complex ad-hoc wiring.</p>
+</blockquote>
+<p>AG-UI协议定义了agent直接和用户界面之间的通信协议，是三大开源代理协议之一，实现了agent 和应用页面之间实时，多模态，可交互用户体验<br>打破了现有前后开发模式(前端等待数据返回后，再进行渲染，用户再感知交互)</p>
+<p>AG-UI协议 出现的必要性</p>
+<p>虽然代理只是软件，但它们展现出的特性使得传统的 REST/GraphQL API 难以为其提供服务：</p>
+<ol>
+<li><p>代理运行时间长，并会流式传输中间工作——通常跨越多个会话。</p>
+</li>
+<li><p>代理具有非确定性，并且能够以非确定性的方式控制应用程序 UI。—&gt;结果是不可预测的，需要前端进行实时渲染，需要自行选择渲染组件</p>
+</li>
+<li><p>代理同时混合结构化和非结构化 I/O（例如，文本和语音，以及工具调用和状态更新）。</p>
+</li>
+<li><p>代理需要用户交互式组合：例如，它们可能会调用子代理，而且通常是递归调用。</p>
+</li>
+</ol>
+<p>等等</p>
+<p>它是一种基于事件的协议，它支持代理前端和后端之间的动态通信。它构建于 Web 的基础协议（HTTP、WebSocket）之上，作为一个专为代理时代设计的抽象层——弥合了传统客户端-服务器架构与 AI 代理的动态、有状态特性之间的差距<br><a href="https://docs.ag-ui.com/concepts/architecture#architectural-overview" target="_blank" rel="noopener">详见</a></p>
+<h2 id="区别其他协议"><a href="#区别其他协议" class="headerlink" title="区别其他协议"></a>区别其他协议</h2><table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Protocol / Example</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agent ⇔ User Interaction</td>
+<td>AG-UI (Agent-User Interaction Protocol)</td>
+<td>The open, event-based standard that connects agents to user-facing applications — enabling real-time, multimodal, interactive experiences.</td>
+</tr>
+<tr>
+<td>Agent ⇔ Tools &amp; Data</td>
+<td>MCP (Model Context Protocol)</td>
+<td>Open standard (originated by Anthropic) that lets agents securely connect to external systems — tools, workflows, and data sources.</td>
+</tr>
+<tr>
+<td>Agent ⇔ Agent</td>
+<td>A2A (Agent to Agent)</td>
+<td>Open standard (originated by Google) which defines how agents coordinate and share work across distributed agentic systems.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="区别-A2UI"><a href="#区别-A2UI" class="headerlink" title="区别 A2UI"></a>区别 A2UI</h2><blockquote>
+<p>A2UI is a generative UI specification - allowing agents to deliver UI widgets, where AG-UI is the Agent↔User Interaction protocol - which connects an agentic frontend to any agentic backend</p>
+</blockquote>
+<blockquote>
+<p>A2UI, MCP-UI, and Open-JSON-UI are all generative UI specifications. Generative UIs allow agents to respond to users not only with text but also with dynamic UI components.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Specification</th>
+<th>Origin / Maintainer</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A2UI</td>
+<td>Google</td>
+<td>A declarative, LLM-friendly Generative UI spec. JSONL-based and streaming, designed for platform-agnostic rendering.</td>
+</tr>
+<tr>
+<td>Open-JSON-UI</td>
+<td>OpenAI</td>
+<td>An open standardization of OpenAI’s internal declarative Generative UI schema.</td>
+</tr>
+<tr>
+<td>MCP-UI</td>
+<td>Microsoft + Shopify</td>
+<td>A fully open, iframe-based Generative UI standard extending MCP for user-facing experiences.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>AG-UI is not a generative UI specification — it’s a User Interaction protocol that provides the bi-directional runtime connection between the agent and the application.</p>
+<p>AG-UI natively supports all of the above generative UI specs and allows developers to define their own custom generative UI standards as well.</p>
+</blockquote>
+<p><a href="https://a2ui.org/quickstart/#whats-happening-behind-the-scenes" target="_blank" rel="noopener">A2UI</a> 是与agent进行交互的组件库的存在形式和定义规范</p>
+<p>A2UI 是一种生成式 UI 规范 - 允许代理交付 UI 小部件，<br>AG-UI 是代理↔用户交互协议 - 它将代理前端连接到任何代理后端</p>
+<h1 id="CopilotKit-框架"><a href="#CopilotKit-框架" class="headerlink" title="CopilotKit 框架"></a>CopilotKit 框架</h1><p>一个可以链接多种前端框架和多种agent框架的生成式UI框架，利用AG-UI协议，实现agent和前端页面之间的实时通信渲染<a href="https://docs.copilotkit.ai/langgraph-fastapi/concepts/architecture#request-flow-at-a-glance" target="_blank" rel="noopener">🔗</a></p>
+<p>CopilotKit 中的生成式 UI 是一组基元，可让代理决定屏幕上显示的内容<br>从渲染您构建的特定应用程序组件，到根据目录组合布局，再到嵌入 MCP 服务器提供的沙盒 UI。</p>
+<h3 id="generative-ui"><a href="#generative-ui" class="headerlink" title="generative ui"></a>generative ui</h3><p><a href="https://docs.copilotkit.ai/langgraph-fastapi/concepts/generative-ui-overview#what-copilotkit-ships" target="_blank" rel="noopener">详见</a></p>
+<table>
+<thead>
+<tr>
+<th>应用场景</th>
+<th>方案</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>让 Agent 渲染你已构建好的特定应用组件</td>
+<td>Components as Tools（组件即工具）</td>
+<td>将应用组件注册为前端工具；Agent 调用它时，CopilotKit 会内联渲染，并支持类型化的输入参数。</td>
+</tr>
+<tr>
+<td>为 Agent 现有后端工具调用自定义 CopilotKit 渲染卡片样式</td>
+<td>Tool Call Rendering（工具调用渲染）</td>
+<td>将 Agent 已有的后端工具调用映射到自定义 UI 卡片，展示实时状态、参数和结果。</td>
+</tr>
+<tr>
+<td>随 Agent 状态变化更新 UI（进度、草稿、仪表盘等）</td>
+<td>State Rendering（状态渲染）</td>
+<td>订阅 Agent 的流式状态，在值到达时重新渲染 UI。</td>
+</tr>
+<tr>
+<td>在对话中展示模型的思考链</td>
+<td>Reasoning（推理过程）</td>
+<td>将模型的推理 token 作为一等消息类型内联渲染（默认卡片，或完全自定义）。</td>
+</tr>
+<tr>
+<td>让 Agent 从你定义的组件目录中组合布局</td>
+<td>A2UI：场景已知用 Fixed Schema（固定模式），场景未知用 Dynamic Schema（动态模式）</td>
+<td>基于 Agent 输出的声明式 Schema 渲染 UI，通过你注册的组件目录进行组合。两种风格：Dynamic Schema（LLM 生成 Schema）和 Fixed Schema（你编写 Schema，Agent 提供数据）。</td>
+</tr>
+<tr>
+<td>在对话中嵌入第三方 MCP 托管的 UI</td>
+<td>MCP Apps（MCP 应用）</td>
+<td>嵌入 MCP 服务器随其工具一同提供的 UI，在沙盒 iframe 中渲染，无需前端渲染器。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>These primitives sit along a spectrum from author-controlled to agent-invented. Same frontend application, same runtime, same AG-UI protocol — the choice is per-feature, not per-product.</p>
+<ul>
+<li>Controlled — you wrote the component; the agent only picks which one to render and what data to pass. Highest - predictability, highest engineering cost per capability. Components as Tools, Tool Call Rendering, State Rendering, Reasoning.</li>
+<li>Declarative — the agent emits a structured spec; the frontend composes from a catalog you registered. Creativity inside a guardrail. A2UI (Dynamic and Fixed Schema).</li>
+<li>Open-Ended — the UI is invented elsewhere (an MCP server) and you sandbox it. Highest expressive range, hardest to guarantee accessibility / brand / security. MCP Apps.</li>
+</ul>
+</blockquote>
+<p>这些基本组件涵盖了从作者控制到代理创建的各个层面。相同的前端应用程序、相同的运行时环境、相同的 AG-UI 协议——选择是针对特定功能，而非针对特定产品。</p>
+<p>受控型——您编写组件；代理仅负责选择要渲染的组件以及要传递的数据。可预测性最高，但每个功能的工程成本也最高。组件即工具、工具调用渲染、状态渲染、推理。</p>
+<p>声明式——代理生成结构化的规范；前端根据您注册的目录进行组合。在一定的框架内进行创新。A2UI（动态和固定模式）。</p>
+<p>开放式——用户界面在其他地方（MCP 服务器）创建，并由您进行沙盒化。表达范围最广，但最难保证可访问性/品牌/安全性。MCP 应用程序。</p>
+<h3 id="hooks"><a href="#hooks" class="headerlink" title="hooks"></a>hooks</h3><table>
+<thead>
+<tr>
+<th>Hook</th>
+<th>使用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>useFrontendTool</td>
+<td>给 Agent 提供一个客户端工具调用（在浏览器中运行逻辑），可选支持内联 UI。</td>
+</tr>
+<tr>
+<td>useRenderTool</td>
+<td>按名称（类型化）渲染特定工具调用的 UI，无需定义工具的处理函数。</td>
+</tr>
+<tr>
+<td>useDefaultRenderTool</td>
+<td>为没有特定渲染器的任意工具调用提供一个通用的通配渲染器。</td>
+</tr>
+<tr>
+<td>useComponent</td>
+<td>将一个 React 组件注册为命名工具渲染器（以组件优先的生成式 UI 方式）。</td>
+</tr>
+<tr>
+<td>useHumanInTheLoop</td>
+<td>在工具调用时暂停 Agent，等待用户批准、编辑或提供输入。</td>
+</tr>
+<tr>
+<td>useInterrupt</td>
+<td>处理 Agent 发起的中断，在用户响应后恢复执行。</td>
+</tr>
+<tr>
+<td>useRenderToolCall</td>
+<td>获取工具调用的渲染函数，用于驱动你自己的自定义聊天界面（无头模式）。</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://docs.copilotkit.ai/langgraph-fastapi/concepts/which-hook#how-to-choose" target="_blank" rel="noopener">详见</a></p>
+<h2 id="多agent-切换"><a href="#多agent-切换" class="headerlink" title="多agent 切换"></a>多agent 切换</h2><p>AG-UI：协议桥<br>CopilotKit 不会是一个代理框架中。运行时通过 AG-UI 与代理进行通信，AG-UI 是一种开放的事件驱动协议，可标准化代理与应用程序的通信方式：</p>
+<p>事件驱动 — 16 种标准化事件类型（文本增量、工具调用、状态快照和增量、运行生命周期）从代理通过运行时流到前端。<br>双向——用户发送输入，代理响应，代理暂停以进行人机交互输入，前端公开代理可以调用​​的前端工具。<br>与传输无关——SSE、WebSockets、webhooks，无论您的堆栈喜欢什么。<br>与框架无关——每个受支持的集成都会附带一个精简的 AG-UI 适配器。使用一行运行时配置切换后端。<br>“代理的未来不是一家公司或一个平台，而是一个通过协议连接的代理生态系统。”</p>
+<p>因为合约是一个协议，而不是 SDK 锁定，所以您可以交换代理层，而无需重写前端，并行运行多个代理后端，并与任何 AG-UI 兼容的内容集成：MCP 服务器、A2UI 组件、Oracle / Google / AWS 代理平台。</p>
+<h3 id="后端启动多服务"><a href="#后端启动多服务" class="headerlink" title="后端启动多服务"></a>后端启动多服务</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br></pre></td><td class="code"><pre><span class="line"># 本脚本主要练习 </span><br><span class="line"># 1. 声明不同模型agent </span><br><span class="line"># 2. 通过copilotKit 在 frontend 中直接进行切换调用不同agent</span><br><span class="line"></span><br><span class="line"># 涉及前端文件</span><br><span class="line"># 1. frontend/server.ts 在前端注册agent</span><br><span class="line"># 2. frontend/src/main.tsx 在前端调用agent</span><br><span class="line"># 3. frontend/src/App.tsx 在具体组件中切换指定agent</span><br><span class="line"></span><br><span class="line">import warnings</span><br><span class="line">from fastapi import FastAPI</span><br><span class="line"></span><br><span class="line"># CopilotKit and AG-UI dependencies for the AG-UI server</span><br><span class="line">from ag_ui_langgraph import add_langgraph_fastapi_endpoint</span><br><span class="line">from copilotkit import LangGraphAGUIAgent</span><br><span class="line">from copilotkit import CopilotKitMiddleware</span><br><span class="line"></span><br><span class="line"># LangChain agent imports</span><br><span class="line">from langchain.agents import create_agent</span><br><span class="line">from langchain_openai import ChatOpenAI</span><br><span class="line">from langgraph.checkpoint.memory import MemorySaver</span><br><span class="line"></span><br><span class="line">#  create and start a Google ADK agent on port 8009</span><br><span class="line">from ag_ui_adk import ADKAgent, add_adk_fastapi_endpoint</span><br><span class="line">from google.adk.agents import LlmAgent</span><br><span class="line"></span><br><span class="line"># Simple helper that starts the server and manages port conflicts</span><br><span class="line">from helper import start_server</span><br><span class="line">from helper import load_api_keys</span><br><span class="line"></span><br><span class="line">from helper import get_ark_api_key</span><br><span class="line">from helper import get_ark_api_base</span><br><span class="line">from helper import get_ark_model_name</span><br><span class="line"></span><br><span class="line">ARK_API_KEY = get_ark_api_key()</span><br><span class="line">ARK_API_BASE = get_ark_api_base()</span><br><span class="line">ARK_MODEL_NAME = get_ark_model_name()</span><br><span class="line"></span><br><span class="line">load_api_keys()</span><br><span class="line"></span><br><span class="line">warnings.filterwarnings(&quot;ignore&quot;)</span><br><span class="line"></span><br><span class="line"># *************************** 建一个LangChain agent ***************************</span><br><span class="line"></span><br><span class="line"># Build the AG-UI endpoint into a FastAPI app</span><br><span class="line"># CopilotKit 通过兼容 AG-UI 的 HTTP 端点连接到agent。在这里，将启动一个 FastAPI 服务器并挂载一个 LangGraphAGUIAgent。</span><br><span class="line">app = FastAPI()</span><br><span class="line">graph = create_agent(&quot;openai:gpt-4.1&quot;)</span><br><span class="line">agent = LangGraphAGUIAgent(</span><br><span class="line">    name=&quot;lesson2_agent&quot;,</span><br><span class="line">    description=&quot;Lesson 2 chart agent&quot;,</span><br><span class="line">    graph=graph,</span><br><span class="line">)</span><br><span class="line">add_langgraph_fastapi_endpoint(app=app, agent=agent, path=&quot;/&quot;)</span><br><span class="line"></span><br><span class="line"># Start the server</span><br><span class="line">start_server(app, port=8002)</span><br><span class="line"></span><br><span class="line"># Make a pre-built LangChain agent</span><br><span class="line"># CopilotKitMiddleware connects your agent to CopilotKit — it lets the model discover and call frontend tools</span><br><span class="line"># Without the middleware, the agent only sees backend-defined tools.</span><br><span class="line"># CopilotKitMiddleware 是一个中间件，它允许您的代理发现并调用前端工具。</span><br><span class="line">graph = create_agent(</span><br><span class="line">    model=ChatOpenAI(model=&quot;gpt-4.1&quot;),</span><br><span class="line">    tools=[],</span><br><span class="line">    middleware=[CopilotKitMiddleware()],</span><br><span class="line">    checkpointer=MemorySaver(),</span><br><span class="line">    system_prompt=(&quot;You are a helpful assistant&quot;),</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># Update the agent&apos;s graph (hot reloads) </span><br><span class="line"># 使用 agent.graph 替换graph</span><br><span class="line">agent.graph = graph </span><br><span class="line">print(&quot;✓ Agent graph updated!&quot;)</span><br><span class="line"></span><br><span class="line"># *************************** 建一个Google ADK agent ***************************</span><br><span class="line"></span><br><span class="line"># create and start a Google ADK agent on port 8009</span><br><span class="line">gemini_agent = LlmAgent(</span><br><span class="line">    name=&quot;assistant&quot;,</span><br><span class="line">    model=&quot;gemini-2.5-flash&quot;,</span><br><span class="line">    instruction=&quot;Be helpful and fun!&quot;,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">adk_agent = ADKAgent(</span><br><span class="line">    adk_agent=gemini_agent,</span><br><span class="line">    app_name=&quot;demo_app&quot;,</span><br><span class="line">    user_id=&quot;demo_user&quot;,</span><br><span class="line">    session_timeout_seconds=3600,</span><br><span class="line">    use_in_memory_services=True,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">app_adk = FastAPI()</span><br><span class="line">add_adk_fastapi_endpoint(app_adk, adk_agent, path=&quot;/&quot;)</span><br><span class="line"></span><br><span class="line">start_server(app_adk, port=8009)</span><br><span class="line"></span><br><span class="line">#* ************************* 建一个火山引擎 ADK agent ***************************</span><br><span class="line"></span><br><span class="line">ark_app_sdk = FastAPI()</span><br><span class="line">ark_graph = create_agent(</span><br><span class="line">    model=ChatOpenAI(</span><br><span class="line">        openai_api_key=ARK_API_KEY,</span><br><span class="line">        openai_api_base=ARK_API_BASE,</span><br><span class="line">        model_name=ARK_MODEL_NAME, # 从环境变量读取模型</span><br><span class="line">    ),</span><br><span class="line">    tools=[],</span><br><span class="line">    middleware=[CopilotKitMiddleware()],</span><br><span class="line">    checkpointer=MemorySaver(),</span><br><span class="line">    system_prompt=(&quot;You are a helpful assistant&quot;),</span><br><span class="line">)</span><br><span class="line">ark_agent = LangGraphAGUIAgent(</span><br><span class="line">    name=&quot;ark_agent&quot;,</span><br><span class="line">    description=&quot;Ark agent for Lesson 2&quot;,</span><br><span class="line">    graph=ark_graph,</span><br><span class="line">)</span><br><span class="line">add_langgraph_fastapi_endpoint(ark_app_sdk, ark_agent, path=&quot;/&quot;)</span><br><span class="line"></span><br><span class="line"># Start the server</span><br><span class="line">start_server(ark_app_sdk, port=8010)</span><br><span class="line"></span><br><span class="line"># start_server 适合在 Jupyter Notebook 中运行（daemon 线程）</span><br><span class="line"># 在 Notebook 里，Python 进程（Kernel）一直跑着，所以 daemon 线程也会一直活着</span><br><span class="line"># 线程类型                     主程序退出时          适合场景 </span><br><span class="line"># 守护线程 ( daemon=True )     ✅ 一起被杀掉         Jupyter Notebook、临时后台任务 </span><br><span class="line"># 非守护线程 ( daemon=False )  ❌ 主程序会等它跑完     独立服务、常驻进程</span><br><span class="line"></span><br><span class="line"># 下面的循环让终端运行时服务保持活跃</span><br><span class="line">print(&quot;\n&quot; + &quot;=&quot;*50)</span><br><span class="line">print(&quot;✅ 所有服务已启动，按 Ctrl+C 停止&quot;)</span><br><span class="line">print(&quot;   Agent 服务: http://localhost:8002&quot;)</span><br><span class="line">print(&quot;   ADK 服务:   http://localhost:8009&quot;)</span><br><span class="line">print(&quot;   Ark 服务:   http://localhost:8010&quot;)</span><br><span class="line">print(&quot;=&quot;*50)</span><br><span class="line"></span><br><span class="line">import time</span><br><span class="line">try:</span><br><span class="line">    while True:</span><br><span class="line">        time.sleep(60)</span><br><span class="line">except KeyboardInterrupt:</span><br><span class="line">    print(&quot;\n\n🛑 服务已停止&quot;)</span><br><span class="line">    import sys</span><br><span class="line">    sys.exit(0)</span><br></pre></td></tr></table></figure>
+<h3 id="前端注册多个agent"><a href="#前端注册多个agent" class="headerlink" title="前端注册多个agent"></a>前端注册多个agent</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">import &#123; HttpAgent &#125; from &quot;@ag-ui/client&quot;;</span><br><span class="line">import &#123; LangGraphHttpAgent &#125; from &quot;@copilotkit/runtime/langgraph&quot;;</span><br><span class="line">import &#123; CopilotRuntime, createCopilotEndpoint &#125; from &quot;@copilotkit/runtime/v2&quot;;</span><br><span class="line">import &#123; serve &#125; from &quot;@hono/node-server&quot;;</span><br><span class="line"></span><br><span class="line">// 下面这三个agent 都指向后端agent 服务</span><br><span class="line">const langGraphAgent = new LangGraphHttpAgent(&#123;</span><br><span class="line">  url: process.env.LANGGRAPH_DEPLOYMENT_URL || &quot;http://localhost:8002&quot;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">const adkAgent = new HttpAgent(&#123;</span><br><span class="line">  url: process.env.ADK_AGENT_URL || &quot;http://localhost:8009&quot;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">const arkAgent = new HttpAgent(&#123;</span><br><span class="line">  url: process.env.ARK_AGENT_URL || &quot;http://localhost:8010&quot;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">// The CopilotRuntime is the secure bridge between your frontend and agent backend</span><br><span class="line">// 将不同的agent 注册到runtime 中 方便前端调用</span><br><span class="line">const runtime = new CopilotRuntime(&#123;</span><br><span class="line">  agents: &#123;</span><br><span class="line">    default: langGraphAgent, // Register  LangChain agent as the default agent</span><br><span class="line">    gemini: adkAgent,</span><br><span class="line">    ark: arkAgent,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">const app = createCopilotEndpoint(&#123;</span><br><span class="line">  runtime,</span><br><span class="line">  basePath: &quot;/api/copilotkit&quot;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">serve(&#123; fetch: app.fetch, port: 4002 &#125;, () =&gt; &#123;</span><br><span class="line">  console.log(&quot;CopilotKit API server running at http://localhost:4002&quot;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="前端指定agent"><a href="#前端指定agent" class="headerlink" title="前端指定agent"></a>前端指定agent</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import &#123; CopilotChat &#125; from &quot;@copilotkit/react-core/v2&quot;;</span><br><span class="line"></span><br><span class="line">export const agentId = &quot;ark&quot;; // 指定用哪个agent 上面注册的名称</span><br><span class="line"></span><br><span class="line">export default function App() &#123;</span><br><span class="line">  return &lt;CopilotChat agentId=&#123;agentId&#125; /&gt;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="前端调用CopilotKit-agent"><a href="#前端调用CopilotKit-agent" class="headerlink" title="前端调用CopilotKit agent"></a>前端调用CopilotKit agent</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">import &#123; StrictMode &#125; from &quot;react&quot;;</span><br><span class="line">import &#123; createRoot &#125; from &quot;react-dom/client&quot;;</span><br><span class="line"></span><br><span class="line">import &#123; CopilotKit &#125; from &quot;@copilotkit/react-core/v2&quot;;</span><br><span class="line">import App from &quot;./App&quot;;</span><br><span class="line"></span><br><span class="line">import &quot;./globals.css&quot;;</span><br><span class="line">import &quot;@copilotkit/react-core/v2/styles.css&quot;;</span><br><span class="line"></span><br><span class="line">// 通过CopilotKit provider runtimeUrl 连接到agent</span><br><span class="line">createRoot(document.getElementById(&quot;root&quot;)!).render(</span><br><span class="line">  &lt;StrictMode&gt;</span><br><span class="line">    &lt;main className=&quot;h-screen w-screen&quot;&gt;</span><br><span class="line">      &lt;CopilotKit runtimeUrl=&quot;/api/copilotkit&quot; useSingleEndpoint=&#123;false&#125;&gt;</span><br><span class="line">        &lt;App /&gt;</span><br><span class="line">      &lt;/CopilotKit&gt;</span><br><span class="line">    &lt;/main&gt;</span><br><span class="line">  &lt;/StrictMode&gt;,</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h2 id="Controlled-Generative-UI-全控式"><a href="#Controlled-Generative-UI-全控式" class="headerlink" title="Controlled Generative UI 全控式"></a>Controlled Generative UI 全控式</h2><p>什么是受控生成式用户界面？<br>生成式用户界面是一种模式，在这种模式下，智能体会使用完全交互式的界面进行响应，而不仅仅是文本，受控生成式用户界面是最严格的形式：智能体只能渲染你明确注册过的组件。</p>
+<p>其工作原理如下：<br>每个已注册的成分都作为一个工具被呈现出来，具有以下功能：<br>一个稳定的名字<br>一个格式化的输入模式<br>一个已映射的 React 组件</p>
+<p>该代理不会生成随机的用户界面。它会将结构化数据传递给你已经构建的组件，而这些组件的定义是在前端阶段完成的，并且在运行时被注册到相应的位置。</p>
+<p><strong> 优点 </strong></p>
+<ul>
+<li>实施起来非常简单：只需注册一个组件即可。</li>
+<li>视觉效果非常精致，因为所有渲染出的表面都是您亲手创作的。</li>
+<li>强大的安全性保障：该模型只能调用那些具有有效参数的注册工具。</li>
+<li>非常适合那些需要稳定性能的、高流量或关键任务型的用户界面场景。</li>
+</ul>
+<p><strong> 缺点 </strong></p>
+<ul>
+<li>随着新功能的不断增加，前端开发的工作量也在逐步上升：每一种模式都需要相应的组件来支持。</li>
+<li>相比声明式或开放式生成式 UI，其表达自由度要低一些。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">import &#123; z &#125; from &quot;zod&quot;</span><br><span class="line"></span><br><span class="line">import &#123; FlightCard, FlightCardProps &#125; from &quot;@/components/flight-card&quot;;</span><br><span class="line">import &#123; PieChart, PieChartProps &#125; from &quot;@/components/pie-chart&quot;;</span><br><span class="line">import &#123; useExampleSuggestions &#125; from &quot;@/hooks/use-example-suggestions&quot;;</span><br><span class="line">import &#123; CopilotChat &#125; from &quot;@copilotkit/react-core/v2&quot;;</span><br><span class="line">import &#123; useComponent &#125; from &quot;@copilotkit/react-core/v2&quot;;</span><br><span class="line"></span><br><span class="line">/************ 使用useComponent 注册组件 ************ */</span><br><span class="line">/*</span><br><span class="line"> * 将react 组件直接注册为 a generative UI tool ，在响应中直接渲染组件</span><br><span class="line"> * 注册组件[useComponent](https://docs.copilotkit.ai/generative-ui/your-components/display-only) </span><br><span class="line">registers a React component as a tool the agent can call inside `&lt;CopilotChat /&gt;`. </span><br><span class="line">You define what&apos;s available; the agent picks when to use it.</span><br><span class="line">useComponent(&#123;</span><br><span class="line">  name: &quot;component_name&quot;,</span><br><span class="line">  description: &quot;description for the agent to know about this component&quot;,</span><br><span class="line">  parameters: z.object(&#123; ... &#125;),</span><br><span class="line">  render: MyComponent,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">- `name` (required `string`): tool name exposed to the model.</span><br><span class="line">- `description` (optional `string`): tells the model when to call this tool.</span><br><span class="line">- `parameters` (optional Zod schema): structured props passed in as arguments.</span><br><span class="line">- `render` (required): a React component (rendered as `&lt;Component &#123;...args&#125; /&gt;`), or a function receiving `&#123; args, status &#125;` for custom rendering (loading states, wrappers, conditional display).</span><br><span class="line"> */</span><br><span class="line">export default function App() &#123;</span><br><span class="line"></span><br><span class="line">  // 🪁 Register a component that shows the name of the user</span><br><span class="line">  useComponent(&#123;</span><br><span class="line">    name: &quot;showMyName&quot;,</span><br><span class="line">    description: &quot;Show the user&apos;s name in a card&quot;,</span><br><span class="line">    parameters: z.object(&#123; name: z.string() &#125;),</span><br><span class="line">    render: (&#123; name &#125;) =&gt; &lt;div className=&quot;bg-blue-500 p-4&quot;&gt;Hi, &#123;name&#125;!&lt;/div&gt;,</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  // 🪁 Resgister a pieChart component to show structured data</span><br><span class="line">  useComponent(&#123;</span><br><span class="line">    name: &quot;pieChart&quot;,</span><br><span class="line">    description: &quot;Controlled Generative UI that displays data as a pie chart.&quot;,</span><br><span class="line">    parameters: PieChartProps,</span><br><span class="line">    render: PieChart,</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  // 🪁 Resgister a flightCard component to show flight data</span><br><span class="line">  useComponent(&#123;</span><br><span class="line">    name: &quot;flightCard&quot;,</span><br><span class="line">    description: &quot;Controlled Generative UI that displays a single flight summary card.&quot;,</span><br><span class="line">    parameters: FlightCardProps,</span><br><span class="line">    render: FlightCard,</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  // 🪁 Add suggestions to our CopilotChat, will display through buttons</span><br><span class="line">  useExampleSuggestions();</span><br><span class="line"></span><br><span class="line">  return &lt;CopilotChat /&gt;;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="useComponent-注册组件"><a href="#useComponent-注册组件" class="headerlink" title="useComponent 注册组件"></a>useComponent 注册组件</h3><p>Tool-based Generative UI is the simplest form of Generative UI: you register a React component with useComponent, and CopilotKit exposes it to the agent as a tool. When the agent calls the tool, CopilotKit renders your component inline in the chat, passing the tool’s arguments straight through as typed props.</p>
+<p>Unlike tool rendering, which wraps a real backend tool in a custom UI, tool-based GenUI is the component. There is no handler, no user interaction, no server-side execution. The agent decides when to show it, populates the data, and CopilotKit paints it.</p>
+<p><a href="https://docs.copilotkit.ai/langgraph-fastapi/generative-ui/tool-based#when-should-i-use-this" target="_blank" rel="noopener">详见</a></p>
+<h2 id="Deccontrolled-Generative-UI-声明式"><a href="#Deccontrolled-Generative-UI-声明式" class="headerlink" title="Deccontrolled Generative UI 声明式"></a>Deccontrolled Generative UI 声明式</h2><h2 id="什么是声明式生成式-UI？"><a href="#什么是声明式生成式-UI？" class="headerlink" title="什么是声明式生成式 UI？"></a>什么是声明式生成式 UI？</h2><p>声明式生成式 UI 让你定义一组 UI 构建块，由 Agent 将它们组合成界面。它从组件目录中选择组件，将它们排列成 Schema，并绑定运行时数据来填充最终结果。</p>
+<p>它由三个部分协同工作：</p>
+<ul>
+<li><strong>组件目录</strong>：你的应用支持的 UI 基元，分为两部分：<ul>
+<li><strong>定义（Definitions）</strong>：对每个组件的名称、属性和用途的平台无关描述。</li>
+<li><strong>渲染器（Renderers）</strong>：将定义转化为实际 UI 的平台特定实现（例如 React 组件）。</li>
+</ul>
+</li>
+<li><strong>Schema</strong>：关于使用哪些组件、如何嵌套以及它们之间关系的结构化描述。</li>
+<li><strong>数据绑定（Data bindings）</strong>：运行时填充 Schema 的真实值，例如航班详情、指标或记录。</li>
+</ul>
+<p>一个有用的心智模型是乐高积木：<strong>目录</strong>是装着积木的盒子，<strong>Schema</strong> 是积木拼接的方式，<strong>数据绑定</strong>在运行时填充最终细节。Agent 动态组装界面，而你的应用始终掌控一致性、安全性和渲染质量。</p>
+<h2 id="为什么使用声明式生成式-UI？"><a href="#为什么使用声明式生成式-UI？" class="headerlink" title="为什么使用声明式生成式 UI？"></a>为什么使用声明式生成式 UI？</h2><p>全控式生成式 UI 适用于流量最高、可预测性最重要的场景。但在长尾场景中（内部工具、边缘情况、多样化的用户目标），手动编写每个布局无法扩展。这正是声明式生成式 UI 的价值所在：Agent 从一组固定的构建块中组装 UI，在不牺牲安全性和一致性的前提下获得适应性。</p>
+<p><strong>优点</strong></p>
+<ul>
+<li><strong>受约束的灵活性</strong>：Agent 在不超出你的组件体系的前提下适配界面。</li>
+<li><strong>自带组件</strong>：由你定义基元，Agent 决定如何组合它们。</li>
+<li><strong>每个场景工作量更少</strong>：只需定义一次目录，即可在各处复用。</li>
+<li><strong>原生跨平台</strong>：同一套 Schema 可在 Web、移动端、Slack 和短信中渲染。</li>
+<li><strong>比开放式生成式 UI 更省 Token</strong>：Agent 使用固定词汇表工作，无需生成任意代码。</li>
+</ul>
+<p><strong>缺点</strong></p>
+<ul>
+<li><strong>像素级控制较弱</strong>：无法对最终界面进行精确微调。</li>
+<li><strong>可预测性较低</strong>：Agent 在相似场景下可能以不同方式组装组件。</li>
+<li><strong>更容易出错</strong>：Schema 和数据绑定可能以细微方式失败，需要验证和恢复逻辑。</li>
+<li><strong>需要前期设计</strong>：组件目录、Schema 格式和渲染器契约需要仔细定义。</li>
+</ul>
+<h3 id="开启a2ui-组件-进行组件组装渲染"><a href="#开启a2ui-组件-进行组件组装渲染" class="headerlink" title="开启a2ui 组件 进行组件组装渲染"></a>开启a2ui 组件 进行组件组装渲染</h3><p><a href="https://docs.copilotkit.ai/langgraph-fastapi/generative-ui/a2ui" target="_blank" rel="noopener">a2ui</a></p>
+<p>通过启动A2UI可以将声明好的一系列组件打包 成一个组件库 供agent 使用<br>agent 可以根据prompt 和问题响应自行利用组件进行组装，生成对应的UI界面<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">import &#123; serve &#125; from &quot;@hono/node-server&quot;;</span><br><span class="line">import &#123;</span><br><span class="line">  CopilotRuntime,</span><br><span class="line">  createCopilotEndpoint,</span><br><span class="line">&#125; from &quot;@copilotkit/runtime/v2&quot;;</span><br><span class="line">import &#123; LangGraphHttpAgent &#125; from &quot;@copilotkit/runtime/langgraph&quot;;</span><br><span class="line"></span><br><span class="line">const langGraphAgent = new LangGraphHttpAgent(&#123; url: &quot;http://localhost:8004&quot; &#125;);</span><br><span class="line"></span><br><span class="line">const runtime = new CopilotRuntime(&#123;</span><br><span class="line">  agents: &#123; default: langGraphAgent &#125;,</span><br><span class="line">  a2ui: &#123; injectA2UITool: true &#125;, // 启动A2UI 组件 进行组件组装渲染</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">const app = createCopilotEndpoint(&#123;</span><br><span class="line">  runtime,</span><br><span class="line">  basePath: &quot;/api/copilotkit&quot;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">serve(&#123; fetch: app.fetch, port: 4004 &#125;, () =&gt; &#123;</span><br><span class="line">  console.log(&quot;\u2713 CopilotKit API server running at http://localhost:4004&quot;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>当启用 A2UI 后，CopilotKit 会自动添加生成结构化 A2UI 输出所需的后端逻辑——您无需手动实现这一流程。</p>
+<p>在底层，这一操作是通过两层工具调用来实现的：</p>
+<p>当代理决定生成 A2UI 时，会触发一个外部工具调用。这样就能将与 A2UI 相关的逻辑与其他代理行为分离开来。</p>
+<p>一个内部工具调用包含了结构化的 A2UI 负载。中间件会拦截这些参数，以实现流处理功能。</p>
+<p>生成的输出结果也被记录在了代理的历史记录中，作为工具调用的结果之一。</p>
+<h3 id="dynamic-schema-UI"><a href="#dynamic-schema-UI" class="headerlink" title="dynamic schema UI"></a>dynamic schema UI</h3><p>前端需要引入组件库 frontend/src/catalog 组件声明 + 组件实现 + 导出</p>
+<p>A component definition is the contract for a primitive in your catalog:</p>
+<ul>
+<li>a <strong>name</strong> the agent can reference (like Card, Row, or Text)</li>
+<li>a <strong>schema</strong> for its props</li>
+<li>and the <strong>React component</strong> that draws it in your app’s styles</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">// frontend/src/catalog/definitions.ts</span><br><span class="line">import &#123; z &#125; from &quot;zod&quot;;</span><br><span class="line"></span><br><span class="line">export const demonstrationCatalogDefinitions = &#123;</span><br><span class="line">  Title: &#123;</span><br><span class="line">    description: &quot;A heading. Use for section titles and page headers.&quot;,</span><br><span class="line">    props: z.object(&#123;</span><br><span class="line">      text: z.string(),</span><br><span class="line">      level: z.string().optional(),</span><br><span class="line">    &#125;),</span><br><span class="line">  &#125;,</span><br><span class="line">  DashboardCard: &#123;</span><br><span class="line">    description:</span><br><span class="line">      &quot;A card container with title and optional subtitle. Has a &apos;child&apos; slot for content (chart, metrics, etc). Use &apos;child&apos; with a single component ID.&quot;,</span><br><span class="line">    props: z.object(&#123;</span><br><span class="line">      title: z.string(),</span><br><span class="line">      subtitle: z.string().optional(),</span><br><span class="line">      child: z.string().optional(),</span><br><span class="line">    &#125;),</span><br><span class="line">  &#125;,</span><br><span class="line">  Metric: &#123;</span><br><span class="line">    description:</span><br><span class="line">      &quot;A key metric display with label, value, and optional trend indicator. Great for KPIs and stats.&quot;,</span><br><span class="line">    props: z.object(&#123;</span><br><span class="line">      label: z.string(),</span><br><span class="line">      value: z.string(),</span><br><span class="line">      trend: z.enum([&quot;up&quot;, &quot;down&quot;, &quot;neutral&quot;]).optional(),</span><br><span class="line">      trendValue: z.string().optional(),</span><br><span class="line">    &#125;),</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  PieChart: &#123;</span><br><span class="line">    description:</span><br><span class="line">      &quot;A pie/donut chart. Provide data as array of &#123;label, value, color&#125; objects.&quot;,</span><br><span class="line">    props: z.object(&#123;</span><br><span class="line">      data: z.array(</span><br><span class="line">        z.object(&#123;</span><br><span class="line">          label: z.string(),</span><br><span class="line">          value: z.number(),</span><br><span class="line">          color: z.string().optional(),</span><br><span class="line">        &#125;),</span><br><span class="line">      ),</span><br><span class="line">      innerRadius: z.number().optional(),</span><br><span class="line">    &#125;),</span><br><span class="line">  &#125;,</span><br><span class="line">  DataTable: &#123;</span><br><span class="line">    description: &quot;A data table with columns and rows.&quot;,</span><br><span class="line">    props: z.object(&#123;</span><br><span class="line">      columns: z.array(z.object(&#123; key: z.string(), label: z.string() &#125;)),</span><br><span class="line">      rows: z.array(z.record(z.any())),</span><br><span class="line">    &#125;),</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">/** Type helper for renderers */</span><br><span class="line">export type DemonstrationCatalogDefinitions =</span><br><span class="line">  typeof demonstrationCatalogDefinitions;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br></pre></td><td class="code"><pre><span class="line">// frontend/src/catalog/renderers.tsx</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">import React from &quot;react&quot;;</span><br><span class="line">import &#123;</span><br><span class="line">  PieChart as RechartsPie,</span><br><span class="line">  Pie,</span><br><span class="line">  Cell,</span><br><span class="line">  ResponsiveContainer,</span><br><span class="line">  BarChart as RechartsBar,</span><br><span class="line">  Bar,</span><br><span class="line">  XAxis,</span><br><span class="line">  YAxis,</span><br><span class="line">  Tooltip,</span><br><span class="line">  CartesianGrid,</span><br><span class="line">&#125; from &quot;recharts&quot;;</span><br><span class="line">import &#123;</span><br><span class="line">  createCatalog,</span><br><span class="line">  type CatalogRenderers,</span><br><span class="line">&#125; from &quot;@copilotkit/a2ui-renderer&quot;;</span><br><span class="line">import &#123;</span><br><span class="line">  demonstrationCatalogDefinitions,</span><br><span class="line">  type DemonstrationCatalogDefinitions,</span><br><span class="line">&#125; from &quot;./definitions&quot;;</span><br><span class="line"></span><br><span class="line">function resolveText(value: unknown): string &#123;</span><br><span class="line">  if (typeof value === &quot;string&quot;) return value;</span><br><span class="line">  if (value &amp;&amp; typeof value === &quot;object&quot; &amp;&amp; &quot;path&quot; in value)</span><br><span class="line">    return String((value as &#123; path: string &#125;).path);</span><br><span class="line">  return String(value ?? &quot;&quot;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// ─── Renderers (type-checked against schema definitions) ────────────</span><br><span class="line"></span><br><span class="line">const demonstrationCatalogRenderers: CatalogRenderers&lt;DemonstrationCatalogDefinitions&gt; =</span><br><span class="line">  &#123;</span><br><span class="line">    Title: (&#123; props &#125;) =&gt; &#123;</span><br><span class="line">      const Tag = (</span><br><span class="line">        props.level === &quot;h1&quot; ? &quot;h1&quot; : props.level === &quot;h3&quot; ? &quot;h3&quot; : &quot;h2&quot;</span><br><span class="line">      ) as &quot;h1&quot; | &quot;h2&quot; | &quot;h3&quot;;</span><br><span class="line">      const sizes: Record&lt;string, string&gt; = &#123;</span><br><span class="line">        h1: &quot;1.75rem&quot;,</span><br><span class="line">        h2: &quot;1.25rem&quot;,</span><br><span class="line">        h3: &quot;1rem&quot;,</span><br><span class="line">      &#125;;</span><br><span class="line">      return (</span><br><span class="line">        &lt;Tag</span><br><span class="line">          style=&#123;&#123;</span><br><span class="line">            margin: 0,</span><br><span class="line">            fontWeight: 600,</span><br><span class="line">            fontSize: sizes[props.level ?? &quot;h2&quot;],</span><br><span class="line">            color: &quot;#111827&quot;,</span><br><span class="line">            letterSpacing: &quot;-0.01em&quot;,</span><br><span class="line">          &#125;&#125;</span><br><span class="line">        &gt;</span><br><span class="line">          &#123;resolveText(props.text)&#125;</span><br><span class="line">        &lt;/Tag&gt;</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Metric: (&#123; props &#125;) =&gt; &#123;</span><br><span class="line">      const trendColors: Record&lt;string, string&gt; = &#123;</span><br><span class="line">        up: &quot;#059669&quot;,</span><br><span class="line">        down: &quot;#dc2626&quot;,</span><br><span class="line">        neutral: &quot;#6b7280&quot;,</span><br><span class="line">      &#125;;</span><br><span class="line">      const trendIcons: Record&lt;string, string&gt; = &#123;</span><br><span class="line">        up: &quot;↑&quot;,</span><br><span class="line">        down: &quot;↓&quot;,</span><br><span class="line">        neutral: &quot;→&quot;,</span><br><span class="line">      &#125;;</span><br><span class="line">      return (</span><br><span class="line">        &lt;div style=&#123;&#123; display: &quot;flex&quot;, flexDirection: &quot;column&quot;, gap: &quot;4px&quot; &#125;&#125;&gt;</span><br><span class="line">          &lt;span</span><br><span class="line">            style=&#123;&#123;</span><br><span class="line">              fontSize: &quot;0.75rem&quot;,</span><br><span class="line">              color: &quot;#6b7280&quot;,</span><br><span class="line">              fontWeight: 500,</span><br><span class="line">              textTransform: &quot;uppercase&quot;,</span><br><span class="line">              letterSpacing: &quot;0.05em&quot;,</span><br><span class="line">            &#125;&#125;</span><br><span class="line">          &gt;</span><br><span class="line">            &#123;resolveText(props.label)&#125;</span><br><span class="line">          &lt;/span&gt;</span><br><span class="line">          &lt;div style=&#123;&#123; display: &quot;flex&quot;, alignItems: &quot;baseline&quot;, gap: &quot;8px&quot; &#125;&#125;&gt;</span><br><span class="line">            &lt;span</span><br><span class="line">              style=&#123;&#123;</span><br><span class="line">                fontSize: &quot;1.5rem&quot;,</span><br><span class="line">                fontWeight: 700,</span><br><span class="line">                color: &quot;#111827&quot;,</span><br><span class="line">                letterSpacing: &quot;-0.02em&quot;,</span><br><span class="line">              &#125;&#125;</span><br><span class="line">            &gt;</span><br><span class="line">              &#123;resolveText(props.value)&#125;</span><br><span class="line">            &lt;/span&gt;</span><br><span class="line">            &#123;props.trend &amp;&amp; props.trendValue &amp;&amp; (</span><br><span class="line">              &lt;span</span><br><span class="line">                style=&#123;&#123;</span><br><span class="line">                  fontSize: &quot;0.8rem&quot;,</span><br><span class="line">                  fontWeight: 500,</span><br><span class="line">                  color: trendColors[props.trend] ?? &quot;#6b7280&quot;,</span><br><span class="line">                &#125;&#125;</span><br><span class="line">              &gt;</span><br><span class="line">                &#123;trendIcons[props.trend]&#125; &#123;resolveText(props.trendValue)&#125;</span><br><span class="line">              &lt;/span&gt;</span><br><span class="line">            )&#125;</span><br><span class="line">          &lt;/div&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">      );</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    PieChart: (&#123; props &#125;) =&gt; &#123;</span><br><span class="line">      const COLORS = [</span><br><span class="line">        &quot;#3b82f6&quot;,</span><br><span class="line">        &quot;#8b5cf6&quot;,</span><br><span class="line">        &quot;#ec4899&quot;,</span><br><span class="line">        &quot;#f59e0b&quot;,</span><br><span class="line">        &quot;#10b981&quot;,</span><br><span class="line">        &quot;#6366f1&quot;,</span><br><span class="line">      ];</span><br><span class="line">      const data = props.data ?? [];</span><br><span class="line">      return (</span><br><span class="line">        &lt;div style=&#123;&#123; width: &quot;100%&quot;, height: 200 &#125;&#125;&gt;</span><br><span class="line">          &lt;ResponsiveContainer&gt;</span><br><span class="line">            &lt;RechartsPie&gt;</span><br><span class="line">              &lt;Pie</span><br><span class="line">                data=&#123;data&#125;</span><br><span class="line">                dataKey=&quot;value&quot;</span><br><span class="line">                nameKey=&quot;label&quot;</span><br><span class="line">                cx=&quot;50%&quot;</span><br><span class="line">                cy=&quot;50%&quot;</span><br><span class="line">                innerRadius=&#123;props.innerRadius ?? 40&#125;</span><br><span class="line">                outerRadius=&#123;80&#125;</span><br><span class="line">                paddingAngle=&#123;2&#125;</span><br><span class="line">              &gt;</span><br><span class="line">                &#123;data.map((entry: any, i: number) =&gt; (</span><br><span class="line">                  &lt;Cell</span><br><span class="line">                    key=&#123;i&#125;</span><br><span class="line">                    fill=&#123;entry.color ?? COLORS[i % COLORS.length]&#125;</span><br><span class="line">                  /&gt;</span><br><span class="line">                ))&#125;</span><br><span class="line">              &lt;/Pie&gt;</span><br><span class="line">              &lt;Tooltip /&gt;</span><br><span class="line">            &lt;/RechartsPie&gt;</span><br><span class="line">          &lt;/ResponsiveContainer&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">      );</span><br><span class="line">    &#125;,</span><br><span class="line">    DataTable: (&#123; props &#125;) =&gt; &#123;</span><br><span class="line">      const cols = props.columns ?? [];</span><br><span class="line">      const rows = props.rows ?? [];</span><br><span class="line">      return (</span><br><span class="line">        &lt;div style=&#123;&#123; overflowX: &quot;auto&quot;, width: &quot;100%&quot; &#125;&#125;&gt;</span><br><span class="line">          &lt;table</span><br><span class="line">            style=&#123;&#123;</span><br><span class="line">              width: &quot;100%&quot;,</span><br><span class="line">              borderCollapse: &quot;collapse&quot;,</span><br><span class="line">              fontSize: &quot;0.8rem&quot;,</span><br><span class="line">            &#125;&#125;</span><br><span class="line">          &gt;</span><br><span class="line">            &lt;thead&gt;</span><br><span class="line">              &lt;tr&gt;</span><br><span class="line">                &#123;cols.map((col: any) =&gt; (</span><br><span class="line">                  &lt;th</span><br><span class="line">                    key=&#123;col.key&#125;</span><br><span class="line">                    style=&#123;&#123;</span><br><span class="line">                      textAlign: &quot;left&quot;,</span><br><span class="line">                      padding: &quot;8px 12px&quot;,</span><br><span class="line">                      borderBottom: &quot;2px solid #e5e7eb&quot;,</span><br><span class="line">                      color: &quot;#6b7280&quot;,</span><br><span class="line">                      fontWeight: 600,</span><br><span class="line">                      fontSize: &quot;0.7rem&quot;,</span><br><span class="line">                      textTransform: &quot;uppercase&quot;,</span><br><span class="line">                      letterSpacing: &quot;0.05em&quot;,</span><br><span class="line">                    &#125;&#125;</span><br><span class="line">                  &gt;</span><br><span class="line">                    &#123;col.label&#125;</span><br><span class="line">                  &lt;/th&gt;</span><br><span class="line">                ))&#125;</span><br><span class="line">              &lt;/tr&gt;</span><br><span class="line">            &lt;/thead&gt;</span><br><span class="line">            &lt;tbody&gt;</span><br><span class="line">              &#123;rows.map((row: any, i: number) =&gt; (</span><br><span class="line">                &lt;tr key=&#123;i&#125; style=&#123;&#123; borderBottom: &quot;1px solid #f3f4f6&quot; &#125;&#125;&gt;</span><br><span class="line">                  &#123;cols.map((col: any) =&gt; (</span><br><span class="line">                    &lt;td</span><br><span class="line">                      key=&#123;col.key&#125;</span><br><span class="line">                      style=&#123;&#123; padding: &quot;8px 12px&quot;, color: &quot;#374151&quot; &#125;&#125;</span><br><span class="line">                    &gt;</span><br><span class="line">                      &#123;String(row[col.key] ?? &quot;&quot;)&#125;</span><br><span class="line">                    &lt;/td&gt;</span><br><span class="line">                  ))&#125;</span><br><span class="line">                &lt;/tr&gt;</span><br><span class="line">              ))&#125;</span><br><span class="line">            &lt;/tbody&gt;</span><br><span class="line">          &lt;/table&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">      );</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">// ─── Assembled Catalog ───────────────────────────────────────────────</span><br><span class="line">// 封装定义和render逻辑 之后 注册到provider 上</span><br><span class="line">export const demonstrationCatalog = createCatalog(</span><br><span class="line">  demonstrationCatalogDefinitions,</span><br><span class="line">  demonstrationCatalogRenderers,</span><br><span class="line">  &#123;</span><br><span class="line">    catalogId: &quot;copilotkit://app-dashboard-catalog&quot;,</span><br><span class="line">    includeBasicCatalog: false,</span><br><span class="line">  &#125;,</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h3 id="注册"><a href="#注册" class="headerlink" title="注册"></a>注册</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">import &#123; StrictMode &#125; from &quot;react&quot;;</span><br><span class="line">import &#123; createRoot &#125; from &quot;react-dom/client&quot;;</span><br><span class="line">import &#123; CopilotKit &#125; from &quot;@copilotkit/react-core/v2&quot;;</span><br><span class="line">import &quot;@copilotkit/react-core/v2/styles.css&quot;;</span><br><span class="line">import &#123; demonstrationCatalog &#125; from &quot;./catalog/renderers&quot;;</span><br><span class="line">import &quot;./globals.css&quot;;</span><br><span class="line">import App from &quot;./App&quot;;</span><br><span class="line"></span><br><span class="line">createRoot(document.getElementById(&quot;root&quot;)!).render(</span><br><span class="line">  &lt;StrictMode&gt;</span><br><span class="line">    &lt;main className=&quot;h-screen w-screen&quot;&gt;</span><br><span class="line">      &lt;CopilotKit</span><br><span class="line">        useSingleEndpoint=&#123;false&#125;</span><br><span class="line">        runtimeUrl=&quot;/api/copilotkit&quot;</span><br><span class="line"></span><br><span class="line">        // 🪁 Enable A2UI using the demonstration catalog</span><br><span class="line">        a2ui=&#123;&#123; catalog: demonstrationCatalog &#125;&#125;</span><br><span class="line">      &gt;</span><br><span class="line">        &lt;App /&gt;</span><br><span class="line">      &lt;/CopilotKit&gt;</span><br><span class="line">    &lt;/main&gt;</span><br><span class="line">  &lt;/StrictMode&gt;,</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h3 id="fixed-schema-UI"><a href="#fixed-schema-UI" class="headerlink" title="fixed schema UI"></a>fixed schema UI</h3><p>固定模式（Fixed Schema）声明式生成式 UI</p>
+<p>使用固定模式时，你需要提前设计好 A2UI 组件树——布局、嵌套结构和数据绑定都已预先定义。Agent 的唯一工作就是填充运行时数据。这让你可以最大程度地控制最终 UI，同时仍由 Agent 来决定何时展示以及展示哪些数据。</p>
+<p>当你需要为特定场景（例如航班卡片轮播）保持一致、精致的布局，且不需要 Agent 即兴发挥结构时，这种方式非常适用。</p>
+<p>构建固定模式最简单的方式是使用 <code>https://a2ui-editor.ag-ui.com/</code> 编辑器。打开 Composer（组合器）并指定以下提示词。</p>
+<h4 id="将ui-schema-注册到后端agent-上"><a href="#将ui-schema-注册到后端agent-上" class="headerlink" title="将ui schema 注册到后端agent 上"></a>将ui schema 注册到后端agent 上</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">from copilotkit import a2ui</span><br><span class="line">from langchain.tools import tool</span><br><span class="line"></span><br><span class="line">CATALOG_ID = &quot;copilotkit://app-dashboard-catalog&quot;</span><br><span class="line">SURFACE_ID = &quot;flight-search-results&quot;</span><br><span class="line"></span><br><span class="line">FLIGHT_SCHEMA = [....] // 定义航班卡片的schema</span><br><span class="line"></span><br><span class="line">`@tool</span><br><span class="line">def display_flights(flights: list[Flight]) -&gt; str:</span><br><span class="line">    &quot;&quot;&quot;Display flights as rich cards in a horizontal row.</span><br><span class="line"></span><br><span class="line">    Each flight must have: id, airline, airlineLogo (URL), flightNumber,</span><br><span class="line">    origin, destination, date, departureTime, arrivalTime, duration,</span><br><span class="line">    status, and price.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    return a2ui.render(</span><br><span class="line">        operations=[</span><br><span class="line">            a2ui.create_surface(SURFACE_ID, catalog_id=CATALOG_ID),</span><br><span class="line">            a2ui.update_components(SURFACE_ID, FLIGHT_SCHEMA), // 按schema 渲染</span><br><span class="line">            a2ui.update_data_model(SURFACE_ID, &#123;&quot;flights&quot;: flights&#125;),</span><br><span class="line">        ],</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">graph = create_agent(</span><br><span class="line">    model=ChatOpenAI(model=&quot;gpt-4.1&quot;),</span><br><span class="line">    tools=[get_sales_data, search_flights, display_flights],</span><br><span class="line">    middleware=[CopilotKitMiddleware()],</span><br><span class="line">    checkpointer=MemorySaver(),</span><br><span class="line">    system_prompt=(</span><br><span class="line">        &quot;.....&quot;</span><br><span class="line">    ),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h3 id="Dynamic-vs-Fixed-When-to-use-which"><a href="#Dynamic-vs-Fixed-When-to-use-which" class="headerlink" title="Dynamic vs Fixed: When to use which"></a>Dynamic vs Fixed: When to use which</h3><table>
+<thead>
+<tr>
+<th></th>
+<th><strong>Fixed Schema</strong></th>
+<th><strong>Dynamic Schema</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Layout</strong></td>
+<td>Predefined, identical every time 预先定义好的，每次都是相同的</td>
+<td>Agent-generated, varies per request由代理生成，随每个请求而不同</td>
+</tr>
+<tr>
+<td><strong>Agent’s role</strong></td>
+<td>Fills in data only 仅填充数据</td>
+<td>Chooses components and layout 选择了组件和布局方式</td>
+</tr>
+<tr>
+<td><strong>Consistency 一致性</strong></td>
+<td>Maximum最大值</td>
+<td>Varies 各不相同</td>
+</tr>
+<tr>
+<td><strong>Flexibility 灵活性</strong></td>
+<td>Minimal — new layouts require code changes 非常少——新的布局需要修改代码</td>
+<td>High — agent adapts to the request 高——代理人能够适应该请求</td>
+</tr>
+<tr>
+<td><strong>Best for</strong></td>
+<td>Polished, known surfaces (flight cards, invoices) 经过精心处理的、易于识别的表面（如飞行卡片、发票）</td>
+<td>Long-tail, exploratory, or internal surfaces 长尾的、探索性的或内部表面</td>
+</tr>
+</tbody>
+</table>
+<p>在实践中，许多应用程序同时使用两种方案：对于高流量且需要注重品牌形象的页面，使用固定的模式；而对于其他所有页面，则使用动态的模式。</p>
+<p>声明式生成式用户界面允许智能体从一系列构建模块中组合出各种界面——这种方式比受控式界面更加灵活，也比自由式界面更加稳定。</p>
+<p>A2UI 规范包含了三个核心要素：组件目录（包含组件的定义和渲染方式）、架构设计（组件之间的布局方式），以及数据绑定（运行时的值的传递方式）。</p>
+<p>动态模式允许代理实时生成布局——这对于需要长尾布局和探索性界面的情况非常有用。</p>
+<p>固定式的架构提供了预定义的布局，代理程序可以将数据填充到这些布局中——这种方式适用于需要呈现精美外观且流量较大的场景。</p>
+<p>这两种方法可以在同一个代理中同时存在。</p>
+<h2 id="Open-Generative-UI-开放式"><a href="#Open-Generative-UI-开放式" class="headerlink" title="Open Generative UI 开放式"></a>Open Generative UI 开放式</h2><p>开放式的生成 UI 是最灵活的模式：该工具并不局限于一组预先注册好的组件，也不依赖于固定的或动态生成的声明式架构。</p>
+<p>这种灵活性源自 MCP 应用程序。代理可以从 MCP 服务器上获取应用程序工具，并在这些工具符合用户需求时将其打开使用。</p>
+<p>你的前端部分充当了主机角色。它无需提前手动编写所有可能的用户界面界面；相反，它只需将聊天运行时与兼容的外部应用程序连接起来即可。</p>
+<p>为什么使用开放式用户界面<br>当用户的请求范围过于广泛，无法用固定的组件库来涵盖时，开放式用户界面就非常有用。<br><strong> 优点 </strong></p>
+<ul>
+<li>极其灵活：该代理能够引导用户体验更丰富的应用程序功能，而不仅仅是简单的内嵌小部件。</li>
+<li>降低前端耦合度：通过连接到 MCP 服务器，宿主应用程序可以获得新的功能。</li>
+<li>非常适合用于白板演示、设计工作、计划制定等需要使用工具来完成的任务。<br><strong> 缺点 </strong></li>
+<li>与那些需要手动配置或声明式的方法相比，这种方式对最终的用户界面控制较少。</li>
+<li>质量取决于所连接的 MCP 应用程序，以及代理程序选择这些应用程序的精准程度。</li>
+<li>这需要更强的信任机制、权限管理，以及更严格的集成规范。</li>
+</ul>
+<p>MCP 应用程序规范<br>MCP 应用程序是模型上下文协议的扩展，它使得 MCP 服务器能够向支持的设备提供交互式用户界面。</p>
+<p>这种架构由三部分组成：</p>
+<p>服务器：提供工具和用户界面资源。<br>HOST：将用户界面嵌入到沙盒中的 iframe 中，并负责代理双方的通信过程<br>视图：在 iframe 内部运行的应用程序。<br>一个重要的设计原则是渐进式增强：如果host支持 MCP 应用程序，那么工具会呈现丰富的用户界面；否则，它仍然可以作为普通的 MCP 工具使用，仅提供文本输出。</p>
+<p>CopilotKit 负责托管工作——你只需要将其指向一个 MCP 服务器的 URL 地址即可。</p>
+<p><a href="https://github.com/modelcontextprotocol/ext-apps/tree/main/examples" target="_blank" rel="noopener"> the official repository of MCP App examples.</a></p>
+<p>注意：开放生成的用户界面是不可预测的</p>
+<p>因为代理在每次请求时都会从零开始生成用户界面，所以结果可能不会完全符合你的预期。你可能需要多次调整提示语，直到得到你想要的效果。</p>
+<p>这是完全开放式的生成式用户界面所面临的核心权衡之一：虽然可以获得最大的灵活性，但必须牺牲一致性和可预测性。对于那些需要始终保持可靠性的用户界面来说，采用控制性或声明式的方法更为合适。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">import &#123; LangGraphHttpAgent &#125; from &quot;@copilotkit/runtime/langgraph&quot;;</span><br><span class="line">import &#123;</span><br><span class="line">  CopilotRuntime,</span><br><span class="line">  createCopilotEndpoint,</span><br><span class="line">&#125; from &quot;@copilotkit/runtime/v2&quot;;</span><br><span class="line">import &#123; serve &#125; from &quot;@hono/node-server&quot;;</span><br><span class="line"></span><br><span class="line">const appAgent = new LangGraphHttpAgent(&#123;</span><br><span class="line">  url: process.env.LANGGRAPH_DEPLOYMENT_URL || &quot;http://localhost:8005&quot;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">/***</span><br><span class="line"> * </span><br><span class="line"> * 关于 mcpApps 配置的几点说明：</span><br><span class="line"> * mcpApps.servers 将运行时连接到一个或多个提供应用程序工具的 MCP 服务器。</span><br><span class="line"> * 每个条目都指明了运行时应该在哪里找到兼容的 MCP 应用程序。在这里，你可以通过 HTTP 连接到 Excalidraw。</span><br><span class="line"> * CopilotKit 会自动为代理添加 MCP 应用程序识别功能，从而在运行时能够自动调用这些工具。</span><br><span class="line"> */</span><br><span class="line">const runtime = new CopilotRuntime(&#123;</span><br><span class="line">  agents: &#123; default: appAgent &#125;,</span><br><span class="line">  openGenerativeUI: true, // 启用开放生成式UI 代理可以生成任意类型的用户界面——包括 HTML、CSS、JavaScript 等代码，并可以直接在聊天界面中展示</span><br><span class="line">  mcpApps: &#123; // 注册 MCP 应用程序</span><br><span class="line">    servers: [</span><br><span class="line">      &#123;</span><br><span class="line">        type: &quot;http&quot;,</span><br><span class="line">        url: &quot;https://mcp.excalidraw.com&quot;, // &lt;- Exalidraw MCP Server</span><br><span class="line">        serverId: &quot;example_mcp_server&quot;,</span><br><span class="line">      &#125;,</span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">const app = createCopilotEndpoint(&#123;</span><br><span class="line">  runtime,</span><br><span class="line">  basePath: &quot;/api/copilotkit&quot;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">serve(&#123; fetch: app.fetch, port: 4005 &#125;, () =&gt; &#123;</span><br><span class="line">  console.log(&quot;✓ CopilotKit API server running at http://localhost:4005&quot;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="全栈状态共享"><a href="#全栈状态共享" class="headerlink" title="全栈状态共享"></a>全栈状态共享</h2><p>在后端agent 服务中，使用AgentState 声明状态值，和更新tool</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">from __future__ import annotations</span><br><span class="line"></span><br><span class="line">import uuid</span><br><span class="line"></span><br><span class="line">from langchain.agents.middleware import AgentState as BaseAgentState</span><br><span class="line">from langchain.tools import ToolRuntime, tool</span><br><span class="line">from langchain_core.messages import ToolMessage</span><br><span class="line">from langgraph.types import Command</span><br><span class="line">from typing_extensions import TypedDict</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class Todo(TypedDict):</span><br><span class="line">    id: str</span><br><span class="line">    title: str</span><br><span class="line">    completed: bool</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class AgentState(BaseAgentState):</span><br><span class="line">    todos: list[Todo]</span><br><span class="line"></span><br><span class="line">@tool</span><br><span class="line">def manage_todos(todos: list[Todo], runtime: ToolRuntime) -&gt; Command:</span><br><span class="line">    &quot;&quot;&quot;Replace the entire todo list. Use this to add, edit, or remove todos.&quot;&quot;&quot;</span><br><span class="line">    for todo in todos:</span><br><span class="line">        if not todo.get(&quot;id&quot;):</span><br><span class="line">            todo[&quot;id&quot;] = str(uuid.uuid4())</span><br><span class="line"></span><br><span class="line">    # Command allows agents to update state via toolcalls</span><br><span class="line">    return Command(update=&#123;</span><br><span class="line">        &quot;todos&quot;: todos,</span><br><span class="line">        &quot;messages&quot;: [</span><br><span class="line">            ToolMessage(</span><br><span class="line">                content=&quot;Successfully updated todos&quot;,</span><br><span class="line">                tool_call_id=runtime.tool_call_id,</span><br><span class="line">            )</span><br><span class="line">        ],</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@tool</span><br><span class="line">def get_todos(runtime: ToolRuntime):</span><br><span class="line">    &quot;&quot;&quot;Get the current todo list.&quot;&quot;&quot;</span><br><span class="line">    return runtime.state.get(&quot;todos&quot;, [])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">todo_tools = [manage_todos, get_todos]</span><br><span class="line"></span><br><span class="line">graph = create_agent(</span><br><span class="line">    model=ChatOpenAI(</span><br><span class="line">        openai_api_key=ARK_API_KEY,</span><br><span class="line">        openai_api_base=ARK_API_BASE,</span><br><span class="line">        model_name=ARK_MODEL_NAME, # 从环境变量读取模型</span><br><span class="line">    ),</span><br><span class="line">    state_schema=AgentState,</span><br><span class="line">    tools=todo_tools,</span><br><span class="line">    middleware=[CopilotKitMiddleware()],</span><br><span class="line">    checkpointer=MemorySaver(),</span><br><span class="line">    system_prompt=(</span><br><span class="line">        &quot;You manage a shared todo list. &quot;</span><br><span class="line">        &quot;Use manage_todos to add, edit, or remove todos. &quot;</span><br><span class="line">        &quot;Use get_todos to check the current list. &quot;</span><br><span class="line">        &quot;When asked to manage todos, call the openOrCloseTodos frontend tool with open=true first. &quot;</span><br><span class="line">        &quot;Keep responses to 1-2 sentences.&quot;</span><br><span class="line">    ),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>使用useAgent 可以实时在前端获取后端agent中注册的状态数据<br>使用useFrontendTool 可以给后端agent 注册tool 进行页面操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">import &#123; useState &#125; from &quot;react&quot;;</span><br><span class="line">import &#123; z &#125; from &quot;zod&quot;</span><br><span class="line"></span><br><span class="line">import &#123; TodoAppLayout &#125; from &quot;@/components/todo-app-layout&quot;;</span><br><span class="line">import &#123; TodoList &#125; from &quot;@/components/todo-list&quot;;</span><br><span class="line">import &#123; CopilotChat, useAgent, useFrontendTool &#125; from &quot;@copilotkit/react-core/v2&quot;;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * useAgent() gives you a live handle to the agent&apos;s shared state: agent.state.todos reflects the current list, and agent.setState(&#123; todos: updated &#125;) pushes changes back.</span><br><span class="line"> * useFrontendTool registers a tool that runs in the browser — the agent calls it like any backend tool, but the handler executes client-side and can update React state directly.</span><br><span class="line"> */</span><br><span class="line">export default function App() &#123;</span><br><span class="line">  const [todosOpen, setTodosOpen] = useState(false);</span><br><span class="line"></span><br><span class="line">  // 🪁 Register a frontend tool the agent can call to control the UI</span><br><span class="line">  useFrontendTool(&#123;</span><br><span class="line">    name: &quot;openOrCloseTodos&quot;,</span><br><span class="line">    description: &quot;Open or close the todo panel.&quot;,</span><br><span class="line">    parameters: z.object(&#123; open: z.boolean()&#125;),</span><br><span class="line">    handler: async (&#123;open&#125;) =&gt; &#123;</span><br><span class="line">      setTodosOpen(open);</span><br><span class="line">      return `Todos are $&#123; open ? &apos;open&apos; : &apos;closed&apos;&#125;.`;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  // 🪁 Subscribe to shared agent state</span><br><span class="line">  const &#123; agent &#125; = useAgent();</span><br><span class="line"></span><br><span class="line">  return (</span><br><span class="line">    &lt;TodoAppLayout</span><br><span class="line">      chat=&#123;&lt;CopilotChat /&gt;&#125;</span><br><span class="line">      open=&#123;todosOpen&#125;</span><br><span class="line">      onOpenChange=&#123;setTodosOpen&#125;</span><br><span class="line">      panel=&#123;(onClose) =&gt; (</span><br><span class="line">        &lt;TodoList</span><br><span class="line">          // 🪁 Read shared state</span><br><span class="line">          todos=&#123;agent.state.todos || []&#125; </span><br><span class="line"></span><br><span class="line">          // 🪁 Write shared state</span><br><span class="line">          onUpdate=&#123;(updated) =&gt; agent.setState(&#123; todos: updated &#125;)&#125;</span><br><span class="line"></span><br><span class="line">          isRunning=&#123;agent.isRunning&#125;</span><br><span class="line">          onClose=&#123;onClose&#125;</span><br><span class="line">        /&gt;</span><br><span class="line">      )&#125;</span><br><span class="line">    /&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href="https://github.com/YooHannah/algorithm/tree/master/LLM/CopilotKit/archive" target="_blank" rel="noopener">相关练习代码</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/llm/" rel="tag"># llm</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/deepLearning/Sequencetosequencemodels.html" rel="next" title="Sequence to Sequence Models">
+                <i class="fa fa-chevron-left"></i> Sequence to Sequence Models
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">267</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Generative-UI"><span class="nav-number">1.</span> <span class="nav-text">Generative UI</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AG-UI-协议"><span class="nav-number">2.</span> <span class="nav-text">AG-UI 协议</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#区别其他协议"><span class="nav-number">2.1.</span> <span class="nav-text">区别其他协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#区别-A2UI"><span class="nav-number">2.2.</span> <span class="nav-text">区别 A2UI</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CopilotKit-框架"><span class="nav-number">3.</span> <span class="nav-text">CopilotKit 框架</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#generative-ui"><span class="nav-number">3.0.1.</span> <span class="nav-text">generative ui</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hooks"><span class="nav-number">3.0.2.</span> <span class="nav-text">hooks</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多agent-切换"><span class="nav-number">3.1.</span> <span class="nav-text">多agent 切换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#后端启动多服务"><span class="nav-number">3.1.1.</span> <span class="nav-text">后端启动多服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#前端注册多个agent"><span class="nav-number">3.1.2.</span> <span class="nav-text">前端注册多个agent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#前端指定agent"><span class="nav-number">3.1.3.</span> <span class="nav-text">前端指定agent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#前端调用CopilotKit-agent"><span class="nav-number">3.1.4.</span> <span class="nav-text">前端调用CopilotKit agent</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Controlled-Generative-UI-全控式"><span class="nav-number">3.2.</span> <span class="nav-text">Controlled Generative UI 全控式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#useComponent-注册组件"><span class="nav-number">3.2.1.</span> <span class="nav-text">useComponent 注册组件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Deccontrolled-Generative-UI-声明式"><span class="nav-number">3.3.</span> <span class="nav-text">Deccontrolled Generative UI 声明式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是声明式生成式-UI？"><span class="nav-number">3.4.</span> <span class="nav-text">什么是声明式生成式 UI？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么使用声明式生成式-UI？"><span class="nav-number">3.5.</span> <span class="nav-text">为什么使用声明式生成式 UI？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#开启a2ui-组件-进行组件组装渲染"><span class="nav-number">3.5.1.</span> <span class="nav-text">开启a2ui 组件 进行组件组装渲染</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dynamic-schema-UI"><span class="nav-number">3.5.2.</span> <span class="nav-text">dynamic schema UI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注册"><span class="nav-number">3.5.3.</span> <span class="nav-text">注册</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fixed-schema-UI"><span class="nav-number">3.5.4.</span> <span class="nav-text">fixed schema UI</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#将ui-schema-注册到后端agent-上"><span class="nav-number">3.5.4.1.</span> <span class="nav-text">将ui schema 注册到后端agent 上</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dynamic-vs-Fixed-When-to-use-which"><span class="nav-number">3.5.5.</span> <span class="nav-text">Dynamic vs Fixed: When to use which</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Open-Generative-UI-开放式"><span class="nav-number">3.6.</span> <span class="nav-text">Open Generative UI 开放式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#全栈状态共享"><span class="nav-number">3.7.</span> <span class="nav-text">全栈状态共享</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
