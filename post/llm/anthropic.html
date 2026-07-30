@@ -1,0 +1,699 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="llm,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="基本使用12345678910111213141516from anthropic import Anthropicfrom helper import load_envload_env()client = Anthropic()MODEL_NAME=&amp;quot;claude-3-5-sonnet-20241022&amp;quot;response = client.messages.create(">
+<meta name="keywords" content="llm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Anthropic">
+<meta property="og:url" content="http://yoohannah.github.io/post/llm/anthropic.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="基本使用12345678910111213141516from anthropic import Anthropicfrom helper import load_envload_env()client = Anthropic()MODEL_NAME=&amp;quot;claude-3-5-sonnet-20241022&amp;quot;response = client.messages.create(">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/anthropic-1.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/anthropic-3.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/anthropic-2.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/anthropic-4.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/anthropic-5.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/anthropic-6.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/anthropic-6.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/anthropic-7.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/anthropic-8.png">
+<meta property="og:updated_time" content="2026-07-30T10:22:32.171Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Anthropic">
+<meta name="twitter:description" content="基本使用12345678910111213141516from anthropic import Anthropicfrom helper import load_envload_env()client = Anthropic()MODEL_NAME=&amp;quot;claude-3-5-sonnet-20241022&amp;quot;response = client.messages.create(">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/LLM/anthropic-1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/llm/anthropic.html">
+
+
+
+
+
+  <title> Anthropic | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/llm/anthropic.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Anthropic
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-07-30T11:36:37+08:00">
+                2026-07-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">from anthropic import Anthropic</span><br><span class="line">from helper import load_env</span><br><span class="line">load_env()</span><br><span class="line"></span><br><span class="line">client = Anthropic()</span><br><span class="line">MODEL_NAME=&quot;claude-3-5-sonnet-20241022&quot;</span><br><span class="line"></span><br><span class="line">response = client.messages.create(</span><br><span class="line">    model=MODEL_NAME,</span><br><span class="line">    max_tokens=1000,</span><br><span class="line">    messages=[</span><br><span class="line">        &#123;&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Write a haiku about Anthropic&quot;&#125;</span><br><span class="line">    ]</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">print(response.content[0].text)</span><br></pre></td></tr></table></figure>
+<h2 id="返回结果"><a href="#返回结果" class="headerlink" title="返回结果"></a>返回结果</h2><p><img src="/image/LLM/anthropic-1.png" alt><br>content: 消息的内容，可以是文本、图片、文件等<br>model: 当前使用的模型名称<br>role: 消息的角色，user 或 assistant assistant 消息会被自动加入，我们一般不需要自己构造<br>stop_reason: 停止生成的原因，可以是max_tokens、max_seconds、stop_sequence等<br>input_tokens: 输入的token数<br>output_tokens: 输出的token数</p>
+<h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><p>stop_sequence: 停止生成的序列，eg. \n 如果client.messages.create 有配置，当生成的内容包含 \n 时，会停止生成<br><img src="/image/LLM/anthropic-3.png" alt><br><img src="/image/LLM/anthropic-2.png" alt><br>max_tokens: 生成最大长度，如果client.messages.create 有配置，当生成的内容超过 max_tokens 时，会停止生成<br><img src="/image/LLM/anthropic-4.png" alt><br>temperature: 生成结果的多样性。取值 0~1 之间，越大越散，越小越收敛<br><img src="/image/LLM/anthropic-5.png" alt></p>
+<p>messages: 对话历史，包含用户和助手的消息，eg. [{“role”: “user”, “content”: “Write a haiku about Anthropic”}]<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">// 手动制造多轮对话（历史问答） 或者 Prefilling the Assistant Response （预填充助手回复）</span><br><span class="line">messages=[</span><br><span class="line">        &#123;&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Hello! Only speak to me in Spanish&quot;&#125;,</span><br><span class="line">        &#123;&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;Hola!&quot;&#125;,</span><br><span class="line">        &#123;&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;How are you?&quot;&#125;</span><br><span class="line">    ]</span><br><span class="line">// chat bot 通过循环每次自动将历史问答加入到messages 中，实现多轮对话</span><br><span class="line">print(&quot;Simple Chatbot (type &apos;quit&apos; to exit)&quot;)</span><br><span class="line"># Store conversation history</span><br><span class="line">messages = []</span><br><span class="line">while True:</span><br><span class="line">    # Get user input</span><br><span class="line">    user_input = input(&quot;You: &quot;)</span><br><span class="line">    # Check for quit command</span><br><span class="line">    if user_input.lower() == &apos;quit&apos;:</span><br><span class="line">        print(&quot;Goodbye!&quot;)</span><br><span class="line">        break</span><br><span class="line">    # Add user message to history</span><br><span class="line">    messages.append(&#123;&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: user_input&#125;)</span><br><span class="line">    try:</span><br><span class="line">        # Get response from Claude</span><br><span class="line">        response = client.messages.create(</span><br><span class="line">            model=MODEL_NAME,</span><br><span class="line">            max_tokens=200,</span><br><span class="line">            messages=messages</span><br><span class="line">        )</span><br><span class="line">        # Extract and print Claude&apos;s response</span><br><span class="line">        asst_message = response.content[0].text</span><br><span class="line">        print(&quot;Assistant:&quot;, asst_message)</span><br><span class="line">        </span><br><span class="line">        # Add assistant response to history</span><br><span class="line">        messages.append(&#123;&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: asst_message&#125;)</span><br><span class="line">        </span><br><span class="line">    except Exception as e:</span><br><span class="line">        print(f&quot;An error occurred: &#123;e&#125;&quot;)</span><br></pre></td></tr></table></figure></p>
+<h3 id="多模态输入"><a href="#多模态输入" class="headerlink" title="多模态输入"></a>多模态输入</h3><p>messages 数组中 content 上面都是简单的文本，通过进行类型区分和扩展，可以进行多模态输入<br>此时content可以传入一个列表，每个元素是一个字典，包含type 和 相应type 的数据字段<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">messages = [</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;role&quot;: &quot;user&quot;,</span><br><span class="line">        &quot;content&quot;: [&#123;</span><br><span class="line">            &quot;type&quot;: &quot;image&quot;, // 图片做输入 图片内容块</span><br><span class="line">            &quot;source&quot;: &#123;</span><br><span class="line">                &quot;type&quot;: &quot;base64&quot;, // 图片以base64 编码 输入</span><br><span class="line">                &quot;media_type&quot;: &quot;image/png&quot;, // 图片类型</span><br><span class="line">                &quot;data&quot;: base64_string // 图片base64 字符串</span><br><span class="line">            &#125;,</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">            &quot;type&quot;: &quot;text&quot;, // 文本做输入 文本内容块</span><br><span class="line">            &quot;text&quot;: &quot;&quot;&quot;How many to-go containers of each type </span><br><span class="line">            are in this image?&quot;&quot;&quot;</span><br><span class="line">        &#125;]</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<p>通过对图片进行输入，可以实现对图片进行识别和信息提取<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line">import base64</span><br><span class="line">import mimetypes</span><br><span class="line"></span><br><span class="line"># 从图片路径创建图片内容块</span><br><span class="line">def create_image_message(image_path):</span><br><span class="line">    # Open the image file in &quot;read binary&quot; mode</span><br><span class="line">    with open(image_path, &quot;rb&quot;) as image_file:</span><br><span class="line">        # Read the contents of the image as a bytes object</span><br><span class="line">        binary_data = image_file.read()</span><br><span class="line">    # Encode the binary data using Base64 encoding</span><br><span class="line">    base64_encoded_data = base64.b64encode(binary_data)</span><br><span class="line">    # Decode base64_encoded_data from bytes to a string</span><br><span class="line">    base64_string = base64_encoded_data.decode(&apos;utf-8&apos;)</span><br><span class="line">    # Get the MIME type of the image based on its file extension</span><br><span class="line">    mime_type, _ = mimetypes.guess_type(image_path)</span><br><span class="line">    # Create the image block</span><br><span class="line">    image_block = &#123;</span><br><span class="line">        &quot;type&quot;: &quot;image&quot;,</span><br><span class="line">        &quot;source&quot;: &#123;</span><br><span class="line">            &quot;type&quot;: &quot;base64&quot;,</span><br><span class="line">            &quot;media_type&quot;: mime_type,</span><br><span class="line">            &quot;data&quot;: base64_string</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    return image_block</span><br><span class="line"></span><br><span class="line"># 创建messages</span><br><span class="line">messages = [</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;role&quot;: &quot;user&quot;,</span><br><span class="line">        &quot;content&quot;: [</span><br><span class="line">            create_image_message(&quot;./images/invoice.png&quot;),</span><br><span class="line">            &#123;&quot;type&quot;: &quot;text&quot;, &quot;text&quot;: &quot;&quot;&quot;</span><br><span class="line">                Generate a JSON object representing the contents # 提取图片中的信息，生成一个JSON对象</span><br><span class="line">                of this invoice.  It should include all dates,</span><br><span class="line">                dollar amounts, and addresses. </span><br><span class="line">                Only respond with the JSON itself.</span><br><span class="line">            &quot;&quot;&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">response = client.messages.create(</span><br><span class="line">    model=MODEL_NAME,</span><br><span class="line">    max_tokens=2048,</span><br><span class="line">    messages=messages</span><br><span class="line">)</span><br><span class="line">print(response.content[0].text)</span><br><span class="line"></span><br><span class="line">=====&gt;</span><br><span class="line">```json</span><br><span class="line">&#123;</span><br><span class="line">  &quot;invoice&quot;: &#123;</span><br><span class="line">    &quot;invoice_number&quot;: &quot;INV-2024-0042&quot;,</span><br><span class="line">    &quot;invoice_date&quot;: &quot;March 17, 2025&quot;,</span><br><span class="line">    &quot;due_date&quot;: &quot;April 16, 2025&quot;,</span><br><span class="line">    &quot;vendor&quot;: &#123;</span><br><span class="line">      &quot;company_name&quot;: &quot;ACME CORPORATION&quot;,</span><br><span class="line">      &quot;address&quot;: &#123;</span><br><span class="line">        &quot;street&quot;: &quot;123 Business Avenue&quot;,</span><br><span class="line">        &quot;city&quot;: &quot;Silicon Valley&quot;,</span><br><span class="line">        &quot;state&quot;: &quot;CA&quot;,</span><br><span class="line">        &quot;zip&quot;: &quot;94025&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;email&quot;: &quot;accounts@acmecorp.com&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;bill_to&quot;: &#123;</span><br><span class="line">      &quot;address&quot;: &#123;</span><br><span class="line">        &quot;street&quot;: &quot;789 Market Street, Suite 500&quot;,</span><br><span class="line">        &quot;city&quot;: &quot;Los Angeles&quot;,</span><br><span class="line">        &quot;state&quot;: &quot;CA&quot;,</span><br><span class="line">        &quot;zip&quot;: &quot;90015&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/image/LLM/anthropic-6.png" alt></p>
+<h2 id="流式输出"><a href="#流式输出" class="headerlink" title="流式输出"></a>流式输出</h2><p>使用client.messages.stream 方法可以实现流式输出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">with client.messages.stream(</span><br><span class="line">    max_tokens=1024,</span><br><span class="line">    messages=[&#123;&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;write a poem&quot;&#125;],</span><br><span class="line">    model=MODEL_NAME,</span><br><span class="line">) as stream:</span><br><span class="line">  for text in stream.text_stream:</span><br><span class="line">      print(text, end=&quot;&quot;, flush=True)</span><br></pre></td></tr></table></figure>
+<h2 id="提示词"><a href="#提示词" class="headerlink" title="提示词"></a>提示词</h2><p>关键步骤</p>
+<ol>
+<li>设置角色，背景，功能概述</li>
+<li>制作模版</li>
+<li>添加思考过程</li>
+<li>阐述结果要求和注意事项</li>
+<li>添加示例，包含尽可能多的场景，覆盖不同的输入情况</li>
+</ol>
+<p>可以分步声明载组合起来<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">final_prompt = f&quot;&quot;&quot;</span><br><span class="line">&#123;setting_the_role&#125;</span><br><span class="line">&#123;instruction_pt1&#125;</span><br><span class="line">&#123;instruction_pt2&#125;</span><br><span class="line">&#123;instruction_pt3&#125;</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">import re</span><br><span class="line">def get_review_sentiment(review):</span><br><span class="line">    #Insert the context into the prompt</span><br><span class="line">    prompt = final_prompt.replace(&quot;&#123;&#123;CUSTOMER_REVIEW&#125;&#125;&quot;, review)</span><br><span class="line">    # Send a request to Claude</span><br><span class="line">    response = client.messages.create(</span><br><span class="line">        model=MODEL_NAME,</span><br><span class="line">        max_tokens=2000,</span><br><span class="line">        messages=[</span><br><span class="line">            &#123;&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: prompt&#125;        </span><br><span class="line">        ]</span><br><span class="line">    )</span><br><span class="line">    output = response.content[0].text</span><br><span class="line">    print(&quot;ENTIRE MODEL OUTPUT: &quot;)</span><br><span class="line">    print(output)</span><br><span class="line">    </span><br><span class="line">    sentiment = re.search(r&apos;&lt;json&gt;(.*?)&lt;/json&gt;&apos;, output, re.DOTALL) // 从模型输出中提取json</span><br><span class="line">    </span><br><span class="line">    if sentiment:</span><br><span class="line">        print(&quot;FINAL JSON OUTPUT: &quot;)</span><br><span class="line">        print(sentiment.group(1).strip())</span><br><span class="line">    else:</span><br><span class="line">        print(&quot;No sentiment analysis in the response.&quot;)</span><br><span class="line"></span><br><span class="line">review1 = &quot;&quot;&quot;</span><br><span class="line">I am in love with my Acme phone.  It&apos;s incredible.</span><br><span class="line">It&apos;s a little expensive, but so worth it imo.</span><br><span class="line">If you can afford it, it&apos;s worth it! </span><br><span class="line">I love the colors too!</span><br><span class="line">&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">get_review_sentiment(review1)</span><br></pre></td></tr></table></figure></p>
+<p><img src="/image/LLM/anthropic-6.png" alt><br><img src="/image/LLM/anthropic-7.png" alt><br><img src="/image/LLM/anthropic-8.png" alt></p>
+<h3 id="prompt-cache"><a href="#prompt-cache" class="headerlink" title="prompt cache"></a>prompt cache</h3><p>通过在content block 中添加 cache_control 字段，可以控制是否使用缓存</p>
+<p>当开启缓存时，当前content block 将被缓存，并在下次请求中作为缓存命中，从而节省计算资源。</p>
+<p>开启缓存时写入要比普通token提问，要贵一些，但是在后续提问中会大幅提升响应速度</p>
+<blockquote>
+<p>Cache write tokens are 25% more expensive than base input tokens<br>Cache read tokens are 90% cheaper than base input tokens<br>Regular input and output tokens are priced at standard rates</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">messages=[</span><br><span class="line">    # ...long conversation so far</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;role&quot;: &quot;user&quot;,</span><br><span class="line">        &quot;content&quot;: [</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;type&quot;: &quot;text&quot;,</span><br><span class="line">                &quot;text&quot;: &quot;Hello, can you tell me more about the solar system&quot;,</span><br><span class="line">                &quot;cache_control&quot;: &#123;&quot;type&quot;: &quot;ephemeral&quot;&#125;</span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;role&quot;: &quot;assistant&quot;,</span><br><span class="line">        &quot;content&quot;: &quot;Certainly! The solar system is the collection of celestial bodies that orbit our Sun. It consists of eight planets, numerous moons, asteroids, comets, and other objects. The planets, in order from closest to farthest from the Sun, are: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, and Neptune. Each planet has its own unique characteristics and features. Is there a specific aspect of the solar system you&apos;d like to know more about?&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;role&quot;: &quot;user&quot;,</span><br><span class="line">        &quot;content&quot;: [</span><br><span class="line">            &#123;</span><br><span class="line">                &quot;type&quot;: &quot;text&quot;,</span><br><span class="line">                &quot;text&quot;: &quot;Tell me more about Mars.&quot;,</span><br><span class="line">                &quot;cache_control&quot;: &#123;&quot;type&quot;: &quot;ephemeral&quot;&#125;</span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>通过在多轮对话中一般会在每次提问时添加缓存设置，这样提问时就是写入缓存的过程，后续再提问时如果命中就是读缓存的过程，提高响应速度<br>缓存有ttl, 一般5分钟，如果缓存命中，则重新设置缓存时间<br>这样如果下一轮提问能命中当前提问的缓存，就可以直接从缓存中读取，快速获取到上一次的提问历史，进行速度提升，每一轮都这样就可以提升整体多轮会话速度</p>
+<h2 id="tool"><a href="#tool" class="headerlink" title="tool"></a>tool</h2><p>tool schema 定义<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;name&quot;: &quot;get_user&quot;,</span><br><span class="line">    &quot;description&quot;: &quot;Looks up a user by email, phone, or username.&quot;,</span><br><span class="line">    &quot;input_schema&quot;: &#123;</span><br><span class="line">        &quot;type&quot;: &quot;object&quot;,</span><br><span class="line">        &quot;properties&quot;: &#123;</span><br><span class="line">            &quot;key&quot;: &#123;</span><br><span class="line">                &quot;type&quot;: &quot;string&quot;,</span><br><span class="line">                &quot;enum&quot;: [&quot;email&quot;, &quot;phone&quot;, &quot;username&quot;],</span><br><span class="line">                &quot;description&quot;: &quot;The attribute to search for a user by (email, phone, or username).&quot;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;value&quot;: &#123;</span><br><span class="line">                &quot;type&quot;: &quot;string&quot;,</span><br><span class="line">                &quot;description&quot;: &quot;The value to match for the specified attribute.&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;required&quot;: [&quot;key&quot;, &quot;value&quot;]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>实际调用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">def process_tool_call(tool_name, tool_input):</span><br><span class="line">    if tool_name == &quot;get_user&quot;:</span><br><span class="line">        return db.get_user(tool_input[&quot;key&quot;], tool_input[&quot;value&quot;])</span><br><span class="line">    elif tool_name == &quot;get_order_by_id&quot;:</span><br><span class="line">        return db.get_order_by_id(tool_input[&quot;order_id&quot;])</span><br><span class="line">    elif tool_name == &quot;get_customer_orders&quot;:</span><br><span class="line">        return db.get_customer_orders(tool_input[&quot;customer_id&quot;])</span><br><span class="line">    elif tool_name == &quot;cancel_order&quot;:</span><br><span class="line">        return db.cancel_order(tool_input[&quot;order_id&quot;])</span><br><span class="line"></span><br><span class="line">def simple_chat():</span><br><span class="line">    system_prompt = &quot;&quot;&quot; xxxxxx &quot;&quot;&quot;</span><br><span class="line">    user_message = input(&quot;\nUser: &quot;)</span><br><span class="line">    messages = [&#123;&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: user_message&#125;]</span><br><span class="line">    while True:</span><br><span class="line">        if user_message == &quot;quit&quot;:</span><br><span class="line">            break</span><br><span class="line">        #If the last message is from the assistant, </span><br><span class="line">        # get another input from the user</span><br><span class="line">        if messages[-1].get(&quot;role&quot;) == &quot;assistant&quot;:</span><br><span class="line">            user_message = input(&quot;\nUser: &quot;)</span><br><span class="line">            messages.append(&#123;&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: user_message&#125;)</span><br><span class="line"></span><br><span class="line">        #Send a request to Claude</span><br><span class="line">        response = client.messages.create(</span><br><span class="line">            model=MODEL_NAME,</span><br><span class="line">            system=system_prompt,</span><br><span class="line">            max_tokens=4096,</span><br><span class="line">            tools=tools,</span><br><span class="line">            messages=messages</span><br><span class="line">        )</span><br><span class="line">        # Update messages to include Claude&apos;s response</span><br><span class="line">        messages.append(</span><br><span class="line">            &#123;&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: response.content&#125;</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        #If Claude stops because it wants to use a tool:</span><br><span class="line">        if response.stop_reason == &quot;tool_use&quot;:</span><br><span class="line">            #Naive approach assumes only 1 tool is called at a time</span><br><span class="line">            tool_use = response.content[-1] </span><br><span class="line">            tool_name = tool_use.name</span><br><span class="line">            tool_input = tool_use.input</span><br><span class="line">            print(f&quot;=====Claude wants to use the &#123;tool_name&#125; tool=====&quot;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            #Actually run the underlying tool functionality on our db</span><br><span class="line">            tool_result = process_tool_call(tool_name, tool_input)</span><br><span class="line"></span><br><span class="line">            #Add our tool_result message:</span><br><span class="line">            messages.append(</span><br><span class="line">                &#123;</span><br><span class="line">                    &quot;role&quot;: &quot;user&quot;,</span><br><span class="line">                    &quot;content&quot;: [</span><br><span class="line">                        &#123;</span><br><span class="line">                            &quot;type&quot;: &quot;tool_result&quot;,</span><br><span class="line">                            &quot;tool_use_id&quot;: tool_use.id,</span><br><span class="line">                            &quot;content&quot;: str(tool_result),</span><br><span class="line">                        &#125;</span><br><span class="line">                    ],</span><br><span class="line">                &#125;,</span><br><span class="line">            )</span><br><span class="line">        else: </span><br><span class="line">            #If Claude does NOT want to use a tool, </span><br><span class="line">            #just print out the text reponse</span><br><span class="line">            model_reply = extract_reply(response.content[0].text)</span><br><span class="line">            print(&quot;\nAcme Co Support: &quot; + f&quot;&#123;model_reply&#125;&quot; )</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/llm/" rel="tag"># llm</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/llm/copilotkit.html" rel="next" title="CopilotKit 生成式UI框架">
+                <i class="fa fa-chevron-left"></i> CopilotKit 生成式UI框架
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">268</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本使用"><span class="nav-number">1.</span> <span class="nav-text">基本使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#返回结果"><span class="nav-number">1.1.</span> <span class="nav-text">返回结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数"><span class="nav-number">1.2.</span> <span class="nav-text">参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#多模态输入"><span class="nav-number">1.2.1.</span> <span class="nav-text">多模态输入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流式输出"><span class="nav-number">1.3.</span> <span class="nav-text">流式输出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提示词"><span class="nav-number">1.4.</span> <span class="nav-text">提示词</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#prompt-cache"><span class="nav-number">1.4.1.</span> <span class="nav-text">prompt cache</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tool"><span class="nav-number">1.5.</span> <span class="nav-text">tool</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
