@@ -259,6 +259,295 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/llm/LangChain.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/llm/LangChain.html" itemprop="url">
+                  LangChain
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-07-28T12:31:37+08:00">
+                2024-07-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>LangChain 也是一套面向大模型的开发框架（SDK）</p>
+<ol>
+<li>LangChain 是 AGI 时代软件工程的一个探索和原型</li>
+<li>学习 LangChain 要关注接口变更</li>
+</ol>
+<h2 id="LangChain-的核心组件"><a href="#LangChain-的核心组件" class="headerlink" title="LangChain 的核心组件"></a>LangChain 的核心组件</h2><ol>
+<li>模型 I/O 封装<ul>
+<li>LLMs：大语言模型</li>
+<li>Chat Models：一般基于 LLMs，但按对话结构重新封装</li>
+<li>PromptTemple：提示词模板</li>
+<li>OutputParser：解析输出</li>
+</ul>
+</li>
+<li>数据连接封装<ul>
+<li>Document Loaders：各种格式文件的加载器</li>
+<li>Document Transformers：对文档的常用操作，如：split, filter, translate, extract metadata, etc</li>
+<li>Text Embedding Models：文本向量化表示，用于检索等操作</li>
+<li>Verctorstores: （面向检索的）向量的存储</li>
+<li>Retrievers: 向量的检索</li>
+</ul>
+</li>
+<li>记忆封装<ul>
+<li>Memory：这里不是物理内存，从文本的角度，可以理解为”上文”、”历史记录”或者说”记忆力”的管理</li>
+</ul>
+</li>
+<li>架构封装<ul>
+<li>Chain：实现一个功能或者一系列顺序功能组合</li>
+<li>Agent：根据用户输入，自动规划执行步骤，自动选择每步需要的工具，最终完成用户指定的功能<ul>
+<li>Tools：调用外部功能的函数，例如：调 google 搜索、文件 I/O、Linux Shell 等等</li>
+<li>Toolkits：操作某软件的一组工具集，例如：操作 DB、操作 Gmail 等等</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Callbacks</li>
+</ol>
+<h2 id="模型-I-O-封装"><a href="#模型-I-O-封装" class="headerlink" title="模型 I/O 封装"></a>模型 I/O 封装</h2><p><span style="color: rgb(27, 94, 32); background-color: rgb(200, 230, 201);">通过模型封装，实现不同模型的统一接口调用</span></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">from langchain_openai import ChatOpenAI</span><br><span class="line">from langchain.schema import (</span><br><span class="line">    AIMessage,  # 等价于OpenAI接口中的assistant role</span><br><span class="line">    HumanMessage,  # 等价于OpenAI接口中的user role</span><br><span class="line">    SystemMessage  # 等价于OpenAI接口中的system role</span><br><span class="line">)</span><br><span class="line">from langchain_community.chat_models import QianfanChatEndpoint</span><br><span class="line">from langchain_core.messages import HumanMessage</span><br><span class="line"></span><br><span class="line">#  OpenAI 模型封装</span><br><span class="line">llm = ChatOpenAI(model=&quot;gpt-3.5-turbo&quot;)  # gpt-4o 默认是gpt-3.5-turbo</span><br><span class="line">response = llm.invoke(&quot;你是谁&quot;)</span><br><span class="line">print(response.content)</span><br><span class="line"></span><br><span class="line"># 多轮对话 Session 封装</span><br><span class="line">messages = [</span><br><span class="line">    SystemMessage(content=&quot;你是AGIClass的课程助理。&quot;),</span><br><span class="line">    HumanMessage(content=&quot;我是学员，我叫王卓然。&quot;),</span><br><span class="line">    AIMessage(content=&quot;欢迎！&quot;),</span><br><span class="line">    HumanMessage(content=&quot;我是谁&quot;)</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">ret = llm.invoke(messages)</span><br><span class="line"></span><br><span class="line">print(ret.content)</span><br><span class="line"></span><br><span class="line"># 国产模型 其它模型分装在 langchain_community 底包中</span><br><span class="line">import os</span><br><span class="line"></span><br><span class="line">llm = QianfanChatEndpoint(</span><br><span class="line">    qianfan_ak=os.getenv(&apos;ERNIE_CLIENT_ID&apos;),</span><br><span class="line">    qianfan_sk=os.getenv(&apos;ERNIE_CLIENT_SECRET&apos;)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">messages = [</span><br><span class="line">    HumanMessage(content=&quot;你是谁&quot;)</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">ret = llm.invoke(messages)</span><br><span class="line"></span><br><span class="line">print(ret.content)</span><br></pre></td></tr></table></figure>
+<h3 id="Prompt-模板封装"><a href="#Prompt-模板封装" class="headerlink" title="Prompt 模板封装"></a>Prompt 模板封装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from langchain.prompts import (</span><br><span class="line">    ChatPromptTemplate,</span><br><span class="line">    HumanMessagePromptTemplate,</span><br><span class="line">    SystemMessagePromptTemplate,</span><br><span class="line">    MessagesPlaceholder,</span><br><span class="line">    PromptTemplate</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<ol>
+<li>PromptTemplate 可以在模板中自定义变量</li>
+<li>ChatPromptTemplate 用模板表示的对话上下文</li>
+<li>MessagesPlaceholder 把多轮对话变成模板</li>
+<li>从文件加载 Prompt 模板: PromptTemplate.from_file</li>
+</ol>
+<p><span style="color: rgb(27, 94, 32); background-color: rgb(200, 230, 201);">把Prompt模板看作带有参数的函数</span></p>
+<h3 id="输出封装-OutputParser"><a href="#输出封装-OutputParser" class="headerlink" title="输出封装 OutputParser"></a>输出封装 OutputParser</h3><p>自动把 LLM 输出的字符串按指定格式加载。<br>LangChain 内置的 OutputParser 包括:</p>
+<ol>
+<li>ListParser</li>
+<li>DatetimeParser</li>
+<li>EnumParser</li>
+<li>JsonOutputParser</li>
+<li>PydanticParser</li>
+<li>XMLParser</li>
+</ol>
+<p>等等</p>
+<h3 id="Pydantic-JSON-Parser"><a href="#Pydantic-JSON-Parser" class="headerlink" title="Pydantic (JSON) Parser"></a>Pydantic (JSON) Parser</h3><p>自动根据 Pydantic 类的定义，生成输出的格式说明</p>
+<h3 id="Auto-Fixing-Parser"><a href="#Auto-Fixing-Parser" class="headerlink" title="Auto-Fixing Parser"></a>Auto-Fixing Parser</h3><p>利用 LLM 自动根据解析异常修复并重新解析</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ol>
+<li>LangChain 统一封装了各种模型的调用接口，包括补全型和对话型两种</li>
+<li>LangChain 提供了 PromptTemplate 类，可以自定义带变量的模板</li>
+<li>LangChain 提供了一些列输出解析器，用于将大模型的输出解析成结构化对象；额外带有自动修复功能。</li>
+<li>上述模型属于 LangChain 中较为优秀的部分；美中不足的是 OutputParser 自身的 Prompt 维护在代码中，耦合度较高。</li>
+</ol>
+<h2 id="数据连接封装"><a href="#数据连接封装" class="headerlink" title="数据连接封装"></a>数据连接封装</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 文档加载器：Document Loaders</span><br><span class="line">from langchain_community.document_loaders import PyMuPDFLoader</span><br><span class="line"># 文档处理器 TextSplitter</span><br><span class="line">from langchain_text_splitters import RecursiveCharacterTextSplitter</span><br><span class="line"># 向量数据库与向量检索</span><br><span class="line">from langchain_openai import OpenAIEmbeddings</span><br><span class="line">from langchain_text_splitters import RecursiveCharacterTextSplitter</span><br><span class="line">from langchain_community.vectorstores import FAISS</span><br><span class="line">from langchain_openai import ChatOpenAI</span><br><span class="line">from langchain_community.document_loaders import PyMuPDFLoader</span><br></pre></td></tr></table></figure>
+<p><span style="color: rgb(0, 96, 100);">类似 LlamaIndex，LangChain 也提供了丰富的 <a href="https://python.langchain.com/v0.2/docs/how_to/#document-loaders" target="_blank" rel="noopener">Document Loaders</a> 和 <a href="https://python.langchain.com/v0.2/docs/how_to/#text-splitters" target="_blank" rel="noopener">Text Splitters</a>﻿</span></p>
+<h2 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h2><ol>
+<li>文档处理部分，建议在实际应用中详细测试后使用</li>
+<li>与向量数据库的链接部分本质是接口封装，向量数据库需要自己选型</li>
+</ol>
+<h2 id="记忆封装：Memory"><a href="#记忆封装：Memory" class="headerlink" title="记忆封装：Memory"></a>记忆封装：Memory</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 对话上下文：ConversationBufferMemory</span><br><span class="line">from langchain.memory import ConversationBufferMemory, ConversationBufferWindowMemory</span><br><span class="line"></span><br><span class="line"># 只保留一个窗口的上下文：ConversationBufferWindowMemory</span><br><span class="line">from langchain.memory import ConversationBufferWindowMemory</span><br><span class="line"></span><br><span class="line"># 通过 Token 数控制上下文长度：ConversationTokenBufferMemory</span><br><span class="line">from langchain.memory import ConversationTokenBufferMemory</span><br></pre></td></tr></table></figure>
+<h3 id="更多类型"><a href="#更多类型" class="headerlink" title="更多类型"></a>更多类型</h3><ol>
+<li>ConversationSummaryMemory: 对上下文做摘要<ul>
+<li><a href="https://python.langchain.com/docs/modules/memory/types/summary" target="_blank" rel="noopener">https://python.langchain.com/docs/modules/memory/types/summary</a>﻿</li>
+</ul>
+</li>
+<li>ConversationSummaryBufferMemory: 保存 Token 数限制内的上下文，对更早的做摘要<ul>
+<li><a href="https://python.langchain.com/docs/modules/memory/types/summary_buffer" target="_blank" rel="noopener">https://python.langchain.com/docs/modules/memory/types/summary_buffer</a>﻿</li>
+</ul>
+</li>
+<li>VectorStoreRetrieverMemory: 将 Memory 存储在向量数据库中，根据用户输入检索回最相关的部分<ul>
+<li><a href="https://python.langchain.com/docs/modules/memory/types/vectorstore_retriever_memory" target="_blank" rel="noopener">https://python.langchain.com/docs/modules/memory/types/vectorstore_retriever_memory</a>﻿</li>
+</ul>
+</li>
+</ol>
+<h3 id="小结-2"><a href="#小结-2" class="headerlink" title="小结"></a>小结</h3><ol>
+<li>LangChain 的 Memory 管理机制属于可用的部分，尤其是简单情况如按轮数或按 Token 数管理；</li>
+<li>对于复杂情况，它不一定是最优的实现，例如检索向量库方式，建议根据实际情况和效果评估；</li>
+<li>但是<strong>它对内存的各种维护方法的思路在实际生产中可以借鉴</strong>。</li>
+</ol>
+<p>LangChain Expression Language（LCEL）是一种声明式语言，可轻松组合不同的调用顺序构成 Chain。LCEL 自创立之初就被设计为能够支持将原型投入生产环境，<strong>无需代码更改</strong>，从最简单的”提示+LLM”链到最复杂的链（已有用户成功在生产环境中运行包含数百个步骤的 LCEL Chain）。</p>
+<p>LCEL 的一些亮点包括：</p>
+<ol>
+<li>流支持</li>
+<li>异步支持</li>
+<li>优化的并行执行</li>
+<li>重试和回退</li>
+<li>访问中间结果</li>
+<li>输入和输出模式</li>
+<li>无缝 LangSmith 跟踪集成</li>
+<li>无缝 LangServe 部署集成</li>
+</ol>
+<p>原文：<a href="https://python.langchain.com/docs/expression_language/" target="_blank" rel="noopener">https://python.langchain.com/docs/expression_language/</a>﻿</p>
+<h3 id="Pipeline-式调用-PromptTemplate-LLM-和-OutputParser"><a href="#Pipeline-式调用-PromptTemplate-LLM-和-OutputParser" class="headerlink" title="Pipeline 式调用 PromptTemplate, LLM 和 OutputParser"></a>Pipeline 式调用 PromptTemplate, LLM 和 OutputParser</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">from langchain_openai import ChatOpenAI</span><br><span class="line">from langchain.prompts import ChatPromptTemplate</span><br><span class="line">from langchain_core.output_parsers import StrOutputParser, PydanticOutputParser</span><br><span class="line">from langchain_core.runnables import RunnablePassthrough</span><br><span class="line">from langchain_core.pydantic_v1 import BaseModel, Field, validator</span><br><span class="line">from typing import List, Dict, Optional</span><br><span class="line">from enum import Enum</span><br><span class="line">import json</span><br><span class="line"></span><br><span class="line"># LCEL 表达式</span><br><span class="line">runnable = (</span><br><span class="line">    &#123;&quot;text&quot;: RunnablePassthrough()&#125; | prompt | model | parser</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># 直接运行</span><br><span class="line">ret = runnable.invoke(&quot;不超过100元的流量大的套餐有哪些&quot;)</span><br><span class="line"></span><br><span class="line"># 流式输出</span><br><span class="line">for s in runnable.stream(&quot;不超过100元的流量大的套餐有哪些&quot;):</span><br><span class="line">    print(s, end=&quot;&quot;)</span><br></pre></td></tr></table></figure>
+<p><strong><span style="color: rgb(27, 94, 32);">使用 LCEL 的价值，也就是 LangChain 的核心价值。</span></strong></p>
+<p><span style="color: rgb(27, 94, 32); background-color: rgb(200, 230, 201);">官方从不同角度给出了举例说明：</span><a href="https://python.langchain.com/docs/expression_language/why" target="_blank" rel="noopener">https://python.langchain.com/docs/expression_language/why</a>﻿</p>
+<h3 id="通过-LCEL，还可以实现"><a href="#通过-LCEL，还可以实现" class="headerlink" title="通过 LCEL，还可以实现"></a>通过 LCEL，还可以实现</h3><ol>
+<li>配置运行时变量：<a href="https://python.langchain.com/docs/expression_language/how_to/configure" target="_blank" rel="noopener">https://python.langchain.com/docs/expression_language/how_to/configure</a></li>
+<li>故障回退：<a href="https://python.langchain.com/docs/expression_language/how_to/fallbacks" target="_blank" rel="noopener">https://python.langchain.com/docs/expression_language/how_to/fallbacks</a></li>
+<li>并行调用：<a href="https://python.langchain.com/docs/expression_language/how_to/map" target="_blank" rel="noopener">https://python.langchain.com/docs/expression_language/how_to/map</a></li>
+<li>逻辑分支：<a href="https://python.langchain.com/docs/expression_language/how_to/routing" target="_blank" rel="noopener">https://python.langchain.com/docs/expression_language/how_to/routing</a></li>
+<li>调用自定义流式函数：<a href="https://python.langchain.com/docs/expression_language/how_to/generators" target="_blank" rel="noopener">https://python.langchain.com/docs/expression_language/how_to/generators</a></li>
+<li>链接外部 Memory：<a href="https://python.langchain.com/docs/expression_language/how_to/message_history" target="_blank" rel="noopener">https://python.langchain.com/docs/expression_language/how_to/message_history</a></li>
+</ol>
+<p>更多例子：<a href="https://python.langchain.com/docs/expression_language/cookbook/" target="_blank" rel="noopener">https://python.langchain.com/docs/expression_language/cookbook/</a>﻿</p>
+<h3 id="什么是智能体（Agent）"><a href="#什么是智能体（Agent）" class="headerlink" title="什么是智能体（Agent）"></a>什么是智能体（Agent）</h3><p>将大语言模型作为一个推理引擎, 给定一个任务，智能体自动生成完成任务所需的步骤，执行相应动作（例如选择并调用工具），直到任务完成。</p>
+<h3 id="先定义一些工具：Tools"><a href="#先定义一些工具：Tools" class="headerlink" title="先定义一些工具：Tools"></a>先定义一些工具：Tools</h3><ol>
+<li>可以是一个函数或三方 API</li>
+<li>也可以把一个 Chain 或者 Agent 的 run()作为一个 Tool</li>
+</ol>
+<h2 id="下载一个现有的-Prompt-模板"><a href="#下载一个现有的-Prompt-模板" class="headerlink" title="下载一个现有的 Prompt 模板"></a>下载一个现有的 Prompt 模板</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">react_prompt = hub.pull(&quot;hwchase17/react&quot;)</span><br><span class="line">print(react_prompt.template)</span><br></pre></td></tr></table></figure>
+<h2 id="直接定义执行执行调用"><a href="#直接定义执行执行调用" class="headerlink" title="直接定义执行执行调用"></a>直接定义执行执行调用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">from langchain_openai import ChatOpenAI</span><br><span class="line">from langchain.agents import AgentExecutor, create_react_agent</span><br><span class="line"></span><br><span class="line">llm = ChatOpenAI(model_name=&apos;gpt-4o&apos;, temperature=0, model_kwargs=&#123;&quot;seed&quot;:23&#125;)</span><br><span class="line"></span><br><span class="line"># 定义一个 agent: 需要大模型、工具集、和 Prompt 模板</span><br><span class="line">agent = create_react_agent(llm, tools, react_prompt)</span><br><span class="line"># 定义一个执行器：需要 agent 对象 和 工具集</span><br><span class="line">agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)</span><br><span class="line"></span><br><span class="line"># 执行</span><br><span class="line">agent_executor.invoke(&#123;&quot;input&quot;: &quot;2024年周杰伦的演唱会星期几&quot;&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="LangServe"><a href="#LangServe" class="headerlink" title="LangServe"></a>LangServe</h2><p>LangServe 用于将 Chain 或者 Runnable 部署成一个 REST API 服务。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 安装 LangServe</span><br><span class="line"># !pip install --upgrade &quot;langserve[all]&quot;</span><br><span class="line"></span><br><span class="line"># 也可以只安装一端</span><br><span class="line"># !pip install &quot;langserve[client]&quot;</span><br><span class="line"># !pip install &quot;langserve[server]&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="LangChain-js"><a href="#LangChain-js" class="headerlink" title="LangChain.js"></a>LangChain.js</h2><p>Python 版 LangChain 的姊妹项目，都是由 Harrison Chase 主理。</p>
+<p>项目地址：<a href="https://github.com/langchain-ai/langchainjs" target="_blank" rel="noopener">https://github.com/langchain-ai/langchainjs</a></p>
+<p>文档地址：<a href="https://js.langchain.com/docs/" target="_blank" rel="noopener">https://js.langchain.com/docs/</a></p>
+<p>特色：</p>
+<ol>
+<li>可以和 Python 版 LangChain 无缝对接</li>
+<li>抽象设计完全相同，概念一一对应</li>
+<li>所有对象序列化后都能跨语言使用，但 API 差别挺大，不过在努力对齐</li>
+</ol>
+<p>支持环境：</p>
+<ol>
+<li>Node.js (ESM and CommonJS) - 18.x, 19.x, 20.x</li>
+<li>Cloudflare Workers</li>
+<li>Vercel / Next.js (Browser, Serverless and Edge functions)</li>
+<li>Supabase Edge Functions</li>
+<li>Browser</li>
+<li>Deno</li>
+</ol>
+<p>安装：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install langchain</span><br></pre></td></tr></table></figure>
+<p>当前重点：</p>
+<ol>
+<li>追上 Python 版的能力（甚至为此做了一个基于 gpt-3.5-turbo 的代码翻译器）</li>
+<li>保持兼容尽可能多的环境</li>
+<li>对质量关注不多，随时间自然能解决</li>
+</ol>
+<h3 id="LangChain-与-LlamaIndex-的错位竞争"><a href="#LangChain-与-LlamaIndex-的错位竞争" class="headerlink" title="LangChain 与 LlamaIndex 的错位竞争"></a>LangChain 与 LlamaIndex 的错位竞争</h3><ol>
+<li>LangChain 侧重与 LLM 本身交互的封装<ul>
+<li>Prompt、LLM、Memory、OutputParser 等工具丰富</li>
+<li>在数据处理和 RAG 方面提供的工具相对粗糙</li>
+<li>主打 LCEL 流程封装</li>
+<li>配套 Agent、LangGraph 等智能体与工作流工具</li>
+<li>另有 LangServe 部署工具和 LangSmith 监控调试工具</li>
+</ul>
+</li>
+<li>LlamaIndex 侧重与数据交互的封装<ul>
+<li>数据加载、切割、索引、检索、排序等相关工具丰富</li>
+<li>Prompt、LLM 等底层封装相对单薄</li>
+<li>配套实现 RAG 相关工具</li>
+<li>有 Agent 相关工具，不突出</li>
+</ul>
+</li>
+<li>LlamaIndex 为 LangChain 提供了集成<ul>
+<li>在 LlamaIndex 中调用 LangChain 封装的 LLM 接口：<a href="https://docs.llamaindex.ai/en/stable/api_reference/llms/langchain/" target="_blank" rel="noopener">https://docs.llamaindex.ai/en/stable/api_reference/llms/langchain/</a></li>
+<li>将 LlamaIndex 的 Query Engine 作为 LangChain Agent 的工具：<a href="https://docs.llamaindex.ai/en/v0.10.17/community/integrations/using_with_langchain.html" target="_blank" rel="noopener">https://docs.llamaindex.ai/en/v0.10.17/community/integrations/using_with_langchain.html</a></li>
+<li>LangChain 也<em>曾经</em>集成过 LlamaIndex，目前相关接口仍在：<a href="https://api.python.langchain.com/en/latest/retrievers/langchain_community.retrievers.llama_index.LlamaIndexRetriever.html" target="_blank" rel="noopener">https://api.python.langchain.com/en/latest/retrievers/langchain_community.retrievers.llama_index.LlamaIndexRetriever.html</a></li>
+</ul>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
   <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/llm/LlamaIndex.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2103,278 +2392,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/mobxlearn.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/knowledge/mobxlearn.html" itemprop="url">
-                  Mobx 运行机制深入研究
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-03-03T15:17:37+08:00">
-                2024-03-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="追踪原理"><a href="#追踪原理" class="headerlink" title="追踪原理"></a><strong>追踪原理</strong></h1><p><a href="https://cn.mobx.js.org/best/react.html" target="_blank" rel="noopener">官方文档</a></p>
-<p>MobX 会对在执行 <strong>跟踪函数 期间</strong> 读取的任何现有的<strong>可观察属性</strong>做出反应</p>
-<p>“<strong>读取</strong>” 是对象属性的间接引用，可以用过 . (例如 user.name) 或者 [] (例如 user[‘name’]) 的形式完成。</p>
-<p>“<strong>追踪函数</strong>” 是 <strong>computed 表达式、observer 组件的 render() 方法和 when、reaction 和 autorun 的第一个入参函数。</strong></p>
-<p>“<strong>过程(during)</strong>” 意味着只追踪那些在函数执行时被读取的 observable 。这些值是否由追踪函数直接或间接使用并不重要。</p>
-<p>换句话说，MobX 不会对其作出反应:</p>
-<p>从 observable 获取的值，但是在追踪函数之外</p>
-<p>在异步调用的代码块中读取的 observable</p>
-<p>Mobx 5 以下 MobX 不会追踪还不存在的索引或者对象属性(当使用 observable 映射(map)时除外)。</p>
-<p>所以建议总是使用 .length 来检查保护基于数组索引的访问。</p>
-<p>所有数组的索引分配都可以检测到，但前提条件必须是提供的索引小于数组长度。</p>
-<h2 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a><strong>核心概念</strong></h2><p>追踪属性访问，而不是值</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">let message = observable(&#123;</span><br><span class="line">    title: &quot;Foo&quot;,</span><br><span class="line">    author: &#123;</span><br><span class="line">        name: &quot;Michel&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    likes: [</span><br><span class="line">        &quot;John&quot;, &quot;Sara&quot;</span><br><span class="line">    ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p><img src="https://bytedance.larkoffice.com/space/api/box/stream/download/asynccode/?code=YjI2YjAxNTdhOWZkMmM1ZjFkOThlOTRhM2RlMWJkYjdfcnliUm9PSXdJWFZseExRcFdxNDhNaHNUcEh4dURwQ0pfVG9rZW46Ym94Y250QmJzT2ZWZkh3QzZVd05mNjlWSExmXzE3MDcxOTA3Mzk6MTcwNzE5NDMzOV9WNA" alt></p>
-<p>mobx会追踪箭头有没有变化</p>
-<p>如果箭头发生变化，就会执行追踪函数</p>
-<h1 id="使用注意"><a href="#使用注意" class="headerlink" title="使用注意"></a><strong>使用注意</strong></h1><h2 id="处理数据时"><a href="#处理数据时" class="headerlink" title="处理数据时"></a><strong>处理数据时</strong></h2><p>1.更改没有被obserable的箭头，追踪函数不执行</p>
-<p>2.追踪函数里使用间接引用指向obserable属性，追踪函数不执行</p>
-<p>3.对新增的属性，可以使用set,get实现obserable</p>
-<p>4.在异步代码中访问的obserable属性，不会引起追踪函数执行</p>
-<pre><code>1.更改没有被obserable的箭头，追踪函数不执行
-autorun(() =&gt; {
-    console.log(message.title)
-})
-message = observable({ title: &quot;Bar&quot; }) //指向message的箭头没有被obervable
-autorun(() =&gt; {
-    message.likes;//箭头没变，又没有访问数组里面的属性
-})
-message.likes.push(&quot;Jennifer&quot;);
-
-2.追踪函数里使用间接引用指向obserable属性，追踪函数不执行
-var title = message.title;
-autorun(() =&gt; {
-    console.log(title) //访问箭头没有变，还是指向老值的位置
-})
-message.title = &quot;Bar&quot; //箭头改了，但autorun里没有用到
-const author = message.author;
-autorun(() =&gt; {
-    console.log(author.name) 
-})
-message.author.name = &quot;Sara&quot;;//会执行跟踪函数，autorun里有访问name属性，这里指向name值得箭头改了
-message.author = { name: &quot;John&quot; };//不会执行，没有访问author属性的箭头
-
-正确使用
-
-A:
-autorun(() =&gt; {
-    console.log(message.author.name)
-})
-message.author.name = &quot;Sara&quot;;
-message.author = { name: &quot;John&quot; };
-B:
-function upperCaseAuthorName(author) {
-    const baseName = author.name;
-    return baseName.toUpperCase();
-}
-autorun(() =&gt; {
-    console.log(upperCaseAuthorName(message.author))
-})
-message.author.name = &quot;Chesterton&quot;
-
-3.异步
-const message = observable({ title: &quot;hello&quot; })
-autorun(() =&gt; {
-    console.log(message) //会执行两次，因为console.log是异步的，请确保始终传递不变数据 ( immutable data ) 或防御副本给 console.log。
-})
-message.title = &quot;Hello world&quot;
-autorun(() =&gt; {
-    setTimeout(
-        () =&gt; console.log(message.likes.join(&quot;, &quot;)), //异步执行，访问原始数据打印一次
-        10
-    )
-})
-message.likes.push(&quot;Jennifer&quot;);//不会引起autorun执行
-
-4.MobX 5 可以追踪还不存在的属性
-autorun(() =&gt; {
-    console.log(message.postDate)
-})
-message.postDate = new Date()
-</code></pre><h2 id="组件使用时"><a href="#组件使用时" class="headerlink" title="组件使用时"></a><strong>组件使用时</strong></h2><h3 id="子组件问题"><a href="#子组件问题" class="headerlink" title="子组件问题"></a><strong>子组件问题</strong></h3><p><strong>MobX 只会为数据是直接通过 render 存取的 observer 组件进行数据追踪</strong></p>
-<p>所以当需要将数据传递给子组件时，要保证子组件也是一个obserable组件，可以做出反应</p>
-<p>解决办法：</p>
-<p>1.将子组件使用obserable函数处理</p>
-<p>它用 mobx.autorun 包装了组件的 render 函数以确保任何组件渲染中使用的数据变化时都可以强制刷新组件</p>
-<p>2.使用mobx-react的Obserable组件包裹子组件</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">方法一：将子组件使用obserable函数处理</span><br><span class="line"><span class="keyword">const</span> MyComponent = observer(<span class="function">(<span class="params">&#123; message &#125;</span>) =&gt;</span></span><br><span class="line">    &lt;SomeContainer</span><br><span class="line">        title = &#123;() =&gt; &lt;TitleRenderer message=&#123;message&#125; /&gt;&#125;</span><br><span class="line">    /&gt;</span><br><span class="line">)</span><br><span class="line"><span class="keyword">const</span> TitleRenderer = observer(<span class="function">(<span class="params">&#123; message &#125;</span>) =&gt;</span></span><br><span class="line">    &lt;div&gt;&#123;message.title&#125;&lt;<span class="regexp">/div&gt;&#125;</span></span><br><span class="line"><span class="regexp">)</span></span><br><span class="line"><span class="regexp">message.title = "Bar"</span></span><br><span class="line"><span class="regexp">方法二：使用mobx-react的Obserable组件包裹子组件</span></span><br><span class="line"><span class="regexp">const MyComponent = (&#123; message &#125;) =&gt;</span></span><br><span class="line"><span class="regexp">    &lt;SomeContainer</span></span><br><span class="line"><span class="regexp">        title = &#123;() =&gt;</span></span><br><span class="line"><span class="regexp">            &lt;Observer&gt;</span></span><br><span class="line"><span class="regexp">                &#123;() =&gt; &lt;div&gt;&#123;message.title&#125;&lt;/</span>div&gt;&#125;</span><br><span class="line">            &lt;<span class="regexp">/Observer&gt;</span></span><br><span class="line"><span class="regexp">        &#125;</span></span><br><span class="line"><span class="regexp">    /</span>&gt;</span><br><span class="line">message.title = <span class="string">"Bar"</span></span><br></pre></td></tr></table></figure>
-<h3 id="避免在本地字段中缓存-observable"><a href="#避免在本地字段中缓存-observable" class="headerlink" title="避免在本地字段中缓存 observable"></a><strong>避免在本地字段中缓存 observable</strong></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@observer class MyComponent extends React.component &#123;</span><br><span class="line">    author;</span><br><span class="line">    constructor(props) &#123;</span><br><span class="line">        super(props)</span><br><span class="line">        this.author = props.message.author;//message.author发生变化时不会引起render</span><br><span class="line">    &#125;</span><br><span class="line">    render() &#123;</span><br><span class="line">        return &lt;div&gt;&#123;this.author.name&#125;&lt;/div&gt; //.name可以引起render</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>优化，使用计算属性，或者在render函数中进行间接引用</p>
-<pre><code>@observer class MyComponent extends React.component {
-    @computed get author() {
-        return this.props.message.author
-    }
-</code></pre><h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>1.从性能上考虑，越晚进行间接引用越好</p>
-<p>2.数组里面的是对象而不是字符串，那么对于发生在某个具体的对象中发生的变化，渲染数组的父组件将不会重新渲染</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">const Message = observer((&#123; message &#125;) =&gt;</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">        &#123;message.title&#125;</span><br><span class="line">        &lt;Author author=&#123; message.author &#125; /&gt;</span><br><span class="line">        &lt;Likes likes=&#123; message.likes &#125; /&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">)</span><br><span class="line">const Author = observer((&#123; author &#125;) =&gt;</span><br><span class="line">    &lt;span&gt;&#123;author.name&#125;&lt;/span&gt;</span><br><span class="line">)</span><br><span class="line">const Likes = observer((&#123; likes &#125;) =&gt;</span><br><span class="line">    &lt;ul&gt;</span><br><span class="line">        &#123;likes.map(like =&gt;</span><br><span class="line">            &lt;li&gt;&#123;like&#125;&lt;/li&gt;</span><br><span class="line">        )&#125;</span><br><span class="line">    &lt;/ul&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">变化</th>
-<th style="text-align:left">重新渲染组件</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">message.title = “Bar”</td>
-<td style="text-align:left">Message</td>
-</tr>
-<tr>
-<td style="text-align:left">message.author.name = “Susan”</td>
-<td style="text-align:left">Author (.author 在 Message 中进行间接引用, 但没有改变)*</td>
-</tr>
-<tr>
-<td style="text-align:left">message.author = { name: “Susan”}</td>
-<td style="text-align:left">Message, Author</td>
-</tr>
-<tr>
-<td style="text-align:left">message.likes[0] = “Michel”</td>
-<td style="text-align:left">Likes</td>
-</tr>
-</tbody>
-</table>
-<h1 id="一些-对比"><a href="#一些-对比" class="headerlink" title="一些 对比"></a>一些 对比</h1><h1 id="autorun-vs-compute"><a href="#autorun-vs-compute" class="headerlink" title="autorun vs compute"></a><strong>autorun vs compute</strong></h1><p>当使用 autorun 时，所提供的函数总是立即被触发一次，然后每次它的依赖关系改变时会再次被触发</p>
-<p>computed(function) 创建的函数只有当它有自己的观察者时才会重新计算，否则它的值会被认为是不相关的</p>
-<p>如果一个计算值不再被观察了，例如使用它的UI不复存在了，MobX 可以自动地将其垃圾回收。</p>
-<p>而 autorun 中的值必须要手动清理才行</p>
-<h1 id="autorun-vs-reaction"><a href="#autorun-vs-reaction" class="headerlink" title="autorun vs reaction"></a><strong>autorun vs reaction</strong></h1><p>reaction(() =&gt; data, (data, reaction) =&gt; { sideEffect }, options?)</p>
-<p>它接收两个函数参数，第一个(<strong>数据</strong>函数)是用来追踪并返回数据作为第二个函数(<strong>效果</strong>函数)的输入。</p>
-<p>传入 reaction 的第二个函数(副作用函数)当调用时会接收两个参数。</p>
-<p>第一个参数是由 data 函数返回的值。</p>
-<p>第二个参数是当前的 reaction，可以用来在执行期间清理 reaction</p>
-<p>reaction 返回一个清理函数。</p>
-<p>不同于 autorun 的是当创建时 **效果 **函数不会直接运行，只有在数据表达式首次返回一个新值后才会运行。</p>
-<p>在执行 <strong>效果</strong>函数时访问的任何 observable 都不会被追踪。</p>
-<p><strong>效果</strong>函数仅对<strong>数据</strong>函数中访问的数据作出反应，这可能会比实际在<strong>效果</strong>函数使用的数据要少。</p>
-<p>此外，<strong>效果</strong> 函数只会在表达式返回的数据发生更改时触发。 换句话说: reaction需要你生产 <strong>效果</strong>函数中</p>
-<p>所需要的东西。</p>
-<h1 id="useObserver-vs-Observer-vs-observer"><a href="#useObserver-vs-Observer-vs-observer" class="headerlink" title="useObserver vs Observer vs observer"></a><strong>useObserver vs Observer vs observer</strong></h1><p><a href="https://juejin.im/post/6844904137167994893" target="_blank" rel="noopener">相关文档</a></p>
-<p>1.虽然只是在返回DOM的地方使用 useObserver(), 但是，当dom中数据改变的时候，整个component都会重新render</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">function Person() &#123;</span><br><span class="line">  console.log(&apos;in useObserver&apos;);//点击按钮会触发执行</span><br><span class="line">  const person = useLocalStore(() =&gt; (&#123; name: &apos;John&apos; &#125;));</span><br><span class="line">  return useObserver(() =&gt; (</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">      &#123;person.name&#125;</span><br><span class="line">      &lt;button onClick=&#123;() =&gt; (person.name = &apos;Mike&apos;)&#125;&gt;No! I am Mike&lt;/button&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  ));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>2.Observer 标签组件可以更精准的控制想要重新渲染的地方</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">export default function ObservePerson() &#123;</span><br><span class="line">    console.log(&apos;in Observer&apos;);//点击按钮不会执行</span><br><span class="line">    const person = useLocalStore(() =&gt; (&#123;name: &apos;John&apos;&#125;))</span><br><span class="line">    return (</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">            The old name is: &#123;person.name&#125; //点击按钮不会更新</span><br><span class="line">            &lt;div&gt;</span><br><span class="line">                &lt;Observer&gt;&#123;() =&gt; &lt;div&gt;&#123;person.name&#125;&lt;/div&gt;&#125;&lt;/Observer&gt; //点击按钮会更新</span><br><span class="line">                &lt;button onClick=&#123;() =&gt; (person.name = &apos;Mike&apos;)&#125;&gt;</span><br><span class="line">                    I want to be Mike</span><br><span class="line">                &lt;/button&gt;</span><br><span class="line">            &lt;/div&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>3.与useObserver相比，除了使用方法不同，目前不知道区别在哪，有时间需要探究一下</p>
-<pre><code>const ObserverLowercasePerson: React.FC&lt;any&gt; = observer(() =&gt; {
-    console.log(&apos;in Observer&apos;) //点击按钮也会执行
-    const person = useLocalStore(() =&gt; ({name: &apos;John&apos;}));
-    return (
-        &lt;div&gt;
-            &lt;div&gt;The name is: {person.name}&lt;/div&gt;
-            &lt;button onClick={() =&gt; (person.name = &apos;Mike&apos;)}&gt;
-                Change name
-            &lt;/button&gt;
-        &lt;/div&gt;
-    )
-})
-```
-</code></pre>
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -2418,7 +2435,7 @@ message.postDate = new Date()
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">269</span>
+              <span class="site-state-item-count">270</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
