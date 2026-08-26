@@ -1,0 +1,698 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="llm,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="The 80/20 Rule: Focus on Tasks Over AgentsWhen building effective AI systems, remember this crucial principle: 80% of your effortshould go into designing tasks.Even the most perfectly defined agent wi">
+<meta name="keywords" content="llm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Crewai 课程一些杂记">
+<meta property="og:url" content="http://yoohannah.github.io/post/llm/Crewai.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="The 80/20 Rule: Focus on Tasks Over AgentsWhen building effective AI systems, remember this crucial principle: 80% of your effortshould go into designing tasks.Even the most perfectly defined agent wi">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/crewai-1.jpg">
+<meta property="og:updated_time" content="2026-08-26T13:03:38.403Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Crewai 课程一些杂记">
+<meta name="twitter:description" content="The 80/20 Rule: Focus on Tasks Over AgentsWhen building effective AI systems, remember this crucial principle: 80% of your effortshould go into designing tasks.Even the most perfectly defined agent wi">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/LLM/crewai-1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/llm/Crewai.html">
+
+
+
+
+
+  <title> Crewai 课程一些杂记 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/llm/Crewai.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Crewai 课程一些杂记
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-08-26T07:59:37+08:00">
+                2026-08-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>The 80/20 Rule: Focus on Tasks Over Agents<br>When building effective AI systems, remember this crucial principle: 80% of your effort<br>should go into designing tasks.<br>Even the most perfectly defined agent will fail with poorly designed tasks, but<br>well-designed tasks can elevate even a simple agent.</p>
+<p>● 80% effort:<br>○ Craft clear tasks</p>
+<p>● 20% effort:<br>○ Polish agent personas</p>
+<p>Pitfalls(陷阱)</p>
+<ol>
+<li>Not spending time on planning use cases</li>
+<li>Not clear definition of success</li>
+<li>Not breaking the process into smaller chunks</li>
+<li>Not measuring / evaluating</li>
+</ol>
+<p>Tactics for Debugging, Observing, Optimizing</p>
+<ul>
+<li>TESTING</li>
+<li>Training</li>
+<li>Guardrails</li>
+</ul>
+<p>Why Agent Design Matters</p>
+<ul>
+<li>Output quality<br>Well-designed agents produce more relevant, high-quality results</li>
+<li>Collaboration effectiveness<br>Agents with complementary skills work together more efficiently</li>
+<li>Task performance<br>Agents with clear roles and goals execute tasks more effectively</li>
+<li>System scalability<br>Thoughtfully designed agents can be reused across multiple crews and contexts</li>
+</ul>
+<p>How to provide deterministic controls on probabilistic systems?</p>
+<ul>
+<li><p>Memory<br>Dynamically update context to help agents learn and get better over time</p>
+<hr>
+<p>  How to provide agents the ability to remember information?<br>  – Short Term<br>  Stores data from past executions to add context that gets shared among agents<br>  – Long Term<br>  Reflects on differences between expect outputs and actual outputs on tasks to improve agents through feedback<br>  – Entity<br>  Collects facts about recognizable people, companies, locations, products, etc</p>
+<hr>
+<p>  Agentic Memory<br>  ● Internal information adapted from previous executions<br>  ● Selectively added to agent’s context during current execution<br>  ● Updated from feedback by human users or LLM-as-a-Judge<br>  Agentic Knowledge<br>  ● External information retrieved from different sources<br>  ● Selectively added to agent’s context from flat files or vector databases<br>  ● Not updated from feedback. Pre-filled at run-time.</p>
+<hr>
+</li>
+<li><p>Guardrails<br>Adding either deterministic or probabilistic (LLM as judge) checks on output<br>● Probabilistic Guardrails / LLM Guardrail: LLM as a judge<br>● Deterministic Guardrails / Code Guardrail: Traditional Code</p>
+</li>
+<li><p>Hooks<br>Execute deterministic code either before or after Agents<br>before:<br>● Fetch input data<br>● Clean input data<br>● Check inputs for PII<br>…<br>after:<br>● Validate outputs<br>● Moderate output content<br>● Log outputs<br>…</p>
+</li>
+</ul>
+<p>How to configure tools for reliable run-time behavior?<br>– Force Return<br>Directly return the output of tool by specifying return_direct=True in agent<br>– Rate Limits<br>Use retry logic and a max usage limit to help agents recover from temporary failures while preventing infinite loops<br>– Tool Repository<br>Promotes reuse and sharing of tools across multiple agents and tasks</p>
+<p>Before using an MCP server, you must trust it!<br>● SSE transports can be vulnerable if not properly secured.<br>● Always validate Origin headers on incoming SSEconnections<br>● Avoid binding servers to all interfaces locally - bind only to localhost instead<br>● Implement proper authentication for all SSE connections</p>
+<p>Without these protections, attackers could use DNS rebinding to interact with local MCP servers from remote websites.</p>
+<p>Mental Models for Agentic Systems</p>
+<ul>
+<li>Agents : Real-time planning</li>
+<li>Graphs : Nodes and edges</li>
+<li>Events : Trigger-based workflows</li>
+</ul>
+<p>State provides <strong>shared context</strong>  across each step of your flow</p>
+<ul>
+<li><p>During Execution<br>● Each step of the flow consists of a function with access to state<br>● All functions can read / write state throughout execution<br>● Accumulated data in state can inform routing of the flow</p>
+</li>
+<li><p>After Execution<br>● Optionally you can persist state. Persistence store state for later use.<br>● Note persistent state of flows is different from the memory of crews in the flow<br>● Using persistence is especially important with conversational agents</p>
+</li>
+</ul>
+<p>How to Build Agents you Trust<br>Flows<br>Guardrails<br>Reasoning agents<br>Human-in-the-loop oversight<br>Testing<br>Training<br>Structured output<br>Safe code execution</p>
+<p>Reliable agents aren’t just accurate,they’re predictable, measurable, and recoverable<br>Observability:  Debuggability , Quality Monitoring<br>Security: Data Governance, Prompt Injection Safeguards,Secure Code Generation<br>Compliance: Protecting PII</p>
+<p>Common Success Patterns<br>● High Frequency<br>● Consensus on Evaluation Criteria<br>● Reasonable Fallback Paths<br>● Measurable Outcomes</p>
+<p>Common Failure Modes<br>● Ill-defined goals<br>● Lack of observability<br>● No clarity on evaluation criteria<br>● No way of tracking proper ROI<br>● No owner for iteration or QA</p>
+<p>Open Source<br>● can be fine-tuned for specific application domains<br>● can be run locally for privacy protected workflows<br>● can reduce usage costs and avoid rate limits</p>
+<p>Closed Source<br>● offer advanced reasoning models for complex tasks<br>● provide safety and robustness features for predictable behavior<br>● allow for easy integration through managed services</p>
+<p>Don’t chase automation Build reliability<br>● Ease of Use<br>● Repeatable Outcomes<br>● Scalable Solutions</p>
+<p><img src="/image/LLM/crewai-1.jpg" alt></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/llm/" rel="tag"># llm</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/llm/agenticAi.html" rel="next" title="Agentic AI">
+                <i class="fa fa-chevron-left"></i> Agentic AI
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">271</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

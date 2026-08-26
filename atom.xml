@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoohannah.github.io/"/>
-  <updated>2026-08-13T04:15:58.872Z</updated>
+  <updated>2026-08-26T13:03:38.403Z</updated>
   <id>http://yoohannah.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Crewai 课程一些杂记</title>
+    <link href="http://yoohannah.github.io/post/llm/Crewai.html"/>
+    <id>http://yoohannah.github.io/post/llm/Crewai.html</id>
+    <published>2026-08-25T23:59:37.000Z</published>
+    <updated>2026-08-26T13:03:38.403Z</updated>
+    
+    <content type="html"><![CDATA[<p>The 80/20 Rule: Focus on Tasks Over Agents<br>When building effective AI systems, remember this crucial principle: 80% of your effort<br>should go into designing tasks.<br>Even the most perfectly defined agent will fail with poorly designed tasks, but<br>well-designed tasks can elevate even a simple agent.</p><p>● 80% effort:<br>○ Craft clear tasks</p><p>● 20% effort:<br>○ Polish agent personas</p><p>Pitfalls(陷阱)</p><ol><li>Not spending time on planning use cases</li><li>Not clear definition of success</li><li>Not breaking the process into smaller chunks</li><li>Not measuring / evaluating</li></ol><p>Tactics for Debugging, Observing, Optimizing</p><ul><li>TESTING</li><li>Training</li><li>Guardrails</li></ul><p>Why Agent Design Matters</p><ul><li>Output quality<br>Well-designed agents produce more relevant, high-quality results</li><li>Collaboration effectiveness<br>Agents with complementary skills work together more efficiently</li><li>Task performance<br>Agents with clear roles and goals execute tasks more effectively</li><li>System scalability<br>Thoughtfully designed agents can be reused across multiple crews and contexts</li></ul><p>How to provide deterministic controls on probabilistic systems?</p><ul><li><p>Memory<br>Dynamically update context to help agents learn and get better over time</p><hr><p>  How to provide agents the ability to remember information?<br>  – Short Term<br>  Stores data from past executions to add context that gets shared among agents<br>  – Long Term<br>  Reflects on differences between expect outputs and actual outputs on tasks to improve agents through feedback<br>  – Entity<br>  Collects facts about recognizable people, companies, locations, products, etc</p><hr><p>  Agentic Memory<br>  ● Internal information adapted from previous executions<br>  ● Selectively added to agent’s context during current execution<br>  ● Updated from feedback by human users or LLM-as-a-Judge<br>  Agentic Knowledge<br>  ● External information retrieved from different sources<br>  ● Selectively added to agent’s context from flat files or vector databases<br>  ● Not updated from feedback. Pre-filled at run-time.</p><hr></li><li><p>Guardrails<br>Adding either deterministic or probabilistic (LLM as judge) checks on output<br>● Probabilistic Guardrails / LLM Guardrail: LLM as a judge<br>● Deterministic Guardrails / Code Guardrail: Traditional Code</p></li><li><p>Hooks<br>Execute deterministic code either before or after Agents<br>before:<br>● Fetch input data<br>● Clean input data<br>● Check inputs for PII<br>…<br>after:<br>● Validate outputs<br>● Moderate output content<br>● Log outputs<br>…</p></li></ul><p>How to configure tools for reliable run-time behavior?<br>– Force Return<br>Directly return the output of tool by specifying return_direct=True in agent<br>– Rate Limits<br>Use retry logic and a max usage limit to help agents recover from temporary failures while preventing infinite loops<br>– Tool Repository<br>Promotes reuse and sharing of tools across multiple agents and tasks</p><p>Before using an MCP server, you must trust it!<br>● SSE transports can be vulnerable if not properly secured.<br>● Always validate Origin headers on incoming SSEconnections<br>● Avoid binding servers to all interfaces locally - bind only to localhost instead<br>● Implement proper authentication for all SSE connections</p><p>Without these protections, attackers could use DNS rebinding to interact with local MCP servers from remote websites.</p><p>Mental Models for Agentic Systems</p><ul><li>Agents : Real-time planning</li><li>Graphs : Nodes and edges</li><li>Events : Trigger-based workflows</li></ul><p>State provides <strong>shared context</strong>  across each step of your flow</p><ul><li><p>During Execution<br>● Each step of the flow consists of a function with access to state<br>● All functions can read / write state throughout execution<br>● Accumulated data in state can inform routing of the flow</p></li><li><p>After Execution<br>● Optionally you can persist state. Persistence store state for later use.<br>● Note persistent state of flows is different from the memory of crews in the flow<br>● Using persistence is especially important with conversational agents</p></li></ul><p>How to Build Agents you Trust<br>Flows<br>Guardrails<br>Reasoning agents<br>Human-in-the-loop oversight<br>Testing<br>Training<br>Structured output<br>Safe code execution</p><p>Reliable agents aren’t just accurate,they’re predictable, measurable, and recoverable<br>Observability:  Debuggability , Quality Monitoring<br>Security: Data Governance, Prompt Injection Safeguards,Secure Code Generation<br>Compliance: Protecting PII</p><p>Common Success Patterns<br>● High Frequency<br>● Consensus on Evaluation Criteria<br>● Reasonable Fallback Paths<br>● Measurable Outcomes</p><p>Common Failure Modes<br>● Ill-defined goals<br>● Lack of observability<br>● No clarity on evaluation criteria<br>● No way of tracking proper ROI<br>● No owner for iteration or QA</p><p>Open Source<br>● can be fine-tuned for specific application domains<br>● can be run locally for privacy protected workflows<br>● can reduce usage costs and avoid rate limits</p><p>Closed Source<br>● offer advanced reasoning models for complex tasks<br>● provide safety and robustness features for predictable behavior<br>● allow for easy integration through managed services</p><p>Don’t chase automation Build reliability<br>● Ease of Use<br>● Repeatable Outcomes<br>● Scalable Solutions</p><p><img src="/image/LLM/crewai-1.jpg" alt></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;The 80/20 Rule: Focus on Tasks Over Agents&lt;br&gt;When building effective AI systems, remember this crucial principle: 80% of your effort&lt;br&gt;
+      
+    
+    </summary>
+    
+    
+      <category term="llm" scheme="http://yoohannah.github.io/tags/llm/"/>
+    
+  </entry>
   
   <entry>
     <title>Agentic AI</title>
@@ -464,31 +487,6 @@
     
     
       <category term="deepLearning" scheme="http://yoohannah.github.io/tags/deepLearning/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>数据清洗和转换</title>
-    <link href="http://yoohannah.github.io/post/machineLearning/dataWash.html"/>
-    <id>http://yoohannah.github.io/post/machineLearning/dataWash.html</id>
-    <published>2024-10-15T12:14:37.000Z</published>
-    <updated>2024-10-18T08:42:02.969Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="常见数据错误形式"><a href="#常见数据错误形式" class="headerlink" title="常见数据错误形式"></a>常见数据错误形式</h1><ol><li>超出正常数据范围，值或者太大或者太小</li><li>不符合相关校验规则，比如数值类型只能是整形，货币单位应该是美元，但是出现了英镑</li><li>形式错误，比如日期格式错误，电话号码格式错误，不符合相关语法语义规范</li></ol><p><img src="/image/LLM/236.png" alt></p><p>对于这样的数据要进行去除清洗处理</p><h1 id="数据转换"><a href="#数据转换" class="headerlink" title="数据转换"></a>数据转换</h1><p>针对数值，图片，视频，文字不同输入类型，有不同转换方式<br><img src="/image/LLM/237.png" alt><br><img src="/image/LLM/238.png" alt><br><img src="/image/LLM/239.png" alt><br><img src="/image/LLM/240.png" alt><br><img src="/image/LLM/241.png" alt><br>小结</p><ol><li>数值类型转换就采用各种归一化的计算公式进行转换</li><li>图片，可以采用裁剪尺寸，下采样，压缩，白化处理</li><li>视频，可以采用截取关键片段，采样关键针降低数据处理陈本</li><li>文字，可以进行词干提取，词形还原以及token化处理<br><img src="/image/LLM/242.png" alt></li></ol><h1 id="mL-常见算法类型"><a href="#mL-常见算法类型" class="headerlink" title="mL 常见算法类型"></a>mL 常见算法类型</h1><p>监督，自监督，半监督，无监督，强化学习<br><img src="/image/LLM/243.png" alt><br><img src="/image/LLM/244.png" alt></p><h2 id="自监督相关概念"><a href="#自监督相关概念" class="headerlink" title="自监督相关概念"></a>自监督相关概念</h2><p><img src="/image/LLM/245.png" alt></p><h2 id="决策树相关注意点"><a href="#决策树相关注意点" class="headerlink" title="决策树相关注意点"></a>决策树相关注意点</h2><p><img src="/image/LLM/246.png" alt><br><img src="/image/LLM/247.png" alt><br><img src="/image/LLM/248.png" alt></p><h2 id="二分类评价指标"><a href="#二分类评价指标" class="headerlink" title="二分类评价指标"></a>二分类评价指标</h2><p><img src="/image/LLM/249.png" alt></p><h2 id="复杂度解释or解释"><a href="#复杂度解释or解释" class="headerlink" title="复杂度解释or解释"></a>复杂度解释or解释</h2><p><img src="/image/LLM/250.png" alt><br><img src="/image/LLM/251.png" alt><br><img src="/image/LLM/252.png" alt><br><img src="/image/LLM/253.png" alt><br><img src="/image/LLM/254.png" alt></p><p><a href="https://c.d2l.ai/stanford-cs329p/syllabus.html#data-i" target="_blank" rel="noopener">李沐机器学习ppt</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h1 id=&quot;常见数据错误形式&quot;&gt;&lt;a href=&quot;#常见数据错误形式&quot; class=&quot;headerlink&quot; title=&quot;常见数据错误形式&quot;&gt;&lt;/a&gt;常见数据错误形式&lt;/h1&gt;&lt;ol&gt;
-&lt;li&gt;超出正常数据范围，值或者太大或者太小&lt;/li&gt;
-&lt;li&gt;不符合相关校验规则，比如
-      
-    
-    </summary>
-    
-    
-      <category term="machineLearning" scheme="http://yoohannah.github.io/tags/machineLearning/"/>
     
   </entry>
   
