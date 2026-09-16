@@ -1,0 +1,1001 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="mySQL,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="order by优化MySQL中有两种排序方式：  索引排序：通过有序索引进行顺序扫描，直接返回有序的数据。 额外排序：对返回的数据进行文件排序  order by 优化的核心原则： 尽量减少额外排序，通过索引直接返回有序数据。 索引排序在排序查询中，如果能利用索引，就能够避免额外的排序操作。extra = Using index 1select * from user where age = 1">
+<meta name="keywords" content="mySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="order by 与 group by 优化">
+<meta property="og:url" content="http://yoohannah.github.io/post/mySQL/7.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="order by优化MySQL中有两种排序方式：  索引排序：通过有序索引进行顺序扫描，直接返回有序的数据。 额外排序：对返回的数据进行文件排序  order by 优化的核心原则： 尽量减少额外排序，通过索引直接返回有序数据。 索引排序在排序查询中，如果能利用索引，就能够避免额外的排序操作。extra = Using index 1select * from user where age = 1">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/67.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/68.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/69.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/70.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/71.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/72.png">
+<meta property="og:updated_time" content="2026-09-16T02:13:06.430Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="order by 与 group by 优化">
+<meta name="twitter:description" content="order by优化MySQL中有两种排序方式：  索引排序：通过有序索引进行顺序扫描，直接返回有序的数据。 额外排序：对返回的数据进行文件排序  order by 优化的核心原则： 尽量减少额外排序，通过索引直接返回有序数据。 索引排序在排序查询中，如果能利用索引，就能够避免额外的排序操作。extra = Using index 1select * from user where age = 1">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/systemDesign/67.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/mySQL/7.html">
+
+
+
+
+
+  <title> order by 与 group by 优化 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/mySQL/7.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                order by 与 group by 优化
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-09-11T14:28:37+08:00">
+                2026-09-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="order-by优化"><a href="#order-by优化" class="headerlink" title="order by优化"></a>order by优化</h1><p>MySQL中有两种排序方式：</p>
+<ul>
+<li>索引排序：通过有序索引进行顺序扫描，直接返回有序的数据。</li>
+<li>额外排序：对返回的数据进行文件排序</li>
+</ul>
+<p>order by 优化的核心原则： 尽量减少额外排序，通过索引直接返回有序数据。</p>
+<h1 id="索引排序"><a href="#索引排序" class="headerlink" title="索引排序"></a>索引排序</h1><p>在排序查询中，如果能利用索引，就能够避免额外的排序操作。extra = Using index</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from user where age = 18 order by name;</span><br></pre></td></tr></table></figure>
+<p>查询过程，找到 age = 18的记录，排序条件是name，name字段是联合索引的最左前列，是已经有序的了，所以不需要额外进行排序。</p>
+<h1 id="额外排序"><a href="#额外排序" class="headerlink" title="额外排序"></a>额外排序</h1><p>所有不是通过索引直接返回排序结果的操作都是额外排序（FileSort排序）。Extra=Using filesort。</p>
+<h2 id="按照执行位置划分"><a href="#按照执行位置划分" class="headerlink" title="按照执行位置划分"></a>按照执行位置划分</h2><p>1) 内存中 sort buffer</p>
+<p>MySQL中为每个线程各维护了一块内存区域，用来进行排序，叫做 sort_buffer。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> <span class="keyword">VARIABLES</span> <span class="keyword">LIKE</span> <span class="string">'%sort_buffer_size%'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> <span class="number">262144</span> / <span class="number">1024</span>;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Variable_name</th>
+<th style="text-align:left">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">innodb_sort_buffer_size</td>
+<td style="text-align:left">1048576</td>
+</tr>
+<tr>
+<td style="text-align:left">myisam_sort_buffer_size</td>
+<td style="text-align:left">306184192</td>
+</tr>
+<tr>
+<td style="text-align:left">sort_buffer_size</td>
+<td style="text-align:left">262144</td>
+</tr>
+</tbody>
+</table>
+<p>以sort_buffer_size该参数为准<br>注意：sort_buffer_size并不是越大越好，因为是connection级别的参数，各大设置+高并发场景，可能会造成系统资源的耗尽。</p>
+<p>2) sort buffer + 临时文件</p>
+<p>如果加载的记录字段的总长度小于 sort buffer，就使用sort buffer，否则就会采用 sort buffer + 临时文件 进行排序。</p>
+<h2 id="按照执行方式划分"><a href="#按照执行方式划分" class="headerlink" title="按照执行方式划分"></a>按照执行方式划分</h2><p>执行方式：max_length_for_sort_data 参数，如果用于排序的单条记录字段的长度 &lt;= 该参数的值，就使用 全字段排序，否则就使用 rowid排序。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 如果单条记录字段的长度 &lt; max... 选择全字段排序，否则 rowid排序。</span></span><br><span class="line"><span class="keyword">SHOW</span> <span class="keyword">VARIABLES</span> <span class="keyword">LIKE</span> <span class="string">'max_length_for_sort_data'</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="全字段排序"><a href="#全字段排序" class="headerlink" title="全字段排序"></a>全字段排序</h3><ul>
+<li><p>将查询的所有的字段，全部加载进来 进行排序<br><img src="/image/systemDesign/67.png" alt></p>
+</li>
+<li><p>优点：查询快，执行过程简单，缺点是 需要的空间比较大。</p>
+</li>
+</ul>
+<h3 id="rowid排序"><a href="#rowid排序" class="headerlink" title="rowid排序"></a>rowid排序</h3><p>rowid排序不会将全部字段放入sort buffer中，所以在sort buffer中排序之后，还要回表查询。<br><img src="/image/systemDesign/68.png" alt><br>• 优点：所需要的空间小。<br>• 缺点：会产生更多的回表查询，查询效率相对低一些。</p>
+<h1 id="排序总结"><a href="#排序总结" class="headerlink" title="排序总结"></a>排序总结</h1><p>• 如果MySQL内存足够大，会优先选择全字段排序。<br>• MySQL的一个设计思想：要多利用内存，尽量减少磁盘访问</p>
+<h1 id="排序优化"><a href="#排序优化" class="headerlink" title="排序优化"></a>排序优化</h1><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 创建联合索引</span></span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> employee <span class="keyword">ADD</span> <span class="keyword">INDEX</span> idx_name_age(<span class="keyword">NAME</span>,age);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 为salary字段添加索引</span></span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> employee <span class="keyword">ADD</span> <span class="keyword">INDEX</span> idx_sal(salary);</span><br><span class="line"></span><br><span class="line"><span class="keyword">SHOW</span> <span class="keyword">INDEX</span> <span class="keyword">FROM</span> employee;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 场景1： 只查询用于排序的索引字段,可以利用索引进行排序，最左原则</span></span><br><span class="line"><span class="keyword">EXPLAIN</span> <span class="keyword">SELECT</span></span><br><span class="line">    e.<span class="string">`NAME`</span>,</span><br><span class="line">    e.<span class="string">`age`</span></span><br><span class="line"><span class="keyword">FROM</span> employee e <span class="keyword">ORDER</span> <span class="keyword">BY</span> e.<span class="string">`NAME`</span>,e.<span class="string">`age`</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 场景2：排序字段在多个索引中，无法使用索引进行排序</span></span><br><span class="line"><span class="keyword">EXPLAIN</span> <span class="keyword">SELECT</span></span><br><span class="line">    e.<span class="string">`NAME`</span>,</span><br><span class="line">    e.<span class="string">`salary`</span></span><br><span class="line"><span class="keyword">FROM</span> employee e <span class="keyword">ORDER</span> <span class="keyword">BY</span> e.<span class="string">`NAME`</span>, e.<span class="string">`salary`</span>;</span><br></pre></td></tr></table></figure>
+<p><img src="/image/systemDesign/69.png" alt></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 场景3：只查询用于排序的索引字段和主键值,可以利用索引进行排序</span></span><br><span class="line"><span class="keyword">EXPLAIN</span> <span class="keyword">SELECT</span> e.<span class="string">`NAME`</span>,e.<span class="string">`id`</span> <span class="keyword">FROM</span> employee e <span class="keyword">ORDER</span> <span class="keyword">BY</span> e.<span class="string">`NAME`</span>;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">id</th>
+<th style="text-align:left">select_type</th>
+<th style="text-align:left">table</th>
+<th style="text-align:left">partitions</th>
+<th style="text-align:left">type</th>
+<th style="text-align:left">possible_keys</th>
+<th style="text-align:left">key</th>
+<th style="text-align:left">key_len</th>
+<th style="text-align:left">ref</th>
+<th style="text-align:left">rows</th>
+<th style="text-align:left">filtered</th>
+<th style="text-align:left">Extra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">SIMPLE</td>
+<td style="text-align:left">e</td>
+<td style="text-align:left">(NULL)</td>
+<td style="text-align:left">index</td>
+<td style="text-align:left">(NULL)</td>
+<td style="text-align:left">idx_name_age</td>
+<td style="text-align:left">68</td>
+<td style="text-align:left">(NULL)</td>
+<td style="text-align:left">6</td>
+<td style="text-align:left">100.00</td>
+<td style="text-align:left">Using index</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 场景4：排序的索引字段，没有出现在查询的字段列表中，不会利用索引排序</span></span><br><span class="line"><span class="keyword">EXPLAIN</span> <span class="keyword">SELECT</span> e.<span class="string">`dep_id`</span> <span class="keyword">FROM</span> employee e <span class="keyword">ORDER</span> <span class="keyword">BY</span> e.<span class="string">`NAME`</span>;</span><br><span class="line"><span class="keyword">EXPLAIN</span> <span class="keyword">SELECT</span> e.<span class="string">`id`</span>,e.<span class="string">`dep_id`</span> <span class="keyword">FROM</span> employee e <span class="keyword">ORDER</span> <span class="keyword">BY</span> e.<span class="string">`NAME`</span>;</span><br><span class="line"><span class="keyword">EXPLAIN</span> <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> employee e <span class="keyword">ORDER</span> <span class="keyword">BY</span> e.<span class="string">`NAME`</span>;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">id</th>
+<th style="text-align:left">select_type</th>
+<th style="text-align:left">table</th>
+<th style="text-align:left">partitions</th>
+<th style="text-align:left">type</th>
+<th style="text-align:left">possible_keys</th>
+<th style="text-align:left">key</th>
+<th style="text-align:left">key_len</th>
+<th style="text-align:left">ref</th>
+<th style="text-align:left">rows</th>
+<th style="text-align:left">filtered</th>
+<th style="text-align:left">Extra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">SIMPLE</td>
+<td style="text-align:left">e</td>
+<td style="text-align:left">(NULL)</td>
+<td style="text-align:left">ALL</td>
+<td style="text-align:left">(NULL)</td>
+<td style="text-align:left">(NULL)</td>
+<td style="text-align:left">(NULL)</td>
+<td style="text-align:left">(NULL)</td>
+<td style="text-align:left">6</td>
+<td style="text-align:left">100.00</td>
+<td style="text-align:left">Using filesort</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 场景5： 排序字段的顺序和索引的顺序不一致,无法利用索引排序</span></span><br><span class="line"><span class="keyword">EXPLAIN</span> <span class="keyword">SELECT</span> e.<span class="string">`NAME`</span>,e.<span class="string">`age`</span> <span class="keyword">FROM</span> employee e <span class="keyword">ORDER</span> <span class="keyword">BY</span> e.<span class="string">`age`</span>,e.<span class="string">`NAME`</span>;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">id</th>
+<th style="text-align:left">select_type</th>
+<th style="text-align:left">table</th>
+<th style="text-align:left">partitions</th>
+<th style="text-align:left">type</th>
+<th style="text-align:left">possible_keys</th>
+<th style="text-align:left">key</th>
+<th style="text-align:left">key_len</th>
+<th style="text-align:left">ref</th>
+<th style="text-align:left">rows</th>
+<th style="text-align:left">filtered</th>
+<th style="text-align:left">Extra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">SIMPLE</td>
+<td style="text-align:left">e</td>
+<td style="text-align:left">(NULL)</td>
+<td style="text-align:left">index</td>
+<td style="text-align:left">(NULL)</td>
+<td style="text-align:left">idx_name_age</td>
+<td style="text-align:left">68</td>
+<td style="text-align:left">(NULL)</td>
+<td style="text-align:left">6</td>
+<td style="text-align:left">100.00</td>
+<td style="text-align:left">Using index; Using filesort</td>
+</tr>
+</tbody>
+</table>
+<p><img src="/image/systemDesign/70.png" alt><br><img src="/image/systemDesign/71.png" alt></p>
+<h1 id="group-by优化"><a href="#group-by优化" class="headerlink" title="group by优化"></a>group by优化</h1><h2 id="group-by回顾"><a href="#group-by回顾" class="headerlink" title="group by回顾"></a>group by回顾</h2><p>group by一般用于分组统计</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 需求：按照城市进行分组，统计每个城市的员工的数量。</span></span><br><span class="line"><span class="keyword">SELECT</span> city,<span class="keyword">COUNT</span>(*) <span class="keyword">num</span> <span class="keyword">FROM</span> emp <span class="keyword">GROUP</span> <span class="keyword">BY</span> city;</span><br></pre></td></tr></table></figure>
+<p>问题1：group by一定要配合聚合函数吗？</p>
+<p>答：分组就是要去做统计的，否则分组没有意义了，所以一般都要配合聚合函数去使用，比如：count、sum、avg…</p>
+<p>问题2：group by后面跟的字段，一定要出现在select列表中吗？</p>
+<p>答：是一定要出现。如果没有没法确定是哪一个分组的值了。在标准SQL规范中，这点是必须的。（MySQL中大部分版本没有强制规定，Oracle中强制规定的），编写SQL时尽量在select列表中列出分组字段，确保查询的可移植性和可读性。</p>
+<p>问题3：where和having的区别？</p>
+<p>group by + where</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">EXPLAIN</span> <span class="keyword">SELECT</span> city,<span class="keyword">COUNT</span>(*) <span class="keyword">num</span> <span class="keyword">FROM</span> emp <span class="keyword">WHERE</span> age &gt; <span class="number">30</span> <span class="keyword">GROUP</span> <span class="keyword">BY</span> city;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 为emp表的age字段添加索引</span></span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> emp <span class="keyword">ADD</span> <span class="keyword">INDEX</span> idx_age(age);</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">table</th>
+<th style="text-align:left">p..</th>
+<th style="text-align:left">type</th>
+<th style="text-align:left">possible_keys</th>
+<th style="text-align:left">key</th>
+<th style="text-align:left">key_len</th>
+<th style="text-align:left">ref</th>
+<th style="text-align:left">rows</th>
+<th style="text-align:left">filtered</th>
+<th style="text-align:left">Extra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">emp</td>
+<td style="text-align:left">.</td>
+<td style="text-align:left">range</td>
+<td style="text-align:left">idx_age</td>
+<td style="text-align:left">idx_a</td>
+<td style="text-align:left">4</td>
+<td style="text-align:left">(NULL)</td>
+<td style="text-align:left">2</td>
+<td style="text-align:left">100.00</td>
+<td style="text-align:left">Using index condition; Using temporary; Using filesort</td>
+</tr>
+</tbody>
+</table>
+<p>使用到了临时表，进行了文件排序</p>
+<p>group by + having</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 需求：查询每个城市的员工数量，获取到员工数量不低于3的城市。</span></span><br><span class="line"><span class="keyword">SELECT</span> city,<span class="keyword">COUNT</span>(*) <span class="keyword">num</span> <span class="keyword">FROM</span> emp <span class="keyword">GROUP</span> <span class="keyword">BY</span> city <span class="keyword">HAVING</span> <span class="keyword">num</span> &gt;=<span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">select_type</th>
+<th style="text-align:left">table</th>
+<th style="text-align:left">p..</th>
+<th style="text-align:left">type</th>
+<th style="text-align:left">possible_keys</th>
+<th style="text-align:left">key</th>
+<th style="text-align:left">key_len</th>
+<th style="text-align:left">ref</th>
+<th style="text-align:left">rows</th>
+<th style="text-align:left">filtered</th>
+<th style="text-align:left">Extra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1 SIMPLE</td>
+<td style="text-align:left">emp</td>
+<td style="text-align:left">.</td>
+<td style="text-align:left">ALL</td>
+<td style="text-align:left">(NULL)</td>
+<td style="text-align:left">(NULL)</td>
+<td style="text-align:left">(NULL)</td>
+<td style="text-align:left">(NULL)</td>
+<td style="text-align:left">10</td>
+<td style="text-align:left">100.00</td>
+<td style="text-align:left">Using temporary; Using filesort</td>
+</tr>
+</tbody>
+</table>
+<p>where和having区别：</p>
+<ul>
+<li>having 子句用于分组后的筛选，where子句用于行条件的筛选。</li>
+<li>having 都是配合分组和聚合函数一起出现。</li>
+<li>where子句中不能使用聚合函数，但是having可以。</li>
+</ul>
+<h2 id="group-by-执行原理"><a href="#group-by-执行原理" class="headerlink" title="group by 执行原理"></a>group by 执行原理</h2><p><img src="/image/systemDesign/72.png" alt></p>
+<p>MySQL的分组中为什么包含排序？</p>
+<ul>
+<li>聚合函数的使用：排序可以帮助最快找到最高或者最低的值。</li>
+<li>Top N查询：排序后，获取每个分组中前N个记录，更加方便。</li>
+<li>结果的可读性：排序之后，可以更好的理解分组统计之后的结果。</li>
+<li>用户需求：用户希望按某个列分组之后，进行排序。</li>
+</ul>
+<h2 id="group-by优化-1"><a href="#group-by优化-1" class="headerlink" title="group by优化"></a>group by优化</h2><p>优化方案1：group by默认要进行排序，在合适的场景下，取消这个默认排序。</p>
+<p>===&gt; 使用  ORDER BY NULL</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 取消分组排序</span></span><br><span class="line"><span class="keyword">EXPLAIN</span> <span class="keyword">SELECT</span> city,<span class="keyword">COUNT</span>(*) <span class="keyword">num</span> <span class="keyword">FROM</span> emp <span class="keyword">GROUP</span> <span class="keyword">BY</span> city <span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="literal">NULL</span>;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">id</th>
+<th style="text-align:left">select_type</th>
+<th style="text-align:left">table</th>
+<th style="text-align:left">p..</th>
+<th style="text-align:left">type</th>
+<th style="text-align:left">possible_keys</th>
+<th style="text-align:left">key</th>
+<th style="text-align:left">key_len</th>
+<th style="text-align:left">ref</th>
+<th style="text-align:left">rows</th>
+<th style="text-align:left">filtered</th>
+<th style="text-align:left">Extra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">SIMPLE</td>
+<td style="text-align:left">emp</td>
+<td style="text-align:left">.</td>
+<td style="text-align:left">ALL</td>
+<td style="text-align:left">(NULL)</td>
+<td style="text-align:left">(NULL)</td>
+<td style="text-align:left">(NULL)</td>
+<td style="text-align:left">(NULL)</td>
+<td style="text-align:left">10</td>
+<td style="text-align:left">100.00</td>
+<td style="text-align:left">Using temporary</td>
+</tr>
+</tbody>
+</table>
+<p>没有filesort</p>
+<p>优化方案2：为group by字段添加索引，让其一开始的时候就是有序的。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">EXPLAIN</span> <span class="keyword">SELECT</span> city,<span class="keyword">COUNT</span>(*) <span class="keyword">num</span> <span class="keyword">FROM</span> emp <span class="keyword">WHERE</span> age = <span class="number">30</span> <span class="keyword">GROUP</span> <span class="keyword">BY</span> city;</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> emp <span class="keyword">ADD</span> <span class="keyword">INDEX</span> idx_age_city(age,city);</span><br></pre></td></tr></table></figure>
+<p>优化方案3：尽量使用内存表</p>
+<p>如果group by需要统计的数据不多，可以尽量使用内存临时表，因为如果内存放不下，就会下沉到磁盘临时表中，导致性能下降。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 调整临时表大小</span></span><br><span class="line"><span class="keyword">SHOW</span> <span class="keyword">GLOBAL</span> <span class="keyword">VARIABLES</span> <span class="keyword">LIKE</span> <span class="string">'tmp_table_size'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> <span class="number">17179869184</span> / <span class="number">1024</span> / <span class="number">1024</span> /<span class="number">1024</span>; <span class="comment">-- 默认是16M</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> <span class="number">16777216</span> * <span class="number">1024</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SET</span> <span class="keyword">GLOBAL</span> tmp_table_size = <span class="number">16777216</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- MySQL配置文件中 设置</span></span><br><span class="line"><span class="comment">-- [mysqld] 下面，添加tmp_table_size = 16777216,重启生效。</span></span><br></pre></td></tr></table></figure>
+<p>优化方案4：使用SQL_BIG_RESULT优化</p>
+<p>如果数据量特别大，数据就算放到临时表中（临时表已经够大了），但是还是会因为数据的插入达到上限，再转成磁盘临时表，还是会影响到数据库的性能。<br>如果预数据量比较大，我们使用SQL_BIG_RESULT直接提示MySQL 直接磁盘临时表。</p>
+<ul>
+<li>禁用内存优化</li>
+<li>适用于大结果集</li>
+</ul>
+<p>一旦添加了SQL_BIG_RESULT，MySQL就不会再用B+树结构存储临时表数据，存储效率低，会选择使用数组，直接用数组存储。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- SQL_BIG_SORT</span></span><br><span class="line"><span class="keyword">EXPLAIN</span> <span class="keyword">SELECT</span> <span class="keyword">SQL_BIG_RESULT</span> city ,<span class="keyword">COUNT</span>(*) <span class="keyword">FROM</span> emp <span class="keyword">GROUP</span> <span class="keyword">BY</span> city;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">id</th>
+<th style="text-align:left">select_type</th>
+<th style="text-align:left">table</th>
+<th style="text-align:left">p..</th>
+<th style="text-align:left">type</th>
+<th style="text-align:left">possible_keys</th>
+<th style="text-align:left">key</th>
+<th style="text-align:left">key_len</th>
+<th style="text-align:left">ref</th>
+<th style="text-align:left">rows</th>
+<th style="text-align:left">filtered</th>
+<th style="text-align:left">Extra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">SIMPLE</td>
+<td style="text-align:left">emp</td>
+<td style="text-align:left">.</td>
+<td style="text-align:left">index</td>
+<td style="text-align:left">idx_city,idx_&amp;</td>
+<td style="text-align:left">idx_c</td>
+<td style="text-align:left">194</td>
+<td style="text-align:left">(NULL)</td>
+<td style="text-align:left">10</td>
+<td style="text-align:left">100.00</td>
+<td style="text-align:left">Using index; Using filesort</td>
+</tr>
+</tbody>
+</table>
+<p>没有使用临时表</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mySQL/" rel="tag"># mySQL</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/mySQL/6.html" rel="next" title="Join 优化">
+                <i class="fa fa-chevron-left"></i> Join 优化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/mySQL/8.html" rel="prev" title="MySQL 查询成本计算">
+                MySQL 查询成本计算 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">286</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#order-by优化"><span class="nav-number">1.</span> <span class="nav-text">order by优化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#索引排序"><span class="nav-number">2.</span> <span class="nav-text">索引排序</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#额外排序"><span class="nav-number">3.</span> <span class="nav-text">额外排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#按照执行位置划分"><span class="nav-number">3.1.</span> <span class="nav-text">按照执行位置划分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#按照执行方式划分"><span class="nav-number">3.2.</span> <span class="nav-text">按照执行方式划分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#全字段排序"><span class="nav-number">3.2.1.</span> <span class="nav-text">全字段排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rowid排序"><span class="nav-number">3.2.2.</span> <span class="nav-text">rowid排序</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#排序总结"><span class="nav-number">4.</span> <span class="nav-text">排序总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#排序优化"><span class="nav-number">5.</span> <span class="nav-text">排序优化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#group-by优化"><span class="nav-number">6.</span> <span class="nav-text">group by优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#group-by回顾"><span class="nav-number">6.1.</span> <span class="nav-text">group by回顾</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#group-by-执行原理"><span class="nav-number">6.2.</span> <span class="nav-text">group by 执行原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#group-by优化-1"><span class="nav-number">6.3.</span> <span class="nav-text">group by优化</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

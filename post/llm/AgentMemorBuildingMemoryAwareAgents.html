@@ -1,0 +1,1253 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="llm,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="Building Memory-Aware Agents Ai agent: An Al agent is a computational entity that perceives its environment through inputs, reasons and plans using alarge language model as its cognitive engine, takes">
+<meta name="keywords" content="llm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Agent Memory">
+<meta property="og:url" content="http://yoohannah.github.io/post/llm/AgentMemorBuildingMemoryAwareAgents.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="Building Memory-Aware Agents Ai agent: An Al agent is a computational entity that perceives its environment through inputs, reasons and plans using alarge language model as its cognitive engine, takes">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/mem-1.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/mem-2.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/mem-3.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/mem-4.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/mem-5.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/mem-6.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/mem-7.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/mem-8.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/mem-9.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/mem-10.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/mem-11.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/mem-12.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/mem-13.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/mem-14.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/mem-15.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/mem-16.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/mem-17.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/mem-18.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/mem-19.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/mem-21.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/mem-22.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/LLM/mem-23.png">
+<meta property="og:updated_time" content="2026-09-01T02:28:48.810Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Agent Memory">
+<meta name="twitter:description" content="Building Memory-Aware Agents Ai agent: An Al agent is a computational entity that perceives its environment through inputs, reasons and plans using alarge language model as its cognitive engine, takes">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/LLM/mem-1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/llm/AgentMemorBuildingMemoryAwareAgents.html">
+
+
+
+
+
+  <title> Agent Memory | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/llm/AgentMemorBuildingMemoryAwareAgents.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Agent Memory
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-08-15T10:11:37+08:00">
+                2026-08-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Building Memory-Aware Agents</p>
+<p>Ai agent:</p>
+<p>An Al agent is a computational entity that perceives its environment through inputs, reasons and plans using a<br>large language model as its cognitive engine, takes actions through tools and integrations, and is augmented<br>with persistent memory to store, retrieve, and apply knowledge across interactions</p>
+<p>AI Agent memeory</p>
+<p>Agent memory refers to the system of architectural components, control mechanisms, tools and<br>software harness that enables an Al agent to persistently store, organize, retrieve, and reuse<br>information across time, interactions, and execution contexts, ensuring temporal and contextual<br>continuity, even across fragmented interactions</p>
+<h1 id="the-reason-why-Memeory-in-Agent"><a href="#the-reason-why-Memeory-in-Agent" class="headerlink" title="the reason why Memeory in Agent"></a>the reason why Memeory in Agent</h1><h2 id="stateless-agent"><a href="#stateless-agent" class="headerlink" title="stateless agent"></a>stateless agent</h2><p>无状态agent, 一轮游，llm只根据输入给出输出<br>缺点：<br>无法处理长周期任务<br>没有跨session的上下文意识<br>不能学习和更新最新的能力<br>过长的prompt 造成操作成本较高<br><img src="/image/LLM/mem-1.png" alt></p>
+<h2 id="memory-augmented-agent-conversation-agent"><a href="#memory-augmented-agent-conversation-agent" class="headerlink" title="memory-augmented agent/conversation agent"></a>memory-augmented agent/conversation agent</h2><p>记忆增强的agent,将之会话存储起来，会后续提问，提供更多信息<br>优点：<br>可处理长时任务<br>可以跨session保持上下文<br>提高处理效率，降低token成本<br>更适合在多步骤工作流中使用<br><img src="/image/LLM/mem-2.png" alt></p>
+<h2 id="beyond-conversation-agent"><a href="#beyond-conversation-agent" class="headerlink" title="beyond conversation agent"></a>beyond conversation agent</h2><p>除了将会话内容进行存储<br>还需要考虑以下问题<br>对话窗口是有限的，用户关系不是<br>不是所有的有用信息都在一个会话中<br>agent 需要一个结构化的，可查询的知识，不止是对话日志</p>
+<h2 id="agent-memory-forms"><a href="#agent-memory-forms" class="headerlink" title="agent memory forms"></a>agent memory forms</h2><p><img src="/image/LLM/mem-3.png" alt></p>
+<h1 id="RAG-MEMORY"><a href="#RAG-MEMORY" class="headerlink" title="RAG + MEMORY"></a>RAG + MEMORY</h1><p>传统RAG处理流程<br><img src="/image/LLM/mem-4.png" alt></p>
+<p>具备memory能力的agent的处理流程<br><img src="/image/LLM/mem-5.png" alt></p>
+<h2 id="the-agent-memory-core"><a href="#the-agent-memory-core" class="headerlink" title="the agent memory core"></a>the agent memory core</h2><p>The primary data infrastructure component of an agent system, responsible for managing the complete lifecycle of agent memory.<br>This database layer handles persistent storage，efficient retrieval, and memory operations that enable agents to adapt to new information,<br>learn apry from interactions, and maintain consistent Datd performance across sessions.</p>
+<p><img src="/image/LLM/mem-6.png" alt></p>
+<h1 id="contructing-the-memory-manager"><a href="#contructing-the-memory-manager" class="headerlink" title="contructing the memory manager"></a>contructing the memory manager</h1><p>存储层分两部分，存储核(数据库) 和存储管理<br>为agent对话连续性，长时记忆以及信息能力更新的提供帮助</p>
+<p><img src="/image/LLM/mem-7.png" alt></p>
+<h2 id="Memory-Manager"><a href="#Memory-Manager" class="headerlink" title="Memory Manager"></a>Memory Manager</h2><p>A Memory Manager is the control logic in the Agent Stack that decides<br>what becomes memory, how it’s structured, how it’s updated, and when it should be recalled during execution.</p>
+<h3 id="存储类型"><a href="#存储类型" class="headerlink" title="存储类型"></a>存储类型</h3><p>不同的记忆形式，有不同的存储类型，存储需求不同进而对应不同操作方法</p>
+<p><img src="/image/LLM/mem-8.png" alt></p>
+<h3 id="存储操作分类"><a href="#存储操作分类" class="headerlink" title="存储操作分类"></a>存储操作分类</h3><ul>
+<li>Deterministic： Memory reads/writes that run automatically on a fixed schedule or predefined condition， independent of the agent‘s judgment.<br>确定性，由固定代码执行的操作</li>
+<li>Agent Triggered： Memory reads/writes that the agent decides to invoke based on its own real-time assessment of need.<br>不确定性，由agent 自主决定什么时候调用什么方法进行什么操作</li>
+</ul>
+<p>A key design decision in memory engineering is determining which operations should be <strong>Deterministic</strong> (executed automatically by code) versus <strong>Agent-Triggered</strong> (decided by the LLM at runtime).</p>
+<ul>
+<li>A <strong>deterministic</strong> memory operation is one that runs based on system rules, not the model’s discretion. It is executed every time (or under clearly defined, non-negotiable conditions) so the system behaves predictably.</li>
+<li>An <strong>agent-triggered</strong> memory operation runs only when the model decides it’s necessary, based on intent and situation.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th style="text-align:center">Deterministic</th>
+<th style="text-align:center">Agent-Triggered</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>read_conversational_memory()</code></td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">❌</td>
+</tr>
+<tr>
+<td><code>read_knowledge_base()</code></td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">❌</td>
+</tr>
+<tr>
+<td><code>read_workflow()</code></td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">❌</td>
+</tr>
+<tr>
+<td><code>read_entity()</code></td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">❌</td>
+</tr>
+<tr>
+<td><code>read_summary_context()</code></td>
+<td style="text-align:center">❌</td>
+<td style="text-align:center">✅</td>
+</tr>
+<tr>
+<td><code>write_conversational_memory()</code></td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">❌</td>
+</tr>
+<tr>
+<td><code>write_workflow()</code></td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">❌</td>
+</tr>
+<tr>
+<td><code>write_entity()</code></td>
+<td style="text-align:center">❌</td>
+<td style="text-align:center">✅</td>
+</tr>
+<tr>
+<td><code>search_tavily()</code></td>
+<td style="text-align:center">❌</td>
+<td style="text-align:center">✅</td>
+</tr>
+<tr>
+<td><code>expand_summary()</code></td>
+<td style="text-align:center">❌</td>
+<td style="text-align:center">✅</td>
+</tr>
+<tr>
+<td><code>summarize_and_store()</code></td>
+<td style="text-align:center">❌</td>
+<td style="text-align:center">✅</td>
+</tr>
+<tr>
+<td><code>read_toolbox()</code></td>
+<td style="text-align:center">✅</td>
+<td style="text-align:center">✅</td>
+</tr>
+</tbody>
+</table>
+<p>Deterministic memory operations run:</p>
+<ul>
+<li><strong>every turn</strong>, or</li>
+<li>under <strong>explicit, fixed conditions</strong> (e.g., “always at the start of the agent loop”, “always after tool execution”)</li>
+</ul>
+<h4 id="Why-Deterministic-Retrieval-Is-Useful"><a href="#Why-Deterministic-Retrieval-Is-Useful" class="headerlink" title="Why Deterministic Retrieval Is Useful"></a>Why Deterministic Retrieval Is Useful</h4><p>Memory retrieval is commonly run <strong>at the start of each agent loop</strong> because:</p>
+<ol>
+<li><p><strong>Context bootstrapping is non-negotiable</strong></p>
+<ul>
+<li>The agent needs prior context to remain consistent and avoid repeating mistakes.</li>
+<li>Without deterministic retrieval, the agent behaves “stateless” and starts from scratch.</li>
+</ul>
+</li>
+<li><p><strong>The agent can’t choose to look up what it doesn’t know exists</strong></p>
+<ul>
+<li>If the agent must decide whether to check memory, it must guess what’s stored.</li>
+<li>This creates a chicken-and-egg problem: <em>you need memory to know which memory you need.</em></li>
+</ul>
+</li>
+<li><p><strong>Predictability</strong></p>
+<ul>
+<li>Always loading memory produces consistent behavior and makes the system easier to evaluate and debug.</li>
+</ul>
+</li>
+</ol>
+<h4 id="Why-Deterministic-Storage-Is-Useful"><a href="#Why-Deterministic-Storage-Is-Useful" class="headerlink" title="Why Deterministic Storage Is Useful"></a>Why Deterministic Storage Is Useful</h4><p>Persisting conversations, workflows, and entities is often deterministic because:</p>
+<ol>
+<li><p><strong>Reliability</strong></p>
+<ul>
+<li>You don’t want the agent to “forget to save” important information.</li>
+<li>If continuity matters, persistence must be consistent.</li>
+</ul>
+</li>
+<li><p><strong>Completeness</strong></p>
+<ul>
+<li>Every interaction should be recorded to avoid gaps.</li>
+<li>Selective saving creates missing context that later breaks long-horizon tasks.</li>
+</ul>
+</li>
+<li><p><strong>Reduced cognitive load</strong></p>
+<ul>
+<li>The model should focus on task execution, not memory bookkeeping.</li>
+</ul>
+</li>
+</ol>
+<h4 id="Advantages-of-Deterministic-Memory-Operations"><a href="#Advantages-of-Deterministic-Memory-Operations" class="headerlink" title="Advantages of Deterministic Memory Operations"></a>Advantages of Deterministic Memory Operations</h4><ul>
+<li><strong>Predictable behavior</strong> across runs and turns</li>
+<li><strong>Stronger continuity</strong> (fewer “stateless resets”)</li>
+<li><strong>Fewer missed memories</strong> (higher reliability)</li>
+<li><strong>Easier debugging and evaluation</strong> (clear expectations of what should be loaded/saved)</li>
+</ul>
+<h4 id="How-Tool-Calls-Fit-In"><a href="#How-Tool-Calls-Fit-In" class="headerlink" title="How Tool Calls Fit In"></a>How Tool Calls Fit In</h4><p>External tool calls (e.g., web search, external DB lookups, expensive summarization jobs) are typically <strong>agent-triggered</strong> because:</p>
+<ol>
+<li><p><strong>Intent matters</strong></p>
+<ul>
+<li>Only the agent can judge whether extra information is needed.</li>
+<li>Automatically using tools for every query is wasteful.</li>
+</ul>
+</li>
+<li><p><strong>Cost considerations</strong></p>
+<ul>
+<li>Tools often introduce latency and may incur API costs.</li>
+<li>The agent should call tools only when the expected value is high.</li>
+</ul>
+</li>
+<li><p><strong>Judgment required</strong></p>
+<ul>
+<li>Choosing <em>what</em> to search for or <em>what</em> to expand requires understanding the user’s goal.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="three-terms"><a href="#three-terms" class="headerlink" title="three terms"></a>three terms</h3><h4 id="Memory-Unit"><a href="#Memory-Unit" class="headerlink" title="Memory Unit"></a>Memory Unit</h4><p>A Memory Unit is the smallest atomic piece of stored information,<br>represented with a minimal set of attributes<br>so it can be captured, retrieved, and updated by a memory-augmented agent.</p>
+<p><img src="/image/LLM/mem-9.png" alt></p>
+<h4 id="Context-engineering"><a href="#Context-engineering" class="headerlink" title="Context engineering"></a>Context engineering</h4><p>Context engineering is the practice of optimally selecting and<br>shaping the information placed into an LLM context window<br>so it can perform a task reliably-while explicitly accounting for context window limits and model constraints.</p>
+<p><img src="/image/LLM/mem-10.png" alt></p>
+<h4 id="Memory-engineering"><a href="#Memory-engineering" class="headerlink" title="Memory engineering"></a>Memory engineering</h4><p>The engineering discipline focused on designing, building,<br>and maintaining memory systems for Al agents.<br>It encompasses the storage, retrieval，classification, and lifecycle management of agent memory.</p>
+<p><img src="/image/LLM/mem-11.png" alt></p>
+<p><img src="/image/LLM/mem-12.png" alt></p>
+<h3 id="memory-aware-agent"><a href="#memory-aware-agent" class="headerlink" title="memory aware agent"></a>memory aware agent</h3><p><img src="/image/LLM/mem-13.png" alt></p>
+<h2 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h2><table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1. Initialize Embeddings</strong></td>
+<td>Load a HuggingFace embedding model to convert text into vectors</td>
+</tr>
+<tr>
+<td><strong>2. Create Vector Store</strong></td>
+<td>Set up an Oracle-backed vector store with distance strategy</td>
+</tr>
+<tr>
+<td><strong>3. Create Index</strong></td>
+<td>Build an HNSW index for fast similarity search</td>
+</tr>
+<tr>
+<td><strong>4. Add Documents</strong></td>
+<td>Store text with metadata in the vector database</td>
+</tr>
+<tr>
+<td><strong>5. Query</strong></td>
+<td>Search for similar documents using natural language</td>
+</tr>
+<tr>
+<td><strong>6. Filter Results</strong></td>
+<td>Use metadata filters to narrow down search results</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key Components</strong></p>
+<ul>
+<li><strong><code>OracleVS</code></strong>: LangChain’s Oracle vector store integration</li>
+<li><strong><code>HuggingFaceEmbeddings</code></strong>: Converts text to 768-dimensional vectors</li>
+<li><strong><code>DistanceStrategy.EUCLIDEAN_DISTANCE</code></strong>: Measures similarity between vectors</li>
+<li><strong>HNSW Index</strong>: Speeds up similarity search with graph-based nearest-neighbor traversal</li>
+</ul>
+<p>These tables will be created in Oracle Database to persist agent memory.</p>
+<h3 id="Memory-Types-We’ll-Implement"><a href="#Memory-Types-We’ll-Implement" class="headerlink" title="Memory Types We’ll Implement"></a>Memory Types We’ll Implement</h3><table>
+<thead>
+<tr>
+<th>Memory Type</th>
+<th>Human Analogy</th>
+<th>Purpose</th>
+<th>Storage</th>
+<th>Retrieval Strategies Used</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Conversational</strong></td>
+<td>Short-term memory</td>
+<td>Chat history per thread</td>
+<td>SQL Table</td>
+<td>Exact match by thread_id</td>
+</tr>
+<tr>
+<td><strong>Knowledge Base</strong></td>
+<td>Long-term semantic memory</td>
+<td>Facts, documents, search results</td>
+<td>Vector Store</td>
+<td>Semantic similarity search</td>
+</tr>
+<tr>
+<td><strong>Workflow</strong></td>
+<td>Procedural memory</td>
+<td>Learned action patterns</td>
+<td>Vector Store</td>
+<td>Semantic similarity search + metadata filtering</td>
+</tr>
+<tr>
+<td><strong>Toolbox</strong></td>
+<td>Skill memory</td>
+<td>Available tools &amp; capabilities</td>
+<td>Vector Store</td>
+<td>Semantic similarity search</td>
+</tr>
+<tr>
+<td><strong>Entity</strong></td>
+<td>Episodic memory</td>
+<td>People, places, systems mentioned</td>
+<td>Vector Store</td>
+<td>Semantic similarity search</td>
+</tr>
+<tr>
+<td><strong>Summary</strong></td>
+<td>Compressed memory</td>
+<td>Condensed context for long conversations</td>
+<td>Vector Store</td>
+<td>Semantic similarity search (with optional ID filter)</td>
+</tr>
+<tr>
+<td><strong>Tool Log</strong></td>
+<td>Execution audit trail</td>
+<td>Raw tool inputs/outputs and execution status</td>
+<td>SQL Table</td>
+<td>Exact match by thread_id + timestamp ordering</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>MemoryManager</code> class is the central abstraction that unifies all memory operations. It provides a clean interface for reading and writing to different memory types, hiding the complexity of SQL queries and vector store operations. It is a single class that manages 7 types of memory with consistent read/write patterns:</p>
+<table>
+<thead>
+<tr>
+<th>Memory Type</th>
+<th>Storage</th>
+<th>Write Method</th>
+<th>Read Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Conversational</strong></td>
+<td>SQL Table</td>
+<td><code>write_conversational_memory()</code></td>
+<td><code>read_conversational_memory()</code></td>
+</tr>
+<tr>
+<td><strong>Knowledge Base</strong></td>
+<td>Vector Store</td>
+<td><code>write_knowledge_base()</code></td>
+<td><code>read_knowledge_base()</code></td>
+</tr>
+<tr>
+<td><strong>Workflow</strong></td>
+<td>Vector Store</td>
+<td><code>write_workflow()</code></td>
+<td><code>read_workflow()</code></td>
+</tr>
+<tr>
+<td><strong>Toolbox</strong></td>
+<td>Vector Store</td>
+<td><code>write_toolbox()</code></td>
+<td><code>read_toolbox()</code></td>
+</tr>
+<tr>
+<td><strong>Entity</strong></td>
+<td>Vector Store</td>
+<td><code>write_entity()</code></td>
+<td><code>read_entity()</code></td>
+</tr>
+<tr>
+<td><strong>Summary</strong></td>
+<td>Vector Store</td>
+<td><code>write_summary()</code></td>
+<td><code>read_summary_memory()</code>, <code>read_summary_context()</code></td>
+</tr>
+<tr>
+<td><strong>Tool Log</strong></td>
+<td>SQL Table</td>
+<td><code>write_tool_log()</code></td>
+<td><code>read_tool_logs()</code></td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/LLM/MemoryAwareAgent/AgentMemoryCore/index.py" target="_blank" rel="noopener">实验： AgentMemoryCore</a></p>
+<h1 id="Scaling-agent-tool-use-with-semantic-tool-memory"><a href="#Scaling-agent-tool-use-with-semantic-tool-memory" class="headerlink" title="Scaling agent tool use with semantic tool memory"></a>Scaling agent tool use with semantic tool memory</h1><p>原始tool use 流程<br><img src="/image/LLM/mem-14.png" alt></p>
+<p>缺点<br>大量使用tool 工具，不仅会占用context空间，造成token 成本提升，还会造成上下文迷惑，工具选择降级(响应的内容反而使模型性能下降), 延时增加</p>
+<table>
+<thead>
+<tr>
+<th>Problem</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Context bloat</strong></td>
+<td>Tool definitions consume tokens, leaving less room for actual content</td>
+</tr>
+<tr>
+<td><strong>Tool selection failure</strong></td>
+<td>LLMs struggle to choose the right tool when presented with too many options</td>
+</tr>
+<tr>
+<td><strong>Increased latency</strong></td>
+<td>More tokens = slower inference</td>
+</tr>
+<tr>
+<td><strong>Higher costs</strong></td>
+<td>More tokens = higher API costs</td>
+</tr>
+</tbody>
+</table>
+<p>Model providers like OpenAI and Anthropic typically recommend limiting the number of tools exposed to an LLM (often 10-20 max for reliable selection).<br><img src="/image/LLM/mem-15.png" alt></p>
+<p>解决办法一：<br>将tool 信息不注册到上下文中，编码后存在数据库中，当用户提问时，从数据库中查找topk可用tool 再调用使用</p>
+<p><img src="/image/LLM/mem-16.png" alt></p>
+<p>解决办法二：<br>在方法一基础上，对tool 存储单元信息通过llm 进行优化，在数据库中存储优化后的名称和描述<br>优点：<br>LLM增强工具<br>高信号嵌入文本, 方便llm更好查找<br>语义工具检索<br>更高的召回率 + 更好的可分离性<br><img src="/image/LLM/mem-17.png" alt></p>
+<h2 id="The-Solution-Semantic-Tool-Retrieval"><a href="#The-Solution-Semantic-Tool-Retrieval" class="headerlink" title="The Solution: Semantic Tool Retrieval"></a>The Solution: Semantic Tool Retrieval</h2><p>The <code>Toolbox</code> class solves this by treating tools as a <strong>searchable memory</strong>:</p>
+<ol>
+<li><strong>Register hundreds of tools</strong> — Store all available tools with their descriptions and embeddings</li>
+<li><strong>Retrieve only relevant tools</strong> — At inference time, use vector search to find tools semantically relevant to the current query</li>
+<li><strong>Pass a focused toolset</strong> — Only the retrieved tools (typically 3-5) are passed to the LLM</li>
+</ol>
+<p>This approach means your system can <strong>scale to hundreds of tools</strong> while the LLM only sees the most relevant ones for each query.</p>
+<h2 id="How-the-Code-Works"><a href="#How-the-Code-Works" class="headerlink" title="How the Code Works"></a>How the Code Works</h2><p>The <code>Toolbox</code> class uses <strong>docstrings as the retrieval key</strong>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">User Query → Embed Query → Vector Search → Find tools with similar docstrings → Return relevant tools</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Toolbox</code> (from <code>helper.py</code>)</td>
+<td>Shared class used across lessons to register and retrieve tools</td>
+</tr>
+<tr>
+<td><code>ToolMetadata</code> (inside <code>helper.py</code>)</td>
+<td>Stores tool name, description, signature, parameters</td>
+</tr>
+<tr>
+<td><code>_augment_docstring()</code></td>
+<td>Uses LLM to improve the docstring for better retrieval</td>
+</tr>
+<tr>
+<td><code>_generate_queries()</code></td>
+<td>Creates synthetic queries that would trigger this tool</td>
+</tr>
+<tr>
+<td><code>register_tool()</code></td>
+<td>Decorator that stores tool with its embedding in the toolbox</td>
+</tr>
+</tbody>
+</table>
+<p>When you call <code>memory_manager.read_toolbox(query)</code>, it performs a similarity search to find tools whose docstrings are semantically similar to the query.</p>
+<p>the Toolbox uses embeddings to map natural-language queries to the most relevant tools. This means tool retrieval is semantic: the agent can discover capabilities even when the query wording does not exactly match a tool name.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">// 在toolbox 里面注册 tool </span><br><span class="line">from tavily import TavilyClient</span><br><span class="line">from datetime import datetime</span><br><span class="line"></span><br><span class="line">tavily_client = TavilyClient()</span><br><span class="line"></span><br><span class="line"># When `augment=True`, the `Toolbox` sends both the **original docstring** and the **function&apos;s source code** to an LLM, </span><br><span class="line"># which produces a richer, more detailed description. </span><br><span class="line"># This enriched text is what gets embedded and stored — improving semantic separability and retrieval recall.</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">@toolbox.register_tool(augment=True)</span><br><span class="line">def search_tavily(query: str, max_results: int = 5):</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    Use this function to search the web and store the results in the knowledge base.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line">    response = tavily_client.search(query=query, max_results=max_results)</span><br><span class="line">    results = response.get(&quot;results&quot;, [])</span><br><span class="line"></span><br><span class="line">    # Write each result to the knowledge base</span><br><span class="line">    for result in results:</span><br><span class="line">        # Create the text content to embed</span><br><span class="line">        text = f&quot;Title: &#123;result.get(&apos;title&apos;, &apos;&apos;)&#125;\nContent: &#123;result.get(&apos;content&apos;, &apos;&apos;)&#125;\nURL: &#123;result.get(&apos;url&apos;, &apos;&apos;)&#125;&quot;</span><br><span class="line">        </span><br><span class="line">        # Create metadata</span><br><span class="line">        metadata = &#123;</span><br><span class="line">            &quot;title&quot;: result.get(&quot;title&quot;, &quot;&quot;),</span><br><span class="line">            &quot;url&quot;: result.get(&quot;url&quot;, &quot;&quot;),</span><br><span class="line">            &quot;score&quot;: result.get(&quot;score&quot;, 0),</span><br><span class="line">            &quot;source_type&quot;: &quot;tavily_search&quot;,</span><br><span class="line">            &quot;query&quot;: query,</span><br><span class="line">            &quot;timestamp&quot;: datetime.now().isoformat()</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        # Write to knowledge base</span><br><span class="line">        memory_manager.write_knowledge_base(text, metadata)</span><br><span class="line"></span><br><span class="line">    return results</span><br><span class="line"></span><br><span class="line">// 获取tool 的源码和描述，用llm augment</span><br><span class="line"></span><br><span class="line">import inspect</span><br><span class="line"></span><br><span class="line"># Original docstring (what the developer wrote - just one line)</span><br><span class="line">original = (&quot;Use this function to search the web&quot;</span><br><span class="line">            &quot; and store the results in the&quot;</span><br><span class="line">            &quot; knowledge base.&quot;)</span><br><span class="line"></span><br><span class="line"># Get the actual source code of the function</span><br><span class="line">fn = toolbox._tools_by_name[&quot;search_tavily&quot;]</span><br><span class="line">source = inspect.getsource(fn)  // 上面注册的代码</span><br><span class="line"></span><br><span class="line">print(&quot;ORIGINAL DOCSTRING:&quot;)</span><br><span class="line">print(f&apos;  &quot;&#123;original&#125;&quot;&apos;)</span><br><span class="line">print()</span><br><span class="line"></span><br><span class="line"># The LLM reads both the docstring AND the source code</span><br><span class="line">augmented = toolbox._augment_docstring(original, source)</span><br><span class="line"></span><br><span class="line">print(&quot;AUGMENTED DOCSTRING (LLM-enhanced):&quot;)</span><br><span class="line">print(f&quot;  &#123;augmented&#125;&quot;)</span><br></pre></td></tr></table></figure>
+<p><a href="https://github.com/YooHannah/algorithm/blob/75cda37b394712c07ebbe5042a18286acead45f9/LLM/MemoryAwareAgent/helper.py#L1170" target="_blank" rel="noopener">toolBOX</a><br><a href="https://github.com/YooHannah/algorithm/blob/master/LLM/MemoryAwareAgent/MemoryUnitAugmentation/index.py" target="_blank" rel="noopener">实验： 基于tool memory unit优化的存储方案</a></p>
+<h1 id="Memory-operations-extraction-consolidation-and-self-updating-memory"><a href="#Memory-operations-extraction-consolidation-and-self-updating-memory" class="headerlink" title="Memory operations: extraction,consolidation,and self-updating memory"></a>Memory operations: extraction,consolidation,and self-updating memory</h1><p>处理原始交互信息为持久知识</p>
+<p>Context Window Reduction<br>Context Window Reduction is the process of shrinking the amount of information placed in an LLM’s context window,<br>by summarizing, compressing，deduplicating, or filtering content,<br>while preserving the signals needed for the current task.</p>
+<p>Context Window Reduction 有以下两种方式<br>Context Summarization</p>
+<h2 id="Context-Summarization"><a href="#Context-Summarization" class="headerlink" title="Context Summarization"></a>Context Summarization</h2><p>上下文总结，通过提取关键，相关，高识别度高价值信息，摒弃低价值，无关，冗余信息，减少context 大小</p>
+<p>Context summarization is the process of compressing content into a shorter representation that preserves the most salient, task-relevant information from the original.</p>
+<p><img src="/image/LLM/mem-18.png" alt></p>
+<p>Summarized content is injected into a clean context window.<br>For certain tasks, retrieving summaries via semantic search provides the LLM with high-signal context.<br>But naive summarization is a lossy technique</p>
+<p>上下文总结有缺点： 容易造成信息丢失</p>
+<h2 id="Context-Compaction"><a href="#Context-Compaction" class="headerlink" title="Context Compaction"></a>Context Compaction</h2><p>上下文压缩，将context 放到数据库中，把数据库当外部组件使用，在大模型里注册数据库有哪些信息，如果有需要，可以去数据库获取全量信息<br><img src="/image/LLM/mem-19.png" alt></p>
+<h2 id="Workflow-Memory"><a href="#Workflow-Memory" class="headerlink" title="Workflow Memory"></a>Workflow Memory</h2><p>Workflow memory is the agent’s ability to persist and reuse the state and structure of work over time,<br>so multi-step tasks can be continued, resumed, audited，or repeated reliably.</p>
+<p>将明确的工作流顺利也同样存储起来，当下次遇到同样问题，直接按历史存储的工作流顺去做就行，减少思考时间，提高产出效率</p>
+<p><img src="/image/LLM/mem-21.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">｛</span><br><span class="line">&quot;workflow_name&quot;：&quot;get_current_weather&quot;，</span><br><span class="line">&quot;user_request&quot;： &quot;Get me the current weather&quot;，</span><br><span class="line">&quot;steps&quot;：［</span><br><span class="line">｛ &quot;step&quot;： 1， &quot;action&quot;： &quot;Get current user location&quot;， &quot;type&quot;：</span><br><span class="line">&quot;tool_calI&quot;，&quot;tool&quot;：&quot;get_user_location&quot;，&quot;input&quot;： ｛｝，</span><br><span class="line">&quot;output&quot;：｛</span><br><span class="line">&quot;lat&quot;：51.76，&quot;lon&quot;：-0.24 ｝，&quot;status&quot; ： &quot;OK&quot; ｝，</span><br><span class="line">｛ &quot;step&quot;： 2，&quot;action&quot;： &quot;Use weather application tool&quot;， &quot;type&quot;：</span><br><span class="line">&quot;tool_cal1&quot;，&quot;tool&quot;：&quot;weather_api&quot;，&quot;input&quot;：｛｝，&quot;output&quot;：｛</span><br><span class="line">&quot;&apos;provider&quot;：&quot;weather_app&quot; ｝，&quot;status&quot;： &quot;OK&quot; ｝，</span><br><span class="line">｛ &quot;step&quot;： 3，&quot;action&quot;： &quot;Pass the lat/long into application</span><br><span class="line">tool&quot;，&quot;tyPe&quot;：&quot;tool_call&quot;，&quot;tool&quot;：&quot;weather_api&quot;，&quot;input&quot;：｛</span><br><span class="line">&quot;lat&quot;：51.76，&quot;1on&quot;：-0.24 ｝，&quot;output&quot;： null，&quot;status&quot;： &quot;OK&quot; ｝，</span><br><span class="line">｛&quot;step&quot;： 4，&quot;action&quot; ： &quot;Get the current weather&quot;， &quot;type&quot;：</span><br><span class="line">&quot;tool_call&quot;，&quot;tool&quot;：&quot;weather_api&quot;，&quot;input&quot;：｛ &quot;lat&quot;： 51.76，</span><br><span class="line">&quot;lon&quot;：-0.24 ｝，&quot;output&quot;： ｛ &quot;temp_c&quot;： 7.2，&quot;condition&quot;： &quot;Cloudy&quot;</span><br><span class="line">｝，&quot;status&quot;： &quot;OK&quot; ｝，</span><br><span class="line">（&quot;step&quot;： 5， &quot;action&quot;： &quot;Return weather to user as response&quot;，</span><br><span class="line">&quot;type&quot;：&quot;assistant_response&quot;，&quot;tool&quot;：null，&quot;input&quot;： null，</span><br><span class="line">&quot;output&quot;： ｛&quot;text&quot;：&quot;It&apos;s 7°C and cloudy right now.&quot; ｝，&quot;status&quot;：</span><br><span class="line">&quot;OK&quot; ｝</span><br><span class="line">］</span><br><span class="line">｝</span><br></pre></td></tr></table></figure>
+<h2 id="练习-1"><a href="#练习-1" class="headerlink" title="练习"></a>练习</h2><p>Large Language Models have finite context windows. When conversations grow long, we face a critical challenge: how do we preserve important information while staying within token limits?</p>
+<p>This section implements the core memory consolidation pipeline:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Long Conversation → Monitor Usage → Summarize → Store Summary → Mark Original as Processed</span><br></pre></td></tr></table></figure>
+<h3 id="Why-This-Matters"><a href="#Why-This-Matters" class="headerlink" title="Why This Matters"></a>Why This Matters</h3><table>
+<thead>
+<tr>
+<th>Problem</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Context overflow crashes the agent</td>
+<td>Monitor token usage and summarize proactively</td>
+</tr>
+<tr>
+<td>Summaries lose important details</td>
+<td>Capture technical, emotional, and entity information</td>
+</tr>
+<tr>
+<td>Can’t access original conversation</td>
+<td>Store summary ID links back to original messages</td>
+</tr>
+<tr>
+<td>Re-summarizing already processed messages</td>
+<td>Mark messages with summary_id after processing</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Summarization-Functions"><a href="#Summarization-Functions" class="headerlink" title="Summarization Functions"></a>Summarization Functions</h3><p>The summarization pipeline captures four types of information:</p>
+<ol>
+<li><strong>Technical Information</strong> — Facts, code, configurations, solutions</li>
+<li><strong>Emotional Context</strong> — Tone, sentiment, urgency levels</li>
+<li><strong>Entities &amp; References</strong> — People, systems, projects mentioned</li>
+<li><strong>Action Items &amp; Decisions</strong> — Next steps, agreements, pending tasks</li>
+</ol>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Monitor</strong></td>
+<td><code>calculate_context_usage()</code> tracks token consumption</td>
+</tr>
+<tr>
+<td><strong>Summarize</strong></td>
+<td><code>summarise_context_window()</code> extracts structured information</td>
+</tr>
+<tr>
+<td><strong>Store</strong></td>
+<td>Summaries persist in <code>SUMMARY_MEMORY</code> with links to originals</td>
+</tr>
+<tr>
+<td><strong>Expand</strong></td>
+<td><code>expand_summary()</code> tool retrieves original conversations</td>
+</tr>
+<tr>
+<td><strong>Self-Update</strong></td>
+<td><code>mark_as_summarized()</code> prevents re-processing</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key Insight:</strong> Memory consolidation isn’t just about compression—it’s about <em>structured extraction</em> that preserves technical details, emotional context, entities, and action items.</p>
+<p><a href="https://github.com/YooHannah/algorithm/blob/75cda37b394712c07ebbe5042a18286acead45f9/LLM/MemoryAwareAgent/MemoryOperations/index.py" target="_blank" rel="noopener">实验： 利用context 压缩还原减少上下文</a></p>
+<h1 id="Memory-Aware-Agent"><a href="#Memory-Aware-Agent" class="headerlink" title="Memory Aware Agent"></a>Memory Aware Agent</h1><p>agnet loop<br><img src="/image/LLM/mem-22.png" alt></p>
+<p>A cyclical, iterative execution pattern inside a single agent run/turn where an agent repeatedly：</p>
+<ol>
+<li>assembles context （instructions, conversation state, retrieved memory, tool outputs, relevant data）</li>
+<li>invokes an LLM to reason/decide, and then acts （responds, calls tools, writes memory/state, or updates the plan），until a stop condition is met,<br>e.g.， a final answer is produced, a goal is completed, an error/timeout occurs, or the agent explicitly decides to exit.</li>
+</ol>
+<p><img src="/image/LLM/mem-23.png" alt></p>
+<h2 id="练习-2"><a href="#练习-2" class="headerlink" title="练习"></a>练习</h2><ul>
+<li>Integrate all memory types (conversational, semantic, workflow, entity, summary, tool logs) into a unified agent</li>
+<li>Implement context window management with automatic summarization</li>
+<li>Build an agent loop that retrieves relevant context before each response</li>
+<li>Use Just-In-Time (JIT) retrieval to expand summaries on demand</li>
+</ul>
+<p><strong>Key Concepts</strong></p>
+<table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Memory Aware Agent</strong></td>
+<td>An agent that reads from and writes to persistent memory stores during execution</td>
+</tr>
+<tr>
+<td><strong>Context Engineering</strong></td>
+<td>Dynamically building the optimal context window for each query</td>
+</tr>
+<tr>
+<td><strong>Just-In-Time Retrieval</strong></td>
+<td>Fetching detailed information only when the agent needs it</td>
+</tr>
+<tr>
+<td><strong>Automatic Summarization</strong></td>
+<td>Compressing context when usage exceeds thresholds</td>
+</tr>
+</tbody>
+</table>
+<h3 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h3><table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Reads Memory</strong></td>
+<td>Retrieves from 7 memory types before each response (tool logs remain JIT by default)</td>
+</tr>
+<tr>
+<td><strong>Manages Context</strong></td>
+<td>Monitors tokens, summarizes when &gt;80% capacity</td>
+</tr>
+<tr>
+<td><strong>Uses Tools</strong></td>
+<td>Semantic search selects relevant tools per query</td>
+</tr>
+<tr>
+<td><strong>Persists Learning</strong></td>
+<td>Saves conversations, workflows, entities, and raw tool logs</td>
+</tr>
+<tr>
+<td><strong>Expands On-Demand</strong></td>
+<td>JIT retrieval via <code>expand_summary()</code> tool</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key Insight:</strong> A memory-aware agent doesn’t just respond to queries—it <em>learns</em> from each interaction. Information discovered, decisions made, and patterns executed are all persisted, making the agent more capable over time.</p>
+<p><a href="https://github.com/YooHannah/algorithm/blob/75cda37b394712c07ebbe5042a18286acead45f9/LLM/MemoryAwareAgent/MemoryAwareAgent/index.py" target="_blank" rel="noopener">实验： 具备上下文总结长时记忆能力的智能体</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/llm/" rel="tag"># llm</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/llm/agenticAi.html" rel="next" title="Agentic AI">
+                <i class="fa fa-chevron-left"></i> Agentic AI
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/llm/Crewai.html" rel="prev" title="Crewai 课程一些杂记">
+                Crewai 课程一些杂记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">286</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#the-reason-why-Memeory-in-Agent"><span class="nav-number">1.</span> <span class="nav-text">the reason why Memeory in Agent</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#stateless-agent"><span class="nav-number">1.1.</span> <span class="nav-text">stateless agent</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#memory-augmented-agent-conversation-agent"><span class="nav-number">1.2.</span> <span class="nav-text">memory-augmented agent/conversation agent</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#beyond-conversation-agent"><span class="nav-number">1.3.</span> <span class="nav-text">beyond conversation agent</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#agent-memory-forms"><span class="nav-number">1.4.</span> <span class="nav-text">agent memory forms</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RAG-MEMORY"><span class="nav-number">2.</span> <span class="nav-text">RAG + MEMORY</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#the-agent-memory-core"><span class="nav-number">2.1.</span> <span class="nav-text">the agent memory core</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#contructing-the-memory-manager"><span class="nav-number">3.</span> <span class="nav-text">contructing the memory manager</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Memory-Manager"><span class="nav-number">3.1.</span> <span class="nav-text">Memory Manager</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#存储类型"><span class="nav-number">3.1.1.</span> <span class="nav-text">存储类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#存储操作分类"><span class="nav-number">3.1.2.</span> <span class="nav-text">存储操作分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Why-Deterministic-Retrieval-Is-Useful"><span class="nav-number">3.1.2.1.</span> <span class="nav-text">Why Deterministic Retrieval Is Useful</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Why-Deterministic-Storage-Is-Useful"><span class="nav-number">3.1.2.2.</span> <span class="nav-text">Why Deterministic Storage Is Useful</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Advantages-of-Deterministic-Memory-Operations"><span class="nav-number">3.1.2.3.</span> <span class="nav-text">Advantages of Deterministic Memory Operations</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#How-Tool-Calls-Fit-In"><span class="nav-number">3.1.2.4.</span> <span class="nav-text">How Tool Calls Fit In</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#three-terms"><span class="nav-number">3.1.3.</span> <span class="nav-text">three terms</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Memory-Unit"><span class="nav-number">3.1.3.1.</span> <span class="nav-text">Memory Unit</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Context-engineering"><span class="nav-number">3.1.3.2.</span> <span class="nav-text">Context engineering</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Memory-engineering"><span class="nav-number">3.1.3.3.</span> <span class="nav-text">Memory engineering</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#memory-aware-agent"><span class="nav-number">3.1.4.</span> <span class="nav-text">memory aware agent</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#练习"><span class="nav-number">3.2.</span> <span class="nav-text">练习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Memory-Types-We’ll-Implement"><span class="nav-number">3.2.1.</span> <span class="nav-text">Memory Types We’ll Implement</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Scaling-agent-tool-use-with-semantic-tool-memory"><span class="nav-number">4.</span> <span class="nav-text">Scaling agent tool use with semantic tool memory</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#The-Solution-Semantic-Tool-Retrieval"><span class="nav-number">4.1.</span> <span class="nav-text">The Solution: Semantic Tool Retrieval</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#How-the-Code-Works"><span class="nav-number">4.2.</span> <span class="nav-text">How the Code Works</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Memory-operations-extraction-consolidation-and-self-updating-memory"><span class="nav-number">5.</span> <span class="nav-text">Memory operations: extraction,consolidation,and self-updating memory</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Context-Summarization"><span class="nav-number">5.1.</span> <span class="nav-text">Context Summarization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Context-Compaction"><span class="nav-number">5.2.</span> <span class="nav-text">Context Compaction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Workflow-Memory"><span class="nav-number">5.3.</span> <span class="nav-text">Workflow Memory</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#练习-1"><span class="nav-number">5.4.</span> <span class="nav-text">练习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Why-This-Matters"><span class="nav-number">5.4.1.</span> <span class="nav-text">Why This Matters</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Summarization-Functions"><span class="nav-number">5.4.2.</span> <span class="nav-text">Summarization Functions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-number">5.4.3.</span> <span class="nav-text">小结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Memory-Aware-Agent"><span class="nav-number">6.</span> <span class="nav-text">Memory Aware Agent</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#练习-2"><span class="nav-number">6.1.</span> <span class="nav-text">练习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#小结-1"><span class="nav-number">6.1.1.</span> <span class="nav-text">小结</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

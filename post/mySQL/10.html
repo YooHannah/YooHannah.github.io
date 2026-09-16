@@ -1,0 +1,1018 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="mySQL,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="概述 连接层MySQL的最上层是连接服务，引入了线程池的概念，允许多台客户端连接。主要工作是：连接处理、授权认证、安全防护、管理连接等。 当客户端连接到 MySQL 服务器时，服务器对其进行认证。基于用户名、原始主机信息和密码。一旦客户端连接成功，服务器会继续验证客户端是否具有执行某个特定权限（比如：是否对某张表具有某种操作权限）。 连接层为通过安全认证的接入用户提供线程，同样，在该层上可以实现基">
+<meta name="keywords" content="mySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MYSQL 体系架构">
+<meta property="og:url" content="http://yoohannah.github.io/post/mySQL/10.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="概述 连接层MySQL的最上层是连接服务，引入了线程池的概念，允许多台客户端连接。主要工作是：连接处理、授权认证、安全防护、管理连接等。 当客户端连接到 MySQL 服务器时，服务器对其进行认证。基于用户名、原始主机信息和密码。一旦客户端连接成功，服务器会继续验证客户端是否具有执行某个特定权限（比如：是否对某张表具有某种操作权限）。 连接层为通过安全认证的接入用户提供线程，同样，在该层上可以实现基">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/75.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/76.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/77.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/78.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/79.png">
+<meta property="og:updated_time" content="2026-09-16T07:19:35.832Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MYSQL 体系架构">
+<meta name="twitter:description" content="概述 连接层MySQL的最上层是连接服务，引入了线程池的概念，允许多台客户端连接。主要工作是：连接处理、授权认证、安全防护、管理连接等。 当客户端连接到 MySQL 服务器时，服务器对其进行认证。基于用户名、原始主机信息和密码。一旦客户端连接成功，服务器会继续验证客户端是否具有执行某个特定权限（比如：是否对某张表具有某种操作权限）。 连接层为通过安全认证的接入用户提供线程，同样，在该层上可以实现基">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/systemDesign/75.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/mySQL/10.html">
+
+
+
+
+
+  <title> MYSQL 体系架构 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/mySQL/10.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                MYSQL 体系架构
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-09-12T10:28:37+08:00">
+                2026-09-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p><img src="/image/systemDesign/75.png" alt></p>
+<h1 id="连接层"><a href="#连接层" class="headerlink" title="连接层"></a>连接层</h1><p>MySQL的最上层是连接服务，引入了线程池的概念，允许多台客户端连接。主要工作是：连接处理、授权认证、安全防护、管理连接等。</p>
+<p>当客户端连接到 MySQL 服务器时，服务器对其进行认证。基于用户名、原始主机信息和密码。一旦客户端连接成功，服务器会继续验证客户端是否具有执行某个特定权限（比如：是否对某张表具有某种操作权限）。</p>
+<p>连接层为通过安全认证的接入用户提供线程，同样，在该层上可以实现基于SSL 的安全连接。连接层中还负责 MySQL Server 与客户端的通信，接受客户端的命令请求，传递 Server 端的结果信息等。</p>
+<p>连接处理：每个客户端连接都会分配一个线程，来自客户端的所有查询都是在该线程中执行，从MySQL5.5版本开始支持线程池。</p>
+<p>授权认证：对客户端进行身份验证，基于用户名、主机信息、密码。</p>
+<p>安全防护：验证客户端发出某些查询的权限。</p>
+<p>连接层为通过安全认证的用户提供线程，也支持SSL的安全连接，还负责MySQL Server与客户端的通信，接受客户端的命令请求，传递Server端处理的结果。</p>
+<p>查看当前连接的信息：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">full</span> <span class="keyword">processlist</span></span><br></pre></td></tr></table></figure>
+<p><em>(表格内容)</em></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Id</th>
+<th style="text-align:left">User</th>
+<th style="text-align:left">Host</th>
+<th style="text-align:left">db</th>
+<th style="text-align:left">Command</th>
+<th style="text-align:left">Time</th>
+<th style="text-align:left">State</th>
+<th style="text-align:left">Info</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">5</td>
+<td style="text-align:left">event_scheduler</td>
+<td style="text-align:left">localhost</td>
+<td style="text-align:left">[NULL]</td>
+<td style="text-align:left">Daemon</td>
+<td style="text-align:left">578,304</td>
+<td style="text-align:left">Waiting on empty queue</td>
+<td style="text-align:left">[NULL]</td>
+</tr>
+<tr>
+<td style="text-align:left">8,238</td>
+<td style="text-align:left">root</td>
+<td style="text-align:left">localhost</td>
+<td style="text-align:left">[NULL]</td>
+<td style="text-align:left">Sleep</td>
+<td style="text-align:left">51,580</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">[NULL]</td>
+</tr>
+<tr>
+<td style="text-align:left">8,254</td>
+<td style="text-align:left">root</td>
+<td style="text-align:left">localhost</td>
+<td style="text-align:left">[NULL]</td>
+<td style="text-align:left">Sleep</td>
+<td style="text-align:left">51,131</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">[NULL]</td>
+</tr>
+<tr>
+<td style="text-align:left">8,610</td>
+<td style="text-align:left">root</td>
+<td style="text-align:left">172.17.0.1:59924</td>
+<td style="text-align:left">[NULL]</td>
+<td style="text-align:left">Sleep</td>
+<td style="text-align:left">20</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">[NULL]</td>
+</tr>
+<tr>
+<td style="text-align:left">8,611</td>
+<td style="text-align:left">root</td>
+<td style="text-align:left">172.17.0.1:59926</td>
+<td style="text-align:left">[NULL]</td>
+<td style="text-align:left">Sleep</td>
+<td style="text-align:left">20</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">[NULL]</td>
+</tr>
+<tr>
+<td style="text-align:left">8,612</td>
+<td style="text-align:left">root</td>
+<td style="text-align:left">172.17.0.1:59928</td>
+<td style="text-align:left">world_x</td>
+<td style="text-align:left">Query</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">init</td>
+<td style="text-align:left">/<em> ApplicationName=DBeaver 22.0.2 - SQL Editor &lt;mysql.sql&gt; </em>/ show full processlist</td>
+</tr>
+</tbody>
+</table>
+<p>User: 客户端连接使用的用户</p>
+<p>Host: 客户端的主机信息</p>
+<p>DB: 客户端连接使用的库</p>
+<p>Command: 执行命令的类别</p>
+<p>Time: 客户端从建立连接到现在的时间</p>
+<p>Info: 详细的描述信息</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*查看最大的连接数*/</span></span><br><span class="line"><span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">'%max_connections%'</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">修改最大连接数</span></span><br><span class="line"><span class="comment">1.修改mysql启动参数文件，永久有效</span></span><br><span class="line"><span class="comment">2.set global max_connections=200, 有效期从命令开始生效，当服务器意外宕机或正常重启失效。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*跟超时相关的变量*/</span></span><br><span class="line"><span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">'%timeout%'</span></span><br></pre></td></tr></table></figure>
+<h1 id="服务层"><a href="#服务层" class="headerlink" title="服务层"></a>服务层</h1><ul>
+<li>服务层用于处理核心服务，如标准的SQL接口、NoSQL接口、查询解析、SQL优化和统计、全局的和引擎依赖的缓存与缓冲器等等。</li>
+<li>所有的与存储引擎无关的工作，如过程、函数等，都会在这一层来处理。该层负责MySQL关系数据库系统所有的逻辑功能。</li>
+<li>在该层上，服务器会解析查询并创建相应的内部解析树，并对其完成优化，如确定查询表的顺序，是否利用索引等，最后生成相关的执行操作。</li>
+<li>如果是SELECT 语句，服务器还会查询内部的缓存（Select Id, Name from User_Token where Id=1）。如果缓存空间足够大，这样在解决大量读操作的环境中能够很好的提升系统的性能（MySQL8版本中已经将查询缓存移除，可以通过架构设计，增加分布式缓存进行替代，用户查询时先在额外的本地分布式缓存中取数据，没有的话，再请求数据库，这样比直接将缓存放在数据库侧效率更高）。</li>
+</ul>
+<p>MySQL的服务层分为各种子组件：</p>
+<h2 id="组件一：系统管理和实用程序（Management-Service-amp-Utilities）。"><a href="#组件一：系统管理和实用程序（Management-Service-amp-Utilities）。" class="headerlink" title="组件一：系统管理和实用程序（Management Service &amp; Utilities）。"></a><strong>组件一：系统管理和实用程序（Management Service &amp; Utilities）。</strong></h2><p>包括备份恢复、安全管理、集群管理服务和工具。</p>
+<h2 id="组件二：SQL接口（SQL-Interface）"><a href="#组件二：SQL接口（SQL-Interface）" class="headerlink" title="组件二：SQL接口（SQL Interface）"></a><strong>组件二：SQL接口（SQL Interface）</strong></h2><p>接收客户端发送的各种 SQL 语句，比如 DML、DDL 和存储过程等，并且返回用户执行的结果。</p>
+<h2 id="组件三：缓存（Cache-amp-Buffer）"><a href="#组件三：缓存（Cache-amp-Buffer）" class="headerlink" title="组件三：缓存（Cache &amp; Buffer）"></a><strong>组件三：缓存（Cache &amp; Buffer）</strong></h2><p>主要功能是将客户端提交 给MySQL 的 Select 类 Query 请求的返回结果集 Cache 到内存中，与该 Query 的一个 Hash 值做一个对应（将Query对应的查询结果缓存起来，Query的SQL语句做一个Hash，得到一个Hash值。如果大小写、空格等会影响到Hash值的结果，比如：Select Id, Name from User_Token where Id=1和Select id, Name from User_Token where Id=1不一样的值）。该 Query 所取数据的基表发生任何数据的变化之后， MySQL 会自动使该 Query 的Cache 失效。在读写比例非常高的应用系统中， Query Cache 对性能的提高是非常显著的，当然它对内存的消耗也是非常大的。</p>
+<p>对于SELECT语句，在解析查询之前，服务器会先检查查询缓存（Query Cache） ，如果查询缓存有命中的查询结果，查询语句就可以直接去查询缓存中取数据。服务器就不必再执行查询解析、优化和执行的整个过程，而是直接返回查询缓存中的结果集。</p>
+<p>这个缓存机制是由一系列小缓存组成的。比如表缓存，记录缓存，key缓存，权限缓存等。</p>
+<p>但不推荐使用查询缓存，即大多数情况下不建议使用查询缓存。为什么呢？</p>
+<p>原因：查询缓存的失效机制是有缺陷的，只要对一个表有更新操作（增、删、改），这个表所有的查询缓存全部清空。除非你的业务就是一张静态表，很长时间才更新一次。比如：系统配置表、菜单表。</p>
+<h2 id="组件四：SQL解析器（Parser）"><a href="#组件四：SQL解析器（Parser）" class="headerlink" title="组件四：SQL解析器（Parser）"></a><strong>组件四：SQL解析器（Parser）</strong></h2><p>如果缓存没有命中，SQL命令传递到解析器的时候会被解析器验证和解析，最终对 SQL 语句进行语法解析生成解析树（树形的数据结构）。</p>
+<ul>
+<li>词法分析<ul>
+<li>需要识别出SQL语句中的字符串分别是什么，各代表什么</li>
+<li>通过识别到的Select关键字就可以知道这是一个查询语句</li>
+<li>把字符串”T”识别为表名，把”Col1”，”Col2”识别为列名</li>
+</ul>
+</li>
+<li>语法分析<ul>
+<li>语法解析器会根据语法规则，判断输入的SQL语句是否满足MySQL语句要求</li>
+<li>比如检查表名、列名是否正确等等。</li>
+</ul>
+</li>
+</ul>
+<p>如果你的语句不对，就会收到“You have an error in your SQL syntax”的错误提醒，比如下面这个语句 select 少打了开头的字母“s”。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; elect * from t where ID=1;</span><br><span class="line"></span><br><span class="line">ERROR 1064 (42000): You have an error in your SQL syntax; <span class="keyword">check</span> the <span class="keyword">manual</span> that corresponds <span class="keyword">to</span> your MySQL <span class="keyword">server</span> <span class="keyword">version</span> <span class="keyword">for</span> the <span class="keyword">right</span> syntax <span class="keyword">to</span> <span class="keyword">use</span> near <span class="string">'elect * from t where ID=1'</span> <span class="keyword">at</span> line <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>一般语法错误会提示第一个出现错误的位置，所以你要关注的是紧接“use near”的内容。</p>
+<p><strong>总结：</strong></p>
+<p>将SQL语句进行语义和语法的分析，分解成数据结构（解析树） ，然后按照不同的操作类型进行分类，然后做出针对性的转发到后续步骤，以后SQL语句的传递和处理就是基于这个结构的。如果在分解构成中遇到错误，那么就说明这个SQL语句是不合理的。</p>
+<p>解析树是通过解析器来解析SQL的关键字和非关键字，SQL语句按照关键字和非关键字进行分类，生成树。</p>
+<p><em>(图示：SELECT语句 -&gt; SELECT -&gt; Fields -&gt; NAME, FROM -&gt; TABLES -&gt; USER_INFO, WHERE -&gt; CONDITIONS -&gt; AND -&gt; ( &gt; -&gt; AGE, 20 ) 和 ( = -&gt; AGE, 20 ))</em></p>
+<h2 id="组件五：查询优化器（Optimizer）"><a href="#组件五：查询优化器（Optimizer）" class="headerlink" title="组件五：查询优化器（Optimizer）"></a><strong>组件五：查询优化器（Optimizer）</strong></h2><p>接下来并不是直接执行，而是会在优化器这一层进行优化。</p>
+<p>优化器是个非常复杂的部件，它会帮我们去使用他自己认为的最好的方式去优化这条 SQL 语句，并生成一条条的执行计划。</p>
+<p>MySQL使用 explain + sql 语句查看执行计划，该执行计划不一定完全正确但是可以参考。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">EXPLAIN</span> <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">User</span> <span class="keyword">WHERE</span> nid = <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">id</th>
+<th style="text-align:left">select_type</th>
+<th style="text-align:left">table</th>
+<th style="text-align:left">partitions</th>
+<th style="text-align:left">type</th>
+<th style="text-align:left">possible_keys</th>
+<th style="text-align:left">key</th>
+<th style="text-align:left">key_len</th>
+<th style="text-align:left">ref</th>
+<th style="text-align:left">rows</th>
+<th style="text-align:left">filtered</th>
+<th style="text-align:left">Extra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">SIMPLE</td>
+<td style="text-align:left">user</td>
+<td style="text-align:left">NULL</td>
+<td style="text-align:left">const</td>
+<td style="text-align:left">PRIMARY</td>
+<td style="text-align:left">PRIMARY</td>
+<td style="text-align:left">4</td>
+<td style="text-align:left">const</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left">100.00</td>
+<td style="text-align:left">NULL</td>
+</tr>
+</tbody>
+</table>
+<p>1 row in set, 1 warning (0.00 sec)</p>
+<p>根据解析树生成最优的执行计划。MySQL使用很多优化策略生成最优的执行计划，可以分为两类：静态优化（编译时的优化），动态优化（运行时的优化）。</p>
+<p>(1) 等价变换策略：<br>where 5=5 and a&gt;5 —&gt; where a&gt;5</p>
+<p>(2) 优化count、min、max等函数：<br>Inno引擎min函数只需要查找索引最左边<br>Inno引擎max函数只需要查找索引最又边<br>Count()，不需要计算，直接返回</p>
+<p>(3) 提前终止查询：<br>Limit查询，获得Limit所需要的数据之后，不需要遍历后面的数据了</p>
+<p>(4) in的优化：<br>MySQL针对in查询，会进行排序，再采用区分查找法去找数据。in(2,1,3) —&gt; in(1,2,3)</p>
+<p>(5) 条件查询：</p>
+<p>SQL语句在查询之前会使用查询优化器对查询进行优化。就是优化客户端请求Query，根据客户端请求的 Query 语句，和数据库中的一些统计信息，在一系列算法的基础上进行分析，得出一个最优的策略，告诉后面的程序如何取得这个 Query 语句的结果。使用的是“选取-投影-联接”策略进行查询。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> uid,<span class="keyword">name</span> <span class="keyword">from</span> <span class="keyword">User</span> <span class="keyword">where</span> gender = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+<p>选取：先根据where语句进行选择，而不是先将表全部查询出来之后再根据gender过滤。<br>投影：会根据uid和name进行属性投影，而不是将属性全部取出来再进行过滤。<br>联接：将上面这两个查询条件连接起来生成最终的查询结果。</p>
+<p>(6) 连接查询：<br>在表里面有多个索引的时候，决定使用哪个索引；或者在一个语句有多表关联（join）的时候，决定各个表的连接顺序。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from t1 join t2 using(ID) where t1.c=10 and t2.d=20;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>既可以从表t1里面取出c=10的记录的ID值，再根据ID值关联到表t2，再判断t2里面d的值是否等于20。</li>
+<li>也可以先从表t2里面取出d=20的记录的ID值，再根据ID值关联到t1，再判断t1里面c的值是否等于10。</li>
+</ul>
+<p>这两种执行方法的逻辑结果是一样的，但是执行的效率会有不同，而优化器的作用就是决定选择使用哪一个方案。</p>
+<p>优化器阶段完成后，这个语句的执行方案就确定下来了，然后进入执行器阶段。</p>
+<h2 id="组件六：执行器"><a href="#组件六：执行器" class="headerlink" title="组件六：执行器"></a><strong>组件六：执行器</strong></h2><p>工作内容：</p>
+<ol>
+<li>判断对这个表有没有查询权限</li>
+<li>有权限，则继续执行；如果没有，就会返回没有权限的错误</li>
+<li>调用存储引擎接口进行执行查询或其他操作</li>
+<li>最终将查询结果集返回给客户端，语句即执行完成</li>
+</ol>
+<p>解析器知道了你想做什么<br>优化器知道该怎么做最合适<br>执行器去执行，担任指挥角色，告诉存储引擎做什么</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from T where ID=10;</span><br><span class="line">ERROR 1142 (42000): <span class="keyword">SELECT</span> command denied <span class="keyword">to</span> <span class="keyword">User</span> <span class="string">'b'</span>@<span class="string">'localhost'</span> <span class="keyword">for</span> <span class="keyword">table</span> <span class="string">'T'</span></span><br></pre></td></tr></table></figure>
+<p>如果有权限，就打开表继续执行。打开表的时候，执行器就会根据表的引擎定义（创建表的时候可以执行该表对应的存储引擎，如果不指定那么默认使用InnoDB），去使用这个引擎提供的接口。</p>
+<p>比如我们这个例子中的表T中，ID字段没有索引，那么执行器的执行流程是这样的：</p>
+<ol>
+<li>调用InnoDB引擎接口取这个表的第一行，判断ID值是不是10，如果不是则跳过，如果是则将这行存在结果集中；</li>
+<li>调用引擎接口取“下一行”，重复相同的判断逻辑，直到取到这个表的最后一行。</li>
+<li>执行器将上述遍历过程中所有满足条件的行组成的记录集作为结果集返回给客户端。</li>
+</ol>
+<p>至此，这个语句就执行完成了。</p>
+<p>对于有索引的表，执行的逻辑也差不多。第一次调用的是“取满足条件的第一行”这个接口，之后循环取“满足条件的下一行”这个接口，这些接口都是引擎中已经定义好的。</p>
+<h1 id="存储引擎层"><a href="#存储引擎层" class="headerlink" title="存储引擎层"></a>存储引擎层</h1><p>存储引擎层负责 MySQL 中数据的存储与提取，服务器中的查询执行引擎通过 API 与存储引擎进行通信，通过接口屏蔽了不同存储引擎之间的差异。</p>
+<p>MySQL 采用插件式的存储引擎。MySQL 为我们提供了许多存储引擎，每种存储引擎有不同的特点。我们可以根据不同的业务特点，选择最适合的存储引擎。如果对于存储引擎的性能不满意，可以通过修改源码来得到自己想要达到的性能。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">engines</span></span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li>MySQL 采用插件式的存储引擎。</li>
+<li>存储引擎是针对于表的而不是针对库的（一个库中不同表可以使用不同的存储引擎），服务器通过 API 与存储引擎进行通信，用来屏蔽不同存储引擎之间的差异。</li>
+<li>不管表采用什么样的存储引擎，都会在数据区，产生对应的一个的一个 frm 文件（表结构定义描述文件）</li>
+</ul>
+<h2 id="物理存储层"><a href="#物理存储层" class="headerlink" title="物理存储层"></a>物理存储层</h2><p>存储引擎底部是物理存储层，是文件的物理存储层（磁盘），包括二进制（BinLog）日志、数据文件、错误日志、慢查询日志、全日志、redo/undo 日志（事务）等。</p>
+<p><img src="/image/systemDesign/76.png" alt></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*数据目录*/</span></span><br><span class="line"><span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">'%datadir%'</span></span><br><span class="line"></span><br><span class="line">mysql&gt; <span class="keyword">show</span> <span class="keyword">databases</span>;</span><br><span class="line">+<span class="comment">--------------------+</span></span><br><span class="line">| Database           |</span><br><span class="line">+<span class="comment">--------------------+</span></span><br><span class="line">| information_schema |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| sys                |</span><br><span class="line">+<span class="comment">--------------------+</span></span><br><span class="line">4 rows in <span class="keyword">set</span> (<span class="number">0.02</span> sec)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>mysql：MySQL系统自带的核心库，存储MySQL的用户账户和权限信息，一些存储过程、事件的定义信息，运行过程中产生日志信息，一些帮助信息及其时区信息。</li>
+<li>information_schema：保存着MySQL服务器维护的其他数据库的信息，比如有哪些表、哪些视图、哪些触发器、那些列、哪些索引。</li>
+<li>performance_schema：保存MySQL运行过程中的状态信息，监控服务器的各类性能指标。</li>
+<li>sys：通过视图的形式把performance_schema和information_schema结合起来。</li>
+</ul>
+<h1 id="运行流程"><a href="#运行流程" class="headerlink" title="运行流程"></a>运行流程</h1><p><img src="/image/systemDesign/77.png" alt></p>
+<h2 id="C-S通信协议"><a href="#C-S通信协议" class="headerlink" title="C/S通信协议"></a>C/S通信协议</h2><p>建立连接（Connectors&amp;Connection Pool），通过客户端/服务器通信协议与MySQL建立连接。MySQL 客户端与服务端的通信方式是“半双工”。对于每一个 MySQL 的连接，时刻都有一个线程状态来标识这个连接正在做什么。</p>
+<p>通讯机制：</p>
+<ul>
+<li>全双工：任意时刻，客户端和服务器既可以发送数据，也可以接收数据。</li>
+<li>半双工：在任一时刻，要么是服务器向客户端发送数据，要么是客户端向服务器发送数据，这两个动作不能同时发生。</li>
+<li>单工</li>
+</ul>
+<p>MySQL客户端/服务端通信协议是“半双工”的，一旦一端开始发送消息，另一端要接收完整个消息才能响应它，所以我们无法也无须将一个消息切成小块独立发送，也没有办法进行流量控制。</p>
+<p>客户端用一个单独的数据包将查询请求发送给服务器，所以当查询语句很长的时候，需要设置max_allowed_packet参数。但是需要注意的是，如果查询实在是太大，服务端会拒绝接收更多数据并抛出异常。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">VARIABLES</span> <span class="keyword">like</span> <span class="string">'%max_allowed_packet%'</span>;</span><br><span class="line"></span><br><span class="line">+<span class="comment">--------------------------+------------+</span></span><br><span class="line">| Variable_name            | Value      |</span><br><span class="line">+<span class="comment">--------------------------+------------+</span></span><br><span class="line">| max_allowed_packet       | 67108864   |</span><br><span class="line">+<span class="comment">--------------------------+------------+</span></span><br></pre></td></tr></table></figure>
+<p>以上说明目前的配置是：64M</p>
+<p>尽可能查询简单，且只返回必须得数据，这样可以降低数据包大小和数量，避免select * ,加上 limit </p>
+<h2 id="查询缓存"><a href="#查询缓存" class="headerlink" title="查询缓存"></a>查询缓存</h2><p>备注：</p>
+<p>从MySQL 5.7.20起，查询缓存已被弃用，并在MySQL 8.0中删除。</p>
+<p>在解析一个查询语句前，如果查询缓存是打开的，那么MySQL会检查这个查询语句是否命中查询缓存中的数据（命中率）。如果当前查询恰好命中查询缓存，在检查一次用户权限后直接返回缓存中的结果。这种情况下，查询不会被解析，也不会生成执行计划，更不会执行。</p>
+<p>MySQL将缓存存放在一个引用表（类似于HashMap的数据结构），通过一个哈希值索引（针对于客户端描述信息以及SQL语句），这个哈希值通过查询本身、当前要查询的数据库、客户端协议版本号等一些可能影响结果的信息计算得来。所以两个查询在任何字符上的不同（例如：空格、注释），都会导致缓存不会命中。</p>
+<p>缓存管理和配置：</p>
+<p>have_query_cache：该MySQL Server是否支持Query Cache。</p>
+<p>query_cache_limit：MySQL能够缓存的最大查询结果，查询结果大于该值时不会被缓存。</p>
+<p>query_cache_min_res_unit：查询缓存分配的最小块的大小(字节)。</p>
+<p>当查询进行的时候，MySQL把查询结果保存在qurey cache中，但如果要保存的结果比较大，超过query_cache_min_res_unit的值，这时候mysql将一边检索结果，一边进行保存结果，也就是说，有可能在一次查询中mysql要进行多次内存分配的操作。适当的调节query_cache_min_res_unit可以优化内存。</p>
+<p>query_cache_size：为缓存查询结果分配的内存的大小，单位是字节，且数值必须是1024的整数倍。默认值是1M，如0即禁用查询缓存。</p>
+<p>query_cache_type：设置查询缓存类型，默认为OFF。设置GLOBAL值可以设置后面的所有客户端连接的类型。客户端以设置SESSION值以影响他们自己对查询缓存的使用。</p>
+<p>下面的表显示了可能的值：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">选项</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">0或OFF</td>
+<td style="text-align:left">不要缓存查询结果。请注意这样不会取消分配的查询缓存区。要想取消，你应将query_cache_size设置为0。</td>
+</tr>
+<tr>
+<td style="text-align:left">1或ON</td>
+<td style="text-align:left">缓存除了以SELECT SQL_NO_CACHE开头的所有查询结果。</td>
+</tr>
+<tr>
+<td style="text-align:left">2或DEMAND</td>
+<td style="text-align:left">只缓存以SELECT SQL_NO_CACHE开头的查询结果。</td>
+</tr>
+</tbody>
+</table>
+<p>query_cache_wlock_invalidate：如果某个表被锁住，是否返回缓存中的数据，默认关闭，也是建议的。</p>
+<p>缓存规则：</p>
+<ul>
+<li>MySQL缓存机制简单的说就是缓存sql文本及查询结果（缓存的结构类似于HashMap结构，Key是客户端特征以及SQL语句综合之后得到的Hash值，Value是查询结果），如果运行完全相同的SQL，服务器直接从缓存中取到结果，而不需要再去解析和执行SQL。</li>
+<li>如果表中任何数据或是结构发生改变，包括INSERT、UPDATE、DELETE、TRUNCATE、ALTER TABLE、DROP TABLE或DROP DATABASE等，那么使用这个表的所有缓存查询将不再有效，查询缓存中值相关条目被清空（保证缓存数据与物理数据保持一致性，缓存与数据源一致性：本地缓存和分布式缓存、分布式缓存与数据库、缓冲区与物理文件）。</li>
+<li>将查询语句和结果集返回到内存，下次再查直接从内存中取；</li>
+<li>Sessions共享，一个Client查询的缓存结果，另一个Client也可以使用；</li>
+<li>SQL必须完全一致才会导致Cache命中；</li>
+<li>不确定的函数将永远不会被Cache, 比如current_date, now等；</li>
+<li>太大的result set不会被Cache(&lt; query_cache_limit)；</li>
+<li>MySQL缓存在分库分表环境下是不起作用的；</li>
+<li>执行SQL里有触发器，自定义函数时，MySQL缓存也是不起作用的；</li>
+<li>在表的结构或数据发生改变时，基于该表相关Cache立即全部失效。</li>
+</ul>
+<p><strong>缓存机制中的内存管理：</strong></p>
+<p>MySQL Query Cache 使用内存池技术，自己管理内存释放和分配，而不是通过操作系统。内存池使用的基本单位是变长的Block,用来存储类型、大小、数据等信息；一个result set的cache通过链表把这些block串起来。block最短长度为query_cache_min_res_unit。</p>
+<p>当服务器启动的时候，会初始化缓存需要的内存，是一个完整的空闲块。当查询结果需要缓存的时候，先从空闲块中申请一个数据块为参数query_cache_min_res_unit配置的空间，即使缓存数据很小，申请数据块也是这个，因为查询开始返回结果的时候就分配空间，此时无法预知结果多大。</p>
+<p>分配内存块需要先锁住空间块，所以操作很慢，MySQL会尽量避免这个操作，选择尽可能小的内存块，如果不够，继续申请，如果存储完时有空余则释放多余的。</p>
+<p>但是如果并发的操作，余下的需要回收的空间很小，小于query_cache_min_res_unit，不能再次被使用，就会产生碎片。</p>
+<p><strong>优点：</strong><br>Query Cache的查询，发生在MySQL接收到客户端的查询请求、查询权限验证之后和查询SQL解析之前。</p>
+<p>也就是说，当MySQL接收到客户端的查询SQL之后，仅仅只需要对其进行相应的权限验证之后，就会通过Query Cache来查找结果，甚至都不需要经过Optimizer模块进行执行计划的分析优化，更不需要发生任何存储引擎的交互。</p>
+<p>由于Query Cache是基于内存的，直接从内存中返回相应的查询结果，因此减少了大量的磁盘I/O和CPU计算，导致效率非常高。</p>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>MySQL会对每条接收到的SELECT类型的查询进行Hash计算，然后查找这个查询的缓存结果是否存在。虽然Hash计算和查找的效率已经足够高了，一条查询语句所带来的开销可以忽略，但一旦涉及到高并发，有成百上千条查询语句时，Hash计算和查找所带来的开销就必须重视了。</li>
+<li>Query Cache的失效问题。如果表的变更比较频繁，则会造成Query Cache的失效率非常高。表的变更不仅仅指表中的数据发生变化，还包括表结构或者索引的任何变化。</li>
+<li>查询语句不同，但查询结果相同的查询都会被缓存，这样便会造成内存资源的过度消耗。查询语句的字符大小写、空格或者注释的不同，Query Cache都会认为是不同的查询（因为他们的Hash值会不同）。</li>
+<li>相关系统变量设置不合理会造成大量的内存碎片，这样便会导致Query Cache频繁清理内存。</li>
+</ul>
+<p><strong>对性能的影响：</strong></p>
+<ul>
+<li>读查询开始之前必须检查是否命中缓存。</li>
+<li>如果读查询可以缓存，那么执行完查询操作后，会查询结果和查询语句写入缓存。</li>
+<li>当向某个表写入数据的时候，必须将这个表所有的缓存设置为失效，如果缓存空间很大，则消耗也会很大，可能使系统僵死一段时间，因为这个操作是靠全局锁操作来保护的。</li>
+<li>对InnoDB表，当修改一个表时，设置了缓存失效，但是多版本特性会暂时将这修改对其他事务屏蔽，在这个事务提交之前，所有查询都无法使用缓存，直到这个事务被提交，所以长时间的事务，会大大降低查询缓存的命中。</li>
+</ul>
+<p><strong>生产如何设置缓存：</strong></p>
+<p>MySQL中的Query Cache是一个适用较少情况的缓存机制。如果你的应用对数据库的更新很少，那么QC将会作用显著。比较典型的如博客系统，一般博客更新相对较慢，数据表相对稳定不变，这时候QC的作用会比较明显。</p>
+<p>但是一个更新频繁系统。Query Cache缓存的作用是很微小的，如果应用层能够实现缓存，将可以忽略Query Cache的效果。所以，如果经常有更新的系统，想要获得较高tps的话，建议一开始就关闭Query Cache</p>
+<p>查询缓存的替代方案MySQL查询缓存工作的原则是：执行查询最快的方式就是不去执行，但是查询仍然需要发送到服务器端，服务器也还需要做一点点工作，如果对于某些查询完全不需要与服务器通信效果会如何呢，这时客户端缓存可以很大程度上分担MySQL服务器的压力。</p>
+<p><strong>性能消耗：</strong></p>
+<p>在任何的写操作时，MySQL会将对应表的所有缓存都设置为失效。</p>
+<p>如果查询缓存非常大或者碎片很多，这个操作就可能带来很大的系统消耗，甚至导致系统僵死一会儿。</p>
+<p>查询缓存对系统的额外消耗也不仅仅在写操作，读操作也不例外：</p>
+<ol>
+<li>任何的查询语句在开始之前都必须经过检查，即使这条SQL语句永远不会命中缓存</li>
+<li>如果查询结果可以被缓存，那么执行完成后，会将结果存入缓存，也会带来额外的系统消耗</li>
+</ol>
+<p>基于此，我们要知道并不是什么情况下查询缓存都会提高系统性能，缓存和失效都会带来额外消耗，只有当缓存带来的资源节约大于其本身消耗的资源时，才会给系统带来性能提升。但要如何评估打开缓存是否能够带来性能提升是一件非常困难的事情，也不在本节讨论的范畴内。如果系统确实存在一些性能问题，可以尝试打开查询缓存，并在数据库设计上做一些优化，比如：</p>
+<ol>
+<li>用多个小表代替一个大表，注意不要过度设计</li>
+<li>批量插入代替循环单条插入</li>
+<li>合理控制缓存空间大小，一般来说其大小设置为几十兆比较合适</li>
+<li>可以通过SQL_CACHE和SQL_NO_CACHE来控制某个查询语句是否需要进行缓存</li>
+</ol>
+<p>最后的忠告是不要轻易打开查询缓存，特别是写密集型应用。如果你实在是忍不住，可以将query_cache_type设置为DEMAND，这时只有加入SQL_CACHE的查询才会走缓存，其他查询则不会，这样可以非常自由地控制哪些查询需要被缓存。</p>
+<h3 id="分布式缓存"><a href="#分布式缓存" class="headerlink" title="分布式缓存"></a>分布式缓存</h3><p>MySQL8版本中已经将查询缓存移除，可以通过架构设计，增加分布式缓存进行替代，用户查询时先在额外的本地分布式缓存中取数据，没有的话，再请求数据库，这样比直接将缓存放在数据库侧效率更高</p>
+<p><img src="/image/systemDesign/78.png" alt></p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><h3 id="语法解析和预处理"><a href="#语法解析和预处理" class="headerlink" title="语法解析和预处理"></a>语法解析和预处理</h3><p>MySQL通过关键字将SQL语句进行解析，并生成一颗对应的解析树。</p>
+<p>这个过程解析器主要通过语法规则来验证和解析。比如SQL中是否使用了错误的关键字或者关键字的顺序是否正确等等。预处理则会根据MySQL规则进一步检查解析树是否合法。比如检查要查询的数据表和数据列是否存在等。</p>
+<p>流程：词法分析 -&gt; 语法分析 -&gt; 解析树 -&gt; 预处理 -&gt; 检查权限 -&gt; 新解析树）</p>
+<h3 id="查询优化器"><a href="#查询优化器" class="headerlink" title="查询优化器"></a>查询优化器</h3><p>根据解析树生成最优的执行计划。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">      +-----------------------------------------------------------------------------+</span><br><span class="line">      |                            优化器 (Optimizer)                               |</span><br><span class="line">      |                                                                             |</span><br><span class="line">      |   +-------------------+       +-----------------------------------------+   |</span><br><span class="line">-----&gt;|   |                   |       |               优化器模式                  |   |</span><br><span class="line">      |   |     查询重写       | ----&gt; |                                          |   |</span><br><span class="line">      |   |                   |       |    +---------------+--------------+     |   |</span><br><span class="line">      |   +-------------------+       |    |      CBO      |      RBO     |     |   |</span><br><span class="line">      |                               |    +---------------+--------------+     |   |</span><br><span class="line">      |                               +-----------------------------------------+   |</span><br><span class="line">      |                                                                             |</span><br><span class="line">      |     逻辑查询优化                        物理查询优化                        |</span><br><span class="line">      +-----------------------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+<ol>
+<li>逻辑查询优化：<ul>
+<li>对SQL语句做一些等价交换、对条件表达式进行<strong>等价谓词重写、条件顺序的调整、条件简化、视图重写、子查询、连接查询优化</strong>。</li>
+</ul>
+</li>
+<li>物理查询优化<ul>
+<li>CBO：Cost-Based Optimizer，基于代价的优化，根据模型计算出各个可能的执行计划的代价，选择代价最小的一个，它会利用数据库里面的统计信息来做判断，动态。</li>
+<li>RBO：Rule-Based Optimizer，基于规则的优化，主要基于一些预置的规则，对查询进行优化。</li>
+</ul>
+</li>
+</ol>
+<h3 id="查询执行引擎"><a href="#查询执行引擎" class="headerlink" title="查询执行引擎"></a>查询执行引擎</h3><p>查询执行引擎负责执行 SQL 语句（选择对应的存储引擎去执行），此时查询执行引擎会根据 SQL 语句中表的存储引擎类型，以及对应的API接口与底层存储引擎缓存或者物理文件的交互，得到查询结果并返回给客户端。<br>若开启用查询缓存，这时会将SQL 语句和结果完整地保存到查询缓存中，以后若有相同的 SQL 语句执行则直接返回结果。</p>
+<ul>
+<li>如果开启了查询缓存，先将查询结果做缓存操作</li>
+<li>返回结果过多，采用增量模式返回</li>
+</ul>
+<p><img src="/image/systemDesign/79.png" alt></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mySQL/" rel="tag"># mySQL</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/mySQL/9.html" rel="next" title="索引单表/多表优化">
+                <i class="fa fa-chevron-left"></i> 索引单表/多表优化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/mySQL/11.html" rel="prev" title="MYSQL 存储引擎">
+                MYSQL 存储引擎 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">286</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#连接层"><span class="nav-number">2.</span> <span class="nav-text">连接层</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#服务层"><span class="nav-number">3.</span> <span class="nav-text">服务层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#组件一：系统管理和实用程序（Management-Service-amp-Utilities）。"><span class="nav-number">3.1.</span> <span class="nav-text">组件一：系统管理和实用程序（Management Service &amp; Utilities）。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组件二：SQL接口（SQL-Interface）"><span class="nav-number">3.2.</span> <span class="nav-text">组件二：SQL接口（SQL Interface）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组件三：缓存（Cache-amp-Buffer）"><span class="nav-number">3.3.</span> <span class="nav-text">组件三：缓存（Cache &amp; Buffer）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组件四：SQL解析器（Parser）"><span class="nav-number">3.4.</span> <span class="nav-text">组件四：SQL解析器（Parser）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组件五：查询优化器（Optimizer）"><span class="nav-number">3.5.</span> <span class="nav-text">组件五：查询优化器（Optimizer）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组件六：执行器"><span class="nav-number">3.6.</span> <span class="nav-text">组件六：执行器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#存储引擎层"><span class="nav-number">4.</span> <span class="nav-text">存储引擎层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#物理存储层"><span class="nav-number">4.1.</span> <span class="nav-text">物理存储层</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#运行流程"><span class="nav-number">5.</span> <span class="nav-text">运行流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#C-S通信协议"><span class="nav-number">5.1.</span> <span class="nav-text">C/S通信协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询缓存"><span class="nav-number">5.2.</span> <span class="nav-text">查询缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分布式缓存"><span class="nav-number">5.2.1.</span> <span class="nav-text">分布式缓存</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-number">5.3.</span> <span class="nav-text">小结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#语法解析和预处理"><span class="nav-number">5.3.1.</span> <span class="nav-text">语法解析和预处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询优化器"><span class="nav-number">5.3.2.</span> <span class="nav-text">查询优化器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询执行引擎"><span class="nav-number">5.3.3.</span> <span class="nav-text">查询执行引擎</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

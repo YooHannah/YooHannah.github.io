@@ -1,0 +1,737 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="mySQL,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="JOIN回顾：MySQL中用来进行连表操作，用来匹配两个表的数据，筛选并合并出符合我们要求的结果集。 JOIN操作有几种方式，取决于最终数据的合并效果：  左外连接 右外连接 内连接驱动表和被驱动表什么是驱动表？•多表关联查询的时候，第一个被处理的表就是驱动表，使用驱动表关联其他表。•驱动表的确定是非常关键的，会直接影响到多表关联的顺序，还有决定了后续的关联查询的性能。通过Explain执行计划，">
+<meta name="keywords" content="mySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Join 优化">
+<meta property="og:url" content="http://yoohannah.github.io/post/mySQL/6.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="JOIN回顾：MySQL中用来进行连表操作，用来匹配两个表的数据，筛选并合并出符合我们要求的结果集。 JOIN操作有几种方式，取决于最终数据的合并效果：  左外连接 右外连接 内连接驱动表和被驱动表什么是驱动表？•多表关联查询的时候，第一个被处理的表就是驱动表，使用驱动表关联其他表。•驱动表的确定是非常关键的，会直接影响到多表关联的顺序，还有决定了后续的关联查询的性能。通过Explain执行计划，">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/62.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/61.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/63.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/64.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/65.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/66.png">
+<meta property="og:updated_time" content="2026-09-16T07:04:42.164Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Join 优化">
+<meta name="twitter:description" content="JOIN回顾：MySQL中用来进行连表操作，用来匹配两个表的数据，筛选并合并出符合我们要求的结果集。 JOIN操作有几种方式，取决于最终数据的合并效果：  左外连接 右外连接 内连接驱动表和被驱动表什么是驱动表？•多表关联查询的时候，第一个被处理的表就是驱动表，使用驱动表关联其他表。•驱动表的确定是非常关键的，会直接影响到多表关联的顺序，还有决定了后续的关联查询的性能。通过Explain执行计划，">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/systemDesign/62.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/mySQL/6.html">
+
+
+
+
+
+  <title> Join 优化 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/mySQL/6.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Join 优化
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-09-10T17:42:37+08:00">
+                2026-09-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>JOIN回顾：MySQL中用来进行连表操作，用来匹配两个表的数据，筛选并合并出符合我们要求的结果集。</p>
+<p>JOIN操作有几种方式，取决于最终数据的合并效果：</p>
+<ul>
+<li>左外连接</li>
+<li>右外连接</li>
+<li>内连接<br><img src="/image/systemDesign/62.png" alt><h1 id="驱动表和被驱动表"><a href="#驱动表和被驱动表" class="headerlink" title="驱动表和被驱动表"></a>驱动表和被驱动表</h1>什么是驱动表？<br>•多表关联查询的时候，第一个被处理的表就是驱动表，使用驱动表关联其他表。<br>•驱动表的确定是非常关键的，会直接影响到多表关联的顺序，还有决定了后续的关联查询的性能。<br>通过Explain执行计划，验证一下不同的连接查询情况下，驱动表的选择</li>
+</ul>
+<p>1）连接查询没有where条件的时候</p>
+<p><img src="/image/systemDesign/61.png" alt></p>
+<p>2) 连接查询存在where条件：</p>
+<ul>
+<li>带where条件的表就是驱动表，否则是被驱动表</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">EXPLAIN</span> <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> student s1 <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> score s2 <span class="keyword">ON</span> s1.<span class="string">`number`</span> = s2.<span class="string">`number`</span> <span class="keyword">WHERE</span> s2.<span class="string">`id`</span> = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">EXPLAIN</span> <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> student s1 <span class="keyword">RIGHT</span> <span class="keyword">JOIN</span> score s2 <span class="keyword">ON</span> s1.<span class="string">`number`</span> = s2.<span class="string">`number`</span> <span class="keyword">WHERE</span> s1.<span class="string">`id`</span> = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">EXPLAIN</span> <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> student s1 <span class="keyword">RIGHT</span> <span class="keyword">JOIN</span> score s2 <span class="keyword">ON</span> s1.<span class="string">`number`</span> = s2.<span class="string">`number`</span> <span class="keyword">WHERE</span> s2.<span class="string">`id`</span> = <span class="number">2</span>;</span><br></pre></td></tr></table></figure>
+<p>3) 驱动表选择的原则：在对最终的结果集没有影响的情况下，优先选择结果集小的那张表作为驱动表。</p>
+<h1 id="JOIN-算法原理"><a href="#JOIN-算法原理" class="headerlink" title="JOIN 算法原理"></a>JOIN 算法原理</h1><h2 id="SNL-算法"><a href="#SNL-算法" class="headerlink" title="SNL 算法"></a>SNL 算法</h2><p>Simple Nested Loop JOIN 简单嵌套循环连接</p>
+<p>简单嵌套循环连接就是一个双层for循环，通过循环外层表的行数据，逐个与内层表的行数据进行比较来获取结果。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 连接用户与订单表，连接条件 用户表id = 订单表的user_id</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">user</span> u <span class="keyword">left</span> <span class="keyword">join</span> <span class="keyword">order</span> o <span class="keyword">on</span> u.id = o.id;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 转换成代码后</span></span><br><span class="line">for(URow :  <span class="keyword">use</span>表)&#123;</span><br><span class="line">    <span class="keyword">for</span>(ORow : <span class="keyword">order</span>)&#123;</span><br><span class="line">        <span class="keyword">if</span>(URow.id = ORow.id)&#123;</span><br><span class="line">            <span class="keyword">return</span> URow;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/image/systemDesign/63.png" alt></p>
+<p>SNL的特点</p>
+<ul>
+<li>简单粗暴，容易理解，就是通过双层循环比较数据，获取结果。</li>
+<li>查询效率非常低，假设A表有N行，B表有M行，SNL开销：<ul>
+<li>A表扫描1次</li>
+<li>B表扫描M次</li>
+<li>一个有N个内循环，每个内循环就要M次，一共是N*M次。</li>
+</ul>
+</li>
+</ul>
+<h2 id="Index-Nested-Loopjoin-索引嵌套循环连接"><a href="#Index-Nested-Loopjoin-索引嵌套循环连接" class="headerlink" title="Index Nested Loopjoin 索引嵌套循环连接"></a>Index Nested Loopjoin 索引嵌套循环连接</h2><p>与SNL的区别：减少了内层表的数据的匹配次数，主要是因为在join字段（指的是被驱动表中的用于连接的字段）上建立了索引。<br><img src="/image/systemDesign/64.png" alt><br>从原来 匹配次数=外层表行数*内层表行数，变成了匹配次数=外层表行数* 内层表连接字段的索引高度，从而提升了JOIN的性能。<br>注意：使用Index Nested loopjoin算法，前提是被驱动表的匹配字段，必须建立索引。</p>
+<h1 id="Block-Nested-Loop-Join-块嵌套循环连接"><a href="#Block-Nested-Loop-Join-块嵌套循环连接" class="headerlink" title="Block Nested Loop Join 块嵌套循环连接"></a>Block Nested Loop Join 块嵌套循环连接</h1><p>在没有使用到索引字段进行表连接的时候，MYSQL会选择使用BNL块嵌套循环连接，通过加入buffer缓冲区，降低内循环的次数。<br><img src="/image/systemDesign/65.png" alt></p>
+<p>调整join buffer的大小</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- JOIN buffer 的大小,默认大小是256K。</span></span><br><span class="line"><span class="keyword">SHOW</span> <span class="keyword">VARIABLES</span> <span class="keyword">LIKE</span> <span class="string">'%join_buffer%'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> <span class="number">262144</span> / <span class="number">1024</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 设置JOIN Buffer的大小</span></span><br><span class="line"><span class="keyword">SET</span> <span class="keyword">SESSION</span> join_buffer_size = <span class="number">262144</span>;</span><br></pre></td></tr></table></figure>
+<h1 id="JOIN使用总结："><a href="#JOIN使用总结：" class="headerlink" title="JOIN使用总结："></a>JOIN使用总结：</h1><ol>
+<li>永远用小的结果集去驱动大的结果集（本质就是减少外层循环的数据数量）。</li>
+<li>应该为匹配的条件 增加索引（減少内层表的循环匹配次数）。</li>
+<li>增加 join buffer的大小（一次缓存的越多，内层表扫描的次数就越少）</li>
+<li>减少不必要的字段查询（字段越少，join buffer所缓存的数据就越多）</li>
+</ol>
+<h1 id="in函数-和-exists函数"><a href="#in函数-和-exists函数" class="headerlink" title="in函数 和 exists函数"></a>in函数 和 exists函数</h1><p>小表去驱动大表，目的是为减少数据库连接的次数</p>
+<h2 id="in函数"><a href="#in函数" class="headerlink" title="in函数"></a>in函数</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 需求： 使用in函数将所有部门下的员工查出来</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> employee e <span class="keyword">WHERE</span> e.<span class="string">`dep_id`</span> <span class="keyword">IN</span> (<span class="keyword">SELECT</span> <span class="keyword">id</span> <span class="keyword">FROM</span> department);</span><br></pre></td></tr></table></figure>
+<p>in函数执行原理</p>
+<ul>
+<li>in语句，只执行一次，将部门表中所有的id字段查询出来，并缓存，接下来就是比较的过，伪代码：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(did : dept)&#123; --小表  SELECT id FROM department</span><br><span class="line">    <span class="keyword">for</span>(eid : emp)&#123; 大表</span><br><span class="line">        <span class="keyword">if</span>(did == eid)&#123; SELECT * FROM employee e WHERE e.`dep_id` = dept_id</span><br><span class="line">            <span class="keyword">return</span> e;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/image/systemDesign/66.png" alt></p>
+<h2 id="exists函数"><a href="#exists函数" class="headerlink" title="exists函数"></a>exists函数</h2><p>1) exists函数介绍</p>
+<ul>
+<li>是一个用于判断子查询是否返回结果的条件函数，返回值是boolean类型。通常使用的场景是判断一个子查询是否至少返回一行数据，根据判断结果进行相应操作。</li>
+</ul>
+<p>2) exists函数语法</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">col</span> <span class="keyword">from</span> <span class="keyword">table</span> <span class="keyword">where</span> <span class="keyword">exists</span>(subquery);</span><br><span class="line">subquery：是一个子查询，用于判断是否存在满足特定条件的数据行。</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查询有员工的部门</span></span><br><span class="line"><span class="comment">-- 连接查询</span></span><br><span class="line"><span class="keyword">SELECT</span></span><br><span class="line"> <span class="keyword">DISTINCT</span> d.*</span><br><span class="line"><span class="keyword">FROM</span> department d <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> employee e <span class="keyword">ON</span> d.<span class="string">`id`</span> = e.<span class="string">`dep_id`</span></span><br><span class="line"><span class="keyword">WHERE</span> e.<span class="string">`dep_id`</span> <span class="keyword">IS</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- exists函数</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> department d <span class="keyword">WHERE</span> <span class="keyword">EXISTS</span>(</span><br><span class="line">    <span class="keyword">SELECT</span> <span class="number">1</span> <span class="keyword">FROM</span> employee e <span class="keyword">WHERE</span> e.<span class="string">`dep_id`</span> = d.<span class="string">`id`</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 2.查询没有员工的部门</span></span><br><span class="line"><span class="keyword">SELECT</span></span><br><span class="line"> <span class="keyword">DISTINCT</span> d.*</span><br><span class="line"><span class="keyword">FROM</span> department d <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> employee e <span class="keyword">ON</span> d.<span class="string">`id`</span> = e.<span class="string">`dep_id`</span></span><br><span class="line"><span class="keyword">WHERE</span> e.<span class="string">`dep_id`</span> <span class="keyword">IS</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- exists函数</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> department d <span class="keyword">WHERE</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span>(</span><br><span class="line">    <span class="keyword">SELECT</span> <span class="number">1</span> <span class="keyword">FROM</span> employee e <span class="keyword">WHERE</span> e.<span class="string">`dep_id`</span> = d.<span class="string">`id`</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 3.查询有部门的员工</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> employee e <span class="keyword">WHERE</span> e.<span class="string">`dep_id`</span> <span class="keyword">IS</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>; <span class="comment">-- 有问题SQL</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> employee e <span class="keyword">WHERE</span> <span class="keyword">EXISTS</span>(</span><br><span class="line">    <span class="keyword">SELECT</span> <span class="number">1</span> <span class="keyword">FROM</span> department d <span class="keyword">WHERE</span> d.<span class="string">`id`</span> = e.<span class="string">`dep_id`</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 4.查询没有部门的员工</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> employee e <span class="keyword">WHERE</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span>(</span><br><span class="line">    <span class="keyword">SELECT</span> <span class="number">1</span> <span class="keyword">FROM</span> department d <span class="keyword">WHERE</span> d.<span class="string">`id`</span> = e.<span class="string">`dep_id`</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>3) exists特点</p>
+<ul>
+<li>exists子句返回的是一个布尔类型值，如果有符合条件的数据返回true，否则返回FALSE</li>
+<li>如果为true，外层的查询语句就会进行匹配，否则外层查询语句就不进行查询。</li>
+</ul>
+<p>5) exists执行原理</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> employee e <span class="keyword">WHERE</span> <span class="keyword">EXISTS</span>(</span><br><span class="line">    <span class="keyword">SELECT</span> <span class="number">1</span> <span class="keyword">FROM</span> department d <span class="keyword">WHERE</span> d.<span class="string">`id`</span> = e.<span class="string">`dep_id`</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 先循环 SELECT * FROM employee e</span></span><br><span class="line"><span class="comment">-- 再判断 SELECT 1 FROM department d WHERE d.`id` = e.`dep_id`</span></span><br><span class="line"></span><br><span class="line">for(e : emp)&#123;</span><br><span class="line">    if(exists(e.dept_id))&#123;</span><br><span class="line">        return e;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="in和exists的区别"><a href="#in和exists的区别" class="headerlink" title="in和exists的区别"></a>in和exists的区别</h2><ul>
+<li>如果子查询得出的结果集记录比较少，主查询中的表比较大并且有索引，该用in。</li>
+<li>如果主查询结果集得出的记录比较少，子查询的表比较大，并且有索引，该用exists。</li>
+</ul>
+<p>一句话：in后面跟的是小表，exists后面跟的是大表。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mySQL/" rel="tag"># mySQL</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/mySQL/5.html" rel="next" title="慢查询日志分析">
+                <i class="fa fa-chevron-left"></i> 慢查询日志分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/mySQL/7.html" rel="prev" title="order by 与 group by 优化">
+                order by 与 group by 优化 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">286</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#驱动表和被驱动表"><span class="nav-number">1.</span> <span class="nav-text">驱动表和被驱动表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JOIN-算法原理"><span class="nav-number">2.</span> <span class="nav-text">JOIN 算法原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SNL-算法"><span class="nav-number">2.1.</span> <span class="nav-text">SNL 算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Index-Nested-Loopjoin-索引嵌套循环连接"><span class="nav-number">2.2.</span> <span class="nav-text">Index Nested Loopjoin 索引嵌套循环连接</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Block-Nested-Loop-Join-块嵌套循环连接"><span class="nav-number">3.</span> <span class="nav-text">Block Nested Loop Join 块嵌套循环连接</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JOIN使用总结："><span class="nav-number">4.</span> <span class="nav-text">JOIN使用总结：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#in函数-和-exists函数"><span class="nav-number">5.</span> <span class="nav-text">in函数 和 exists函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#in函数"><span class="nav-number">5.1.</span> <span class="nav-text">in函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#exists函数"><span class="nav-number">5.2.</span> <span class="nav-text">exists函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#in和exists的区别"><span class="nav-number">5.3.</span> <span class="nav-text">in和exists的区别</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

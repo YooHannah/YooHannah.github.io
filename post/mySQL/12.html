@@ -1,0 +1,1169 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="mySQL,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="MySQL事务原理事务特性首先看看什么是事务？事务具有哪些特性？ 简单来说，事务是指作为单个逻辑工作单元执行的一系列操作，这些操作要么全做，要么全不做，是一个不可分割的工作单元。 一个逻辑工作单元要成为事务，在关系型数据库管理系统中，必须满足 4 个特性。 数据库事务的特性包括原子性（Atomicity）、一致性（Consistency）、隔离性（Isolation）和持久性（Durabilily">
+<meta name="keywords" content="mySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL 事务和锁原理">
+<meta property="og:url" content="http://yoohannah.github.io/post/mySQL/12.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="MySQL事务原理事务特性首先看看什么是事务？事务具有哪些特性？ 简单来说，事务是指作为单个逻辑工作单元执行的一系列操作，这些操作要么全做，要么全不做，是一个不可分割的工作单元。 一个逻辑工作单元要成为事务，在关系型数据库管理系统中，必须满足 4 个特性。 数据库事务的特性包括原子性（Atomicity）、一致性（Consistency）、隔离性（Isolation）和持久性（Durabilily">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/92.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/93.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/94.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/95.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/96.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/97.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/98.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/99.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/102.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/100.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/101.png">
+<meta property="og:updated_time" content="2026-09-16T02:13:08.687Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL 事务和锁原理">
+<meta name="twitter:description" content="MySQL事务原理事务特性首先看看什么是事务？事务具有哪些特性？ 简单来说，事务是指作为单个逻辑工作单元执行的一系列操作，这些操作要么全做，要么全不做，是一个不可分割的工作单元。 一个逻辑工作单元要成为事务，在关系型数据库管理系统中，必须满足 4 个特性。 数据库事务的特性包括原子性（Atomicity）、一致性（Consistency）、隔离性（Isolation）和持久性（Durabilily">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/systemDesign/92.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/mySQL/12.html">
+
+
+
+
+
+  <title> MySQL 事务和锁原理 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/mySQL/12.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                MySQL 事务和锁原理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-09-14T18:31:37+08:00">
+                2026-09-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="MySQL事务原理"><a href="#MySQL事务原理" class="headerlink" title="MySQL事务原理"></a>MySQL事务原理</h1><h2 id="事务特性"><a href="#事务特性" class="headerlink" title="事务特性"></a>事务特性</h2><p>首先看看什么是事务？事务具有哪些特性？</p>
+<p>简单来说，事务是指作为单个逻辑工作单元执行的一系列操作，这些操作要么全做，要么全不做，是一个不可分割的工作单元。</p>
+<p>一个逻辑工作单元要成为事务，在关系型数据库管理系统中，必须满足 4 个特性。</p>
+<p>数据库事务的特性包括原子性（Atomicity）、一致性（Consistency）、隔离性（Isolation）和持久性（Durabilily），简称 ACID。</p>
+<h3 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h3><p>原子性：事务的所有操作，要么全部完成，要么全部不完成，不会结束在某个中间环节。</p>
+<ul>
+<li>原子性：即要么改了，要么没改。也就是说用户感受不到一个正在改的状态。</li>
+<li>MySQL 是通过 WAL（Write Ahead Log）技术来实现这种效果的。</li>
+<li>举例来讲，如果事务提交了，那改了的数据就生效了，如果此时 Buffer Pool 的脏页没有刷盘，如何来保证改了的数据生效呢？就需要使用 Redo 日志恢复出来的数据。而如果事务没有提交，且 Buffer Pool 的脏页被刷盘了，那这个本不应该存在的数据如何消失呢？就需要通过 Undo 来实现了，Undo 又是通过 Redo 来保证的，所以最终原子性的保证还是靠 Redo 的 WAL 机制实现的。</li>
+</ul>
+<p>每一个写事务，都会修改 Buffer Pool，从而产生相应的 Redo 日志，这些日志信息会被记录到 ib_logfiles 文件中。因为 Redo 日志是遵循 Write Ahead Log 的方式写的，所以事务是顺序被记录的。</p>
+<p>在 MySQL 中，任何 Buffer Pool 中的页被刷到磁盘之前，都会先写入到日志文件中，这样做有两方面的保证。</p>
+<p>如果 Buffer Pool 中的这个页没有刷成功，此时数据库挂了，那在数据库再次启动之后，可以通过 Redo 日志将其恢复出来，以保证脏页写下去的数据不会丢失，所以必须要保证 Redo 先写。</p>
+<p>因为 Buffer Pool 的空间是有限的，要载入新页时，需要从 LRU 链表中淘汰一些页，而这些页必须要刷盘之后，才可以重新使用，那这时的刷盘就需要保证对应的 LSN（log sequence number，日志序列号）的日志也要提前写到 ib_logfiles 中，如果没有写的话，恰巧这个事务又没有提交，数据库挂了，在数据库启动之后，这个事务就没法回滚了。</p>
+<p>所以如果不写日志的话，这些数据对应的回滚日志可能就不存在，导致未提交的事务回滚不了，从而不能保证原子性，所以原子性就是通过 WAL（Write Ahead logging） 来保证的。</p>
+<h3 id="持久性"><a href="#持久性" class="headerlink" title="持久性"></a>持久性</h3><p>持久性：事务完成之后，事务所做的修改进行持久化保存，不会丢失。</p>
+<ul>
+<li>所谓持久性，就是指一个事务一旦提交，它对数据库中数据的改变就应该是永久性的，接下来的操作或故障不应该对其有任何影响。</li>
+<li>事务的原子性可以保证一个事务要么全执行，要么全不执行的特性，这可以从逻辑上保证用户看不到中间的状态。但持久性是如何保证的呢？</li>
+<li>一旦事务提交，通过原子性，即便是遇到宕机，也可以从逻辑上将数据找回来后再次写入物理存储空间，这样就从逻辑和物理两个方面保证了数据不会丢失，即保证了数据库的持久性。</li>
+</ul>
+<p>一个“提交”动作触发的操作有：binlog 落地、发送 binlog、存储引擎提交、flush_logs，check_point、事务提交标记等。这些都是数据库保证其数据完整性、持久性的手段。</p>
+<p><img src="/image/systemDesign/92.png" alt><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> <span class="keyword">User</span> <span class="keyword">set</span> Age = Age+<span class="number">1</span> <span class="keyword">where</span> <span class="keyword">ID</span> = <span class="number">2</span></span><br></pre></td></tr></table></figure></p>
+<p>图中白色框表示是在 InnoDB 内部执行的，绿色框表示是在执行器中执行的。<br><img src="/image/systemDesign/93.png" alt></p>
+<ol>
+<li>执行器先找引擎取 ID=2 这一行。ID 是主键，引擎直接用树搜索找到这一行。如果 ID=2 这一行所在的数据页本来就在内存中，就直接返回给执行器；否则，需要先从磁盘读入内存，然后再返回。</li>
+<li>执行器拿到引擎给的行数据，把这个值加上 1，比如原来是 N，现在就是 N+1，得到新的一行数据，再调用引擎接口写入这行新数据。</li>
+<li>引擎将这行新数据更新到内存（InnoDB Buffer Pool）中，同时将这个更新操作记录到 redo log 里面，此时 redo log 处于 prepare 状态。然后告知执行器执行完成了，随时可以提交事务。</li>
+<li>执行器生成这个操作的 binlog，并把 binlog 写入磁盘。</li>
+<li>执行器调用引擎的提交事务接口，引擎把刚刚写入的 redo log 改成提交（commit）状态，更新完成。</li>
+</ol>
+<p>从图中可以看出，在最后提交事务的时候，需要有3个步骤：</p>
+<ul>
+<li>写入redo log，处于prepare状态</li>
+<li>写binlog</li>
+<li>修改redo log状态为commit<ul>
+<li>redo log的提交分为prepare和commit两个阶段，所以称之为两阶段提交 2PC</li>
+</ul>
+</li>
+</ul>
+<p>为什么需要两阶段提交？</p>
+<p>假设当前 ID=2 的行，字段 age 的值是 0，再假设执行 update 语句过程中在写完第一个日志后，第二个日志还没有写完期间发生了 crash，会出现什么情况呢？</p>
+<ol>
+<li>先写 redo log 后写 binlog。假设在 redo log 写完，binlog 还没有写完的时候，MySQL 进程异常重启。由于我们前面说过的，redo log 写完之后，系统即使崩溃，仍然能够把数据恢复回来，所以恢复后这一行 age 的值是 1。但是由于 binlog 没写完就 crash 了，这时候 binlog 里面就没有记录这个语句。因此，之后备份日志的时候，存起来的 binlog 里面就没有这条语句。然后你会发现，如果需要用这个 binlog 来恢复临时库的话，由于这个语句的 binlog 丢失，这个临时库就会少了这一次更新，恢复出来的这一行 age 的值就是 0，与原库的值不同。</li>
+<li>先写 binlog 后写 redo log。如果在 binlog 写完之后 crash，由于 redo log 还没写，崩溃恢复以后这个事务无效，所以这一行 age 的值是 0。但是 binlog 里面已经记录了“把 age 从 0 改成 1”这个日志。所以，在之后用 binlog 来恢复的时候就多了一个事务出来，恢复出来的这一行 age 的值就是 1，与原库的值不同。</li>
+</ol>
+<p>可以看到，如果不使用“两阶段提交”，那么数据库的状态就有可能和用它的日志恢复出来的库的状态不一致。</p>
+<p>崩溃恢复</p>
+<p>如果在图中时刻 A 的地方，也就是写入 redo log 处于 prepare 阶段之后、写 binlog 之前，发生了崩溃（crash），由于此时 binlog 还没写，redo log 也还没提交，所以崩溃恢复的时候，这个事务会回滚。这时候，binlog 还没写，所以也不会传到备库。</p>
+<p>如果 redo log 里面的事务是完整的，也就是已经有了 commit 标识，则直接提交；如果 redo log 里面的事务只有完整的 prepare，则判断对应的事务 binlog 是否存在并完整：</p>
+<ul>
+<li>a. 如果是，则提交事务；</li>
+<li>b. 否则，回滚事务。</li>
+</ul>
+<p>这里，时刻 B 发生 crash 对应的就是 2(a) 的情况，崩溃恢复过程中事务会被提交。</p>
+<p>注：两阶段提交的最后一个阶段的操作本身是不会失败的，除非是系统或硬件错误，所以也就不再需要回滚（不然就无限循环下去了）。</p>
+<h3 id="隔离性"><a href="#隔离性" class="headerlink" title="隔离性"></a>隔离性</h3><p>隔离性：当多个事务并发访问数据库中的同一数据时，所表现出来的相互关系。</p>
+<ul>
+<li>隔离性，指的是一个事务的执行不能被其他事务干扰，即一个事务内部的操作及使用的数据对其他的并发事务是隔离的。</li>
+<li>锁和多版本控制就符合隔离性。</li>
+</ul>
+<p>InnoDB支持的隔离性有 4 种，隔离性从低到高分别为：读未提交、读提交、可重复读、可串行化。后面详细讲。</p>
+<h3 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h3><p>一致性：事务开始之前和事务结束之后，数据库的完整性限制未被破坏。</p>
+<ul>
+<li>一致性其实包括两部分内容，分别是约束一致性和数据一致性。</li>
+<li>约束一致性：数据库中创建表结构时所指定的外键、唯一索引等约束，所以约束一致性就非常容易理解了。</li>
+<li>数据一致性：是一个综合性的规定，或者说是一个把握全局的规定。因为它是由原子性、持久性、隔离性共同保证的结果，而不是单单依赖于某一种技术。</li>
+</ul>
+<p>一致性可以归纳为数据的完整性。</p>
+<p>根据前文可知，数据的完整性是通过其他三个特性来保证的，包括原子性、隔离性、持久性，而这三个特性，又是通过Redo/Undo来保证的，正所谓：合久必分，分久必合，三足鼎力，三分归晋，数据库也是，为了保证数据的完整性，提出来三个特性，这三个特性又是由同一个技术来实现的，所以理解Redo/Undo才能理解数据库的本质。</p>
+<h2 id="事务隔离"><a href="#事务隔离" class="headerlink" title="事务隔离"></a>事务隔离</h2><h3 id="并发问题"><a href="#并发问题" class="headerlink" title="并发问题"></a>并发问题</h3><p>在数据库执行中，多个并发执行的事务如果涉及到同一份数据的读写就容易出现数据不一致的情况，不一致的异常现象有以下几种。</p>
+<ul>
+<li>脏读，是指一个事务中访问到了另外一个事务未提交的数据。<ul>
+<li>例如事务 T1 中修改的数据（张三–&gt;李四）项在尚未提交的情况下被其他事务（T2）读取到，如果 T1 进行回滚操作，则T2刚刚读取到的数据实际并不存在。</li>
+</ul>
+</li>
+</ul>
+<p><img src="/image/systemDesign/94.png" alt></p>
+<ul>
+<li>不可重复读，是指一个事务读取同一条记录 2 次，得到的结果不一致。<ul>
+<li>例如事务 T1 第一次读取数据，接下来 T2 对其中的数据进行了更新或者删除，并且 Commit 成功。这时候 T1 再次读取这些数据，那么会得到 T2 修改后的数据，发现数据已经变更，这样 T1 在一个事务中的两次读取，返回的结果集会不一致。<br><img src="/image/systemDesign/95.png" alt></li>
+</ul>
+</li>
+<li>幻读，是指一个事务读取 2 次，得到的记录条数不一致。<ul>
+<li>例如事务 T1 查询获得一个结果集，T2 插入新的数据，T2 Commit 成功后，T1 再次执行同样的查询，此时得到的结果集记录数不同。<br><img src="/image/systemDesign/96.png" alt><br><img src="/image/systemDesign/97.png" alt></li>
+</ul>
+</li>
+</ul>
+<h3 id="隔离级别"><a href="#隔离级别" class="headerlink" title="隔离级别"></a>隔离级别</h3><p>SQL 标准根据三种不一致的异常现象，将隔离性定义为四个隔离级别（Isolation Level），隔离级别和数据库的性能呈反比（安全性和执行速度），隔离级别越低，数据库性能越高；而隔离级别越高，数据库性能越差，具体如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">隔离级别</th>
+<th style="text-align:left">脏读</th>
+<th style="text-align:left">不可重复读</th>
+<th style="text-align:left">幻读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">读未提交<br>(Read uncommitted)</td>
+<td style="text-align:left">出现</td>
+<td style="text-align:left">出现</td>
+<td style="text-align:left">出现</td>
+</tr>
+<tr>
+<td style="text-align:left">读已提交<br>(Read committed)</td>
+<td style="text-align:left">不出现</td>
+<td style="text-align:left">出现</td>
+<td style="text-align:left">出现</td>
+</tr>
+<tr>
+<td style="text-align:left">可重复读<br>(Repeatable read)</td>
+<td style="text-align:left">不出现</td>
+<td style="text-align:left">不出现</td>
+<td style="text-align:left">出现</td>
+</tr>
+<tr>
+<td style="text-align:left">串行化<br>(Serializable)</td>
+<td style="text-align:left">不出现</td>
+<td style="text-align:left">不出现</td>
+<td style="text-align:left">不出现</td>
+</tr>
+</tbody>
+</table>
+<p>按隔离水平高低排序，读未提交 &lt; 读已提交 &lt; 可重复度 &lt; 串行化。</p>
+<p>（1）Read uncommitted 读未提交</p>
+<p>在该级别下，一个事务对数据修改的过程中，不允许另一个事务对该行数据进行修改，但允许另一个事务对该行数据进行读，不会出现更新丢失，但会出现脏读、不可重复读的情况。</p>
+<p>它能读到一个事务的中间过程，违背了 ACID 特性，存在脏读的问题，所以基本不会用到，可以忽略。</p>
+<p>（2）Read committed 读已提交</p>
+<p>在该级别下，未提交的写事务不允许其他事务访问该行，不会出现脏读，但是读取数据的事务允许其他事务访问该行数据，因此会出现不可重复读的情况。</p>
+<p>A事务正在写，不允许其他事务访问的</p>
+<p>A事务正在读，允许其他事务写</p>
+<p>它表示如果其他事务已经提交，那么我们就可以看到，这也是一种最普遍适用的级别。但由于一些历史原因，RC 在生产环境中用的并不多。</p>
+<p>（3）Repeatable read 可重复读</p>
+<p>可能出现幻读</p>
+<p>在该级别下，在同一个事务内的查询都是和事务开始时刻一致的，保证对同一字段的多次读取结果都相同，除非数据是被本身事务自己所修改，不会出现同一事务读到两次不同数据的情况。因为没有约束其他事务的增Insert操作，所以 SQL 标准中可重复读级别会出现幻读。</p>
+<p>A事务正在读，不允许其他事务写，但是允许事务事务读。</p>
+<p>值得一提的是，可重复读是 MySQL InnoDB 引擎的默认隔离级别，但是在 MySQL 额外添加了间隙锁（Gap Lock），可以防止幻读。是目前被使用得最多的一种级别，在这种级别下有一定概率会发生死锁、低并发等问题。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">'transaction_isolation'</span>;</span><br><span class="line"></span><br><span class="line">Variable_name          |Value            |</span><br><span class="line"><span class="comment">-----------------------+-----------------+</span></span><br><span class="line">transaction_isolation  |REPEATABLE-READ  |</span><br></pre></td></tr></table></figure>
+<p>（4）Serializable 序列化</p>
+<p>该级别要求所有事务都必须串行执行，可以避免各种并发引起的问题，效率也最低。</p>
+<p>可串行化，这种实现方式，其实已经并不是多版本了，又回到了单版本的状态，因为它所有的实现都是通过锁来实现的。</p>
+<p>对不同隔离级别的解释，其实是为了保持数据库事务中的隔离性（Isolation），目标是使并发事务的执行效果与串行一致，隔离级别的提升带来的是并发能力的下降，两者是负相关的关系。</p>
+<h2 id="并发事务控制"><a href="#并发事务控制" class="headerlink" title="并发事务控制"></a>并发事务控制</h2><ul>
+<li>单版本控制-锁</li>
+</ul>
+<p>先来看锁，锁用独占的方式来保证在只有一个版本的情况下事务之间相互隔离，所以锁可以理解为单版本控制。</p>
+<p>在 MySQL 事务中，锁的实现与隔离级别有关系，在 RR（Repeatable Read）隔离级别下，MySQL 为了解决幻读的问题，以牺牲并行度为代价，通过 Gap 锁来防止数据的写入，而这种锁，因为其并行度不够，冲突很多，经常会引起死锁。</p>
+<p>现在流行的 Row 模式可以避免很多冲突甚至死锁问题，所以推荐默认使用 Row + RC（Read Committed）模式的隔离级别，可以很大程度上提高数据库的读写并行度。</p>
+<ul>
+<li>多版本控制-MVCC</li>
+</ul>
+<p>多版本控制也叫作 MVCC，是指在数据库中，为了实现高并发的数据访问，对数据进行多版本处理，并通过事务的可见性来保证事务能看到自己应该看到的数据版本。</p>
+<p>那个多版本是如何生成的呢？每一次对数据库的修改，都会在 Undo 日志中记录当前修改记录的事务号及修改前数据状态的存储地址（即 ROLL_PTR），以便在必要的时候可以回滚到老的数据版本。例如，一个读事务查询到当前记录，而最新的事务还未提交，根据原子性，读事务看不到最新数据，但可以去回滚段中找到老版本的数据，这样就生成了多个版本。</p>
+<p>多版本控制很巧妙地将稀缺资源的独占互斥转换为并发，大大提高了数据库的吞吐量及读写性能。</p>
+<h1 id="锁机制"><a href="#锁机制" class="headerlink" title="锁机制"></a>锁机制</h1><h2 id="锁分类"><a href="#锁分类" class="headerlink" title="锁分类"></a>锁分类</h2><p>在 MySQL 中有三种级别的锁：页(Page)级锁、表级锁、行级锁。</p>
+<ol>
+<li>表级锁：开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高，并发度最低。会发生在：MyISAM、memory、InnoDB、BDB 等存储引擎中。</li>
+<li>行级锁：开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低，并发度最高。会发生在：InnoDB 存储引擎。</li>
+<li>页级锁：开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般。会发生在：BDB 存储引擎。</li>
+</ol>
+<p>三种级别的锁分别对应存储引擎关系如下图所示。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:left">行锁</th>
+<th style="text-align:left">表锁</th>
+<th style="text-align:left">页锁</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">MyISAM</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">√</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">BDB</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">√</td>
+<td style="text-align:left">√</td>
+</tr>
+<tr>
+<td style="text-align:left">InnoDB</td>
+<td style="text-align:left">√</td>
+<td style="text-align:left">√</td>
+</tr>
+</tbody>
+</table>
+<p>在InnoDB 存储引擎中，锁分为行锁和表锁，其中行锁包括两种锁：</p>
+<ul>
+<li>共享锁（S）：读锁，允许持有锁的事务读取行，多个事务可以一起读，共享锁之间不互斥，共享锁会阻塞排它锁。<ul>
+<li>事务A获得共享锁，事务B可以同时获得共享锁 from Table where col1 = 1</li>
+<li>事务A获得共享锁，事务B如果是个写操作，阻塞等待锁</li>
+</ul>
+</li>
+<li>排他锁（X）：写锁，允许获得排他锁的事务更新或者删除数据，阻止其他事务取得相同数据集的共享读锁和排他写锁。<ul>
+<li>如果要对某一行进行写操作，首先要先获得排它锁</li>
+<li>如果对id=5这一行获得X锁，此时自该行无法加X锁和S锁</li>
+</ul>
+</li>
+</ul>
+<p>如果事务T1在r行上持有共享（S）锁，则来自某些不同事务T2对行r上锁的请求将按以下方式处理：</p>
+<ol>
+<li>T2可以立即批准S 锁的请求。因此，T1 和 T2 在 r 上都持有 S 锁。</li>
+<li>T2 对 X 锁的请求无法立即批准。</li>
+</ol>
+<p>如果事务T1 在行 r 上持有排他性（X）锁，则无法立即批准来自某个不同事务T2 对 r 上任一类型锁的请求。相反，事务T2 必须等待事务T1 释放其对行 r 的锁。</p>
+<p>为了允许行锁和表锁共存，实现多粒度锁机制，InnoDB 还有两种内部使用的意向锁（Intention Locks），这两种意向锁都是表锁。表锁又分为三种：</p>
+<ul>
+<li>意向共享锁（IS）：事务计划给数据行加行共享锁（S），事务在给一个数据行加共享锁前必须先取得该表的 IS 锁。</li>
+<li>意向排他锁（IX）：事务计划给数据行加行排他锁（X），事务在给一个数据行加排他锁前必须先取得该表的 IX 锁。</li>
+<li>自增锁（AUTO-INC Locks）：特殊表锁，自增长计数器通过该“锁”来获得子增长计数器最大的计数值。</li>
+</ul>
+<p>InnoDB 锁关系矩阵如下图所示，其中：+ 表示兼容，- 表示不兼容。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:left">IS</th>
+<th style="text-align:left">IX</th>
+<th style="text-align:left">AUTO_INC</th>
+<th style="text-align:left">S</th>
+<th style="text-align:left">X</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">IS</td>
+<td style="text-align:left">+</td>
+<td style="text-align:left">+</td>
+<td style="text-align:left">+</td>
+<td style="text-align:left">+</td>
+<td style="text-align:left">-</td>
+</tr>
+<tr>
+<td style="text-align:left">IX</td>
+<td style="text-align:left">+</td>
+<td style="text-align:left">+</td>
+<td style="text-align:left">+</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">-</td>
+</tr>
+<tr>
+<td style="text-align:left">AUTO_INC</td>
+<td style="text-align:left">+</td>
+<td style="text-align:left">+</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">-</td>
+</tr>
+<tr>
+<td style="text-align:left">S</td>
+<td style="text-align:left">+</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">+</td>
+<td style="text-align:left">-</td>
+</tr>
+<tr>
+<td style="text-align:left">X</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">-</td>
+<td style="text-align:left">-</td>
+</tr>
+</tbody>
+</table>
+<p>从操作的性能可分为乐观锁和悲观锁。</p>
+<ol>
+<li>乐观锁：一般的实现方式是对记录数据版本进行比对，在数据更新提交的时候才会进行冲突检测，如果发现冲突了，则提示错误信息。</li>
+<li>悲观锁：在对一条数据修改的时候，为了避免同时被其他人修改，在修改数据之前先锁定，再修改的控制方式。</li>
+<li>共享锁和排他锁是悲观锁的不同实现，但都属于悲观锁范畴。</li>
+</ol>
+<h2 id="自增锁"><a href="#自增锁" class="headerlink" title="自增锁"></a>自增锁</h2><p>在MySQL InnoDB 存储引擎中，我们在设计表结构的时候，通常会建议添加一列作为自增主键。这里就会涉及一个特殊的锁：自增锁（即：AUTO-INC Locks），它属于表锁的一种，在 INSERT 结束后立即释放。我们可以执行 show engine innodb status 来查看自增锁的状态信息。</p>
+<p>理解自增锁是一个接口，实现的形式有多种。</p>
+<p>在自增锁的使用过程中，有一个核心参数，需要关注，即 <code>innodb_autoinc_lock_mode</code>,它有0、1、2三个值。保持默认值就行。具体的含义可以参考官方文档，这里不再赘述，如下图所示。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">'%innodb_autoinc_lock_mode%'</span>;</span><br><span class="line"></span><br><span class="line">Name            |Value                    |</span><br><span class="line"><span class="comment">----------------+-------------------------+</span></span><br><span class="line">Variable_name   |innodb_autoinc_lock_mode |</span><br><span class="line">Value           |2                        |</span><br></pre></td></tr></table></figure>
+<p>0传统模式：</p>
+<pre><code>                        +-----------------------------------------+
+                        |                 执行中                  |
+                        |                                         |
+                        |   +---------------------------------+   |
++----------------+      |   |      分配 AUTO_INCREMENT        |   |
+|   INSERT       |      |   +---------------------------------+   |
+|   语句 4       |      |                    |                    |
++----------------+      |                    v                    |
+|   INSERT       |      |   +---------------------------------+   |
+|   语句 3       |      |   |           INSERT 语句 1         |   |
++----------------+      |   +---------------------------------+   |
+|   INSERT       | ----&gt;|                                         |
+|   语句 2       |      +-----------------------------------------+
++----------------+
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">以下是为您提取的图片文字内容，以及用纯文本（ASCII字符）重新绘制的下方流程图：</span><br><span class="line"></span><br><span class="line">1-连续模式：</span><br><span class="line"></span><br><span class="line">连续模式（Consecutive）是 MySQL 8.0 之前默认的模式，之所以提出这种模式，是因为传统模式存在影响性能的弊端，所以才有了连续模式。</span><br><span class="line"></span><br><span class="line">比如执行能够确定插入条数的Insert语句时，不会使用自增锁，会直接将Insert语句锁需要的自增值预留出来即可，就可以继续执行下一个语句了。</span><br><span class="line"></span><br><span class="line">在实际分配ID的过程中个，InnoDB会使用轻量级的Mutex锁，来放置ID重复分配，ID分配完，Mutex锁自动释放。</span><br><span class="line"></span><br><span class="line">但是如果Insert语句不能确认插入的数量，还是需要获得自增锁。INSERT INTO ...SELECT....</span><br><span class="line"></span><br><span class="line">交叉模式：</span><br><span class="line"></span><br><span class="line">交叉模式（Interleaved）下，所有的 INSERT 语句，包含 INSERT 和 INSERT INTO ... SELECT ，都不会使用 AUTO-INC 自增锁，而是使用较为轻量的 `mutex` 锁。这样一来，多条 INSERT 语句可以并发的执行，这也是三种锁模式中扩展性最好的一种。</span><br><span class="line"></span><br><span class="line">**交叉模式流程图（纯文本重绘）：**</span><br><span class="line"></span><br><span class="line">```text</span><br><span class="line">                                         +-----------------------------------------------------------------+</span><br><span class="line">                                         |                             执行中                              |</span><br><span class="line">                                         |                                                                 |</span><br><span class="line">                                         |            +-----------------------------------------+          |</span><br><span class="line">                                         |            |          分配 AUTO_INCEMENT             |          |</span><br><span class="line">                                         |            +-----------------------------------------+          |</span><br><span class="line">                                         |                 |                    |                    |          |</span><br><span class="line">                                         |                 |                    |                    |          |</span><br><span class="line">                                         |                 v                    v                    v          |</span><br><span class="line">                                         |      +-------------------+  +-------------------+  +-------------------+ </span><br><span class="line">                                         |      |    INSERT         |  |    INSERT         |  |    INSERT         |</span><br><span class="line">                                         |      |    语句 1         |  |    语句 2         |  |    语句 3         |</span><br><span class="line">                                         |      +-------------------+  +-------------------+  +-------------------+</span><br><span class="line">                                         |                                                                 |</span><br><span class="line">+----------------+                       |                                                                 |</span><br><span class="line">|    INSERT      |                       |                                                                 |</span><br><span class="line">|    语句 4      |                       |                                                                 |</span><br><span class="line">+----------------+                       |                                                                 |</span><br><span class="line">|    INSERT      |                       |                                                                 |</span><br><span class="line">|    语句 3      |                       |                                                                 |</span><br><span class="line">+----------------+                       |                                                                 |</span><br><span class="line">|    INSERT      |                       |                                                                 |</span><br><span class="line">|    语句 2      | ---------------------&gt;|                                                                 |</span><br><span class="line">+----------------+                       +-----------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+<p>副作用就是单个Insert的自增值有可能是不连续的，因为AUTO_INCREMENT的值会在多个INSERT语句中来回复交叉执行。</p>
+<p>优点：效率高</p>
+<p>缺点：在并发情况下无法保持数据的一致性</p>
+<p>Binlog: Statement、Row、Mixed</p>
+<p>如果采用的是Statement格式，同步的SQL语句，并且有采用了交叉模式，数据不一致问题。</p>
+<h2 id="InnoDB-行锁"><a href="#InnoDB-行锁" class="headerlink" title="InnoDB 行锁"></a>InnoDB 行锁</h2><p>InnoDB行锁是通过对索引数据页上的记录（record）加锁实现的，主要实现算法有 3 种：</p>
+<ul>
+<li>Record Lock：单个行记录的锁（锁数据，不锁 Gap）。（记录锁，RC、RR隔离级别都支持）</li>
+<li>Gap Lock：间隙锁，锁定一个范围，不包括记录本身（不锁数据，仅仅锁数据前面的Gap）。（范围锁，RR隔离级别支持）</li>
+<li>Next-key Lock：同时锁住数据，并且锁住数据前面的 Gap。（记录锁+范围锁，RR隔离级别支持）</li>
+</ul>
+<h3 id="第一种情况：主键-RR"><a href="#第一种情况：主键-RR" class="headerlink" title="第一种情况：主键 + RR"></a>第一种情况：主键 + RR</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">id =10 name=zs</span><br><span class="line">id=10 name=ls</span><br><span class="line"></span><br><span class="line">+-----------------------------------------------------------+</span><br><span class="line">| Table: T1(id primary key, name)                           |</span><br><span class="line">|                                                           |</span><br><span class="line">| Primary Key                     X锁                       |</span><br><span class="line">|                                  |                        |</span><br><span class="line">|                                  v                        |</span><br><span class="line">|     +---------------------------------------------+       |</span><br><span class="line">|     |  id  |  1  |  4  |  7  |  10 |  20 |  30 |   |      |</span><br><span class="line">|     +---------------------------------------------+       |</span><br><span class="line">|     | name |  a  |  c  |  b  |  a  |  d  |  b  |   |      |</span><br><span class="line">|     +---------------------------------------------+       |</span><br><span class="line">|                                                           |</span><br><span class="line">+-----------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+<p>假设条件是：</p>
+<ul>
+<li>update t1 set name=’XX’ where id=10</li>
+<li>id 为主键索引。</li>
+</ul>
+<p>加锁行为：仅在 id=10 的主键索引记录上加X锁。</p>
+<p>秒杀，扣减场景  SKU   -1<br>N个请求同时编辑同一个数据库记录<br>解决：<br>CDN  Nginx<br>限流 熔断、降级<br>缓存<br>分片</p>
+<p>以下是图中内容的纯文本提取：</p>
+<h3 id="第二种情况：唯一键-RR"><a href="#第二种情况：唯一键-RR" class="headerlink" title="第二种情况：唯一键 + RR"></a>第二种情况：唯一键 + RR</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">+-----------------------------------------------------------------------+</span><br><span class="line">|                                                                       |</span><br><span class="line">| Table: T1(name primary key, id unique key)                            |</span><br><span class="line">|                                                                       |</span><br><span class="line">|                                                                       |</span><br><span class="line">| +-------------------+                           X锁                   |</span><br><span class="line">| | Unique Key (id)   |                            |                    |</span><br><span class="line">| +-------------------+                            v                    |</span><br><span class="line">|                                                                       |</span><br><span class="line">|          +--------------------------------------------+               |</span><br><span class="line">|          | id   | 1  | 2  | 3  | 5  | 6  | 10 (X锁)  |               |</span><br><span class="line">|          +------+----+----+----+----+----+-----------|               |</span><br><span class="line">|          | name | f  | zz | b  | a  | c  | d  (X锁)  |               |</span><br><span class="line">|          +--------------------------------------------+               |</span><br><span class="line">|                                     |                                 |</span><br><span class="line">|                                     |                                 |</span><br><span class="line">| +-------------------+               |  X锁                             |</span><br><span class="line">| | Primary Key       |               |  |                               |</span><br><span class="line">| +-------------------+               v  v                               |</span><br><span class="line">|                                                                       |</span><br><span class="line">|          +--------------------------------------------+               |</span><br><span class="line">|          | name | a  | b  | c  | d (X锁) | f  | zz   |               |</span><br><span class="line">|          +------+----+----+----+---------+----+------|               |</span><br><span class="line">|          | id   | 5  | 3  | 6  | 10 (X锁)| 1  | 2    |               |</span><br><span class="line">|          +--------------------------------------------+               |</span><br><span class="line">|                                                                       |</span><br><span class="line">+-----------------------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+<p>假设条件是：</p>
+<ul>
+<li>update t1 set name=’XX’ where id=10。</li>
+<li>id 为唯一索引。</li>
+</ul>
+<p>加锁行为：</p>
+<ul>
+<li>先在唯一索引 id 上加 id=10 的 X 锁。</li>
+<li>再在 id=10 的主键索引记录上加 X 锁。</li>
+</ul>
+<h3 id="第三种情况：非唯一键-RR"><a href="#第三种情况：非唯一键-RR" class="headerlink" title="第三种情况：非唯一键 + RR"></a>第三种情况：非唯一键 + RR</h3><p><img src="/image/systemDesign/98.png" alt></p>
+<p>假设条件是：</p>
+<ul>
+<li>update t1 set name=’XX’ where id=10。</li>
+<li>id 为非唯一索引。</li>
+</ul>
+<p>加锁行为：</p>
+<ul>
+<li>先通过 id=10 在 key(id) 上定位到第一个满足的记录，对该记录加 X 锁，而且要在 (6,c)~(10,b) 之间加上 Gap lock，为了防止幻读。然后在主键索引 name 上加对应记录的X 锁；</li>
+<li>再通过 id=10 在 key(id) 上定位到第二个满足的记录，对该记录加 X 锁，而且要在(10,b)~(10,d)之间加上 Gap lock，为了防止幻读。然后在主键索引 name 上加对应记录的X 锁；</li>
+<li>最后直到 id=11 发现没有满足的记录，此时不需要加 X 锁，但要再加一个 Gap lock：(10,d)~(11,f)。</li>
+</ul>
+<h3 id="第四种情况：无索引-RR"><a href="#第四种情况：无索引-RR" class="headerlink" title="第四种情况：无索引 + RR"></a>第四种情况：无索引 + RR</h3><p><img src="/image/systemDesign/99.png" alt></p>
+<p>假设条件是：</p>
+<ul>
+<li>update t1 set name=’XX’ where id=10。</li>
+<li>id 列无索引。</li>
+</ul>
+<p>加锁行为：</p>
+<ul>
+<li>表里所有行和间隙均加 X 锁。</li>
+</ul>
+<p>这样加锁就会很多</p>
+<p>因此尽可能通过主键进行加锁，减少加锁数量</p>
+<h2 id="InnoDB死锁"><a href="#InnoDB死锁" class="headerlink" title="InnoDB死锁"></a>InnoDB死锁</h2><p>在 MySQL 中死锁不会发生在 MyISAM 存储引擎中，但会发生在 InnoDB 存储引擎中，因为 InnoDB 是逐行加锁的，极容易产生死锁。那么死锁产生的四个条件是什么呢？</p>
+<ol>
+<li>互斥条件：一个资源每次只能被一个进程使用；</li>
+<li>请求与保持条件：一个进程因请求资源而阻塞时，对已获得的资源保持不放；</li>
+<li>不剥夺条件：进程已获得的资源，在没使用完之前，不能强行剥夺；</li>
+<li>循环等待条件：多个进程之间形成的一种互相循环等待资源的关系。</li>
+</ol>
+<p>在发生死锁时，InnoDB 存储引擎会自动检测，并且会自动回滚代价较小的事务来解决死锁问题。但很多时候一旦发生死锁，InnoDB 存储引擎的处理的效率是很低下的或者有时候根本解决不了问题，需要人为手动去解决。</p>
+<p>既然死锁问题会导致严重的后果，那么在开发或者使用数据库的过程中，如何避免死锁的产生呢？这里给出一些建议：</p>
+<ul>
+<li>加锁顺序一致；</li>
+<li>尽量基于 primary 或 unique key 更新数据。</li>
+<li>单次操作数据量不宜过多，涉及表尽量少。</li>
+<li>减少表上索引，减少锁定资源。</li>
+<li>相关工具：pt-deadlock-logger。</li>
+</ul>
+<p><a href="https://www.percona.com/doc/percona-toolkit/3.0/pt-deadlock-logger.html" target="_blank" rel="noopener">https://www.percona.com/doc/percona-toolkit/3.0/pt-deadlock-logger.html</a></p>
+<p>eg：</p>
+<p>面条<br>一根筷子<br>一个刀子</p>
+<p>牛排<br>一根筷子<br>一个叉子</p>
+<p>以下是为您提取并整理的图中文字内容：</p>
+<h3 id="表级锁死锁"><a href="#表级锁死锁" class="headerlink" title="表级锁死锁"></a>表级锁死锁</h3><p><strong>产生原因：</strong><br>用户A访问表A（锁住了表A），然后又访问表B；另一个用户B访问表B（锁住了表B），然后企图访问表A；这时用户A由于用户B已经锁住表B，它必须等待用户B释放表B才能继续，同样用户B要等用户A释放表A才能继续，这就死锁就产生了。</p>
+<p>Session 1 –&gt; A表（表锁） –&gt; B表（表锁）<br>Session 2 –&gt; B表（表锁） –&gt; A表（表锁）</p>
+<p><strong>解决方案：</strong><br>这种死锁比较不常见，是由于程序设计不合理或程序Bug产生的，除了调整的程序的逻辑没有其它的办法。</p>
+<p>仔细分析程序的逻辑，对于数据库的多表操作时，尽量按照相同的顺序进行处理，尽量避免同时锁定两个资源，如操作A和B两张表时，总是按先A后B的顺序处理，必须同时锁定两个资源时，要保证在任何时刻都应该按照相同的顺序来锁定资源。</p>
+<hr>
+<h3 id="行级锁死锁"><a href="#行级锁死锁" class="headerlink" title="行级锁死锁"></a>行级锁死锁</h3><p><strong>产生原因1：</strong><br>如果在事务中执行了一条没有索引条件的查询，引发全表扫描（update User set age=20 where name=’ShangJun’），把行级锁上升为全表记录锁定（等价于表级锁，表中的每个行记录都要加排它锁，行与行之间都加gap lock），多个这样的事务执行后，就很容易产生死锁和阻塞，最终应用系统会越来越慢，发生阻塞或死锁。</p>
+<p><strong>解决方案1：</strong><br>SQL语句中不要使用太复杂的关联多表的查询。</p>
+<p>使用Explain对SQL语句进行分析，对于有全表扫描和全表锁定的SQL语句，建立相应的索引进行优化。</p>
+<p>尽可能通过主键索引或唯一索引作为编辑数据的条件。</p>
+<hr>
+<p><strong>产生原因2：</strong><br>两个事务分别想拿到对方持有的锁，互相等待，于是产生死锁。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">     T1                                T2</span><br><span class="line">     |                                 |</span><br><span class="line">     |                                 |</span><br><span class="line">[ 锁 id=1 ]  &lt;------- 等待释放 -------&gt;  [ 锁 id=2 ]</span><br><span class="line">     ^                                 ^</span><br><span class="line">     |                                 |</span><br><span class="line">     |                                 |</span><br><span class="line">[ 锁 id=2 ]  &lt;------- 等待释放 -------&gt;  [ 锁 id=1 ]</span><br></pre></td></tr></table></figure>
+<p><strong>Session1 / Session2 代码示例：</strong><br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Session1</span><br><span class="line"><span class="keyword">begin</span>;</span><br><span class="line"><span class="keyword">update</span> t1 <span class="keyword">set</span> c1=<span class="number">1</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span>;</span><br><span class="line"><span class="keyword">update</span> t1 <span class="keyword">set</span> c1=<span class="number">2</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">Session2</span><br><span class="line"><span class="keyword">begin</span>;</span><br><span class="line"><span class="keyword">update</span> t1 <span class="keyword">set</span> c1=<span class="number">2</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">2</span>;</span><br><span class="line"><span class="keyword">update</span> t1 <span class="keyword">set</span> c1=<span class="number">1</span> <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span>;</span><br></pre></td></tr></table></figure></p>
+<p><strong>解决方案2：</strong></p>
+<ul>
+<li>在同一个事务中，尽可能做到一次锁定所需要的所有资源</li>
+<li>按照id对资源排序，然后按顺序进行处理</li>
+</ul>
+<hr>
+<h3 id="资源争用死锁"><a href="#资源争用死锁" class="headerlink" title="资源争用死锁"></a>资源争用死锁</h3><p>下面分享一个基于资源争用导致死锁的情况，如下图所示。</p>
+<p><strong>死锁情况一</strong></p>
+<p>同上面情况2</p>
+<p>Table: T1(id primary key, name)</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">session 1</span><br><span class="line"><span class="keyword">begin</span>;</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> t1 <span class="keyword">where</span> <span class="keyword">id</span> = <span class="number">1</span> <span class="keyword">for</span> <span class="keyword">update</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">update</span> t1 <span class="keyword">set</span> <span class="keyword">name</span>=<span class="string">' qqq'</span> <span class="keyword">where</span> <span class="keyword">id</span> = <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line">死锁发生！！！</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">session 2</span><br><span class="line"><span class="keyword">begin</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> t1 <span class="keyword">where</span> <span class="keyword">id</span> = <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> <span class="keyword">from</span> t1 <span class="keyword">where</span> <span class="keyword">id</span> = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">id</th>
+<th style="text-align:left">1</th>
+<th style="text-align:left">2</th>
+<th style="text-align:left">3</th>
+<th style="text-align:left">4</th>
+<th style="text-align:left">5</th>
+<th style="text-align:left">6</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>name</strong></td>
+<td style="text-align:left">aaa</td>
+<td style="text-align:left">ccc</td>
+<td style="text-align:left">aaa</td>
+<td style="text-align:left">bbb</td>
+<td style="text-align:left">ccc</td>
+<td style="text-align:left">zzz</td>
+</tr>
+</tbody>
+</table>
+<h3 id="元数据锁导致死锁"><a href="#元数据锁导致死锁" class="headerlink" title="元数据锁导致死锁"></a>元数据锁导致死锁</h3><p>下面分享一个 Metadata lock（即元数据锁）导致的死锁的情况，如下图所示。</p>
+<p><img src="/image/systemDesign/102.png" alt><br>session1 首先拿到 id=1 的锁，session2 同期拿到了 id=5 的锁后，两者分别想拿到对方持有的锁，于是产生死锁。</p>
+<p>session1 和 session2 都在抢占 id=1 和 id=6 的元数据的资源，产生死锁。</p>
+<p>查看 MySQL 数据库中死锁的相关信息，可以执行 <code>show engine innodb status\G</code> 来进行查看，重点关注 “LATEST DETECTED DEADLOCK” 部分。</p>
+<p>给大家一些开发建议来避免线上业务因死锁造成的不必要的影响。</p>
+<ul>
+<li>更新 SQL 的 where 条件时尽量用索引；</li>
+<li>加锁索引准确，缩小锁定范围；</li>
+<li>减少范围更新，尤其不建议非主键/非唯一索引上的范围更新。</li>
+<li>控制事务大小，减少锁定数据量和锁定时间长度（innodb_row_lock_time_avg）。</li>
+<li>加锁顺序一致，尽可能一次性锁定所有所需的数据行。</li>
+</ul>
+<p>以下是为您提取的图中文字内容，已按照两图的内容进行合并整理：</p>
+<h3 id="死锁排查"><a href="#死锁排查" class="headerlink" title="死锁排查"></a>死锁排查</h3><p>MySQL提供了几个与锁有关的参数和命令，可以辅助我们优化锁操作，减少死锁发生。</p>
+<p>（1）查看死锁日志</p>
+<p>通过 <code>show engine innodb status</code> 命令查看近期死锁日志信息。</p>
+<p>使用方法：</p>
+<p>①、查看近期死锁日志信息；<br>②、使用explain查看下SQL执行计划</p>
+<p>（2）查看死锁信息</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 查询死锁表和事务 */</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> performance_schema.data_locks;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 查询等待锁的事务 */</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> performance_schema.data_lock_waits;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* 查询是否锁表 */</span></span><br><span class="line"><span class="keyword">SHOW</span> <span class="keyword">OPEN</span> <span class="keyword">TABLES</span> <span class="keyword">where</span> In_use &gt; <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p>（3）解除死锁</p>
+<p>如果需要解除死锁，有一种最简单粗暴的方式，那就是找到进程id之后，直接干掉。</p>
+<p>查看当前正在进行中的进程</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">processlist</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 也可以使用 */</span></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> information_schema.INNODB_TRX;</span><br></pre></td></tr></table></figure>
+<p>这两个命令找出来的进程id 是同一个。</p>
+<p>杀掉进程对应的进程 id</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">kill</span> <span class="keyword">id</span></span><br></pre></td></tr></table></figure>
+<p>验证（kill后再看是否还有锁）</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> <span class="keyword">OPEN</span> <span class="keyword">TABLES</span> <span class="keyword">where</span> In_use &gt; <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<h1 id="MVCC"><a href="#MVCC" class="headerlink" title="MVCC"></a>MVCC</h1><p>以下是为您提取的图中文字内容，已整合并按纯文本形式展示：</p>
+<p>Multi-Version Concurrency Control 多版本并发控制。MySQL InnoDB 存储引擎，实现的是基于多版本的并发控制协议——MVCC，而不是基于锁的并发控制。</p>
+<p>MVCC 最大的好处是读不加锁，读写不冲突。在读多写少的 OLTP（On-Line Transaction Processing）应用中，读写不冲突是非常重要的，极大的提高了系统的并发性能，这也是为什么现阶段几乎所有的 RDBMS（Relational Database Management System），都支持 MVCC 的原因。</p>
+<p>常规的服务分类：</p>
+<ul>
+<li>读服务：电商搜索、查看订单，缓存、索引库、数据库</li>
+<li>写服务：先插入缓存系统然后再异步写入到数据，直接写入数据库</li>
+<li>扣减服务：update，秒杀服务</li>
+</ul>
+<hr>
+<p><strong>5.6.1. 快照读与当前读</strong></p>
+<p>在 MVCC 并发控制中，读操作可以分为两类: 快照读（Snapshot Read）与当前读 （Current Read）。</p>
+<ul>
+<li>快照读：读取的是记录的可见版本（有可能是历史版本），不用加锁。</li>
+<li>当前读：读取的是记录的最新版本，并且当前读返回的记录，都会加锁，保证其他事务不会再并发修改这条记录。</li>
+</ul>
+<p>注意：MVCC 只在 Read Commited 和 Repeatable Read 两种隔离级别下工作。</p>
+<p>如何区分快照读和当前读呢？ 可以简单的理解为：</p>
+<ul>
+<li>快照读：简单的 select 操作，属于快照读，不需要加锁。</li>
+<li>当前读：特殊的读操作，插入/更新/删除操作，属于当前读，需要加锁。</li>
+</ul>
+<hr>
+<p>假设 F1～F6 是表中字段的名字，1～6 是其对应的数据。后面三个隐含字段分别对应该行的隐含ID、事务号和回滚指针，如下图所示。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">+----+----+----+----+----+----+------------+------------+-------------+</span><br><span class="line">| F1 | F2 | F3 | F4 | F5 | F6 | DB_ROW_ID  | DB_TRX_ID  | DB_ROLL_PT  |</span><br><span class="line">+----+----+----+----+----+----+------------+------------+-------------+</span><br><span class="line">| 1  | 2  | 3  | 4  | 5  | 6  |            |            |             |</span><br><span class="line">+----+----+----+----+----+----+------------+------------+-------------+</span><br><span class="line">  |_________________________|</span><br><span class="line">              |</span><br><span class="line">            DATA</span><br><span class="line">                               |__________________________|</span><br><span class="line">                                             |</span><br><span class="line">                                         隐含ID</span><br><span class="line">                                         事务ID</span><br><span class="line">                                         回滚指针</span><br></pre></td></tr></table></figure>
+<ul>
+<li>隐含 ID（DB_ROW_ID），6 个字节，当由 InnoDB 自动产生聚集索引时，聚集索引包括这个 DB_ROW_ID 的值。</li>
+<li>事务号（DB_TRX_ID），6 个字节，标记了最新更新这条行记录的 Transaction ID，每处理一个事务，其值自动 +1。</li>
+<li>回滚指针（DB_ROLL_PT），7 个字节，指向当前记录项的 Rollback Segment 的 Undo log记录，通过这个指针才能查找之前版本的数据。</li>
+</ul>
+<p>具体的更新过程，简单描述如下：</p>
+<p>首先，假如这条数据是刚 INSERT 的，可以认为 ID 为 1，其他两个字段为空。</p>
+<p>然后，当事务 1 更改该行的数据值时，会进行如下操作，如下图所示。</p>
+<p><img src="/image/systemDesign/100.png" alt></p>
+<ul>
+<li>用排他锁锁定该行；记录 Redo log；</li>
+<li>把该行修改前的值复制到 Undo log，即图中下面的行；</li>
+<li>修改当前行的值，填写事务编号，使回滚指针指向 Undo log 中修改前的行。</li>
+</ul>
+<hr>
+<p>接下来，与事务 1 相同，此时 Undo log 中有两行记录，并且通过回滚指针连在一起。因此，如果 Undo log 一直不删除，则会通过当前记录的回滚指针回溯到该行创建时的初始内容，所幸的是在 InnoDB 中存在 purge 线程，它会查询那些比现在最老的活动事务还早的 Undo log，并删除它们，从而保证 Undo log 文件不会无限增长，如下图所示。</p>
+<p><img src="/image/systemDesign/101.png" alt></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mySQL/" rel="tag"># mySQL</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/mySQL/11.html" rel="next" title="MYSQL 存储引擎">
+                <i class="fa fa-chevron-left"></i> MYSQL 存储引擎
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/mySQL/13.html" rel="prev" title="MySQL 集群高可用">
+                MySQL 集群高可用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">286</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL事务原理"><span class="nav-number">1.</span> <span class="nav-text">MySQL事务原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#事务特性"><span class="nav-number">1.1.</span> <span class="nav-text">事务特性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#原子性"><span class="nav-number">1.1.1.</span> <span class="nav-text">原子性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#持久性"><span class="nav-number">1.1.2.</span> <span class="nav-text">持久性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#隔离性"><span class="nav-number">1.1.3.</span> <span class="nav-text">隔离性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一致性"><span class="nav-number">1.1.4.</span> <span class="nav-text">一致性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事务隔离"><span class="nav-number">1.2.</span> <span class="nav-text">事务隔离</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#并发问题"><span class="nav-number">1.2.1.</span> <span class="nav-text">并发问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#隔离级别"><span class="nav-number">1.2.2.</span> <span class="nav-text">隔离级别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#并发事务控制"><span class="nav-number">1.3.</span> <span class="nav-text">并发事务控制</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#锁机制"><span class="nav-number">2.</span> <span class="nav-text">锁机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#锁分类"><span class="nav-number">2.1.</span> <span class="nav-text">锁分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自增锁"><span class="nav-number">2.2.</span> <span class="nav-text">自增锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InnoDB-行锁"><span class="nav-number">2.3.</span> <span class="nav-text">InnoDB 行锁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一种情况：主键-RR"><span class="nav-number">2.3.1.</span> <span class="nav-text">第一种情况：主键 + RR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二种情况：唯一键-RR"><span class="nav-number">2.3.2.</span> <span class="nav-text">第二种情况：唯一键 + RR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三种情况：非唯一键-RR"><span class="nav-number">2.3.3.</span> <span class="nav-text">第三种情况：非唯一键 + RR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第四种情况：无索引-RR"><span class="nav-number">2.3.4.</span> <span class="nav-text">第四种情况：无索引 + RR</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InnoDB死锁"><span class="nav-number">2.4.</span> <span class="nav-text">InnoDB死锁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#表级锁死锁"><span class="nav-number">2.4.1.</span> <span class="nav-text">表级锁死锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#行级锁死锁"><span class="nav-number">2.4.2.</span> <span class="nav-text">行级锁死锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#资源争用死锁"><span class="nav-number">2.4.3.</span> <span class="nav-text">资源争用死锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#元数据锁导致死锁"><span class="nav-number">2.4.4.</span> <span class="nav-text">元数据锁导致死锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#死锁排查"><span class="nav-number">2.4.5.</span> <span class="nav-text">死锁排查</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MVCC"><span class="nav-number">3.</span> <span class="nav-text">MVCC</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

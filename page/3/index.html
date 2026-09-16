@@ -259,7 +259,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/dataWash.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/deepLearning/Sequencetosequencemodels.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -284,8 +284,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/machineLearning/dataWash.html" itemprop="url">
-                  数据清洗和转换
+                <a class="post-title-link" href="/post/deepLearning/Sequencetosequencemodels.html" itemprop="url">
+                  Sequence to Sequence Models
                 </a>
               
             
@@ -299,8 +299,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-10-15T20:14:37+08:00">
-                2024-10-15
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-07-17T15:15:37+08:00">
+                2026-07-17
               </time>
             
 
@@ -337,26 +337,48 @@
       
         
           
-            <h1 id="常见数据错误形式"><a href="#常见数据错误形式" class="headerlink" title="常见数据错误形式"></a>常见数据错误形式</h1><ol>
-<li>超出正常数据范围，值或者太大或者太小</li>
-<li>不符合相关校验规则，比如数值类型只能是整形，货币单位应该是美元，但是出现了英镑</li>
-<li>形式错误，比如日期格式错误，电话号码格式错误，不符合相关语法语义规范</li>
-</ol>
-<p><img src="/image/LLM/236.png" alt></p>
-<p>对于这样的数据要进行去除清洗处理</p>
-<h1 id="数据转换"><a href="#数据转换" class="headerlink" title="数据转换"></a>数据转换</h1><p>针对数值，图片，视频，文字不同输入类型，有不同转换方式<br><img src="/image/LLM/237.png" alt><br><img src="/image/LLM/238.png" alt><br><img src="/image/LLM/239.png" alt><br><img src="/image/LLM/240.png" alt><br><img src="/image/LLM/241.png" alt><br>小结</p>
+            <h1 id="Sequence-to-Sequence-Models"><a href="#Sequence-to-Sequence-Models" class="headerlink" title="Sequence to Sequence Models"></a>Sequence to Sequence Models</h1><p>输入为一个序列，输出为另一个序列</p>
+<p>比如语言翻译</p>
+<p><img src="/image/deepLearning/seq2seq-1.png" alt></p>
+<p>根据图片内容生成对其语言描述</p>
+<p><img src="/image/deepLearning/seq2seq-2.png" alt></p>
+<p>机器翻译过程可以看做是一个有条件的语言模型<br><img src="/image/deepLearning/seq2seq-3.jpg" alt></p>
+<p>找到最合适的翻译结果Y 的过程，就是计算在 x 输入情况下得到Y的概率P，使P达到最大值的过程</p>
+<p><img src="/image/deepLearning/seq2seq-4.png" alt><br><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/NeuralMachineTranslation/Neural_machine_translation_with_attention_v4a.ipynb" target="_blank" rel="noopener">相关练习</a><br>上述过程更适合直接获取到整个句子Y后，对整个句子的适配度进行概率计算，而不是用贪心算法，<br>依次根据上一个词的内容找到最匹配的下一个词之后，再最终对整个句子进行概率运算，<br>因为单个词语查找最合适下一个词语的概率，是计算量非常大的，另外词语的高频性可能会影响句子整体的适配性<br>比如下面句1 比句2 翻译的效果更好<br>但是句1和句2 在用贪心算法获取过程中更可能得到句2，因为得到相同的前两个词语之后，going 出现的频率大于visiting</p>
+<p><img src="/image/deepLearning/seq2seq-5.png" alt></p>
+<p>贪心算法的缺点是，在获取到当前词语之后，会根据当前词语，获取下一个词语，然后获取下一个词语，直到获取到整个句子.</p>
+<h1 id="集束搜索算法"><a href="#集束搜索算法" class="headerlink" title="集束搜索算法"></a>集束搜索算法</h1><p>集束搜索算法（beam search algorithm）: 在获取当前词语之后，会获取当前词语的概率最大的k个词语，然后获取下一个词语，直到获取到整个句子<br>相当于同时进行集束宽度（eg. B=3）个贪心算法，然后再每一步的n*3 个结果中寻找概率最大前B 个结果，然后进行下一步.n 是当前词汇库中的词汇数<br>这样就比贪心算法可能得到更多的可能性</p>
+<p><img src="/image/deepLearning/seq2seq-6.jpg" alt><br><img src="/image/deepLearning/seq2seq-7.png" alt><br><img src="/image/deepLearning/seq2seq-8.png" alt></p>
+<h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><p>当前的概率计算存在以下问题</p>
 <ol>
-<li>数值类型转换就采用各种归一化的计算公式进行转换</li>
-<li>图片，可以采用裁剪尺寸，下采样，压缩，白化处理</li>
-<li>视频，可以采用截取关键片段，采样关键针降低数据处理陈本</li>
-<li>文字，可以进行词干提取，词形还原以及token化处理<br><img src="/image/LLM/242.png" alt></li>
+<li>概率值都是小于1的值，多项相乘时，项数越多，值越小，对于计算来说，能存储的极小值有限，容易出现数据下溢</li>
+<li>基于问题1，项越多概率越小，导致模型为使概率值最大，尽可能生成短句子，从而天然倾向生成较短的句子，不倾向生成长句子</li>
+<li>对于长句生成本身不友好<br><img src="/image/deepLearning/seq2seq-9.png" alt></li>
 </ol>
-<h1 id="mL-常见算法类型"><a href="#mL-常见算法类型" class="headerlink" title="mL 常见算法类型"></a>mL 常见算法类型</h1><p>监督，自监督，半监督，无监督，强化学习<br><img src="/image/LLM/243.png" alt><br><img src="/image/LLM/244.png" alt></p>
-<h2 id="自监督相关概念"><a href="#自监督相关概念" class="headerlink" title="自监督相关概念"></a>自监督相关概念</h2><p><img src="/image/LLM/245.png" alt></p>
-<h2 id="决策树相关注意点"><a href="#决策树相关注意点" class="headerlink" title="决策树相关注意点"></a>决策树相关注意点</h2><p><img src="/image/LLM/246.png" alt><br><img src="/image/LLM/247.png" alt><br><img src="/image/LLM/248.png" alt></p>
-<h2 id="二分类评价指标"><a href="#二分类评价指标" class="headerlink" title="二分类评价指标"></a>二分类评价指标</h2><p><img src="/image/LLM/249.png" alt></p>
-<h2 id="复杂度解释or解释"><a href="#复杂度解释or解释" class="headerlink" title="复杂度解释or解释"></a>复杂度解释or解释</h2><p><img src="/image/LLM/250.png" alt><br><img src="/image/LLM/251.png" alt><br><img src="/image/LLM/252.png" alt><br><img src="/image/LLM/253.png" alt><br><img src="/image/LLM/254.png" alt></p>
-<p><a href="https://c.d2l.ai/stanford-cs329p/syllabus.html#data-i" target="_blank" rel="noopener">李沐机器学习ppt</a></p>
+<p>对于集束宽度的选择<br>实际生产为10个左右，大于100的基本就可以算做太多了<br>large B 可以得到更好的结果，但是训练时间会变长<br>small B 会得到差的结果，但是训练时间会变短</p>
+<p>虽然集束搜索算法不如深度或者广度优先搜索算法的准确性高，不能保证找到最准确的值，但是计算速度会比二者快</p>
+<h2 id="问题分析"><a href="#问题分析" class="headerlink" title="问题分析"></a>问题分析</h2><p>通常增加测试数据集或者增加集束搜索宽度，一般都会是效果更好<br>但判别是RNN过程有错误，还是集束搜索算法搜索过程有错误可以更根本的解决训练异常问题</p>
+<p>如果人工翻译结果概率大于算法得出的句子的概率，即集束算法没有找到使概率最大的正确的句子，问题出在解码查找过程<br>相反，在本身人工翻译结果好于算法结果的情况下，如果人工翻译结果概率还是小于算法得出的句子的概率，说明RNN过程有错误</p>
+<p><img src="/image/deepLearning/seq2seq-10.png" alt="img"></p>
+<h1 id="bleu-算法"><a href="#bleu-算法" class="headerlink" title="bleu 算法"></a>bleu 算法</h1><p>类似图像识别可以用对错一个确定的数值判断推测结果，这里用bleu 算法得到的指数来评估翻译结果好坏<br>用来计算评估机器翻译结果的指数，从而评估翻译好坏<br>翻译越接近人类翻译，指数分数越高<br>具备双语评估，且具有人类评估结果替补性</p>
+<p><img src="/image/deepLearning/seq2seq-11.png" alt="img"><br><img src="/image/deepLearning/seq2seq-12.png" alt="img"></p>
+<p>短翻译容易获得高精度的评判结果，为了降低这种误差，引入BP 惩罚参数进行更精准效果计算<br><img src="/image/deepLearning/seq2seq-13.png" alt="img"></p>
+<h1 id="注意力机制"><a href="#注意力机制" class="headerlink" title="注意力机制"></a>注意力机制</h1><p>之前涉及的机器翻译是使用两个rnn 结构，先编码后解码（编码后将信息存在激活函数中），一次性读取整个句子会之后再整体翻译<br>这样对于特别长的句子来说不太现实，即需要处理的入参特别长，随着句子长度增加，bleu 指数会有明显下降<br>且不符合人类翻译习惯，人类翻译更倾向于，读一段翻译一段，这样只关注一整段文字里面的一小段句子<br><img src="/image/deepLearning/seq2seq-14.png" alt="img"><br>注意力机制在编码阶段会生成一系列输入单词的特征信息（单词本身和它周围词的特征），<br>在生成翻译结果时，根据输入句子中每个单词对该翻译结果单词的影响权重（注意力权重）和已经翻译出的单词两个信息共同计算出当前单词的翻译结果<br><img src="/image/deepLearning/seq2seq-15.png" alt="img"></p>
+<p>具体计算过程<br><img src="/image/deepLearning/seq2seq-16.png" alt="img"><br><img src="/image/deepLearning/seq2seq-17.png" alt="img"><br>更多应用，日期格式转换</p>
+<p><img src="/image/deepLearning/seq2seq-18.png" alt="img"></p>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><p>语音识别，输入变成每一帧的语音音频, 1秒有1000帧的话，输入就会是1000个数据，相当于上面1000个单词<br><img src="/image/deepLearning/seq2seq-19.png" alt="img"><br><img src="/image/deepLearning/seq2seq-20.png" alt="img"><br>触发词识别<br><img src="/image/deepLearning/seq2seq-21.png" alt="img"></p>
+<h1 id="transformer"><a href="#transformer" class="headerlink" title="transformer"></a>transformer</h1><p>对于循环神经网络来说，rnn, Lstm 处理连续输入信息会要求神经网络越来越复杂<br><img src="/image/deepLearning/seq2seq-22.png" alt="img"></p>
+<p>将注意力机制中RNN 过程用CNN 卷积 同时处理多个单词的过程就是transformer 架构</p>
+<p>transformer 架构的模型两个关键点</p>
+<ol>
+<li>自注意力机制 — 带着句子上下文情况下特征计算</li>
+<li>多头注意机制 — 自注意力机制循环过程，产生多种可能性</li>
+</ol>
+<p><img src="/image/deepLearning/seq2seq-23.png" alt="img"></p>
+<h2 id="自注意力机制"><a href="#自注意力机制" class="headerlink" title="自注意力机制"></a>自注意力机制</h2><p>计算输入单词的注意力值</p>
+<p><img src="/image/deepLearning/seq2seq-24.png" alt="img"><br><img src="/image/deepLearning/seq2seq-25.png" alt="img"></p>
+<h2 id="多头注意力机制"><a href="#多头注意力机制" class="headerlink" title="多头注意力机制"></a>多头注意力机制</h2><p>在自注意力机制基础上，同时并计算其他多个问题的注意力值<br>通过并行同时获取多个单词之间的不同维度的含义关系<br><img src="/image/deepLearning/seq2seq-26.png" alt="img"></p>
+<h2 id="transform-网络"><a href="#transform-网络" class="headerlink" title="transform 网络"></a>transform 网络</h2><p><img src="/image/deepLearning/seq2seq-27.png" alt="img"><br>有时候使用mask multi-head attention 进行训练<br>在有准确输入输出情况下，<br>在解码阶段，将输入值从正确输出结果里一次掩盖后几个单词，假设还没有推理出来，仅推理出了前几个单词<br>查看能否正确预测出序列中的下一个单词<br><img src="/image/deepLearning/seq2seq-28.png" alt="img"></p>
 
           
         
@@ -395,7 +417,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/datalabel.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/deepLearning/Embedding.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -420,8 +442,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/machineLearning/datalabel.html" itemprop="url">
-                  数据标注
+                <a class="post-title-link" href="/post/deepLearning/Embedding.html" itemprop="url">
+                  Embedding 词嵌入
                 </a>
               
             
@@ -435,8 +457,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-10-14T21:05:37+08:00">
-                2024-10-14
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-07-16T17:15:37+08:00">
+                2026-07-16
               </time>
             
 
@@ -473,18 +495,49 @@
       
         
           
-            <p>根据标注数据的目的(数据优化还是训练模型)，数据当前的标注情况以及预算情况<br>可以根据下面的流程进行数据标注<br><img src="/image/LLM/226.png" alt></p>
-<h1 id="半监督学习"><a href="#半监督学习" class="headerlink" title="半监督学习"></a>半监督学习</h1><p>如果一开始有一部分数据可以进行监督学习训练，然后用未标记的数据进行测试，拿到测试结果，<br>根据测试结果准确性判断是否将当前未标记数据当做标记数据添加到下一轮的训练中<br><img src="/image/LLM/227.png" alt><br><img src="/image/LLM/228.png" alt><br>由于这里的工作是进行数据标注，所以可以使用较深的神经网络或者较贵的模型进行训练<br>以保证得到更准确的标注结果</p>
-<h1 id="众包标注"><a href="#众包标注" class="headerlink" title="众包标注"></a>众包标注</h1><p>如果有足够的资金预算，可以将数据交给第三方进行标注，然后将标注结果进行汇总<br><img src="/image/LLM/229.png" alt><br>但要面临如何降低标注门槛，标注质量，价格昂贵，标注人员不稳定等问题<br><img src="/image/LLM/230.png" alt></p>
-<h2 id="主动学习"><a href="#主动学习" class="headerlink" title="主动学习"></a>主动学习</h2><p>只将训练结果最不确定的数据，或者最难标记的数据进行人工标注，然后用多个模型投票保证标记准确度<br><img src="/image/LLM/231.png" alt><br>通常与半监督学习结合使用<br><img src="/image/LLM/232.png" alt></p>
-<h2 id="质量控制"><a href="#质量控制" class="headerlink" title="质量控制"></a>质量控制</h2><p>防止标错或者范围有问题，可以选择将一个数据发给多个标注人员进行标注，然后根据标注结果进行投票<br>但这样做会导致标注成本增加<br>降低成本的方法可以是，<br>一是从结果角度思考，先让模型进行推测，如果人工标注与模型推测结果相差较大，则将数据发给多个标注人员进行标注<br>否则停止任务发送，减少成本；或者发送的前几个人标记结果都一样，就停止发送更多人进行标记<br>二是从人的角度思考，先给一些有确定标注的数据给标记人员进行标注，如果标注结果与确定标注相差结果较大，说明标注人员能力有问题，进行人员更换<br><img src="/image/LLM/233.png" alt></p>
-<h2 id="弱监督学习"><a href="#弱监督学习" class="headerlink" title="弱监督学习"></a>弱监督学习</h2><p>使用启发式规则通过数据编程得到一些有噪音的标注<br>通过半自动化的方式生成准确度弱于人工标记，但足以进行模型训练的标注<br>通过根据数据特征的一系列判断(启发式规则)进行投票，然后将投票结果进行阈值比较，从而判断属于哪个分类标签<br><img src="/image/LLM/233.png" alt></p>
-<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>三种常见数据标注方式</p>
+            <h1 id="word-representation-词汇表征"><a href="#word-representation-词汇表征" class="headerlink" title="word representation 词汇表征"></a>word representation 词汇表征</h1><p>如果用one-hot表示词汇集中的word，只能存储这个单词在这个词表中的索引，无法表示单词的语义，更无法计算不同单词之间的相似度/关联度。<br>如果选取n个features, 每个feature 再用数据大小表征当前单词和这个feature的关联度，可以更好的表征单词语义和计算单词之间的相似度，从而进行词嵌入，进一步进行猜词计算</p>
+<p><img src="/image/deepLearning/embedding-1.png" alt></p>
+<p>引入坐标系的概念，如果n个特征代表n 个维度,比如300个维度，那么每个单词就像嵌入在这个300维空间中, 会自然的发现类似的或者同类的单词会聚集在一起<br>使用t-sne 算法通过降维到2维可以实现词分布的可视化</p>
+<p><img src="/image/deepLearning/embedding-2.png" alt></p>
+<h1 id="词嵌入应用"><a href="#词嵌入应用" class="headerlink" title="词嵌入应用"></a>词嵌入应用</h1><h2 id="实体识别-gt-迁移学习"><a href="#实体识别-gt-迁移学习" class="headerlink" title="实体识别 ==&gt; 迁移学习"></a>实体识别 ==&gt; 迁移学习</h2><p>因为现在每个单词是通过词嵌入表征的，所以如果对于已经识别的实体，对于现在要识别的实体，只需要对比特征向量的相似度，就可以进行识别<br>另外，对于词汇表中未出现的单词，通过进行特征向量转换后，自然可以加入词汇表中，从而可以直接进行相似度计算</p>
+<p>词嵌入方便进行迁移学习，尤其是大批量词嵌入模型应用与小批量垂类领域时，需要重新进行词嵌入的新词是少数，可以直接使用词嵌入模型中已存在的大多数语义逻辑，从而进行迁移学习</p>
+<p><img src="/image/deepLearning/embedding-3.png" alt><br>词嵌入迁移过程<br><img src="/image/deepLearning/embedding-4.png" alt></p>
+<p>词嵌入word embedding 和 之前的人脸识别的 face encoding 思路一致，可以认为是意思一样的术语<br><img src="/image/deepLearning/embedding-5.png" alt></p>
+<p>更多： 文本摘要（text summarization）文本解析（co-reference resolution）解析（ parsing）</p>
+<h2 id="类比推理"><a href="#类比推理" class="headerlink" title="类比推理"></a>类比推理</h2><p>使用余弦相似度算法或者其他可以计算相似度的算法，可以对两个已知单词进行向量计算，得到向量关系，从而推理出问题中单词在相同向量，即类比关系中对应的单词</p>
+<p>比如 Q: man 对应 woman 那么 king 对应 ?<br>a: e<em>man - e_woman = e_king - e</em>?</p>
+<p><img src="/image/deepLearning/embedding-6.png" alt></p>
+<p>e<em>? = e_king - e_man + e_woman<br>如果向量 e</em>? 和 e_king - e_man + e_woman 相似度值越高，即词语语义越相似，越接近正确答案<br><img src="/image/deepLearning/embedding-7.jpg" alt></p>
+<p>使用余弦计算相似度<br>两个向量夹角角度的余弦值，夹角为90度时，余弦值为0, 夹角为0度时，余弦值为1， 夹角为180度时，余弦值为-1，相反方向</p>
+<p><img src="/image/deepLearning/embedding-8.jpg" alt></p>
+<h2 id="词嵌入矩阵"><a href="#词嵌入矩阵" class="headerlink" title="词嵌入矩阵"></a>词嵌入矩阵</h2><p>所有词汇表中的单词进行特征向量表示后，组成的矩阵，如果跟原来one-shot表示法中某个单词w的向量进行点积运算可以直接得到该单词w 的特征向量表示<br>E · O_w = e_w<br><img src="/image/deepLearning/embedding-9.png" alt></p>
+<h3 id="使用word-embedding-进行模型训练"><a href="#使用word-embedding-进行模型训练" class="headerlink" title="使用word embedding 进行模型训练"></a>使用word embedding 进行模型训练</h3><p>整体步骤都是将样本数据（一个句子）中单词分为目标值和输入值后，形成监督学习模型，然后进行训练</p>
 <ol>
-<li>半监督学习</li>
-<li>众包标注</li>
-<li>弱监督学习<br>对于没有标记的数据也可以用无监督或者自监督学习进行训练<br><img src="/image/LLM/233.png" alt></li>
+<li>将目标值转成特征向量，摊平所有的向量值</li>
+<li>引入softmax 激活函数，计算目标值出现的概率，取概率最大的值与目标值对比</li>
+<li>计算损失函数，重新训练</li>
 </ol>
+<p>词嵌入矩阵的训练过程<br><img src="/image/deepLearning/embedding-10.png" alt></p>
+<h4 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h4><ol>
+<li><p>固定输入单词数量，如上例，输入值为推测词前面的所有6个单词，300维的特征摊平后，输入值为300 * 6 = 1800维<br>如果固定单词数量为4，输入单词数量减少，那么特征向量的维度也会减少，模型输入值减少，从而可以减少训练时间<br>固定输入单词数着窗口，可以方便的处理任意长度的句子，因为这样模型的输入结构就是固定的</p>
+</li>
+<li><p>尝试使用不同的上下文选取窗口大小进行训练<br>最近4个<br>左右各4个<br>最近1个<br>附件的一个</p>
+</li>
+<li><p>使用 Word2Vec 中的 Skip-grams 算法进行训练<br>Skip-grams 先固定输入上下文，在根据不同窗口规则选取目标值，生成监督学习数据对</p>
+</li>
+</ol>
+<p><img src="/image/deepLearning/embedding-11.png" alt><br><img src="/image/deepLearning/embedding-12.png" alt><br>softmax 分类 的问题就是要全量计算所有的概率，然后取概率最大的值，这样计算量非常大<br><img src="/image/deepLearning/embedding-13.png" alt></p>
+<ol start="4">
+<li><p>负采样<br>选取一对正确的目标值和上下文，作为输入， 输出为正确的flag 1， 作为正采样样本<br>然后随机生成k个负采样样本，负采样样本输入值中的上下文和正采样样本一致， 目标值随机选取，输出为错误的flage 0</p>
+<p><img src="/image/deepLearning/embedding-14.jpg" alt><br>正采样样本和负采样样本一起组成监督学习样本对 进行训练<br>这样做的好处，相当于原来要判断单词集合中所有单词是不是正确答案，错误答案是远多于正确答案的，现在只要判断k个单词生成的错误答案，避免了每次判断所有的单词，从而大大减少计算量<br><img src="/image/deepLearning/embedding-15.png" alt><br>负采样单词的获取为了避免取到极高频词或者极低频词，一般用下面的概率公式判断当前单词概率，决定是否要采样，f(w) 为单词出现频率<br><img src="/image/deepLearning/embedding-16.png" alt></p>
+</li>
+<li><p>情感分类<br>将评论中单词进行特征向量转换后进行均值计算，最后对计算结果进行softmax 分类<br><img src="/image/deepLearning/embedding-17.png" alt><br>但这样没有考虑单词之间的语序和重复出现的频率问题，会导致预测结果不准确<br>可以使用RNN 进行训练, 解决单词语序引起的语义失真问题<br><img src="/image/deepLearning/embedding-18.png" alt></p>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/WordVectorRepressiontation/RNN/Emojify_v2a.ipynb" target="_blank" rel="noopener">相关练习</a></p>
+</li>
+<li><p>语义纠偏<br><img src="/image/deepLearning/embedding-19.png" alt></p>
+</li>
+</ol>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/WordVectorRepressiontation/Operations_on_word_vectors_v2a.ipynb" target="_blank" rel="noopener">相关练习</a></p>
 
           
         
@@ -523,7 +576,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/ReinforcementLearning.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/llm/xinchang/paractice.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -548,8 +601,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/machineLearning/ReinforcementLearning.html" itemprop="url">
-                  强化学习
+                <a class="post-title-link" href="/post/llm/xinchang/paractice.html" itemprop="url">
+                  一些实操的步骤
                 </a>
               
             
@@ -563,8 +616,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-10-07T14:34:37+08:00">
-                2024-10-07
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-11-01T10:36:37+08:00">
+                2025-11-01
               </time>
             
 
@@ -601,330 +654,38 @@
       
         
           
-            <p>强化学习的主要思想不是告诉算法每个输入的正确输出是什么<br>而是指定一个奖励函数，告诉它什么时候做的好，什么时候做的不好<br>算法的工作是自动找出如何选择好的动作</p>
-<p><img src="/image/LLM/202.png" alt></p>
-<h1 id="一些概念"><a href="#一些概念" class="headerlink" title="一些概念"></a>一些概念</h1><p>以火星探测器为例，在其决定路线的过程中产生的几个概念</p>
-<ol>
-<li>S ： 当前状态</li>
-<li>a : 动作</li>
-<li>S’ : 下一个状态</li>
-<li>R : 奖励函数</li>
-<li><p>teminal state : 终止状态<br><img src="/image/LLM/203.png" alt><br>每种路线回报通过计算路上每一步奖励乘以折现系数加和得到<br><img src="/image/LLM/204.png" alt></p>
-</li>
-<li><p>policy : 策略函数，根据当前的状态选择可以获得最大收益的动作</p>
-</li>
+            <h1 id="文生视频"><a href="#文生视频" class="headerlink" title="文生视频"></a>文生视频</h1><ol>
+<li>找到相似图片，通过<a href="https://chat.baidu.com/search?isShowHello=1&amp;pd=csaitab&amp;setype=csaitab&amp;extParamsJson=%7B%22enter_type%22%3A%22home_tab%22%7D" target="_blank" rel="noopener">文心一言</a>生成图片提示词</li>
+<li>将提示词替换下面代码, 在jupyter notebook中运行可以得到5张图片</li>
 </ol>
-<p>A policy is a function π（s）= a  mapping from states to actions, that tells you what action a to take in a given state s.</p>
-<p>The goal of reinforcement learning ===&gt;<br>Find a policy 5 that tells you what action (a = 5(s)) to take in every state (s) so as to maximize the return.</p>
-<p><img src="/image/LLM/205.png" alt></p>
-<h1 id="马尔科夫决策过程"><a href="#马尔科夫决策过程" class="headerlink" title="马尔科夫决策过程"></a>马尔科夫决策过程</h1><p>未来只取决于当前的名称，而不是到达当前状态之前可能发生的任何事情</p>
-<p><img src="/image/LLM/206.png" alt></p>
-<h1 id="状态动作回报函数-Q"><a href="#状态动作回报函数-Q" class="headerlink" title="状态动作回报函数 Q"></a>状态动作回报函数 Q</h1><p>当前状态下执行一次函数能够得到的最大回报值<br>如果能够找到最大回报值也就能知道接下来应该用什么动作</p>
-<p><img src="/image/LLM/207.png" alt></p>
-<p><img src="/image/LLM/208.png" alt></p>
-<h1 id="贝尔曼公式"><a href="#贝尔曼公式" class="headerlink" title="贝尔曼公式"></a>贝尔曼公式</h1><p><img src="/image/LLM/209.png" alt><br><img src="/image/LLM/210.png" alt><br><img src="/image/LLM/211.png" alt></p>
-<h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><p>面对环境随机的情况，动作实际执行过程可能存在多个可能路线，导致每次得到的最大回报值不同，因此计算当前状态最大收益时取所有路线情况的平均值进行计算<br>即使用期望回报值进行计算<br><img src="/image/LLM/212.png" alt><br><img src="/image/LLM/213.png" alt></p>
-<h1 id="DQN-算法"><a href="#DQN-算法" class="headerlink" title="DQN 算法"></a>DQN 算法</h1><p>D: deep learning<br>Q: Q function<br>N: Network</p>
-<p>对于连续状态值的情况，使用神经网络训练Q函数进行深度强化学习<br><img src="/image/LLM/214.png" alt><br><img src="/image/LLM/215.png" alt><br><img src="/image/LLM/216.png" alt><br>By using experience replay we avoid problematic correlations, oscillations and instabilities. In addition, experience replay also allows the agent to potentially use the same experience in multiple weight updates, which increases data efficiency.<br>通过使用经验重放，我们可以避免有问题的相关性、振荡和不稳定性。此外，经验重放还允许代理在多次权重更新中使用相同的经验，从而提高数据效率。</p>
-<h2 id="优化-1"><a href="#优化-1" class="headerlink" title="优化"></a>优化</h2><h3 id="优化神经网络结构"><a href="#优化神经网络结构" class="headerlink" title="优化神经网络结构"></a>优化神经网络结构</h3><p>上面将s和a作为X 同时参与训练，最终只会得到一个动作a最大回报函数值,需要进行多次运算<br>如果仅将s作为输入，输出层产生多个a的回报值，就可以根据回报值大小选择相应的动作</p>
-<p><img src="/image/LLM/217.png" alt><br><img src="/image/LLM/218.png" alt></p>
-<h3 id="epsilon-greedy-policy"><a href="#epsilon-greedy-policy" class="headerlink" title="epsilon-greedy policy"></a>epsilon-greedy policy</h3><p>选择action 过程中，如果一直按Q值最大原则选择action,万一初始值特别小无法开启我们想要的第一步程序，就会导致无法进行后续的action<br>epsilon-greedy policy 方案就是找一个合适的阈值epsilon，比如说0.05,<br>95%的时间选择最大Q值action (贪婪剥削策略)<br>5%的时间选择随机选择action（探索策略）<br>这样就可以避免选到固定不符合预期的action,开放一定的窗口有可能选到其他的action<br>epsilon 大小 类似于梯度，随训练过程进行会逐渐变小，变小的过程，模型也就学会了如何选择更有可能选择符合预期的action</p>
-<p><img src="/image/LLM/219.png" alt></p>
-<h3 id="小批量"><a href="#小批量" class="headerlink" title="小批量"></a>小批量</h3><p>训练数据如果非常庞大，在训练过程中可能会造成时间消耗，为了提高训练速度，可以采用小批量的方式进行<br>将训练数据分成多个批次，每次迭代用不同批次数据，虽然梯度会比较嘈杂，但还是会朝着梯度下降的方向进行<br><img src="/image/LLM/220.png" alt><br><img src="/image/LLM/221.png" alt><br><img src="/image/LLM/222.png" alt><br><img src="/image/LLM/223.png" alt></p>
-<h3 id="软更新"><a href="#软更新" class="headerlink" title="软更新"></a>软更新</h3><p>在更新参数过程中，每次按比例更新参数，每次仅更新部分比例的参数，可以使强化学习更好的收敛<br><img src="/image/LLM/224.png" alt></p>
-<h1 id="强化学习的一些限制"><a href="#强化学习的一些限制" class="headerlink" title="强化学习的一些限制"></a>强化学习的一些限制</h1><p><img src="/image/LLM/225.png" alt></p>
-<p><a href="https://github.com/kaieye/2022-Machine-Learning-Specialization/blob/main/Unsupervised%20learning%20recommenders%20reinforcement%20learning/week3/Practice%20Lab-Reinforcement%20Learning/C3_W3_A1_Assignment.ipynb" target="_blank" rel="noopener">实验练习</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/RecommenderSystem.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/machineLearning/RecommenderSystem.html" itemprop="url">
-                  推荐系统
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-10-06T07:10:37+08:00">
-                2024-10-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>下面以根据电影评分推荐电影为例，介绍推荐系统的开发过程</p>
-<h1 id="思路整理"><a href="#思路整理" class="headerlink" title="思路整理"></a>思路整理</h1><p>根据电影的特征，用户对每个电影都会有一个评分(0-5分)，比如电影A的评分是5分，电影B的评分是4分，电影C的评分是3分<br>一般情况下，用户对某电影评分越高，说明后续对该类型电影的青睐度越高，对于系统来说越值得推荐给用户<br>即系统需要预测用户对某个电影X的评分，从而决定是否推荐给用户<br>系统需要依赖的数据是电影的特征数据（X）和以往用户对电影的评分数据(Y)<br>根据二者的关系，计算出相关的算法参数<br>当有需要预测一个电影评分的时候，输入待评分电影特征即可得到评分，然后根据阈值判断是否推荐给用户<br>下面是对一个观众的电影评分预测过程<br><img src="/image/LLM/179.png" alt><br>对应的成本函数<br><img src="/image/LLM/180.png" alt><br>如果训练集有多个用户的评分数据，拿到所有用户的参数后加合，就可以预测大众用户对某个电影的整体评分情况<br><img src="/image/LLM/181.png" alt></p>
-<h1 id="协同过滤算法"><a href="#协同过滤算法" class="headerlink" title="协同过滤算法"></a>协同过滤算法</h1><p>对于电影的评分，一开始不能确定使用电影的哪些特征，协同过滤算法将输入，电影的特征X， 也看做是一个参数参与成本函数的计算<br>从而利用梯度下降过程找到合适的参数和特征值</p>
-<h2 id="推导过程"><a href="#推导过程" class="headerlink" title="推导过程"></a>推导过程</h2><ol>
-<li>已知多个人对一部电影的评分和相关参数，可以反推出X 的 情况<br><img src="/image/LLM/182.png" alt></li>
-<li>如果现在已知多个人对一部电影的评分和相关参数，可以对电影特征X进行成本函数计算<br>加和之后可以对多个电影的特征进行预测<br><img src="/image/LLM/183.png" alt></li>
-<li>观察成本函数的公式，现在加和参数和特征的成本函数，<br><img src="/image/LLM/185.png" alt><br><img src="/image/LLM/184.png" alt></li>
-<li>可以发现， 梯度下降过程，可以同时找出多个人对电影评分参数和对多部电影的特征值推测<br><img src="/image/LLM/186.png" alt></li>
-</ol>
-<p>协同在这里的体现在于多个用户对一部电影进行了评价，通过合作得到了对电影的整体评价，同时可以预测出能够代表这部电影的特征值<br>反过来，可以预测尚未对同一部电影进行评分的其他用户的评分<br>即从多个用户收集数据，然后预测其他用户的评分</p>
-<h1 id="线性回归转向二进制分类"><a href="#线性回归转向二进制分类" class="headerlink" title="线性回归转向二进制分类"></a>线性回归转向二进制分类</h1><p>基于线性回归的推荐系统适合于上面评分有连续值的推测，基于上述思路，将评分结果通过逻辑函数转成二进制结果<br>即可实现二进制分类问题的预测<br><img src="/image/LLM/187.png" alt><br><img src="/image/LLM/188.png" alt><br><img src="/image/LLM/189.png" alt></p>
-<h1 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h1><h2 id="均值归一化"><a href="#均值归一化" class="headerlink" title="均值归一化"></a>均值归一化</h2><p>对于尚未对电影作为任何评价的用户，如果参数为0，那么预测的评分结果为0，会极大影响推荐的准确性<br>因此，先对多用户评分计算均值，然后对所有用户的评分减去均值，得到新的评分，在新的评分上进行参数获取<br>进行评分预测的时候再把均值加回来，这样即使参数为0，预测的评分值也是之前评分的均值，对整体评分meian值不会有影响<br><img src="/image/LLM/190.png" alt></p>
-<h2 id="如何找到相似的推荐"><a href="#如何找到相似的推荐" class="headerlink" title="如何找到相似的推荐"></a>如何找到相似的推荐</h2><p>找到与当前item 距离最近的其他item<br><img src="/image/LLM/191.png" alt></p>
-<h2 id="协同过滤的限制"><a href="#协同过滤的限制" class="headerlink" title="协同过滤的限制"></a>协同过滤的限制</h2><ol>
-<li>对冷启动问题不友好</li>
-<li>不能直接获取到有价值的特征数据，可能是关于观众或者电影的片面的信息，只能从这些信息上推测用户的爱好<br><img src="/image/LLM/192.png" alt></li>
-</ol>
-<h1 id="基于内容的推荐算法"><a href="#基于内容的推荐算法" class="headerlink" title="基于内容的推荐算法"></a>基于内容的推荐算法</h1><p>对比基于协同过滤的推荐算法(根据用户对相似item的评分进行推荐)<br>基于内容的推荐算法同时基于用户和item的特征，通过计算item 和用户的匹配度，来判断用户是否对该item感兴趣<br><img src="/image/LLM/193.png" alt></p>
-<h2 id="主要思路"><a href="#主要思路" class="headerlink" title="主要思路"></a>主要思路</h2><p>利用神经网络从用户特征和item 特征中提取n 个特征，计算二者的点积从而判断用户是否对item感兴趣，是否要推荐给用户<br><img src="/image/LLM/194.png" alt><br><img src="/image/LLM/195.png" alt><br><img src="/image/LLM/196.png" alt><br><img src="/image/LLM/197.png" alt><br><img src="/image/LLM/198.png" alt></p>
-<h1 id="从大目录中进行推荐"><a href="#从大目录中进行推荐" class="headerlink" title="从大目录中进行推荐"></a>从大目录中进行推荐</h1><ol>
-<li><p>进行检索，找出候选列表<br>但是检索过程需要注意，通过对更多的项目进行检索可以得到更好的结果但是检索的速度回变慢，<br>为了分析优化权衡二者，可以实施离线实验观察新增的检索项是否增加了检索结果的相关性</p>
-</li>
-<li><p>对候选列表进行fine-tune排序找出得分最高的item给用户</p>
-</li>
-</ol>
-<p><img src="/image/LLM/199.png" alt><br><img src="/image/LLM/200.png" alt><br><img src="/image/LLM/201.png" alt></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/abnormalTest.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/machineLearning/abnormalTest.html" itemprop="url">
-                  异常检测
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-10-05T18:50:37+08:00">
-                2024-10-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="异常检测"><a href="#异常检测" class="headerlink" title="异常检测"></a>异常检测</h1><p>异常检测是机器学习中一个重要的概念，它是指在数据中检测出不符合预期的数据点，以便及时发现和处理异常情况。</p>
-<h2 id="检测方法：密度估计"><a href="#检测方法：密度估计" class="headerlink" title="检测方法：密度估计"></a>检测方法：密度估计</h2><p>密度估计是异常检测中的一种方法，它通过计算数据的密度分布来识别异常数据点。<br>通过将特征值的可能性进行乘积计算，得到数据的密度，然后跟阈值进行比较，判断当前数据是否正常。<br><img src="/image/LLM/164.png" alt><br><img src="/image/LLM/169.png" alt><br><img src="/image/LLM/165.png" alt></p>
-<h1 id="高斯分布"><a href="#高斯分布" class="headerlink" title="高斯分布"></a>高斯分布</h1><p>高斯分布的位置受数据集的平均值𝜇和方差𝜎^2 决定<br><img src="/image/LLM/166.png" alt><br>𝜇 决定钟形最高点在x轴上的位置<br>𝜎^2 决定钟形的宽度，因为整个钟形面积为1，所以，如果𝜎^2 变小，那个整个钟形会变得很高<br><img src="/image/LLM/167.png" alt></p>
-<p><img src="/image/LLM/168.png" alt></p>
-<h1 id="异常检测算法步骤"><a href="#异常检测算法步骤" class="headerlink" title="异常检测算法步骤"></a>异常检测算法步骤</h1><ol>
-<li>在训练数据中选择你认为可能会引起异常的数据的n个特征值</li>
-<li>计算各个特征值的平均值𝜇和方差𝜎^2</li>
-<li>计算每个特征值的密度，如果密度小于阈值，则认为是异常数据</li>
-</ol>
-<p><img src="/image/LLM/170.png" alt></p>
-<h1 id="开发过程中如何评估异常检测系统"><a href="#开发过程中如何评估异常检测系统" class="headerlink" title="开发过程中如何评估异常检测系统"></a>开发过程中如何评估异常检测系统</h1><p>通常采用实数评估方案，就是可以用一个具体的数值小小来衡量算法的好坏<br>假设训练数据中的数据都是正常的，存在标签0<br>在交叉验证和测试数据中，存在少量异常数据，标签为1<br>测试算法好坏的标准就是能否将异常数据识别出来<br>如果是特别少量的异常数据，可以仅通过交叉验证来评估测试好坏<br>从而决定合适的阈值大小<br><img src="/image/LLM/171.png" alt><br><img src="/image/LLM/172.png" alt><br>另外的评估方法可参考<a href>二分类错误度量</a><br>相关的衡量指标，真假值，精确率，召回率，F1 score等<br><img src="/image/LLM/173.png" alt></p>
-<h1 id="如何选择异常检测算法和监督学习"><a href="#如何选择异常检测算法和监督学习" class="headerlink" title="如何选择异常检测算法和监督学习"></a>如何选择异常检测算法和监督学习</h1><p>异常检测算法适用于</p>
-<ol>
-<li>正常数据少量但是有大量异常数据</li>
-<li>异常的特征值是未知的，且是多样的</li>
-</ol>
-<p>监督学习算法适用于</p>
-<ol>
-<li>存在大量异常和正常数据</li>
-<li>有足够数据告诉算法什么是正常的数据，什么是异常的数据<br>将来出现的异常数据很可能是之前训练集中出现过的异常数据</li>
-</ol>
-<p><img src="/image/LLM/174.png" alt></p>
-<p><img src="/image/LLM/175.png" alt></p>
-<h1 id="如何选择要使用的特征"><a href="#如何选择要使用的特征" class="headerlink" title="如何选择要使用的特征"></a>如何选择要使用的特征</h1><ol>
-<li><p>选择符合高斯分布的特征，如果不能拟合高斯分布，可以通过取对数，开方等方式进行特殊处理后进行拟合<br>但要注意，训练数据如果有对特征值进行特殊处理，那么交叉验证集合测试集也要进行相同的处理<br><img src="/image/LLM/176.png" alt></p>
-</li>
-<li><p>对于误判的异常数据，可以通过增加特征值来进行弥补，保证数据在新加的特征值上存在异常大或者异常小的数据</p>
-</li>
-</ol>
-<p><img src="/image/LLM/177.png" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">import json</span><br><span class="line">import os</span><br><span class="line">import dashscope</span><br><span class="line">from dashscope import MultiModalConversation</span><br><span class="line"></span><br><span class="line"># 以下为北京地域url，若使用新加坡地域的模型，需将url替换为：https://dashscope-intl.aliyuncs.com/api/v1</span><br><span class="line">dashscope.base_http_api_url = &apos;https://dashscope.aliyuncs.com/api/v1&apos;</span><br><span class="line"></span><br><span class="line">messages = [</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;role&quot;: &quot;user&quot;,</span><br><span class="line">        &quot;content&quot;: [</span><br><span class="line">            &#123;&quot;text&quot;: &quot;一张充满秋日氛围的摄影图，画面中心是一片金黄的枫叶，叶脉清晰、边缘略带枯黄斑点，阳光从画面右侧洒下，形成耀眼的光斑与柔和的光线；背景是暖色调的树木（树叶呈橙红渐变），远处有朦胧的建筑轮廓；整体风格自然写实，光线明亮且带暖调，营造出宁静又诗意的秋日氛围，细节上突出枫叶的质感与光影层次。&quot;&#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"># 若没有配置环境变量，请用百炼API Key将下行替换为：api_key=&quot;sk-xxx&quot;</span><br><span class="line"># 新加坡和北京地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key</span><br><span class="line">api_key = &quot;xxxxx&quot;</span><br><span class="line">for  i in range(0,5):</span><br><span class="line">    response = MultiModalConversation.call(</span><br><span class="line">        api_key=api_key,</span><br><span class="line">        model=&quot;qwen-image-plus&quot;,</span><br><span class="line">        messages=messages,</span><br><span class="line">        result_format=&apos;message&apos;,</span><br><span class="line">        stream=False,</span><br><span class="line">        watermark=True,</span><br><span class="line">        prompt_extend=True,</span><br><span class="line">        negative_prompt=&apos;&apos;,</span><br><span class="line">        size=&apos;1328*1328&apos;</span><br><span class="line">    )</span><br><span class="line">    </span><br><span class="line">    if response.status_code == 200:</span><br><span class="line">        print(json.dumps(response, ensure_ascii=False))</span><br><span class="line">        import requests</span><br><span class="line">        url = json.dumps(response, ensure_ascii=False)</span><br><span class="line">        reponse = requests.get(url=response.output.choices[0].message.content[0][&apos;image&apos;])</span><br><span class="line">        with open(&apos;./ad50000&apos;+str(i)+&apos;.png&apos;,&apos;wb&apos;) as f:</span><br><span class="line">            f.write(reponse.content)</span><br><span class="line">    else:</span><br><span class="line">        print(f&quot;HTTP返回码：&#123;response.status_code&#125;&quot;)</span><br><span class="line">        print(f&quot;错误码：&#123;response.code&#125;&quot;)</span><br><span class="line">        print(f&quot;错误信息：&#123;response.message&#125;&quot;)</span><br><span class="line">        print(&quot;请参考文档：https://help.aliyun.com/zh/model-studio/developer-reference/error-code&quot;)</span><br></pre></td></tr></table></figure>
 <ol start="3">
-<li>可以在已有的原始特征值基础上创造新的特征值参与运算<br><img src="/image/LLM/178.png" alt></li>
+<li>将图片上传到度加-<a href="https://aigc.baidu.com/promptMake/video" target="_blank" rel="noopener">视频生成</a>，生成依据图片生成的视频</li>
 </ol>
+<h1 id="商品评论分析"><a href="#商品评论分析" class="headerlink" title="商品评论分析"></a>商品评论分析</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br></pre></td><td class="code"><pre><span class="line"># Python3.8以上</span><br><span class="line">pip install pydantic==2.5.3 -i https://mirrors.aliyun.com/pypi/simple/</span><br><span class="line">pip install  langchain-core==0.1.45 -i https://mirrors.aliyun.com/pypi/simple/</span><br><span class="line">pip install langchain==0.1.16 -i https://mirrors.aliyun.com/pypi/simple/</span><br><span class="line">pip install  dashscope==1.24.7 -i https://mirrors.aliyun.com/pypi/simple/</span><br><span class="line"></span><br><span class="line">#导入库</span><br><span class="line">import os</span><br><span class="line">import pandas as pd</span><br><span class="line">from typing import List, Optional</span><br><span class="line">from langchain_core.pydantic_v1 import BaseModel, Field</span><br><span class="line">from langchain_core.utils.function_calling import convert_to_openai_tool</span><br><span class="line">from dashscope import Generation</span><br><span class="line">import dashscope</span><br><span class="line">from langchain.tools.render import render_text_description</span><br><span class="line">import warnings</span><br><span class="line">warnings.filterwarnings(&apos;ignore&apos;)</span><br><span class="line"></span><br><span class="line"># 1.初始化大模型环境</span><br><span class="line"></span><br><span class="line"># 使用大模型类型</span><br><span class="line">os.environ[&quot;DASHSCOPE_API_KEY&quot;] = &quot;https://dashscope.aliyuncs.com/compatible-mode/v1&quot;</span><br><span class="line"></span><br><span class="line">dashscope.api_key = &quot;xxx&quot; // 阿里云百炼 https://bailian.console.aliyun.com/?tab=model#/api-key</span><br><span class="line"></span><br><span class="line">from typing import Optional</span><br><span class="line"></span><br><span class="line">from langchain_core.pydantic_v1 import BaseModel, Field</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">class Person(BaseModel):</span><br><span class="line">    &quot;&quot;&quot;Information about a person.&quot;&quot;&quot;</span><br><span class="line">    name: Optional[str] = Field(default=None, description=&quot;The name of the person&quot;)</span><br><span class="line">    hair_color: Optional[str] = Field(default=None, description=&quot;The color of the peron&apos;s hair if known&quot;)</span><br><span class="line">    height_in_meters: Optional[str] = Field(default=None, description=&quot;Height measured in meters&quot;)</span><br><span class="line"></span><br><span class="line">2.读取数据</span><br><span class="line"></span><br><span class="line">df=pd.read_excel(r&quot;./原始数据.xlsx&quot;)</span><br><span class="line"></span><br><span class="line">df.head(2)</span><br><span class="line">df[df[&quot;Rating&quot;]&lt;2].groupby(&quot;Clothing_ID&quot;).size().sort_values().tail(10) # 评分低于2的最多的10条数据</span><br><span class="line"></span><br><span class="line">3.筛选数据</span><br><span class="line">re_862=df[(df[&quot;Rating&quot;]&lt;2)&amp;(df[&quot;Clothing_ID&quot;]==862)].Review_Text.dropna(axis=0,how=any).tolist() // 去掉Review_Text 缺省的数据</span><br><span class="line"></span><br><span class="line">4.大模型处理</span><br><span class="line"></span><br><span class="line"># 定义问题类别</span><br><span class="line">class clothing(BaseModel):</span><br><span class="line">    Fabric_problems: Optional[str] = Field(default=None, description=&quot;Fabric problems: noticeable holes, loose threads, pilling, or abnormal color fading and shrinkage&quot;)</span><br><span class="line">    Workmanship_defects: Optional[str] = Field(default=None, description=&quot;Workmanship defects: poor stitching, excessive loose threads, easily detachable buttons, etc&quot;)</span><br><span class="line">    Size_discrepancies : Optional[str] = Field(default=None, description=&quot;Size discrepancies: the actual product size differs from the described dimensions, leading to ill-fitting garments.&quot;)</span><br><span class="line">    Uncomfortable_wear : Optional[str] = Field(default=None, description=&quot;non-breathable fabrics, irritation against the skin, or discomfort during wear.&quot;)</span><br><span class="line">    Fit_design: Optional[str] = Field(default=None, description=&quot;Fit and design: unsuitable cut, not conforming to ergonomics, or unflattering when worn&quot;)</span><br><span class="line">    Appearance_Discrepancies: Optional[str] = Field(default=None, description=&quot;Mismatch between the product received and online images in terms of style or color.&quot;)</span><br><span class="line">    After_Sales: Optional[str] = Field(default=None, description=&quot;Unsatisfactory customer service attitude or response efficiency.&quot;)</span><br><span class="line">    Value_Money: Optional[str] = Field(default=None, description=&quot;Consumers feel that the price does not align with the actual quality or value of the product, perceiving it as overpriced.&quot;)</span><br><span class="line"></span><br><span class="line">class Data_yun(BaseModel):</span><br><span class="line">    &quot;&quot;&quot;提取负面信息&quot;&quot;&quot;</span><br><span class="line">    comment: List[clothing]</span><br><span class="line"></span><br><span class="line"># 封装请求数据</span><br><span class="line">def prompt_yun(ct):</span><br><span class="line">    system_prompt=&quot;您是提取算法专家。仅从文本中提取相关信息。如果您不知道要求提取的属性值，则为属性值返回 null。首先抽取出用户评价中的抱怨点，然后对这些点进行分类，然后调用工具输出&quot;</span><br><span class="line">    prompt=[&#123;&quot;content&quot;:system_prompt,&quot;role&quot;:&quot;system&quot;&#125;,\</span><br><span class="line">            &#123;&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;The material is cheap&quot;&#125;,\</span><br><span class="line">            &#123;&apos;role&apos;: &apos;assistant&apos;, &apos;content&apos;: &apos;&apos;, &apos;tool_calls_ids&apos;: [&#123;&apos;function&apos;: &#123;&apos;name&apos;: &apos;Data_yun&apos;, &apos;arguments&apos;: </span><br><span class="line">                                                                              &apos;&#123;&quot;comment&quot;: [&#123;&quot;Fabric_problems&quot;: &quot;The material is cheap&quot;,&quot;Size_discrepancies&quot;: &quot;is made for women with long torso and shorter shoulders&quot;&#125;]&#125;&apos;&#125;&#125;]&#125;]</span><br><span class="line">    prompt.append(&#123;&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:ct&#125;)</span><br><span class="line">    return prompt</span><br><span class="line"></span><br><span class="line"># 向大模型提问</span><br><span class="line">def get_response_1t(mess):</span><br><span class="line">    response = Generation.call(</span><br><span class="line">        model=&apos;qwen-plus&apos;,</span><br><span class="line">        messages=mess,</span><br><span class="line">        tools=[convert_to_openai_tool(Data_yun)],</span><br><span class="line">        result_format=&apos;message&apos;, # 将输出设置为message形式</span><br><span class="line">    )</span><br><span class="line">    return response</span><br><span class="line"></span><br><span class="line">5.处理单个评论，进行模型能力测试</span><br><span class="line"></span><br><span class="line">text = re_862[1]</span><br><span class="line">p_y = prompt_yun(text)</span><br><span class="line">res = get_response_1t(p_y)</span><br><span class="line"></span><br><span class="line">res.output.choices[0].message[&quot;tool_calls&quot;][0][&apos;function&apos;][&apos;arguments&apos;]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">6.循环处理所有数据</span><br><span class="line"></span><br><span class="line">import time</span><br><span class="line">import numpy as np</span><br><span class="line">for i in re_862:</span><br><span class="line">    time.sleep(0)</span><br><span class="line">    text = i</span><br><span class="line">    if text is np.nan:</span><br><span class="line">        print(&quot;数据为空值&quot;)</span><br><span class="line">    else:</span><br><span class="line">        p_y=prompt_yun(text)</span><br><span class="line">        res=get_response_1t(p_y)</span><br><span class="line">        print(res.output.choices[0].message[&quot;tool_calls&quot;][0][&apos;function&apos;][&apos;arguments&apos;])</span><br><span class="line">        print(&apos;-&apos;*20)</span><br></pre></td></tr></table></figure>
+<h1 id="推荐算法1"><a href="#推荐算法1" class="headerlink" title="推荐算法1"></a>推荐算法1</h1><p><img src="/image/xinchangnote.jpg" alt></p>
+<p><strong>算法(模型)</strong>: 建模就是在使用某个算法。</p>
+<p><strong>关联算法</strong>: 可以实现商品的推荐。</p>
+<p><strong>电商</strong>: 购买了手机就推荐手机壳。</p>
+<p><strong>美团(小象超市)</strong>: 土豆、黄瓜、鸡蛋、面包、椰子水。—&gt;你历史的购物数据进行关联分析来推荐。</p>
+<p><strong>关联算法的阈值</strong>:</p>
+<p><strong>项集</strong>: 每个事物就是一个项集。(土豆、黄瓜、鸡蛋、面包、椰子水)</p>
+<p><strong>支持度</strong>: 满足最小支持度阈值时就认为数据(项集)之间存在关联规则。可以是多项集之间存在关联规则。0.2  3/5=0.6    牛奶和面包出现的次数/总记录数</p>
+<p>001:(牛奶、面包、啤酒、鸡蛋)<br>002:(方便面、面包、火腿肠)<br>003:(牛奶、面包、火腿肠)<br>004:(牛奶、面包、啤酒)<br>005:(矿泉水、面包、啤酒)</p>
+<p>手机和手机壳之间有关联系，还是手机壳和手机之间有关联系呢</p>
+<p><strong>置信度</strong>: 确定事物之间的关联关系的。0.8<br>面包和牛奶之间的置信度: 面包和牛奶同时出现的次数/面包出现的次数, 3/5=0.6<br>牛奶和面包之间的置信度: 牛奶和面包同时出现的次数/牛奶出现的次数 3/3=1</p>
+<p><strong>apriori算法</strong><br>如果事物不满足频繁一项集那么也就一定不满足频繁二项集，以此类推</p>
+<p>牛奶、面包、啤酒、鸡蛋、火腿肠、矿泉水、方便面</p>
+<p>牛奶: 0.6  面包: 1  啤酒: 0.6  鸡蛋0.2  火腿肠: 0.4  矿泉水: 0.2  方便面: 0.2</p>
+<p>牛奶: 面包: 0.6  牛奶: 啤酒: 0.4  牛奶: 鸡蛋: 0.2  面包: 啤酒: 0.6  面包: 鸡蛋: 0.2  啤酒: 鸡蛋: 0.2</p>
+<p><strong>fp-tree</strong>: 将事物的关联规则加载成一个树形结构</p>
+<p>面包: 5</p>
+<p>牛奶: 3  啤酒: 3  火腿肠: 1</p>
+<p>火腿肠: 1</p>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line">import warnings</span><br><span class="line">warnings.filterwarnings(&quot;ignore&quot;)</span><br><span class="line"></span><br><span class="line">1.读取数据</span><br><span class="line"></span><br><span class="line">df = pd.read_csv(&apos;./fruit_purchases1.csv&apos;,sep=&apos;;&apos;)</span><br><span class="line">df.head()</span><br><span class="line"></span><br><span class="line">2.数据预处理</span><br><span class="line"></span><br><span class="line">df_mtix = df[&apos;购买水果&apos;].map(lambda line:line.replace(&apos; &apos;,&apos;&apos;).split(&apos;,&apos;))</span><br><span class="line">或者</span><br><span class="line">list_all_f  = []</span><br><span class="line">for x in df[&apos;购买水果&apos;]：</span><br><span class="line"> list_all_f.append(x.split(&apos;,&apos;))</span><br><span class="line"></span><br><span class="line">from mlxtend.preprocessing import TransactionEncoder</span><br><span class="line"></span><br><span class="line">model_te = TransactionEncoder()  # 设置参数</span><br><span class="line">df_te = model_te.fit_transform(df_mtix)  # 应用到数据上</span><br><span class="line">df_te = pd.DataFrame(data=df_te,columns=model_te.columns_)  # 转型</span><br><span class="line"></span><br><span class="line">3.关联规则建模</span><br><span class="line">from mlxtend.frequent_patterns import fpmax,fpgrowth,apriori // 不同的计算置信度的算法</span><br><span class="line"></span><br><span class="line">model_apriori = apriori(df=df_te,min_support=0.2,use_colnames=True)</span><br><span class="line"># model_fpmax = fpmax(df=df_te,min_support=0.1,use_colnames=True)</span><br><span class="line"># model_fpgrowth = fpgrowth(df=df_te,min_support=0.1,use_colnames=True)</span><br><span class="line"></span><br><span class="line">4.association_rules 函数来找出关联规则</span><br><span class="line">from mlxtend.frequent_patterns import association_rules</span><br><span class="line"></span><br><span class="line">rules = association_rules(df=model_apriori,metric=&apos;confidence&apos;,min_threshold=0.8)</span><br><span class="line">rules</span><br><span class="line"></span><br><span class="line">5. 推荐---当用户购买了某个水果后应推荐什么其他的水果</span><br><span class="line"></span><br><span class="line">buyfruit = input(&apos;现已经买了什么水果&apos;)</span><br><span class="line"></span><br><span class="line">lists = rules[rules[&apos;antecedents&apos;] == &#123;buyfruit&#125;][&apos;consequents&apos;].values</span><br><span class="line">print(&apos;用户购买了&apos;+ buyfruit + &apos;推荐&apos;, lists)</span><br><span class="line"></span><br><span class="line">后续策略</span><br><span class="line">去重</span><br><span class="line">如果是一个任何关联都没有的水果，可以推荐support 最高的，购买次数最多的项集</span><br></pre></td></tr></table></figure>
+<h1 id="推荐算法2"><a href="#推荐算法2" class="headerlink" title="推荐算法2"></a>推荐算法2</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 想要向某个用户去推荐音乐：</span><br><span class="line">    计算处用户和哪些用户相似，在将和用户相似的用户听过的音乐，并且是用户没用听过的音乐，推荐给用户。</span><br><span class="line">    张三：李四、王五   音乐：1 2 3 4 5 6</span><br><span class="line">    李四：音乐：1  5  6  7  8 </span><br><span class="line">    王五：音乐：2  4  7  9</span><br><span class="line">    向张三推荐：7  8  9</span><br><span class="line">1.计算用户之间的相似度：</span><br><span class="line">2.相似的用户听过的音乐；</span><br><span class="line">3.相似用户听过的音乐哪些是用户没有听过的的；</span><br><span class="line">4.推荐 --&gt;</span><br><span class="line"></span><br><span class="line"># 导入pandas和numpy库</span><br><span class="line">import pandas as pd</span><br><span class="line">import numpy as np</span><br><span class="line"># 读取数据集</span><br><span class="line">user_artists = pd.read_csv(&apos;./music/user_artists.dat&apos;, sep=&apos;\t&apos;) # 优用&quot;t&apos;分隔符读取user artists.dat文件</span><br><span class="line">artists = pd.read_csv(&apos;./music/artists.dat&apos;, sep=&apos;\t&apos;, usecols=[&apos;id&apos;, &apos;name&apos;]) # 使用t分隔符读取artists.dat文件，仅读取id和name列</span><br><span class="line">user_artists</span><br><span class="line"></span><br><span class="line"># 去除不必要的列</span><br><span class="line"># user_artists = user_artists.drop([&apos;weight&apos;], axis=1)# 删除user _artists中的weight列</span><br><span class="line"></span><br><span class="line">artists.head()</span><br><span class="line"></span><br><span class="line">artists[&apos;id&apos;] =artists[&apos;id&apos;].astype(np.int64)</span><br><span class="line"></span><br><span class="line">6.将user_artists和artists两个DataFrame进行合并，以user_artists中的artistID和artists中的id为键值进行连接。</span><br><span class="line"># 合并数据集</span><br><span class="line">data = pd.merge(user_artists, artists, left_on=&apos;artistID&apos;, right_on=&apos;id&apos;) # 将user_artists 和 artists 合并</span><br><span class="line">data = data.drop([&apos;id&apos;, &apos;artistID&apos;], axis=1) # 删除data 中的id 和artistID 列</span><br><span class="line">data</span><br><span class="line"></span><br><span class="line">7.去除评分次数少于50次的音乐和用户。</span><br><span class="line">counts = data[&apos;userID&apos;].value_counts() # 计算每个用户的评分次数</span><br><span class="line">data = data[data[&apos;userID&apos;].isin(counts[counts &gt;= 50].index)] # 去除评分次数少于50 次的用户</span><br><span class="line"></span><br><span class="line">counts = data[&apos;name&apos;].value_counts() # 计算每个音乐的评分次数</span><br><span class="line">data = data[data[&apos;name&apos;].isin(counts[counts &gt;= 50].index)] # 去除评分次数少于50 次的音乐</span><br><span class="line"></span><br><span class="line"># 将音乐和用户ID 转换为数字</span><br><span class="line">name_to_index = &#123;&#125; # 创建 name_to_index 字典</span><br><span class="line">index_to_name = &#123;&#125; # 创建index_to_name 字典</span><br><span class="line">for i, name in enumerate(data[&apos;name&apos;].unique()): # 遍历 data 中的name 列</span><br><span class="line">    name_to_index[name] = i # 将name 映射到数字</span><br><span class="line">    index_to_name[i] = name # 将数字映射到name</span><br><span class="line">    </span><br><span class="line">user_id_to_index = &#123;&#125; # 创建user_id_to_index 字典</span><br><span class="line">index_to_user_id = &#123;&#125; # 创建index_to_user_id 字典</span><br><span class="line">for i, user_id in enumerate(data[&apos;userID&apos;].unique()): # 遍历data 中的userID 列</span><br><span class="line">    user_id_to_index[user_id] = i # 将user_id 映射到数字</span><br><span class="line">    index_to_user_id[i] = user_id # 将数字映射到user_id</span><br><span class="line">data[&apos;name_index&apos;] = data[&apos;name&apos;].apply(lambda x: name_to_index[x]) # 将data 中的 name 映射到数字</span><br><span class="line">data[&apos;user_index&apos;] = data[&apos;userID&apos;].apply(lambda x: user_id_to_index[x]) # 将data 中的 user_id 映射到数字</span><br><span class="line"># # 构建用户-音乐评分矩阵</span><br><span class="line">n_users = len(user_id_to_index) # 获取用户数量</span><br><span class="line">n_artists = len(name_to_index) # 获取音乐数量</span><br><span class="line">ratings_matrix = np.zeros((n_users, n_artists)) # 创建用户-音乐评分矩阵</span><br><span class="line">ratings_matrix</span><br><span class="line"></span><br><span class="line">8.将data中的评分填入用户-音乐评分矩阵，使得ratingsmatrix的输出为。</span><br><span class="line">for row in data.itertuples(): # 遍历data</span><br><span class="line">    ratings_matrix[row[5], row[4]] = row[2] # 将data 中的评分填入用户-音乐评分矩阵</span><br><span class="line">    print(row)</span><br><span class="line">ratings_matrix</span><br><span class="line">#     print(row)</span><br><span class="line"># 计算用户之间的相似度</span><br><span class="line">from sklearn.metrics.pairwise import cosine_similarity # 导入sklearn 库中的余弦相似度计算函数</span><br><span class="line">user_similarity = cosine_similarity(ratings_matrix) # 计算用户之间的相似度</span><br><span class="line"># 为用户推荐音乐</span><br><span class="line">user_index = 0 # 设置用户索引</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">9.获取与用户最相似的用户索引similar users(不包括自己)，使得similar users的输出为:</span><br><span class="line">similar_users = np.argsort(-user_similarity[user_index])[1:] # 获取与用户索引为0 的用户最相似的用户索引</span><br><span class="line">similar_users  </span><br><span class="line">recommended_artists=[]# 创建推荐音乐列表</span><br><span class="line"></span><br><span class="line">10.填补以下程序，获取相似用户评分的音乐索引artists_rated。</span><br><span class="line"></span><br><span class="line">for i in similar_users: # 遍历相似用户索引</span><br><span class="line">    artists_rated = np.where(ratings_matrix[i] &gt; 0)[0] # 获取相似用户评分的音乐索引</span><br><span class="line">    for j in artists_rated: # 遍历音乐索引</span><br><span class="line">        if ratings_matrix[user_index][j] == 0: #用户未评分</span><br><span class="line">            recommended_artists.append((j, ratings_matrix[i][j])) # 将音乐加入推荐音乐列表</span><br><span class="line">recommended_artists = sorted(recommended_artists, key=lambda x: x[1], reverse=True)[:10] # 筛选出推荐音乐中的前10 首</span><br><span class="line">for artist in recommended_artists: # 遍历推荐音乐</span><br><span class="line">#     print(artists[artists[&apos;name&apos;] == index_to_name[artist[0]]][&apos;name&apos;].values[0]) # 打印推荐音乐</span><br><span class="line">    print(index_to_name.get(artist[0]))</span><br><span class="line">#     print(artist)</span><br><span class="line"></span><br><span class="line">artists[artists[&apos;name&apos;] == index_to_name[artist[0]]][&apos;name&apos;].values[0]</span><br></pre></td></tr></table></figure>
+<p><a href="https://github.com/YooHannah/algorithm/tree/master/xinchang/%E6%8E%A8%E8%8D%90%E7%AE%97%E6%B3%95" target="_blank" rel="noopener">实验</a></p>
 
           
         
@@ -963,7 +724,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/Kmeans.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/llm/xinchang/fineTuning.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -988,8 +749,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/machineLearning/Kmeans.html" itemprop="url">
-                  Kmeans 聚类算法
+                <a class="post-title-link" href="/post/llm/xinchang/fineTuning.html" itemprop="url">
+                  进行模型训练的其他方式
                 </a>
               
             
@@ -1003,8 +764,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-10-03T00:37:37+08:00">
-                2024-10-03
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-10-25T10:36:37+08:00">
+                2025-10-25
               </time>
             
 
@@ -1041,161 +802,98 @@
       
         
           
-            <p>无监督学习算法一</p>
-<h1 id="什么是聚类"><a href="#什么是聚类" class="headerlink" title="什么是聚类"></a>什么是聚类</h1><p>将输入数据分成多个类别，每个类别包含一组相似的数据点的过程就是聚类，分好的类被称为cluster</p>
-<h1 id="聚类算法k-means处理过程"><a href="#聚类算法k-means处理过程" class="headerlink" title="聚类算法k-means处理过程"></a>聚类算法k-means处理过程</h1><ol>
-<li>随机选择k个点作为初始的中心点, 计算每个点到中心点的距离，将每个点分配到距离最近的中心点所属的类别中</li>
-<li>计算每个类别的中心点(平均值)，并更新中心点，重复步骤1</li>
-<li>直到中心点不再变化，或者达到最大迭代次数</li>
+            <p>csv 文本文件，没有多余格式，适用于各种场景使用，不仅适用各种算法，也适用数仓</p>
+<p>jupyter notebook<br>执行: shift + 回车<br>注释：control + / ===&gt;解释性文字<br>收起执行的结果： 点击蓝色边框</p>
+<p>python install pandas numpy<br>pandas numpy 数据分析，数据挖掘</p>
+<p>建模</p>
+<p>拆分数据：</p>
+<p>纵向拆分<br>x: 除目标列以外的列<br>y: 目标列</p>
+<p>横向拆分：<br>训练集：模型学习<br>测试集： 验证模型效果</p>
+<p>特征处理</p>
+<p>特征缩放<br>数值类型的数据取值范围差异较大，导致模型在建模的时候忽略了某些属性对模型的重要度，<br>所以就需要通过特征缩放来平衡属性之间的权重</p>
+<p>方法：标准化，最小值，最大值归一化</p>
+<p>特征离散化<br>   离散化：将连续数据转换成离散数据<br>   数值的属性范围较大导致模型进行判断条件变多，进而影响模型效率<br>   方法：<br>     分箱： 1,1,1,1,1,1,4,5,1,10<br>       等宽分箱：每个区间的范围大小是相同的<br>       0-5               6-10<br>       [1,1,1,1,1,1,4,5] [10]<br>       等频分箱：每个区间的样本数量相同<br>       [1,1,1,1,1] [1,1,4,5,10]</p>
+<pre><code>基于聚类的离散化
+基于信息熵的；离散化
+基于卡方的离散化
+1R
+</code></pre><p>特征编码<br>   有一些模型无法处理字符串类型的数据，这个时候就需要通过特征编码将字符串类型数据转换成模型可以处理的数据</p>
+<p>   方法：</p>
+<p>   label-encoding(标签编码)： 将字符串映射为对应数字eg: male –&gt; 0, female –&gt; 1，应用于二元属性和序数属性<br>   one-hot-encoding(独热编码)： 将字符串转换为不同的01组合，应用于标称属性（没有大小顺利的特征）</p>
+<h1 id="代码的方式"><a href="#代码的方式" class="headerlink" title="代码的方式"></a>代码的方式</h1><ol>
+<li>读取文件</li>
 </ol>
-<h2 id="具体实现-伪代码"><a href="#具体实现-伪代码" class="headerlink" title="具体实现(伪代码)"></a>具体实现(伪代码)</h2><p><img src="/image/LLM/157.png" alt><br><img src="/image/LLM/158.png" alt></p>
-<h2 id="成本函数"><a href="#成本函数" class="headerlink" title="成本函数"></a>成本函数</h2><p><img src="/image/LLM/159.png" alt><br><img src="/image/LLM/160.png" alt></p>
-<h2 id="如何初始化中心点"><a href="#如何初始化中心点" class="headerlink" title="如何初始化中心点"></a>如何初始化中心点</h2><p>随机选择k个点作为初始的中心点（k小于m），计算最终中心点和损失函数<br>重复N次，选择损失函数最小的中心点作为最终的中心点<br><img src="/image/LLM/161.png" alt></p>
-<h2 id="如何选择K的数量"><a href="#如何选择K的数量" class="headerlink" title="如何选择K的数量"></a>如何选择K的数量</h2><p>取决后续如何使用分类好的集群数据<br><img src="/image/LLM/163.png" alt><br><img src="/image/LLM/162.png" alt></p>
-<p><a href="https://github.com/kaieye/2022-Machine-Learning-Specialization/blob/main/Unsupervised%20learning%20recommenders%20reinforcement%20learning/week1/2%20Practice%20Lab1/C3_W1_KMeans_Assignment.ipynb" target="_blank" rel="noopener">压缩图像应用</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/decisionTreeModel.html">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="YooHannah">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/psb.jpg">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="My Little World">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="My Little World" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/post/machineLearning/decisionTreeModel.html" itemprop="url">
-                  决策树模型
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-09-30T15:31:37+08:00">
-                2024-09-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>决策树模型是通过计算特征纯度后，选取最大纯度值的特征作为决策节点，<br>将数据根据是否符合当前特征节点一份为二，再根据特征纯度，继续划分，<br>最后根据停止划分规则进行数据分类或推测的模型</p>
-<p><img src="/image/LLM/136.png" alt></p>
-<h1 id="创建过程"><a href="#创建过程" class="headerlink" title="创建过程"></a>创建过程</h1><p>决策树创建过程需要考虑两件事</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pip install pandas</span><br><span class="line">pip install numpy</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">df = pd.read_csv(&apos;./wine3.csv&apos;)</span><br><span class="line">df.head()</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>缺失值处理方式</li>
+</ol>
+<p>删除：</p>
+<p>   按行删除：</p>
+<p>   按列删除： 该列数据超过20%缺失，可以考虑删除该列</p>
+<p>填充： 通过特殊值填充，如：均值（数据为浮点性），中位数，众数（数据字符串），0</p>
+<p>sklearn 也可以处理缺失值，填充 算法预测</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">df.isnull().sum()</span><br><span class="line"></span><br><span class="line">df.shape # 查看行列数</span><br><span class="line"></span><br><span class="line">del df[&apos;phenols&apos;] # 删除列</span><br><span class="line"></span><br><span class="line">df.shape</span><br><span class="line"></span><br><span class="line">df.info() # 查看每列数据类型</span><br><span class="line"></span><br><span class="line">&lt;!-- np.nan 代表缺失值，可能是上面提到的三种 --&gt;</span><br><span class="line"></span><br><span class="line"># 填充</span><br><span class="line">df[&apos;malic&apos;] = df[&apos;malic&apos;].replace(np.nan,df[&apos;malic&apos;].mean()) </span><br><span class="line"></span><br><span class="line"># aixs : 0 按行删除； </span><br><span class="line"># how :any 只要有一个数据缺失就将该行删除，all 表示这一行全部缺失的时候才删除</span><br><span class="line"></span><br><span class="line">df_drop = df.dropna(axis= 0, how=&apos;any&apos;) </span><br><span class="line"></span><br><span class="line">df_drop.isnull().sum()</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>异常值处理</li>
+</ol>
+<p>异常值：</p>
+<p>   偏离正常样本过多的值，也叫噪声点，离群点，一般是极大或者极小的值</p>
+<p>   但不是错误值，只有数值类型（有数值含义）数据才会有异常值</p>
+<p>   处理：同缺失值<br>    删除： 按行删除<br>    替换： 使用特殊值替换，（当做缺失值处理）</p>
+<p>异常值检测</p>
+<p>   箱线图<br>       Q3 + 1.5IQR &lt; X &lt; Q1 - 1.5IQR<br>       IQR = Q3 - Q1<br>       Q3: 75% 分位数 Q: 25% 分位数<br>       1.5 : 经验值，可容忍范围，可根据实际情况调整</p>
+<p>   3σ 原则: z-score<br>      |x- μ| &gt; 3σ<br>      σ 标准差 μ 均值</p>
+<p>务必根据实际情况分析， 比如年龄,可以设定 1-100 范围为正常值，则不需要再进行上述检测</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">plt.boxplot(df_drop[&apos;malic&apos;])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>3.1 箱线图：进行异常值检测<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">while True:</span><br><span class="line">    list_error = []</span><br><span class="line">    Q1 = df_drop[&apos;malic&apos;].quantile(0.25)</span><br><span class="line">    Q3 = df_drop[&apos;malic&apos;].quantile(0.75)</span><br><span class="line">    IQR = Q3 - Q1</span><br><span class="line">    up = Q3 + 1.5*IQR</span><br><span class="line">    down = Q1 - 1.5*IQR</span><br><span class="line">    n = 0</span><br><span class="line">    for x in df_drop[&apos;malic&apos;]:</span><br><span class="line">        if x &gt; up or x&lt;down :</span><br><span class="line">            print(x)</span><br><span class="line">            df_drop.loc[:, &apos;malic&apos;] = df_drop[&apos;malic&apos;].replace(x,df_drop[&apos;malic&apos;].mean()) # 填充 </span><br><span class="line">            list_error.append(x)</span><br><span class="line">    if len(list_error) == 0:</span><br><span class="line">        break</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">for x in df_drop[&apos;malic&apos;]:</span><br><span class="line">    if x &gt; up or x&lt;down :</span><br><span class="line">        print(x)</span><br><span class="line">plt.boxplot(df_drop[&apos;malic&apos;])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure></p>
+<p>3.2 3σ 原则: z-score<br>    |x- μ| &gt; 3σ  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">mport  warnings</span><br><span class="line">warnings.filterwarnings(&apos;ignore&apos;)</span><br><span class="line"></span><br><span class="line">mean = df_drop[&apos;ash&apos;].mean()</span><br><span class="line">std = np.std(df_drop[&apos;ash&apos;])</span><br><span class="line">for x in df_drop[&apos;ash&apos;].index:</span><br><span class="line">    if np.abs(df_drop[&apos;ash&apos;][x] - mean)&gt;3*std:</span><br><span class="line">        print(df_drop[&apos;ash&apos;][x])</span><br><span class="line">        df_drop.drop(axis=0,index=x,inplace=True)</span><br></pre></td></tr></table></figure>
+<ol start="4">
+<li>拆分数据</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 纵向拆分</span><br><span class="line">X= df_drop.drop(axis=1, columns=&apos;type&apos;)</span><br><span class="line">Y = df_drop[[&apos;type&apos;]]</span><br><span class="line"></span><br><span class="line">pip install scikit-learn</span><br><span class="line"></span><br><span class="line">from sklearn.model_selection import train_test_split</span><br><span class="line"></span><br><span class="line">X_train,X_test,Y_train,Y_test = train_test_split(X,Y,test_size=0.3)</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>建模</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.neighbors import KNeighborsClassifier</span><br><span class="line"></span><br><span class="line">model_knn = KNeighborsClassifier()</span><br><span class="line">model_knn.fit(X_train, Y_train)</span><br></pre></td></tr></table></figure>
+<ol start="6">
+<li>评估</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model_knn.score(X_test,Y_test)</span><br></pre></td></tr></table></figure>
+<ol start="7">
+<li>保存模型</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pip install joblib</span><br><span class="line"></span><br><span class="line">import joblib</span><br><span class="line"></span><br><span class="line">joblib.dump(model_knn, &apos;./红酒等级预测.pkl&apos;)</span><br></pre></td></tr></table></figure>
+<p>8 预测</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import pandas as pd</span><br><span class="line">import joblib</span><br></pre></td></tr></table></figure>
+<p>8.1 读取数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df = pd.read_csv(&apos;./wine3_pre.csv&apos;)</span><br><span class="line">df.head()</span><br></pre></td></tr></table></figure>
+<p>8.2. 读取模型</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model = joblib.load(&apos;./红酒等级预测.pkl&apos;)</span><br></pre></td></tr></table></figure>
+<p>8.3. 预测数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 把要预测的数据处理成跟训练的时候的维度一样 --&gt;</span><br><span class="line">del df[&apos;phenols&apos;]</span><br><span class="line">model.predict(df)</span><br><span class="line"></span><br><span class="line">Y_pre = model.predict(df) # 预测</span><br><span class="line">df[&apos;type&apos;] = Y_pre # 合并数据</span><br></pre></td></tr></table></figure>
+<p>8.4 存储预测数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.to_csv(&apos;./wine_model_pre.csv&apos;, index=False)</span><br></pre></td></tr></table></figure>
+<p><a href="https://github.com/YooHannah/algorithm/tree/master/xinchang/模型训练基础流程" target="_blank" rel="noopener">在线练习</a></p>
+<h1 id="使用-knime"><a href="#使用-knime" class="headerlink" title="使用 knime"></a>使用 knime</h1><p>软件下载，要翻墙 <a href="https://www.knime.com/downloads" target="_blank" rel="noopener">https://www.knime.com/downloads</a></p>
 <ol>
-<li><p>在每个节点上如果选择根据什么特征进行数据分类<br>Maximize purity<br>如果一个特征在把数据分成两组之后，使分组后的数据能够最大程度的趋于同一类，那么这个特征就是纯度高的特征,<br>即 如果这个特征能够直接决定数据属于哪个分类的程度越高，纯度就越高<br>比如用DNA特征判断猫狗分类比用耳朵是尖的还是软的更直接，DNA特征就是最大纯度的特征<br><img src="/image/LLM/137.png" alt></p>
+<li>创建工作流<br><img src="/image/knime1.jpg" alt></li>
+</ol>
+<ol start="2">
+<li>添加数据源<br>将csv Reader 拖到工作流绘制中心，并只指定训练数据文件<br><img src="/image/knime2.jpg" alt><br>切换 transformation tab 可以指定要保留的列数据，和修改该列数据类型<br><img src="/image/knime3.jpg" alt></li>
+</ol>
+<p>也可以再后续添加 string Replacer 进行具体数值转换<br><img src="/image/knime4.jpg" alt></p>
+<p>看起来一次只能改一个值，多个值进行转换，可以添加多个string Replacer</p>
+<ol start="3">
+<li>缺失异常值处理</li>
+</ol>
+<p>添加misssing Value, 对常见数据类型添加缺失值处理规则<br><img src="/image/knime5.jpg" alt><br>也可以对指定列进行缺失值处理规则指定<br><img src="/image/knime6.jpg" alt></p>
+<ol start="4">
+<li><p>训练模型<br>选择算法指定，目标列<br>注意knime 只允许 数据类型为string 的列作为目标列，不是的话，要在前面步骤中进行转换<br><img src="/image/knime7.jpg" alt></p>
 </li>
-<li><p>什么时候停止数据分类<br>a. 当一个节点里面的数据都属于同一类的时候<br>b. 到达树的深度最大值的时候，树越深，过拟合越有可能，计算成本越高<br>c. 当特征纯度(熵)低于某个阈值的时候<br>d. 当节点里的数据个数低于某个阈值的时候</p>
+<li><p>模型预测和结果保存<br>注意训练模型的算法和预测的算法要一致<br>添加模型预测，结果保存,csv Writer 需要指定保存的文件路径名称<br><img src="/image/knime8.jpg" alt></p>
 </li>
 </ol>
-<p><img src="/image/LLM/138.png" alt></p>
-<h2 id="熵"><a href="#熵" class="headerlink" title="熵"></a>熵</h2><p>可以理解为数据的混乱程度，如果数据特别混乱，则值越大，返回数据如果种类单一，则值越小，趋近0<br>这里用熵来计算特征的非纯度或者较杂质程度，<br>如果根据某个特征分类后的数据的熵 越小，说数据越干净，杂质越少<br>反之，如果得到的熵越大，说数据越混乱，不同类的数据越多<br>如下面判断是否是猫的问题<br>p1 代表是每组数据中猫的比例，都是猫或狗的话熵 是0，5:5 的时候熵 最大值为1，数据最混乱<br><img src="/image/LLM/139.png" alt><br>具体熵 的计算公式如下<br><img src="/image/LLM/140.png" alt></p>
-<h2 id="信息增益"><a href="#信息增益" class="headerlink" title="信息增益"></a>信息增益</h2><p>在了解熵的含义后，用下面的计算过程选择节点的判断特征<br>根节点的熵减去分类后两个节点熵的加权平均值，值越大说明分类后数据越纯了<br><img src="/image/LLM/141.png" alt><br>这个计算方式得到的值就叫信息增益<br>即特征信息增益越大，在分类过程中，能够把数据分的越纯<br><img src="/image/LLM/142.png" alt></p>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>决策树学习过程<br><img src="/image/LLM/143.png" alt><br>对于每个节点，都要像对待根节点一样<br>根据拿到的数据先找到最大信息增益的特征然后进行分类<br>整个过程就是一个递归的过程，直到满足停止分类的规则为止<br><img src="/image/LLM/144.png" alt></p>
-<h1 id="多特征值处理办法"><a href="#多特征值处理办法" class="headerlink" title="多特征值处理办法"></a>多特征值处理办法</h1><h2 id="one-hot"><a href="#one-hot" class="headerlink" title="one-hot"></a>one-hot</h2><p>If a categorical feature can take on 𝑘 values, create 𝑘 binary features (0 or 1 valued).<br>如果一个特征有大于2个以上的N可枚举值，那么将当前特征拆分成N个新的代表相应枚举值的特征即可<br><img src="/image/LLM/145.png" alt></p>
-<h2 id="连续值"><a href="#连续值" class="headerlink" title="连续值"></a>连续值</h2><p>如果一个特质的值是连续值，不可枚举，那么需要设定一个阈值，大于该阈值一类，小于则是另一类，从而实现对该特征的二分类<br>阈值的选取还是通过计算信息增益，选取能够使信息增益值最大的阈值参与分类<br>一般情况下先对所有数据按这个特征值排序，然后选取排序列表中两个数据间的中点做阈值进行信息增益计算，<br>多轮计算后再从中选取信息增益最大的阈值<br><img src="/image/LLM/146.png" alt></p>
-<h1 id="回归树"><a href="#回归树" class="headerlink" title="回归树"></a>回归树</h1><p>上面是使用决策树进行分类计算<br>接下来使用方差对连续数据进行推测，就是回归树<br>如下图，根据前三个特征，推测weight 的值，weight 是个连续的值，不能枚举的<br><img src="/image/LLM/147.png" alt></p>
-<p><img src="/image/LLM/148.png" alt></p>
-<p><a href="https://colab.research.google.com/github/kaieye/2022-Machine-Learning-Specialization/blob/main/Advanced%20Learning%20Algorithms/week4/7.Practice%20lab%20decision%20trees/C2_W4_Decision_Tree_with_Markdown.ipynb#scrollTo=5MIhOlYfSm26" target="_blank" rel="noopener">决策树练习</a></p>
-<h1 id="多个决策树"><a href="#多个决策树" class="headerlink" title="多个决策树"></a>多个决策树</h1><p>单个决策树对训练数据非常敏感，只要更改一个训练数据，就有可能更改信息增益排序，<br>从而影响节点特征选择，进而导致整棵树发生变化，使得算法失去健壮性<br>解决办法就是构建多个树，让他们投票最终的预测结果，使整体的算法对任何单个树可能在做什么不那么敏感<br><img src="/image/LLM/149.png" alt></p>
-<h2 id="放回抽样"><a href="#放回抽样" class="headerlink" title="放回抽样"></a>放回抽样</h2><p>一共有m个训练数据，每次从m个数据中随机抽取1个数据，直到抽取到m个数据，抽取到的数据可能是重复的<br><img src="/image/LLM/150.png" alt></p>
-<h2 id="随机森林算法"><a href="#随机森林算法" class="headerlink" title="随机森林算法"></a>随机森林算法</h2><p>使用放回抽样的数据选取方法，每次拿到m个训练数据，用这个m个训练数据训练决策树，重复 B(小于100)次,<br>得到B棵决策树，从而形成决策树森林对预测结果进行投票，这种算法就是随机森林算法<br><img src="/image/LLM/151.png" alt><br>B 如果大于100 一个是训练效果会下降，推测准确性降低，另外一个就是会增加计算成本，使算法变得复杂，得不偿失</p>
-<h3 id="随机特征选取"><a href="#随机特征选取" class="headerlink" title="随机特征选取"></a>随机特征选取</h3><p>对于具备N个特征的数据，通常选择N的K个特征子集进行训练，如果N特别大，K一般等于N的平方根<br><img src="/image/LLM/152.png" alt></p>
-<h2 id="XGBoost-随机森林增强算法"><a href="#XGBoost-随机森林增强算法" class="headerlink" title="XGBoost 随机森林增强算法"></a>XGBoost 随机森林增强算法</h2><p>除了第一次等概率的从m个训练数据中抽样new dataSet 外，后续的每一轮抽样，都将前一轮推测失败的训练数据的权重加大，<br>使被抽取到的概率变高，尽可能的将推测失败的数据参与到后续的训练中，从而推动算法更快的学习，并学习的更好，提高算法的准确性<br><img src="/image/LLM/153.png" alt></p>
-<p>这种算法又称为XGBoost 算法，是随机森林算法的改进版，优点如下<br><img src="/image/LLM/154.png" alt><br><img src="/image/LLM/155.png" alt></p>
-<h1 id="决策树-VS-神经网络"><a href="#决策树-VS-神经网络" class="headerlink" title="决策树 VS 神经网络"></a>决策树 VS 神经网络</h1><p><img src="/image/LLM/156.png" alt></p>
-<h2 id="决策树-amp-决策森林"><a href="#决策树-amp-决策森林" class="headerlink" title="决策树&amp; 决策森林"></a>决策树&amp; 决策森林</h2><p>适合结构化数据(可以用表格表示的数据)<br>不适合非结构化数据（音视频，图像）<br>小的决策树可以被人类解释推测过程<br>训练速度快，缩短算法迭代循环周期，更快的提高算法性能</p>
-<h2 id="神经网络"><a href="#神经网络" class="headerlink" title="神经网络"></a>神经网络</h2><p>对于所有数据类型都很友好，包括结构化和非结构化<br>训练速度比决策树要慢<br>但可以轻松实现迁移学习，但是决策树每次训练只能特定的特征，得到特定的决策树<br>方便构建多模型系统，神经网络间串联方便</p>
 
           
         
@@ -1234,7 +932,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/MachineLearningDevelopmentProcess.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/llm/xinchang/LocalChoose.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1259,8 +957,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/machineLearning/MachineLearningDevelopmentProcess.html" itemprop="url">
-                  机器学习开发过程
+                <a class="post-title-link" href="/post/llm/xinchang/LocalChoose.html" itemprop="url">
+                  本地运行大模型的一些选择 & 指令和图形化微调
                 </a>
               
             
@@ -1274,8 +972,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-09-29T16:39:37+08:00">
-                2024-09-29
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-09-27T10:36:37+08:00">
+                2025-09-27
               </time>
             
 
@@ -1312,35 +1010,214 @@
       
         
           
-            <p><img src="/image/LLM/123.png" alt></p>
-<p>整个开发过程是一个选择框架，训练模型，诊断模型循环的过程</p>
-<h1 id="错误分析"><a href="#错误分析" class="headerlink" title="错误分析"></a>错误分析</h1><p>除了从高偏差高误差角度对模型进行分析外，还可以对mcv 产生错误分类的角度对模型进行分析<br><img src="/image/LLM/125.png" alt></p>
-<p>可以从交叉验证集测试产生的错误中进行分析<br>通过将错误进行归类统计，找出对模型影响比例较大的错误和比例较小的错误<br>从而调整模型训练的方向，已解决上面遇到的问题<br><img src="/image/LLM/124.png" alt></p>
-<p>如果交叉验证集产生错误的数据比较庞大，可以选择进行随机抽取一定小批量的数据进行错误分类，以节省人力</p>
-<h1 id="添加数据"><a href="#添加数据" class="headerlink" title="添加数据"></a>添加数据</h1><p>通过引入更多数据完善模型的判断，更关注通过注入的数据引发的对模型的训练结果的影响</p>
-<h2 id="数据增强"><a href="#数据增强" class="headerlink" title="数据增强"></a>数据增强</h2><p>Augmentation: modifying an existing training example to create a new training example.<br>在原有数据基础上，通过添加特定种类的噪声，形成新的测试数据，从而完善特定种类的错误判断<br>对于图片和音频数据都适用<br><img src="/image/LLM/126.png" alt><br>但是对添加随机或者无意义噪声产生的数据进行训练，对于模型训练不会有多大帮助</p>
-<h2 id="数据合成"><a href="#数据合成" class="headerlink" title="数据合成"></a>数据合成</h2><p>Synthesis: using artificial data inputs to create a new training example.<br>直接由计算机合成训练过程中使用的数据，通常用于计算机视觉训练的场景<br><img src="/image/LLM/127.png" alt></p>
-<h1 id="迁移学习"><a href="#迁移学习" class="headerlink" title="迁移学习"></a>迁移学习</h1><p>在已有大模型训练结果基础上，通过修改输出层结果使之符合自己使用场景的训练方法<br>好处是，在数据有限的情况下，可以直接使用输出层之前的参数开始训练，减少自己从头开始训练的工作</p>
-<p>例如下面这个使用1000+分类的训练识别数字0-9的模型，只是在输出层将1000+ 输出改成10种输出，在此基础上开始训练<br><img src="/image/LLM/128.png" alt><br>一般训练步骤为下载相同输入(文本的下载文本的，音视频的下载音视频的)的预训练模型，然后用自己的数据进行训练(fine tuning)<br><img src="/image/LLM/129.png" alt></p>
-<h1 id="完整开发流程"><a href="#完整开发流程" class="headerlink" title="完整开发流程"></a>完整开发流程</h1><p><img src="/image/LLM/130.png" alt></p>
-<h2 id="部署阶段"><a href="#部署阶段" class="headerlink" title="部署阶段"></a>部署阶段</h2><p>通常应用层跟模型通过Api 进行通信，用户输入x， 模型返回预测值y^<br>软件工程师需要注意</p>
+            <h1 id="业务场景分类"><a href="#业务场景分类" class="headerlink" title="业务场景分类"></a>业务场景分类</h1><p>文本处理：LLM（自然语言处理）</p>
+<p>视频图片：计算机视觉</p>
+<p>混合模型：文本、图片、视频、音频。</p>
+<h1 id="任务类型"><a href="#任务类型" class="headerlink" title="任务类型"></a>任务类型</h1><p>训练任务：通常是数据量较大，导致计算量也比较大。并行度也高。对资源消耗比较大。对时效性没有太大要求。<br>推理任务：是使用已有大模型对现有情况处理，数据量通常不大，所以资源消耗没那么大。通常要求处理速度快。</p>
+<h1 id="硬件选择"><a href="#硬件选择" class="headerlink" title="硬件选择"></a>硬件选择</h1><p>服务器：要评估业务的资源使用情况来具体配置<br>国产化GPU：昇腾<br>国产化CPU：华为、海光<br>操作系统：Linux、欧拉、麒麟</p>
+<p>还要考虑以上4者之间的兼容性。</p>
+<h1 id="计算资源"><a href="#计算资源" class="headerlink" title="计算资源"></a>计算资源</h1><p>全部使用GPU： 耗费高，适用于中大型企业，<br>GPU+CPU的组合：适用于 中小企业部署，如果用CPU 替换GPU, 所用CPU 数量将是原理GPU 数量的两倍。</p>
+<p>华为云 - 工作台 - AI NOTEBOOK 支持使用<a href="https://developer.huaweicloud.com/space/devportal/notebook-tool" target="_blank" rel="noopener">NPU</a> 进行训练<br><img src="/image/LlamaFactory7.jpg" alt><br>阿里云 - MODEScope - My Notebook  支持使用<a href="https://modelscope.cn/my/mynotebook" target="_blank" rel="noopener">GPU</a><br><img src="/image/LlamaFactory8.jpg" alt></p>
+<h1 id="模型选择-模型类型"><a href="#模型选择-模型类型" class="headerlink" title="模型选择/模型类型"></a>模型选择/模型类型</h1><p>L0：通用场景的模型，但是通常精度不高</p>
+<p>L1：进行微调以后的模型，可以适用某一个特定的领域</p>
+<p>微调方式：代码、命令行、图形化界面</p>
+<p>L2：只专注某个功能的模型，如：代码生成</p>
+<h1 id="借助LLAMAFactory-进行微调"><a href="#借助LLAMAFactory-进行微调" class="headerlink" title="借助LLAMAFactory 进行微调"></a>借助LLAMAFactory 进行微调</h1><p><a href="https://github.com/hiyouga/LLaMA-Factory?tab=readme-ov-file#installation" target="_blank" rel="noopener">LLAMAFactory</a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/hiyouga/LLaMA-Factory.git</span><br><span class="line"></span><br><span class="line">cd LLaMA-Factory</span><br><span class="line"></span><br><span class="line">pip install -e &quot;.[torch,metrics]&quot; </span><br><span class="line"></span><br><span class="line"># 如遇版本冲突可尝试用下面的命令</span><br><span class="line"></span><br><span class="line">pip install --no-deps -e .</span><br><span class="line"># </span><br><span class="line">llamafactory-cli version</span><br><span class="line"></span><br><span class="line"># 方式一： 启动webui，通过页面配置进行微调</span><br><span class="line">llamafactory-cli webui</span><br><span class="line"></span><br><span class="line"># 方式二： 命令行进行微调 llamafactory-cli train 配置文件路径，文件和界面作用一样，只不过用key=value进行配置</span><br><span class="line"></span><br><span class="line">llamafactory-cli train examples/train_lora/llama3_lora_sft.yaml </span><br><span class="line"></span><br><span class="line"># 安装nvitop 查看内存使用情况</span><br><span class="line"></span><br><span class="line">pip install nvitop</span><br><span class="line">nvitop -m auto</span><br></pre></td></tr></table></figure></p>
+<h2 id="指定数据集"><a href="#指定数据集" class="headerlink" title="指定数据集"></a>指定数据集</h2><p>配置文件：data/dataset_info.json</p>
+<p>数据集都放在data文件夹下面，通过配置dataset_info.json文件，可以更新界面上数据集选项<br>也可以根据界面上数据集选项生成规则对命令行调用的文件进行配置<br><img src="/image/LlamaFactory13.jpg" alt></p>
+<p>训练后大模型产物一般会存放在save文件夹中，或者根据配置的输出路径进行存放</p>
+<p><img src="/image/LlamaFactory6.jpg" alt></p>
+<h3 id="用界面调试"><a href="#用界面调试" class="headerlink" title="用界面调试"></a>用界面调试</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 方式一： 启动webui，通过页面配置进行微调</span><br><span class="line">llamafactory-cli webui</span><br></pre></td></tr></table></figure>
+<p>模型下载源可指定<a href="https://modelscope.cn/models" target="_blank" rel="noopener">modelScope</a>，或者<a href="https://huggingface.co/models" target="_blank" rel="noopener">HuggingFace</a> 里面的模型,避免下载到本地</p>
+<p><img src="/image/LlamaFactory1.jpg" alt></p>
+<p><img src="/image/LlamaFactory2.jpg" alt></p>
+<h3 id="用命令行调试"><a href="#用命令行调试" class="headerlink" title="用命令行调试"></a>用命令行调试</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 方式二： 命令行进行微调 llamafactory-cli train 配置文件路径，文件和界面作用一样，只不过用key=value进行配置</span><br><span class="line"></span><br><span class="line">llamafactory-cli train examples/train_lora/llama3_lora_sft.yaml</span><br></pre></td></tr></table></figure>
+<p>通过修改配置文件达到使用界面一样的配置效果<br><img src="/image/LlamaFactory11.jpg" alt><br><img src="/image/LlamaFactory3.jpg" alt><br><img src="/image/LlamaFactory4.jpg" alt></p>
+<p>nvitop 查看内存<br><img src="/image/LlamaFactory5.jpg" alt></p>
+<h2 id="调试完成"><a href="#调试完成" class="headerlink" title="调试完成"></a>调试完成</h2><p>不管通过命令行调试还是通过界面调试，都可以通过查看日志判断是否完成调试或者拍错排查<br><img src="/image/LlamaFactory14.jpg" alt></p>
+<h2 id="模型保存、模型导出"><a href="#模型保存、模型导出" class="headerlink" title="模型保存、模型导出"></a>模型保存、模型导出</h2><h3 id="通过界面保存"><a href="#通过界面保存" class="headerlink" title="通过界面保存"></a>通过界面保存</h3><p><img src="/image/LlamaFactory10.jpg" alt><br>注意看保存到文件下面的几个关键文件有没有<br><img src="/image/LlamaFactory9.jpg" alt></p>
+<p>保存后需要可用ollama 命令行查看是否正常导出<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ollama show --modelfile Qwen2.5:0.5B</span><br></pre></td></tr></table></figure></p>
+<h3 id="通过命令行保存"><a href="#通过命令行保存" class="headerlink" title="通过命令行保存"></a>通过命令行保存</h3><p>修改examples/merge_lora 文件夹下对应文件，指定模型现存位置和导出位置<br><img src="/image/LlamaFactory12.jpg" alt></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">// 运行命令导出</span><br><span class="line">llamafactory-cli export examples/merge_lora/llama3_lora_sft.yaml</span><br><span class="line"></span><br><span class="line">// 查看模型相关信息，进一步确保模型正确导出</span><br><span class="line"></span><br><span class="line">ollama show --modelfile Qwen2.5:0.5B</span><br><span class="line"></span><br><span class="line">// 安装压缩命令行，对模型进行压缩</span><br><span class="line">sudo add-apt-repository multiverse   </span><br><span class="line">sudo apt update</span><br><span class="line">sudo apt installsudo apt install unrar rar</span><br><span class="line"></span><br><span class="line">// 把导出的模型进行压缩</span><br><span class="line">rar a -r Qwen3-8rar a -r Qwen3-8B_lora_sft.rar ./output/Qwen3-8B_lora_sft/                                                        se</span><br></pre></td></tr></table></figure>
+<h2 id="模型使用"><a href="#模型使用" class="headerlink" title="模型使用"></a>模型使用</h2><p>通过界面的形式模型在本地不用下载<br>通过命令行模型在本地使用要先下载到本地<br>下载后进行解压</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 切换到导出模型的文件夹执行[部署]命令</span><br><span class="line">ollama create qwen2.5-wt0.5b -f Modelfile</span><br><span class="line">// 出现”success”表示模型部署成功。</span><br></pre></td></tr></table></figure>
+<p>部署模型后可以就可以通过open-webui 进行使用了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">open-webui server</span><br></pre></td></tr></table></figure>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>微调训练：包括以下几部分配置：<br>微调训练的阶段：预训练、指令微调、强化学习等等；<br>微调使用的数据集：数据集的格式、路径、验证集的比例等等；<br>关键微调参数：在我们之前教程中重点学习的：学习率、训练轮数、批量 大小等等；<br>LoRA 参数：当使用 Lora 微调时需要配置的一些特殊参数；<br>RLHF 参数：当训练阶段为强化学习时需要配置的一些特殊参数；<br>特殊优化参数：当选择使用 GaLore、APOLLO 和 BAdam 优化器时需要配置的一些参数；<br>SwanLab 参数：一款开源的模型训练跟踪与可视化工具；</p>
+<p>LLM模型选择<br>成本<br>本身训练语言是否中文（中文选国内）<br>模型大小<br>硬件兼容性</p>
+<p>数据准备<br>数据不同格式训练不同模型<br>重复数据删除 否则增加训练时长</p>
+<p>comfyui</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/llm/xinchang/localRun.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/llm/xinchang/localRun.html" itemprop="url">
+                  本地运行大模型的一种方式
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-09-21T10:36:37+08:00">
+                2025-09-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>本文仅介绍如何运行大模型<br>前提：有足够内存</p>
+<h2 id="云主机上运行"><a href="#云主机上运行" class="headerlink" title="云主机上运行"></a>云主机上运行</h2><ol>
+<li>创建一个云主机<br>使用华为云主机<a href="https://developer.huaweicloud.com/space/home" target="_blank" rel="noopener">https://developer.huaweicloud.com/space/home</a>, 目前有180hours/年免费使用时长<br>登录后<br>工作台–配置一个云主机（需要实名认证，微信刷脸）– 点击进入桌面<br>注意这里进入的ubantu 系统，操作略有区别</li>
+<li><p>安装Ollama<br>云主机界面右键”Open Terminal Here”，打开命令终端窗口<br>执行命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -fsSL https://dtse-mirrors.obs.cn-north-4.myhuaweicloud.com/case/0035/install.sh | sudo bash</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建DeepSeek模型<br>借助 Ollama 工具来部署 Deepseek 大模型，部署 deepseek-r1:1.5b 版本，执行命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ollama run deepseek-r1:1.5b</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>如果需要查看其他模型可直接去<a href="https://ollama.com/search" target="_blank" rel="noopener">官网</a><br>点击 任一一个模型名称可进一步看到模型版本和大小</p>
+<p>ollama 命令行可以看做是管理大模型的工具<br>[cli 文档] (<a href="https://docs.ollama.com/cli" target="_blank" rel="noopener">https://docs.ollama.com/cli</a>)<br>ollama run xxx 命令会自行判断模型是否存在，不存在则下载模型后运行<br>将指定模型运行后就可以和模型进行对话了</p>
+<ol start="4">
+<li>创建Agent智能角色</li>
+</ol>
+<p>关闭上面terminal 之后，虚拟环境创建</p>
+<p>打开云主机桌面CodeArts IDE for Python<br>点击新建工程，输入工程名称：Agent，点击创建<br>左下角选择：管理-&gt;设置<br>在搜索框中输入：activate，找到图中所示，在“Python:Terminal:Activate Environment”选项前方框中点击勾选，保证在终端运行时展示当前指定python 环境<br>打开终端，前方出现（venv）字样表示创建成功，如果没有请点击“删除”图标关闭终端重新打开一下</p>
+<p>升级pip,下载Autogen框架,openai借口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip install --upgrade pip -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple</span><br><span class="line">pip install pyautogen -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple</span><br><span class="line">pip install openai -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple</span><br></pre></td></tr></table></figure>
+<p>新建运行python文件用来装运行代码，配置文件指定模型相关配置供代码使用，提示词文件注入上下文，也是供代码使用</p>
+<p>demo.py:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> autogen <span class="keyword">import</span> UserProxyAgent, ConversableAgent, config_list_from_json</span><br><span class="line"><span class="keyword">from</span> openai <span class="keyword">import</span> models</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">r'提示词.txt'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        jiudan = f.readlines()</span><br><span class="line">        jiudan = str(jiudan)</span><br><span class="line">    <span class="comment"># Load LLM inference endpoints from an env variable or a file</span></span><br><span class="line">    <span class="comment"># 从文件或者环境变量中加载LLM的推理端点</span></span><br><span class="line">    config_list = config_list_from_json(env_or_file=<span class="string">"OAI_CONFIG_LIST.json"</span>)</span><br><span class="line">    <span class="comment">#利用LLM来创建一个Assistant Agent,这个LLM是在上面的配置文件里指定的。</span></span><br><span class="line">    assistant = ConversableAgent(<span class="string">"agent"</span>, llm_config=&#123;<span class="string">"config_list"</span>: config_list&#125;,system_message=jiudan)</span><br><span class="line">    <span class="comment">#创建一个用户代理，这个用户代理就代表你，你可以随时加入对话中</span></span><br><span class="line">    user_proxy = UserProxyAgent(<span class="string">"user"</span>, code_execution_config=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#让assistant来开始这个对话，如果用户输入 exit，那么对话就会被终止。</span></span><br><span class="line">    assistant.initiate_chat(user_proxy, message=<span class="string">"欢迎来到私人健康助手"</span>)</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<p>OAI_CONFIG_LIST.json:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">  &#123;</span><br><span class="line">    &quot;model&quot;: &quot;deepseek-r1:1.5b&quot;,</span><br><span class="line">    &quot;api_key&quot;: &quot;testkey&quot;,</span><br><span class="line">    &quot;base_url&quot;: &quot;http://localhost:11434/v1&quot;</span><br><span class="line">  &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<p>提示词txt:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"># 角色</span><br><span class="line">你是以为热情的医疗顾问，擅长根据患者的症状推荐合适的资料方案，还能与患者畅谈分享健康知识。让咨询过程充满关怀和专业。</span><br><span class="line">## 技能</span><br><span class="line">### 技能1：推荐治疗方案，直接给出患者一种治疗方案，如果不合适再询问患者具体症状。</span><br><span class="line">1.当患者表明症状时，从已知治疗方案中挑选合适的进行推荐。</span><br><span class="line">2.若不清楚患者症状时，可询问患者具体症状、病史等信息。</span><br><span class="line">3.专注药物治疗推荐：</span><br><span class="line">    -对于患者提出的非药物治疗问题（如手术或物理治疗），清始终引导回药物治疗推荐。</span><br><span class="line">    -对于和药物治疗无关的问题，请忽略，请始终引导回药物治疗推荐。</span><br><span class="line">只能出现这里面的治疗方案[</span><br><span class="line">    &#123;</span><br><span class="line">    &quot;名称&quot;: &quot;酚麻美敏片&quot;,</span><br><span class="line">    &quot;主要成分&quot;: &quot;对乙酰氨基酚、盐酸伪麻黄碱、氢溴酸右美沙芬、马来酸氯苯那敏&quot;,</span><br><span class="line">    &quot;适应症&quot;: &quot;用于普通感冒或流行性感冒引起的发热、头痛、四肢酸痛、打喷嚏、流鼻涕、鼻塞、咳嗽、咽痛等症状&quot;,</span><br><span class="line">    &quot;剂量&quot;: &quot;成人和12岁以上儿童，一次1 - 2片，每6小时服1次，24小时内不超过4次&quot;,</span><br><span class="line">    &quot;副作用&quot;: &quot;有时有轻度头晕、乏力、恶心、上腹不适、口干、食欲缺乏和皮疹等，可自行恢复&quot;,</span><br><span class="line">    &quot;注意事项&quot;: &quot;用药3 - 7天，症状未缓解，请咨询医师或药师；服用本品期间不得饮酒或含有酒精的饮料；不能同时服用与本品成份相似的其他抗感冒药等&quot;,</span><br><span class="line">    &quot;适用人群&quot;: &quot;成人和12岁以上儿童&quot;,</span><br><span class="line">    &quot;使用时长&quot;: &quot;一般不超过7天&quot;,</span><br><span class="line">    &quot;颜色&quot;: &quot;薄膜衣片，除去包衣后显白色或类白色&quot;</span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    &quot;名称&quot;: &quot;氢溴酸右美沙芬糖浆&quot;,</span><br><span class="line">    &quot;主要成分&quot;: &quot;氢溴酸右美沙芬&quot;,</span><br><span class="line">    &quot;适应症&quot;: &quot;用于干咳，包括上呼吸道感染（如感冒和咽炎）、支气管炎等引起的咳嗽&quot;,</span><br><span class="line">    &quot;剂量&quot;: &quot;口服。成人一次10 - 20毫升，一日3 - 4次&quot;,</span><br><span class="line">    &quot;副作用&quot;: &quot;可见头晕、头痛、嗜睡、易激动、嗳气、食欲缺乏、便秘、恶心、皮肤过敏等，但不影响疗效。停药后上述反应可自行消失&quot;,</span><br><span class="line">    &quot;注意事项&quot;: &quot;用药7天，症状未缓解，请咨询医师；哮喘患者、痰多的患者、肝肾功能不全患者慎用；孕妇及哺乳期妇女慎用等&quot;,</span><br><span class="line">    &quot;适用人群&quot;: &quot;成人&quot;,</span><br><span class="line">    &quot;使用时长&quot;: &quot;一般不超过7天&quot;,</span><br><span class="line">    &quot;颜色&quot;: &quot;棕黄色澄清液体&quot;</span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    &quot;名称&quot;: &quot;氯雷他定片&quot;,</span><br><span class="line">    &quot;主要成分&quot;: &quot;氯雷他定&quot;,</span><br><span class="line">    &quot;适应症&quot;: &quot;用于缓解过敏性鼻炎有关的症状，如喷嚏、流涕、鼻痒、鼻塞以及眼部痒及烧灼感。口服药物后，鼻和眼部症状及体征得以迅速缓解。亦适用于缓解慢性荨麻疹、瘙痒性皮肤病及其他过敏性皮肤病的症状及体征&quot;,</span><br><span class="line">    &quot;剂量&quot;: &quot;成人及12岁以上儿童：一日1次，一次1片（10毫克）；2 - 12岁儿童：体重＞30公斤：一日1次，一次1片（10毫克）；体重≤30公斤：一日1次，一次半片（5毫克）&quot;,</span><br><span class="line">    &quot;副作用&quot;: &quot;常见不良反应有乏力、头痛、嗜睡、口干、胃肠道不适包括恶心、胃炎以及皮疹等。罕见不良反应有脱发、过敏反应、肝功能异常、心动过速及心悸等&quot;,</span><br><span class="line">    &quot;注意事项&quot;: &quot;在做皮肤过敏试验前约48小时应中止使用本品；同时服用酮康唑、大环内酯类抗生素、西咪替丁、茶碱等药物，会提高氯雷他定在血浆中的浓度，应慎用；罕见不良反应有心动过速、心悸、肝酶升高、肝炎及胆红素增加等，应停药并就医等&quot;,</span><br><span class="line">    &quot;适用人群&quot;: &quot;成人及2岁以上儿童&quot;,</span><br><span class="line">    &quot;使用时长&quot;: &quot;根据病情而定，症状缓解后可停药，一般慢性疾病疗程较长&quot;,</span><br><span class="line">    &quot;颜色&quot;: &quot;白色或类白色片&quot;</span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">    &quot;名称&quot;: &quot;健胃消食片&quot;,</span><br><span class="line">    &quot;主要成分&quot;: &quot;太子参、陈皮、山药、麦芽（炒）、山楂&quot;,</span><br><span class="line">    &quot;适应症&quot;: &quot;健胃消食。用于脾胃虚弱所致的食积，症见不思饮食、嗳腐酸臭、脘腹胀满；消化不良见上述证候者&quot;,</span><br><span class="line">    &quot;剂量&quot;: &quot;口服，可以咀嚼。成人一次4 - 6片，儿童二岁至四岁一次2片，五岁至八岁一次3片，九岁至十四岁一次4片；一日3次&quot;,</span><br><span class="line">    &quot;副作用&quot;: &quot;尚不明确&quot;,</span><br><span class="line">    &quot;注意事项&quot;: &quot;饮食宜清淡，忌食辛辣、生冷、油腻食物；孕妇及哺乳期妇女慎用；儿童必须在成人监护下使用等&quot;,</span><br><span class="line">    &quot;适用人群&quot;: &quot;各年龄段人群，儿童需在成人监护下使用&quot;,</span><br><span class="line">    &quot;使用时长&quot;: &quot;症状缓解后即可停药&quot;,</span><br><span class="line">    &quot;颜色&quot;: &quot;浅棕黄色的片；气微香，味微甜、酸&quot;</span><br><span class="line">&#125;,&#123;</span><br><span class="line">    &quot;名称&quot;: &quot;硝苯地平缓释片&quot;,</span><br><span class="line">    &quot;主要成分&quot;: &quot;硝苯地平&quot;,</span><br><span class="line">    &quot;适应症&quot;: &quot;各种类型的高血压及心绞痛&quot;,</span><br><span class="line">    &quot;剂量&quot;: &quot;口服。一次10 - 20毫克，一日2次，极量，一次40毫克，一日0.12克&quot;,</span><br><span class="line">    &quot;副作用&quot;: &quot;可能出现的副作用有外周水肿（外周水肿与剂量相关，服用120片/日时发生率为4.8%，服用240片/日则为12.8%）、头晕、头痛、脸红、心悸、乏力、恶心等&quot;,</span><br><span class="line">    &quot;注意事项&quot;: &quot;低血压、严重主动脉瓣狭窄、肝肾功能不全患者慎用；用药期间定期监测血压和心率；避免突然停药，以免引起血压反跳等&quot;,</span><br><span class="line">    &quot;适用人群&quot;: &quot;高血压及心绞痛患者&quot;,</span><br><span class="line">    &quot;使用时长&quot;: &quot;需长期服用，根据血压控制情况调整剂量&quot;,</span><br><span class="line">    &quot;颜色&quot;: &quot;黄色薄膜衣片除去薄膜衣后显黄色&quot;</span><br><span class="line">&#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<p>保证三者在同一个文件夹下</p>
+<p>然后打开CodeArts IDE for Python 终端<br>执行python demo.py<br>大模型就可以更准确的回答和提示词相关的问题了</p>
+<h2 id="本地运行"><a href="#本地运行" class="headerlink" title="本地运行"></a>本地运行</h2><p>在实际自己的电脑笔记本上运行</p>
+<p>步骤与上面类似，工具略有不同</p>
 <ol>
-<li>尽可能的保障低成本的计算出具有可靠性和有效性的预测结果</li>
-<li>可以进行大规模用户扩展使用</li>
-<li>在用户隐私允许同意的情况下进行日志记录输入和输出</li>
-<li>对模型进行系统监控，比如根据上面日志的记录，计算出因为当前数据变化导致计算结果不准时，判断是否让模型进行进一步优化</li>
-<li>保障模型更新，在上一步进行模型优化后要保证能够将老的模型替换成新模型</li>
+<li><p><a href="https://ollama.com/download" target="_blank" rel="noopener">安装ollama</a>, 帮忙下载模型<br>下载完成后，可直接在笔记本终端跑ollama 命令 同上<br>点击客户端也可以直接提问，前提也是已经有可用大模型model，没有的话，直接选择也是会先下载再运行，<br>执行下<br>ollama run xxx<br>下载一个模型，供open webUI使用</p>
+</li>
+<li><p>升级python 到3.11以上，<a href="https://github.com/open-webui/open-webui?tab=readme-ov-file" target="_blank" rel="noopener">装 open webUI</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install open-webui</span><br></pre></td></tr></table></figure>
+</li>
 </ol>
-<p><img src="/image/LLM/131.png" alt></p>
-<h1 id="避免道德偏见伦理问题"><a href="#避免道德偏见伦理问题" class="headerlink" title="避免道德偏见伦理问题"></a>避免道德偏见伦理问题</h1><ol>
-<li>建议多元化(多背景，多种族)团队，上线前进行头脑风暴，探索可能对弱势群体造成伤害的可能</li>
-<li>参考行业标准</li>
-<li>上线前通过技术诊断产生的伤害可能性，从而决策是否可以上线</li>
-<li>制定延缓计划，上线后观测可能产生的伤害，及时进行回滚处理<br><img src="/image/LLM/132.png" alt></li>
+<p>安装完后运行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">open-webui serve</span><br></pre></td></tr></table></figure></p>
+<p>访问 <a href="http://localhost:8080/" target="_blank" rel="noopener">http://localhost:8080/</a><br>如无法访问，等一会儿再刷新</p>
+<ol start="3">
+<li>模型配置<br>可避免建上面云主机的文件，直接定制自己的agent<br>在open webUI的界面中选择【工作空间】- 添加模型（版本不同，操作界面不同，进入下面页面即可）<br><img src="/image/openWebUI.jpg" alt></li>
 </ol>
-<h1 id="二分类错误度量"><a href="#二分类错误度量" class="headerlink" title="二分类错误度量"></a>二分类错误度量</h1><p>在对倾斜数据集(y=1 和y = 0 所占比例不是5:5)进行训练时，<br>判断模型预测结果好坏通常交叉验证集的数据计算精确率和召回率两个指标衡量<br><img src="/image/LLM/133.png" alt><br>如果二者都趋近0或1时，说明当前的模型不是一个有用的模型，一直在打印0或1<br>只有二者值都很大时，才说明算法是有用的</p>
-<p>精确率表示实际上y = 1的可能性<br>召回率表示模型计算出y = 1 的可能性</p>
-<h2 id="对于精确率和召回率的衡量"><a href="#对于精确率和召回率的衡量" class="headerlink" title="对于精确率和召回率的衡量"></a>对于精确率和召回率的衡量</h2><p>一种是通过设置阈值大小去权衡二者，从而进行取舍<br>提高阈值，会增加精度，降低召回率<br>降低阈值，会降低精度，提高召回率<br><img src="/image/LLM/134.png" alt><br>另外一种是使用F1 score分数(调和平均数)，自动计算出最佳的精度和召回率，从而选择对应的算法<br><img src="/image/LLM/135.png" alt></p>
+<p>后记：没必要在本地部署，尤其本地，内存消耗巨大，尤其是模型本身体积巨大</p>
+<p>其他问题记录</p>
+<ol>
+<li><p>决策分析式AI 与 生成式AI 区别<br>二者本质的不同是从底层开始演绎的算法不同，而且最终生成的产物应用阈也不同<br>决策分析式AI<br>通过对历史数据的学习，辅助我们进行一些决策，应用阈更加垂类，<br>与数据挖掘，机器学习是一个时代的概念，相关算法设计决策树，KNN, 集成算法，朴素贝叶斯，关联规则，推荐算法<br>生成式AI<br>通过对大量历史数据进行学习，帮助我们进行内容创作，这些内容通常都是全新的，应用阈更加宽泛，通用，涉及的算法有卷积神经网络等</p>
+</li>
+<li><p>模型压缩方法 ？？？？<br>量化：模型参数的量化，降低数据精度，将模型参数从浮点数转换为整数，从而减少存储空间和计算量。<br>结构化剪枝：剔除模型中无意义或冗余的注意头<br>蒸馏：比如使用LoRA 算法进行降秩处理</p>
+</li>
+<li><p>语义理解<br>大模型实现语义理解的关键目前是使用transform机制，transform机制是多个并行执行的</p>
+</li>
+<li><p>装包问题<br>pyenv install 3.12.0 遇到 ModuleNotFoundError: No module named ‘_lzma’<br>执行 下面命令后再次安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install xz</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>pip install open-webui 安装过程始终联网，这个耗时长，如果中断了，再执行一次就可以</p>
+<p>执行open-webui serve 报错 ModuleNotFoundError: No module named ‘itsdangerous’<br>先装包再次执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install itsdangerous</span><br></pre></td></tr></table></figure></p>
 
           
         
@@ -1379,7 +1256,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/biasVariance.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/systemThinking.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1404,8 +1281,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/machineLearning/biasVariance.html" itemprop="url">
-                  高偏差和高方差
+                <a class="post-title-link" href="/post/knowledge/systemThinking.html" itemprop="url">
+                  系统思考
                 </a>
               
             
@@ -1419,8 +1296,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-09-27T17:39:37+08:00">
-                2024-09-27
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-06-22T10:10:06+08:00">
+                2025-06-22
               </time>
             
 
@@ -1457,23 +1334,77 @@
       
         
           
-            <p>通过判断高方差和高偏差的大小可以判断模型的性能问题<br>一般有以下两个性能问题<br>高偏差意味着模型欠拟合<br>高方差意味着模型过拟合</p>
-<p>高偏差的情况下，<br>Jtrain 值会比较大，且Jtrain和Jcv 值相近<br>也就是说Jtrain 较高对应的训练数据的拟合度本身就不够</p>
-<p>高方差的情况下，<br>Jcv 会远大于Jtrain, Jtrain 值可能比较小<br>就是说模型对训练数据很拟合，但是对交叉验证数据不够拟合</p>
-<p>也有高方差和高偏差两个问题同时存在的情况<br>Jtrain 值会比较大，且Jcv 远大于Jtrain,<br>这种情况意味着模型可能对一些数据过拟合，对一些数据又存在欠拟合</p>
-<p><img src="/image/LLM/109.png" alt></p>
-<h1 id="正则化参数𝜆-对模型的影响"><a href="#正则化参数𝜆-对模型的影响" class="headerlink" title="正则化参数𝜆 对模型的影响"></a>正则化参数𝜆 对模型的影响</h1><p>如果𝜆偏大会导致Jtrain 偏大，出现欠拟合<br>(想象𝜆现在是一个非常大的数值，为使Jtrain 最小，就会让w值逐渐趋近0, 最终模型无限接近b)<br>如果𝜆偏小会导致Jtrain 偏小，但是Jcv 偏大，出现过拟合<br>(想象𝜆现在无限趋近于0，或者直接等于0， 那么要使Jtrain 最小，w取值就得变大，多项式就会被保留，最终模型出现过拟合)<br>如果𝜆取值适中就可以实现Jtrain和Jcv 值都偏低，模型适当拟合的效果<br><img src="/image/LLM/110.png" alt></p>
-<h2 id="𝜆-如何取值"><a href="#𝜆-如何取值" class="headerlink" title="𝜆 如何取值"></a>𝜆 如何取值</h2><p>通过选取不同 𝜆 带入计算最小损失函数，用得到的(w,b)值计算Jcv, 选取多组Jcv 中 最小值的(w,b)进行Jtest 计算，<br><img src="/image/LLM/111.png" alt></p>
-<h2 id="𝜆-趋势图"><a href="#𝜆-趋势图" class="headerlink" title="𝜆 趋势图"></a>𝜆 趋势图</h2><p>𝜆 对于误差的影响趋势和多项式对误差的影响趋势呈镜像关系<br>𝜆 值从小到大，Jtrain 从小到大，模型从过拟合到欠拟合<br>多项式平方数从小到大，Jtrain 从大到小， 模型从欠拟合到过拟合<br><img src="/image/LLM/112.png" alt></p>
-<h1 id="建立性能基准线来判断模型性能"><a href="#建立性能基准线来判断模型性能" class="headerlink" title="建立性能基准线来判断模型性能"></a>建立性能基准线来判断模型性能</h1><p>计算基准线与Jtrain 的差A， A 如果偏大说明模型存在高偏差欠拟合问题<br>计算Jtrain 与 Jcv 的差B，B 如果偏大说明存在高方差过拟合问题<br>如果A 大于B 说明存在高偏差，欠拟合<br>如果A 小于B 说明存在高方差，过拟合<br>如果A 和 B 数值接近，说明 高偏差和高方差同时存在<br><img src="/image/LLM/115.png" alt><br>基准线可以来自<br>人类的测试水平<br>竞争算法的性能水平<br>基于过程经验判断的水平<br><img src="/image/LLM/114.png" alt><br>以 语音识别为例<br><img src="/image/LLM/113.png" alt></p>
-<h1 id="学习曲线"><a href="#学习曲线" class="headerlink" title="学习曲线"></a>学习曲线</h1><p>Jtrain 和Jcv 随 训练集大小m变化的趋势曲线被称为学习曲线</p>
-<p>一般情况下，<br>Jtrain 会随m 变大逐渐变大，因为为了拟合更多数据，数据比一定会散落在曲线上，误差累加起来数值会变大<br>Jcv 会随m 变大逐渐变小，因为更多的数据可以展示更多的情况，是模型拟合度更高，对于Jcv 计算就是越小<br><img src="/image/LLM/116.png" alt></p>
-<p>但是对于存在高偏差的模型，增加样本数量并不一定能对模型拟合产生多大帮助，<br>因为高偏差模型具备欠拟合特点，随样本数增加损失函数也会增加，且相对基本线误差依然存在<br><img src="/image/LLM/117.png" alt></p>
-<p>对于存在高方差的模型，增加样本数量可以起到一定帮助<br>因为高方差模型具体过拟合特点，会将增加的样本继续拟合到自己的训练模型中，相当容纳近了更多的数据情况<br>可以更好的拟合实际的情况<br><img src="/image/LLM/118.png" alt></p>
-<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>高偏差和高方差的一些解决方案<br><img src="/image/LLM/119.png" alt></p>
-<h1 id="神经网络中的应用"><a href="#神经网络中的应用" class="headerlink" title="神经网络中的应用"></a>神经网络中的应用</h1><p>神经网络是低偏差的模型，<br>在训练过程中如果Jtrain 过大可以使用更大的神经网络，缺点就是运算速度会变低且会增加研发成本<br>在Jtrain 基本与基准线相差不大时计算Jvc，如果Jvc 过大可以增加数据样本重新回到模型计算<br>经过上面不断重复的过程，最终得到合适的模型参数<br><img src="/image/LLM/120.png" alt><br>只要数据规则化做的合适，大型神经网络总是会比小型神经网络表现好一些<br><img src="/image/LLM/121.png" alt><br>在tensorFlow 中，可以在构建layer 时传入规则化参数<br><img src="/image/LLM/122.png" alt></p>
-<h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><p>练习多项式，正则化参数𝜆，训练数据个数m, 神经网络层数<br><a href="https://colab.research.google.com/github/kaieye/2022-Machine-Learning-Specialization/blob/main/Advanced%20Learning%20Algorithms/week3/8.Practice%20Lab%20Advice%20for%20applying%20machine%20learning/C2_W3_Assignment.ipynb#scrollTo=3tnHtCF35uzg" target="_blank" rel="noopener">链接</a></p>
-<p>The simple model is a bit better in the training set than the regularized model but it worse in the cross validation set.</p>
+            <h1 id="系统"><a href="#系统" class="headerlink" title="系统"></a>系统</h1><p>由相互依赖，具有特殊目的多个部分组成的整体</p>
+<ul>
+<li>多个部分</li>
+<li>相互依赖</li>
+<li>具有特殊目的</li>
+</ul>
+<h1 id="系统思考角度"><a href="#系统思考角度" class="headerlink" title="系统思考角度"></a>系统思考角度</h1><ul>
+<li>深度思考: 从现象到本质</li>
+<li>全局思考: 从局部思考到整体思考</li>
+<li>动态思考: 理解每个人每件事之间的关系都是动态变化的</li>
+</ul>
+<h1 id="因果回路图"><a href="#因果回路图" class="headerlink" title="因果回路图"></a>因果回路图</h1><h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><p>系统结构里面的因素，会随时间而变化的名词</p>
+<p><img src="/image/st1.png" alt></p>
+<ul>
+<li>链路: 变量之间的因果关系，也称因果链路，分为正相关链路(A+B+)和负相关链路(A+B-)</li>
+</ul>
+<p><img src="/image/st2.png" alt></p>
+<h2 id="回路"><a href="#回路" class="headerlink" title="回路"></a>回路</h2><p>通过多条链路形成一个闭合的圈，分为增强回路和平衡回路</p>
+<h3 id="增强回路"><a href="#增强回路" class="headerlink" title="增强回路"></a>增强回路</h3><p>所有链路都是正相关的<br>Reinforcing loop，一个回路中的变量增加或减少，会影响这个回路中的所有链路持续增加或减少，发展的趋势不受控制，<br>常见的类比说法比如“恶性循环”、“强者恒强”等等就是增强回路导致的；<br><img src="/image/st3.png" alt></p>
+<h3 id="平衡回路"><a href="#平衡回路" class="headerlink" title="平衡回路"></a>平衡回路</h3><p>有正相关也有负相关<br>Balance loop，一个回路中的变量增加或减少受到系统中其他变量的反向影响，使得这个系统中的变量在长期的维度会表现出一种保持平衡的状态，<br>比如最常见的例子是，猪肉如果大幅度涨价，就会有更多的人加入到养猪的行业，第二年的猪肉就会因为供应充足而降价，最终长期看价格会维持在一个平衡的状态。<br><img src="/image/st4.png" alt></p>
+<h3 id="延时"><a href="#延时" class="headerlink" title="延时"></a>延时</h3><p>一个变量的变化影响另一个变量并不一定是马上生效的，他们之间的关系有可能存在时延<br>在链路之间增加一个“||”的符号代表这两个变量之间的因果关系存在时延<br><img src="/image/st5.png" alt><br>时延在工作中最典型的例子比如：<br>招聘对项目人力缺口的影响、代码单元测试对产品质量的影响、学习对于工作能力的影响等等。<br>对时延的感知也是帮助理解系统复杂性的重点之一。<br><img src="/image/st6.png" alt></p>
+<h1 id="系统思考的五个基础模型"><a href="#系统思考的五个基础模型" class="headerlink" title="系统思考的五个基础模型"></a>系统思考的五个基础模型</h1><p>通过执行不同的决策最终导致平衡或者增强回路的出现，没有解决实际问题的模型<br>可以更好的帮助了解分析定位系统中出现问题的因果流程</p>
+<h2 id="饮鸩止渴"><a href="#饮鸩止渴" class="headerlink" title="饮鸩止渴"></a>饮鸩止渴</h2><p><img src="/image/st7.png" alt></p>
+<blockquote>
+<p>B：走捷径为了加速<br>R：有故障会拖后腿</p>
+</blockquote>
+<p>饮鸩止渴”描述了我们是怎么在进度的压力下一次又一次的放弃了自己的坚持，因为链路上的延迟，让我们心存侥幸，最后使得我们的系统背负了沉重的技术债的。<br>左侧半圈虽然是个平衡回路，但是整个外圈回路是个增强回路【负负得正】</p>
+<h2 id="舍本逐末"><a href="#舍本逐末" class="headerlink" title="舍本逐末"></a>舍本逐末</h2><p><img src="/image/st8.jpeg" alt></p>
+<blockquote>
+<p>B1：走捷径为了加速【末】<br>B2：优化架构做加速【本】<br>R：陷入架构泥潭无法脱身 【因延时】</p>
+</blockquote>
+<p>“舍本逐末”描述了短期表面方案和长期根本方案之间的冲突，因为增强回路的存在，使得我们不能对“架构优化”这个根本的方案提高优先级，最终上瘾于短期表面方案</p>
+<h2 id="目标侵蚀"><a href="#目标侵蚀" class="headerlink" title="目标侵蚀"></a>目标侵蚀</h2><p><img src="/image/st9.jpeg" alt></p>
+<blockquote>
+<p>B1：通过行动推进【本】<br>B2：通过修改目标推进 【走捷径】<br>R：完成目标的动力被侵蚀 【对实际进展产生负影响】</p>
+</blockquote>
+<p>“目标侵蚀”描述了我们怎么在目标完成的压力下，放弃了做正确的事，而是通过直接降低目标来达成目标的。真实的“加速”措施通常需要更长的时间才能见效。正是这个延迟，使得我们逐步转向上面的平衡回路，需求延期和下调目标成为一种习惯</p>
+<h2 id="成长上限"><a href="#成长上限" class="headerlink" title="成长上限"></a>成长上限</h2><p><img src="/image/st10.png" alt></p>
+<blockquote>
+<p>R：业务增长飞轮<br>B：业务增长天花板【人口规模是一定的，不可能一直增】</p>
+</blockquote>
+<p>“成长上限”描述了一个增强回路不可能独自持续下去，在一个更大的维度，一定会有另一个因素（或平衡回路）对它进行限制，这个就是成长上限。</p>
+<h2 id="公地悲剧"><a href="#公地悲剧" class="headerlink" title="公地悲剧"></a>公地悲剧</h2><p><img src="/image/st11.png" alt></p>
+<blockquote>
+<p>R：投放即增长<br>B：体验下降，用户用脚投票【最外面一圈是个平衡回路】</p>
+</blockquote>
+<p>“公地悲剧”描述了对于大家共享的有限资源（push渠道），每个个体（业务单元）都想自己利益最大化。<br>使用者越多，越消耗用户对平台体验的信任。<br>随着push总量迅速增加，遭遇用户容忍瓶颈时，消费者会感到不可容忍，用脚投票。</p>
+<p>更复杂的例子<br><img src="/image/st12.png" alt><br><img src="/image/st13.png" alt></p>
+<h1 id="回归思考的心智模型"><a href="#回归思考的心智模型" class="headerlink" title="回归思考的心智模型"></a>回归思考的心智模型</h1><h2 id="怎么找到合适的“变量”"><a href="#怎么找到合适的“变量”" class="headerlink" title="怎么找到合适的“变量”"></a>怎么找到合适的“变量”</h2><ol>
+<li>从目标或问题出发<ul>
+<li>明确系统目标：首先确定系统的核心目标（如 “提高产品销量”“降低成本”），围绕目标反推影响它的关键因素。</li>
+<li>聚焦核心问题：从具体问题出发，拆解问题背后的驱动因素。例如，“员工流失率高” 可能涉及 “薪资水平”“晋升机会”“工作压力” 等变量。</li>
+</ul>
+</li>
+<li>逐层分解系统<ul>
+<li>MECE 原则（相互独立、完全穷尽）：将复杂系统分解为互不重叠且覆盖全面的子系统。例如，分析企业运营时，可分解为 “市场”“生产”“财务”“人力资源” 等模块，再分别提取变量。</li>
+<li>5Why 分析法：通过连续追问 “为什么”，挖掘深层变量。</li>
+</ul>
+</li>
+<li>从参与者视角切入<ul>
+<li>列出所有利益相关者：识别与系统相关的个体或群体（如PM、开发、测试、DA等），分析他们的行为如何影响系统。</li>
+<li>寻找交叉影响：关注不同利益相关者之间的互动。例如，“排期压力” 可能影响 “软件质量”，进而影响 “用户体验”。</li>
+</ul>
+</li>
+</ol>
+<h2 id="系统思考的心智模型"><a href="#系统思考的心智模型" class="headerlink" title="系统思考的心智模型"></a>系统思考的心智模型</h2><p><img src="/image/st14.png" alt></p>
+<p>对于复杂问题的思考是有层次的，从最表面的事件（正在发生什么），到事件背后的规律（发展趋势是什么），再到这个问题的结构模式（解释趋势背后的原因），再到价值观（驱动这个模式的理念），层层递进。</p>
+<p>在画完自己的业务系统因果回路图之后，再结合这个心智模型，思考自己的思考在哪个层次，是否可以有机会再下钻到更深的层次。</p>
+<p>值得注意的地方，“系统思考”只是一个工具，不同的人，面对同样一个系统，因为了解的信息多少不同，关注的问题角度不同，对系统发展方向的期待不同，都会导致画出来的因果回路图有所不同。</p>
+<p>所以，“系统思考”就是一个帮助你不断的通过zoom out、zoom in 来完整的、体系的看待复杂问题的工具，通过使用这个工具的过程，帮助更好的思考和理解你面对的复杂问题。</p>
+<p><img src="/image/st15.png" alt></p>
 
           
         
@@ -1512,7 +1443,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/machineLearning/advanceOpt.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/deepLearning/RNN.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1537,8 +1468,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/machineLearning/advanceOpt.html" itemprop="url">
-                  一些其他的概念
+                <a class="post-title-link" href="/post/deepLearning/RNN.html" itemprop="url">
+                  RNN-循环神经网络
                 </a>
               
             
@@ -1552,8 +1483,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2024-09-25T16:27:37+08:00">
-                2024-09-25
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-02-25T17:15:37+08:00">
+                2025-02-25
               </time>
             
 
@@ -1590,17 +1521,520 @@
       
         
           
-            <h1 id="Adam-Algorithm"><a href="#Adam-Algorithm" class="headerlink" title="Adam Algorithm"></a>Adam Algorithm</h1><p>一种加快模型学习的优化算法<br> 可以自动调节学习率的大小，使模型更快的朝梯度下降的方向学习<br> <img src="/image/LLM/96.png" alt><br> <img src="/image/LLM/97.png" alt><br> <img src="/image/LLM/98.png" alt></p>
-<h1 id="卷积层"><a href="#卷积层" class="headerlink" title="卷积层"></a>卷积层</h1><p> 之前讨论的神经网络中的中间层，都依赖上一层所有的输出进行计算<br> Each neuron output is a function of<br> all the activation outputs of the previous layer.<br> 有一种计算方案是只选取上一层的部分数据计算本层的输出<br> 这种layer 被称为卷积层（Convolutional Layer）<br> 优点有两个<br> 一个是可以加快计算，<br> 另外一个是可以减少需要的训练数据</p>
-<p>  <img src="/image/LLM/99.png" alt></p>
-<h1 id="降低预测结果错误率"><a href="#降低预测结果错误率" class="headerlink" title="降低预测结果错误率"></a>降低预测结果错误率</h1><p>拿到训练模型后，如果遇到一个不可接受的错误输出，可以通过以下方式进行重新调整<br><img src="/image/LLM/100.png" alt></p>
-<p>更常见的方式是用诊断的方式评估模型好坏<br>在训练前将数据分成两组，<br>一组用于模型训练，称为训练组<br>另一组用于测试训练得到的模型，称为测试组</p>
-<p>比如对于过拟合的情况<br>将数据分成两组<br><img src="/image/LLM/101.png" alt><br>分别计算训练组和测试组的损失函数<br><img src="/image/LLM/102.png" alt><br>对于训练组数据的损失函数肯定会更小<br>要关注的是测试数据的损失函数，值越小，说明越近真实的值，说明模型越好<br>上面是线性回归模型，下面是对于分类问题的损失函数计算<br><img src="/image/LLM/103.png" alt></p>
-<p><img src="/image/LLM/104.png" alt></p>
-<p>如果需要在多个模型间进行选择，可以在一开始的时候将数据分成三组<br>训练组，交叉验证组，测试组</p>
-<p>同样计算基于交叉验证组数据的损失函数，值越小说明越符合实际数据<br>主要作用是用于选择模型，比如挑出最合适的多项式</p>
-<p>然后再使用测试组数据进行泛化错误的测试</p>
-<p><img src="/image/LLM/105.png" alt><br><img src="/image/LLM/106.png" alt><br><img src="/image/LLM/107.png" alt><br><img src="/image/LLM/108.png" alt></p>
+            <p>循环神经网络（RNN, Recurrent Neural Network）是一类用于处理序列数据的神经网络，它与传统的前馈神经网络不同，具有“记忆”能力。<br>RNN的特点是神经元之间的连接不仅仅是前向的，还包括了“循环”连接，这样可以把之前的输出作为当前的输入，从而捕捉到时间序列中不同时间点之间的依赖关系。</p>
+<p>主要特点：<br>序列数据处理：RNN擅长处理序列数据（例如文本、时间序列、语音等），可以在处理每个时间步时考虑之前的状态。<br>权重共享：RNN在不同时间步之间共享相同的权重参数，这使得它能够在不同的时间点上进行相似的计算。<br>记忆能力：通过循环结构，RNN可以保留以前输入的信息，帮助模型理解时间依赖性。</p>
+<p>常见序列数据处理任务：语音识别，乐谱生成，情绪分类，DNA序列分析，机器翻译，视频动作识别，名称实体识别<br><img src="/image/deepLearning/211.png" alt></p>
+<p>下面以名称实体识别为例，介绍一个多对多且输出序列长度等于输入序列长度的RNN架构工作原理</p>
+<h1 id="名称实体识别"><a href="#名称实体识别" class="headerlink" title="名称实体识别"></a>名称实体识别</h1><p>任务：识别文本中的实体，如人名、地名、组织机构名等<br>实现原理：</p>
+<ol>
+<li>准备一个字典，将单词映射为数字表示</li>
+<li>将输入句子中的每一个单词利用one-hot编码表示, 此时一个单词就是一个序列</li>
+<li>将所有序列输入到RNN中，RNN会对每个序列进行处理，输出结果</li>
+<li>每一个结果对应一个单词是否是名称实体</li>
+</ol>
+<h2 id="RNN-符号表示"><a href="#RNN-符号表示" class="headerlink" title="RNN 符号表示"></a>RNN 符号表示</h2><p><img src="/image/deepLearning/209.png" alt><br><img src="/image/deepLearning/212.png" alt></p>
+<h2 id="RNN-计算过程"><a href="#RNN-计算过程" class="headerlink" title="RNN 计算过程"></a>RNN 计算过程</h2><p>如果用简单卷积神经网络主要存在两个问题</p>
+<ol>
+<li>并不是所有输入或者所有输出的序列长度都不一致，如果都填充到一个最大值，会造成表示不友好的问题</li>
+<li>不能跨文本位置共享学习到的特征</li>
+<li>输入层巨大(单词数*10000)，会导致第一层的权重矩阵非常大<br><img src="/image/deepLearning/213.png" alt></li>
+</ol>
+<p>RNN 可以解决上述问题</p>
+<ol>
+<li>不同的问题中输入或者输出的序列长度可能不一致，RNN可以处理任意长度的序列</li>
+<li>学习到的特征值可以应用到不同位置的名称实体识别中，RNN可以学习到不同位置的特征值</li>
+</ol>
+<h3 id="循环过程"><a href="#循环过程" class="headerlink" title="循环过程"></a>循环过程</h3><p>如果从左到右读取单词，处理完第一个单词后，在处理第二个单词时，不仅需要将第二个单词作为输入，<br>也需要将第一个单词的输出作为输入，以此类推，直到处理完最后一个单词，拿到所有单词的输出后</p>
+<p><img src="/image/deepLearning/214.png" alt></p>
+<h3 id="向前传播"><a href="#向前传播" class="headerlink" title="向前传播"></a>向前传播</h3><p><img src="/image/deepLearning/215.png" alt><br><img src="/image/deepLearning/216.png" alt></p>
+<h3 id="向后传播"><a href="#向后传播" class="headerlink" title="向后传播"></a>向后传播</h3><p><img src="/image/deepLearning/217.png" alt><br><img src="/image/deepLearning/218.png" alt></p>
+<h3 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h3><h4 id="符号表示"><a href="#符号表示" class="headerlink" title="符号表示"></a>符号表示</h4><p><img src="/image/deepLearning/221.png" alt></p>
+<h4 id="关于输入的维度描述"><a href="#关于输入的维度描述" class="headerlink" title="关于输入的维度描述"></a>关于输入的维度描述</h4><p><img src="/image/deepLearning/222.png" alt></p>
+<h4 id="rnn-cell-vs-rnn-cell-forward"><a href="#rnn-cell-vs-rnn-cell-forward" class="headerlink" title="rnn cell vs rnn_cell_forward"></a>rnn cell vs rnn_cell_forward</h4><p>rnn cell 是一个函数，输入是x^t和a^(t-1)，输出是a^t<br>rnn cell forward 是一个函数，输入是a^t，输出是和y^t<br>下图是一个单个时间步的计算过程， 实线是rcc cell，虚线是rnn cell forward<br>这里是最基础的RNN单元的实现，后面会介绍降低梯度消失的RGU单元和LSTM单元<br><img src="/image/deepLearning/233.png" alt></p>
+<h4 id="recurrent-neural-network"><a href="#recurrent-neural-network" class="headerlink" title="recurrent neural network"></a>recurrent neural network</h4><p>循环神经网络的实现就是基于时间步数循环调用rnn cell 函数，rnn cell 里面的parameters参数对于每一个时间步都相同<br><img src="/image/deepLearning/234.png" alt></p>
+<blockquote>
+<p>Situations when this RNN will perform better:</p>
+<p>This will work well enough for some applications, but it suffers from the vanishing gradient problems.<br>The RNN works best when each output  𝑦̂ ⟨𝑡⟩  can be estimated using “local” context.<br>“Local” context refers to information that is close to the prediction’s time step  𝑡 .<br>More formally, local context refers to inputs  𝑥⟨𝑡′⟩  and predictions  𝑦̂ ⟨𝑡⟩  where  𝑡′  is close to  𝑡 .</p>
+</blockquote>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/RecurrentNeuralNetwork/StepByStep/index.py" target="_blank" rel="noopener">相关代码</a></p>
+<h1 id="不同的RNN架构"><a href="#不同的RNN架构" class="headerlink" title="不同的RNN架构"></a>不同的RNN架构</h1><p><img src="/image/deepLearning/219.png" alt><br><img src="/image/deepLearning/220.png" alt></p>
+<p>Music generation –&gt; 1 to many<br>Sentiment classification –&gt; many to 1<br>DNA sequence analysis –&gt; many to many<br>Machine translation –&gt; many to many Xt ===? Yt<br>Name entity recognition –&gt; many to many Xt === Yt</p>
+<p>Video activity recognition –&gt; many to many ????<br>Speech recognition –&gt; 1 to many ???<br>如果任务是从输入的时间序列映射到另一个时间序列（如语音转文本、逐帧动作识别），则属于多对多（Many-to-Many）。<br>如果任务是从整个序列映射到一个单一类别（如视频整体分类、语音情感识别），则属于多对一（Many-to-One）。<br><img src="/image/deepLearning/210.png" alt></p>
+<h1 id="语言模型-language-model"><a href="#语言模型-language-model" class="headerlink" title="语言模型(language model)"></a>语言模型(language model)</h1><p>本质上是在计算输出结果的概率是多大<br>比如输出一个句子，The apple and pear salad<br>那么这个概率代表的就是P(The)P(apple|The)P(and|The apple)…P(salad|The apple and pear salad)<br>其中P(and|The apple) 表示 第三个词在前两个词是 the apple 的情况下 是 and 的概率<br>因此评价一个语言模型的好坏标准就是对一个正常准确句子计算得到的概率高低，对正确句子计算的概率越高，说明模型准确度越高</p>
+<p><img src="/image/deepLearning/223.png" alt></p>
+<h2 id="训练过程"><a href="#训练过程" class="headerlink" title="训练过程"></a>训练过程</h2><p>针对语言模型的训练过程，就一个训练样本来说<br>第一步就是进行分词，也就是token处理<br>这个过程就拿到一个训练样本的多个时间step, 一个词是一个x^t,<br>对于句尾符号一般用<eos> 或者也也用onehot表示<br>对于词典中没有出现的词，则一般用<unk> 表示，这样在训练和采样阶段可以针对不存在的词制定相应的处理策略，<br>比如是照常输出，还是跳过重新采样</unk></eos></p>
+<p>第二步开始训练<br>time step 训练的第一轮输入都是0向量，输出是字典里任意词语的的概率，即每个词都等概率<br>在后面的每一轮中，另x^t = y^(t-1)，那么y^~^t 计算的就是在前一轮基础上计算下个词y^t出现的概率，最终直到出现<eos> 句子结束</eos></p>
+<p><img src="/image/deepLearning/224.png" alt></p>
+<h2 id="采样"><a href="#采样" class="headerlink" title="采样"></a>采样</h2><p>就是根据y^~^t取出对应的词典里的词作为下一轮的输入，代替y^t<br>类似于训练过程，只不过在第二轮开始的输入，变成np.random.choice(y^~t), 根据计算过程的概率取词，接着预测下一个词<br>结束规则可以自行定义，如果词典中有<eos> 则碰到<eos>即可以结束采样，如果没有，可以定义一定数据，采样到一定数量的词后自行结束采样<br>这也相当于根据前面的词预测下一个词的过程<br>要尽量避免如果出现<unk>，出现的话则丢弃重新进行采样<br><img src="/image/deepLearning/225.png" alt><br><img src="/image/deepLearning/242.png" alt><br><img src="/image/deepLearning/dinos3.png" alt></unk></eos></eos></p>
+<h2 id="字母级语言模型"><a href="#字母级语言模型" class="headerlink" title="字母级语言模型"></a>字母级语言模型</h2><p>类似于上面word 级别的模型，只不过分词细化到每个字母，每个字母是一个时间序，字典就是26个英文字母加相关符号<br>优点是不会出现unk，<br>但是缺点是最终会得到太多太长的序列，捕捉句子中的依赖关系时(句子较前部分影响较后部分)不如word language model 能捕捉长范围范围内关系<br>另外训练计算成本高，<br>除非用于处理大量未知文本，未知词汇的应用，或者专有词汇的领域<br><img src="/image/deepLearning/226.png" alt></p>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/RecurrentNeuralNetwork/CharactersModel/index.py" target="_blank" rel="noopener">练习</a></p>
+<h1 id="梯度消失-amp-爆炸"><a href="#梯度消失-amp-爆炸" class="headerlink" title="梯度消失&amp;爆炸"></a>梯度消失&amp;爆炸</h1><p>如果出现梯度爆炸常见的处理办法就是进行<b>梯度修剪</b>(gradient clipping)<br>即如果梯度值超过某个阈值，则对其进行缩放，始终保证其在阈值范围内，详见上面【练习】<br><img src="/image/deepLearning/clip.png" alt><br><img src="/image/deepLearning/243.png" alt></p>
+<p>对于梯度消失的影响，类似于深层网络，最终给到输出的权重y很难影响到靠前层的权重<br>对于RNN来说，梯度消失意味着后面层的输出误差很难影响前面层的计算，其实就是无法实现一个句子中的长范围影响</p>
+<p>下面是两种处理梯度消失的解决办法，主要通过引入记忆细胞进行长范围特征传递避免梯度消失</p>
+<h2 id="GRU-单元"><a href="#GRU-单元" class="headerlink" title="GRU 单元"></a>GRU 单元</h2><p>Gated Recurrent Unit (GRU) 门控循环单元<br>通过引入记忆细胞，存储前层数据特征，然后利用【更新门】逻辑决定是否将特征传递给后面数据实现长范围影响<br><img src="/image/deepLearning/227.png" alt><br>更新门是个sigmod 函数，即使无限接近0,在更新候选值时可以始终保持记忆细胞的值，从而实现深层传递，实现长范围影响，缓解梯度消失的问题<br>Γu：控制当前状态与前一时刻状态的融合程度。<br>Γr：决定前一时刻的记忆细胞信息保留多少在当前时刻的记忆细胞候选值中</p>
+<p>通过门控机制缓解梯度问题，但比 LSTM 稍弱</p>
+<h2 id="LSTM-long-short-term-memory-unit"><a href="#LSTM-long-short-term-memory-unit" class="headerlink" title="LSTM (long short term memory) unit"></a>LSTM (long short term memory) unit</h2><p>LSTM 循环单元 出现的比GRU 单元要早，相比GRU 单元更复杂<br>多了【遗忘门】和【输出门】<br>【更新门】现在决定当前输入信息有多少被存入细胞状态<br>【遗忘门】决定遗忘多少过去的信息<br>【输出门】决定细胞状态中的信息有多少影响当前的隐藏状态<br>激活值不再等于记忆细胞，而是由【输出门】和【记忆细胞】共同决定<br>LSTM 通过这三个门的组合，实现对信息的精确控制，使其能够有效处理长序列依赖问题<br><img src="/image/deepLearning/228.png" alt><br><img src="/image/deepLearning/229.png" alt></p>
+<p>通过细胞状态缓解梯度消失问题，更适用于长序列</p>
+<h3 id="LSTM-单元的具体实现"><a href="#LSTM-单元的具体实现" class="headerlink" title="LSTM 单元的具体实现"></a>LSTM 单元的具体实现</h3><h4 id="一个LSTM单元的具体实现"><a href="#一个LSTM单元的具体实现" class="headerlink" title="一个LSTM单元的具体实现"></a>一个LSTM单元的具体实现</h4><p><img src="/image/deepLearning/LSTM_cell.png" alt></p>
+<h4 id="各个状态和门的计算和解释"><a href="#各个状态和门的计算和解释" class="headerlink" title="各个状态和门的计算和解释"></a>各个状态和门的计算和解释</h4><p><img src="/image/deepLearning/235.png" alt><br><img src="/image/deepLearning/236.png" alt><br><img src="/image/deepLearning/237.png" alt><br><img src="/image/deepLearning/238.png" alt><br><img src="/image/deepLearning/239.png" alt><br><img src="/image/deepLearning/240.png" alt><br><img src="/image/deepLearning/241.png" alt></p>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/RecurrentNeuralNetwork/StepByStep/index.py" target="_blank" rel="noopener">相关代码</a></p>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/RecurrentNeuralNetwork/shakespearePoem/index.py" target="_blank" rel="noopener">字母级莎士比亚文学模型</a></p>
+<h2 id="GRU-单元-VS-LSTM-单元"><a href="#GRU-单元-VS-LSTM-单元" class="headerlink" title="GRU 单元 VS LSTM 单元"></a>GRU 单元 VS LSTM 单元</h2><h3 id="1-结构对比"><a href="#1-结构对比" class="headerlink" title="1. 结构对比"></a>1. 结构对比</h3><table>
+<thead>
+<tr>
+<th><strong>对比项</strong></th>
+<th><strong>GRU</strong></th>
+<th><strong>LSTM</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>门控机制</strong></td>
+<td>2 个门：更新门（Update Gate）、重置门（Reset Gate）</td>
+<td>3 个门：输入门（Input Gate）、遗忘门（Forget Gate）、输出门（Output Gate）</td>
+</tr>
+<tr>
+<td><strong>记忆单元</strong></td>
+<td>直接更新隐藏状态</td>
+<td>额外维护一个“细胞状态”</td>
+</tr>
+<tr>
+<td><strong>计算复杂度</strong></td>
+<td>相对较低</td>
+<td>计算量较大</td>
+</tr>
+<tr>
+<td><strong>参数数量</strong></td>
+<td>较少</td>
+<td>较多</td>
+</tr>
+<tr>
+<td><strong>梯度消失/爆炸</strong></td>
+<td>通过门控机制缓解梯度问题，但比 LSTM 稍弱</td>
+<td>通过细胞状态缓解梯度消失问题，更适用于长序列</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="2-对比分析"><a href="#2-对比分析" class="headerlink" title="2. 对比分析"></a>2. 对比分析</h3><table>
+<thead>
+<tr>
+<th><strong>对比项</strong></th>
+<th><strong>GRU</strong></th>
+<th><strong>LSTM</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>训练时间</strong></td>
+<td>更快（参数较少，计算量低）</td>
+<td>相对较慢（参数多，计算复杂）</td>
+</tr>
+<tr>
+<td><strong>表现效果</strong></td>
+<td>适用于中等长度依赖</td>
+<td>更擅长长序列依赖问题</td>
+</tr>
+<tr>
+<td><strong>内存占用</strong></td>
+<td>低（因参数少）</td>
+<td>高（因参数多）</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>机器翻译、语音识别、文本生成</td>
+<td>时间序列预测、长文本处理</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-应用场景"><a href="#3-应用场景" class="headerlink" title="3.应用场景"></a>3.应用场景</h3><p>GRU 适用于：<br>计算资源有限的设备（如移动端）<br>需要较快训练和推理的任务<br>语音识别、机器翻译等</p>
+<p>LSTM 适用于：<br>处理长序列依赖问题<br>需要更精细控制记忆存储的任务<br>生成式任务（如文本生成、音乐生成）</p>
+<p><a href="https://github.com/GeeeekExplorer/AndrewNg-Deep-Learning/blob/master/Sequence%20Models/Week%201/Building%20a%20Recurrent%20Neural%20Network%20-%20Step%20by%20Step/Building%20a%20Recurrent%20Neural%20Network%20-%20Step%20by%20Step%20Solution.ipynb" target="_blank" rel="noopener">更多– RNN 普通单元和LSTM单元的反向传播过程</a></p>
+<h1 id="双向RNN"><a href="#双向RNN" class="headerlink" title="双向RNN"></a>双向RNN</h1><p>先正向计算每个时间步的激活值，然后再反向(从最后一个时间步开始)计算一遍一遍激活值<br>每个时间步的最终计算值，由正反两次计算的激活值共同决定<br>主要用于解决，既要考虑前文又要考虑后文的模型判断<br>优点是可以预测句子中任意位置信息<br>缺点是需要完整的数据序列，才能预测任意位置，比如语音识别，需要等人说完完整的句子后才开始识别<br><img src="/image/deepLearning/230.png" alt><br><img src="/image/deepLearning/231.png" alt></p>
+<h1 id="深度循环网络-deep-RNN"><a href="#深度循环网络-deep-RNN" class="headerlink" title="深度循环网络 deep RNN"></a>深度循环网络 deep RNN</h1><p>使用基本RNN单元，GRU 单元，LSTM 单元构建的多层循环神经网络<br>常见的是三层，每层参数相同，<br>也可能有更深的架构但是在循环层上不在有联系<br>甚至有双向深度循环网络，但训练成本高，需要更多计算资源和时间<br><img src="/image/deepLearning/232.png" alt></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/deepLearning/ConvolutionalNeuralNetworks.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/deepLearning/ConvolutionalNeuralNetworks.html" itemprop="url">
+                  卷积神经网络
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-02-03T17:15:37+08:00">
+                2025-02-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>如果用神经网络直接处理1000x1000的图片，那么在一开始入参就需要1000x1000x3 = 3mili个参数，加上后续layer的参数，<br>会导致整个神经网络需要足够巨大的内存，且消耗训练时间，另外难以获取足够多的数据防止出现过拟合问题和竞争需求<br>因此，计算机视觉中进行图片识别就引入了卷积计算，解决大图片识别问题</p>
+<h1 id="卷积计算"><a href="#卷积计算" class="headerlink" title="卷积计算"></a>卷积计算</h1><p>卷积运算在图像处理和计算机视觉中被广泛用于边缘检测。<br>边缘检测是识别图像中像素值变化显著的区域，这些区域通常对应于物体的边界。<br>卷积运算通过在图像上应用特定的滤波器（或卷积核）来实现这一点。</p>
+<p>卷积运算涉及将一个小矩阵（称为卷积核或滤波器）在图像上滑动，并在每个位置计算该核与图像局部区域的点积。<br>卷积核的大小通常较小（如 3x3、5x5），而图像可能很大。</p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><p>选择卷积核：选择一个合适的卷积核，例如 Sobel 核，用于检测图像中的边缘。<br>滑动卷积核：将卷积核从图像的左上角开始，逐像素地在图像上滑动。对于每个位置，将卷积核与图像的对应区域进行点积运算。<br>计算卷积值：将卷积核与图像局部区域的像素值相乘并求和，得到该位置的卷积值。<br>生成输出图像：将每个位置的卷积值组成一个新的图像，该图像的每个像素值表示原始图像中对应位置的边缘强度。<br><img src="/image/deepLearning/111.png" alt><br><img src="/image/deepLearning/112.png" alt><br><img src="/image/deepLearning/113.png" alt><br><img src="/image/deepLearning/114.png" alt><br><img src="/image/deepLearning/115.png" alt></p>
+<h3 id="padding"><a href="#padding" class="headerlink" title="padding"></a>padding</h3><p>如上计算过程存在两个弊端<br>一个是卷积计算完之后，输出图像的大小会比输入图像小，如果神经网络有100层，每一层都缩小一点点，最终得到的图片可能是1x1大小的图片，<br>另外一个是无法充分利用图片边缘信息，因为卷积核在边缘处计算时，图片的边缘数据只被用到了一次，但是中间的数据被用到了多次，导致图片信息没有等概率的参数推测</p>
+<blockquote>
+<p>The main benefits of padding are the following:<br>It allows you to use a CONV layer without necessarily shrinking the height and width of the volumes. This is important for building deeper networks, since otherwise the height/width would shrink as you go to deeper layers. An important special case is the “same” convolution, in which the height/width is exactly preserved after one layer.<br>It helps us keep more of the information at the border of an image. Without padding, very few values at the next layer would be affected by pixels as the edges of an image.</p>
+</blockquote>
+<p>为了解决这个问题，在图片边缘添加p圈0，这样卷积核在边缘处计算时，图片的边缘数据就可以被用到了多次，从而可以防止计算后图片缩小<br>这个操作的过程就是卷积计算加padding的操作<br><img src="/image/deepLearning/116.png" alt><br>加padding有两种方式valid 和 same<br>valid 表示不加padding，输出图片计算公式为 nxn  * fxf = (n-f+1) x (n-f+1)<br>same 表示加padding，使得输出图像的大小和输入图像的大小相同<br>(n + 2p - f + 1 ) x (n + 2p - f + 1 ) = n x n<br>p = (f - 1) / 2<br>这样过滤器f 一般为奇数，才能保证实现对称填充(4周填充数相同)，不然会出现不对称填充（左边多右边少）<br>另外奇数过滤器为奇数，会存在中心点，方便定位过滤器位置<br><img src="/image/deepLearning/117.png" alt><br><img src="/image/deepLearning/191.png" alt></p>
+<h3 id="stride"><a href="#stride" class="headerlink" title="stride"></a>stride</h3><p>stride 表示卷积核在图像上滑动的步长，默认值为1，表示每次滑动一个像素<br>如果stride 为2，表示每次滑动2个像素，这样可以减少计算量，同时可以减少输出图像的大小<br>输出图像的大小计算公式为 math.floor((n + 2p - f) / stride) + 1</p>
+<p><img src="/image/deepLearning/118.png" alt></p>
+<h3 id="三维计算"><a href="#三维计算" class="headerlink" title="三维计算"></a>三维计算</h3><p>上面讨论的是在一张灰度图片上的计算，如果是彩色图片，那么需要对图片的每个通道进行卷积计算，<br>然后将每个通道的卷积结果相加，得到最终的输出图像<br>最终输入图片大小同上，为 (n-f+1) x (n-f+1)<br>但是要保证输入图片的通道数和卷积核的通道数相同，否则无法进行卷积计算<br><img src="/image/deepLearning/119.png" alt><br>如果同时对图片进行多个通道，多个过滤器的计算，<br>那么输出图片维度需要加上过滤器的个数，相当于一张过滤器产生一个通道<br>输出图片的大小为 (n-f+1) x (n-f+1) x 过滤器的个数<br><img src="/image/deepLearning/120.png" alt></p>
+<h1 id="卷积层"><a href="#卷积层" class="headerlink" title="卷积层"></a>卷积层</h1><p>之前的神经网络，输入x 和 w 都是具体的一个数字，现在相当之于x 和 w 是一个三维矩阵<br>有几个过滤器，相当于有几个神经元，每个神经元的输入是一个三维矩阵，<br>每个神经元的w是一个和上一层输入深度相同的三维矩阵, b 也是一个和上一层输入深度相同的三维矩阵<br>这样每个神经元计算结果就是一个2维矩阵，<br>多个神经元的计算结果就是一个三维矩阵，相当于多个通道的图片</p>
+<h2 id="单层的实现原理"><a href="#单层的实现原理" class="headerlink" title="单层的实现原理"></a>单层的实现原理</h2><p><img src="/image/deepLearning/121.png" alt><br>相关符号表示<br><img src="/image/deepLearning/122.png" alt></p>
+<h2 id="卷积层的实现"><a href="#卷积层的实现" class="headerlink" title="卷积层的实现"></a>卷积层的实现</h2><p><img src="/image/deepLearning/123.png" alt></p>
+<h1 id="池化层"><a href="#池化层" class="headerlink" title="池化层"></a>池化层</h1><p>减小模型规模，提高计算速度<br>类似与卷积层，只不过在过滤器范围内，不再是卷积计算，而是取最大值或者平均值<br>但是要注意，池化层的过滤器大小和步长是固定的，在整个神经网络中属于静态属性，不参与梯度下降运算<br><img src="/image/deepLearning/124.png" alt><br><img src="/image/deepLearning/125.png" alt><br><img src="/image/deepLearning/126.png" alt></p>
+<h1 id="卷积神经网络"><a href="#卷积神经网络" class="headerlink" title="卷积神经网络"></a>卷积神经网络</h1><p>上面提到了卷积层和池化层，卷积神经网络的最后一层叫做全连接层<br>相当于之前的标准神经网络，将卷积层和池化层的输出结果进行展平，然后进行全连接计算<br><img src="/image/deepLearning/127.png" alt><br>随着卷积池化层的增加，图片尺寸会越来越小，但是通道越来多<br>池化层没有学习参数，卷积层可学习参数远小于全连接层<br>而且随着卷积神经网络的向后计算，激活值数据逐渐减少<br><img src="/image/deepLearning/128.png" alt></p>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><blockquote>
+<p>Parameter sharing: A feature detector (such as a vertical edge detector) that’s useful in one part of the image is probably useful in another part of the image.<br>Sparsity of connections: In each layer, each output value<br>depends only on a small number of inputs.</p>
+</blockquote>
+<ol>
+<li>参数共享，从而减少参数数量</li>
+<li>结果输出仅依赖输入的部分数据，计算速度快</li>
+</ol>
+<p><img src="/image/deepLearning/129.png" alt></p>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/ConvolutionalNeuralNetworksStepByStep/index.py" target="_blank" rel="noopener">实验</a><br><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/ConvolutionalNeuralNetworks/index.py" target="_blank" rel="noopener">实验</a></p>
+<h1 id="三种常见的卷积神经网络架构"><a href="#三种常见的卷积神经网络架构" class="headerlink" title="三种常见的卷积神经网络架构"></a>三种常见的卷积神经网络架构</h1><h2 id="LeNet-5"><a href="#LeNet-5" class="headerlink" title="LeNet - 5"></a>LeNet - 5</h2><p>论文: LeCun et al., 1998. Gradient-based learning applied to document recognition<br><img src="/image/deepLearning/130.png" alt></p>
+<h2 id="AlexNet"><a href="#AlexNet" class="headerlink" title="AlexNet"></a>AlexNet</h2><p>论文: Krizhevsky et al., 2012. ImageNet classification with deep convolutional neural networks<br><img src="/image/deepLearning/131.png" alt></p>
+<h2 id="VGG-16"><a href="#VGG-16" class="headerlink" title="VGG-16"></a>VGG-16</h2><p>简化了神经网络的结构，所有的卷积层和池化层都相同<br>16 指的是整个网络架构中所有卷积层，池化层以及全连接层的层数总和<br>结构庞大，会有约1.38亿个参数<br>但是结构规律，<br>池化层都在缩小一倍图片尺寸<br>过滤器数量随层数递深，整倍增长</p>
+<p>论文：Simonyan &amp; Zisserman 2015. Very deep convolutional networks for large-scale image recognition<br><img src="/image/deepLearning/132.png" alt></p>
+<h1 id="残差网络"><a href="#残差网络" class="headerlink" title="残差网络"></a>残差网络</h1><blockquote>
+<p>The problem of very deep neural networks</p>
+<ol>
+<li>The main benefit of a very deep network is that it can represent very complex functions. It can also learn features at many different levels of abstraction, from edges (at the shallower layers, closer to the input) to very complex features (at the deeper layers, closer to the output).</li>
+<li>However, using a deeper network doesn’t always help. A huge barrier to training them is vanishing gradients: very deep networks often have a gradient signal that goes to zero quickly, thus making gradient descent prohibitively slow.</li>
+<li>More specifically, during gradient descent, as you backprop from the final layer back to the first layer, you are multiplying by the weight matrix on each step, and thus the gradient can decrease exponentially quickly to zero (or, in rare cases, grow exponentially quickly and “explode” to take very large values).</li>
+<li>During training, you might therefore see the magnitude (or norm) of the gradient for the shallower layers decrease to zero very rapidly as training proceeds:</li>
+</ol>
+</blockquote>
+<h2 id="残差块"><a href="#残差块" class="headerlink" title="残差块"></a>残差块</h2><p>在计算a^[l+2]前，激活函数不再使用z^(l+2)作为入参，而是以z^(l+2) + a^(l) 作为入参<br>即 a^(l+2) = g(z^(l+2) + a^(l))<br>其中a^(l) 被称为残差块<br>在通用场景下，残差块(a^(l))可能不止被加在后面第二层的计算中，可能会加入在更深的网络层中，<br>这种在main path 的基础上进行的计算又叫short cut  捷径/ skip connect 远跳链接<br><img src="/image/deepLearning/133.png" alt></p>
+<h2 id="残差网络-1"><a href="#残差网络-1" class="headerlink" title="残差网络"></a>残差网络</h2><p>将多个远跳链接计算堆积在一起就形成残差网络，可以使神经网络按照理论规律，随着神经网路层数加深，误差降低<br><img src="/image/deepLearning/134.png" alt></p>
+<h2 id="残差网络优化原理"><a href="#残差网络优化原理" class="headerlink" title="残差网络优化原理"></a>残差网络优化原理</h2><p>根据残差块的计算原理<br>a^(l+2) = g(z^(l+2) + a^(l))<br>a^(l+2) = g(w^(l+2) * a^(l+1) + b^(l+2) + a^(l))<br>在进行梯度下降处理过程中如果有使用L2正则化,或者梯度缩减,导致 w^(l+2),  b^(l+2)变小至0,<br>那么残差块的计算结果就会变成<br>a^(l+2) = g(a^(l))<br>这时激活函数式是Relu函数的话,就会得到<br>a^(l+2) = a^(l)<br>也就是说，我们通过在激活函数前添加一个远跳链接，<br>不仅没有影响网络本身性能，而且发现(学习到)了一个恒等映射，<br>可以直接利用a^(l+2) = a^(l)进行计算，<br>中间的两个隐藏层的增加对整个网络没有影响，没有的话会更好<br>扩展思路，如果跳跃链接加在更深的网络层，甚至神经网络最后一层<br>有可能学习到比恒等映射更有用的东西，从而提高整个网络的性能</p>
+<p>另外，如果没有跳跃链接，随着网络层数的增加，深层参数的初始化会是一个非常困难的事情，更别说是学习恒等映射<br>这也是为什么随着层数加深，训练的效果不是越来越好，反而越糟</p>
+<p>因此，通过增加跳跃连接形成残差网络，从不影响性能开始学习恒等映射，然后梯度下降只能从这里进行更新，<br>从而避免梯度消失或爆炸，进而提高整个网络的性能</p>
+<p>上述讨论假设在全链接层或者卷积层的 a^(l+2),a^(l) 维度相同可以成立，<br>但是在卷积层中，如果 a^(l+2),a^(l)维度不同, 需要给a^(l) 增加参数保证(比如进行卷积处理后再相加)和 a^(l+2) 维度相同<br><img src="/image/deepLearning/135.png" alt><br><img src="/image/deepLearning/136.png" alt></p>
+<p>论文：He et al., 2015. Deep residual networks for image recognition</p>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/ConvolutionalNeuralNetworks/ResidualNetworks.py" target="_blank" rel="noopener">实验</a></p>
+<h1 id="Inception网络"><a href="#Inception网络" class="headerlink" title="Inception网络"></a>Inception网络</h1><h2 id="1-x-1-卷积层"><a href="#1-x-1-卷积层" class="headerlink" title="1 x 1 卷积层"></a>1 x 1 卷积层</h2><p>当对三维矩阵进行1<em>1 的卷积计算时，相当于取三维矩阵的一个切片进行加和计算<br>对于1</em>1 的过滤器，利用其个数，可以对三维矩阵实现【通道】压缩或增加，<br>从而实现对输入数据的维度变换<br><img src="/image/deepLearning/137.png" alt><br><img src="/image/deepLearning/138.png" alt></p>
+<p>在下面的Inception网络中, 被用来构建【瓶颈层】<br>对矩阵先压缩在扩展，从而大大降低计算成本</p>
+<p>论文：[Lin et al., 2013. Network in network]</p>
+<h2 id="Inception网络-1"><a href="#Inception网络-1" class="headerlink" title="Inception网络"></a>Inception网络</h2><p>可以自行选择过滤器实现卷积层和池化层的计算，代替人工来确定卷积层中的过滤器类型(1<em>1, 3</em>3, 5<em>5, 7</em>7, 个数)<br><img src="/image/deepLearning/139.png" alt><br>直接进行卷积计算，计算量巨大<br><img src="/image/deepLearning/140.png" alt><br>可以引入瓶颈层降低计算量<br><img src="/image/deepLearning/141.png" alt></p>
+<h2 id="inception-module"><a href="#inception-module" class="headerlink" title="inception module"></a>inception module</h2><p>在普通卷积计算中引入瓶颈层，最后将所有结果进行拼接，这个模块就是inception module<br><img src="/image/deepLearning/142.png" alt></p>
+<h2 id="inception-network"><a href="#inception-network" class="headerlink" title="inception network"></a>inception network</h2><p>将多个inception module 堆叠在一起，就形成了inception network<br><img src="/image/deepLearning/143.png" alt></p>
+<p>论文： Szegedy et al., 2014, Going Deeper with Convolutions</p>
+<h1 id="迁移学习"><a href="#迁移学习" class="headerlink" title="迁移学习"></a>迁移学习</h1><p>卷积网络中的迁移学习没什么不同，在公开模型基础上继续进行训练<br>对于训练数据较少的情况，建议固定所有隐藏层参数，仅更改softmax 层结构，使之符合自己的分类规则<br>相当于只训练输出结果层的参数，</p>
+<p>一个提高训练速度的方法是因为隐藏层参数固定，可以看做固定函数，训练数据不多的情况下，<br>提前计算好所有训练数据的最后一层的激活值，拿激活值进行训练，避免重复计算</p>
+<p>对于训练数据较多的情况，建议固定前面几层的参数，仅更改后面几层的参数，使之符合自己的分类规则<br>相当于只训练后面几层的参数</p>
+<p>对于训练数据超多的情况，可以放开所有层级，以已有参数做初始值，从头开始训练</p>
+<p><img src="/image/deepLearning/144.png" alt></p>
+<h1 id="数据增强"><a href="#数据增强" class="headerlink" title="数据增强"></a>数据增强</h1><h2 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h2><p>镜像处理，随机裁剪，旋转,shearing,local warping(局部扭曲)<br><img src="/image/deepLearning/145.png" alt><br>色彩转换(加减rgb值, PCA颜色增强算法)<br><img src="/image/deepLearning/146.png
+进行数据增强过程也存在超参调试(颜色变化多少，随机裁剪时的参数" alt><br><img src="/image/deepLearning/147.png" alt></p>
+<h1 id="架构实现选择"><a href="#架构实现选择" class="headerlink" title="架构实现选择"></a>架构实现选择</h1><p>对于数据量少的情况，一般进行更多的手工设计<br>对于数据量多的情况，一般使用更简单的算法和更少的手工工程，不需要精心设计<br><img src="/image/deepLearning/148.png" alt><br><img src="/image/deepLearning/149.png" alt><br>Use open source code<br>• Use architectures of networks published in the literature<br>• Use open source implementations if possible<br>• Use pretrained models and fine-tune on your dataset</p>
+<h1 id="目标检测"><a href="#目标检测" class="headerlink" title="目标检测"></a>目标检测</h1><p>在图片分类的基础上，我们可以进行分类和定位<br>但是分类的定位都针对一个对象进行讨论<br>如果是对一张图的多个对象进行分类和定位就是对象检测<br><img src="/image/deepLearning/150.png" alt>)</p>
+<h2 id="定义输出"><a href="#定义输出" class="headerlink" title="定义输出"></a>定义输出</h2><p>在分类的基础上，定义输出是一个向量，包含分类和定位信息<br>pc 代表是否有检测目标存在，存在为1，不存在为0，不存在的情况下，后续向量值不做继续讨论<br>bx 对象中心点横坐标<br>by 对象中心店纵坐标<br>bh 对象在图中相对整幅图片高度<br>bw 对象在图中相对整幅图片宽度<br>c1 c2 c3 代表具体是哪一个对象，其中一个值为1 时，另外两个为0，同时pc 为1<br><img src="/image/deepLearning/151.png" alt><br>损失函数分为pc 是否为1 两种计算方式<br>在实际计算过程中，可能会去将y 向量分类，pc, bx ~bw, c1~c3 然后分别使用不同的计算方法进行损失值计算<br><img src="/image/deepLearning/152.png" alt></p>
+<h3 id="特征点检测"><a href="#特征点检测" class="headerlink" title="特征点检测"></a>特征点检测</h3><p>原理同定位检测，只不过输出向量是N个特征点的位置坐标 + pc值<br><img src="/image/deepLearning/153.png" alt></p>
+<h2 id="滑动窗口进行图像识别"><a href="#滑动窗口进行图像识别" class="headerlink" title="滑动窗口进行图像识别"></a>滑动窗口进行图像识别</h2><p>识别一张图片中是否有某个物体的过程一般是通过分别定义不同大小的窗口，对图片进行滑动裁剪<br>对裁剪到的图片进行对象识别，但是这样无疑会大大增加计算量<br>解决方案就是利用卷积计算的过程，避免窗口滑动过程重复区域的重复计算<br>直接将一张图片输入，直接得到物体识别的结果<br><img src="/image/deepLearning/154.png" alt><br>卷积滑动窗口的具体实现，现将FC 层也转成卷积层，方便输入各个窗口的计算值<br><img src="/image/deepLearning/155.png" alt><br><img src="/image/deepLearning/156.png" alt></p>
+<h2 id="YOLO"><a href="#YOLO" class="headerlink" title="YOLO"></a>YOLO</h2><p>YOLO(you only look once) 算法通过对图片进行格子分割，直接对格子内图片进行对象识别，从而更准确的判断对象位置<br>最后的输出结果代表每个格子的识别和位置检测结果<br><img src="/image/deepLearning/157.png" alt><br>如何解释结果？<br>将框看做左上角(0,0)，右下角(1,1) 的坐标<br>bx,by,相对一个格子而言，是中心，肯定要小于1<br>bh,bw 同样相对于一个格子的大小，进行比例计算，有可能大于1，说明对象是跨格子存在的<br><img src="/image/deepLearning/158.png" alt></p>
+<h3 id="交并比"><a href="#交并比" class="headerlink" title="交并比"></a>交并比</h3><p>用于评价一个位置检测算法的好坏<br>预测值面积与实际对象所占面积重叠的部分就是交集大小 –&gt; S1<br>二者面积之和即为并集大小 –&gt;S2<br>交并比 = S1/S2<br>阈值认为决定，1 当然是最好的，说明准确发现了对象位置，<br>在YOLO 中用于non_max_suppression 计算，排除重叠的格子<br><img src="/image/deepLearning/159.png" alt></p>
+<h3 id="非最大值抑制-non-max-suppression"><a href="#非最大值抑制-non-max-suppression" class="headerlink" title="非最大值抑制(non_max_suppression)"></a>非最大值抑制(non_max_suppression)</h3><p>用于解决出现多个位置检测符合条件的情况<br><img src="/image/deepLearning/160.png" alt><br>原理就是在符合条件的窗口中寻找最大正交比</p>
+<ol>
+<li>对于所有格子的输出，去掉pc概率小于阈值的格子</li>
+<li>对剩下格子循环处理，首先找pc值最大的格子A最为最终的检测结果，然后计算剩余格子与A 的交并比，去掉交并比大于一定阈值的格子(在最大值附近)，剩余格子的话，继续循环处理<br>如果是对多类对象进行同时检测，则需要对各个类别，分别进行非最大值抑制处理<br><img src="/image/deepLearning/161.png" alt></li>
+</ol>
+<h3 id="ancher-box"><a href="#ancher-box" class="headerlink" title="ancher box"></a>ancher box</h3><p>用于处理两个对象同时出现在一个格子的情况<br>提前定义两个不同形状的ancher box， 分别用不同ancher box去识别不同的对象<br>然后根据正交比大小，判断当前格子的对象是哪个分类，修改对应分类位置的值<br>注意这里，通过增加输出通道，输出从单一结果，变成两个<br>一般很少遇到3个对象同时出现在一个格子的情况，暂不考虑<br><img src="/image/deepLearning/162.png" alt><br><img src="/image/deepLearning/163.png" alt></p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p><img src="/image/deepLearning/164.png" alt><br><img src="/image/deepLearning/165.png" alt><br><img src="/image/deepLearning/166.png" alt></p>
+<blockquote>
+<p>Summary for YOLO:<br>Input image (608, 608, 3)<br>Image is split into a grid of 19x19 cells， Each cell predicts 5 boxes(uses 5 anchor boxes.)<br>就是直接切割成19x19的格子，对每个格子直接进行5种ancher box 的检测，这里避免了滑动窗口的重复计算<br>The input image goes through a CNN, resulting in a (19,19,5,85) dimensional output.<br>After flattening the last two dimensions, the output is a volume of shape (19, 19, 425):<br>Each cell in a 19x19 grid over the input image gives 425 numbers.<br>425 = 5 x 85 because each cell contains predictions for 5 boxes, corresponding to 5 anchor boxes, as seen in lecture.<br>85 = 5 + 80 where 5 is because $(p_c, b_x, b_y, b_h, b_w)$ has 5 numbers, and 80 is the number of classes we’d like to detect<br>You then select only few boxes based on:<br>Score-thresholding: throw away boxes that have detected a class with a score less than the threshold<br>Non-max suppression: Compute the Intersection over Union and avoid selecting overlapping boxes<br>This gives you YOLO’s final output.</p>
+</blockquote>
+<p>论文【难】： Redmon et al., 2015, You Only Look Once: Unified real-time object detection</p>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/LOYO.py" target="_blank" rel="noopener">实验</a></p>
+<h3 id="R-CNN"><a href="#R-CNN" class="headerlink" title="R-CNN"></a>R-CNN</h3><p> 利用图像分割算法，对图像进行分割后，在一定区域内进行图像识别和定位<br>缺点不如YOLO一次性计算快</p>
+<p><img src="/image/deepLearning/167.png" alt><br><img src="/image/deepLearning/168.png" alt></p>
+<h1 id="人脸识别"><a href="#人脸识别" class="headerlink" title="人脸识别"></a>人脸识别</h1><h2 id="验证与识别"><a href="#验证与识别" class="headerlink" title="验证与识别"></a>验证与识别</h2><p>验证比识别要简单一些，属于1对1 的问题，识别输入仅仅是一张图，相对来说更难<br><img src="/image/deepLearning/169.png" alt></p>
+<blockquote>
+<p>Face recognition problems commonly fall into two categories:</p>
+</blockquote>
+<blockquote>
+<p>Face Verification - “is this the claimed person?”. For example, at some airports, you can pass through customs by letting a system scan your passport and then verifying that you (the person carrying the passport) are the correct person. A mobile phone that unlocks using your face is also using face verification. This is a 1:1 matching problem.</p>
+</blockquote>
+<blockquote>
+<p>Face Recognition - “who is this person?”. For example, the video lecture showed a face recognition video of Baidu employees entering the office without needing to otherwise identify themselves. This is a 1:K matching problem.</p>
+</blockquote>
+<h2 id="one-shot-amp-similarity"><a href="#one-shot-amp-similarity" class="headerlink" title="one shot &amp; similarity"></a>one shot &amp; similarity</h2><p>one shot learning 就是根据已有的一张图片对输入的图片进行识别<br>用传统的训练思维处理容易出现过拟合，而且数据库更新需要重新训练，成本高<br><img src="/image/deepLearning/170.png" alt><br>解决方式是通过看他们相似度的方法进行图片验证，比较输入图片和图库图片，<br>有差值小于阈值的图片的话，说明有这个人，没有小于阈值的图片的话，则输入图片对应的人没有在数据库中<br><img src="/image/deepLearning/171.png" alt></p>
+<h3 id="Siamese-network"><a href="#Siamese-network" class="headerlink" title="Siamese network"></a>Siamese network</h3><p>根据相似度进行图片验证的网络架构<br>原理就是，对两张图片进行相同的网络架构处理得到能够尽可能代表两张图片的128为编码<br>然后对两个编码进行范数运算，如果是同一个人则范数值会很小，否则会很大<br><img src="/image/deepLearning/172.png" alt><br>模型训练过程也是通过进行范数比较然后再去调整模型参数<br><img src="/image/deepLearning/173.png" alt></p>
+<p>论文： Taigman et. al., 2014. DeepFace closing the gap to human level performance</p>
+<blockquote>
+<p>So, an encoding is a good one if:</p>
+</blockquote>
+<blockquote>
+<p>The encodings of two images of the same person are quite similar to each other.<br>The encodings of two images of different persons are very different.</p>
+</blockquote>
+<h3 id="三元损失函数"><a href="#三元损失函数" class="headerlink" title="三元损失函数"></a>三元损失函数</h3><p>在训练过程过程中，通过构造识别对象的三元组数据，进行损失函数计算<br>具体过程就是分别准备待识别对象A，与待识别对象相似的对象P，与待识别对象差异较大的对象N三者的图像编码<br>通过计算比较AP与AN 之间范数的大小关系，用作损失函数的计算<br>注意这里引入超参α用于加强 AP 与AN之间的差距，提高准确度，也防止出现图像编码始终为0，导致比较关系始终成立情况出现<br><img src="/image/deepLearning/174.png" alt><br><img src="/image/deepLearning/175.png" alt><br><img src="/image/deepLearning/176.png" alt><br><img src="/image/deepLearning/201.png" alt></p>
+<p>论文：Schroff et al.,2015, FaceNet: A unified embedding for face recognition and clustering</p>
+<h3 id="Siamese-network-二分类"><a href="#Siamese-network-二分类" class="headerlink" title="Siamese network + 二分类"></a>Siamese network + 二分类</h3><p>在 Siamese network  基础上，对输入的两张图片进行计算得出0 和 1 的结果，直接判断二者是否是同一个人<br><img src="/image/deepLearning/177.png" alt><br>y^的计算方式可以有多种<br>在实际使用中可以提前计算好数据库中图片编码，需要验证的时候只计算输入图片编码即可<br><img src="/image/deepLearning/178.png" alt></p>
+<blockquote>
+<p>Key points to remember<br>Face verification solves an easier 1:1 matching problem; face recognition addresses a harder 1:K matching problem.<br>The triplet loss is an effective loss function for training a neural network to learn an encoding of a face image.<br>The same encoding can be used for verification and recognition. Measuring distances between two images’ encodings allows you to determine whether they are pictures of the same person.</p>
+</blockquote>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/FaceRecognition.py" target="_blank" rel="noopener">实验</a></p>
+<h1 id="神经风格迁移"><a href="#神经风格迁移" class="headerlink" title="神经风格迁移"></a>神经风格迁移</h1><p>将一张作为内容的图片C合并上一张具有艺术表现风格的图片S，从而生成一张具有图片B艺术表现风格，但图片内容是图片A 的新图片 G<br><img src="/image/deepLearning/179.png" alt></p>
+<blockquote>
+<p>The idea of using a network trained on a different task and applying it to a new task is called transfer learning.</p>
+</blockquote>
+<h2 id="可视化深层网络"><a href="#可视化深层网络" class="headerlink" title="可视化深层网络"></a>可视化深层网络</h2><p><img src="/image/deepLearning/180.png" alt><br><img src="/image/deepLearning/181.png" alt><br>【要去读】<br>论文： Zeiler and Fergus., 2013, Visualizing and understanding convolutional networks</p>
+<h2 id="成本函数"><a href="#成本函数" class="headerlink" title="成本函数"></a>成本函数</h2><p>由两部分组成，CG之间的内容成本函数Jcg（衡量内容相似度），SG之间的风格成本函数Jsg(衡量风格相似度)<br><img src="/image/deepLearning/182.png" alt><br><img src="/image/deepLearning/183.png" alt></p>
+<p>论文：Gatys et al., 2015. A neural algorithm of artistic style. </p>
+<p>具体实现过程<br><img src="/image/deepLearning/202.png" alt><br><img src="/image/deepLearning/203.png" alt></p>
+<h3 id="内容成本函数"><a href="#内容成本函数" class="headerlink" title="内容成本函数"></a>内容成本函数</h3><p>计算CG在相同预训练模型上某一层的激活函数值的相似度，如果二者相似说明图片有相似的内容<br><img src="/image/deepLearning/184.png" alt></p>
+<h3 id="风格成本函数"><a href="#风格成本函数" class="headerlink" title="风格成本函数"></a>风格成本函数</h3><p>如果两个通道间关联度高，说明图片风格特征同时出现的概率高<br>通过某一层计算激活函数值各通道间的关联程度定义来衡量图片的风格，<br>如果SG相似度低，则成本函数值高<br><img src="/image/deepLearning/185.png" alt><br><img src="/image/deepLearning/186.png" alt><br><img src="/image/deepLearning/187.png" alt><br><img src="/image/deepLearning/188.png" alt></p>
+<p>具体实现过程<br><img src="/image/deepLearning/204.png" alt><br><img src="/image/deepLearning/205.png" alt><br><img src="/image/deepLearning/206.png" alt><br><img src="/image/deepLearning/207.png" alt><br><img src="/image/deepLearning/208.png" alt></p>
+<h3 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h3><blockquote>
+<p>What you should remember<br>Neural Style Transfer is an algorithm that given a content image C and a style image S can generate an artistic image<br>It uses representations (hidden layer activations) based on a pretrained ConvNet.<br>The content cost function is computed using one hidden layer’s activations.<br>The style cost function for one layer is computed using the Gram matrix of that layer’s activations. The overall style cost function is obtained using several hidden layers.<br>Optimizing the total cost function results in synthesizing new images.</p>
+</blockquote>
+<blockquote>
+<p>You can also tune your hyperparameters:</p>
+</blockquote>
+<blockquote>
+<p>Which layers are responsible for representing the style? STYLE_LAYERS<br>How many iterations do you want to run the algorithm? num_iterations<br>What is the relative weighting between content and style? alpha/beta</p>
+</blockquote>
+<p>====》</p>
+<blockquote>
+<p> first time building a model in which the optimization algorithm updates the pixel values rather than the neural network’s parameters. Deep learning has many different types of models and this is only one of them!</p>
+</blockquote>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/NeuralStyleTransfer.py" target="_blank" rel="noopener">实验</a></p>
+<h1 id="1D-2D-3D-卷积计算"><a href="#1D-2D-3D-卷积计算" class="headerlink" title="1D 2D 3D 卷积计算"></a>1D 2D 3D 卷积计算</h1><p><img src="/image/deepLearning/189.png" alt><br><img src="/image/deepLearning/190.png" alt></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/deepLearning/HyperparameterTuning.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/post/deepLearning/HyperparameterTuning.html" itemprop="url">
+                  超参数调优
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2025-01-31T21:26:37+08:00">
+                2025-01-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="超参数如何取值"><a href="#超参数如何取值" class="headerlink" title="超参数如何取值"></a>超参数如何取值</h1><h2 id="直接调优"><a href="#直接调优" class="headerlink" title="直接调优"></a>直接调优</h2><p>根据经验对于超参数的重要性进行排序</p>
+<ol>
+<li>学习率</li>
+<li>momentum 的β（~0.9）;隐藏层的神经元数量;mini batch size</li>
+<li>隐藏层的数量；学习率的衰减率</li>
+<li>adam 的β1（~0.9），β2（~0.999）Σ（10^-8）这三者一般固定，很少需要调试</li>
+</ol>
+<p>数值选择上遵循随机取值和精确搜索的原则<br>随机取值可以快速找到影响较大的超参数，确定范围后，精确搜索可以进一步优化超参数，由粗糙到精细</p>
+<p><img src="/image/deepLearning/78.png" alt><br><img src="/image/deepLearning/79.png" alt><br><img src="/image/deepLearning/80.png" alt></p>
+<h2 id="借鉴已有其他领域模型，复用其参数进行测试评估"><a href="#借鉴已有其他领域模型，复用其参数进行测试评估" class="headerlink" title="借鉴已有其他领域模型，复用其参数进行测试评估"></a>借鉴已有其他领域模型，复用其参数进行测试评估</h2><h2 id="根据计算能力选择调试方式"><a href="#根据计算能力选择调试方式" class="headerlink" title="根据计算能力选择调试方式"></a>根据计算能力选择调试方式</h2><p>1，如果计算能力有限，一次进行一个模型的训练调试，用时间换取效果<br>2，如果计算能力充足，一次同时进行多个模型的不同超参训练调试，用并行换取时间</p>
+<h1 id="batch归一化处理"><a href="#batch归一化处理" class="headerlink" title="batch归一化处理"></a>batch归一化处理</h1><p>基于对输入样本数据进行归一化处理可加速算法训练学习的原理，对隐层的输入数据也同样进行归一化处理，<br>可以降低前一层的数据计算结束变动对后一层计算的影响，降低前后层的联系，每一层都可以独立学习，从而加速算法的训练速度<br><img src="/image/deepLearning/81.png" alt><br><img src="/image/deepLearning/82.png" alt><br><img src="/image/deepLearning/83.png" alt><br><img src="/image/deepLearning/84.png" alt><br><img src="/image/deepLearning/85.png" alt><br><img src="/image/deepLearning/86.png" alt></p>
+<h1 id="Softmax-regression"><a href="#Softmax-regression" class="headerlink" title="Softmax regression"></a>Softmax regression</h1><p>Softmax 算法是一种用于多分类任务的函数，通常应用于神经网络的输出层，以将网络的输出转换为概率分布。<br>它可以将一个未归一化的向量（即原始的网络输出）转换为一个归一化的概率分布，使得每个类别的概率值在 0 到 1 之间，并且所有类别的概率和为 1。<br><img src="/image/deepLearning/87.png" alt></p>
+<h1 id="TensorFlow-框架学习"><a href="#TensorFlow-框架学习" class="headerlink" title="TensorFlow 框架学习"></a>TensorFlow 框架学习</h1><p><img src="/image/deepLearning/88.png" alt></p>
+<blockquote>
+<p>What you should remember: - Tensorflow is a programming framework used in deep learning - The two main object classes in tensorflow are Tensors and Operators. - When you code in tensorflow you have to take the following steps: - Create a graph containing Tensors (Variables, Placeholders …) and Operations (tf.matmul, tf.add, …) - Create a session - Initialize the session - Run the session to execute the graph - You can execute the graph multiple times as you’ve seen in model() - The backpropagation and optimization is automatically done when running the session on the “optimizer” object.</p>
+</blockquote>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/deeplearning/TensorFlow/index.py" target="_blank" rel="noopener">实验</a><br><a href="https://github.com/GeeeekExplorer/AndrewNg-Deep-Learning/blob/master/Improving%20Deep%20Neural%20Networks%20Hyperparameter%20tuning%2C%20Regularization%20and%20Optimization/week7/TensorFlow%20Tutorial%20Solution.ipynb" target="_blank" rel="noopener">练习代码</a></p>
 
           
         
@@ -1634,7 +2068,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/28/">28</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/29/">29</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1673,7 +2107,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">271</span>
+              <span class="site-state-item-count">286</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1690,7 +2124,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-count">24</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

@@ -259,7 +259,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/sort.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/performance/cache/cdn.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -284,8 +284,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/algorithm/sort.html" itemprop="url">
-                  排序
+                <a class="post-title-link" href="/post/performance/cache/cdn.html" itemprop="url">
+                  关于CDN
                 </a>
               
             
@@ -299,8 +299,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-14T22:18:37+08:00">
-                2017-04-14
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-03T06:37:02+08:00">
+                2017-08-03
               </time>
             
 
@@ -337,17 +337,7 @@
       
         
           
-            <p>记录：在排序问题中，通常将数据元素称为记录<br>–输入一个记录集合，排序后输出也是一个记录集合<br>–将排序看成是线性表的一种操作<br>排序依据关键字之间的大小关系，那么对同一记录集合，针对不同的关键字进行排序，可以得到不同的序列</p>
-<h1 id="排序稳定性"><a href="#排序稳定性" class="headerlink" title="排序稳定性"></a>排序稳定性</h1><p>假设Ki=Kj(1&lt;=i&lt;=n,1&lt;=j&lt;=n,i!=j),且在排序前的序列中ri领先于rj(即i&lt;j)<br>–如果排序后ri仍领先于rj,则称所用排序方法是稳定的<br>–反之，若排序后rj仍领先于ri,则称所用排序方法是不稳定的<br>即原来值相同的两个值A和B,排序前A在B前面，排序后位置不变则说排序算法是稳定的，否则是不稳定的</p>
-<h1 id="影响排序算法性能的几个要素"><a href="#影响排序算法性能的几个要素" class="headerlink" title="影响排序算法性能的几个要素"></a>影响排序算法性能的几个要素</h1><p>时间性能(比较，移动)<br>辅助空间(存放临时变量)<br>算法的复杂性</p>
-<h1 id="冒泡排序算法n-2"><a href="#冒泡排序算法n-2" class="headerlink" title="冒泡排序算法n^2"></a>冒泡排序算法n^2</h1><p>两两相邻记录的关键字，如果反序则交换，直到没有反序记录为止<br>注意点：<br>– 每次比较相邻两个元素<br>– 如果有n个元素,比较n-1次，每次减少1次比较<br>– 从下往上比较，即从后往前比较<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/bubblesort.js" target="_blank" rel="noopener">代码链接</a></p>
-<h1 id="选择排序法n-2"><a href="#选择排序法n-2" class="headerlink" title="选择排序法n^2"></a>选择排序法n^2</h1><p>通过n-i次关键字间的比较，从n-i+1个记录中选出关键字最小的记录，并和第i(1=&lt;i&lt;=n)个记录交换<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/SelectSort.js" target="_blank" rel="noopener">代码链接</a></p>
-<h1 id="直接插入排序n-2"><a href="#直接插入排序n-2" class="headerlink" title="直接插入排序n^2"></a>直接插入排序n^2</h1><p>连续两个值比较若后面的比前面的小，就将后面的值移到比它大的值的前面<br>适用于记录本身就是有序的,记录数少<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/InsertSort.js" target="_blank" rel="noopener">代码链接</a></p>
-<h1 id="希尔排序n-logn"><a href="#希尔排序n-logn" class="headerlink" title="希尔排序n*logn"></a>希尔排序n*logn</h1><p>将所有元素按一定间隔f取出n/f个进行比较，再按顺序放回对应的位置，直到所有元素参与完比较之后，算完成一轮比较，<br>再改变间隔进行下一轮比较，直到间隔为1<br>可以将该处理方法套进冒泡、选择和直接插入的方法中<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/shellsort.js" target="_blank" rel="noopener">代码链接</a></p>
-<h1 id="堆排序n-logn"><a href="#堆排序n-logn" class="headerlink" title="堆排序n*logn"></a>堆排序n*logn</h1><p>大顶堆；每个结点大于等于其左右孩子的完全二叉树<br>小顶堆：每个结点小于等于其左右孩子的完全二叉树<br>各结点一定是堆中所有结点的最大或最小者，如果按照层序遍历方式给结点从1开始编号，则结点之间满足如下关系<br>大顶堆：Ki&gt;=K2i &amp;&amp; Ki&gt;=K2i+1<br>大顶堆：Ki&lt;=K2i &amp;&amp; Ki&lt;=K2i+1<br>其中(1&lt;=i&lt;=n/2取下限)<br>下标i与2i和2i+1是双亲和子女关系<br>堆排序：利用堆进行排序<br>– 将待排序的序列构造成一个大顶堆(从小到大)(或小顶堆(从大到小))<br>– 此时整个序列的最大值就是堆顶的根结点。将它移走(就是将其与堆数组的末尾元素交换，此时末尾元素就是最大值)<br>– 然后将剩余的n-1个序列重新构造成一个堆，这样就会得到n个元素中的此最大值<br>– 如此反复执行，便能得到一个有序序列了<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/HeapSort.js" target="_blank" rel="noopener">代码链接</a></p>
-<h1 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h1><p>将待排序数组每次一份为2，直到每一份的数组长度为1，<br>对拆分的两份结果排序合成一个新数组，参与下次下一次比较排序合并<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/MergeSort.js" target="_blank" rel="noopener">代码链接</a></p>
-<h1 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h1><p>每趟排序指定一个基准点，把比基准点小的元素放在基准点左边，比基准点大的元素放在基准点右边<br>再以基准点为界，把前面的数据(都比基准点小)和后面的数据(都比基准点大)按两部分的最小下标为基准准进行移动,<br>优化<br>选取基准点<br>不必要的交换<br>小数组时的排序方案(使用直接插入排序)<br>递归操作<br>尾递归：函数递归形式的调用出现在函数末尾，可以大大缩减栈空间<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/QuickSort.js" target="_blank" rel="noopener">代码链接</a></p>
-<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p><img src="/image/qsort.png" alt="qsort"><br>插入排序类:直接插入排序、希尔排序<br>选择排序类：选择排序、堆排序<br>交换排序类：冒泡排序、快速排序<br>归并排序类：归并排序<br><img src="/image/sort.png" alt="sort"></p>
+            <p>cdn 是一种从网络层面优化页面访问速度的手段<br>CDN服务商提供一项智能域名解析服务，这种智能DNS服务在浏览器发起域名查询时，会根据用户IP计算并返回离它最近的同网络CDN节点IP，引导浏览器与此节点建立连接以获取资源。<br>不同地区的用户访问同一个域名，依赖CDN服务商提供的智能域名解析服务得到不同CDN节点的IP地址<br>不同地区的用户会访问到离自己最近的相同网络线路上的CDN节点，当请求达到CDN节点后，节点会判断自己的内容缓存是否有效，如果有效，则立即响应缓存内容给用户，从而加快响应速度。如果CDN节点的缓存失效，它会根据服务配置去我们的内容源服务器获取最新的资源响应给用户，并将内容缓存下来以便响应给后续访问的用户。因此，一个地区内只要有一个用户先加载资源，在CDN中建立了缓存，该地区的其他后续用户都能因此而受益。<br>通过将静态资源缓存到离用户很近的相同网络运营商的CDN节点上，不但能提升用户的访问速度，还能节省服务器的带宽消耗，降低负载。<br>好的cdn服务到源服务器获取文件会通过专用的线路，这样就会比用户直接从源服务器获取资源快<br><img src="/image/cdn.png" alt="cdn缓存技术原理"></p>
 
           
         
@@ -386,7 +376,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/hash.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/layouts.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -411,8 +401,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/algorithm/hash.html" itemprop="url">
-                  散列表(哈希表)
+                <a class="post-title-link" href="/post/knowledge/layouts.html" itemprop="url">
+                  常见页面布局小结
                 </a>
               
             
@@ -426,8 +416,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-09T18:21:37+08:00">
-                2017-04-09
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-03T06:30:02+08:00">
+                2017-08-03
               </time>
             
 
@@ -464,10 +454,17 @@
       
         
           
-            <p>记录的存储位置 = f(关键字)<br>散列技术是在存储位置和它的关键字之间建立一个确定的对应关系f,使得每个关键字key对应一个存储位置f(key)<br>对应关系函数f称为散列函数(哈希函数)<br>采用三列技术将记录存储在一块连续的存储空间中，这块连续存储空间称为散列表(哈希表)</p>
-<h1 id="查找步骤"><a href="#查找步骤" class="headerlink" title="查找步骤"></a>查找步骤</h1><p>当存储记录时，通过散列函数计算出记录的散列地址<br>当查找记录时，通过散列函数计算记录的散列地址，并按此散列地址访问该记录<br>各记录之间没有任何关系<br>散列表适合1对1查找，不适合查找范围，也不适合关键字对应多个结果的查找<br>散列函数通过不同的关键字，计算出了相同地址，称之为冲突</p>
-<h1 id="构建散列函数"><a href="#构建散列函数" class="headerlink" title="构建散列函数"></a>构建散列函数</h1><p>散列函数原则=计算简单+分布均匀(散列地址)<br>直接定址法<br>取关键字的某个线性函数值为散列地址：f(key)=a*key+b<br>适合查找表小，key比较连续的情况，不常用<br>数字分析法<br>适合处理关键字位数比较大的情况<br>抽取关键字的某几位作为散列地址<br>平方取中法<br>平方取中法是将关键字平方之后取中间若干位数字作为散列地址<br>适合不知道关键字的分布，关键字位数不是很大的情况<br>折叠法<br>将关键字从左到右分割成位数相等的几部分，然后将这几部分叠加求和，并按散列表表长取后几位作为散列地址<br>除留余数法<br>f(key) = key mod p(p &lt;= m)<br>m为表长<br>这个方法不仅可以对关键字直接取模，也可以通过折叠、平方取中后再取模<br>p的取值是关键，最好接近m的最小质数<br>随机数法<br>选择一个随机数，取关键字的随机函数值为它的散列地址<br>f(key) = random(key)<br>random为随机函数，适合关键字长度不等的情况<br>选取方法时要考虑的因素：<br>计算散列地址所需时间<br>关键字长度<br>散列表大小<br>关键字分布情况<br>记录查找频率</p>
-<h1 id="处理散列冲突的方法"><a href="#处理散列冲突的方法" class="headerlink" title="处理散列冲突的方法"></a>处理散列冲突的方法</h1><p>开放定址法<br>一旦发生了冲突，就去寻找下一个空的散列地址，只要散列表足够大，空的散列地址总能找到，并将记录存入<br>1.线性探测法<br>fi(key) = (f(key)+di) mod m<br>其中di = 1,2,…,m-1<br>意思是，散列函数计算的地址已经被其他记录占据，就将散列函数计算的地址每次次加1到m-1的一个数,<br>再mod表长，将每次计算的结果当做新地址去探测有没有记录，如果没有就将该地址做为记录的地址<br>2.二次探测法<br>修改一次探测法di的取值<br>另di = 1^2,-1^2,2^2,-2^2,q^2,-q^2,其中q&lt;=m/2<br>3.随机探测法<br>对di采用随机函数计算得到<br>再散列函数法<br>fi(key) = RHi(key)(i=1,2,3,…k)<br>就是用第一个散列函数计算的地址发生冲突就换第二个散列函数，如果第二个也发生冲突，则换第三个，以此类推<br>链地址法<br>地址处不存放单一记录，而是存放记录的链表，记录1指向记录2，计算得到地址相同，就继续指下去<br>公共溢出区法<br>不发生冲突的关键字放在基本表，将发生冲突的记录依次存放在溢出表，<br>查找时基本表找不到时就去查溢出表，溢出表找不到再宣告失败</p>
+            <h1 id="圣杯布局"><a href="#圣杯布局" class="headerlink" title="圣杯布局"></a>圣杯布局</h1><p>三栏布局,左右两栏宽度固定,中间一栏宽度随屏幕宽度自适应<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">&lt;div id=&quot;header&quot;&gt;#header&lt;/div&gt;</span><br><span class="line">&lt;div id=&quot;container&quot;&gt;</span><br><span class="line">  &lt;div id=&quot;center&quot; class=&quot;column&quot;&gt;#center&lt;/div&gt;</span><br><span class="line">  &lt;div id=&quot;left&quot; class=&quot;column&quot;&gt;#left&lt;/div&gt;</span><br><span class="line">  &lt;div id=&quot;right&quot; class=&quot;column&quot;&gt;#right&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;div id=&quot;footer&quot;&gt;#footer&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line"></span><br><span class="line">&lt;style type=&quot;text/css&quot;&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">  min-width: 550px;      /* 2x LC width + RC width */</span><br><span class="line">&#125;</span><br><span class="line">#container &#123;</span><br><span class="line">  padding-left: 200px;   /* LC width */</span><br><span class="line">  padding-right: 150px;  /* RC width */</span><br><span class="line">&#125;</span><br><span class="line">#container .column &#123;</span><br><span class="line">  position: relative;/* 让左右两栏进行相对位移，位移到container的内边距位置 */</span><br><span class="line">  min-height: 200px;/* 高度自适应*/</span><br><span class="line">  float: left;</span><br><span class="line">&#125;</span><br><span class="line">#center &#123;</span><br><span class="line">  width: 100%;</span><br><span class="line">  background-color: #e9e9e9;</span><br><span class="line">&#125;</span><br><span class="line">#left &#123;</span><br><span class="line">  width: 200px;          /* LC width */</span><br><span class="line">  right: 200px;           /*LC width *//*相对于 container 的右边线向左偏移 200px 将自己位移到container内边距 */</span><br><span class="line">  margin-left: -100%;/*浮动到与中间平行 */</span><br><span class="line">  background-color: red;</span><br><span class="line">&#125;</span><br><span class="line">#right &#123;</span><br><span class="line">  width: 150px;          /* RC width */</span><br><span class="line">  margin-right: -150px;  /* RC width */</span><br><span class="line">  background-color: blue;</span><br><span class="line">&#125;</span><br><span class="line">#footer &#123;</span><br><span class="line">  clear: both;/*清除 footer 的上下环境，以免遭跟上面三栏一起浮动*/</span><br><span class="line">&#125;</span><br><span class="line">#header, </span><br><span class="line">#footer &#123;</span><br><span class="line">  background-color: #c9c9c9;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/image/holy1.png" alt="圣杯1"><br><img src="/image/holy2.png" alt="圣杯2"></p>
+<p>flex 实现 圣杯布局<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">&lt;!doctype html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;header&gt;header&lt;/header&gt;</span><br><span class="line">    &lt;section&gt;</span><br><span class="line">      &lt;nav&gt;nav&lt;/nav&gt;</span><br><span class="line">      &lt;article&gt;article&lt;/article&gt;</span><br><span class="line">      &lt;aside&gt;aside&lt;/aside&gt;</span><br><span class="line">    &lt;/section&gt;</span><br><span class="line">    &lt;footer&gt;footer&lt;/footer&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line"> body&#123;</span><br><span class="line">   display: flex;</span><br><span class="line">   flex-flow: column wrap;</span><br><span class="line">   justify-content:flex-start;</span><br><span class="line"> &#125;</span><br><span class="line"> header,section,nav,aside,footer&#123;</span><br><span class="line">   display: block;</span><br><span class="line"> &#125;</span><br><span class="line"> header&#123;</span><br><span class="line">   order: 1;</span><br><span class="line">   width: 100%;</span><br><span class="line">   min-height: 100px;</span><br><span class="line">   padding: 10px 20px;</span><br><span class="line">   background-color: antiquewhite;</span><br><span class="line"> &#125;</span><br><span class="line"> section&#123;</span><br><span class="line">   flex: 1; </span><br><span class="line">   order: 2;</span><br><span class="line">   min-width: 100%;</span><br><span class="line">   margin: 20px 0;</span><br><span class="line">   display: flex;</span><br><span class="line"> &#125;</span><br><span class="line"> footer&#123;</span><br><span class="line">   order: 3;</span><br><span class="line">   min-height: 60px;</span><br><span class="line">   min-width: 100%;</span><br><span class="line">   padding: 1%;</span><br><span class="line">   background-color: burlywood;</span><br><span class="line"> &#125;</span><br><span class="line"> nav&#123;</span><br><span class="line">   order:1;</span><br><span class="line">   width: 220px;</span><br><span class="line">   padding: 1%;</span><br><span class="line">   background-color: aquamarine;</span><br><span class="line"> &#125;</span><br><span class="line"> article&#123;</span><br><span class="line">   flex: 1;/* 可伸缩 */</span><br><span class="line">   order:2;</span><br><span class="line">   padding: 1%;</span><br><span class="line">   margin:0 2%;</span><br><span class="line">   background-color: blue;</span><br><span class="line">   word-break: break-all;</span><br><span class="line"> &#125;</span><br><span class="line"> aside&#123;</span><br><span class="line">   order:3;</span><br><span class="line">   width:220px;</span><br><span class="line">   padding: 1%;</span><br><span class="line">   background-color: aqua;</span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
+<h1 id="双飞翼布局"><a href="#双飞翼布局" class="headerlink" title="双飞翼布局"></a>双飞翼布局</h1><p>效果同圣杯布局，只是写法上DOM在center里面新增加了div,css不再使用relative定位，只是用float和外边距<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id=&quot;header&quot;&gt;header&lt;/div&gt;</span><br><span class="line">&lt;div id=&quot;container&quot;&gt;</span><br><span class="line">  &lt;div id=&quot;center&quot; class=&quot;column&quot;&gt;</span><br><span class="line">    &lt;div id=&quot;innerCenter&quot;&gt;center&lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  &lt;div id=&quot;left&quot; class=&quot;column&quot;&gt;left&lt;/div&gt;</span><br><span class="line">  &lt;div id=&quot;right&quot; class=&quot;column&quot;&gt;right&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;div id=&quot;footer&quot;&gt;footer&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;style type=&quot;text/css&quot;&gt;</span><br><span class="line">  body &#123;</span><br><span class="line">    min-width: 351px; /* LC width + RC width +1*/</span><br><span class="line">  &#125;</span><br><span class="line">  #container .column &#123;</span><br><span class="line">    min-height: 200px;</span><br><span class="line">    float: left;</span><br><span class="line">  &#125;</span><br><span class="line">  #innerCenter &#123; /*代替圣杯container的padding处理*/</span><br><span class="line">    margin-left: 200px;</span><br><span class="line">    margin-right: 150px;</span><br><span class="line">  &#125;</span><br><span class="line">  #center &#123;</span><br><span class="line">    width: 100%;</span><br><span class="line">    background-color: #e9e9e9;</span><br><span class="line">  &#125;</span><br><span class="line">  #left &#123;</span><br><span class="line">    width: 200px;</span><br><span class="line">    margin-left: -100%;</span><br><span class="line">    background-color: red;</span><br><span class="line">  &#125;</span><br><span class="line">  #right &#123;</span><br><span class="line">    width: 150px;</span><br><span class="line">    margin-left: -150px;</span><br><span class="line">    background-color: blue;</span><br><span class="line">  &#125;</span><br><span class="line">  #footer &#123;</span><br><span class="line">    clear: both;</span><br><span class="line">  &#125;</span><br><span class="line">  #header, #footer &#123;</span><br><span class="line">    background-color: #c9c9c9;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/image/holy3.png" alt="圣杯3"><br><img src="/image/holy4.png" alt="圣杯4"></p>
+<h1 id="7种垂直居中"><a href="#7种垂直居中" class="headerlink" title="7种垂直居中"></a>7种垂直居中</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br></pre></td><td class="code"><pre><span class="line">1.tabel自带</span><br><span class="line">&lt;body&gt;</span><br><span class="line">  &lt;table class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;tr&gt;</span><br><span class="line">      &lt;td class=&quot;child&quot;&gt;</span><br><span class="line">      一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字</span><br><span class="line">      &lt;/td&gt;</span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line">  &lt;/table&gt;</span><br><span class="line">  .parent&#123;</span><br><span class="line">  border: 1px solid red;</span><br><span class="line">  height: 600px;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.child&#123;</span><br><span class="line">  border: 1px solid green;</span><br><span class="line">&#125;</span><br><span class="line">2.在水平居中部分的前后添加inline-block元素，高度100%，三个子元素，vertical-align:middle</span><br><span class="line">&lt;body&gt;</span><br><span class="line">  &lt;div class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;child&quot;&gt;</span><br><span class="line">      一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">.parent&#123;</span><br><span class="line">  border: 3px solid red;</span><br><span class="line">  height: 600px;</span><br><span class="line">  text-align: center;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.child&#123;</span><br><span class="line">  border: 3px solid black;</span><br><span class="line">  display: inline-block;</span><br><span class="line">  width: 300px;</span><br><span class="line">  vertical-align: middle;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">.parent:before&#123;</span><br><span class="line">  content:&apos;&apos;;</span><br><span class="line">  outline: 3px solid red;</span><br><span class="line">  display: inline-block;</span><br><span class="line">  height: 100%;</span><br><span class="line">  vertical-align: middle;</span><br><span class="line">&#125;</span><br><span class="line">.parent:after&#123;</span><br><span class="line">  content:&apos;&apos;;</span><br><span class="line">  outline: 3px solid red;</span><br><span class="line">  display: inline-block;</span><br><span class="line">  height: 100%;</span><br><span class="line">  vertical-align: middle;</span><br><span class="line">&#125;</span><br><span class="line">如果用标签元素，则前后元素类设置为.parent .after&#123;&#125;,.parent .before&#123;&#125;</span><br><span class="line"></span><br><span class="line">3.父元素position设置为相对定位relative,子元素位置相对父元素，设置为absolute,通过设置top和left 50%决定距离父元素上边和左边的距离，</span><br><span class="line">再通过margin-top,margin-left为子元素高和宽的一半将子元素和父元素中心重合</span><br><span class="line">&lt;div class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;child&quot;&gt;</span><br><span class="line">      一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">.parent&#123;</span><br><span class="line">  height: 600px;</span><br><span class="line">  border: 1px solid red;</span><br><span class="line">  position: relative;</span><br><span class="line">&#125;</span><br><span class="line">.child&#123;</span><br><span class="line">  border: 1px solid green;</span><br><span class="line">  width: 300px;</span><br><span class="line">  height: 100px;</span><br><span class="line">  position: absolute;</span><br><span class="line">  top: 50%;</span><br><span class="line">  left: 50%;</span><br><span class="line">  margin:-50px 0 0 -150px;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">4.父元素relative,子元素absolute，top和left均为 50%，transform:translate(-50%,-50%)</span><br><span class="line">&lt;div class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;child&quot;&gt;</span><br><span class="line">      一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">.parent&#123;</span><br><span class="line">  height: 600px;</span><br><span class="line">  border: 1px solid red;</span><br><span class="line">  position: relative;</span><br><span class="line">&#125;</span><br><span class="line">.child&#123;</span><br><span class="line">  border: 1px solid green;</span><br><span class="line">  position: absolute;</span><br><span class="line">  top: 50%;</span><br><span class="line">  left: 50%;</span><br><span class="line">  transform: translate(-50%,-50%);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">5.父元素relative,子元素absolute，子元素，上下左右都是0，margin:auto</span><br><span class="line">&lt;div class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;child&quot;&gt;</span><br><span class="line">      一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">.parent&#123;</span><br><span class="line">  height: 600px;</span><br><span class="line">  border: 1px solid red;</span><br><span class="line">  position: relative;</span><br><span class="line">&#125;</span><br><span class="line">.child&#123;</span><br><span class="line">  border: 1px solid green;</span><br><span class="line">  width: 300px;</span><br><span class="line">  position: absolute;</span><br><span class="line">  margin: auto;</span><br><span class="line">  top: 0;</span><br><span class="line">  bottom: 0;</span><br><span class="line">  left: 0;</span><br><span class="line">  right: 0;</span><br><span class="line">&#125;</span><br><span class="line">6.felx布局，父元素display:flex,justify-content:center;align-items:center</span><br><span class="line">&lt;div class=&quot;parent&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;child&quot;&gt;</span><br><span class="line">      一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字一串文字</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line"></span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">  .parent&#123;</span><br><span class="line">  height: 600px;</span><br><span class="line">  border: 3px solid red;</span><br><span class="line"></span><br><span class="line">  display: flex;</span><br><span class="line">  justify-content: center;</span><br><span class="line">  align-items: center;</span><br><span class="line">&#125;</span><br><span class="line">.child&#123;</span><br><span class="line">  border: 3px solid green;</span><br><span class="line">  width: 300px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="清除浮动"><a href="#清除浮动" class="headerlink" title="清除浮动"></a>清除浮动</h1><p>1.在父元素上添加样式overflow:hidden/auto<br>2.给父元素设置高度或者添加float属性（使之成为浮动元素）<br>3.在子元素结尾添加空div标签或者br标签，或者给父元素添加:after伪类，设置属性clear：both<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">.clearfix::after&#123;</span><br><span class="line">    content: &apos;&apos;; display: block; clear:both;</span><br><span class="line">&#125;</span><br><span class="line">.clearfix&#123;</span><br><span class="line">    zoom: 1; /* IE 兼容 */</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="多列布局"><a href="#多列布局" class="headerlink" title="多列布局"></a>多列布局</h1><p>column-width —— 列宽,不设置时由其他属性决定<br>column-count —— 列数,不设置时由其他属性决定<br>columns —— column-width column-count</p>
+<p>column-gap —— 列间距<br>column-rule —— 间距线，位于列间距中间，介于background和content之间，宽度大于列间距时消失<br>宽度 样式 颜色</p>
+<p>column-fill —— 各列宽度<br>auto 随内容自动调整 |balance 以内容最多一列统一高度<br>column-span —— 子元素是否合并列<br>none/all</p>
+<p>静态布局：尺寸不变，布局不变<br>自适应布局：为不同尺寸屏幕设计不同静态布局<br>流式布局：通过更改模块大小，保证整体布局<br>响应式布局：针对不同尺寸屏幕，设计不同流式布局<br>弹性布局：可以设置模块大小放缩保证布局，也可以固定模块大小，更改布局<br><a href="https://www.cnblogs.com/yanayana/p/7066948.html" target="_blank" rel="noopener">各种布局概念区分</a><br><a href="/post/react/course/layout.html">react涉及布局</a><br><a href="http://www.imooc.com/article/2235" target="_blank" rel="noopener">相关资料</a><br><a href="http://www.cnblogs.com/dolphinX/archive/2012/10/13/2722501.html" target="_blank" rel="noopener">CSS布局 ——从display，position， float属性谈起</a></p>
 
           
         
@@ -506,7 +503,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/multliwaysearchtree.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/knowledge/qrcode.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -531,8 +528,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/algorithm/multliwaysearchtree.html" itemprop="url">
-                  多路查找树
+                <a class="post-title-link" href="/post/knowledge/qrcode.html" itemprop="url">
+                  使用QRcode.js生成二维码
                 </a>
               
             
@@ -546,8 +543,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-08T20:59:37+08:00">
-                2017-04-08
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-01T07:26:37+08:00">
+                2017-08-01
               </time>
             
 
@@ -584,10 +581,7 @@
       
         
           
-            <p>特点：<br>每个结点的孩子可以多于两个，且每一个结点处可以存储多个元素<br>所有元素之间存在某种特定的排序关系<br>2-3树：每一个结点都具有两个或者三个孩子的多路查找树，所有叶子结点都在同一层次上<br>2结点：拥有两个孩子和一个元素，左子树包含元素小于结点元素，右子树则大于，要么有两个孩子，要么一个孩子也没有<br>3结点：拥有三个孩子两个元素，孩子和结点元素呈一定顺序，要么有三个孩子，要么一个孩子也没有<br>2-3-4树：每一个结点都具有两个或者三个孩子或四个孩子的多路查找树，所有叶子结点都在同一层次上<br>4结点：拥有四个个孩子三个元素，孩子和结点元素呈一定顺序，要么有四个孩子，要么一个孩子也没有</p>
-<h1 id="2-3树插入原理"><a href="#2-3树插入原理" class="headerlink" title="2-3树插入原理"></a>2-3树插入原理</h1><p>1.如果是一个空树，直接插入形成一个2结点，即根结点<br>2.插入到一个结构为2结点的叶子上，直接将该2结点转为3结点<br>3.插入到一个结构为3结点的叶子结点，而该叶子结点双亲为2结点，则将该双亲2结点扩展为3结点，将元素插进去<br>4.插入到一个结构为3结点的叶子结点，而其双亲也为3结点，则继续往上找其双亲的双亲是否为2结点，若是，则将该2结点扩展为3结点，将双亲的一个元素挪上去，将3结点的元素挪到双亲，然后插入元素<br>5.插入到一个结构为3结点的叶子结点，往上追溯到根结点也为3结点，则说明该子树已满，需要增加树的高度，即将树每个结点拆都分成2结点，从而保证，所有叶结点在统一层次</p>
-<h1 id="2-3树删除原理"><a href="#2-3树删除原理" class="headerlink" title="2-3树删除原理"></a>2-3树删除原理</h1><p>1.删除的元素位于结构为3结点的叶子上，直接删掉就好，3结点变2结点<br>2.删除元素位于结构为2结点的叶子上，<br>若双亲也为2结点结构，且双亲另一个孩子为3结点，则将元素删除后，左旋或右旋，将原来双亲移下来做孩子，将原来3结点一个元素移上去做双亲，另一个不动继续做孩子<br>若双亲为2结点结构，且双亲另一个孩子也为2结点,假设删除的是左子树的元素，则寻找双亲的双亲的直接后继元素来填充双亲的双亲的元素位置，将双亲的双亲的元素做双亲元素的孩子，将双亲元素移下来做孩子，将双亲原来的孩子移上去做双亲<br>若双亲是一个3结点结构，则将双亲一个元素移下来，3结点变2结点<br>若删除时，整颗树是一个满2叉树状态，则将树的深度变小，2结点变3结点<br>3.删除元素位于结构为2结点的双亲位置，若其右孩子为3结点则将其直接后继结点顶上去，3结点孩子变2结点<br>4.删除元素位于结构为3结点的双亲位置，若其直接前驱位于3结点结构，则将前驱顶上去，3结点变2结点<br>若其直接前驱位于2结点结构，则将前驱与直接后继合并为3结点，双亲变2结点</p>
-<h1 id="B树"><a href="#B树" class="headerlink" title="B树"></a>B树</h1><p>一种平衡的多路查找树，2-3树和2-3-4树都是B树的特例<br>把结点最大的孩子树数目称为B树的阶，因此2-3树是3阶B树，2-3-4树是4阶B树<br>一个m阶的B树有如下属性<br>如果根结点不是叶结点，则其至少有两颗子树<br>每一个非根的分支节点都有K-1个元素和K个孩子，其中K满足：m/2向上取整 &lt;= K &lt;= m<br>所有叶子结点都位于同一层次<br>每个分支结点包含元素个数，该结点各元素及其孩子的信息</p>
+            <p>在页面中引入QRcode.js文件，再js部分进行定义<br>var qrcode = new QRCode(document.getElementById(“qrcode0”), { //qrcode0放置二维码容器的id<br>        width : 150,//二维码大小<br>        height : 150<br>});<br>qrcode.makeCode(url);//url,生成二维码的依据</p>
 
           
         
@@ -626,7 +620,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/balancesortbtree.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/angular/angularjsfilterEmoji.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -651,8 +645,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/algorithm/balancesortbtree.html" itemprop="url">
-                  平衡二叉排序树
+                <a class="post-title-link" href="/post/angular/angularjsfilterEmoji.html" itemprop="url">
+                  Angularjs 利用图片更换emoji表情
                 </a>
               
             
@@ -666,8 +660,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-08T14:51:37+08:00">
-                2017-04-08
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-01T06:46:02+08:00">
+                2017-08-01
               </time>
             
 
@@ -704,9 +698,8 @@
       
         
           
-            <h1 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h1><p>首先得是一颗二叉排序树<br>左子树与右子树都是平衡二叉树<br>每个结点左子树与右子树的深度差的绝对值不能大于1<br>结点左子树深度减右子树深度的差叫做平衡因子BF，即|BF|&lt;=1，BF=-1/1/0<br>平衡二叉树就是一颗二叉树上所有结点的平衡因子的绝对值小于等于1 的树</p>
-<h1 id="关键操作"><a href="#关键操作" class="headerlink" title="关键操作"></a>关键操作</h1><p>左子树bf大于右子树bf，右旋<br>左子树bf小于右子树bf，左旋<br>左旋的子树的右子树若存在左子树，将该左子树做左旋子树根结点的右子树，左旋子树根结点做其右子树的左子树<br>右旋的子树的左子树若存在右子树，将该右子树做右旋子树根结点的左结点，右旋子树根结点做其左子树的右子树</p>
-<h1 id="构建"><a href="#构建" class="headerlink" title="构建"></a>构建</h1><p>现用以下数据构建平衡二叉树<br>3,2,1,4,5,6,7,10,9,8<br><img src="/image/balancebtree.png" alt="balance"><br>按照大于父节点做右子树小于父结点做左子树原则,将3,2,1构建树，当1进入树之后3的左子树深度2减右子树深度0大于1，以2为中心进行右旋，如图1<br>继续添加4和5，当5进入树之后，3的左右子树深度差为-2，断开2,3链接，将3,4,5,以4为中心左旋，再与2相连，如图2<br>继续添加6，当6进入树之后,这时2的bf为-2，以2的右子树根结点为中心左旋，此时1,2和3均为4的左子树，则将4的原左子树做新左子树的右子树，如图3<br>添加7,当7进入树之后,5的bf为-2，断开4,5链接，以6为中心左旋，再与4相连，如图4<br>添加10、9,当9进入树之后,6的bf为-2,断开6、7，因为10有左结点，先将9、10关系转换，让10做9孩子结点，然后以9为中心左旋，再与6相连,如图5<br>添加8,4、6的bf又变为-2,断开4、6,9的bf为1，因为将来要对6左旋，所以先将9右旋，使9的bf变成0或负值，再对6以7为中心左旋，如图6<br>最终结果如图7<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/balancebtree.js" target="_blank" rel="noopener">代码链接</a></p>
+            <p>在某些浏览器中,emoji表情不能正常显示,只能显示原始状态如下<br><img src="/image/emoji1.png" alt="erroremoji"><br>为使表情正常显示，这里利用转码方法将emoji符号用图片替换<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//对数据$scope.data.remark做表情替换处理,$scope.data.remark是包含emoji符号的字符串</span></span><br><span class="line">    <span class="keyword">var</span> str=$scope.data.remark;</span><br><span class="line">    str=str.replace(rep,<span class="function"><span class="keyword">function</span>(<span class="params">code</span>) </span>&#123; <span class="comment">//code即匹配到的emoji符号,对该符号通过_escapeToUtf32(code)转码,得到对应图片名,然后图片替换</span></span><br><span class="line">     <span class="keyword">return</span> <span class="string">'&lt;img class="emoji" style="vertical-align:middle" src="assets/img/emoji/'</span>+_escapeToUtf32(code) + <span class="string">'.png"&gt;'</span>;</span><br><span class="line">    &#125;)</span><br><span class="line">    $scope.data.remark = str;</span><br><span class="line"></span><br><span class="line"><span class="comment">//用emoji符号的unicode码匹配emoji符号,例如270c匹配 victory hand符号</span></span><br><span class="line"> <span class="keyword">var</span> rep =<span class="regexp">/\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]|\u270c|\u261d/g</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//emoji 表情转码</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span>  <span class="title">_escapeToUtf32</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> escaped = [],</span><br><span class="line">      unicodeCodes = _convertStringToUnicodeCodePoints(str),</span><br><span class="line">      i = <span class="number">0</span>,</span><br><span class="line">      l = unicodeCodes.length,</span><br><span class="line">      hex;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (; i &lt; l; i++) &#123;</span><br><span class="line">      hex = unicodeCodes[i].toString(<span class="number">16</span>);</span><br><span class="line">      escaped.push(<span class="string">'0000'</span>.substr(hex.length) + hex);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> escaped.join(<span class="string">'-'</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">function</span> <span class="title">_convertStringToUnicodeCodePoints</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> surrogate1st = <span class="number">0</span>,</span><br><span class="line">      unicodeCodes = [],</span><br><span class="line">      i = <span class="number">0</span>,</span><br><span class="line">      l = str.length;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (; i &lt; l; i++) &#123;</span><br><span class="line">      <span class="keyword">var</span> utf16Code = str.charCodeAt(i);</span><br><span class="line">      <span class="keyword">if</span> (surrogate1st != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (utf16Code &gt;= <span class="number">0xDC00</span> &amp;&amp; utf16Code &lt;= <span class="number">0xDFFF</span>) &#123;</span><br><span class="line">          <span class="keyword">var</span> surrogate2nd = utf16Code,</span><br><span class="line">            unicodeCode = (surrogate1st - <span class="number">0xD800</span>) * (<span class="number">1</span> &lt;&lt; <span class="number">10</span>) + (<span class="number">1</span> &lt;&lt; <span class="number">16</span>) + (surrogate2nd - <span class="number">0xDC00</span>);</span><br><span class="line">          unicodeCodes.push(unicodeCode);</span><br><span class="line">        &#125;</span><br><span class="line">        surrogate1st = <span class="number">0</span>;</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (utf16Code &gt;= <span class="number">0xD800</span> &amp;&amp; utf16Code &lt;= <span class="number">0xDBFF</span>) &#123;</span><br><span class="line">        surrogate1st = utf16Code;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        unicodeCodes.push(utf16Code);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> unicodeCodes;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Angularjs对字符串里面的html标签不会按照HTML去解析,会当做字符串显示,</span></span><br><span class="line"><span class="comment">//所以这里需要对字符串进行过滤，使字符串里面的标签能按照html解析</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//新建过滤器trust2Html,这里使用$sce方法</span></span><br><span class="line">app.filter(<span class="string">'trust2Html'</span>, [<span class="string">'$sce'</span>,<span class="function"><span class="keyword">function</span>(<span class="params">$sce</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">val</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> $sce.trustAsHtml(val);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;])</span><br><span class="line"></span><br><span class="line"><span class="comment">//在页面里面显示经过图片替换的含emoji符号的字符串</span></span><br><span class="line">&lt;label ng-bind-html=<span class="string">"data.remark|trust2Html"</span>&gt;&lt;<span class="regexp">/label&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>替换后结果<br><img src="/image/emoji2.png" alt="exactemoji"><br><a href="https://apps.timwhitlock.info/emoji/tables/unicode#block-6a-additional-emoticons" target="_blank" rel="noopener">Emoji Unicode Tables</a></p>
 
           
         
@@ -745,7 +738,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/sortbtree.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/js/JQuery_data.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -770,8 +763,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/algorithm/sortbtree.html" itemprop="url">
-                  二叉排序树
+                <a class="post-title-link" href="/post/js/JQuery_data.html" itemprop="url">
+                  探究jQuery.data
                 </a>
               
             
@@ -785,8 +778,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-03T16:51:37+08:00">
-                2017-04-03
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-30T13:43:02+08:00">
+                2017-07-30
               </time>
             
 
@@ -823,7 +816,17 @@
       
         
           
-            <p>将无序的数组，把首项当做根结点开始，按照比双亲结点小的做左子树，比双亲结点大的做右子树的规则<br>建立一颗二叉树，对二叉树进行中序遍历，即得到无序数组从小到大的排序<br>二叉排序树特点<br>—- 若它的左子树不为空，则左子树上所有结点的值均小于它的根结构的值<br>—- 若它的右子树不为空，则右子树上所有结点的值均大于它的根结构的值<br>—- 它的左右子树也分别为二叉排序树(递归)<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/SortingBtree.js" target="_blank" rel="noopener">代码链接</a></p>
+            <p>jQuery.data用于处理标签数据绑定</p>
+<h1 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h1><p>1.赋值</p>
+<p>a.使用js<br>$(‘’).data(key,value); 一次赋值一个，value可以是任意js数据类型,包括Array 或者 Object<br>$(‘’).data(obj);一次赋值多个或者更新多个或者新增多个</p>
+<p>b.使用HTML标签属性<br>利用H5 标签的’data-‘属性添加键值对<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div data-role=&quot;page&quot; data-last-value=&quot;43&quot; data-hidden=&quot;true&quot; data-options=&apos;&#123;&quot;name&quot;:&quot;John&quot;&#125;&apos;&gt;&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<p>2.取值<br>$(‘’).data(key);获取key对应的数据值<br>$(‘’).data(); 一次性获取绑定在$(‘’)上的所有数据对象</p>
+<p>3.删除<br>$(‘’).removeData(key);</p>
+<h1 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h1><p>a. &lt;object&gt;（除非是Flash插件），&lt;applet&gt; 或 &lt;embed&gt;&gt; 三个标签不能使用.data方法</p>
+<p>b. 通过”data-“属性建立的标签数据，获取时注意<br>data-last-value=”43” ==&gt; $(‘div’).data(‘lastValue’)<br>data-options=’{“name”:”John”}’ ==&gt; $(“div”).data(“options”).name -&gt;John<br>取到的值会自动转化为js的数据类型</p>
+<p>c. $(‘’).data()被赋值到js变量A后，之后对$(‘’)进行数据处理，A的内容会进行同步变动，<br>如果更改A的内容，$(‘’).data()也会同步更改<br>但如果$(‘’).data()的值被用到了html里面,HTML里面的值不会变动</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">  &lt;style&gt;</span><br><span class="line">  div &#123; <span class="attr">color</span>:blue; &#125;</span><br><span class="line">  span &#123; <span class="attr">color</span>:red; &#125;</span><br><span class="line">  &lt;<span class="regexp">/style&gt;</span></span><br><span class="line"><span class="regexp">  &lt;script src="http:/</span><span class="regexp">/cdn.bootcss.com/</span>jquery/<span class="number">1.11</span><span class="number">.2</span>/jquery.min.js<span class="string">"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="string">&lt;/head&gt;</span></span><br><span class="line"><span class="string">&lt;body&gt;</span></span><br><span class="line"><span class="string">  &lt;div&gt;</span></span><br><span class="line"><span class="string">    The values stored were</span></span><br><span class="line"><span class="string">    &lt;span&gt;&lt;/span&gt;</span></span><br><span class="line"><span class="string">    and</span></span><br><span class="line"><span class="string">    &lt;span&gt;&lt;/span&gt;</span></span><br><span class="line"><span class="string">  &lt;/div&gt;</span></span><br><span class="line"><span class="string">&lt;script&gt;</span></span><br><span class="line"><span class="string">$("</span>div<span class="string">").data("</span>test<span class="string">", &#123; first: 16, last: "</span>pizza!<span class="string">" &#125;);</span></span><br><span class="line"><span class="string">$("</span>span:first<span class="string">").text($("</span>div<span class="string">").data("</span>test<span class="string">").first);</span></span><br><span class="line"><span class="string">$("</span>span:last<span class="string">").text($("</span>div<span class="string">").data("</span>test<span class="string">").last);</span></span><br><span class="line"><span class="string">//页面输出 The values stored were 16 and pizza!</span></span><br><span class="line"><span class="string">  var temp = $("</span>div<span class="string">").data();</span></span><br><span class="line"><span class="string">  console.log(temp);</span></span><br><span class="line"><span class="string">  $("</span>div<span class="string">").data(&#123; first: 25, last: "</span>pizza!<span class="string">" ,test:&#123;last:'fruit'&#125;&#125;);</span></span><br><span class="line"><span class="string">  // $("</span>span:first<span class="string">").text($("</span>div<span class="string">").data("</span>first<span class="string">"));</span></span><br><span class="line"><span class="string">  // $("</span>span:last<span class="string">").text($("</span>div<span class="string">").data("</span>test<span class="string">").last); </span></span><br><span class="line"><span class="string">  //如果没有以上两句页面不会发生任何变化，添加后</span></span><br><span class="line"><span class="string">  //页面输出 The values stored were 25 and fruit</span></span><br><span class="line"><span class="string">  console.log(temp);//temp与$("</span>div<span class="string">").data()保持一致</span></span><br><span class="line"><span class="string">  console.log($("</span>div<span class="string">").data())</span></span><br><span class="line"><span class="string">  temp.child = 'Jack';</span></span><br><span class="line"><span class="string">  console.log($("</span>div<span class="string">").data()) //增加一项&#123;child: "</span>Jack<span class="string">"&#125;</span></span><br><span class="line"><span class="string">  $("</span>div<span class="string">").removeData("</span>blah<span class="string">");//删除没有的属性不会报错</span></span><br><span class="line"><span class="string">  $("</span>div<span class="string">").removeData("</span>child<span class="string">");</span></span><br><span class="line"><span class="string">   console.log(temp);</span></span><br><span class="line"><span class="string">&lt;/script&gt;</span></span><br><span class="line"><span class="string">&lt;/body&gt;</span></span><br><span class="line"><span class="string">&lt;/html&gt;</span></span><br></pre></td></tr></table></figure>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/plugin/data.js" target="_blank" rel="noopener">JQuery.data源码解析</a></p>
 
           
         
@@ -862,7 +865,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/indexsearch.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/angular/ng-class.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -887,8 +890,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/algorithm/indexsearch.html" itemprop="url">
-                  线性索引查找
+                <a class="post-title-link" href="/post/angular/ng-class.html" itemprop="url">
+                  angular样式绑定ng-class
                 </a>
               
             
@@ -902,8 +905,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-03T16:38:37+08:00">
-                2017-04-03
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-25T22:00:37+08:00">
+                2017-06-25
               </time>
             
 
@@ -940,8 +943,8 @@
       
         
           
-            <h1 id="稠密索引"><a href="#稠密索引" class="headerlink" title="稠密索引"></a>稠密索引</h1><p><img src="/image/index1.png" alt="index1"><br>索引表与数据表一对一，索引表的关键码是对应目标数据的提取，索引表有序，数据表无序</p>
-<h1 id="分块索引"><a href="#分块索引" class="headerlink" title="分块索引"></a>分块索引</h1><p><img src="/image/index2.png" alt="index2"><br>将整个数据表分块，取每块数据中最大值建立索引表，块间有序，块内无序</p>
+            <p>ng-class命令可用于绑定不同的样式<br>使用方法即先在js中,定义样式集合<br>$scope.STATUS_NAME = [<br>  {‘labelClass’: ‘label1’},<br>  {‘labelClass’: ‘label2’},<br>  {‘labelClass’: ‘label3’},<br>  {‘labelClass’: ‘label4’}<br> ];<br> 对绑定对象赋值<br> angular.forEach($scope.data, function(data){<br>     //对数组中每一项，根据status属性赋给labelclass属性样式集合中的值<br>   data.labelClass = $scope.STATUS_NAME[data.status].labelClass;<br> });<br>在html中定义不同的样式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;style type=&quot;text/css&quot;&gt;</span><br><span class="line">	.label1&#123;</span><br><span class="line">    background-color:#87CEFA</span><br><span class="line">  &#125;</span><br><span class="line">  .label2&#123;</span><br><span class="line">    background-color:#90EE90</span><br><span class="line">  &#125;</span><br><span class="line">  .label3&#123;</span><br><span class="line">    background-color:#d2cd93</span><br><span class="line">  &#125;</span><br><span class="line">  .label4&#123;</span><br><span class="line">    background-color:#D3D3D3</span><br><span class="line">  &#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure></p>
+<p> 在html中使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;tr role=&quot;row&quot; ng-repeat=&quot;item in data track by $index&quot;&gt;</span><br><span class="line">	&lt;td&gt;&lt;span class=&quot;label&quot; ng-class=&quot;item.labelClass&quot;&gt;&#123;&#123;item.status_desc&#125;&#125;&lt;/span&gt;&lt;/td&gt;</span><br><span class="line">&lt;/tr&gt;</span><br></pre></td></tr></table></figure></p>
 
           
         
@@ -980,7 +983,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/search.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/php/CookieAndSession.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1005,8 +1008,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/algorithm/search.html" itemprop="url">
-                  查找
+                <a class="post-title-link" href="/post/php/CookieAndSession.html" itemprop="url">
+                  cookie和session
                 </a>
               
             
@@ -1020,8 +1023,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-02T19:24:37+08:00">
-                2017-04-02
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-26T21:38:37+08:00">
+                2017-05-26
               </time>
             
 
@@ -1058,10 +1061,20 @@
       
         
           
-            <p>静态查找: 数据集合稳定，不需要添加，删除元素的查找操作<br>– 组织数据宜用线性表结构<br>– 如果要对关键字排序，折半查找算法或斐波那契查找算法<br>动态查找：数据集合在查找过程中需要同时添加或删除元素的查找操作<br>– 二叉排序树，散列表结构</p>
-<h1 id="顺序查找"><a href="#顺序查找" class="headerlink" title="顺序查找"></a>顺序查找</h1><p>顺序查找/线性查找:从第一个(或者最后一个)记录开始，逐个进行记录的关键字和给定值进行比较，若某个记录的关键字和给定值相等，则查找成功。<br>—如果查找了所有的记录仍然找不到与给定值相等的关键字，则查找不成功<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//方式一</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">search</span>(<span class="params">array,key</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> i;</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i&lt;= array.length;i++)&#123;</span><br><span class="line">		<span class="keyword">if</span>(a[i] == key)&#123;</span><br><span class="line">			<span class="keyword">return</span> i;</span><br><span class="line">		&#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//方式二</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">search</span>(<span class="params">array,key</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">var</span> i= array.length;</span><br><span class="line">	a[<span class="number">0</span>] = key;</span><br><span class="line">	<span class="keyword">while</span>(a[i] != key)&#123;</span><br><span class="line">	  i--</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> i;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h1 id="插值查找-按比例查找"><a href="#插值查找-按比例查找" class="headerlink" title="插值查找(按比例查找)"></a>插值查找(按比例查找)</h1><p>查找方法类似于折半查找，只不过mid的值不再取low和high的中间值，<br>而是根据查找值在low和hight中间的大概位置确定mid<br>var mid = low +(high-low)*(num-list[low])/(list[high]-list[low]);<br>因此插值查找适用于有一定顺序规律的数组<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/Interpolationsearch.js" target="_blank" rel="noopener">代码链接</a></p>
-<h1 id="斐波那契查找-黄金查找"><a href="#斐波那契查找-黄金查找" class="headerlink" title="斐波那契查找(黄金查找)"></a>斐波那契查找(黄金查找)</h1><p>同样适用于有一定顺序规律的数组<br>在折半查找的基础上根据斐波那契数列进行分割。<br>在斐波那契数列找一个等于略大于查找表中元素个数的数F[k]，<br>将原查找表扩展为长度为F[k]-1(如果要补充元素，则补充重复最后一个元素，直到满足F[k]-1个元素)<br>进行斐波那契分割，即F[k]-1个元素分割为前半部分F[k-1]-1个元素，后半部分F[n-2]-1个元素，剩一个做mid<br>找出要查找的元素在那一部分并递归，直到找到。<br><img src="/image/fiobsearch.png" alt="fiobsearch"><br><a href="https://github.com/YooHannah/algorithm/blob/master/js/FibonacciSearch.js" target="_blank" rel="noopener">代码链接</a></p>
+            <h1 id="cookie"><a href="#cookie" class="headerlink" title="cookie"></a>cookie</h1><p>设置cookie<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">bool setcookie  (</span><br><span class="line">	string $名字</span><br><span class="line">	[, string $值]</span><br><span class="line">	[, int $过期时间  = 0]</span><br><span class="line">	[, string $路径]</span><br><span class="line">	[, string $域名]</span><br><span class="line">	[, bool $安全  = false]</span><br><span class="line">	[, bool $http只读  = false]</span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
+<p> 参数 描述<br>$名字 必需。规定 cookie 的名称。<br>$值 可选。规定 cookie 的值。<br>$有效期 可选。规定 cookie 的有效期。<br>$路径 可选。规定 cookie 的服务器路径。<br>$域名 可选。规定 cookie 的域名。<br>$安全 可选。规定是否通过安全的 HTTPS 连接来传输 cookie。<br>$http安读 可选。如果true，那么js就无法读取改cookie，增加安全性。</p>
+<p>在服务端通过$_COOKIE[‘name’] 来读取cookie了。</p>
+<p><a href="https://github.com/YooHannah/algorithm/tree/master/php/cookie" target="_blank" rel="noopener">使用cookie例子</a></p>
+<h1 id="session"><a href="#session" class="headerlink" title="session"></a>session</h1><p> session_start(); //开启session<br> $_SESSION[‘userName’] = ‘wang’; //添加session数据<br> $userName = $_SESSION[‘userName’]; //读取session数据<br> unset($_SESSION[‘XXX’]);//销毁单个session数据<br> $_SESSION = array();//销毁全部session数据<br> session_destory();//这个函数会销毁当前会话中的全部数据，并结束当前会话,但是不会重置当前会话所关联的全局变量，也不会重置会话 cookie</p>
+<p> 在php.ini配置文件中有这么一行 session.save_handler = files,<br> files,说明了php默认的是用文件读写的方式来保存session的<br> session.save_path = “/tmp”, “/tmp”即存储路径</p>
+<p><a href="https://github.com/YooHannah/algorithm/tree/master/php/shoppingcart" target="_blank" rel="noopener">使用session例子</a></p>
+<h1 id="curl"><a href="#curl" class="headerlink" title="curl"></a>curl</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"><span class="comment">//初始化</span></span><br><span class="line">$ch = curl_init();</span><br><span class="line"><span class="comment">//设置选项，包括URL</span></span><br><span class="line">curl_setopt($ch, CURLOPT_URL, <span class="string">"http://www.php.cn"</span>);</span><br><span class="line">curl_setopt($ch, CURLOPT_RETURNTRANSFER, <span class="number">1</span>);</span><br><span class="line">curl_setopt($ch, CURLOPT_HEADER, <span class="number">0</span>);</span><br><span class="line"><span class="comment">//执行并获取HTML文档内容</span></span><br><span class="line">$output = curl_exec($ch);</span><br><span class="line"><span class="comment">//释放curl句柄</span></span><br><span class="line">curl_close($ch);</span><br><span class="line"><span class="comment">//打印获得的数据</span></span><br><span class="line">print_r($output);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>函数    curl_setopt<br>参数1    curl资源变量<br>参数2    curl参数选项<br>参数3    curl参数值</p>
+<p>CURLOPT_URL           这个参数选项规定了请求的url地址。<br>CURLOPT_RETURNTRANSFER   curl请求后返回对应的结果 若需要返回值即为1。不需请求后返回的结果可设置为0。</p>
+<p>如果是get请求，我们不需要设置发送的参数。在post等请求的时候，我们需要设置发送方法为post方法。并设置发送的数据。<br>CURLOPT_POST    值设为1是使用POST方法，0为不使用POST方法<br>CURLOPT_POSTFIELDS  设置传递的数据<br>//声明使用POST方式来进行发送<br>    curl_setopt($ch, CURLOPT_POST, 1);<br>//发送什么数据呢<br>curl_setopt($ch, CURLOPT_POSTFIELDS, $data);</p>
+<p>如果是https有的时候需要忽略https的安全证书。</p>
+<p>CURLOPT_SSL_VERIFYPEER和CURLOPT_SSL_VERIFYHOST 两个参数改为false即忽略了证书。<br>curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);<br>curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);<br>CURLOPT_HEADER  决定是是否处理http的头信息，不接收处理的话可将这个值设置为0。<br>CURLOPT_TIMEOUT 设置请求的超时时间</p>
+<p>$output = curl_exec($ch); 如果执行的结果有数据。使用curl_exec执行后，会将结果返回给$output变量。<br>curl_close($ch); 关闭curl资源。<br><a href="https://github.com/YooHannah/algorithm/blob/master/php/curl1.php" target="_blank" rel="noopener">curlget 截取页面例子</a><br><a href="https://github.com/YooHannah/algorithm/blob/master/php/curlpost.php" target="_blank" rel="noopener">curlpost例子</a></p>
 
           
         
@@ -1100,7 +1113,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/keypath.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/php/php_MySQL.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1125,8 +1138,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/algorithm/keypath.html" itemprop="url">
-                  关键路径
+                <a class="post-title-link" href="/post/php/php_MySQL.html" itemprop="url">
+                  MySQL的基本知识
                 </a>
               
             
@@ -1140,8 +1153,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-02T19:15:37+08:00">
-                2017-04-02
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-26T21:37:37+08:00">
+                2017-05-26
               </time>
             
 
@@ -1178,7 +1191,46 @@
       
         
           
-            <h1 id="关键路径"><a href="#关键路径" class="headerlink" title="关键路径"></a>关键路径</h1><p>AOE网：在一个表示工程的带权有向图中，用顶点表示事件，用有向边表示活动，用边上的权值表示活动的持续时间，<br>这种有向图的边表示活动的网，我们称之为AOE网(Activity On Edge Network)<br>始点/源点:AOE网中没有入边的顶点<br>终点/汇点:AOE网中没有出边的顶点<br><img src="/image/keypath.png" alt="keypath"><br>etv:时间最早发生时间,顶点的最早发生时间<br>ltv:事件最晚发生时间，每个顶点对应事件最晚需要开始的时间，如果超出此时间将会延误着整个工期<br>ete:活动最早开工时间，弧的最早发生时间<br>lte:活动最晚发生时间，不推迟工期的最晚开工时间<br>关键路径的目的是在规划工程各项活动执行的顺序时，找出关键的活动，保证工程不延期<br><img src="/image/keypath1.png" alt="keypath1"><br><img src="/image/keypath2.png" alt="keypath2"><br><a href="https://github.com/YooHannah/algorithm/blob/master/js/CriticalPath.js" target="_blank" rel="noopener">代码链接</a></p>
+            <h1 id="五个基本单位"><a href="#五个基本单位" class="headerlink" title="五个基本单位"></a>五个基本单位</h1><p>数据库服务器:指用来运行数据库服务的一台电脑<br>数据库:一个数据库服务器里面有可以有多个数据库。主要用来分类使用。<br>数据表:专门用来区分一个数据库中的不同数据<br>数据字段:也叫数据列,日常所见表格里面的列<br>数据行:真正的数据存在每一个表的行里面</p>
+<h1 id="语句类别"><a href="#语句类别" class="headerlink" title="语句类别"></a>语句类别</h1><p>1.数据定义语言(DDL ，Data Defintion Language)语句：数据定义语句，用于定义不同的数据段、数据库、表、列、索引等。常用的语句关键字包括create、drop、alter等。<br>2.数据操作语言(DML ， Data Manipulation Language)语句：数据操纵语句，用于添加、删除、更新和查询数据库记录，并检查数据的完整性。常用的语句关键字主要包括insert、delete、update和select等。<br>3.数据控制语言(DCL， Data Control Language)<br>语句：数据控制语句，用于控制不同数据段直接的许可和访问级别的语句。<br>这些语句定义了数据库、表、字段、用户的访问权限和安全级别。主要的语句关键字包括grant、revoke等。</p>
+<h1 id="操作语句"><a href="#操作语句" class="headerlink" title="操作语句"></a>操作语句</h1><p>create database 数据库名;      创建数据库<br>show databases;                查看当前服务器有哪些数据库，显示所有数据库名<br>use 数据库名;                  选中数据库，进入到相应的数据库中<br>show tables;                   显示当前数据库下的所有表<br>drop database 数据库名;        删除数据库<br>create table 表名(字段名1 字段类型,….字段名n 字段类型n); 建表<br>desc 表名;                     查看表结构，显示表中属性</p>
+<p>show create table 表名 \G;<br>查看表的创建语句，“\G”选项的含义是使得记录能够按照字段竖着排列，对于内 容比较长的记录更易于显示。<br>可以看到表的 engine（存储引擎) 和 charset(字符集)等信息<br>在创建表的时候能够制定引擎<br>例<br>CREATE TABLE emp (<br>     useraname varchar(10) DEFAULT NULL,<br>     password date DEFAULT NULL,<br> )ENGINE=InnoDB DEFAULT CHARSET=utf8;</p>
+<p>drop table 表名;                删除表<br>alter table 表名 modify 字段名 类型字段; 修改表字段类型<br>alter table 表名 add column 字段名 类型;  增加表字段<br>alter table 表名 add 字段名2 字段类型 after 字段名1; 在字段名1后面增加字段名1<br>alter table 表名 add 字段名2 字段类型 first; 在最开始的位置增加字段<br>alter table 表名 drop column 字段名;                 删除表字段<br>alter table 表名 change 字段原名 字段新名 字段类型;  表字段改名</p>
+<p>alter table 旧表名 rename 新的表名; 修改表名</p>
+<p>修改表字段排列顺序<br>在前的字段增加和修改语句（add/change/modify）中，最后都可以加一个可选项 first|after。</p>
+<h1 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h1><h2 id="整型"><a href="#整型" class="headerlink" title="整型"></a>整型</h2><p>MySQL数据类型    所占字节    值范围<br>tinyint    1字节    -128~127<br>smallint    2字节    -32768~32767<br>mediumint    3字节    -8388608~8388607<br>int    4字节    范围-2147483648~2147483647<br>bigint    8字节    +-9.22*10的18次方<br>1.在创建表字段时，性别我们可以使用无符号的微小整型（tinyint）来表示。用0表示女、用1表示男。用2表示未知。<br>2.同样人类年龄也是，在创建表字段时可用用无符号的整型。因为人类的年龄还没有负数<br>3.在实际使用过程中。我们业务中最大需要存储多大的数值。我们创建表时，就选择什么样的类型来存储这样的值。</p>
+<h2 id="浮点类型"><a href="#浮点类型" class="headerlink" title="浮点类型"></a>浮点类型</h2><p>MySQL数据类型    所占字节    值范围<br>float(m, d)    4字节    单精度浮点型，m总个数，d小数位<br>double(m, d)    8字节    双精度浮点型，m总个数，d小数位<br>decimal(m, d)  decimal是存储为字符串的浮点数<br>浮点是非精确值，会存在不太准确的情况,而decimal叫做定点数。<br>在MySQL内部，本质上是用字符串存储的。实际使用过程中如果存在金额、钱精度要求比较高的浮点数存储，建议使用decimal（定点数）这个类型</p>
+<h2 id="字符类型"><a href="#字符类型" class="headerlink" title="字符类型"></a>字符类型</h2><p>MySQL数据类型    所占字节    值范围<br>CHAR    0-255字节    定长字符串<br>VARCHAR    0-255字节    变长字符串<br>TINYBLOB    0-255字节    不超过255个字符的二进制字符串<br>TINYTEXT    0-255字节    短文本字符串<br>BLOB    0-65535字节    二进制形式的长文本数据<br>TEXT    0-65535字节    长文本数据<br>MEDIUMBLOB    0-16 777 215字节    二进制形式的中等长度文本数据<br>MEDIUMTEXT    0-16 777 215字节    中等长度文本数据<br>LOGNGBLOB    0-4 294 967 295字节    二进制形式的极大文本数据<br>LONGTEXT    0-4 294 967 295字节    极大文本数据<br>VARBINARY(M)    允许长度0-M个字节的定长字节符串    值的长度+1个字节<br>BINARY(M)    M    允许长度0-M个字节的定长字节符串</p>
+<h2 id="时间类型"><a href="#时间类型" class="headerlink" title="时间类型"></a>时间类型</h2><p>MySQL数据类型    所占字节    值范围<br>date    3字节    日期，格式：2014-09-18<br>time    3字节    时间，格式：08:42:30<br>datetime    8字节    日期时间，格式：2014-09-18 08:42:30<br>timestamp    4字节    自动存储记录修改的时间<br>year    1字节    年份</p>
+<h2 id="复合类型"><a href="#复合类型" class="headerlink" title="复合类型"></a>复合类型</h2><p>MySQL数据类型    说明    举例<br>set    集合类型    set(“member”, “member2″, … “member64″)<br>enum    枚举类型    enum(“member1″, “member2″, … “member65535″)<br>一个 ENUM 类型只允许从一个集合中取得一个值；而 SET 类型允许从一个集合中取得任意多个值。</p>
+<h2 id="常用中文字符集"><a href="#常用中文字符集" class="headerlink" title="常用中文字符集"></a>常用中文字符集</h2><p>gbk_chinese_ci    简体中文, 不区分大小写<br>utf8_general_ci    Unicode (多语言), 不区分大小写<br>mysql在写utf-8的时候写的是utf8。不加中间的中横线</p>
+<h1 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h1><p>使用show engines命令可显示当前服务器支持的所有引擎<br>引擎名称<br>MyISAM    常用。读取效率很高的引擎<br>InnoDB    常用。写入，支持事处等都支持<br>Archive    不常用。归档引擎，压缩比高达1:10，用于数据归档<br>NDB    不常用。主要在MySQL 集群服务器中使用，</p>
+<p>行锁：写入、更新操作的时候将这一行锁起来，不让其他人再操作了。<br>表锁：写入、更新操作时，将表给锁起来不让其他人再操作了。<br>事务：同时操作多个数据，若其中的一个数据操作失败。可回滚到操作之前。常用于银行、电商、金融等系统中</p>
+<p>MyISAM<br>不支持事务，表锁(表级锁，加锁会锁住整个表)，支持全文索引,操作速度快。常用于读取多的业务。<br>myisam存储引擎表由myd和myi组成。.myd用来存放数据文件，.myi用来存放索引文件。<br>对于myisam存储引擎表，mysql数据库只缓存其索引文件，数据文件的缓存由操作系统本身来完成。</p>
+<p>InnoDB<br>支持事务，主要面向在线事务处理(OLTP)方面的应用。<br>行锁设计，支持外键，即默认情况下读取操作不加锁。</p>
+<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><p>1.普通索引    最基本的索引，它没有任何限制<br>alter table 表  add index(字段)</p>
+<p>2.唯一索引    某一行企用了唯一索引则不准许这一列的行数据中有重复的值。针对这一列的每一行数据都要求是唯一的<br>alter table 表  add UNIQUE(字段)</p>
+<p>3.主键索引    它是一种特殊的唯一索引，不允许有空值。一般是在建表的时候同时创建主键索引，常用于用户ID。类似于书中的页码<br>alter table 表  add PRIMARY KEY(字段)</p>
+<p>4.全文索引    对于需要全局搜索的数据，进行全文索引<br>alter table 表  add FULLTEXT(字段)</p>
+<p>创建表时可在创建表语句后加上对应的类型即可声明索引：<br>CREATE TABLE test (<br>     id INT NOT NULL ,<br>     username VARCHAR(20) NOT NULL ,<br>     password INT NOT NULL ,<br>     content INT NOT NULL ,<br>     PRIMARY KEY (id),<br>     INDEX pw (password),<br>     UNIQUE (username),<br>     FULLTEXT (content)<br> ) ENGINE = InnoDB;</p>
+<h1 id="插入记录"><a href="#插入记录" class="headerlink" title="插入记录"></a>插入记录</h1><p>  方法一：<br>    insert into 表 values(值1,值2,值n);<br>  表中有多少个字段就必须要插入多少个值。一个不能多，一个也不能少。若有默认值，不想传，可以写上null。<br>  顺序应该和表字段的排序一致。<br>  方法二：<br>  insert into 表(字段1,字段2,字段n) values(值1,值2,值n);<br>  除非有必填字段必须要写入值外。如果有默认值的不想写可以忽略不写。mysql会自动补主默认值。<br>  以表(字段1,字段2,字段n)字段顺序为值的顺序。<br>  基本语法变形：一次插入多条记录<br>  INSERT INTO user(username,password,sex)<br>     values(‘ll’, ‘abcdef’, 1),<br>     ( ‘loe’, ‘bcdeef’, 0),<br>     ( ‘key’, ‘123456’, 1),<br>     (‘tom’, ‘987654’, 1);</p>
+<h1 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h1><p>select <em> from 表;                             查询表中所有字段中的所有结果,”</em>“ 是一种正则表达式的写法，表示匹配所有<br>select 字段1[,字段2,字段n] from 表;           指定字段查询<br>select distinct 字段 from 表;                 查询单个字段不重复记录 distinct<br>select  字段 from 表 where 条件;              条件查询 where,条件可以是逻辑比较运算符的比较式</p>
+<p>select 字段 from 表 order  by 字段 排序关键词; 查询结果按照字段排序关键词排序<br>排序关键词:<br>asc    升序排列，从小到大（默认）<br>desc    降序排列，从大到小</p>
+<p>select 字段 from 表 order  by 字段1 排序关键词,… …字段n desc|asc;<br>order by 后面可以跟多个不同的字段排序，并且排序字段的不同结果集的顺序也不同，<br>如果排序字段的值一样，则值相同的字段按照第二个排序字段进行排序。</p>
+<p>select 字段 from 表  limit 数量; 对于查询或者排序后的结果集，如果希望只显示一部分而不是全部，使用 limit 关键字结果集数量限制。<br>select 字段 from 表 order by 字段 关键词 limit 数量; 限制结果集并排序<br>select 字段 from 表  limit 偏移量,数量; 结果集区间选择，偏移量从0开始，0是第一条数据<br>select 函数(字段) from 表; 从表中将按字段查询的结果进行函数处理<br>函数<br>sum    求和<br>count    统计总数<br>max    最大值<br>min    最小值<br>avg    平均值</p>
+<p>select <em> from 表 group by 字段;    将表中数据按字段分组<br>select </em> from 表 group by 字段 having 条件; 分组结果再过滤。having 是筛选组 而where是筛选记录<br>例：统计省份数量后再进行分组显示： select count(province),province  from money group by province;</p>
+<p>整体的SQL语句配合使用的语法结构如下：<br>SELECT<br>     [字段1 [as 别名1],[函数(字段2) ,]……字段n]<br> FROM 表名<br> [WHERE where条件]<br> [GROUP BY 字段]<br> [HAVING where_contition]<br> [order 条件]<br> [limit 条件]<br> 例<br> 查询money表字段：id,username,balance,province 要求id&gt;1 余额大于50，使用地区进行分组。我们使用用户id进行降序，要求只准显示3条。<br> select id,username,balance,province from money where id &gt; 1 and balance &gt; 50 group by province order by id desc limit 3;</p>
+<h1 id="多表联合查询"><a href="#多表联合查询" class="headerlink" title="多表联合查询"></a>多表联合查询</h1><h2 id="内连接"><a href="#内连接" class="headerlink" title="内连接"></a>内连接</h2><p>将两个表中存在联结关系的字段符合联结关系的那些记录形成记录集的联结。<br>基本语法1：<br>select 表1.字段 [as 别名],表n.字段  from 表1 [别名],表n where 条件;<br>取满足条件的数据的在各表中的各字段<br>例<br>select user.uid ,user.username as username,order_goods.oid,order_goods.uid,order_goods.name as shopname from user,order_goods  where user.uid = order_goods.uid;<br>若表user中某条数据x的uid与表order_goods中的某条数据y的uid相同,则取出user表中数据x的 uid、username，取出order_goods中数据y的uid,name,其中order_goods的name的值以shopname的值显示<br>基本语法2：<br>select 表1.字段 [as 别名],表n.字段  from 表1 INNER JOIN 表n on  条件;<br>例<br>select user.uid ,user.username as username,order_goods.oid,order_goods.uid,order_goods.name as shopname from user inner join order_goods  on  user.uid = order_goods.uid;<br>效果同基本语法1</p>
+<p>##　外连接<br>会选出其他不匹配的记录，分为外左联结和外右联结。<br>左连接：包含所有的左边表中的记录甚至是右边表中没有和它匹配的记录<br>select 表1.字段 [as 别名],表n.字段  from 表1 LEFT JOIN 表n on  条件;<br>例<br>select *  from user left join order_goods  on  user.uid = order_goods.uid;<br>以左边ｕｓｅｒ为主，查询哪些用户未购买过商品，并将用户信息显示出来，ｕｓｅｒ表全部显示</p>
+<p>右连接：包含所有的右边表中的记录甚至是右边表中没有和它匹配的记录<br>select 表1.字段 [as 别名],表n.字段  from 表1 right JOIN 表n on  条件;<br>例<br>select *  from user right join order_goods  on  user.uid = order_goods.uid;<br>查询商品表中哪些用户购买过商品，并将用户信息显示出来，order_goods全部显示</p>
+<h2 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h2><p>需要的条件是另外一个select语句的结果，即使用子查询<br>用于子查询的关键字包括in、not in、=、!=、exists、not exists等。<br>select 字段  from 表 where 字段 in(条件)<br>例<br>select *  from user where uid in (select uid from order_goods);<br>从order_goods取出uid这一列，将uid在user中对应的数据取出来</p>
+<h2 id="记录联合"><a href="#记录联合" class="headerlink" title="记录联合"></a>记录联合</h2><p>使用 union 和 union all 关键字，将两个表的数据按照一定的查询条件查询出来后，将结果合并到一起显示。<br>union all 把结果直接合并在一起<br>union 是将 union all 后的结果进行一次distinct，去除重复记录后的结果。</p>
+<h1 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h1><p>使用update<br>update 表名 set 字段1=值1,字段2=值2,字段n=值n where 条件；<br>例<br>update emp set  balance=balance-500 where userid = 15;<br>将emp表中userid为15的数据的balance减15<br>同时对两个表进行更新<br>update 表1,表2 set 字段1=值1,字段2=值2,字段n=值n where 条件<br>例<br>update money m,user u m.balance=m.balance<em>u.age where m.userid=u.id;<br>修改money，将money表的别名设置为m；user表的别名设置为u；将m表的余额改为m表的balance</em>用户表的age。执行条件是：m.userid = u.id</p>
+<h1 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h1><p>用delete<br>DELETE FROM 表 [where 条件];<br>删除时如果不加where条件，会清空掉整个表的记录，返回被删除的记录数</p>
+<p>清空表 如果使用，<br>truncate table 表名;<br>表中若有自增字段，这个自增字段会将起始值恢复成1</p>
+<h1 id="权限"><a href="#权限" class="headerlink" title="权限"></a>权限</h1><h2 id="添加权限"><a href="#添加权限" class="headerlink" title="添加权限"></a>添加权限</h2><p>grant 权限 on 库.表 to ‘用户‘@’主机’ identified by ‘密码’;<br>grant select, insert on test.* to ‘liwenkai‘@’localhost’ identified by ‘4311’;<br>给予liwenkai用户，在本机连接test库所有表的权限。操作的这些表具有查询和写入权限</p>
+<h2 id="删除权限"><a href="#删除权限" class="headerlink" title="删除权限"></a>删除权限</h2><p>revoke 权限 on 库.表 from ‘用户‘@’主机’;<br>revoke select, insert on test.* to ‘liwenkai‘@’localhost’ identified by ‘4311’;<br>给予liwenkai用户，在本机连接test库所有表的权限。操作的这些表具有查询和写入权限</p>
+<h2 id="参数说明"><a href="#参数说明" class="headerlink" title="参数说明"></a>参数说明</h2><p>grant all        在grant后接all说明给予所有权限<br>revoke all       在revoke后接all说明删除所有权限<br>权限 on .        . 所明给予所有库所有表的操作权限<br>‘用户‘@’主机’    主机里面若为%。任意来源的主机均可以使用这个用户来访问</p>
 
           
         
@@ -1217,7 +1269,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/TopologySorting.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/php/php_MySQLuse.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1242,8 +1294,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/algorithm/TopologySorting.html" itemprop="url">
-                  拓扑排序
+                <a class="post-title-link" href="/post/php/php_MySQLuse.html" itemprop="url">
+                  php中MySQL的使用
                 </a>
               
             
@@ -1257,8 +1309,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-02T19:14:37+08:00">
-                2017-04-02
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-26T21:37:37+08:00">
+                2017-05-26
               </time>
             
 
@@ -1295,9 +1347,34 @@
       
         
           
-            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>DAG(Directed Acyclic)图/无环图：无环的有向图<br>‘活动’：所有的工程或者某种流程都可以分为的若干个小的工程或者阶段<br>AOV(Active On Vertex Network)网：在一个表示工程的有向图中，用顶点表示活动，用弧表示活动之间的优先关系<br>这样的有向图为顶点表示活动的网即AOV网<br>拓扑序列：设G=(V,E)是一个具有n个顶点的有向图，V中的顶点序列V1，V2，……Vn满足若从顶点Vi到Vj有一条路径，则在顶点序列中顶点Vi必在顶点Vj之前,我们称这样的顶点序列为一个拓扑序列,<br>拓扑排序：所谓的拓扑排序，其实就是对一个有向图构造拓扑序列的过程,保证活动是按一定顺序进行<br><img src="/image/tuopu1.png" alt="tuopu1"></p>
-<h1 id="对AOV网进行拓扑排序的方法和步骤"><a href="#对AOV网进行拓扑排序的方法和步骤" class="headerlink" title="对AOV网进行拓扑排序的方法和步骤"></a>对AOV网进行拓扑排序的方法和步骤</h1><p>——从AOV网中选择一个没有前驱的顶点(入度为0的顶点),并且输出它；<br>——从网中删去该顶点，并且删去从该顶点发出的全部有向边(将有向边终点入度减一)<br>——重复上述两步，直到剩余网中不再没有前驱的顶点为止。<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/TopologicalSort.js" target="_blank" rel="noopener">代码链接</a></p>
-<h1 id="算法时间复杂度"><a href="#算法时间复杂度" class="headerlink" title="算法时间复杂度"></a>算法时间复杂度</h1><p>对一个具有n个顶点，e条边的网来说，初始建立入度为0的顶点栈，要检查所有顶点一次，执行时间为O(n);<br>排序中，若AOV网无回路，则每个顶点入、出栈各一次，每个表结点被检查一次，因而执行时间是O(n+e);<br>因此整个算法时间复杂度是O(n+e)</p>
+            <h1 id="php连接数据库"><a href="#php连接数据库" class="headerlink" title="php连接数据库"></a>php连接数据库</h1><p>查看数据库主机，用户名<br>use myaql；<br>select Host from user;<br>select user from user;</p>
+<h2 id="连接数据库服务器"><a href="#连接数据库服务器" class="headerlink" title="连接数据库服务器"></a>连接数据库服务器</h2><p>mysql_connect函数<br>$con = mysql_connect(“localhost”,”peter”,”abc123”);<br>参数1    主机<br>参数2    数据库服务器登陆名<br>参数3    密码<br>参数4    数据库的名称<br>参数5    数据库服务器端口不填默认3306</p>
+<p>若参数4，数据库名称在此步已填并择，不需要执行第三步</p>
+<h2 id="判断链接是否正常"><a href="#判断链接是否正常" class="headerlink" title="判断链接是否正常"></a>判断链接是否正常</h2><p>如果有错误，存在错误号<br>if (mysql_errno($conn)) {<br>   echo mysql_error($conn);<br>   exit;<br>}</p>
+<p>mysql_errno 返回连接错误号，无错误返回0<br>参数1    传入mysql_connect返回的资源</p>
+<p>mysql_error 返回连接错误字符串<br>参数1    传入mysql_connect返回的资源</p>
+<h2 id="选择数据库"><a href="#选择数据库" class="headerlink" title="选择数据库"></a>选择数据库</h2><p>mysql_select_db函数<br>mysql_select_db(‘user’,$conn);<br>参数1    传入mysql_connect返回的资源<br>参数2    需要连接的数据库名</p>
+<h2 id="设置字符集"><a href="#设置字符集" class="headerlink" title="设置字符集"></a>设置字符集</h2><p>mysql_set_charset<br>mysql_set_charset(‘utf8’,$conn);<br>参数1    字符集类型<br>参数2    传入mysql_connect返回的资源</p>
+<h2 id="准备SQL语句"><a href="#准备SQL语句" class="headerlink" title="准备SQL语句"></a>准备SQL语句</h2><p>要传入数据库的操作语句<br>注意参数如何拼接</p>
+<p>如果是int类型的就使用<br>$sql=”insert into user(mycon) values(“.$my_con.”)”;<br>//或者<br>$sql=’insert into user(mycon) values(‘.$my_con.’)’;</p>
+<p>如果是字符型的就要使用单引号或者双引号括起来<br>$sql=”insert into user(mycon) values(‘“.$my_con.”‘)”;<br>//或者这样写<br>$sql=’insert into user(mycon) values(“‘.$my_con.’”)’;</p>
+<p>多个<br>$sql = “INSERT INTO user (username,password,createtime,createip)<br>values<br>(‘“ . $username . “‘,’” . $password . “‘,” . $time . “,’” . $ip . “‘)”;</p>
+<h2 id="发送SQL语句"><a href="#发送SQL语句" class="headerlink" title="发送SQL语句"></a>发送SQL语句</h2><p>$result = mysql_query($sql,$conn);</p>
+<h2 id="根据不同操作，判断执行是否正常或者遍历数据"><a href="#根据不同操作，判断执行是否正常或者遍历数据" class="headerlink" title="根据不同操作，判断执行是否正常或者遍历数据"></a>根据不同操作，判断执行是否正常或者遍历数据</h2><p>发送的是select类别的语句，通常需要将结果输出显示出来。就需要用到遍历显示数据的函数<br>函数    mysql_fetch_array<br>功能    得到result结果集中的数据，返回数组进行便利<br>参数1    传入查询出来的结果变量<br>参数2    传入MYSQLI_NUM返回索引数组，MYSQLI_ASSOC返回关联数组，MYSQLI_BOTH返回索引和关联</p>
+<p>函数    mysql_fetch_assoc<br>功能    得到result结果集中的数据，返回关联数组进行便利<br>参数1    传入查询出来的结果变量</p>
+<p>函数    mysql_fetch_row<br>功能    得到result结果集中的数据，返回索引数组进行便利<br>参数1    传入查询出来的结果变量</p>
+<p>函数    mysql_fetch_object<br>功能    得到result结果集中的数据，返回对象进行遍历<br>参数1    传入查询出来的结果变量</p>
+<p>函数    mysql_num_rows<br>功能    返回查询出来的结果总数<br>参数1    传入查询出来的结果变量</p>
+<p>函数    sql_num_rows<br>功能    返回查询出来的结果总数<br>参数1    传入查询出来的结果变量</p>
+<p>如果发送的是insert的语句，通常需要得到是否执行成功，或者同时拿到自增的ID。<br>函数    mysqli_fetch_field<br>功能    遍历数据行<br>参数1    传入查询出来的结果变量</p>
+<p>如果发送的是update和delete类别的语句。只需要判断是否执行成功即可。</p>
+<p>if ($result) {<br>   echo ‘成功’;<br>} else {<br>    echo $sql;//查看是否是SQL语句拼接有问题<br>  echo ‘失败’;<br>}</p>
+<h2 id="关闭数据库"><a href="#关闭数据库" class="headerlink" title="关闭数据库"></a>关闭数据库</h2><p>函数    mysqli_close<br>功能    关闭数据库连接<br>参数1    传入mysqli_connect返回的资源</p>
+<p>mysql_close($conn);//关闭数据库</p>
+<h1 id="显示服务器信息函数"><a href="#显示服务器信息函数" class="headerlink" title="显示服务器信息函数"></a>显示服务器信息函数</h1><p>函数    mysqli_get_server_info<br>功能    返回服务器信息<br>参数1    传入mysqli_connect返回的资源</p>
+<p>函数    mysqli_get_server_version<br>功能    返回服务器版本<br>参数1    传入mysqli_connect返回的资源</p>
+<p><a href="https://github.com/YooHannah/algorithm/blob/master/php/registration/connect.php" target="_blank" rel="noopener">一个用户注册的代码链接</a></p>
+<h2 id="数据显示乱码终极解决办法"><a href="#数据显示乱码终极解决办法" class="headerlink" title="数据显示乱码终极解决办法"></a>数据显示乱码终极解决办法</h2><p>多个不同的文件系统中一定要统一编码。<br>9个要点分别是：<br>    1.html编码与MySQL编码一致<br>    2.PHP编码与MySQL编码一致<br>    3.若有header头发送字符集，请与数据库一样<br>      如果php中有header头，一定要是utf-8的<br>      header(‘content-type:text/html;charset=utf-8’);<br>    4.&lt;meta http-equiv=“Content-Type”content=“text/html; charset=utf-8” /&gt;要和页面的文字编码一致<br>    5.数据库建库的字符集要统一<br>    6.表的字符集要统一<br>    7.列的字符集要统一(表设了,列就默认写表的)<br>    8.连接,校验的字符集要统一<br>      通过mysqli_set_charset(‘utf8’)来MySQL连接、结果和校验的字符集设置。<br>      注：数据库的字符集声明和文件中的略有不同。utf8为mysql数据库的，utf-8为文件中使用的<br>    9.结果集的字符集要统一</p>
 
           
         
@@ -1336,7 +1413,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/algorithm/shortestpath.html">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/php/php_imge.html">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="YooHannah">
@@ -1361,8 +1438,8 @@
             
               
                 
-                <a class="post-title-link" href="/post/algorithm/shortestpath.html" itemprop="url">
-                  最短路径
+                <a class="post-title-link" href="/post/php/php_imge.html" itemprop="url">
+                  图片上传
                 </a>
               
             
@@ -1376,8 +1453,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-02T19:12:37+08:00">
-                2017-04-02
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-02T22:22:37+08:00">
+                2017-05-02
               </time>
             
 
@@ -1414,9 +1491,13 @@
       
         
           
-            <p>网图：两个顶点经过的边上权值之和最少的路径<br>非网图：两个顶点之间经过的边数最少的路径<br>源点：路径起始的第一个顶点<br>终点：最后一个顶点<br><img src="/image/shortestpath1.png" alt="shortestpath1"></p>
-<h1 id="迪杰斯特拉-Dijkstra-算法"><a href="#迪杰斯特拉-Dijkstra-算法" class="headerlink" title="迪杰斯特拉(Dijkstra)算法"></a>迪杰斯特拉(Dijkstra)算法</h1><p>一个顶点到所有顶点的最短路径<br>主要思路：一步步求出它们之间顶点的最短路径，过程中都是基于已经求出的最短路径的基础上，求得更远顶点的最短路径<br>编程思路：类似于最小生成树普里姆算法<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/ShortestPath_Dijkstra.js" target="_blank" rel="noopener">代码链接</a></p>
-<h1 id="佛洛依德-Floyd-算法"><a href="#佛洛依德-Floyd-算法" class="headerlink" title="佛洛依德(Floyd)算法"></a>佛洛依德(Floyd)算法</h1><p>扩展版迪杰斯特拉(Dijkstra)算法，求图中所有结点到所有结点的最大路径，结果由二维数组展现<br><a href="https://github.com/YooHannah/algorithm/blob/master/js/ShortestPath_Floyd.js" target="_blank" rel="noopener">代码链接</a><br><img src="/image/shortestpath2.png" alt="shortestpath2"></p>
+            <h1 id="用函数画图"><a href="#用函数画图" class="headerlink" title="用函数画图"></a>用函数画图</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">//创建图片</span><br><span class="line">$img = imagecreatetruecolor(500, 500);</span><br><span class="line"></span><br><span class="line">//分配颜色 为图片准备需要用到的颜色</span><br><span class="line">$red = imagecolorallocate($img, 255, 0, 0);</span><br><span class="line"></span><br><span class="line">$green = imagecolorallocate($img, 0, 255, 0);</span><br><span class="line"></span><br><span class="line">$blue = imagecolorallocate($img, 0, 0, 255);</span><br><span class="line"></span><br><span class="line">$pur = imagecolorallocate($img, 255, 0, 255);</span><br><span class="line"></span><br><span class="line">$yellow = imagecolorallocate($img, 121, 72, 0);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//填充背景 (0,0)(500,500)指图片左上角和右下角两点，从而确定图片的矩形</span><br><span class="line">imagefilledrectangle($img, 0, 0, 500, 500, $green);</span><br><span class="line"></span><br><span class="line">//画对角线 对角线起始点坐标</span><br><span class="line">imageline($img, 0, 0, 500, 500, $red);</span><br><span class="line">imageline($img, 500, 0, 0, 500, $blue);</span><br><span class="line"></span><br><span class="line">//画圆</span><br><span class="line">//bool imagefilledellipse ( resource $图片资源 , int $圆心x , int $圆心y , int $圆的宽 , int $圆的高 , int $圆的颜色 )</span><br><span class="line">imagefilledellipse($img, 250, 250, 200, 200, $yellow);</span><br><span class="line"></span><br><span class="line">//圆中间画矩形，同样通过左上角右下角确定矩形</span><br><span class="line">imagefilledrectangle($img, 200, 200, 300, 300, $blue);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//保存图片，图片名为haha.jpg</span><br><span class="line">imagejpeg($img, &apos;haha.jpg&apos;);</span><br><span class="line"></span><br><span class="line">//销毁资源</span><br><span class="line">imagedestroy($img);</span><br><span class="line"></span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="画验证码"><a href="#画验证码" class="headerlink" title="画验证码"></a>画验证码</h1><p><a href="https://github.com/YooHannah/algorithm/blob/master/php/Verificationcode.php" target="_blank" rel="noopener">代码链接</a></p>
+<h1 id="图片加水印"><a href="#图片加水印" class="headerlink" title="图片加水印"></a>图片加水印</h1><p>bool imagecopymerge ( resource $目标图片 , resource $来源图片, int $目标开始的x , int $目标开始的y, int $来源的x , int $来源的y , int $来源的宽 , int $来源的高 , int $透明度)<br>注意：<br>透明度的值为0-100的整数。imagecopy和imagecopymerge的区别在于一个有透明度，一个没有透明度。<br>大致步骤：<br> 1.打开原图（也叫操作的目标图片）<br> 2.打开水印图（也叫水印来源图片）<br> 3.使用 imagecopymerge 将小图合并至大图的指定位置<br> 4.输出图片<br> 5.销毁资源<br> <a href="https://github.com/YooHannah/algorithm/blob/master/php/Watermark.php" target="_blank" rel="noopener">代码链接</a></p>
+<h1 id="图像放缩和裁剪"><a href="#图像放缩和裁剪" class="headerlink" title="图像放缩和裁剪"></a>图像放缩和裁剪</h1><p>操作方式说明：<br>从来源图片的开始点(x,y)起，指定的宽高的大小图片。放至到目标图片的起点(x,y)，指定宽高大小的图片中。</p>
+<h2 id="缩放图片"><a href="#缩放图片" class="headerlink" title="缩放图片"></a>缩放图片</h2><p>imagecopyresampled    重采样拷贝部分图像并调整大小<br>bool imagecopyresampled ( resource $目标图 , resource $来源图 , int $目标开始的x位置 , int $目标开始的y位置 , int $来源开始的x位置 , int $来源开始的y位置 , int $目标图片的宽 , int $目标图片的高, int $来源图片的宽 , int $来源图片的高 )<br>大致步骤：<br>1.打开来源图片<br>2.设置图片缩放百分比（缩放）<br>3.获得来源图片，按比调整大小<br>4.新建一个指定大小的图片为目标图<br>5.将来源图调整后的大小放到目标中<br>6.销毁资源<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">//打开来源图片</span><br><span class="line">$image = imagecreatefrompng(&apos;fbb.png&apos;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//定义百分比，缩放到0.1大小</span><br><span class="line">$percent = 0.1;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 将图片宽高获取到</span><br><span class="line">list($width, $height) = getimagesize(&apos;fbb.png&apos;);</span><br><span class="line"></span><br><span class="line">//设置新的缩放的宽高</span><br><span class="line">$new_width = $width * $percent;</span><br><span class="line">$new_height = $height * $percent;</span><br><span class="line"></span><br><span class="line">//创建新图片</span><br><span class="line">$new_image = imagecreatetruecolor($new_width, $new_height);</span><br><span class="line"></span><br><span class="line">//将原图$image按照指定的宽高，复制到$new_image指定的宽高大小中</span><br><span class="line">imagecopyresampled($new_image, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);</span><br><span class="line"></span><br><span class="line">header(&apos;content-type:image/jpeg&apos;);</span><br><span class="line">imagejpeg($new_image);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure></p>
+<h2 id="裁剪图片"><a href="#裁剪图片" class="headerlink" title="裁剪图片"></a>裁剪图片</h2><p>imagecopyresized    拷贝部分图像并调整大小<br>bool imagecopyresized ( resource $目标图 , resource $来源图 , int $目标开始的x位置 , int $目标开始的y位置 , int $来源开始的x位置 , int $来源开始的y位置 , int $目标图片的宽 , int $目标图片的高, int $来源图片的宽 , int $来源图片的高 )<br>大致步骤：<br> 1.打开来源图片和目标图片<br> 2.截取来源图片中的点，设置宽高。放至到目标图片中。（裁剪）<br> 3.保存图片输入<br> 4.销毁资源</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line"> $dst = imagecreatefrompng(&apos;hsq.png&apos;);</span><br><span class="line"> $src = imagecreatefrompng(&apos;du.png&apos;);</span><br><span class="line"> imagecopyresized($dst, $src, 281, 71, 407, 154, 132, 160, 80, 90);</span><br><span class="line"> header(&apos;content-type:image/jpeg&apos;);</span><br><span class="line">imagejpeg($dst);</span><br><span class="line">imagedestroy($dst);</span><br><span class="line"> imagedestroy($src);</span><br><span class="line"> ?&gt;</span><br></pre></td></tr></table></figure>
 
           
         
@@ -1450,7 +1531,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/20/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><span class="page-number current">21</span><a class="page-number" href="/page/22/">22</a><span class="space">&hellip;</span><a class="page-number" href="/page/28/">28</a><a class="extend next" rel="next" href="/page/22/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/20/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><span class="page-number current">21</span><a class="page-number" href="/page/22/">22</a><span class="space">&hellip;</span><a class="page-number" href="/page/29/">29</a><a class="extend next" rel="next" href="/page/22/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1489,7 +1570,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">271</span>
+              <span class="site-state-item-count">286</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1506,7 +1587,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-count">24</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

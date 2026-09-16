@@ -1,0 +1,952 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="mySQL,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="什么是成本？在MySQL中，一条查询语句的执行成本实际上是由两部分构成的：  I/O 成本 MyISAM 和 InnoDB都需要将数据和索引存储到磁盘，当进行查询时，就需要把数据或者索引加载到内存中。从磁盘到内存这个加载过程，损耗的时间，我们称之为 I/O成本。   CPU成本 读取记录的时候，需要检测记录是否满足对应的搜索条件、对结果集进行排序等等操作发生的损耗都称之为 CPU成本。   成本常">
+<meta name="keywords" content="mySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL 查询成本计算">
+<meta property="og:url" content="http://yoohannah.github.io/post/mySQL/8.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="什么是成本？在MySQL中，一条查询语句的执行成本实际上是由两部分构成的：  I/O 成本 MyISAM 和 InnoDB都需要将数据和索引存储到磁盘，当进行查询时，就需要把数据或者索引加载到内存中。从磁盘到内存这个加载过程，损耗的时间，我们称之为 I/O成本。   CPU成本 读取记录的时候，需要检测记录是否满足对应的搜索条件、对结果集进行排序等等操作发生的损耗都称之为 CPU成本。   成本常">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/73.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/74.png">
+<meta property="og:updated_time" content="2026-09-16T02:13:06.476Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL 查询成本计算">
+<meta name="twitter:description" content="什么是成本？在MySQL中，一条查询语句的执行成本实际上是由两部分构成的：  I/O 成本 MyISAM 和 InnoDB都需要将数据和索引存储到磁盘，当进行查询时，就需要把数据或者索引加载到内存中。从磁盘到内存这个加载过程，损耗的时间，我们称之为 I/O成本。   CPU成本 读取记录的时候，需要检测记录是否满足对应的搜索条件、对结果集进行排序等等操作发生的损耗都称之为 CPU成本。   成本常">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/systemDesign/73.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/mySQL/8.html">
+
+
+
+
+
+  <title> MySQL 查询成本计算 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/mySQL/8.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                MySQL 查询成本计算
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-09-11T16:09:37+08:00">
+                2026-09-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="什么是成本？"><a href="#什么是成本？" class="headerlink" title="什么是成本？"></a>什么是成本？</h1><p>在MySQL中，一条查询语句的执行成本实际上是由两部分构成的：</p>
+<ul>
+<li><strong>I/O 成本</strong><ul>
+<li>MyISAM 和 InnoDB都需要将数据和索引存储到磁盘，当进行查询时，就需要把数据或者索引加载到内存中。从磁盘到内存这个加载过程，损耗的时间，我们称之为 <strong>I/O成本</strong>。</li>
+</ul>
+</li>
+<li><strong>CPU成本</strong><ul>
+<li>读取记录的时候，需要检测记录是否满足对应的搜索条件、对结果集进行排序等等操作发生的损耗都称之为 CPU成本。</li>
+</ul>
+</li>
+<li><strong>成本常数</strong><ul>
+<li>I/O成本常数：1.0 ，MySQL规定读取一个页面花费的成本默认是1.0</li>
+<li>CPU成本常数：0.2，读取以及检测一条记录是否符合搜索条件的成本，默认是0.2<h1 id="单表查询成本"><a href="#单表查询成本" class="headerlink" title="单表查询成本"></a>单表查询成本</h1></li>
+</ul>
+</li>
+</ul>
+<p>MySQL中找出成本最低方案的过程，大致如下：</p>
+<ol>
+<li>根据搜索条件，找出所有可能使用的索引。</li>
+<li>计算全表扫描的代价。</li>
+<li>计算使用不同索引，执行查询的代价。</li>
+<li>对比各种执行方案的代价，找出成本最低的那个。</li>
+</ol>
+<h2 id="根据搜索条件，找出所有可能使用的索引。"><a href="#根据搜索条件，找出所有可能使用的索引。" class="headerlink" title="根据搜索条件，找出所有可能使用的索引。"></a>根据搜索条件，找出所有可能使用的索引。</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> orders</span><br><span class="line">    <span class="keyword">WHERE</span> order_no</span><br><span class="line">    <span class="keyword">IN</span> (<span class="string">'DD00_6S'</span>, <span class="string">'DD00_9S'</span>, <span class="string">'DD00_10S'</span>)</span><br><span class="line">    <span class="keyword">AND</span> expire_time&gt; <span class="string">'2021-03-22 18:28:28'</span></span><br><span class="line">    <span class="keyword">AND</span> expire_time&lt;= <span class="string">'2021-03-22 18:35:09'</span></span><br><span class="line">    <span class="keyword">AND</span> insert_time &gt; expire_time</span><br><span class="line">    <span class="keyword">AND</span> order_note <span class="keyword">LIKE</span> <span class="string">'%7****排1%'</span></span><br><span class="line">    <span class="keyword">AND</span> order_status = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Indexes</th>
+<th style="text-align:left">Columns</th>
+<th style="text-align:left">Index Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">PRIMARY</td>
+<td style="text-align:left">id</td>
+<td style="text-align:left">Unique</td>
+</tr>
+<tr>
+<td style="text-align:left">u_idx_day_status</td>
+<td style="text-align:left">insert_time, order_status, expire_time</td>
+<td style="text-align:left">Unique</td>
+</tr>
+<tr>
+<td style="text-align:left">idx_order_no</td>
+<td style="text-align:left">order_no</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">idx_expire_time</td>
+<td style="text-align:left">expire_time</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">idx_note</td>
+<td style="text-align:left">order_note</td>
+</tr>
+</tbody>
+</table>
+<p>分析一下上面SQL中的涉及到的搜索条件：</p>
+<p>1) IN (‘DD00_6S’, ‘DD00_9S’, ‘DD00_10S’)这个搜索条件，可以使用二级索引：idx_order_no。</p>
+<p>2) AND expire_time &gt; ‘2021-03-22 18:28:28’ AND expire_time &lt;= ‘2021-03-22 18:35:09’这个搜索条件可以使用二级索引 idx_expire_time。</p>
+<p>3) AND insert_time &gt; expire_time： 这个搜索条件索引列没有和常数进行比较，所以就不能使用索引。</p>
+<p>4) AND order_note LIKE ‘%7排1%’： order_note是有索引的，但是由于like查询 % 出现在了左边，不符合最左前缀原则，索引索引就失效。</p>
+<p>5) AND order_status = 0; order_status 是处在联合索引的第二个位置上，所以索引是无法使用的。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">EXPLAIN</span> <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> orders</span><br><span class="line">    <span class="keyword">WHERE</span> order_no</span><br><span class="line">    <span class="keyword">IN</span> (<span class="string">'DD00_6S'</span>, <span class="string">'DD00_9S'</span>, <span class="string">'DD00_10S'</span>)</span><br><span class="line">    <span class="keyword">AND</span> expire_time&gt; <span class="string">'2021-03-22 18:28:28'</span></span><br><span class="line">    <span class="keyword">AND</span> expire_time&lt;= <span class="string">'2021-03-22 18:35:09'</span></span><br><span class="line">    <span class="keyword">AND</span> insert_time &gt; expire_time</span><br><span class="line">    <span class="keyword">AND</span> order_note <span class="keyword">LIKE</span> <span class="string">'%7****排1%'</span></span><br><span class="line">    <span class="keyword">AND</span> order_status = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">id</th>
+<th style="text-align:left">select_type</th>
+<th style="text-align:left">table</th>
+<th style="text-align:left">p..</th>
+<th style="text-align:left">type</th>
+<th style="text-align:left">possible_keys</th>
+<th style="text-align:left">key</th>
+<th style="text-align:left">key_len</th>
+<th style="text-align:left">ref</th>
+<th style="text-align:left">rows</th>
+<th style="text-align:left">filtered</th>
+<th style="text-align:left">Extra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">SIMPLE</td>
+<td style="text-align:left">orders</td>
+<td style="text-align:left">.</td>
+<td style="text-align:left">range</td>
+<td style="text-align:left">idx_order_no,idx_expire_time</td>
+<td style="text-align:left">idx_expire_time</td>
+<td style="text-align:left">5</td>
+<td style="text-align:left">(NULL)</td>
+<td style="text-align:left">38</td>
+<td style="text-align:left">0.13</td>
+<td style="text-align:left">Using index condition; Using where</td>
+</tr>
+</tbody>
+</table>
+<h2 id="计算全表扫描的代价"><a href="#计算全表扫描的代价" class="headerlink" title="计算全表扫描的代价"></a>计算全表扫描的代价</h2><p>对于InnoDB存储引擎来说，全表扫描指的就是把聚簇索引中的记录和给定的搜索条件依次进行比较，把符合条件的记录加入到结果集中。要把聚簇索引对应的页面加载到内存中，然后在检测记录是否符合条件。</p>
+<p>查询成本 = I/O成本+CPU 的成本,所以就计算全表扫描的代价需要两个信息：</p>
+<p>1) 聚簇索引占用的页面数<br>2) 该表的记录数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show table status like &apos;orders&apos;\G</span><br></pre></td></tr></table></figure>
+<p><img src="/image/systemDesign/73.png" alt></p>
+<p>1) rows :表示的是表中的记录数，<strong>值为10591</strong>。而实际的记录数为10567。在InnoDB中 rows是一个估值。但是计算成本的时候，按照 show table status like ‘orders’\G显示的结果来进行计算。</p>
+<p>2) Data_length :表示当前表 占用的存储空间的字节数。对于InnoDB来说，聚簇索引占用的存储空间的大小就是该值的大小。</p>
+<ul>
+<li>Data_length = 聚簇索引的页面的数量 x 每个页面的大小。</li>
+<li>聚簇索引页面数量 = 1589248 / 16 / 1024 = <strong>97</strong></li>
+</ul>
+<p>得到上两个值之后，接下来计算一下全表扫描的成本：</p>
+<ul>
+<li>I/O成本： 97 x 1.0 + 1.1 = 98.1;<ul>
+<li>97表示聚簇索引页面数</li>
+<li>1.0 表示加载一个页面的成本常数</li>
+<li>1.1 是一个微调值</li>
+</ul>
+</li>
+<li>CPU成本： 10591 x 0.2 + 1.0 = 2119.2<ul>
+<li>10591表中记录数，但是是估算值</li>
+<li>0.2 访问一条记录所需的成本常数</li>
+<li>1.0 微调值。</li>
+</ul>
+</li>
+<li>I/O + CPU，全表扫描所需总成本 = <strong>2217.3</strong></li>
+</ul>
+<h2 id="计算使用不同的索引，执行查询的代价"><a href="#计算使用不同的索引，执行查询的代价" class="headerlink" title="计算使用不同的索引，执行查询的代价"></a>计算使用不同的索引，执行查询的代价</h2><h3 id="使用idx-expire-time执行查询的成本分析"><a href="#使用idx-expire-time执行查询的成本分析" class="headerlink" title="使用idx_expire_time执行查询的成本分析"></a>使用idx_expire_time执行查询的成本分析</h3><p>对应的搜索条件为：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AND expire_time&gt; '2021-03-22 18:28:28' AND expire_time&lt;= '2021-03-22 18:35:09'</span><br></pre></td></tr></table></figure>
+<p>上面的条件的区间范围是 2021-03-22 18:28:28 , 2021-03-22 18:35:09</p>
+<p>使用idx_expire_time进行搜索会使用 二级索引 + 回表查询的方式，MySQL计算这种查询的成本的依赖两个方面的数据：</p>
+<p>1) 范围区间的数量</p>
+<ul>
+<li>查询优化器认为 读取索引一个范围区间的I/O 成本和读取一个页是相同。</li>
+<li>范围区间的二级索引付出的I/O 成本： 1 x 1.0 = 1.0;</li>
+</ul>
+<p>2) 需要回表的记录数</p>
+<p>对于本例来说，就是要计算2021-03-22 18:28:28到2021-03-22 18:35:09这个范围中包含多少二级索引记录，计算过程：<br><img src="/image/systemDesign/74.png" alt></p>
+<p>根据MySQL的算法，测出的该二级索引的范围区间的记录数大约是：<br>AND expire_time&gt; ‘2021-03-22 18:28:28’ AND expire_time&lt;= ‘2021-03-22 18:35:09’ 之间大约有38条记录。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">id</th>
+<th style="text-align:left">select_type</th>
+<th style="text-align:left">table</th>
+<th style="text-align:left">p..</th>
+<th style="text-align:left">type</th>
+<th style="text-align:left">possible_keys</th>
+<th style="text-align:left">key</th>
+<th style="text-align:left">key_len</th>
+<th style="text-align:left">ref</th>
+<th style="text-align:left">rows</th>
+<th style="text-align:left">filtered</th>
+<th style="text-align:left">Extra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">SIMPLE</td>
+<td style="text-align:left">orders</td>
+<td style="text-align:left">.</td>
+<td style="text-align:left">range</td>
+<td style="text-align:left">idx_order_no,idx_expire_time</td>
+<td style="text-align:left">idx_expire_time</td>
+<td style="text-align:left">5</td>
+<td style="text-align:left">(NULL)</td>
+<td style="text-align:left">38</td>
+<td style="text-align:left">0.13</td>
+<td style="text-align:left">Using index condition; Using where</td>
+</tr>
+</tbody>
+</table>
+<p>读取38条二级索引记录需要付出CPU成本：</p>
+<ul>
+<li>38 x 0.2 + 0.01 = 7.61</li>
+</ul>
+<p>在通过二级索引获取到记录之后，还要干两件事情：</p>
+<ol>
+<li>根据这些记录的主键值，到聚簇索引中做回表操作：<ul>
+<li>二级索引之间有多少记录，就需要多少次回表，有多少次回表，就需要进行多少次的页面IO。</li>
+<li>上面的执行计划中预计有38条需要进行回表，回表带来的I/O成本： 38 x 1.0 = 38</li>
+</ul>
+</li>
+<li><p>回表操作后，得到完整的用户记录，然后在检测其他的搜索条件是否成立。</p>
+<ul>
+<li><p>找到完整的记录之后，再检测</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">IN ('DD00_6S', 'DD00_9S', 'DD00_10S')</span><br><span class="line">AND insert_time &gt; expire_time</span><br><span class="line">AND order_note LIKE '%7****排1%'</span><br><span class="line">AND order_status = 0;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>二级索引区间范围中共有38条数据，对应了聚簇索引汇中38条完整记录，读取并且检测是否符合其余查询条件的CPU成本： 38 x 0.2 = 7.6</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>本例中，使用idx_expire_time索引执行查询的成本如下：</p>
+<ul>
+<li>I/O成本： 38 x 1.0 + 1.0 = 39</li>
+<li>CPU成本： 38 x 0.2 +0.01 + 38 x0.2 = 15.21 (读取二级索引记录的成本 + 读取并检查回表聚簇索引的记录成本)</li>
+</ul>
+<p>idx_expire_time执行查询的总成本就是： 39 + 15.21 = <strong>54.21</strong></p>
+<h4 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h4><ol>
+<li>为什么这里计算I/O 没有微调参数？<br>I/O 相关的微调值 只有在全量表扫描时才会使用，当前两次I/O成本计算直接使用页数 × 1.0 来计算</li>
+<li>为什么这里计算CPU 有的加微调参数，有的没加？<br>上面两处CPU成本计算<br>+0.01 是 MySQL 给”读取索引记录”这一操作附带的固定启动成本，只挂在 cpu_index_tuple_cost 的计算路径上<br>而”回表读取聚簇索引完整记录”走的是 cpu_tuple_cost 路径，公式里本来就没有这个常数项<br>小结—&gt;不同场景计算公式不同</li>
+</ol>
+<h3 id="使用idx-order-no执行查询的成本分析"><a href="#使用idx-order-no执行查询的成本分析" class="headerlink" title="使用idx_order_no执行查询的成本分析"></a>使用idx_order_no执行查询的成本分析</h3><p>idx_order_no 对应的搜索条件是</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">IN ('DD00_6S', 'DD00_9S', 'DD00_10S')</span><br></pre></td></tr></table></figure>
+<p>上面的条件是三个单点区间：</p>
+<ul>
+<li>访问这三个范围区间的二级索引付出的I/O成本： 3 x 1.0 = 3</li>
+<li>需要回表的记录数：为58</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">id</th>
+<th style="text-align:left">select_type</th>
+<th style="text-align:left">table</th>
+<th style="text-align:left">p..</th>
+<th style="text-align:left">type</th>
+<th style="text-align:left">possible_keys</th>
+<th style="text-align:left">key</th>
+<th style="text-align:left">key_len</th>
+<th style="text-align:left">ref</th>
+<th style="text-align:left">rows</th>
+<th style="text-align:left">filtered</th>
+<th style="text-align:left">Extra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">SIMPLE</td>
+<td style="text-align:left">orders</td>
+<td style="text-align:left">.</td>
+<td style="text-align:left">range</td>
+<td style="text-align:left">idx_order_no</td>
+<td style="text-align:left">idx_order_no</td>
+<td style="text-align:left">152</td>
+<td style="text-align:left">(NULL)</td>
+<td style="text-align:left">58</td>
+<td style="text-align:left">100.00</td>
+<td style="text-align:left">Using index condition</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>读取这些二级索引记录的CPU成本： 58 x 0.2 + 0.01 = 11.61<ul>
+<li>根据这些记录的主键值到聚簇索引中做回表。所需的I/O成本： 58 x 1.0 = 58.0</li>
+<li>获取到完整记录之后，还需要用其他条件进行检查过滤， CPU成本: 58 x 0.2 = 11.6</li>
+</ul>
+</li>
+<li>所以本例中的成本总值为：<ul>
+<li>IO成本： 3 + 58 x 1.0 = 61 (范围区间数量 + 预估二级索引的记录数)</li>
+<li>CPU成本： 58 x 0.2 + 0.01 + 58 x 0.2 = 23.21</li>
+<li>总成本： 61 + 23.21 = <strong>84.21</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="对比各种方案，找出成本最低的"><a href="#对比各种方案，找出成本最低的" class="headerlink" title="对比各种方案，找出成本最低的"></a>对比各种方案，找出成本最低的</h2><ul>
+<li>全表扫描：2117.3</li>
+<li>使用idx_expire_time索引：54.21</li>
+<li>使用idx_order_no索引：84.21</li>
+</ul>
+<p>最终选择 idx_expire_time。</p>
+<h1 id="连接查询成本"><a href="#连接查询成本" class="headerlink" title="连接查询成本"></a>连接查询成本</h1><h2 id="驱动表的扇出值计算"><a href="#驱动表的扇出值计算" class="headerlink" title="驱动表的扇出值计算"></a>驱动表的扇出值计算</h2><p>连接查询成本的构成：</p>
+<p>1) 单次查询驱动表的成本<br>2) 多次查询被驱动表的成本</p>
+<p>对驱动表进行查询后，得到的记录条数称之为<strong>驱动表的扇出</strong>。</p>
+<p>查询1</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> orders <span class="keyword">as</span> s1 <span class="keyword">inner</span> <span class="keyword">join</span> orders2 <span class="keyword">as</span> s2;</span><br></pre></td></tr></table></figure>
+<p>假设s1是驱动表，只能使用全表扫描，扇出值很好计算，就是驱动表中有多少条记录，扇出值就是多少.</p>
+<p>查询2</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> orders <span class="keyword">as</span> s1 <span class="keyword">inner</span> <span class="keyword">join</span> orders2 <span class="keyword">as</span> s2</span><br><span class="line"><span class="keyword">where</span> expire_time&gt; <span class="string">'2021-03-22 18:28:28'</span>  <span class="keyword">AND</span> expire_time&lt;= <span class="string">'2021-03-22 18:35:09'</span></span><br></pre></td></tr></table></figure>
+<p>假设s1表是驱动表，对于驱动表的查询可以使用到索引idx_expire_time进行查询，此时区间范围的记录有多少，扇出值就是多少。</p>
+<h2 id="连接查询成本分析"><a href="#连接查询成本分析" class="headerlink" title="连接查询成本分析"></a>连接查询成本分析</h2><p>连接查询成本计算公式：</p>
+<p>连接查询的总成本 = 单次访问驱动表的成本 + 驱动表扇出数 x 单次访问被驱动表的成本。</p>
+<ul>
+<li>左外或者右外连接只需要分别为驱动表和被驱动表选择成本最低的访问方法就可以了，因为驱动表固定的。</li>
+<li>如果是内连接，驱动表和被驱动表可以互换的，所以要考虑两个问题：<ul>
+<li>要选择最优表连接顺序</li>
+<li>分别为驱动表和被驱动表选择成本最低的访问方法</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">    *</span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">    orders <span class="keyword">AS</span> s1</span><br><span class="line"><span class="keyword">INNER</span> <span class="keyword">JOIN</span> orders2 <span class="keyword">AS</span> s2 <span class="keyword">ON</span> s1.order_no = s2.order_note</span><br><span class="line"><span class="keyword">WHERE</span></span><br><span class="line">    s1.expire_time &gt; <span class="string">'2021-03-22 18:28:28'</span></span><br><span class="line">    <span class="keyword">AND</span> s1.expire_time &lt;= <span class="string">'2021-03-22 18:35:09'</span></span><br><span class="line">    <span class="keyword">AND</span> s2.expire_time &gt; <span class="string">'2021-03-22 18:35:09'</span></span><br><span class="line">    <span class="keyword">AND</span> s2.expire_time &lt;= <span class="string">'2021-03-22 18:35:59'</span>;</span><br></pre></td></tr></table></figure>
+<p>在Explain 和查询语句之间，加一个 FORMAT = JSON，得出一个JSON格式的计划，里面就有该计划花费的成本：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">explain</span> <span class="keyword">FORMAT</span> = <span class="keyword">JSON</span> <span class="keyword">SELECT</span></span><br><span class="line">    *</span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">    orders <span class="keyword">AS</span> s1</span><br><span class="line"><span class="keyword">INNER</span> <span class="keyword">JOIN</span> orders2 <span class="keyword">AS</span> s2 <span class="keyword">ON</span> s1.order_no = s2.order_note</span><br><span class="line"><span class="keyword">WHERE</span></span><br><span class="line">    s1.expire_time &gt; <span class="string">'2021-03-22 18:28:28'</span></span><br><span class="line">    <span class="keyword">AND</span> s1.expire_time &lt;= <span class="string">'2021-03-22 18:35:09'</span></span><br><span class="line">    <span class="keyword">AND</span> s2.expire_time &gt; <span class="string">'2021-03-22 18:35:09'</span></span><br><span class="line">    <span class="keyword">AND</span> s2.expire_time &lt;= <span class="string">'2021-03-22 18:35:59'</span>;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mySQL/" rel="tag"># mySQL</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/mySQL/7.html" rel="next" title="order by 与 group by 优化">
+                <i class="fa fa-chevron-left"></i> order by 与 group by 优化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/mySQL/9.html" rel="prev" title="索引单表/多表优化">
+                索引单表/多表优化 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">286</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是成本？"><span class="nav-number">1.</span> <span class="nav-text">什么是成本？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#单表查询成本"><span class="nav-number">2.</span> <span class="nav-text">单表查询成本</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#根据搜索条件，找出所有可能使用的索引。"><span class="nav-number">2.1.</span> <span class="nav-text">根据搜索条件，找出所有可能使用的索引。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算全表扫描的代价"><span class="nav-number">2.2.</span> <span class="nav-text">计算全表扫描的代价</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算使用不同的索引，执行查询的代价"><span class="nav-number">2.3.</span> <span class="nav-text">计算使用不同的索引，执行查询的代价</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用idx-expire-time执行查询的成本分析"><span class="nav-number">2.3.1.</span> <span class="nav-text">使用idx_expire_time执行查询的成本分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#补充"><span class="nav-number">2.3.1.1.</span> <span class="nav-text">补充</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用idx-order-no执行查询的成本分析"><span class="nav-number">2.3.2.</span> <span class="nav-text">使用idx_order_no执行查询的成本分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对比各种方案，找出成本最低的"><span class="nav-number">2.4.</span> <span class="nav-text">对比各种方案，找出成本最低的</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#连接查询成本"><span class="nav-number">3.</span> <span class="nav-text">连接查询成本</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#驱动表的扇出值计算"><span class="nav-number">3.1.</span> <span class="nav-text">驱动表的扇出值计算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#连接查询成本分析"><span class="nav-number">3.2.</span> <span class="nav-text">连接查询成本分析</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

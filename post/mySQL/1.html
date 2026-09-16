@@ -1,0 +1,1097 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="mySQL,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="My Little World" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="数据库索引(database index)索引是一种数据结构，针对特定key, 可以使读取数据加快，但写入速度降低处理常见数据量过大情况下进行查找问题，避免挨个遍历数据(无论是从前往后还是从后往前找)，提高查找效率O(n)比如具体查找，找到key = xxx的 那条数据范围查找，找到key在[xxx, xxx]之间的数据  MySQL官方对索引定义：索引是MySQL存储引擎用于快速查找记录的一种数">
+<meta name="keywords" content="mySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库索引和冲突解决">
+<meta property="og:url" content="http://yoohannah.github.io/post/mySQL/1.html">
+<meta property="og:site_name" content="My Little World">
+<meta property="og:description" content="数据库索引(database index)索引是一种数据结构，针对特定key, 可以使读取数据加快，但写入速度降低处理常见数据量过大情况下进行查找问题，避免挨个遍历数据(无论是从前往后还是从后往前找)，提高查找效率O(n)比如具体查找，找到key = xxx的 那条数据范围查找，找到key在[xxx, xxx]之间的数据  MySQL官方对索引定义：索引是MySQL存储引擎用于快速查找记录的一种数">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/7.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/8.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/9.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/10.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/2.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/6.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/3.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/4.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/5.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/11.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/t1.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/t2.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/t3.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/t4.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/timeWheel1.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/timeWheel2.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/skip1.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/skip2.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/12.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/22.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/23.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/24.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/25.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/26.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/27.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/28.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/29.png">
+<meta property="og:image" content="http://yoohannah.github.io/image/systemDesign/30.png">
+<meta property="og:updated_time" content="2026-09-16T03:42:16.919Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据库索引和冲突解决">
+<meta name="twitter:description" content="数据库索引(database index)索引是一种数据结构，针对特定key, 可以使读取数据加快，但写入速度降低处理常见数据量过大情况下进行查找问题，避免挨个遍历数据(无论是从前往后还是从后往前找)，提高查找效率O(n)比如具体查找，找到key = xxx的 那条数据范围查找，找到key在[xxx, xxx]之间的数据  MySQL官方对索引定义：索引是MySQL存储引擎用于快速查找记录的一种数">
+<meta name="twitter:image" content="http://yoohannah.github.io/image/systemDesign/7.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoohannah.github.io/post/mySQL/1.html">
+
+
+
+
+
+  <title> 数据库索引和冲突解决 | My Little World </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">My Little World</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">learn and share</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoohannah.github.io/post/mySQL/1.html">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="YooHannah">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/psb.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="My Little World">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="My Little World" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                数据库索引和冲突解决
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2026-08-31T09:36:37+08:00">
+                2026-08-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="数据库索引-database-index"><a href="#数据库索引-database-index" class="headerlink" title="数据库索引(database index)"></a>数据库索引(database index)</h1><p>索引是一种数据结构，针对特定key, 可以使读取数据加快，但写入速度降低<br>处理常见数据量过大情况下进行查找问题，避免挨个遍历数据(无论是从前往后还是从后往前找)，提高查找效率O(n)<br>比如<br>具体查找，找到key = xxx的 那条数据<br>范围查找，找到key在[xxx, xxx]之间的数据</p>
+<blockquote>
+<p>MySQL官方对索引定义：索引是MySQL存储引擎用于快速查找记录的一种数据结构。<br>简单理解为：索引是排好序的数据结构，帮助我们快速的查询数据库表中的数据。<br>• 索引是一种特殊的数据文件<br>  。 MyISAM存储引擎：数据文件和索引文件是分开的。索引文件中保存的是数据记录的地址。<br>  。InnoDB存储引擎：表数据本身就是按照B+Tree组织的索引结构。ibd文件 就是数据+索引存储文件。<br>• 索引是一种数据结构<br>  。索引是一个独立的、物理的数据结构，它是由一个表中的一个字段或者多个字段的值组合成的集合。<br>• MySQL中，默认使用的是B+Tree结构管理索引。</p>
+</blockquote>
+<h2 id="没有索引"><a href="#没有索引" class="headerlink" title="没有索引"></a>没有索引</h2><p>查找数据需要从磁盘中一条一条进行对比</p>
+<h2 id="二叉查找树索引"><a href="#二叉查找树索引" class="headerlink" title="二叉查找树索引"></a>二叉查找树索引</h2><p>使用二叉查找树，构建索引<br>• 任何一个节点的左子树上的键值，都必须小于当前节点。<br>• 任何一个节点的右子树上的键值，都必须大于当前节点。<br>• 每个节点分别保存，字段数据和指向数据记录的物理地址的指针。|<br><img src="/image/systemDesign/7.png" alt></p>
+<h2 id="平衡二叉树索引"><a href="#平衡二叉树索引" class="headerlink" title="平衡二叉树索引"></a>平衡二叉树索引</h2><p>平衡二叉树通过让树的叶子节点自动旋转和调整，让整课树保持平衡状态。<br>平衡二叉树的特点：<br>• 在符合二叉查找树的条件下，还满足任何节点的两个子树的高度差最大为1.<br><img src="/image/systemDesign/8.png" alt><br>AVL树 在失去平衡之后（两个子树的高度差&gt;1），可以通过旋转使其恢复平衡。<br><img src="/image/systemDesign/9.png" alt><br><img src="/image/systemDesign/10.png" alt></p>
+<p>AVL树的优点<br>•叶子节点的层级相对减少了。<br>• 形态上能够保持平衡<br>• 查找效率提升，大量的顺序插入操作也不会导致查询性能下降<br>AVL树的缺点：<br>• 一个节点最多分裂出两个子节点，树的高度太高，导致IO次数过多<br>• 节点里面只保存一个关键字，每次操作获取的目标数据太少</p>
+<h2 id="哈希索引-hash-index"><a href="#哈希索引-hash-index" class="headerlink" title="哈希索引(hash index)"></a>哈希索引(hash index)</h2><p>通过哈希函数对某一特定key值进行计算生成hash map key值，将数据存储或者内存地址存在对应的hash map key值对应的bucket中<br>这样可以实现O(1)时间复杂度的查找效率，对于读写都是<br>hash map key值唯一且有限，比如从1-100000000<br>对于哈希函数计算结果相同的情况，可以在bucket中通过链表进行存储或者在hash map 中继续查找有无空位填入</p>
+<p>• Hash索引底层是由Hash表实现的，是根据键值&lt;key，value&gt;存储数据。<br>• Hash索引非常适合 根据Key查找value值，也就是单个key的查询或者说<strong>等值查询</strong>。</p>
+<p>个人理解： 类似将数据根据关键key通过哈希函数强制进行归类，这样在查找的时候，进行同样的哈希计算，直接过滤掉哈希值不同的情况，从而降低挨个查找的工作量</p>
+<p><img src="/image/systemDesign/2.png" alt></p>
+<p><img src="/image/systemDesign/6.png" alt></p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>Hash索引的优点：<br>•O(1) reads and writes<br>•索引结构是比较紧凑的，因为只存储对应的hash值，如果只是做等值查询，不包含排序或者范围查询的需求，可以选择Hash索引。<br>•在没有哈希冲突的情况下，等值查询访问hash索引的速度是比较快的，理论上比B+Tree快</p>
+<p>Hash索引的缺点：<br>•索引结构是比较紧凑的，因为只存储对应的hash值，如果只是做等值查询，不包含排序或者范围查询的需求，可以选择Hash<br>•在没有哈希冲突的情况下，等值查询访问hash索引的速度是比较快的，理论上比B+Tree快。<br>•哈希索引只包含哈希值和行指针，不存储字段值，不能使用索引中的值来避免读取行。<br>•哈希索引只支持等值比较查询。不支持任何范围查询。<br>•哈希索引的数据并不是按照索引值顺序存储的，所以就无法用于排序。<br>•在遇到大量的Hash值相等的情况时，性能下降明显。</p>
+<p>缺点简记：<br>由于hash function 会将数据均匀分布到不同的bucket中，这使得在存储磁盘中存储地址不连续，导致连续查找性能较差，只能存储在内存中<br>存内存的话RAM 访问性能高，但是expensive, size less, key 也要适配ram 的存储方式<br>不能范围查找，O(n), 需要遍历所有数据才能找到符合条件的数据<br>不能排序，同上</p>
+<p>应用场景<br>• 在MYSQL中 哈希索引主要应用于内存表，也就是Memory引擎。<br>• InnoDB引擎不支持 对表中字段创建Hash索引</p>
+<h2 id="预写日志"><a href="#预写日志" class="headerlink" title="预写日志"></a>预写日志</h2><p>主要用于解决数据丢失问题，在对数据进行操作的每一步都将操作日志记录下来存在磁盘中，当数据丢失时，可以通过根据之前的日志进行操作<br>从而来重建索引和数据<br>这个方案也适用于其他类型索引情况<br>对于哈希索引，需要先写入日志，再更改哈希索引</p>
+<h2 id="B-tree索引"><a href="#B-tree索引" class="headerlink" title="B-tree索引"></a>B-tree索引</h2><p>B-tree结构和存储<br><img src="/image/systemDesign/3.png" alt><br><img src="/image/systemDesign/4.png" alt><br>B-Tree的查找操作</p>
+<ol>
+<li>B-Tree的每个节点的元素，可以视为一次I/O的读取，树的高度就表示了最多的IO次数。</li>
+<li>在相同数量的总元素的个数下，每个节点的元素个数越多，高度越低，查询需要的IO次数就越少。<br><img src="/image/systemDesign/5.png" alt></li>
+</ol>
+<p>• B-Tree的优点<br>    。 B树可以在内部节点存储键值和相关的记录数据，因此把频繁访问的数据放在靠近根节点的位置，可以提高热点数据的查询效率。<br>• B-Tree的缺点<br>    。 B-Tree中每个节点不仅包含数据的key值，还有data数据。当data数据较大的时候，会导致每个节点存储的key值減少了，就会导致B树的层数变高。增加查询的1/O次数。<br>• 使用场景：B树的使用场景主要应用于文件系统以及部分数据库索引，比如MongoDB，大部分的关系型数据库索引是使用的 B+树实现</p>
+<h2 id="B-tree索引-1"><a href="#B-tree索引-1" class="headerlink" title="B+tree索引"></a>B+tree索引</h2><p>B-Tree存在的问题<br>•在B树中，每个节点都会存储数据，如果每个节点存储的都是行数据，那么占用的内存就会大大的增加，树的高度也会变高，就会增加I/O操作的次数。<br>•B树适用于随机访问，但是范围查询是不适合的，因为范围查询通常需要顺序访问一系列的键值，不是随机访问。由于B树的结构的特点，无法有效的执行范围查询</p>
+<p>B+Tree 在B-Tree基础之上做了一些优化。B+Tree更加适合实现存储索引结构。InnoDB引擎就是通过B+Tree实现其索引结构的。</p>
+<p><strong>【解决读多写少的问题】</strong></p>
+<p>一颗m阶的B+树要满足下列要求：</p>
+<ol>
+<li>每个分支节点至多有m颗子树。</li>
+<li>根节点或者没有子树，或者至少有两棵子树。</li>
+<li>除了根节点以外，其他每个分支节点至少要有【m/2】 棵子树。</li>
+<li>有n棵子树的节点，恰好有n个关键字。子树的个数与该节点的关键字的个数相同。（b-tree 有n-1 个关键字）</li>
+<li>所有的叶子节点包含全部的关键字，以及指向相应记录的指针，而且叶子节点的关键字，自小到大顺序链接。并且所有的叶子节点链接到了一起。</li>
+<li>所有的分支节点中，仅包含它的各个子节点中最大的关键字以及指向子节点的指针。</li>
+<li>B+树中，只有叶子节点保存数据，其他节点仅仅是索引，没有任何的数据关联</li>
+</ol>
+<p><img src="/image/systemDesign/11.png" alt></p>
+<p>B+Tree结构存储索引的特点<br>从MySQL数据页的角度看B+Tree：<br>• MySQL的InnoDB存储引擎中，最小存储单元就是页（每页默认大小是16KB）<br>•MySQL的设计者将一颗B+Tree的节点的大小 就设置为了等于一个页（16KB），这样做的目的是为了每个节点只需要一次IO就能够完整的载入一页数据。</p>
+<p><img src="/image/systemDesign/t1.png" alt><br>MySQL B+Tree存储索引的特点</p>
+<ol>
+<li>MySQL的B+Tree 分支节点的数据页，存放的是”关键字＋指针”。</li>
+<li>叶子节点的数据页，存放的”关键字＋全部数据”，这里单指聚簇索引来说。</li>
+<li>B+Tree的根节点是保存在内存中的，子节点存储在磁盘上的。</li>
+<li>所有的节点按照索引键大小排序，构成一个双向链表，便于范围查询。</li>
+</ol>
+<p>B+Tree的查找操作<br>两种查找方式：<br>1.跟B-Tree一样，通过指针实现随机查找，从根节点开始。<br>2.根据叶子节点进行顺序查找，在一个节点的内部可以实现折半查找，在多个节点之间，因为是通过指针连接的，所以要使用顺序查找。</p>
+<p>单个元素的查询：</p>
+<p><img src="/image/systemDesign/t2.png" alt></p>
+<p>范围查询：IO次数更少，查询简便。</p>
+<p><img src="/image/systemDesign/t3.png" alt></p>
+<p>B+Tree的优势<br>对于B-Tree，B+Tree具有以下优势：</p>
+<ol>
+<li>B+Tree的中间节点是没有数据，所以同样大小的磁盘页，B+Tree可以容纳更多的节点元素（保存更多的索引），在数据量相同的情况下，B+Tree比B-Tree会更加的矮胖，因此查询时lO次数也就更少。</li>
+<li>B+Tree的查询效率是更加稳定的，B+Tree在查询时必须要找到叶子节点，而B-Tree只需要找到匹配的元素就可以了。因此B-Tree的查找性能是不稳定的，最好的情况是只查根节点，最坏的情况是找到叶子节点，而B+Tree的查找每次都是稳定的。</li>
+<li>B+Tree扫库和扫表的能力更强，如果我们需要根据索引进行数据表的扫描，对B-Tree 需要将整棵树遍历一遍，而B+Tree只需要遍历所有的叶子结点即可 +子节点之间有指针连接）。</li>
+<li>B+Tree排序能力更强，在上面范围查询的例子中，B+Tree天然具有排序的功能</li>
+</ol>
+<h3 id="一棵B-Tree可以存放多少数据？"><a href="#一棵B-Tree可以存放多少数据？" class="headerlink" title="一棵B+Tree可以存放多少数据？"></a>一棵B+Tree可以存放多少数据？</h3><p>MySQL中将B+Tree的节点的大小，设置为等于一个页（16KB）•<br><img src="/image/systemDesign/t4.png" alt><br>上面是一棵高度为2的B+Tree，存在一个根节点和 若干的叶子节点，那么这棵B+Tree的能够存放的总记录数为：</p>
+<p>根节点指针数*单个叶子节点的记录数</p>
+<p>计算步骤：</p>
+<ol>
+<li>计算根节点的指针数：假设表的主键是int类型，占用4个字节，指针大小为6个字节。一个页大概可以存储：<br>16384/（4b+ 6b）=1638，一个节点最多存储1638个索引指针。</li>
+<li>计算每个叶子节点存储的记录数：假设一行记录的大小为1KB，那么一页就可以存储16行数据，16KB/ 1KB=16。</li>
+<li>高度为2的B+Tree可以存放的记录数为：16384 x 16=26208条 数据记录，以此可以推算出高度为3的B+Tree可以存放的记<br>录数为：1638 x 1638 x 16=4千万条数据。<br>InnoDB中的B+Tree高度一般为1~3层，就可以满足干万级别的数据存储</li>
+</ol>
+<h2 id="LSM-TREE索引-SSTable"><a href="#LSM-TREE索引-SSTable" class="headerlink" title="LSM-TREE索引 + SSTable"></a>LSM-TREE索引 + SSTable</h2><p>lsm-tree： log structure merge tree ，日志结构合并树<br><strong> 解决写多读少 </strong>(利用顺序I/O)的问题，磁盘利用率比B+Tree（一般为50%左右）高(利用compaction)<br>sstable： Sorted String Table ，排序字符串表</p>
+<blockquote>
+<p> 一些前置相关知识</p>
+<p>后端开发常见层式结构：时间轮、跳表、LSM-Tree</p>
+<ol>
+<li>海量并发的定时任务组织：时间轮</li>
+<li>高并发读写的有序结构组织：跳表</li>
+<li>空间利用率以及写性能高的磁盘数据组织：LSM-Tree<br>时间轮：linux内核、skynet、kafka、netty<br>跳表：redis.lucene（倒排索引）、rocksdb<br>Ism-tree: leveldb rocksdb分布式关系型数据库 tidb （mysql） cockroachdlb （pg）</li>
+</ol>
+</blockquote>
+<h3 id="时间轮"><a href="#时间轮" class="headerlink" title="时间轮"></a>时间轮</h3><p>适用于在多线程环境执行海量并发定时任务</p>
+<p>通过指定</p>
+<ul>
+<li>最小时间精度(最低层级执行时间误差),min_time_precision，</li>
+<li>最大时间范围(整个时间轮的时间范围，周期时长，超出会出错)max_time_range，</li>
+<li>层级（决定任务映射次数和每次映射执行时间）level，<br>定制时间轮框架</li>
+</ul>
+<p>当时间轮运行时，最低层级时间指针minlevelPointer每移动一次（经过min_time_precision时间）<br>就会执行当前时刻上存储的多个任务，当minlevelPointer移动到的当前层级最后一个时间格子的时候<br>执行完当前定时任务，就会从更高一层级的当前level(+1)Pointer指定的时间格子获取定时任务<br>给到当前最低层级的每个时间格子(根据具体任务过期时间与当前时间间隔计算该放在哪个时间格子里)<br>然后等待时间执行<br>当更高一层级的level(+1)Pointer移动到的当前层级最后一个时间格子的时候<br>就会从更高两层级的当前level(+2)Pointer指定的时间格子获取定时任务<br>给到当前level+1层级的每个时间格子，等待时间执行<br>以此类推<br><img src="/image/systemDesign/timeWheel1.png" alt><br><img src="/image/systemDesign/timeWheel2.png" alt></p>
+<p>好处：<br>只用关心最低层级时间周期minlevelPeriod内的任务，即最近minlevelPeriod 时间范围内的任务<br>不用过早遍历轮询高层层级时间范围里的任务是否要执行<br>用空间换时间，把大量不同到期时间的任务映射到有限的时间槽（bucket）中，避免对海量任务进行全局排序或反复扫描。</p>
+<p>区分任务队列</p>
+<p>优先队列：</p>
+<p>“我必须知道谁最早到期。”<br>        ↓<br>      排序<br>        ↓<br>    找最早任务</p>
+<p>时间轮：<br>“我不关心谁最早。”<br>        ↓<br>按照时间分桶<br>        ↓<br>当前时间到了哪个 bucket<br>        ↓<br>处理 bucket</p>
+<p>优先队列解决的是“有序性”，时间轮解决的是“时间范围内的快速定位”。</p>
+<h3 id="跳表"><a href="#跳表" class="headerlink" title="跳表"></a>跳表</h3><p>多层级有序链表<br>数据的增删改查都要先进行节点的查询，所有数据存在最后一层<br><img src="/image/systemDesign/skip1.png" alt><br>数据查找时层级从上到下依次查找，直到找到匹配的节点或者到达最底层<br>比如现在要插入17，<br>第一层找到6再往后找是null, 就往下移动一层接着从6开始找<br>6-25 17小于25，下移<br>6-9 17大于9，从9开始找<br>9-25 17小于25，下移<br>9-12 17大于12，从12开始找<br>12-19 17小于19，但已经是最后一层<br>17应该插入在12和19之间，指针层级随机生成，因为如果始终保持理想多层有序链表，那么每次插入删除都要重新生成层级结构，计算开销大</p>
+<p><img src="/image/systemDesign/skip2.png" alt><br>redis 有序集合 为什么使用跳表 而不是红黑树？</p>
+<p>红黑树相比跳表本身没有空间浪费，且时间复杂度更稳定，但它本质是平衡二叉树，由于回溯过程复杂，并不能直接用来进行范围查找<br>B+树相比跳表都是最后一层包含所有数据，但是查找时间复杂度跟树高度有关，比调表更高，二者适用场景不同，<br>跳表适用于组织<strong>内存数据</strong><br>B+树适用于组织<strong>磁盘数据</strong></p>
+<h3 id="布隆过滤器"><a href="#布隆过滤器" class="headerlink" title="布隆过滤器"></a>布隆过滤器</h3><p><a href="https://github.com/YooHannah/algorithm/blob/master/justCode/bigData.js#L42" target="_blank" rel="noopener">详见</a></p>
+<h3 id="顺序I-O"><a href="#顺序I-O" class="headerlink" title="顺序I/O"></a>顺序I/O</h3><p>顺序IO<br>• 磁盘访问时间：寻道时间 + 旋转时间 + 传输时间； 大概10ms<br>。寻道时间：8ms~12ms；<br>。旋转时间：7200转/min（半周 4ms）；<br>。传输时间：50M/s（约0.3ms）；<br>• 磁盘随机 IO ＜ 磁盘顺序IO~内存随机 IO ＜内存顺序IO(大概10ns)； </p>
+<p>内存访问速度几乎是磁盘的100w倍</p>
+<h3 id="Lsm-tree"><a href="#Lsm-tree" class="headerlink" title="Lsm-tree"></a>Lsm-tree</h3><p><strong>【解决写多读少的问题】</strong><br>B+TREE 添加数据分裂时，空间利用率要占50%，随机IO，写入慢<br>lsm-tree 为基础的存储引擎空间利用率可以实现30%，顺序IO，写入快，每次追加日志写入<br>lsm-tree 不是数据结构，而是数据存储组织的一种方式<br><img src="/image/systemDesign/12.png" alt><br>整体运行流程就是当用户写入时，先对磁盘日志进行预写入，然后将数据暂存在内存里面的Memtable（跳表）中<br>当Memtable 快要写满时，将数据固定下来变成静态数据，存到内存 Immutable Memtable （跳表） 中，不再支持写入，只读，等待刷进磁盘中<br>数据进入磁盘中以level0 ssTable 形式存在，有序结构，多个ssTable 中 多个操作可能针对同一个key 即同一条数据多次操作，造成数据处理重复<br>这时可以进行level 0层ssTable数据 compaction,减少数据冗余，形成 level 1 层数据，<br>level 1 层数据合并压缩排序再生成level 2 以此类推直到level n ， n 一般为7<br>这样到level n 基本可以保证该层没有重复的数据，几乎占整体数据的 90%<br>同时对于经常操作的数据使用在整个架构的上方，现在内存中，然后在level 0 中<br>这样对于读取来说，热key 甚至可以直接在内存中读到<br>另外对于不同层的数据读取，可以引入布隆过滤器判断数据是否存在，误差可控</p>
+<h2 id="稀疏索引"><a href="#稀疏索引" class="headerlink" title="稀疏索引"></a>稀疏索引</h2><p>稀疏索引不是给“列”分类，而是给“索引项”分类：索引不为每一条数据都建立索引项，只为部分数据建立索引项。<br><strong>稀疏索引（Sparse Index）</strong> 是一种索引结构，它<strong>不为表中的每一行数据都建立索引项</strong>，而是为<strong>部分数据块（如数据页）或特定间隔的数据</strong>建立索引条目。</p>
+<p>你可以把它理解为书的<strong>目录页</strong>——目录只列出每个章节的起始页码，而不是每个字、每句话出现的页码。</p>
+<hr>
+<h3 id="1-稀疏索引-vs-稠密索引"><a href="#1-稀疏索引-vs-稠密索引" class="headerlink" title="1. 稀疏索引 vs. 稠密索引"></a>1. 稀疏索引 vs. 稠密索引</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">维度</th>
+<th style="text-align:left"><strong>稀疏索引</strong></th>
+<th style="text-align:left"><strong>稠密索引（Dense Index）</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>索引条目数量</strong></td>
+<td style="text-align:left">只为部分数据建立索引（如每个数据页一条）</td>
+<td style="text-align:left">为表中的<strong>每一行</strong>数据都建立一个索引项</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>存储空间</strong></td>
+<td style="text-align:left"><strong>小</strong>，占用空间少</td>
+<td style="text-align:left"><strong>大</strong>，可能和表数据相当甚至更大</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>查找过程</strong></td>
+<td style="text-align:left">先通过索引定位到近似位置，再在数据块内<strong>顺序扫描</strong>找到目标</td>
+<td style="text-align:left">通过索引直接定位到具体行</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>适用场景</strong></td>
+<td style="text-align:left">数据量大、索引列值有序且变化不频繁</td>
+<td style="text-align:left">需要精确定位、对查询响应时间要求极高</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>典型例子</strong></td>
+<td style="text-align:left">文件系统的目录索引、数据库的聚簇索引（主键）</td>
+<td style="text-align:left">辅助索引（二级索引）的叶子节点</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="2-稀疏索引在数据库中的典型应用"><a href="#2-稀疏索引在数据库中的典型应用" class="headerlink" title="2. 稀疏索引在数据库中的典型应用"></a>2. 稀疏索引在数据库中的典型应用</h3><h4 id="（1）InnoDB-的聚簇索引（主键索引）"><a href="#（1）InnoDB-的聚簇索引（主键索引）" class="headerlink" title="（1）InnoDB 的聚簇索引（主键索引）"></a>（1）InnoDB 的聚簇索引（主键索引）</h4><p>InnoDB 的聚簇索引本质上是一个<strong>稀疏索引 + 稠密索引的混合体</strong>：</p>
+<ul>
+<li><strong>B+Tree 的内部节点</strong>：只存储<strong>每个子页的最小键值</strong>作为索引条目 → 这是稀疏索引。</li>
+<li><strong>B+Tree 的叶子节点</strong>：存储了<strong>完整的行数据</strong>，且所有数据都在这层 → 叶子节点内部是稠密的（所有行都存在）。</li>
+</ul>
+<p>当你通过主键查找时，过程是：</p>
+<ol>
+<li>从根节点开始，利用稀疏的索引条目（每个节点的最小键值）快速定位到目标数据页。</li>
+<li>到达叶子节点（数据页）后，在页内进行<strong>顺序扫描</strong>或二分查找找到具体行。</li>
+</ol>
+<h4 id="（2）文件系统中的目录索引"><a href="#（2）文件系统中的目录索引" class="headerlink" title="（2）文件系统中的目录索引"></a>（2）文件系统中的目录索引</h4><p>操作系统中的文件目录也是一种稀疏索引：</p>
+<ul>
+<li>每个目录项只记录<strong>文件名和对应的数据块起始地址</strong>。</li>
+<li>查找文件时，先在目录中定位到文件元数据，再根据元数据去数据区读取具体内容。</li>
+</ul>
+<hr>
+<h3 id="3-为什么需要稀疏索引？"><a href="#3-为什么需要稀疏索引？" class="headerlink" title="3. 为什么需要稀疏索引？"></a>3. 为什么需要稀疏索引？</h3><h4 id="✅-优点"><a href="#✅-优点" class="headerlink" title="✅ 优点"></a>✅ 优点</h4><table>
+<thead>
+<tr>
+<th style="text-align:left">优点</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>节省存储空间</strong></td>
+<td style="text-align:left">索引条目数量远少于数据行数，特别适合大表场景。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>降低维护成本</strong></td>
+<td style="text-align:left"><code>INSERT</code>/<code>UPDATE</code>/<code>DELETE</code> 时，不需要频繁更新索引条目（只在数据页分裂或合并时才调整）。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>内存友好</strong></td>
+<td style="text-align:left">索引体积小，更多索引数据可以缓存在内存中，提升查询速度。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="❌-缺点"><a href="#❌-缺点" class="headerlink" title="❌ 缺点"></a>❌ 缺点</h4><table>
+<thead>
+<tr>
+<th style="text-align:left">缺点</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>查询效率略低</strong></td>
+<td style="text-align:left">定位到数据页后，还需要在页内进行扫描，无法像稠密索引那样一步到位。</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>不适合等值查询为主的场景</strong></td>
+<td style="text-align:left">如果大量查询是 <code>WHERE id = 12345</code> 这种精确查询，稠密索引更快。</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="4-稀疏索引-vs-覆盖索引"><a href="#4-稀疏索引-vs-覆盖索引" class="headerlink" title="4. 稀疏索引 vs. 覆盖索引"></a>4. 稀疏索引 vs. 覆盖索引</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">维度</th>
+<th style="text-align:left"><strong>稀疏索引</strong></th>
+<th style="text-align:left"><strong>覆盖索引</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>关注点</strong></td>
+<td style="text-align:left"><strong>如何减少索引条目数量</strong>（降低存储）</td>
+<td style="text-align:left"><strong>如何避免回表</strong>（提升查询速度）</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>索引内容</strong></td>
+<td style="text-align:left">只记录关键位置信息（如页最小键值）</td>
+<td style="text-align:left">索引中包含查询所需的所有列数据</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>目标</strong></td>
+<td style="text-align:left">节省空间，支持范围查找</td>
+<td style="text-align:left">提升查询效率，减少 I/O</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>能否同时存在</strong></td>
+<td style="text-align:left">✅ 可以。一个联合索引如果是稀疏的（如页级索引），同时又包含了查询所需的所有列，那它既是稀疏索引又是覆盖索引。</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="5-实际例子"><a href="#5-实际例子" class="headerlink" title="5. 实际例子"></a>5. 实际例子</h3><h4 id="场景：用户表-users，主键-id-自增列"><a href="#场景：用户表-users，主键-id-自增列" class="headerlink" title="场景：用户表 users，主键 id 自增列"></a>场景：用户表 <code>users</code>，主键 <code>id</code> 自增列</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">数据页1：id 1~100</span><br><span class="line">数据页2：id 101~200</span><br><span class="line">数据页3：id 201~300</span><br></pre></td></tr></table></figure>
+<p><strong>稀疏索引（聚簇索引内部）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">索引条目</th>
+<th style="text-align:left">指向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>1</code></td>
+<td style="text-align:left">数据页1</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>101</code></td>
+<td style="text-align:left">数据页2</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>201</code></td>
+<td style="text-align:left">数据页3</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>查询 <code>SELECT * FROM users WHERE id = 150</code>：</p>
+<ol>
+<li>在稀疏索引中找到 <code>101</code>（最大的 ≤ 150），定位到数据页2。</li>
+<li>在数据页2内顺序扫描，找到 id=150 的行。</li>
+</ol>
+</li>
+<li><p>查询 <code>SELECT * FROM users WHERE id BETWEEN 50 AND 250</code>：</p>
+<ol>
+<li>稀疏索引定位到起始页（数据页1）。</li>
+<li>顺序扫描所有数据页（1、2、3），直到超出范围。</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h3 id="6-什么时候该考虑稀疏索引？"><a href="#6-什么时候该考虑稀疏索引？" class="headerlink" title="6. 什么时候该考虑稀疏索引？"></a>6. 什么时候该考虑稀疏索引？</h3><table>
+<thead>
+<tr>
+<th style="text-align:left">推荐使用</th>
+<th style="text-align:left">不建议使用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">表数据量极大（亿级）</td>
+<td style="text-align:left">数据量小（几千行），索引开销可忽略</td>
+</tr>
+<tr>
+<td style="text-align:left">存储空间有限</td>
+<td style="text-align:left">查询以精确等值查询为主（如 <code>WHERE id = xxx</code>）</td>
+</tr>
+<tr>
+<td style="text-align:left">查询以<strong>范围查询</strong>或<strong>全表扫描变种</strong>为主</td>
+<td style="text-align:left">需要频繁更新索引列值（维护成本高）</td>
+</tr>
+<tr>
+<td style="text-align:left">索引列值有序且变化不频繁</td>
+<td style="text-align:left">索引列值无序（如 UUID），无法利用稀疏索引的有序性</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li><strong>稀疏索引是一种用空间换时间的反向策略</strong>——它牺牲了一点查询精度（需要额外扫描），换来了更小的索引体积和更低的维护成本。</li>
+<li>在数据库中，<strong>聚簇索引（主键）天然就是稀疏索引</strong>，而辅助索引（二级索引）通常是稠密索引。</li>
+<li>如果你在建表时选择了<strong>自增主键</strong>，实际上已经在享受稀疏索引带来的好处了——主键索引的 B+Tree 内部节点就是稀疏的，大大减少了内存占用和 I/O 次数。</li>
+</ul>
+<h2 id="聚簇索引"><a href="#聚簇索引" class="headerlink" title="聚簇索引"></a>聚簇索引</h2><p>索引的分类：<br>1.按照字段的特性分类：主键索引、普通索引、前缀索引。<br>2.按照数据结构分类：B+Tree索引、Hash索引。<br>3.按照物理存储方式分类：聚簇索引、辅助索引（二级索引）。</p>
+<p>聚簇索引的定义<br>聚簇索引并不是一种单独的索引类型，聚簇索引是一种数据存储的方式。<br>例如InnoDB的聚簇索引使用的数据结构就是B+Tree存储索引和数据。</p>
+<p>• ‘聚簇”含义：表示数据行和相邻的键值是紧凑的存储在一起。<br>• 辅助索引（二级索引）：叶子节点是不会保存引用行的物理地址的，而是保存行的主键值</p>
+<h3 id="聚簇索引-VS-非聚簇索引"><a href="#聚簇索引-VS-非聚簇索引" class="headerlink" title="聚簇索引  VS 非聚簇索引"></a>聚簇索引  VS 非聚簇索引</h3><p>• 聚簇索引（主键索引）：将数据存储与索引放到了一起，索引结构的叶子节点保存了具体的行数据。<br>• 非聚簇索引：将数据与索引分开存储，索引结构的叶子节点存储的是指向数据行对应的地址。<br>从存储引擎的角度去看，聚簇索引和非聚簇索引的区别：</p>
+<p>• InnoDB存储引擎【聚簇索引】<br>        。在InnoDB存储引擎中，默认使用B+Tree存储索引和数据，InnoDB中利用主键创建的索引，就是聚簇索引。<br>        。聚簇索引的二级索引：叶子节点是不会保存引用行的物理地址的，而是保存行的主键值<br>        。对于聚簇索引，数据的物理存放顺序与索引顺序是一致的（主键必须是自增id）。</p>
+<p><img src="/image/systemDesign/22.png" alt></p>
+<p>•MyISAM存储引擎【非聚簇索引】<br>        。在MyISAM存储引擎中，默认也是B+Tree索引，但是主键索引和辅助索引都是非聚簇索引。<br>        。非聚簇索引不管是主键索引还是二级索引，其索引结构的叶子节点保存的都是一个指向对应行记录的物理地址。<br>        。非聚簇索引中辅助索引的检索无需访问主键索引。<br>        。非聚簇索引的存储引擎，表数据存储与索引顺序是无关</p>
+<p><img src="/image/systemDesign/23.png" alt></p>
+<p><img src="/image/systemDesign/24.png" alt><br>• InnoDB聚簇索引就是按照主键索引的顺序构建B+Tree。B+Tree的叶子节点就是行记录，行记录和主键值紧凑的存储在一起<br>的。<br>•InnoDB中主键索引就是数据表本身。主键索引中存放了整张表的数据。<br>InnoDB表中 要求必须要有聚簇索引：<br>。如果表定义了主键，主键索引就是聚簇索引。<br>。 如果表没有定义主键，则第一个非空unique列 作力聚簇索引。<br>• 否则以上都没有，InnoDB会重建一个隐藏的row-id 作为聚簇索引</p>
+<h3 id="回表"><a href="#回表" class="headerlink" title="回表"></a>回表</h3><p>回表是数据库执行查询时的一种操作过程，简单来说就是：先通过辅助索引找到主键值，再根据主键值到主索引（聚簇索引）中取回整行数据。<br>这个动作之所以叫“回表”，是因为数据读取路径走了两步（索引 -&gt; 主键 -&gt; 数据行），相当于“返回”到主表（聚簇索引）中去查找。<br><img src="/image/systemDesign/25.png" alt></p>
+<p>如何解决回表问题？答：使用覆盖索引。（覆盖索引： 所查询信息在当前索引值中能找到，“索引和查询之间的关系”，而不是一种索引结构。）<br>• 如果一个索引包含了所要查询的所有的字段值（不需要回表），这个索引就是覆盖索引。<br>如何实现覆盖索引？<br>•将被查询的字段建立联合索引，这样就可以直接返回索引中的数据了，避免了去聚簇索引中去定位行记录。<br><img src="/image/systemDesign/26.png" alt></p>
+<h3 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h3><p>用于查询优化。可以在索引遍历的过程中，对索引中包含的字段先做判断，不符合条件的记录过滤，作用就是减少回表的次数<br>将存储引擎层（Engine）的过滤条件下推到索引遍历的过程中，提前过滤掉不符合条件的记录，从而减少回表次数</p>
+<p>比如下面在辅助索引中添加age 信息后，同时满足age 要求才会去主键索引中获取完整行数据<br><img src="/image/systemDesign/27.png" alt><br><img src="/image/systemDesign/28.png" alt></p>
+<p>在不使用 ICP 时，存储引擎会先通过索引把所有满足“索引键范围”的记录全部回表，然后在 Server 层再过滤；使用 ICP 后，存储引擎在索引遍历时就直接把不满足条件的记录过滤掉，只有满足条件的才回表。</p>
+<h3 id="数据库主键类型选择"><a href="#数据库主键类型选择" class="headerlink" title="数据库主键类型选择"></a>数据库主键类型选择</h3><p>自增的优点<br>•字段长度比UUID小。<br>•在写的方面，由于是自增，新增的数据永远是在后面，有序，这点对性能有很大的提升。<br>•数据库自动编号，速度快，增量增长按顺序存放，检索比较快。<br>•数字型，占用的空间小，容易排序。<br>自增的缺点<br>•由于自增，比较容易通过网络爬虫获取当前系统的业务量。<br>•高并发场景下，竞争自增锁会降低数据库吞吐能力。<br>•数据迁移或者是分库分表场景下，自增方式不再适合</p>
+<blockquote>
+<p>自增主键的本质是单库单表内的局部唯一，它依赖单个数据库实例的全局计数器(由 MySQL 的 AUTO_INCREMENT 机制维护)。<br>一旦数据被拆分到多个库/表，或需要合并多个数据源，这个”局部唯一”就失效了，会导致主键冲突、无法全局排序、迁移困难等问题。<br>因此分库分表和迁移场景下，需要改用全局唯一 ID 生成方案（如雪花算法）</p>
+</blockquote>
+<p>自增ID的内部结构：<br>新增的行一定会在原有最大数据行的下一行，MySQL的寻址定位很快，不会为计算新行的位置而作出额外的消耗，较少了页的分裂。</p>
+<p><img src="/image/systemDesign/29.png" alt><br>UUID的优点：<br>•主键在任何时候都不会冲突。进行分库分表，还是做合并存储的时候，都能保证主键全局的唯一性。<br>•可以在应用层生成，提高数据库的吞吐能力。<br>UUID的缺点：<br>•与自增相比，最大的缺陷就是随机IO。<br>•字符串类型要比整数类型更加消耗空间，而且要比整数类型操作慢</p>
+<p>UUID的内部结构：<br>如果是uuidInnoDB无法做到总是把新插入的行放到索引的最后，每次都需要为新的行寻找合适的位置，分配新的空间。<br>还包括一些问题：<br>• 产生大量的随机IO<br>• 页分裂操作频繁</p>
+<p>页分裂：<br>页分裂（Page Split） 是数据库（如 MySQL InnoDB）或操作系统文件系统中，当数据页（Page）已满，却需要插入新数据时，系统被迫将当前页拆分成两个页的过程。<br>简单来说：一个数据页装不下了，必须分一分为二，腾出空间给新数据。</p>
+<p><img src="/image/systemDesign/30.png" alt></p>
+<p>总结：<br>如果是使用InnoDB应该尽可能的选择主键自增顺序插入。<br>但是如果是在分库分表场景下，分布式主键ID的生成方案优先选择：雪花算法生成全局的唯一ID。</p>
+<p>雪花算法：<br>一种开源分布式 ID 生成算法，在分布式系统中生成全局唯一且有序的 ID，非常适合作为分库分表后的主键 ID 或全局订单号<br>它生成的 ID 是一个 64 位的长整型（Long）数字，由以下部分组成：</p>
+<ul>
+<li>1位符号位：固定为 0，保证 ID 是正数。</li>
+<li>41位时间戳：记录毫秒级时间，可以使用约 69 年，让 ID 整体趋势递增。</li>
+<li>10位机器标识：通常拆分为 5 位数据中心 ID 和 5 位机器 ID，最多支持 1024 个节点，保证不同机器生成的 ID 不重复。</li>
+<li>12位序列号：同一毫秒内可生成 4096 个不同的 ID，应对高并发场景。</li>
+</ul>
+<h3 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h3><p>聚簇索引的优点：<br>1.可以将相关的数据保存在一起。<br>2.数据访问更快。<br>3.使用覆盖索引进行扫描查询时，可以直接使用叶节点中的主键值。<br>4.辅助索引使用的是主键作为指针，不是使用地址值。<br>聚簇索引的缺点：</p>
+<ol>
+<li>随机主键会导致页分裂问题（主键生成选择UUID的情况）</li>
+<li>使用辅助索引查询时，需要回表</li>
+</ol>
+<h2 id="多维索引（multi-dimensional-index）"><a href="#多维索引（multi-dimensional-index）" class="headerlink" title="多维索引（multi dimensional index）"></a>多维索引（multi dimensional index）</h2><p>一种为了高效处理基于多个属性（维度）进行查询而设计的数据库索引结构，是处理多条件、空间、向量等复杂查询需求的利器。无论是用树结构的R树、KD树，还是搜索引擎风味的倒排索引，或是OLAP的数据立方体，它们的目标都一样：在海量数据中，让多维度、组合式的查询变得更快。</p>
+<p>相关实现数据结构：<br>R-Tree<br>R*-Tree<br>KD-Tree<br>QuadTree<br>GiST / SP-GiST</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">维度</th>
+<th style="text-align:left"><strong>联合索引 (Composite Index)</strong></th>
+<th style="text-align:left"><strong>覆盖索引 (Covering Index)</strong></th>
+<th style="text-align:left"><strong>多维索引 (Multi-Dimensional Index)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>核心目的</strong></td>
+<td style="text-align:left"><strong>如何排序</strong>——把多个列拼成一个索引键，决定查询时能走哪个索引</td>
+<td style="text-align:left"><strong>如何偷懒</strong>——让索引里直接包含查询要的数据，避免回表</td>
+<td style="text-align:left"><strong>如何划分空间</strong>——把多个列看作多维空间，决定如何快速定位数据</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>底层结构</strong></td>
+<td style="text-align:left">单棵 B+Tree，键值是 <code>(col1, col2, ...)</code> 拼接而成</td>
+<td style="text-align:left">不特定结构，任何索引（联合或单列）只要包含所需字段即可</td>
+<td style="text-align:left">R-Tree、KD-Tree、倒排索引等，将数据映射为空间中的点或区域</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>核心规则</strong></td>
+<td style="text-align:left"><strong>最左匹配原则</strong>：只有索引最左边的列能用上，跳过一个列，后面的就失效</td>
+<td style="text-align:left"><strong>无特殊规则</strong>：只要 <code>SELECT</code> 的列都在索引里，就能生效</td>
+<td style="text-align:left"><strong>无固定顺序要求</strong>：可以对所有维度同时进行范围或邻近查询，没有“最左”限制</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>典型查询</strong></td>
+<td style="text-align:left"><code>WHERE a = 1 AND b = 2</code><br><code>WHERE a = 1 ORDER BY b</code></td>
+<td style="text-align:left"><code>SELECT a, b FROM t WHERE a = 1</code> （无需回表）</td>
+<td style="text-align:left"><code>WHERE x BETWEEN 0 AND 10 AND y BETWEEN 20 AND 30</code><br>（查找矩形区域）</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>性能特点</strong></td>
+<td style="text-align:left">对 <code>=</code> 和范围查询效果好，但受顺序限制，有一定维护开销</td>
+<td style="text-align:left"><strong>极高</strong>，直接省去随机 I/O，是查询优化的首选手段</td>
+<td style="text-align:left">对多维范围查询高效，但结构复杂，维护成本高，非所有数据库都支持</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="用例子加深理解"><a href="#用例子加深理解" class="headerlink" title="用例子加深理解"></a>用例子加深理解</h3><p>假设有一张地图数据表 <code>places</code>，有 <code>x</code>（经度）、<code>y</code>（纬度）、<code>name</code> 三个字段。</p>
+<p><strong>1. 联合索引：<code>INDEX idx_xy (x, y)</code></strong></p>
+<ul>
+<li>它的排序规则是：<strong>先按 x 排，x 相同再按 y 排</strong>。</li>
+<li>查询 <code>WHERE x = 1 AND y = 2</code>：能高效利用索引（先定位 x=1，再在结果中找 y=2）。✅</li>
+<li>查询 <code>WHERE y = 2 AND x = 1</code>：优化器通常能调整顺序，也能用上。✅</li>
+<li>查询 <code>WHERE y = 2</code>：由于 y 不是联合索引的最左列，这个索引基本<strong>失效</strong>，无法用于减少扫描范围。❌</li>
+<li>这是典型的<strong>一维有序列表</strong>（先排第一列，再排第二列）。</li>
+</ul>
+<p><strong>2. 覆盖索引：<code>INDEX idx_xy_cover (x, y, name)</code></strong></p>
+<ul>
+<li>当我们执行 <code>SELECT x, y, name FROM places WHERE x = 1</code> 时，查询所需的所有列 (<code>x</code>, <code>y</code>, <code>name</code>) 都包含在这个联合索引中。</li>
+<li>因此，数据库<strong>直接读取索引页就能返回结果</strong>，完全不用去读原始数据行（主键聚簇索引），省去了昂贵的回表操作。这就是“覆盖”的含义。</li>
+</ul>
+<p><strong>3. 多维索引（如 R-Tree）：<code>SPATIAL INDEX idx_xy_mdi (x, y)</code></strong></p>
+<ul>
+<li>它将 <code>(x, y)</code> 视为二维平面上的一个<strong>点</strong>，所有点构成一个空间。</li>
+<li>查询 <code>WHERE x BETWEEN 0 AND 10 AND y BETWEEN 20 AND 30</code>：这是个典型的二维矩形范围查询。多维索引能直接在这个平面空间里进行搜索，同时利用 x 和 y 两个维度的信息来剪枝，效率很高。</li>
+<li>而联合索引面对这个查询，通常只能利用 x 的范围（0-10）来定位，然后对命中的每一行再检查 y 是否在 20-30 之间，无法同时利用两个维度的范围信息，效率相对较低。</li>
+</ul>
+<hr>
+<h3 id="一句话总结核心区别"><a href="#一句话总结核心区别" class="headerlink" title="一句话总结核心区别"></a>一句话总结核心区别</h3><ul>
+<li><strong>联合索引</strong>：解决<strong>多条件排序和查找</strong>的问题，但受“最左匹配”约束。</li>
+<li><strong>覆盖索引</strong>：解决<strong>减少数据读取</strong>的问题，是一种避免回表的优化技巧。</li>
+<li><strong>多维索引</strong>：解决<strong>多维度同时过滤</strong>的问题，无顺序限制，专为<strong>空间、向量</strong>等复杂场景设计。</li>
+</ul>
+<p>所以，在实际业务中，它们经常是组合使用的。比如，创建一个<strong>联合索引</strong>，恰好覆盖了查询需要的所有列，那这个联合索引同时也是一个<strong>覆盖索引</strong>。而当你遇到地理围栏、图像特征匹配等场景时，才需要考虑引入<strong>多维索引</strong>这种更专业的结构。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mySQL/" rel="tag"># mySQL</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/post/systemDesign/1.html" rel="next" title="数据库索引和冲突解决">
+                <i class="fa fa-chevron-left"></i> 数据库索引和冲突解决
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/post/mySQL/2.html" rel="prev" title="数据库事务">
+                数据库事务 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/psb.jpg" alt="YooHannah">
+          <p class="site-author-name" itemprop="name">YooHannah</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">286</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库索引-database-index"><span class="nav-number">1.</span> <span class="nav-text">数据库索引(database index)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#没有索引"><span class="nav-number">1.1.</span> <span class="nav-text">没有索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二叉查找树索引"><span class="nav-number">1.2.</span> <span class="nav-text">二叉查找树索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#平衡二叉树索引"><span class="nav-number">1.3.</span> <span class="nav-text">平衡二叉树索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#哈希索引-hash-index"><span class="nav-number">1.4.</span> <span class="nav-text">哈希索引(hash index)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-number">1.4.1.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#预写日志"><span class="nav-number">1.5.</span> <span class="nav-text">预写日志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#B-tree索引"><span class="nav-number">1.6.</span> <span class="nav-text">B-tree索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#B-tree索引-1"><span class="nav-number">1.7.</span> <span class="nav-text">B+tree索引</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一棵B-Tree可以存放多少数据？"><span class="nav-number">1.7.1.</span> <span class="nav-text">一棵B+Tree可以存放多少数据？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LSM-TREE索引-SSTable"><span class="nav-number">1.8.</span> <span class="nav-text">LSM-TREE索引 + SSTable</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#时间轮"><span class="nav-number">1.8.1.</span> <span class="nav-text">时间轮</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#跳表"><span class="nav-number">1.8.2.</span> <span class="nav-text">跳表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#布隆过滤器"><span class="nav-number">1.8.3.</span> <span class="nav-text">布隆过滤器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#顺序I-O"><span class="nav-number">1.8.4.</span> <span class="nav-text">顺序I/O</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lsm-tree"><span class="nav-number">1.8.5.</span> <span class="nav-text">Lsm-tree</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#稀疏索引"><span class="nav-number">1.9.</span> <span class="nav-text">稀疏索引</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-稀疏索引-vs-稠密索引"><span class="nav-number">1.9.1.</span> <span class="nav-text">1. 稀疏索引 vs. 稠密索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-稀疏索引在数据库中的典型应用"><span class="nav-number">1.9.2.</span> <span class="nav-text">2. 稀疏索引在数据库中的典型应用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#（1）InnoDB-的聚簇索引（主键索引）"><span class="nav-number">1.9.2.1.</span> <span class="nav-text">（1）InnoDB 的聚簇索引（主键索引）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#（2）文件系统中的目录索引"><span class="nav-number">1.9.2.2.</span> <span class="nav-text">（2）文件系统中的目录索引</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-为什么需要稀疏索引？"><span class="nav-number">1.9.3.</span> <span class="nav-text">3. 为什么需要稀疏索引？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#✅-优点"><span class="nav-number">1.9.3.1.</span> <span class="nav-text">✅ 优点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#❌-缺点"><span class="nav-number">1.9.3.2.</span> <span class="nav-text">❌ 缺点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-稀疏索引-vs-覆盖索引"><span class="nav-number">1.9.4.</span> <span class="nav-text">4. 稀疏索引 vs. 覆盖索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-实际例子"><span class="nav-number">1.9.5.</span> <span class="nav-text">5. 实际例子</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#场景：用户表-users，主键-id-自增列"><span class="nav-number">1.9.5.1.</span> <span class="nav-text">场景：用户表 users，主键 id 自增列</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-什么时候该考虑稀疏索引？"><span class="nav-number">1.9.6.</span> <span class="nav-text">6. 什么时候该考虑稀疏索引？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">1.9.7.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#聚簇索引"><span class="nav-number">1.10.</span> <span class="nav-text">聚簇索引</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#聚簇索引-VS-非聚簇索引"><span class="nav-number">1.10.1.</span> <span class="nav-text">聚簇索引  VS 非聚簇索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#回表"><span class="nav-number">1.10.2.</span> <span class="nav-text">回表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#索引下推"><span class="nav-number">1.10.3.</span> <span class="nav-text">索引下推</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库主键类型选择"><span class="nav-number">1.10.4.</span> <span class="nav-text">数据库主键类型选择</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结-1"><span class="nav-number">1.10.5.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多维索引（multi-dimensional-index）"><span class="nav-number">1.11.</span> <span class="nav-text">多维索引（multi dimensional index）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#用例子加深理解"><span class="nav-number">1.11.1.</span> <span class="nav-text">用例子加深理解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一句话总结核心区别"><span class="nav-number">1.11.2.</span> <span class="nav-text">一句话总结核心区别</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">YooHannah</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/treedocument/treedocument.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
